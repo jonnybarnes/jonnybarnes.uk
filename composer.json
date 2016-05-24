@@ -33,6 +33,12 @@
         "barryvdh/laravel-debugbar": "~2.0",
         "filp/whoops": "~2.0"
     },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/njbarrett/laravel-postgis"
+        }
+    ],
     "autoload": {
         "classmap": [
             "database"

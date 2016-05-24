@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "4525beccb6fc2efeada96db7dbbedd9f",
-    "content-hash": "b4fb100b154bd0655bee2f2edcca13eb",
+    "hash": "daf7804a781d9e4f7de63ae2da8dee9e",
+    "content-hash": "59a5ff5c293a0de8dbc63e7b8f0cf055",
     "packages": [
         {
             "name": "anahkiasen/underscore-php",
@@ -2104,12 +2104,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/njbarrett/laravel-postgis.git",
-                "reference": "1e1a0247fdc1e3310153468a73c67a961bdb454d"
+                "reference": "accec379af8ceba903ceb10df37beeb9bfb411cc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/njbarrett/laravel-postgis/zipball/1e1a0247fdc1e3310153468a73c67a961bdb454d",
-                "reference": "1e1a0247fdc1e3310153468a73c67a961bdb454d",
+                "url": "https://api.github.com/repos/njbarrett/laravel-postgis/zipball/accec379af8ceba903ceb10df37beeb9bfb411cc",
+                "reference": "accec379af8ceba903ceb10df37beeb9bfb411cc",
                 "shasum": ""
             },
             "require": {
@@ -2131,7 +2131,12 @@
                     "Phaza\\LaravelPostgis\\": "src/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "autoload-dev": {
+                "classmap": [
+                    "tests/BaseTestCase.php",
+                    "tests/Stubs/"
+                ]
+            },
             "license": [
                 "MIT"
             ],
@@ -2139,10 +2144,18 @@
                 {
                     "name": "Peter Haza",
                     "email": "peter.haza@gmail.com"
+                },
+                {
+                    "name": "Nicholas Barrett",
+                    "email": "njbarrett7@gmail.com"
                 }
             ],
             "description": "Postgis extensions for laravel. Aims to make it easy to work with geometries from laravel models",
-            "time": "2016-05-18 07:54:54"
+            "support": {
+                "source": "https://github.com/njbarrett/laravel-postgis/tree/master",
+                "issues": "https://github.com/njbarrett/laravel-postgis/issues"
+            },
+            "time": "2016-05-21 08:00:18"
         },
         {
             "name": "predis/predis",
