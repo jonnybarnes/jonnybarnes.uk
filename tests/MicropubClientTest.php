@@ -43,10 +43,10 @@ class MicropubClientTest extends TestCase
     /**
      * This currently creates a new note that stays in the database.
      */
-    public function testClientCreatesNewNote()
+    public function testClientCreatesNewNoteWithTag()
     {
         $faker = \Faker\Factory::create();
-        $note = 'Fake note from PHPUnit: ' . $faker->text;
+        $note = 'Fake note from #PHPUnit: ' . $faker->text;
         $this->withSession([
             'me' => $this->appurl,
             'token' => $this->getToken()
@@ -54,6 +54,8 @@ class MicropubClientTest extends TestCase
           ->type($note, 'content')
           ->press('Submit');
         $this->seeInDatabase('notes', ['note' => $note]);
+        $this->visit($this->appurl . '/notes/tagged/PHPUnit')
+             ->see('PHPUnit');
 
     }
 

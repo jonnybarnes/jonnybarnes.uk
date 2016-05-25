@@ -155,6 +155,15 @@ class NotesController extends Controller
      */
     public function taggedNotes($tag)
     {
+        $tag = mb_strtolower(
+            preg_replace(
+                '/&([a-z]{1,2})(acute|cedil|circ|grave|lig|orn|ring|slash|th|tilde|uml|caron);/i',
+                '$1',
+                htmlentities($tag)
+            ),
+            'UTF-8'
+        );
+
         $tagId = Tag::where('tag', $tag)->pluck('id');
         $notes = Tag::find($tagId)->notes()->orderBy('updated_at', 'desc')->get();
         foreach ($notes as $note) {
