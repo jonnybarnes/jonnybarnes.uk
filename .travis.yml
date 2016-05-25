@@ -1,0 +1,42 @@
+language: php
+
+sudo: false
+
+addons:
+  postgresql: "9.4"
+
+services:
+  - postgresql
+
+env:
+  global:
+    - setup=basic
+
+php:
+  - 7.0
+  - nightly
+matrix:
+  allow_failures:
+    - php: nightly
+
+before_install:
+  - phpenv config-rm xdebug.ini
+  - travis_retry composer self-update --preview
+
+install:
+  - if [[ $setup = 'basic' ]];  then travis_retry composer install --no-interaction --prefer-dist; fi
+  - if [[ $setup = 'stable' ]]; then travis_retry composer update --no-interaction --prefer-dist --prefer-stable; fi
+  - if [[ $setup = 'lowest' ]]; then travis_retry composer update --no-interaction --prefer-dist --prefer-lowest --prefer-stable; fi
+
+before_script:
+  - psql -U travis -c 'create database travis_ci_test'
+  - psql -U travis -d travis_ci_test -c 'create extension postgis'
+  - cp .env.travis .env
+  - php artisan key:generate
+  - php artisan migrate
+  - php artisan db:seed
+  - php artisan serve &
+  - sleep 5 # Give artisan some time to start serving
+
+script:
+  - phpdbg -qrr vendor/bin/phpunit --coverage-text

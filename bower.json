@@ -1,0 +1,26 @@
+{
+  "name": "jbuk-frontend",
+  "description": "",
+  "main": "",
+  "authors": [
+    "Jonny Barnes <jonny@jonnybarnes.uk>"
+  ],
+  "license": "CC0-1.0",
+  "homepage": "https://github.com/jonnybarnes/jbl5",
+  "moduleType": [],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "fetch": "~0.11.0",
+    "alertify.js": "alertifyjs#~1.0.5",
+    "store2": "~2.3.2",
+    "Autolinker.js": "~0.24.0",
+    "marked": "~0.3.5",
+    "sanitize-css": "^3.2.0"
+  }
+}

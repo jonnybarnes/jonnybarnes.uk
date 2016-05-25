@@ -1,0 +1,7 @@
+preset: laravel
+
+disabled:
+  - concat_without_spaces
+
+finder:
+  path: app/

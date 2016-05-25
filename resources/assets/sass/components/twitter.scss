@@ -1,0 +1,9 @@
+//twitter.scss
+
+.twitter-tweet-rendered {
+  margin-bottom: 0 !important;
+}
+
+.twitter-tweet-rendered + .note {
+  margin-top: 0;
+}
