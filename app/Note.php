@@ -2,7 +2,6 @@
 
 namespace App;
 
-use App\Tag;
 use Normalizer;
 use Jonnybarnes\IndieWeb\Numbers;
 use Illuminate\Database\Eloquent\Model;
