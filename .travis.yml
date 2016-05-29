@@ -39,4 +39,4 @@ before_script:
   - sleep 5 # Give artisan some time to start serving
 
 script:
-  - phpdbg -qrr vendor/bin/phpunit --coverage-text
+  - phpdbg -qrr vendor/bin/phpunit
