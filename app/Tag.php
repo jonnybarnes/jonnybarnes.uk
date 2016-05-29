@@ -36,4 +36,32 @@ class Tag extends Model
      * @var array
      */
     protected $guarded = ['id'];
+
+    /**
+     * Normalize tags so they’re lowercase and fancy diatrics are removed.
+     *
+     * @param  string
+     */
+    public function setTagAttribute($value)
+    {
+        $this->attributes['tag'] = $this->normalizeTag($value);
+    }
+
+    /**
+     * This method actually normalizes a tag. That means lowercase-ing and
+     * removing fancy diatric characters.
+     *
+     * @param  string
+     */
+    public static function normalizeTag($tag)
+    {
+        return mb_strtolower(
+            preg_replace(
+                '/&([a-z]{1,2})(acute|cedil|circ|grave|lig|orn|ring|slash|th|tilde|uml|caron);/i',
+                '$1',
+                htmlentities($tag)
+            ),
+            'UTF-8'
+        );
+    }
 }

@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Tag;
 use Normalizer;
 use Jonnybarnes\IndieWeb\Numbers;
 use Illuminate\Database\Eloquent\Model;
@@ -216,7 +217,7 @@ class Note extends Model implements HasMedia
             foreach ($matches[0] as $name) {
                 $name = str_replace('#', '', $name);
                 $replacements[$name] =
-                  '<a rel="tag" class="p-category" href="/notes/tagged/' . $name . '">#' . $name . '</a>';
+                  '<a rel="tag" class="p-category" href="/notes/tagged/' . Tag::normalizeTag($name) . '">#' . $name . '</a>';
             }
 
             // Replace #tags with valid microformat-enabled link
