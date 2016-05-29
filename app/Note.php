@@ -150,7 +150,7 @@ class Note extends Model implements HasMedia
         if ($this->client_id == null) {
             return;
         }
-        $name = Client::where('client_url', $this->client_id)->value('client_name');
+        $name = MicropubClient::where('client_url', $this->client_id)->value('client_name');
         if ($name == null) {
             $url = parse_url($this->client_id);
             if (isset($url['path'])) {

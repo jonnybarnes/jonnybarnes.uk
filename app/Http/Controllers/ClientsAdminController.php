@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Client;
+use App\MicropubClient;
 
 class ClientsAdminController extends Controller
 {
@@ -13,7 +13,7 @@ class ClientsAdminController extends Controller
      */
     public function listClients()
     {
-        $clients = Client::all();
+        $clients = MicropubClient::all();
 
         return view('admin.listclients', ['clients' => $clients]);
     }
@@ -36,7 +36,7 @@ class ClientsAdminController extends Controller
      */
     public function postNewClient(Request $request)
     {
-        Client::create([
+        MicropubClient::create([
             'client_url' => $request->input('client_url'),
             'client_name' => $request->input('client_name'),
         ]);
@@ -52,7 +52,7 @@ class ClientsAdminController extends Controller
      */
     public function editClient($clientId)
     {
-        $client = Client::findOrFail($clientId);
+        $client = MicropubClient::findOrFail($clientId);
 
         return view('admin.editclient', [
             'id' => $clientId,
@@ -70,7 +70,7 @@ class ClientsAdminController extends Controller
      */
     public function postEditClient($clientId, Request $request)
     {
-        $client = Client::findOrFail($clientId);
+        $client = MicropubClient::findOrFail($clientId);
         if ($request->input('edit')) {
             $client->client_url = $request->input('client_url');
             $client->client_name = $request->input('client_name');
