@@ -21,7 +21,7 @@
         "league/commonmark": "^0.13.0",
         "spatie/laravel-medialibrary": "^3.5",
         "league/flysystem-aws-s3-v3": "^1.0",
-        "phaza/laravel-postgis": "dev-master",
+        "phaza/laravel-postgis": "~3.1",
         "lcobucci/jwt": "^3.1"
     },
     "require-dev": {
@@ -33,12 +33,6 @@
         "barryvdh/laravel-debugbar": "~2.0",
         "filp/whoops": "~2.0"
     },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/njbarrett/laravel-postgis"
-        }
-    ],
     "autoload": {
         "classmap": [
             "database"
