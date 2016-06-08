@@ -5,7 +5,6 @@ namespace App;
 use Normalizer;
 use Jonnybarnes\IndieWeb\Numbers;
 use Illuminate\Database\Eloquent\Model;
-use Jonnybarnes\UnicodeTools\UnicodeTools;
 use League\CommonMark\CommonMarkConverter;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
@@ -98,10 +97,8 @@ class Note extends Model implements HasMedia
      */
     public function getNoteAttribute($value)
     {
-        $unicode = new UnicodeTools();
-        $codepoints = $unicode->convertUnicodeCodepoints($value);
         $markdown = new CommonMarkConverter();
-        $html = $markdown->convertToHtml($codepoints);
+        $html = $markdown->convertToHtml($value);
         $hcards = $this->makeHCards($html);
         $hashtags = $this->autoLinkHashtag($hcards);
 

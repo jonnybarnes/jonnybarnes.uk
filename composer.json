@@ -8,7 +8,6 @@
         "ext-intl": "*",
         "php": ">=7.0.0",
         "laravel/framework": "5.2.*",
-        "jonnybarnes/unicode-tools": "dev-master",
         "jonnybarnes/indieweb": "dev-master",
         "jonnybarnes/webmentions-parser": "dev-master",
         "guzzlehttp/guzzle": "~6.0",
