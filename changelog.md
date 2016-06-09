@@ -1,6 +1,6 @@
 # Changelog
 
-## Version {next}
+## Version 0.0.3 (2013-06-09)
   - Better tag normalization code organisation
   - Remove `jonnybarnes/unicode-tools` dependency and clean up relevant code
 
