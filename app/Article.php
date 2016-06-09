@@ -3,7 +3,6 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Jonnybarnes\UnicodeTools\UnicodeTools;
 use League\CommonMark\CommonMarkConverter;
 use MartinBean\Database\Eloquent\Sluggable;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -57,9 +56,8 @@ class Article extends Model
      */
     public function getMainAttribute($value)
     {
-        $unicode = new UnicodeTools();
         $markdown = new CommonMarkConverter();
-        $html = $markdown->convertToHtml($unicode->convertUnicodeCodepoints($value));
+        $html = $markdown->convertToHtml($value);
         //change <pre><code>[lang] ~> <pre><code data-language="lang">
         $match = '/<pre><code>\[(.*)\]\n/';
         $replace = '<pre><code class="language-$1">';

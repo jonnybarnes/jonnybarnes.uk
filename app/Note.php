@@ -5,7 +5,6 @@ namespace App;
 use Normalizer;
 use Jonnybarnes\IndieWeb\Numbers;
 use Illuminate\Database\Eloquent\Model;
-use Jonnybarnes\UnicodeTools\UnicodeTools;
 use League\CommonMark\CommonMarkConverter;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
@@ -98,10 +97,8 @@ class Note extends Model implements HasMedia
      */
     public function getNoteAttribute($value)
     {
-        $unicode = new UnicodeTools();
-        $codepoints = $unicode->convertUnicodeCodepoints($value);
         $markdown = new CommonMarkConverter();
-        $html = $markdown->convertToHtml($codepoints);
+        $html = $markdown->convertToHtml($value);
         $hcards = $this->makeHCards($html);
         $hashtags = $this->autoLinkHashtag($hcards);
 
@@ -150,7 +147,7 @@ class Note extends Model implements HasMedia
         if ($this->client_id == null) {
             return;
         }
-        $name = Client::where('client_url', $this->client_id)->value('client_name');
+        $name = MicropubClient::where('client_url', $this->client_id)->value('client_name');
         if ($name == null) {
             $url = parse_url($this->client_id);
             if (isset($url['path'])) {
@@ -216,7 +213,7 @@ class Note extends Model implements HasMedia
             foreach ($matches[0] as $name) {
                 $name = str_replace('#', '', $name);
                 $replacements[$name] =
-                  '<a rel="tag" class="p-category" href="/notes/tagged/' . $name . '">#' . $name . '</a>';
+                  '<a rel="tag" class="p-category" href="/notes/tagged/' . Tag::normalizeTag($name) . '">#' . $name . '</a>';
             }
 
             // Replace #tags with valid microformat-enabled link

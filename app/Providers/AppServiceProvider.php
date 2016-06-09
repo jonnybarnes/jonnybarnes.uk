@@ -5,7 +5,6 @@ namespace App\Providers;
 use App\Tag;
 use App\Note;
 use Validator;
-use Jonnybarnes\IndieWeb\NotePrep;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -32,11 +31,14 @@ class AppServiceProvider extends ServiceProvider
 
         //Add tags for notes
         Note::created(function ($note) {
-            $noteprep = new NotePrep();
             $tagsToAdd = [];
-            $tags = $noteprep->getTags($note->note);
-            foreach ($tags as $text) {
-                $tag = Tag::firstOrCreate(['tag' => $text]);
+            preg_match_all('/#([^\s<>]+)\b/', $note, $tags);
+            foreach ($tags[1] as $tag) {
+                $tag = Tag::normalizeTag($tag);
+            }
+            $tags = array_unique($tags[1]);
+            foreach ($tags as $tag) {
+                $tag = Tag::firstOrCreate(['tag' => $tag]);
                 $tagsToAdd[] = $tag->id;
             }
             if (count($tagsToAdd > 0)) {

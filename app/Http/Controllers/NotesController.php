@@ -155,17 +155,9 @@ class NotesController extends Controller
      */
     public function taggedNotes($tag)
     {
-        $tag = mb_strtolower(
-            preg_replace(
-                '/&([a-z]{1,2})(acute|cedil|circ|grave|lig|orn|ring|slash|th|tilde|uml|caron);/i',
-                '$1',
-                htmlentities($tag)
-            ),
-            'UTF-8'
-        );
-
-        $tagId = Tag::where('tag', $tag)->pluck('id');
-        $notes = Tag::find($tagId)->notes()->orderBy('updated_at', 'desc')->get();
+        $notes = Note::whereHas('tags', function ($query) use ($tag) {
+            $query->where('tag', $tag);
+        })->get();
         foreach ($notes as $note) {
             $note->iso8601_time = $note->updated_at->toISO8601String();
             $note->human_time = $note->updated_at->diffForHumans();
