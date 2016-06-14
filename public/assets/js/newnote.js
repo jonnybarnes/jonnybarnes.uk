@@ -1,3 +1,4 @@
+/* global L */
 if ('geolocation' in navigator) {
     var button = document.querySelector('#locate');
     if (button.addEventListener) {
@@ -81,7 +82,7 @@ function addMap(latitude, longitude, places) {
     var noLocation = document.createElement('option');
     noLocation.setAttribute('selected', 'selected');
     noLocation.setAttribute('value', 'no-location');
-    noLocText = document.createTextNode('Select no location');
+    var noLocText = document.createTextNode('Select no location');
     noLocation.appendChild(noLocText);
     selectEl.appendChild(noLocation);
     form.insertBefore(selectEl, div);
@@ -194,8 +195,16 @@ function addMap(latitude, longitude, places) {
                 method: 'post',
                 body: formData
             })
-            .then(status)
-            .then(json)
+            .then(function (response) {
+                if (response.status >= 200 && response.status < 300) {
+                    return Promise.resolve(response);
+                } else {
+                    return Promise.reject(new Error(response.statusText));
+                }
+            })
+            .then(function (response) {
+                return response.json();
+            })
             .then(function (placeJson) {
                 //create the slug from the url
                 var urlParts = placeJson.split('/');
@@ -206,7 +215,7 @@ function addMap(latitude, longitude, places) {
                 form.removeChild(document.querySelector('#place-latitude'));
                 form.removeChild(document.querySelector('#place-longitude'));
                 var labels = document.querySelectorAll('.place-label');
-                for (i = 0; i < labels.length; ++i) {
+                for (var i = 0; i < labels.length; ++i) {
                     form.removeChild(labels[i]);
                 }
                 form.removeChild(document.querySelector('#place-submit'));
@@ -269,16 +278,4 @@ function getLongitudeFromMapboxMarker(latlng) {
     var location = resultArray[1].split(' ');
 
     return location[1];
-}
-
-function status(response) {
-    if (response.status >= 200 && response.status < 300) {
-        return Promise.resolve(response);
-    } else {
-        return Promise.reject(new Error(response.statusText));
-    }
-}
-
-function json(response) {
-    return response.json();
 }

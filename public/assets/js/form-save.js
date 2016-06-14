@@ -1,3 +1,4 @@
+/* global alertify, store */
 var feature = {
     addEventListener : !!window.addEventListener,
     querySelectorAll : !!document.querySelectorAll

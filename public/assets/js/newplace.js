@@ -1,3 +1,4 @@
+/* global L */
 var button = document.querySelector('#locate');
 
 if (button.addEventListener) {

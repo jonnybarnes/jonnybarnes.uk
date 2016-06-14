@@ -4,15 +4,15 @@
   "assets/css/prism.css": "assets/css/prism-5c98941a94.css",
   "assets/css/projects.css": "assets/css/projects-d945298e4f.css",
   "assets/css/sanitize.min.css": "assets/css/sanitize.min-535bccd783.css",
-  "assets/js/form-save.js": "assets/js/form-save-45f7f5b21d.js",
+  "assets/js/form-save.js": "assets/js/form-save-14b9f120ac.js",
   "assets/js/libs/Autolinker.min.js": "assets/js/libs/Autolinker.min-b46556773a.js",
   "assets/js/libs/alertify.js": "assets/js/libs/alertify-269e23cb46.js",
   "assets/js/libs/fetch.js": "assets/js/libs/fetch-5e9040330a.js",
   "assets/js/libs/marked.min.js": "assets/js/libs/marked.min-c2a88705e2.js",
   "assets/js/libs/prism.js": "assets/js/libs/prism-f6e997bc6d.js",
   "assets/js/libs/store2.min.js": "assets/js/libs/store2.min-c4daa8f871.js",
-  "assets/js/links.js": "assets/js/links-3676e4cd2b.js",
-  "assets/js/maps.js": "assets/js/maps-fb902a9f1d.js",
-  "assets/js/newnote.js": "assets/js/newnote-c2e8ef271c.js",
-  "assets/js/newplace.js": "assets/js/newplace-144a0b83ef.js"
+  "assets/js/links.js": "assets/js/links-c394f9c920.js",
+  "assets/js/maps.js": "assets/js/maps-a6a01a253b.js",
+  "assets/js/newnote.js": "assets/js/newnote-36ff29cdef.js",
+  "assets/js/newplace.js": "assets/js/newplace-89a1be080e.js"
 }

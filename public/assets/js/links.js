@@ -1,3 +1,4 @@
+/* global Autolinker */
 //the autlinker object
 var autolinker = new Autolinker();
 

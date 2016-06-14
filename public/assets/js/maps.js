@@ -1,3 +1,4 @@
+/* global L */
 //This code runs on page load and looks for <div class="map">, then adds map
 var mapDivs = document.querySelectorAll('.map');
 for (var i = 0; i < mapDivs.length; i++) {
