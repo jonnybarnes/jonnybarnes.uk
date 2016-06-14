@@ -22,17 +22,17 @@ elixir(function(mix) {
         'assets/css/alertify.css',
         'assets/css/sanitize.min.css',
         'assets/css/prism.css',
+        'assets/js/libs/fetch.js',
+        'assets/js/libs/alertify.js',
+        'assets/js/libs/store2.min.js',
+        'assets/js/libs/Autolinker.min.js',
+        'assets/js/libs/marked.min.js',
+        'assets/js/libs/prism.js',
         'assets/js/form-save.js',
         'assets/js/links.js',
         'assets/js/maps.js',
         'assets/js/newplace.js',
         'assets/js/newnote.js',
-        'assets/js/fetch.js',
-        'assets/js/alertify.js',
-        'assets/js/store2.min.js',
-        'assets/js/Autolinker.min.js',
-        'assets/js/marked.min.js',
-        'assets/js/prism.js',
     ]);
 });
 
@@ -60,6 +60,18 @@ gulp.task('br-built-js', function() {
         .pipe(gulp.dest('public/build/assets/js/'));
 });
 
+gulp.task('gzip-built-libs-js', function() {
+    return gulp.src('public/build/assets/js/libs/*.js')
+        .pipe(zopfli({ format: 'gzip', append: true }))
+        .pipe(gulp.dest('public/build/assets/js/libs/'));
+});
+
+gulp.task('br-built-libs-js', function() {
+    return gulp.src('public/build/assets/js/libs/*.js')
+        .pipe(brotli.compress({mode: 1, quality: 11}))
+        .pipe(gulp.dest('public/build/assets/js/libs/'));
+});
+
 gulp.task('bower', function() {
     //copy JS files
     gulp.src([
@@ -69,7 +81,7 @@ gulp.task('bower', function() {
             'bower_components/Autolinker.js/dist/Autolinker.min.js',
             'bower_components/marked/marked.min.js',
         ])
-        .pipe(gulp.dest('public/assets/js/'));
+        .pipe(gulp.dest('public/assets/js/libs/'));
     //copy CSS files
     gulp.src([
             'bower_components/alertify.js/dist/css/alertify.css',
@@ -78,4 +90,4 @@ gulp.task('bower', function() {
         .pipe(gulp.dest('public/assets/css/'));
 });
 
-gulp.task('compress', ['gzip-built-css', 'br-built-css', 'gzip-built-js', 'br-built-js']);
+gulp.task('compress', ['gzip-built-css', 'br-built-css', 'gzip-built-js', 'br-built-js', 'gzip-built-libs-js', 'br-built-libs-js']);

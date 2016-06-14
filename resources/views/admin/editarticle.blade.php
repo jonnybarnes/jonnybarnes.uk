@@ -26,7 +26,7 @@ Edit Article « Admin CP
 
 @section('scripts')
 @parent
-<script src="{{ elixir('assets/js/marked.min.js') }}"></script>
+<script src="{{ elixir('assets/js/libs/marked.min.js') }}"></script>
 <script>
   var preview = document.createElement('div');
   preview.classList.add('preview');

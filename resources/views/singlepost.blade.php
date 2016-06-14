@@ -19,6 +19,6 @@
 @stop
 
 @section('scripts')
-<script src="{{ elixir('assets/js/prism.js') }}"></script>
+<script src="{{ elixir('assets/js/libs/prism.js') }}"></script>
 <link rel="stylesheet" href="{{ elixir('assets/css/prism.css') }}">
 @stop

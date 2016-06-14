@@ -22,10 +22,10 @@ Notes « Jonny Barnes
 <link rel="stylesheet" href="https://api.mapbox.com/mapbox.js/v2.2.3/mapbox.css">
 <script src="https://api.mapbox.com/mapbox.js/v2.2.3/mapbox.js"></script>
 
-<script src="{{ elixir('assets/js/Autolinker.min.js') }}"></script>
+<script src="{{ elixir('assets/js/libs/Autolinker.min.js') }}"></script>
 <script src="{{ elixir('assets/js/links.js') }}"></script>
 <script src="{{ elixir('assets/js/maps.js') }}"></script>
 
-<script src="{{ elixir('assets/js/prism.js') }}"></script>
+<script src="{{ elixir('assets/js/libs/prism.js') }}"></script>
 <link rel="stylesheet" href="{{ elixir('assets/css/prism.css') }}">
 @stop

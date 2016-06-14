@@ -39,7 +39,7 @@ function addPlaces(latitude, longitude) {
             addMap(latitude, longitude);
         }
     }).catch(function (err) {
-        console.log(err);
+        console.error(err);
     });
 }
 
@@ -57,11 +57,11 @@ function addMap(latitude, longitude, places) {
     var map = L.mapbox.map('map', 'jonnybarnes.gnoihnim')
         .setView([latitude, longitude], 15)
         .addLayer(L.mapbox.tileLayer('jonnybarnes.gnoihnim', {
-            detectRetina: true,
+            detectRetina: true
         }));
     //add a marker for the current location
     var marker = L.marker([latitude, longitude], {
-        draggable: true,
+        draggable: true
     }).addTo(map);
     //when the location marker is dragged, if the new place form elements exist
     //update the lat/lng values
@@ -87,7 +87,7 @@ function addMap(latitude, longitude, places) {
     form.insertBefore(selectEl, div);
     if (places !== null) {
         //add the places both to the map and <select>
-        places.forEach(function (item, index, array) {
+        places.forEach(function (item) {
             var option = document.createElement('option');
             option.setAttribute('value', item[1]);
             var text = document.createTextNode(item[0]);
@@ -106,7 +106,7 @@ function addMap(latitude, longitude, places) {
             placeMarker.bindPopup(name, {
                 closeButton: true
             });
-            placeMarker.on('click', function (e) {
+            placeMarker.on('click', function () {
                 map.panTo([item[2], item[3]]);
                 selectPlace(item[1]);
             });
@@ -130,7 +130,7 @@ function addMap(latitude, longitude, places) {
         //add the form elements
         var nameLabel = document.createElement('label');
         nameLabel.setAttribute('for', 'place-name');
-        nameLabel.classList.add('place-label')
+        nameLabel.classList.add('place-label');
         nameLabel.appendChild(document.createTextNode('Place Name:'));
         var nameEl = document.createElement('input');
         nameEl.setAttribute('placeholder', 'Name');
@@ -206,8 +206,8 @@ function addMap(latitude, longitude, places) {
                 form.removeChild(document.querySelector('#place-latitude'));
                 form.removeChild(document.querySelector('#place-longitude'));
                 var labels = document.querySelectorAll('.place-label');
-                for (var label of labels) {
-                    form.removeChild(label);
+                for (i = 0; i < labels.length; ++i) {
+                    form.removeChild(labels[i]);
                 }
                 form.removeChild(document.querySelector('#place-submit'));
                 form.removeChild(document.querySelector('#create-new-place'));
@@ -231,16 +231,16 @@ function addMap(latitude, longitude, places) {
                 newPlaceMarker.bindPopup(newName, {
                     closeButton: true
                 });
-                newPlaceMarker.on('click', function (e) {
+                newPlaceMarker.on('click', function () {
                     map.panTo([placeJson['latitude'], placeJson['longitude']]);
                     selectPlace(slug);
                 });
                 //make selected
                 selectPlace(slug);
             }).catch(function (placeError) {
-                console.log(placeError);
+                console.error(placeError);
             });
-        })
+        });
     });
     form.insertBefore(newLocButton, div);
 }
