@@ -3,10 +3,8 @@ var feature = {
     addEventListener : !!window.addEventListener,
     querySelectorAll : !!document.querySelectorAll
 };
-if(feature.addEventListener && feature.querySelectorAll) {
-    init();
-}
-function init() {
+
+if (feature.addEventListener && feature.querySelectorAll) {
     var keys = getKeys();
     for (var i = 0; i < keys.length; i++) {
         if (store.get(keys[i])) {
@@ -15,6 +13,7 @@ function init() {
         }
     }
 }
+
 var timerId = window.setInterval(function() {
     var saved = false;
     var inputs = document.querySelectorAll('input[type=text], textarea');
