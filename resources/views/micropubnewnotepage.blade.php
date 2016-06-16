@@ -35,11 +35,11 @@ New Note « Jonny Barnes
 <link rel="stylesheet" href="https://api.mapbox.com/mapbox.js/v2.2.3/mapbox.css">
 <script src="https://api.mapbox.com/mapbox.js/v2.2.3/mapbox.js"></script>
 
-<script src="{{ elixir('assets/js/libs/fetch.js') }}"></script>
-<script src="{{ elixir('assets/js/libs/store2.min.js') }}"></script>
-<script src="{{ elixir('assets/js/libs/alertify.js') }}"></script>
+<script src="{{ elixir('assets/bower/fetch.js') }}"></script>
+<script src="{{ elixir('assets/bower/store2.min.js') }}"></script>
+<script src="{{ elixir('assets/bower/alertify.js') }}"></script>
 <script src="{{ elixir('assets/js/form-save.js') }}"></script>
 <script src="{{ elixir('assets/js/newnote.js') }}"></script>
 
-<link rel="stylesheet" href="{{ elixir('assets/css/alertify.css') }}">
+<link rel="stylesheet" href="{{ elixir('assets/bower/alertify.css') }}">
 @stop
