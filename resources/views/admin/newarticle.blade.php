@@ -29,7 +29,7 @@ New Article « Admin CP
 
 @section('scripts')
 @parent
-<script src="{{ elixir('assets/js/libs/marked.min.js') }}"></script>
+<script src="{{ elixir('assets/bower/marked.min.js') }}"></script>
 <script>
   var preview = document.createElement('div');
   preview.classList.add('preview');
@@ -41,9 +41,9 @@ New Article « Admin CP
     preview.innerHTML = marked(markdown);
   }, 5000);
 </script>
-<script src="{{ elixir('assets/js/libs/store2.min.js') }}"></script>
-<script src="{{ elixir('assets/js/libs/alertify.js') }}"></script>
+<script src="{{ elixir('assets/bower/store2.min.js') }}"></script>
+<script src="{{ elixir('assets/bower/alertify.js') }}"></script>
 <script src="{{ elixir('assets/js/form-save.js') }}"></script>
 
-<link rel="stylesheet" href="{{ elixir('assets/css/alertify.css') }}">
+<link rel="stylesheet" href="{{ elixir('assets/bower/alertify.css') }}">
 @stop
