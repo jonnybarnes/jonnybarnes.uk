@@ -19,6 +19,8 @@ New Place « Admin CP
 @stop
 
 @section('scripts')
-<script src="/assets/js/libs/mapbox.v2.2.1.js"></script>
+<link rel="stylesheet" href="https://api.mapbox.com/mapbox.js/v2.2.3/mapbox.css">
+<script src="https://api.mapbox.com/mapbox.js/v2.2.3/mapbox.js"></script>
+
 <script src="{{ elixir('assets/js/newplace.js') }}"></script>
 @stop

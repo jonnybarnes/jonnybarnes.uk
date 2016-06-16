@@ -26,8 +26,8 @@ New Note « Admin CP
 <script src="https://api.mapbox.com/mapbox.js/v2.2.3/mapbox.js"></script>
 
 <script src="{{ elixir('assets/js/newnote.js') }}"></script>
-<script src="{{ elixir('assets/js/store2.min.js') }}"></script>
-<script src="{{ elixir('assets/js/alertify.js') }}"></script>
+<script src="{{ elixir('assets/js/libs/store2.min.js') }}"></script>
+<script src="{{ elixir('assets/js/libs/alertify.js') }}"></script>
 <script src="{{ elixir('assets/js/form-save.js') }}"></script>
 
 <link rel="stylesheet" href="{{ elixir('assets/css/alertify.css') }}">

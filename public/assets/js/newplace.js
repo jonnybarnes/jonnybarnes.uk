@@ -1,3 +1,4 @@
+/* global L */
 var button = document.querySelector('#locate');
 
 if (button.addEventListener) {
@@ -12,8 +13,6 @@ function getLocation() {
             updateForm(position.coords.latitude, position.coords.longitude);
             addMap(position.coords.latitude, position.coords.longitude);
         });
-    } else {
-        console.log('I need to do something when geoloaction isn’t available.');
     }
 }
 
@@ -33,10 +32,10 @@ function addMap(latitude, longitude) {
     var map = L.mapbox.map('map', 'jonnybarnes.gnoihnim')
         .setView([latitude, longitude], 15)
         .addLayer(L.mapbox.tileLayer('jonnybarnes.gnoihnim', {
-            detectRetina: true,
+            detectRetina: true
         }));
     var marker = L.marker([latitude, longitude], {
-        draggable: true,
+        draggable: true
     }).addTo(map);
     marker.on('dragend', function () {
         var markerLocation = marker.getLatLng();

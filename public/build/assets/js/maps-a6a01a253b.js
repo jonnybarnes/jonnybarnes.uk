@@ -1,6 +1,7 @@
+/* global L */
 //This code runs on page load and looks for <div class="map">, then adds map
 var mapDivs = document.querySelectorAll('.map');
-for(var i = 0; i < mapDivs.length; i++) {
+for (var i = 0; i < mapDivs.length; i++) {
     var mapDiv = mapDivs[i];
     var latitude = mapDiv.dataset.latitude;
     var longitude  = mapDiv.dataset.longitude;
@@ -8,8 +9,8 @@ for(var i = 0; i < mapDivs.length; i++) {
     var map = L.mapbox.map(mapDiv, 'jonnybarnes.gnoihnim')
         .setView([latitude, longitude], 15)
         .addLayer(L.mapbox.tileLayer('jonnybarnes.gnoihnim', {
-        detectRetina: true,
-    }));
-    var marker = L.marker([latitude, longitude]).addTo(map);
+            detectRetina: true
+        }));
+    L.marker([latitude, longitude]).addTo(map);
     map.scrollWheelZoom.disable();
 }
