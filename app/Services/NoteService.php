@@ -41,7 +41,7 @@ class NoteService
         if ($request->hasFile('photo')) {
             $files = $request->file('photo');
             foreach ($files as $file) {
-                $note->addMedia($file)->toMediaLibraryOnDisk('images', 's3');
+                $note->addMedia($file)->toMediaLibrary('images', 's3');
             }
         }
 

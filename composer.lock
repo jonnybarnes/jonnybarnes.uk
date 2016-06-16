@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "ae25cd7787df367a650bf7dc2fa74227",
-    "content-hash": "7982802429d5fe540f528ec69c3d84d2",
+    "hash": "e17d58f5ff05d8a71261984fb22e0757",
+    "content-hash": "875c8207087b92da0cffdf369815dd27",
     "packages": [
         {
             "name": "anahkiasen/underscore-php",
@@ -1517,34 +1517,33 @@
         },
         {
             "name": "league/glide",
-            "version": "0.3.6",
+            "version": "1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/glide.git",
-                "reference": "e45a4b536924956e1b20f5d023800557d466eda7"
+                "reference": "4218b548401ff3a8f602e2c3f78849a381b2c1bf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/glide/zipball/e45a4b536924956e1b20f5d023800557d466eda7",
-                "reference": "e45a4b536924956e1b20f5d023800557d466eda7",
+                "url": "https://api.github.com/repos/thephpleague/glide/zipball/4218b548401ff3a8f602e2c3f78849a381b2c1bf",
+                "reference": "4218b548401ff3a8f602e2c3f78849a381b2c1bf",
                 "shasum": ""
             },
             "require": {
-                "intervention/image": "~2.1",
-                "league/flysystem": "~1.0",
-                "php": ">=5.4",
-                "symfony/http-foundation": "~2.3|~3.0",
-                "symfony/http-kernel": "~2.3|~3.0"
+                "intervention/image": "^2.1",
+                "league/flysystem": "^1.0",
+                "php": "^5.4 | ^7.0",
+                "psr/http-message": "^1.0"
             },
             "require-dev": {
                 "mockery/mockery": "~0.9",
-                "phpunit/php-token-stream": ">=1.3.0",
+                "phpunit/php-token-stream": "^1.4",
                 "phpunit/phpunit": "~4.4"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "0.3-dev"
+                    "dev-master": "1.0-dev"
                 }
             },
             "autoload": {
@@ -1564,7 +1563,7 @@
                 }
             ],
             "description": "Wonderfully easy on-demand image manipulation library with an HTTP based API.",
-            "homepage": "https://github.com/thephpleague/glide",
+            "homepage": "http://glide.thephpleague.com",
             "keywords": [
                 "ImageMagick",
                 "editing",
@@ -1575,7 +1574,7 @@
                 "manipulation",
                 "processing"
             ],
-            "time": "2016-01-25 13:35:12"
+            "time": "2016-06-13 14:45:28"
         },
         {
             "name": "martinbean/laravel-sluggable-trait",
@@ -2395,31 +2394,31 @@
         },
         {
             "name": "spatie/laravel-glide",
-            "version": "2.3.3",
+            "version": "3.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/laravel-glide.git",
-                "reference": "06bcfb85464a1202dfaa7494d1b1600c88c418e5"
+                "reference": "9a5f8cac9ed2246b41afd6aa1f2b3034a6aa9ba4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/laravel-glide/zipball/06bcfb85464a1202dfaa7494d1b1600c88c418e5",
-                "reference": "06bcfb85464a1202dfaa7494d1b1600c88c418e5",
+                "url": "https://api.github.com/repos/spatie/laravel-glide/zipball/9a5f8cac9ed2246b41afd6aa1f2b3034a6aa9ba4",
+                "reference": "9a5f8cac9ed2246b41afd6aa1f2b3034a6aa9ba4",
                 "shasum": ""
             },
             "require": {
                 "illuminate/support": "5.*",
-                "league/glide": "0.3.*",
-                "php": ">=5.4.0"
+                "league/glide": "^1.0",
+                "php": "^7.0"
             },
             "require-dev": {
-                "codeception/codeception": "2.*",
-                "mockery/mockery": "~0.9.3"
+                "orchestra/testbench": "^3.2",
+                "phpunit/phpunit": "5.*"
             },
             "type": "library",
             "autoload": {
-                "psr-0": {
-                    "Spatie\\Glide": "src/"
+                "psr-4": {
+                    "Spatie\\Glide\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -2432,22 +2431,22 @@
                     "email": "freek@spatie.be"
                 }
             ],
-            "description": "A Glide Service Provider for Laravel",
+            "description": "Easily convert images with Glide",
             "homepage": "https://github.com/spatie/laravel-glide",
-            "time": "2016-05-13 14:56:07"
+            "time": "2016-05-05 15:35:48"
         },
         {
             "name": "spatie/laravel-medialibrary",
-            "version": "3.18.0",
+            "version": "4.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/laravel-medialibrary.git",
-                "reference": "e7a0a564707b29e22c4e03c815d455de515bc230"
+                "reference": "3499014e3b2de852f1e5f4bd4006e4031dd49daa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/laravel-medialibrary/zipball/e7a0a564707b29e22c4e03c815d455de515bc230",
-                "reference": "e7a0a564707b29e22c4e03c815d455de515bc230",
+                "url": "https://api.github.com/repos/spatie/laravel-medialibrary/zipball/3499014e3b2de852f1e5f4bd4006e4031dd49daa",
+                "reference": "3499014e3b2de852f1e5f4bd4006e4031dd49daa",
                 "shasum": ""
             },
             "require": {
@@ -2455,16 +2454,16 @@
                 "illuminate/console": "~5.1.16|~5.2.0",
                 "illuminate/database": "~5.1.16|~5.2.0",
                 "illuminate/support": "~5.1.16|~5.2.0",
-                "php": "^5.5|^7.0",
-                "spatie/laravel-glide": "^2.2.4",
+                "php": "^7.0",
+                "spatie/laravel-glide": "^3.0.0",
                 "spatie/pdf-to-image": "^1.0.1",
-                "spatie/string": "^2.0"
+                "spatie/string": "^2.0.0"
             },
             "require-dev": {
                 "doctrine/dbal": "^2.5.2",
                 "mockery/mockery": "^0.9.4",
                 "orchestra/testbench": "^3.0",
-                "phpunit/phpunit": "^4.0",
+                "phpunit/phpunit": "^5.0.0",
                 "scrutinizer/ocular": "^1.1"
             },
             "type": "library",
@@ -2494,7 +2493,7 @@
                 "media",
                 "spatie"
             ],
-            "time": "2016-06-02 11:45:10"
+            "time": "2016-06-03 11:06:43"
         },
         {
             "name": "spatie/pdf-to-image",
