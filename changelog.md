@@ -6,6 +6,7 @@
   - Better guplfile, next thing is to add cleanup of old compressed files
   - Update `spatie/laravel-medialibrary` to v4, tweak associated code
   - Merge in upstream changes
+  - Add a stylelint lint-staged hook
 
 ## Version 0.0.3 (2013-06-09)
   - Better tag normalization code organisation
