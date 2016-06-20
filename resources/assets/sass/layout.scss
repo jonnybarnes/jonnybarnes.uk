@@ -2,196 +2,197 @@
 
 //boxes
 html {
-	box-sizing: border-box;
+    box-sizing: border-box;
 }
 
-*, *:before, *:after {
-	box-sizing: inherit;
+*,
+*::before,
+*::after {
+    box-sizing: inherit;
 }
 
 #topheader {
-	display: flex;
-	flex-flow: row;
+    display: flex;
+    flex-flow: row;
 }
 
 #topheader a {
-	padding: 0.5em 1em;
+    padding: 0.5em 1em;
 }
 
 nav {
-	padding-top: 0.5em;
+    padding-top: 0.5em;
 }
 
 .social-list {
-	padding-left: 2em;
+    padding-left: 2em;
 }
 
 .note {
-	background-color: $base2;
-	box-shadow: 0 0 10px 2px $base1;
-	padding: 0.5em 0.5em;
-	margin-top: 1em;
+    background-color: $base2;
+    box-shadow: 0 0 10px 2px $base1;
+    padding: 0.5em;
+    margin-top: 1em;
 }
 
-.note:after {
-	content: " ";
-	display: block;
-	height: 0;
-	clear: both;
+.note::after {
+    content: " ";
+    display: block;
+    height: 0;
+    clear: both;
 }
 
 .note a {
-	word-wrap: break-word;
+    word-wrap: break-word;
 }
 
 .note .e-content p:first-child {
-	margin-top: 0;
+    margin-top: 0;
 }
 
 .note-metadata {
-	width: 100%;
+    width: 100%;
 }
 
 .social-links {
-	float: right;
+    float: right;
 }
 
 .social-links a {
-	text-decoration: none;
+    text-decoration: none;
 }
 
 .icon {
-	width: auto;
-	height: 1em;
-	fill: $blue;
+    width: auto;
+    height: 1em;
+    fill: $blue;
 }
 
 .reply {
-	margin-left: 2em;
-	margin-right: 2em;
-	font-size: 0.8em;
-	padding: 0.5em 0.5em;
+    margin-left: 2em;
+    margin-right: 2em;
+    font-size: 0.8em;
+    padding: 0.5em;
 }
 
 .reply-to {
-	margin-left: 2em;
-	margin-right: 2em;
-	font-size: 0.8em;
-	padding-top: 2em;
+    margin-left: 2em;
+    margin-right: 2em;
+    font-size: 0.8em;
+    padding-top: 2em;
 }
 
 .reply-to + .note {
-	margin-top: 0.3em;
+    margin-top: 0.3em;
 }
 
 .mini-h-card {
-	border-radius: 2px;
-	border: 1px solid $base01;
-	padding: 0 0.2em;
-	text-decoration: none;
-	margin-right: 5px;
-	white-space: nowrap;
+    border-radius: 2px;
+    border: 1px solid $base01;
+    padding: 0 0.2em;
+    text-decoration: none;
+    margin-right: 5px;
+    white-space: nowrap;
 }
 
 .mini-h-card img {
-	height: 1.26em;
-	display: inline;
-	border-radius: 2px;
-	vertical-align: text-bottom;
+    display: inline;
+    border-radius: 2px;
+    vertical-align: text-bottom;
 }
 
 .like-photo {
-	height: 1.26em;
+    height: 1.26em;
 }
 
 .reply .e-content {
-	margin-top: 0.5em;
-	padding-left: 0.5em;
+    margin-top: 0.5em;
+    padding-left: 0.5em;
 }
 
 .notes-subtitle {
-	font-size: 1em;
+    font-size: 1em;
 }
 
 .note-photo {
-	width: 100%;
-	height: auto;
-	image-orientation: from-image;
+    width: 100%;
+    height: auto;
+    image-orientation: from-image;
 }
 
 //articles
 
 article header {
-	margin-top: 0.5em;
-	margin-bottom: 0.8em;
+    margin-top: 0.5em;
+    margin-bottom: 0.8em;
 }
 
 .post-info {
-	font-size: 0.8em;
-	font-style: italic;
-	margin-top: -0.8em;
+    font-size: 0.8em;
+    font-style: italic;
+    margin-top: -0.8em;
 }
 
 //contacts
 .contact {
-	position: relative;
+    position: relative;
 }
 
 .contact-links {
-	list-style-type: none;
+    list-style-type: none;
 }
 
 .contact img {
-	height: auto;
-	width: 2em;
-	position: absolute;
-	top: 0;
-	left: 0;
+    height: auto;
+    width: 2em;
+    position: absolute;
+    top: 0;
+    left: 0;
 }
 
 .contact-info {
-	margin-left: 2em;
+    margin-left: 2em;
 }
 
 #map {
-	height: 300px;
+    height: 300px;
 }
 
 /* media queries */
 @media (min-width: 700px) {
-	main {
-		margin-left: 10em;
-		margin-right: 10em;
-	}
+    main {
+        margin-left: 10em;
+        margin-right: 10em;
+    }
 
-	footer {
-		margin-left: 13em;
-		margin-right: 13em;
-	}
+    footer {
+        margin-left: 13em;
+        margin-right: 13em;
+    }
 
-	.youtube {
-		width: 640px;
-		height: 360px;
-	}
+    .youtube {
+        width: 640px;
+        height: 360px;
+    }
 }
 
 @media (max-width: 699px) {
-	main {
-		margin-left: 10px;
-		margin-right: 10px;
-	}
+    main {
+        margin-left: 10px;
+        margin-right: 10px;
+    }
 
-	article {
-		word-wrap: break-word;
-	}
+    article {
+        word-wrap: break-word;
+    }
 
-	footer {
-		margin-left: 15px;
-		margin-right: 15px;
-	}
+    footer {
+        margin-left: 15px;
+        margin-right: 15px;
+    }
 
-	.youtube {
-		width: 100%;
-		height: auto;
-	}
+    .youtube {
+        width: 100%;
+        height: auto;
+    }
 }

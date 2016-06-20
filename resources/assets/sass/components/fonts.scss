@@ -1,41 +1,41 @@
 //fonts.scss
 
 body {
-	text-rendering: optimizeLegibility;
-	font-feature-settings: "liga";
-	font-family: $font-stack-body;
-	font-size: 1.2em;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: "liga";
+    font-family: $font-stack-body;
+    font-size: 1.2em;
 }
 
 #topheader h1 {
-	font-family: $font-stack-body;
+    font-family: $font-stack-body;
 }
 
 h1 {
-	font-family: $font-stack-headers;
+    font-family: $font-stack-headers;
 }
 
 #topheader a {
-	text-decoration: none;
+    text-decoration: none;
 }
 
 nav {
-	font-feature-settings: "dlig";
+    font-feature-settings: "dlig";
 }
 
 article header h1 a {
-	text-decoration: none;
+    text-decoration: none;
 }
 
 article div a {
-	text-decoration: none;
+    text-decoration: none;
 }
 
 footer {
-	font-size: 0.8em;
+    font-size: 0.8em;
 }
 
 .emoji {
-	width: auto;
-	height: 1em;
+    width: auto;
+    height: 1em;
 }

@@ -18,11 +18,11 @@
     "prod": "gulp --production",
     "dev": "gulp watch",
     "lint-staged": "lint-staged",
-    "stylelint-staged": "stylint --syntax=scss"
+    "stylelint-staged": "stylelint --syntax=scss"
   },
   "lint-staged": {
     "eslint": "resources/assets/js/*.js",
-    "stylint-staged": "resources/assets/sass/**/*.scss"
+    "stylelint-staged": "resources/assets/sass/**/*.scss"
   },
   "pre-commit": [
     "lint-staged"
