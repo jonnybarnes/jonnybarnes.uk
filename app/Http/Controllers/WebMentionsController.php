@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Note;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use App\Jobs\SendWebMentions;
 use App\Jobs\ProcessWebMention;
 use Jonnybarnes\IndieWeb\Numbers;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -63,38 +62,5 @@ class WebMentionsController extends Controller
                 );
                 break;
         }
-    }
-
-    /**
-     * Send a webmention.
-     *
-     * @param  \App\Note  $note
-     * @return array   An array of successful then failed URLs
-     */
-    public function send(Note $note)
-    {
-        //grab the URLs
-        $urlsInReplyTo = explode(' ', $note->in_reply_to);
-        $urlsNote = $this->getLinks($note->note);
-        $urls = array_filter(array_merge($urlsInReplyTo, $urlsNote)); //filter out none URLs
-        foreach ($urls as $url) {
-            $this->dispatch(new SendWebMentions($url, $note->longurl));
-        }
-    }
-
-    /**
-     * Get the URLs from a note.
-     */
-    private function getLinks($html)
-    {
-        $urls = [];
-        $dom = new \DOMDocument();
-        $dom->loadHTML($html);
-        $anchors = $dom->getElementsByTagName('a');
-        foreach ($anchors as $anchor) {
-            $urls[] = ($anchor->hasAttribute('href')) ? $anchor->getAttribute('href') : false;
-        }
-
-        return $urls;
     }
 }
