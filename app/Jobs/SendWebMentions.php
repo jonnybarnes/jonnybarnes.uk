@@ -61,6 +61,11 @@ class SendWebMentions extends Job implements ShouldQueue
      */
     private function discoverWebmentionEndpoint($url)
     {
+        //let’s not send webmentions to myself
+        if (parse_url($url, PHP_URL_HOST) == env('LONG_URL', 'localhost')) {
+            return false;
+        }
+
         $endpoint = null;
 
         $response = $this->guzzle->get($url);
