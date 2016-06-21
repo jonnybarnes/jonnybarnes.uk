@@ -1,5 +1,7 @@
 # Changelog
 
+## Version {next}
+
 ## Version 0.0.4 (2016-06-21)
   - Move bower components into their own subdir
   - Move my js into `resources/`, apply an eslint pre-commit hook
