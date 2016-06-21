@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>@if (App::environment() == 'local'){!! "[testing] -"!!}@endif @yield('title')</title>
   <meta name="viewport" content="width=device-width">
-  <link rel="stylesheet" href="{{ elixir('assets/css/sanitize.min.css') }}">
+  <link rel="stylesheet" href="{{ elixir('assets/bower/sanitize.css') }}">
   <link rel="stylesheet" href="{{ elixir('assets/css/global.css') }}">
   <link rel="openid.server" href="https://indieauth.com/openid">
   <link rel="openid.delegate" href="https://jonnybarnes.uk">

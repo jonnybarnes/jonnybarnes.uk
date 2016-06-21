@@ -19,7 +19,7 @@ class NotesController extends Controller
      */
     public function showNotes()
     {
-        $notes = Note::orderBy('id', 'desc')->with('webmentions', 'place')->simplePaginate(10);
+        $notes = Note::orderBy('id', 'desc')->with('webmentions', 'place', 'media')->simplePaginate(10);
         foreach ($notes as $note) {
             $replies = 0;
             foreach ($note->webmentions as $webmention) {

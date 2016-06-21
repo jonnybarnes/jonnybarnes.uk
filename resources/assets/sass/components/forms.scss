@@ -1,45 +1,49 @@
 //forms.scss
 
 form {
-	width: 100%;
+    width: 100%;
 }
 
 fieldset {
-	min-width: 0;
-	width: 100%;
+    min-width: 0;
+    width: 100%;
 }
 
-input[type="text"], input[type="file"], textarea {
-	width: 100%;
+input[type="text"],
+input[type="file"],
+textarea {
+    width: 100%;
 }
 
-input, button, textarea {
-	-webkit-appearance: none;
-	-moz-appearance: none;
-	background-color: $base03;
-	color: $base3;
-	border: 1px solid $base3;
-	border-radius: 4px;
+input,
+button,
+textarea {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-color: $base03;
+    color: $base3;
+    border: 1px solid $base3;
+    border-radius: 4px;
 }
 
 button:hover {
-	transition: 0.5s ease-in-out;
-	background-color: $base3;
-	color: $base03;
+    transition: 0.5s ease-in-out;
+    background-color: $base3;
+    color: $base03;
 }
 
 button:disabled {
-	background-color: $base1;
-	color: $base03;
+    background-color: $base1;
+    color: $base03;
 }
 
 input[type="checkbox"] {
-	-webkit-appearance: checkbox;
-	-moz-appearance: checkbox;
+    -webkit-appearance: checkbox;
+    -moz-appearance: checkbox;
 }
 
 #photo {
-	background: inherit;
-	color: inherit;
-	border: none;
+    background: inherit;
+    color: inherit;
+    border: none;
 }

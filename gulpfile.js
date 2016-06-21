@@ -16,48 +16,29 @@ var elixir = require('laravel-elixir');
 
 elixir(function(mix) {
     mix.sass('global.scss', 'public/assets/css');
+    mix.copy('resources/assets/js', 'public/assets/js');
     mix.version([
+        //hand-made css
         'assets/css/global.css',
         'assets/css/projects.css',
-        'assets/css/alertify.css',
-        'assets/css/sanitize.min.css',
-        'assets/css/prism.css',
+        //hand-made js
         'assets/js/form-save.js',
         'assets/js/links.js',
         'assets/js/maps.js',
         'assets/js/newplace.js',
         'assets/js/newnote.js',
-        'assets/js/fetch.js',
-        'assets/js/alertify.js',
-        'assets/js/store2.min.js',
-        'assets/js/Autolinker.min.js',
-        'assets/js/marked.min.js',
-        'assets/js/prism.js',
+        //bower components
+        'assets/bower/alertify.css',
+        'assets/bower/sanitize.css',
+        'assets/bower/fetch.js',
+        'assets/bower/alertify.js',
+        'assets/bower/store2.min.js',
+        'assets/bower/Autolinker.min.js',
+        'assets/bower/marked.min.js',
+        //prism
+        'assets/prism/prism.js',
+        'assets/prism/prism.css',
     ]);
-});
-
-gulp.task('gzip-built-css', function() {
-    return gulp.src('public/build/assets/css/*.css')
-        .pipe(zopfli({ format: 'gzip', append: true }))
-        .pipe(gulp.dest('public/build/assets/css/'));
-});
-
-gulp.task('br-built-css', function() {
-    return gulp.src('public/build/assets/css/*.css')
-        .pipe(brotli.compress({mode: 1, quality: 11}))
-        .pipe(gulp.dest('public/build/assets/css/'));
-});
-
-gulp.task('gzip-built-js', function() {
-    return gulp.src('public/build/assets/js/*.js')
-        .pipe(zopfli({ format: 'gzip', append: true }))
-        .pipe(gulp.dest('public/build/assets/js/'));
-});
-
-gulp.task('br-built-js', function() {
-    return gulp.src('public/build/assets/js/*.js')
-        .pipe(brotli.compress({mode: 1, quality: 11}))
-        .pipe(gulp.dest('public/build/assets/js/'));
 });
 
 gulp.task('bower', function() {
@@ -69,13 +50,54 @@ gulp.task('bower', function() {
             'bower_components/Autolinker.js/dist/Autolinker.min.js',
             'bower_components/marked/marked.min.js',
         ])
-        .pipe(gulp.dest('public/assets/js/'));
+        .pipe(gulp.dest('public/assets/bower/'));
     //copy CSS files
     gulp.src([
             'bower_components/alertify.js/dist/css/alertify.css',
-            'bower_components/sanitize-css/dist/sanitize.min.css',
+            'bower_components/sanitize-css/sanitize.css',
         ])
-        .pipe(gulp.dest('public/assets/css/'));
+        .pipe(gulp.dest('public/assets/bower/'));
 });
 
-gulp.task('compress', ['gzip-built-css', 'br-built-css', 'gzip-built-js', 'br-built-js']);
+gulp.task('compress', function () {
+    //hand-made css
+    gulp.src('public/build/assets/css/*.css')
+        .pipe(zopfli({ format: 'gzip', append: true }))
+        .pipe(gulp.dest('public/build/assets/css/'));
+    gulp.src('public/build/assets/css/*.css')
+        .pipe(brotli.compress({mode: 1, quality: 11}))
+        .pipe(gulp.dest('public/build/assets/css/'));
+    //hand-made js
+    gulp.src('public/build/assets/js/*.js')
+        .pipe(zopfli({ format: 'gzip', append: true }))
+        .pipe(gulp.dest('public/build/assets/js/'));
+    gulp.src('public/build/assets/js/*.js')
+        .pipe(brotli.compress({mode: 1, quality: 11}))
+        .pipe(gulp.dest('public/build/assets/js/'));
+    //bower components
+    gulp.src('public/build/assets/bower/*.css')
+        .pipe(zopfli({ format: 'gzip', append: true }))
+        .pipe(gulp.dest('public/build/assets/bower/'));
+    gulp.src('public/build/assets/bower/*.js')
+        .pipe(zopfli({ format: 'gzip', append: true }))
+        .pipe(gulp.dest('public/build/assets/bower/'));
+    gulp.src('public/build/assets/bower/*.css')
+        .pipe(brotli.compress({mode: 1, quality: 11}))
+        .pipe(gulp.dest('public/build/assets/bower/'));
+    gulp.src('public/build/assets/bower/*.js')
+        .pipe(brotli.compress({mode: 1, quality: 11}))
+        .pipe(gulp.dest('public/build/assets/bower/'));
+    //prism
+    gulp.src('public/build/assets/prism/*.css')
+        .pipe(zopfli({ format: 'gzip', append: true }))
+        .pipe(gulp.dest('public/build/assets/prism/'));
+    gulp.src('public/build/assets/prism/*.js')
+        .pipe(zopfli({ format: 'gzip', append: true }))
+        .pipe(gulp.dest('public/build/assets/prism/'));
+    gulp.src('public/build/assets/prism/*.css')
+        .pipe(brotli.compress({mode: 1, quality: 11}))
+        .pipe(gulp.dest('public/build/assets/prism/'));
+    gulp.src('public/build/assets/prism/*.js')
+        .pipe(brotli.compress({mode: 1, quality: 11}))
+        .pipe(gulp.dest('public/build/assets/prism/'));
+});
