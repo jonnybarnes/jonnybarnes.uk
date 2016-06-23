@@ -22,7 +22,7 @@ class SendWebMentions extends Job implements ShouldQueue
      * @param  Note $note
      * @return void
      */
-    public function __construct(Note $note, Client $guzzle)
+    public function __construct(Note $note, Client $guzzle = null)
     {
         $this->note = $note;
         $this->guzzle = $guzzle ?? new Client();
@@ -47,7 +47,7 @@ class SendWebMentions extends Job implements ShouldQueue
                         'source' => $this->note->longurl,
                         'target' => $url
                     ]
-                ])
+                ]);
             }
         }
     }
