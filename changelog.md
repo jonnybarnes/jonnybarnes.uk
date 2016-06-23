@@ -2,6 +2,7 @@
 
 ## Version {next}
   - Automatically send webmentions
+  - Change `mp-syndicate-to` to `syndicate-to`
 
 ## Version 0.0.4 (2016-06-21)
   - Move bower components into their own subdir

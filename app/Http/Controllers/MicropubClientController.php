@@ -160,10 +160,10 @@ class MicropubClientController extends Controller
                 'contents' => $request->input('reply-to'),
             ];
         }
-        if ($request->input('mp-syndicate-to')) {
-            foreach ($request->input('mp-syndicate-to') as $syn) {
+        if ($request->input('syndicate-to')) {
+            foreach ($request->input('syndicate-to') as $syn) {
                 $multipart[] = [
-                    'name' => 'mp-syndicate-to',
+                    'name' => 'syndicate-to',
                     'contents' => $syn,
                 ];
             }
@@ -320,14 +320,14 @@ class MicropubClientController extends Controller
         if ($syndicationTargets === null) {
             return;
         }
-        $mpSyndicateTo = [];
+        $syndicateTo = [];
         $parts = explode(';', $syndicationTargets);
         foreach ($parts as $part) {
             $target = explode('=', $part);
-            $mpSyndicateTo[] = urldecode($target[1]);
+            $syndicateTo[] = urldecode($target[1]);
         }
-        if (count($mpSyndicateTo) > 0) {
-            return $mpSyndicateTo;
+        if (count($syndicateTo) > 0) {
+            return $syndicateTo;
         }
     }
 }
