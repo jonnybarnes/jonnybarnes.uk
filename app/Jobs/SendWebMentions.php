@@ -13,36 +13,34 @@ class SendWebMentions extends Job implements ShouldQueue
     use InteractsWithQueue, SerializesModels;
 
     protected $note;
-    protected $guzzle;
 
     /**
      * Create the job instance, inject dependencies.
      *
-     * @param  User $user
      * @param  Note $note
      * @return void
      */
-    public function __construct(Note $note, Client $guzzle = null)
+    public function __construct(Note $note)
     {
         $this->note = $note;
-        $this->guzzle = $guzzle ?? new Client();
     }
 
     /**
      * Execute the job.
      *
+     * @param  \GuzzleHttp\Client $guzzle
      * @return void
      */
-    public function handle(Note $note)
+    public function handle(Client $guzzle)
     {
         //grab the URLs
         $urlsInReplyTo = explode(' ', $this->note->in_reply_to);
         $urlsNote = $this->getLinks($this->note->note);
         $urls = array_filter(array_merge($urlsInReplyTo, $urlsNote)); //filter out none URLs
         foreach ($urls as $url) {
-            $endpoint = $this->discoverWebmentionEndpoint($url);
+            $endpoint = $this->discoverWebmentionEndpoint($url, $guzzle);
             if ($endpoint) {
-                $this->guzzle->post($endpoint, [
+                $guzzle->post($endpoint, [
                     'form_params' => [
                         'source' => $this->note->longurl,
                         'target' => $url,
@@ -56,10 +54,10 @@ class SendWebMentions extends Job implements ShouldQueue
      * Discover if a URL has a webmention endpoint.
      *
      * @param  string  The URL
-     * @param  \GuzzleHttp\Client $client
+     * @param  \GuzzleHttp\Client $guzzle
      * @return string  The webmention endpoint URL
      */
-    private function discoverWebmentionEndpoint($url)
+    private function discoverWebmentionEndpoint($url, $guzzle)
     {
         //let’s not send webmentions to myself
         if (parse_url($url, PHP_URL_HOST) == env('LONG_URL', 'localhost')) {
@@ -68,7 +66,7 @@ class SendWebMentions extends Job implements ShouldQueue
 
         $endpoint = null;
 
-        $response = $this->guzzle->get($url);
+        $response = $guzzle->get($url);
         //check HTTP Headers for webmention endpoint
         $links = \GuzzleHttp\Psr7\parse_header($response->getHeader('Link'));
         foreach ($links as $link) {
@@ -100,6 +98,9 @@ class SendWebMentions extends Job implements ShouldQueue
 
     /**
      * Get the URLs from a note.
+     *
+     * @param  string $html
+     * @return array  $urls
      */
     private function getLinks($html)
     {
