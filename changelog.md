@@ -1,6 +1,6 @@
 # Changelog
 
-## Version {next}
+## Version 0.0.5 (2016-06-23)
   - Automatically send webmentions
   - Change `mp-syndicate-to` to `syndicate-to`
 
