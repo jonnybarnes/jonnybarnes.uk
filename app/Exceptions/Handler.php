@@ -6,6 +6,7 @@ use Exception;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Session\TokenMismatchException;
 use Illuminate\Auth\Access\AuthorizationException;
+use Symfony\Component\Debug\Exception\FlattenException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
@@ -78,10 +79,11 @@ class Handler extends ExceptionHandler
         });
         $whoops->pushHandler($handler);
 
+        $flattened = FlattenException::create($exc);
         return new \Illuminate\Http\Response(
             $whoops->handleException($exc),
-            $exc->getStatusCode(),
-            $exc->getHeaders()
+            $flattened->getStatusCode(),
+            $flattened->getHeaders()
         );
     }
 }

@@ -1,6 +1,7 @@
 # Changelog
 
 ## Version {next}
+  - Automatically send webmentions
 
 ## Version 0.0.4 (2016-06-21)
   - Move bower components into their own subdir

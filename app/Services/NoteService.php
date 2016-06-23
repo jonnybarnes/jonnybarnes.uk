@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Note;
 use App\Place;
 use Illuminate\Http\Request;
+use App\Jobs\SendWebMentions;
 use App\Jobs\SyndicateToTwitter;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use App\Http\Controllers\WebMentionsController;
@@ -45,10 +46,7 @@ class NoteService
             }
         }
 
-        if ($request->input('webmentions')) {
-            $wmc = new WebMentionsController();
-            $wmc->send($note);
-        }
+        $this->dispatch(new SendWebMentions($note));
 
         if (//micropub request, syndication sent as array
             (is_array($request->input('mp-syndicate-to'))
