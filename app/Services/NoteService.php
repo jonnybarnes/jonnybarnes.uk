@@ -8,7 +8,6 @@ use Illuminate\Http\Request;
 use App\Jobs\SendWebMentions;
 use App\Jobs\SyndicateToTwitter;
 use Illuminate\Foundation\Bus\DispatchesJobs;
-use App\Http\Controllers\WebMentionsController;
 
 class NoteService
 {

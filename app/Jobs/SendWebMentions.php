@@ -45,8 +45,8 @@ class SendWebMentions extends Job implements ShouldQueue
                 $this->guzzle->post($endpoint, [
                     'form_params' => [
                         'source' => $this->note->longurl,
-                        'target' => $url
-                    ]
+                        'target' => $url,
+                    ],
                 ]);
             }
         }

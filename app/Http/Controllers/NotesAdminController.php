@@ -15,6 +15,7 @@ class NotesAdminController extends Controller
     {
         $this->noteService = $noteService ?? new NoteService();
     }
+
     /**
      * Show the form to make a new note.
      *

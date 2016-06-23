@@ -80,6 +80,7 @@ class Handler extends ExceptionHandler
         $whoops->pushHandler($handler);
 
         $flattened = FlattenException::create($exc);
+
         return new \Illuminate\Http\Response(
             $whoops->handleException($exc),
             $flattened->getStatusCode(),
