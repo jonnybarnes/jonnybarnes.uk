@@ -38,7 +38,7 @@ class MicropubTest extends TestCase
     public function testMicropubRequestWithValidToken()
     {
         $this->call('GET', $this->appurl . '/api/post', [], [], [], ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]);
-        $this->see('me=https%3A%2F%2Fjbl5.dev');
+        $this->see('me=https%3A%2F%2Fjonnybarnes.localhost');
     }
 
     public function testMicropubRequestForSyndication()
@@ -79,8 +79,6 @@ class MicropubTest extends TestCase
 
     public function testMicropubRequestCreateNewPlace()
     {
-        $faker = \Faker\Factory::create();
-        $note = $faker->text;
         $this->call(
             'POST',
             $this->appurl . '/api/post',
@@ -101,7 +99,7 @@ class MicropubTest extends TestCase
         $signer = new Sha256();
         $token = (new Builder())
             ->set('client_id', 'https://quill.p3k.io')
-            ->set('me', 'https://jbl5.dev')
+            ->set('me', 'https://jonnybarnes.localhost')
             ->set('scope', 'post')
             ->set('issued_at', time())
             ->sign($signer, env('APP_KEY'))

@@ -59,16 +59,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.18.18",
+            "version": "3.18.19",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "68b9d0b7e007782bc0f2633cdf5a4a6bf08aaafc"
+                "reference": "2ffb032afe91b143293f75b48ec7593659c66ddb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/68b9d0b7e007782bc0f2633cdf5a4a6bf08aaafc",
-                "reference": "68b9d0b7e007782bc0f2633cdf5a4a6bf08aaafc",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/2ffb032afe91b143293f75b48ec7593659c66ddb",
+                "reference": "2ffb032afe91b143293f75b48ec7593659c66ddb",
                 "shasum": ""
             },
             "require": {
@@ -135,7 +135,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2016-06-14 20:35:03"
+            "time": "2016-06-21 21:41:45"
         },
         {
             "name": "barnabywalters/mf-cleaner",
@@ -1470,16 +1470,16 @@
         },
         {
             "name": "league/flysystem-aws-s3-v3",
-            "version": "1.0.12",
+            "version": "1.0.13",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/flysystem-aws-s3-v3.git",
-                "reference": "d9c27edda5b4b2840c3f602d4ce6fbfeaab10e5a"
+                "reference": "dc56a8faf3aff0841f9eae04b6af94a50657896c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/flysystem-aws-s3-v3/zipball/d9c27edda5b4b2840c3f602d4ce6fbfeaab10e5a",
-                "reference": "d9c27edda5b4b2840c3f602d4ce6fbfeaab10e5a",
+                "url": "https://api.github.com/repos/thephpleague/flysystem-aws-s3-v3/zipball/dc56a8faf3aff0841f9eae04b6af94a50657896c",
+                "reference": "dc56a8faf3aff0841f9eae04b6af94a50657896c",
                 "shasum": ""
             },
             "require": {
@@ -1513,7 +1513,7 @@
                 }
             ],
             "description": "Flysystem adapter for the AWS S3 SDK v3.x",
-            "time": "2016-06-06 11:18:47"
+            "time": "2016-06-21 21:34:35"
         },
         {
             "name": "league/glide",
@@ -2437,16 +2437,16 @@
         },
         {
             "name": "spatie/laravel-medialibrary",
-            "version": "4.2.1",
+            "version": "4.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/laravel-medialibrary.git",
-                "reference": "3499014e3b2de852f1e5f4bd4006e4031dd49daa"
+                "reference": "d5ec391023ea27c78131f2d1823908d45f9e38ae"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/laravel-medialibrary/zipball/3499014e3b2de852f1e5f4bd4006e4031dd49daa",
-                "reference": "3499014e3b2de852f1e5f4bd4006e4031dd49daa",
+                "url": "https://api.github.com/repos/spatie/laravel-medialibrary/zipball/d5ec391023ea27c78131f2d1823908d45f9e38ae",
+                "reference": "d5ec391023ea27c78131f2d1823908d45f9e38ae",
                 "shasum": ""
             },
             "require": {
@@ -2493,7 +2493,7 @@
                 "media",
                 "spatie"
             ],
-            "time": "2016-06-03 11:06:43"
+            "time": "2016-06-23 08:22:21"
         },
         {
             "name": "spatie/pdf-to-image",

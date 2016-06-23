@@ -9,6 +9,13 @@ use App\Services\NoteService;
 
 class NotesAdminController extends Controller
 {
+    protected $noteService;
+
+    public function __construct(NoteService $noteService = null)
+    {
+        $this->noteService = $noteService ?? new NoteService();
+    }
+
     /**
      * Show the form to make a new note.
      *
