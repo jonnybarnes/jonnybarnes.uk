@@ -13,12 +13,10 @@ env:
     - setup=basic
 
 php:
-  - 7.0.6
-  - 7.0.7
+  - 7.0
   - nightly
 matrix:
   allow_failures:
-    - php: 7.0.7 # A known bug in PHP 7.0.7 stops phpdbg producing code coverage reports
     - php: nightly
 
 before_install:
