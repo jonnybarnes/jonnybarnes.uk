@@ -32,7 +32,10 @@ class Place extends Model
      *
      * @var array
      */
-    protected $postgisFields = [Point::class, Polygon::class];
+    protected $postgisFields = [
+        'location' => Point::class,
+        'polygon' => Polygon::class,
+    ];
 
     /**
      * Define the relationship with Notes.
@@ -74,18 +77,18 @@ class Place extends Model
         return $places;
     }
 
-    /**
+    /*
      * Convert location to text.
      *
      * @param  text $value
      * @return text
-     */
+     *
     public function getLocationAttribute($value)
     {
         $result = DB::select(DB::raw("SELECT ST_AsText('$value')"));
 
         return $result[0]->st_astext;
-    }
+    }*/
 
     /**
      * Get the latitude from the `location` property.
@@ -94,9 +97,7 @@ class Place extends Model
      */
     public function getLatitudeAttribute()
     {
-        preg_match('/\((.*)\)/', $this->location, $latlng);
-
-        return explode(' ', $latlng[1])[1];
+        return explode(' ', $this->location)[1];
     }
 
     /**
@@ -106,9 +107,7 @@ class Place extends Model
      */
     public function getLongitudeAttribute()
     {
-        preg_match('/\((.*)\)/', $this->location, $latlng);
-
-        return explode(' ', $latlng[1])[0];
+        return explode(' ', $this->location)[0];
     }
 
     /**

@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 0.0.6 (2016-06-28)
+  - Better use of `laravel-postgis`
+  - Change style for inline mini-profile images
+
 ## Version 0.0.5 (2016-06-23)
   - Automatically send webmentions
   - Change `mp-syndicate-to` to `syndicate-to`
