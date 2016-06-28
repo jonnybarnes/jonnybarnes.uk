@@ -2,6 +2,7 @@
 
 ## Version {next}
   - Better use of `laravel-postgis`
+  - Change style for inline mini-profile images
 
 ## Version 0.0.5 (2016-06-23)
   - Automatically send webmentions
