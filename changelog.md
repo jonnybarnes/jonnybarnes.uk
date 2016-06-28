@@ -1,6 +1,6 @@
 # Changelog
 
-## Version 0.0.6.0 (2016-06-28)
+## Version 0.0.6.2 (2016-06-28)
   - Fix an issue with sending webmentions
 
 ## Version 0.0.6 (2016-06-28)
