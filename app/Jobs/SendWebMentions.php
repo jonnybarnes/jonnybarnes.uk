@@ -63,7 +63,7 @@ class SendWebMentions extends Job implements ShouldQueue
         if (parse_url($url, PHP_URL_HOST) == env('LONG_URL', 'localhost')) {
             return false;
         }
-        if (starts_with($url, '/notes/tagged/') {
+        if (starts_with($url, '/notes/tagged/')) {
             return false;
         }
 
