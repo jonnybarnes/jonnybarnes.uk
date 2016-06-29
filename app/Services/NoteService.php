@@ -48,11 +48,11 @@ class NoteService
         $this->dispatch(new SendWebMentions($note));
 
         if (//micropub request, syndication sent as array
-            (is_array($request->input('mp-syndicate-to'))
+            (is_array($request->input('syndicate-to'))
                 &&
-            (in_array('twitter.com/jonnybarnes', $request->input('mp-syndicate-to')))
+            (in_array('twitter.com/jonnybarnes', $request->input('syndicate-to')))
             || //micropub request, syndication sent as string
-            ($request->input('mp-syndicate-to') == 'twitter.com/jonnybarnes')
+            ($request->input('syndicate-to') == 'twitter.com/jonnybarnes')
             || //local admin cp request
             ($request->input('twitter') == true))
         ) {
