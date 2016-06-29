@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 0.0.6.3 (2016-06-29)
+  - Fix an issue with dispatching the syndication job
+
 ## Version 0.0.6.2 (2016-06-28)
   - Fix an issue with sending webmentions
 
