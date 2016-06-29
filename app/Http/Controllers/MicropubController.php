@@ -108,12 +108,22 @@ class MicropubController extends Controller
             }
             //we have a valid token, is `syndicate-to` set?
             if ($request->input('q') === 'syndicate-to') {
-                $content = http_build_query([
-                    'syndicate-to' => 'twitter.com/jonnybarnes',
+                return response()->json([
+                    'syndicate-to' => [[
+                        'uid' => 'https://twitter.com/jonnybarnes',
+                        'name' => 'jonnybarnes on Twitter',
+                        'service' => [
+                            'name' => 'Twitter',
+                            'url' => 'https://twitter.com',
+                            'photo' => 'https://upload.wikimedia.org/wikipedia/en/9/9f/Twitter_bird_logo_2012.svg',
+                        ],
+                        'user' => [
+                            'name' => 'jonnybarnes',
+                            'url' => 'https://twitter.com/jonnybarnes',
+                            'photo' => 'https://pbs.twimg.com/profile_images/1853565405/jmb-bw.jpg',
+                        ],
+                    ]],
                 ]);
-
-                return (new Response($content, 200))
-                              ->header('Content-Type', 'application/x-www-form-urlencoded');
             }
             //nope, how about a geo URL?
             if (substr($request->input('q'), 0, 4) === 'geo:') {

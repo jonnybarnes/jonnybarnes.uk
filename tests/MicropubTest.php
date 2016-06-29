@@ -44,7 +44,7 @@ class MicropubTest extends TestCase
     public function testMicropubRequestForSyndication()
     {
         $this->call('GET', $this->appurl . '/api/post', ['q' => 'syndicate-to'], [], [], ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]);
-        $this->see('twitter.com%2Fjonnybarnes');
+        $this->seeJson(['uid' => 'https://twitter.com/jonnybarnes']);
     }
 
     public function testMicropubRequestForNearbyPlacesThatExist()

@@ -50,9 +50,9 @@ class NoteService
         if (//micropub request, syndication sent as array
             (is_array($request->input('syndicate-to'))
                 &&
-            (in_array('twitter.com/jonnybarnes', $request->input('syndicate-to')))
+            (in_array('https://twitter.com/jonnybarnes', $request->input('syndicate-to')))
             || //micropub request, syndication sent as string
-            ($request->input('syndicate-to') == 'twitter.com/jonnybarnes')
+            ($request->input('syndicate-to') == 'https://twitter.com/jonnybarnes')
             || //local admin cp request
             ($request->input('twitter') == true))
         ) {
