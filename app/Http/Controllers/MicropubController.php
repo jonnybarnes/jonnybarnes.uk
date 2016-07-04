@@ -133,6 +133,7 @@ EOD;
     "error_description": "The provided token did not pass validation"
 }
 EOD;
+
                 return (new Response($content, 400))
                             ->header('Content-Type', 'application/json');
             }
