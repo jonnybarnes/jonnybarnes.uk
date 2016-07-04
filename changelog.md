@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 0.0.7.1 (2016-07-04)
+  - Minor style fixes
+
 ## Version 0.0.7 (2016-07-04)
   - Use JSON for syndication endpoint query response
   - Use JSON for all micropub requests
