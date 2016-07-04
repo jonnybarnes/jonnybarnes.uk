@@ -41,8 +41,7 @@ class NotesController extends Controller
                 }
             }
             if ($note->place !== null) {
-                preg_match('/\((.*)\)/', $note->place->location, $matches);
-                $lnglat = explode(' ', $matches[1]);
+                $lnglat = explode(' ', $note->place->location);
                 $note->latitude = $lnglat[1];
                 $note->longitude = $lnglat[0];
                 $note->address = $note->place->name;
@@ -110,8 +109,7 @@ class NotesController extends Controller
             }
         }
         if ($note->place !== null) {
-            preg_match('/\((.*)\)/', $note->place->location, $matches);
-            $lnglat = explode(' ', $matches[1]);
+            $lnglat = explode(' ', $note->place->location);
             $note->latitude = $lnglat[1];
             $note->longitude = $lnglat[0];
             $note->address = $note->place->name;

@@ -37,9 +37,7 @@ class MicropubClientController extends Controller
     public function newNotePage(Request $request)
     {
         $url = $request->session()->get('me');
-        $syndication = $this->parseSyndicationTargets(
-            $request->session()->get('syndication')
-        );
+        $syndication = $request->session()->get('syndication');
 
         return view('micropubnewnotepage', [
             'url' => $url,
@@ -113,7 +111,7 @@ class MicropubClientController extends Controller
             return redirect('notes/new')->withErrors('Bad response when refreshing syndication targets', 'endpoint');
         }
         $body = (string) $response->getBody();
-        $syndication = str_replace(['&', '[]'], [';', ''], $body);
+        $syndication = $this->parseSyndicationTargets($body);
 
         $request->session()->put('syndication', $syndication);
 
@@ -321,10 +319,9 @@ class MicropubClientController extends Controller
             return;
         }
         $syndicateTo = [];
-        $parts = explode(';', $syndicationTargets);
-        foreach ($parts as $part) {
-            $target = explode('=', $part);
-            $syndicateTo[] = urldecode($target[1]);
+        $data = json_decode($syndicationTargets, true);
+        foreach ($syndicateTo['syndicate-to'] as $syn) {
+            $syndicateTo[] = $syn['uid'];
         }
         if (count($syndicateTo) > 0) {
             return $syndicateTo;

@@ -27,7 +27,7 @@ class MicropubController extends Controller
     protected $placeService;
 
     /**
-     * Injest the dependency.
+     * Inject the dependencies.
      */
     public function __construct(
         TokenService $tokenService = null,
@@ -59,31 +59,53 @@ class MicropubController extends Controller
                     $type = $request->input('h');
                     if ($type == 'entry') {
                         $note = $this->noteService->createNote($request, $clientId);
-                        $content = 'Note created at ' . $note->longurl;
+                        $content = <<<EOD
+{
+    "response": "created",
+    "location": "$note->longurl"
+}
+EOD;
 
                         return (new Response($content, 201))
-                                      ->header('Location', $note->longurl);
+                                      ->header('Location', $note->longurl)
+                                      ->header('Content-Type', 'application/json');
                     }
                     if ($type == 'card') {
                         $place = $this->placeService->createPlace($request);
-                        $content = 'Place created at ' . $place->longurl;
+                        $content = <<<EOD
+{
+    "response": "created",
+    "location": "$place->longurl"
+}
+EOD;
 
                         return (new Response($content, 201))
-                                      ->header('Location', $place->longurl);
+                                      ->header('Location', $place->longurl)
+                                      ->header('Content-Type', 'application/json');
                     }
                 }
             }
-            $content = http_build_query([
-                'error' => 'invalid_token',
-                'error_description' => 'The token provided is not valid or does not have the necessary scope',
-            ]);
+            $content = <<<EOD
+{
+    "response": "error",
+    "error": "invalid_token",
+    "error_description": "The token provided is not valid or does not have the necessary scope",
+}
+EOD;
 
             return (new Response($content, 400))
-                          ->header('Content-Type', 'application/x-www-form-urlencoded');
+                          ->header('Content-Type', 'application/json');
         }
-        $content = 'No OAuth token sent with request.';
+        $content = <<<EOD
+{
+    "response": "error",
+    "error": "no_token",
+    "error_description": "No OAuth token sent with request"
+}
+EOD;
 
-        return new Response($content, 400);
+        return (new Response($content, 400))
+                        ->header('Content-Type', 'application/json');
     }
 
     /**
@@ -104,16 +126,34 @@ class MicropubController extends Controller
             $valid = $this->tokenService->validateToken($token);
 
             if ($valid === null) {
-                return new Response('Invalid token', 400);
+                $content = <<<EOD
+{
+    "respose": "error",
+    "error": "invalid_token",
+    "error_description": "The provided token did not pass validation"
+}
+EOD;
+                return (new Response($content, 400))
+                            ->header('Content-Type', 'application/json');
             }
             //we have a valid token, is `syndicate-to` set?
             if ($request->input('q') === 'syndicate-to') {
-                $content = http_build_query([
-                    'syndicate-to' => 'twitter.com/jonnybarnes',
+                return response()->json([
+                    'syndicate-to' => [[
+                        'uid' => 'https://twitter.com/jonnybarnes',
+                        'name' => 'jonnybarnes on Twitter',
+                        'service' => [
+                            'name' => 'Twitter',
+                            'url' => 'https://twitter.com',
+                            'photo' => 'https://upload.wikimedia.org/wikipedia/en/9/9f/Twitter_bird_logo_2012.svg',
+                        ],
+                        'user' => [
+                            'name' => 'jonnybarnes',
+                            'url' => 'https://twitter.com/jonnybarnes',
+                            'photo' => 'https://pbs.twimg.com/profile_images/1853565405/jmb-bw.jpg',
+                        ],
+                    ]],
                 ]);
-
-                return (new Response($content, 200))
-                              ->header('Content-Type', 'application/x-www-form-urlencoded');
             }
             //nope, how about a geo URL?
             if (substr($request->input('q'), 0, 4) === 'geo:') {
@@ -123,21 +163,51 @@ class MicropubController extends Controller
                 $longitude = $latlng[1];
                 $places = Place::near($latitude, $longitude, 1000);
 
-                return (new Response(json_encode($places), 200))
-                        ->header('Content-Type', 'application/json');
+                return response()->json([
+                    'response' => 'places',
+                    'places' => $places
+                ]);
             }
-            //nope, just return the token
-            $content = http_build_query([
-                'me' => $valid->getClaim('me'),
-                'scope' => $valid->getClaim('scope'),
-                'client_id' => $valid->getClaim('client_id'),
-            ]);
+            //nope, ho about a config query?
+            if ($request->input('q') == 'config') {
+                return response()->json([
+                    'syndicate-to' => [[
+                        'uid' => 'https://twitter.com/jonnybarnes',
+                        'name' => 'jonnybarnes on Twitter',
+                        'service' => [
+                            'name' => 'Twitter',
+                            'url' => 'https://twitter.com',
+                            'photo' => 'https://upload.wikimedia.org/wikipedia/en/9/9f/Twitter_bird_logo_2012.svg',
+                        ],
+                        'user' => [
+                            'name' => 'jonnybarnes',
+                            'url' => 'https://twitter.com/jonnybarnes',
+                            'photo' => 'https://pbs.twimg.com/profile_images/1853565405/jmb-bw.jpg',
+                        ],
+                    ]],
+                ]);
+            }
 
-            return (new Response($content, 200))
-                          ->header('Content-Type', 'application/x-www-form-urlencoded');
+            //nope, just return the token
+            return response()->json([
+                'response' => 'token',
+                'token' => [
+                    'me' => $valid->getClaim('me'),
+                    'scope' => $valid->getClaim('scope'),
+                    'client_id' => $valid->getClaim('client_id'),
+                ],
+            ]);
         }
         $content = 'No OAuth token sent with request.';
+        $content = <<<EOD
+{
+    "response": "error",
+    "error": "no_token",
+    "error_description": "No token provided with request"
+}
+EOD;
 
-        return new Response($content, 400);
+        return (new Response($content, 400))
+                        ->header('Content-Type', 'application/json');
     }
 }
