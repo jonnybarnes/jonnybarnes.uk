@@ -85,7 +85,7 @@ EOD;
                     }
                 }
             }
-            $content = <<<EOD
+            $content = <<<'EOD'
 {
     "response": "error",
     "error": "invalid_token",
@@ -96,7 +96,7 @@ EOD;
             return (new Response($content, 400))
                           ->header('Content-Type', 'application/json');
         }
-        $content = <<<EOD
+        $content = <<<'EOD'
 {
     "response": "error",
     "error": "no_token",
@@ -126,7 +126,7 @@ EOD;
             $valid = $this->tokenService->validateToken($token);
 
             if ($valid === null) {
-                $content = <<<EOD
+                $content = <<<'EOD'
 {
     "respose": "error",
     "error": "invalid_token",
@@ -165,7 +165,7 @@ EOD;
 
                 return response()->json([
                     'response' => 'places',
-                    'places' => $places
+                    'places' => $places,
                 ]);
             }
             //nope, ho about a config query?
@@ -199,7 +199,7 @@ EOD;
             ]);
         }
         $content = 'No OAuth token sent with request.';
-        $content = <<<EOD
+        $content = <<<'EOD'
 {
     "response": "error",
     "error": "no_token",
