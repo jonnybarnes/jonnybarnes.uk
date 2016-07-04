@@ -1,5 +1,13 @@
 # Changelog
 
+## Version {next}
+  - Use JSON for syndication endpoint query response
+  - Use JSON for all micropub requests
+  - Add support for `q=config` query of the micropub endpoint
+
+## Version 0.0.6.3 (2016-06-29)
+  - Fix an issue with dispatching the syndication job
+
 ## Version 0.0.6.2 (2016-06-28)
   - Fix an issue with sending webmentions
 
