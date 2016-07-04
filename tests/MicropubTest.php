@@ -59,6 +59,12 @@ class MicropubTest extends TestCase
         $this->see('[]');
     }
 
+    public function testMicropubRequestForConfig()
+    {
+        $this->call('GET', $this->appurl . '/api/post', ['q' => 'config'], [], [], ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]);
+        $this->seeJson(['uid' => 'https://twitter.com/jonnybarnes']);
+    }
+
     public function testMicropubRequestCreateNewNote()
     {
         $faker = \Faker\Factory::create();

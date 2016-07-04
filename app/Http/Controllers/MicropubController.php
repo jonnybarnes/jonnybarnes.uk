@@ -168,6 +168,25 @@ EOD;
                     'places' => $places
                 ]);
             }
+            //nope, ho about a config query?
+            if ($request->input('q') == 'config') {
+                return response()->json([
+                    'syndicate-to' => [[
+                        'uid' => 'https://twitter.com/jonnybarnes',
+                        'name' => 'jonnybarnes on Twitter',
+                        'service' => [
+                            'name' => 'Twitter',
+                            'url' => 'https://twitter.com',
+                            'photo' => 'https://upload.wikimedia.org/wikipedia/en/9/9f/Twitter_bird_logo_2012.svg',
+                        ],
+                        'user' => [
+                            'name' => 'jonnybarnes',
+                            'url' => 'https://twitter.com/jonnybarnes',
+                            'photo' => 'https://pbs.twimg.com/profile_images/1853565405/jmb-bw.jpg',
+                        ],
+                    ]],
+                ]);
+            }
 
             //nope, just return the token
             return response()->json([
