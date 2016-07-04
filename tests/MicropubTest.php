@@ -25,20 +25,20 @@ class MicropubTest extends TestCase
     {
         $this->call('GET', $this->appurl . '/api/post');
         $this->assertResponseStatus(400);
-        $this->see('No OAuth token sent with request.');
+        $this->seeJson(['error_description' => 'No token provided with request']);
     }
 
     public function testMicropubRequestWithoutValidToken()
     {
         $this->call('GET', $this->appurl . '/api/post', [], [], [], ['HTTP_Authorization' => 'Bearer abc123']);
         $this->assertResponseStatus(400);
-        $this->see('Invalid token');
+        $this->seeJson(['error_description' => 'The provided token did not pass validation']);
     }
 
     public function testMicropubRequestWithValidToken()
     {
         $this->call('GET', $this->appurl . '/api/post', [], [], [], ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]);
-        $this->see('me=https%3A%2F%2Fjonnybarnes.localhost');
+        $this->seeJson(['response' => 'token']);
     }
 
     public function testMicropubRequestForSyndication()
