@@ -2437,16 +2437,16 @@
         },
         {
             "name": "spatie/laravel-medialibrary",
-            "version": "4.4.0",
+            "version": "4.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/laravel-medialibrary.git",
-                "reference": "4b47aaebfa3ee52435a4832e1c551b424a51fdeb"
+                "reference": "8ba0ded185ee7c3c36d3ebb531a881f17950677d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/laravel-medialibrary/zipball/4b47aaebfa3ee52435a4832e1c551b424a51fdeb",
-                "reference": "4b47aaebfa3ee52435a4832e1c551b424a51fdeb",
+                "url": "https://api.github.com/repos/spatie/laravel-medialibrary/zipball/8ba0ded185ee7c3c36d3ebb531a881f17950677d",
+                "reference": "8ba0ded185ee7c3c36d3ebb531a881f17950677d",
                 "shasum": ""
             },
             "require": {
@@ -2493,7 +2493,7 @@
                 "media",
                 "spatie"
             ],
-            "time": "2016-07-06 12:49:31"
+            "time": "2016-07-09 13:49:32"
         },
         {
             "name": "spatie/pdf-to-image",
