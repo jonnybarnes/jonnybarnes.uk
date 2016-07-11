@@ -25,7 +25,7 @@ class NoteService
         if ($request->header('Content-Type') == 'application/json') {
             $content = $request->input('properties.content')[0];
             $inReplyTo = $request->input('properties.in-reply-to')[0];
-            $placeSlug = $request->input('proprties.location');
+            $placeSlug = $request->input('properties.location');
             if (is_array($placeSlug)) {
                 $placeSlug = $placeSlug[0];
             }
