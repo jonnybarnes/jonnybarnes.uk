@@ -22,15 +22,27 @@ class NoteService
      */
     public function createNote(Request $request, $clientId = null)
     {
+        if ($request->header('Content-Type') == 'application/json') {
+            $content = $request->input('properties.content')[0];
+            $inReplyTo = $request->input('properties.in-reply-to')[0];
+            $placeSlug = $request->input('proprties.location');
+            if (is_array($placeSlug)) {
+                $placeSlug = $placeSlug[0];
+            }
+        } else {
+            $content = $request->input('content');
+            $inReplyTo = $request->input('in-reply-to');
+            $placeSlug = $request->input('location');
+        }
+
         $note = Note::create(
             [
-                'note' => $request->input('content'),
-                'in_reply_to' => $request->input('in-reply-to'),
+                'note' => $content,
+                'in_reply_to' => $inReplyTo,
                 'client_id' => $clientId,
             ]
         );
 
-        $placeSlug = $request->input('location');
         if ($placeSlug !== null && $placeSlug !== 'no-location') {
             $place = Place::where('slug', '=', $placeSlug)->first();
             $note->place()->associate($place);

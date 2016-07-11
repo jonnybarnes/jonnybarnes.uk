@@ -14,7 +14,7 @@ class PlaceService
      * @param  \Illuminate\Http\Request $request
      * @return \App\Place
      */
-    public function createplace(Request $request)
+    public function createPlace(Request $request)
     {
         //we’ll either have latitude and longitude sent together in a
         //geo-url (micropub), or seperatley (/admin)
