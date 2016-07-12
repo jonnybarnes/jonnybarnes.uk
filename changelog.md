@@ -2,6 +2,7 @@
 
 ## Version {next}
   - Allow new notes to be made by a JSON request from a micropub client
+  - Add DependencyCI support
 
 ## Version 0.0.7.1 (2016-07-04)
   - Minor style fixes
