@@ -1091,12 +1091,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/jonnybarnes/webmentions-parser.git",
-                "reference": "00ccf313a8c19bf795fc16ec71f2408ea23dd8d6"
+                "reference": "9f29162e826b6ad3574443a317979b006f54a94f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jonnybarnes/webmentions-parser/zipball/00ccf313a8c19bf795fc16ec71f2408ea23dd8d6",
-                "reference": "00ccf313a8c19bf795fc16ec71f2408ea23dd8d6",
+                "url": "https://api.github.com/repos/jonnybarnes/webmentions-parser/zipball/9f29162e826b6ad3574443a317979b006f54a94f",
+                "reference": "9f29162e826b6ad3574443a317979b006f54a94f",
                 "shasum": ""
             },
             "require": {
@@ -1114,6 +1114,9 @@
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "CC0-1.0"
+            ],
             "authors": [
                 {
                     "name": "Jonny Barnes",
@@ -1127,7 +1130,7 @@
                 "microformats",
                 "webmentions"
             ],
-            "time": "2016-04-03 19:57:20"
+            "time": "2016-07-12 16:40:58"
         },
         {
             "name": "laravel/framework",
