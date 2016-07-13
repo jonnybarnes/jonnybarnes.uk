@@ -100,6 +100,25 @@ class MicropubTest extends TestCase
         $this->seeInDatabase('places', ['slug' => 'the-barton-arms']);
     }
 
+    public function testMicropubJSONRequestCreateNewNote()
+    {
+        $faker = \Faker\Factory::create();
+        $note = $faker->text;
+        $this->json(
+            'POST',
+            $this->appurl . '/api/post',
+            [
+                'type' => ['h-entry'],
+                'properties' => [
+                    'content' => [$note],
+                ],
+            ],
+            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+        )->seeJson([
+            'response' => 'created'
+        ]);
+    }
+
     private function getToken()
     {
         $signer = new Sha256();

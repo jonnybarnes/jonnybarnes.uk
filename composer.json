@@ -17,7 +17,7 @@
         "martinbean/laravel-sluggable-trait": "0.2.*",
         "indieauth/client": "~0.1",
         "ezyang/htmlpurifier": "~4.6",
-        "league/commonmark": "^0.13.0",
+        "league/commonmark": "^0.14.0",
         "spatie/laravel-medialibrary": "^4.0",
         "league/flysystem-aws-s3-v3": "^1.0",
         "phaza/laravel-postgis": "~3.1",

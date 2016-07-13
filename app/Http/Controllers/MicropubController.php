@@ -56,8 +56,7 @@ class MicropubController extends Controller
                 $scopes = explode(' ', $tokenData->getClaim('scope'));
                 if (array_search('post', $scopes) !== false) {
                     $clientId = $tokenData->getClaim('client_id');
-                    $type = $request->input('h');
-                    if ($type == 'entry') {
+                    if (($request->input('h') == 'entry') || ($request->input('type')[0] == 'h-entry')) {
                         $note = $this->noteService->createNote($request, $clientId);
                         $content = <<<EOD
 {
@@ -70,7 +69,7 @@ EOD;
                                       ->header('Location', $note->longurl)
                                       ->header('Content-Type', 'application/json');
                     }
-                    if ($type == 'card') {
+                    if ($request->input('h') == 'card' || $request->input('type')[0] == 'h-card') {
                         $place = $this->placeService->createPlace($request);
                         $content = <<<EOD
 {
