@@ -1,5 +1,8 @@
 # Changelog
 
+## Version {next}
+  - Improve syndication parsing to allow better name display on new note form
+
 ## Version 0.0.8.1 (2016-07-13)
   - Fix anh issue in the syndication target parsing method
 

@@ -322,7 +322,10 @@ class MicropubClientController extends Controller
         $data = json_decode($syndicationTargets, true);
         if (array_key_exists('syndicate-to', $data)) {
             foreach ($data['syndicate-to'] as $syn) {
-                $syndicateTo[] = $syn['uid'];
+                $syndicateTo[] = [
+                    'target' => $syn['uid'],
+                    'name' => $syn['name'],
+                ];
             }
         }
         if (count($syndicateTo) > 0) {
