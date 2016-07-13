@@ -1,6 +1,6 @@
 # Changelog
 
-## Version {next}
+## Version 0.0.8 (2016-07-13)
   - Allow new notes to be made by a JSON request from a micropub client
   - Add DependencyCI support
 
