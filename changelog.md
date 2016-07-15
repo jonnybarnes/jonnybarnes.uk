@@ -1,6 +1,6 @@
 # Changelog
 
-## Version {next}
+## Version 0.0.8.2 (2016-07-15)
   - Improve syndication parsing to allow better name display on new note form
 
 ## Version 0.0.8.1 (2016-07-13)
