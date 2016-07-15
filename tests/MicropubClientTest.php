@@ -32,7 +32,12 @@ class MicropubClientTest extends TestCase
 
     public function testClientPageRecentAuth()
     {
-        $syndication = ['https://twitter.com/jonnybarnes'];
+        $syndication = [
+            [
+                'target' => 'https://twitter.com/jonnybarnes',
+                'name' => 'jonnybarnes on Twitter',
+            ]
+        ];
         $this->withSession([
             'me' => $this->appurl,
             'syndication' => $syndication,
