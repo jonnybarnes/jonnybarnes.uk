@@ -4,10 +4,13 @@ var gulp = require('gulp');
 var sass = require('gulp-sass');
 var zopfli = require('gulp-zopfli');
 var brotli = require('gulp-brotli');
+var sourcemaps = require('gulp-sourcemaps');
 
 gulp.task('sass', function () {
     return gulp.src('./resources/assets/sass/global.scss')
-        .pipe(sass().on('error', sass.logError))
+        .pipe(sourcemaps.init())
+        .pipe(sass({outputStyle: 'compressed'}).on('error', sass.logError))
+        .pipe(sourcemaps.write('./maps'))
         .pipe(gulp.dest('./public/assets/css'));
 });
 
