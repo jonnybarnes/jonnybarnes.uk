@@ -13,7 +13,6 @@ html {
   box-sizing: inherit; }
 
 #topheader {
-  display: -webkit-box;
   display: flex;
   flex-flow: row; }
 
@@ -156,7 +155,6 @@ article header {
 
 body {
   text-rendering: optimizeLegibility;
-  -webkit-font-feature-settings: "liga";
   font-feature-settings: "liga";
   font-family: "leitura-news", serif;
   font-size: 1.2em; }
@@ -171,7 +169,6 @@ h1 {
   text-decoration: none; }
 
 nav {
-  -webkit-font-feature-settings: "dlig";
   font-feature-settings: "dlig"; }
 
 article header h1 a {
@@ -219,7 +216,6 @@ textarea {
   border-radius: 4px; }
 
 button:hover {
-  -webkit-transition: 0.5s ease-in-out;
   transition: 0.5s ease-in-out;
   background-color: #fdf6e3;
   color: #002b36; }
@@ -242,5 +238,3 @@ input[type="checkbox"] {
 
 .twitter-tweet-rendered + .note {
   margin-top: 0; }
-
-/*# sourceMappingURL=global.css.map */
