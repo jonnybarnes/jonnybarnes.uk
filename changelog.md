@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 0.0.8.3 (2016-07-18)
+  - Dump laravel-elixir, use gulp natively. Also this means using nginx and etags for cache-busting
+
 ## Version 0.0.8.2 (2016-07-15)
   - Improve syndication parsing to allow better name display on new note form
 
