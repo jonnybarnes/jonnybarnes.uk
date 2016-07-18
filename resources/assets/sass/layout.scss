@@ -20,6 +20,11 @@ html {
     padding: 0.5em 1em;
 }
 
+#topheader h1 {
+    font-size: 1em;
+    margin: 0;
+}
+
 nav {
     padding-top: 0.5em;
 }
@@ -125,6 +130,11 @@ nav {
 article header {
     margin-top: 0.5em;
     margin-bottom: 0.8em;
+}
+
+article h1 {
+    font-size: 1.2em;
+    margin-bottom: 0;
 }
 
 .post-info {
