@@ -1,7 +1,8 @@
 # Changelog
 
-## Version {next}
+## Version 0.0.8.5 (2016-07-18)
   - Set the size of the textarea in a form better
+  - Update to latest Guzzle to fix CVE-2016-5385
 
 ## Version 0.0.8.4 (2016-07-18)
   - Make the revised non-elixir asset links absolute
