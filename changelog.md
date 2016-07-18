@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 0.0.8.4 (2016-07-18)
+  - Make the revised non-elixir asset links absolute
+
 ## Version 0.0.8.3 (2016-07-18)
   - Dump laravel-elixir, use gulp natively. Also this means using nginx and etags for cache-busting
 
