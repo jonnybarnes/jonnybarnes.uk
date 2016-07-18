@@ -34,10 +34,10 @@
 <link rel="stylesheet" href="https://api.mapbox.com/mapbox.js/v2.2.3/mapbox.css">
 <script src="https://api.mapbox.com/mapbox.js/v2.2.3/mapbox.js"></script>
 
-<script src="assets/bower/Autolinker.min.js"></script>
-<script src="assets/js/links.js"></script>
-<script src="assets/js/maps.js"></script>
+<script src="/assets/bower/Autolinker.min.js"></script>
+<script src="/assets/js/links.js"></script>
+<script src="/assets/js/maps.js"></script>
 
-<script src="assets/prism/prism.js"></script>
-<link rel="stylesheet" href="assets/prism/prism.css">
+<script src="/assets/prism/prism.js"></script>
+<link rel="stylesheet" href="/assets/prism/prism.css">
 @stop
