@@ -1,5 +1,8 @@
 # Changelog
 
+## Version {next}
+  - Set the size of the textarea in a form better
+
 ## Version 0.0.8.4 (2016-07-18)
   - Make the revised non-elixir asset links absolute
 

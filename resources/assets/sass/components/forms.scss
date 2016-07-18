@@ -24,6 +24,11 @@ textarea {
     color: $base3;
     border: 1px solid $base3;
     border-radius: 4px;
+    font-size: 1em;
+}
+
+textarea {
+    font-size: 1.2em; //textarea doesn’t resize with the rest
 }
 
 button:hover {
