@@ -26,7 +26,7 @@ Edit Article « Admin CP
 
 @section('scripts')
 @parent
-<script src="assets/bower/marked.min.js"></script>
+<script src="/assets/bower/marked.min.js"></script>
 <script>
   var preview = document.createElement('div');
   preview.classList.add('preview');

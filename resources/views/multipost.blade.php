@@ -25,6 +25,6 @@ Articles « Jonny Barnes
 @stop
 
 @section('scripts')
-<script src="assets/prism/prism.js"></script>
-<link rel="stylesheet" href="assets/prism/prism.css">
+<script src="/assets/prism/prism.js"></script>
+<link rel="stylesheet" href="/assets/prism/prism.css">
 @stop
