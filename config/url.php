@@ -7,5 +7,5 @@
 
 return [
     'longurl' => env('APP_LONGURL', 'jonnybarnes.uk'),
-    'shorturl' => env('APP_SHORTURL', 'jmb.so')
+    'shorturl' => env('APP_SHORTURL', 'jmb.lv')
 ];
