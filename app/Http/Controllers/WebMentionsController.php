@@ -28,7 +28,7 @@ class WebMentionsController extends Controller
         }
 
         //next check the $target is valid
-        $path = parse_url($request->input('target'))['path'];
+        $path = parse_url($request->input('target'), PHP_URL_PATH);
         $pathParts = explode('/', $path);
 
         switch ($pathParts[1]) {
@@ -36,9 +36,8 @@ class WebMentionsController extends Controller
                 //we have a note
                 $noteId = $pathParts[2];
                 $numbers = new Numbers();
-                $realId = $numbers->b60tonum($noteId);
                 try {
-                    $note = Note::findOrFail($realId);
+                    $note = Note::findOrFail($numbers->b60tonum($noteId));
                     $this->dispatch(new ProcessWebMention($note, $request->input('source')));
                 } catch (ModelNotFoundException $e) {
                     return new Response('This note doesn’t exist.', 400);

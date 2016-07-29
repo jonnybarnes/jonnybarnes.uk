@@ -2,8 +2,8 @@
 
 namespace App\Jobs;
 
+use Mf2;
 use App\Note;
-use Mf2\parse;
 use HTMLPurifier;
 use App\WebMention;
 use GuzzleHttp\Client;
@@ -11,6 +11,7 @@ use HTMLPurifier_Config;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Jonnybarnes\WebmentionsParser\Parser;
+use GuzzleHttp\Exception\RequestException;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
 class ProcessWebMention extends Job implements ShouldQueue
@@ -44,7 +45,11 @@ class ProcessWebMention extends Job implements ShouldQueue
         $sourceURL = parse_url($this->source);
         $baseURL = $sourceURL['scheme'] . '://' . $sourceURL['host'];
         $remoteContent = $this->getRemoteContent($this->source);
-        $microformats = $this->parseHTML($remoteContent, $baseURL);
+        if ($remoteContent === null) {
+            return false;
+        }
+        $mf2Parser = new Mf2\Parser($remoteContent, $baseURL, true);
+        $microformats = $mf2Parser->parse();
         $count = WebMention::where('source', '=', $this->source)->count();
         if ($count > 0) {
             //we already have a webmention from this source
@@ -140,14 +145,18 @@ class ProcessWebMention extends Job implements ShouldQueue
     /**
      * Retreive the remote content from a URL, and caches the result.
      *
-     * @param  string  The URL to retreive content from
-     * @return string  The HTML from the URL
+     * @param  string       The URL to retreive content from
+     * @return string|null  The HTML from the URL (or null if error)
      */
     private function getRemoteContent($url)
     {
         $client = new Client();
 
-        $response = $client->get($url);
+        try {
+            $response = $client->request('GET', $url);
+        } catch(RequestException $e) {
+            return;
+        }
         $html = (string) $response->getBody();
         $path = storage_path() . '/HTML/' . $this->createFilenameFromURL($url);
         $this->fileForceContents($path, $html);
@@ -187,20 +196,6 @@ class ProcessWebMention extends Job implements ShouldQueue
             mkdir($dir, 0755, true);
         }
         file_put_contents("$dir/$name", $contents);
-    }
-
-    /**
-     * A wrapper function for php-mf2’s parse method.
-     *
-     * @param  string  The HTML to parse
-     * @param  string  The base URL to resolve relative URLs in the HTML against
-     * @return array   The porcessed microformats
-     */
-    private function parseHTML($html, $baseurl)
-    {
-        $microformats = \Mf2\parse((string) $html, $baseurl);
-
-        return $microformats;
     }
 
     /**
