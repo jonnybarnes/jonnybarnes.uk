@@ -1,5 +1,9 @@
 # Changelog
 
+## Version {next}
+  - Adding jsonb column to store webmentions’ mf2.
+    * As of L5.2 this needs a custom command to drop NOT NULL from content, L5.3 should allow a fix for this
+
 ## Version 0.0.8.5 (2016-07-18)
   - Set the size of the textarea in a form better
   - Update to latest Guzzle to fix CVE-2016-5385
