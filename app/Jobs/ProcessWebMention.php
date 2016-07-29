@@ -154,7 +154,7 @@ class ProcessWebMention extends Job implements ShouldQueue
 
         try {
             $response = $client->request('GET', $url);
-        } catch(RequestException $e) {
+        } catch (RequestException $e) {
             return;
         }
         $html = (string) $response->getBody();
