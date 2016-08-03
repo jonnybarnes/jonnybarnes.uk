@@ -13,13 +13,16 @@ use Illuminate\Queue\InteractsWithQueue;
 use Jonnybarnes\WebmentionsParser\Parser;
 use GuzzleHttp\Exception\RequestException;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Bus\DispatchesJobs;
+use App\Exceptions\RemoteContentNotFoundException;
 
 class ProcessWebMention extends Job implements ShouldQueue
 {
-    use InteractsWithQueue, SerializesModels;
+    use InteractsWithQueue, SerializesModels, DispatchesJobs;
 
     protected $note;
     protected $source;
+    protected $guzzle;
 
     /**
      * Create a new job instance.
@@ -28,10 +31,11 @@ class ProcessWebMention extends Job implements ShouldQueue
      * @param  string $source
      * @return void
      */
-    public function __construct(Note $note, $source)
+    public function __construct(Note $note, $source, Client $guzzle = null)
     {
         $this->note = $note;
         $this->source = $source;
+        $this->guzzle = $guzzle ?? new Client();
     }
 
     /**
@@ -46,100 +50,60 @@ class ProcessWebMention extends Job implements ShouldQueue
         $baseURL = $sourceURL['scheme'] . '://' . $sourceURL['host'];
         $remoteContent = $this->getRemoteContent($this->source);
         if ($remoteContent === null) {
-            return false;
+            throw new RemoteContentNotFoundException;
         }
-        $mf2Parser = new Mf2\Parser($remoteContent, $baseURL, true);
-        $microformats = $mf2Parser->parse();
-        $count = WebMention::where('source', '=', $this->source)->count();
-        if ($count > 0) {
-            //we already have a webmention from this source
-            $webmentions = WebMention::where('source', '=', $this->source)->get();
-            foreach ($webmentions as $webmention) {
-                //now check it still 'mentions' this target
-                //we switch for each type of mention (reply/like/repost)
-                switch ($webmention->type) {
-                    case 'reply':
-                        if ($parser->checkInReplyTo($microformats, $note->longurl) == false) {
-                            //it doesn't so delete
-                            $webmention->delete();
+        $microformats = Mf2\parse($remoteContent, $baseURL);
+        $webmentions = WebMention::where('source', $this->source)->get();
+        foreach ($webmentions as $webmention) {
+            //check webmention still references target
+            //we try each type of mention (reply/like/repost)
+            if ($webmention->type == 'in-reply-to') {
+                if ($parser->checkInReplyTo($microformats, $this->note->longurl) == false) {
+                    //it doesn't so delete
+                    $webmention->delete();
 
-                            return true;
-                        }
-                        //webmenion is still a reply, so update content
-                        $content = $parser->replyContent($microformats);
-                        $this->saveImage($content);
-                        $content['reply'] = $this->filterHTML($content['reply']);
-                        $content = serialize($content);
-                        $webmention->content = $content;
-                        $webmention->save();
+                    return;
+                }
+                //webmenion is still a reply, so update content
+                $microformats = $this->filterHTML($microformats);
+                $this->dispatch(new SaveProfileImage($microformats));
+                $webmention->mf2 = json_encode($microformats);
+                $webmention->save();
 
-                        return true;
-                        break;
-                    case 'like':
-                        if ($parser->checkLikeOf($microformats, $note->longurl) == false) {
-                            //it doesn't so delete
-                            $webmention->delete();
+                return;
+            }
+            if ($webmention->type == 'like-of') {
+                if ($parser->checkLikeOf($microformats, $note->longurl) == false) {
+                    //it doesn't so delete
+                    $webmention->delete();
 
-                            return true;
-                        } //note we don't need to do anything if it still is a like
-                        break;
-                    case 'repost':
-                        if ($parser->checkRepostOf($microformats, $note->longurl) == false) {
-                            //it doesn't so delete
-                            $webmention->delete();
+                    return;
+                } //note we don't need to do anything if it still is a like
+            }
+            if ($webmention->type == 'repost-of') {
+                if ($parser->checkRepostOf($microformats, $note->longurl) == false) {
+                    //it doesn't so delete
+                    $webmention->delete();
 
-                            return true;
-                        } //again, we don't need to do anything if it still is a repost
-                        break;
-                }//switch
-            }//foreach
-        }//if
+                    return;
+                } //again, we don't need to do anything if it still is a repost
+            }
+        }//foreach
+
         //no wemention in db so create new one
         $webmention = new WebMention();
-        //check it is in fact a reply
-        if ($parser->checkInReplyTo($microformats, $note->longurl)) {
-            $content = $parser->replyContent($microformats);
-            $this->saveImage($content);
-            $content['reply'] = $this->filterHTML($content['reply']);
-            $content = serialize($content);
-            $webmention->source = $this->source;
-            $webmention->target = $note->longurl;
-            $webmention->commentable_id = $this->note->id;
-            $webmention->commentable_type = 'App\Note';
-            $webmention->type = 'reply';
-            $webmention->content = $content;
-            $webmention->save();
+        $type = $parser->getMentionType($microformats); //throw error here?
+        $this->dispatch(new SaveProfileImage($microformats));
+        $microformats = $this->filterHTML($microformats);
+        $webmention->source = $this->source;
+        $webmention->target = $this->note->longurl;
+        $webmention->commentable_id = $this->note->id;
+        $webmention->commentable_type = 'App\Note';
+        $webmention->type = $type;
+        $webmention->mf2 = json_encode($microformats);
+        $webmention->save();
 
-            return true;
-        } elseif ($parser->checkLikeOf($microformats, $note->longurl)) {
-            //it is a like
-            $content = $parser->likeContent($microformats);
-            $this->saveImage($content);
-            $content = serialize($content);
-            $webmention->source = $this->source;
-            $webmention->target = $note->longurl;
-            $webmention->commentable_id = $this->note->id;
-            $webmention->commentable_type = 'App\Note';
-            $webmention->type = 'like';
-            $webmention->content = $content;
-            $webmention->save();
-
-            return true;
-        } elseif ($parser->checkRepostOf($microformats, $note->longurl)) {
-            //it is a repost
-            $content = $parser->repostContent($microformats);
-            $this->saveImage($content);
-            $content = serialize($content);
-            $webmention->source = $this->source;
-            $webmention->target = $note->longurl;
-            $webmention->commentable_id = $this->note->id;
-            $webmention->commentable_type = 'App\Note';
-            $webmention->type = 'repost';
-            $webmention->content = $content;
-            $webmention->save();
-
-            return true;
-        }
+        return;
     }
 
     /**
@@ -150,16 +114,20 @@ class ProcessWebMention extends Job implements ShouldQueue
      */
     private function getRemoteContent($url)
     {
-        $client = new Client();
-
         try {
-            $response = $client->request('GET', $url);
+            $response = $this->guzzle->request('GET', $url);
         } catch (RequestException $e) {
             return;
         }
         $html = (string) $response->getBody();
         $path = storage_path() . '/HTML/' . $this->createFilenameFromURL($url);
-        $this->fileForceContents($path, $html);
+        $parts = explode('/', $path);
+        $name = array_pop($parts);
+        $dir = implode('/', $parts);
+        if (! is_dir($dir)) {
+            mkdir($dir, 0755, true);
+        }
+        file_put_contents("$dir/$name", $html);
 
         return $html;
     }
@@ -182,65 +150,29 @@ class ProcessWebMention extends Job implements ShouldQueue
     }
 
     /**
-     * Save a file, and create any necessary folders.
+     * Filter the HTML in a reply webmention.
      *
-     * @param string  The directory to save to
-     * @param binary  The file to save
+     * @param  array  The unfiltered microformats
+     * @return array  The filtered microformats
      */
-    private function fileForceContents($dir, $contents)
+    private function filterHTML($microformats)
     {
-        $parts = explode('/', $dir);
-        $name = array_pop($parts);
-        $dir = implode('/', $parts);
-        if (! is_dir($dir)) {
-            mkdir($dir, 0755, true);
+        if (isset($microformats['items'][0]['properties']['content'][0]['html'])) {
+            $microformats['items'][0]['properties']['content'][0]['html_purified'] = $this->useHTMLPurifier(
+                $microformats['items'][0]['properties']['content'][0]['html']
+            );
         }
-        file_put_contents("$dir/$name", $contents);
+
+        return $microformats;
     }
 
     /**
-     * Save a profile image to the local cache.
-     *
-     * @param  array  source content
-     * @return bool   wether image was saved or not (we don’t save twitter profiles)
-     */
-    public function saveImage(array $content)
-    {
-        $photo = $content['photo'];
-        $home = $content['url'];
-        //dont save pbs.twimg.com links
-        if (parse_url($photo)['host'] != 'pbs.twimg.com'
-              && parse_url($photo)['host'] != 'twitter.com') {
-            $client = new Client();
-            try {
-                $response = $client->get($photo);
-                $image = $response->getBody(true);
-                $path = public_path() . '/assets/profile-images/' . parse_url($home)['host'] . '/image';
-                $this->fileForceContents($path, $image);
-            } catch (Exception $e) {
-                // we are openning and reading the default image so that
-                // fileForceContent work
-                $default = public_path() . '/assets/profile-images/default-image';
-                $handle = fopen($default, 'rb');
-                $image = fread($handle, filesize($default));
-                fclose($handle);
-                $path = public_path() . '/assets/profile-images/' . parse_url($home)['host'] . '/image';
-                $this->fileForceContents($path, $image);
-            }
-
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * Purify HTML received from a webmention.
+     * Set up and use HTMLPurifer on some HTML.
      *
      * @param  string  The HTML to be processed
      * @return string  The processed HTML
      */
-    public function filterHTML($html)
+    private function useHTMLPurifier($html)
     {
         $config = HTMLPurifier_Config::createDefault();
         $config->set('Cache.SerializerPath', storage_path() . '/HTMLPurifier');

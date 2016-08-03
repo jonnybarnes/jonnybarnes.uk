@@ -7,6 +7,8 @@ use Twitter;
 use App\Tag;
 use App\Note;
 use Jonnybarnes\IndieWeb\Numbers;
+use Illuminate\Filesystem\Filesystem;
+use Jonnybarnes\WebmentionsParser\Authorship;
 
 // Need to sort out Twitter and webmentions!
 
@@ -23,8 +25,8 @@ class NotesController extends Controller
         foreach ($notes as $note) {
             $replies = 0;
             foreach ($note->webmentions as $webmention) {
-                if ($webmention->type == 'reply') {
-                    $replies = $replies + 1;
+                if ($webmention->type == 'in-reply-to') {
+                    $replies++;
                 }
             }
             $note->replies = $replies;
@@ -67,31 +69,51 @@ class NotesController extends Controller
     public function singleNote($urlId)
     {
         $numbers = new Numbers();
+        $authorship = new Authorship();
         $realId = $numbers->b60tonum($urlId);
         $note = Note::find($realId);
         $replies = [];
         $reposts = [];
         $likes = [];
         foreach ($note->webmentions as $webmention) {
+            /*
+                reply->url      |
+                reply->photo    |   Author
+                reply->name     |
+                reply->source
+                reply->date
+                reply->reply
+
+                repost->url     |
+                repost->photo   |   Author
+                repost->name    |
+                repost->date
+                repost->source
+
+                like->url       |
+                like->photo     |   Author
+                like->name      |
+            */
+            $microformats = json_decode($webmention->mf2);
+            $authorHCard = $authorship->findAuthor($microformats);
+            $content['url'] = $authorHCard['properties']['url'][0];
+            $content['photo'] = $this->createPhotoLink($authorHCard['properties']['photo'][0]);
+            $content['name'] = $authorHCard['properties']['name'][0];
             switch ($webmention->type) {
-                case 'reply':
-                    $content = unserialize($webmention->content);
-                    $content['source'] = $this->bridgyReply($webmention->source);
-                    $content['photo'] = $this->createPhotoLink($content['photo']);
+                case 'in-reply-to':
+                    $content['source'] = $webmention->source;
                     $content['date'] = $carbon->parse($content['date'])->toDayDateTimeString();
+                    $content['reply'] = $microformats['items'][0]['properties']['content'][0]['html_purified'];
                     $replies[] = $content;
                     break;
 
-                case 'repost':
-                    $content = unserialize($webmention->content);
-                    $content['photo'] = $this->createPhotoLink($content['photo']);
+                case 'repost-of':
                     $content['date'] = $carbon->parse($content['date'])->toDayDateTimeString();
+                    $content['source'] = $webmention->source;
                     $reposts[] = $content;
                     break;
 
-                case 'like':
-                    $content = unserialize($webmention->content);
-                    $content['photo'] = $this->createPhotoLink($content['photo']);
+                case 'like-of':
                     $likes[] = $content;
                     break;
             }
@@ -165,40 +187,42 @@ class NotesController extends Controller
     }
 
     /**
-     * Swap a brid.gy URL shim-ing a twitter reply to a real twitter link.
-     *
-     * @param  string
-     * @return string
-     */
-    public function bridgyReply($source)
-    {
-        $url = $source;
-        if (mb_substr($source, 0, 28, 'UTF-8') == 'https://brid-gy.appspot.com/') {
-            $parts = explode('/', $source);
-            $tweetId = array_pop($parts);
-            if ($tweetId) {
-                $url = 'https://twitter.com/_/status/' . $tweetId;
-            }
-        }
-
-        return $url;
-    }
-
-    /**
      * Create the photo link.
+     *
+     * We shall leave twitter.com and twimg.com links as they are. Then we shall
+     * check for local copies, if that fails leave the link as is.
      *
      * @param  string
      * @return string
      */
     public function createPhotoLink($url)
     {
-        $host = parse_url($url)['host'];
-        if ($host != 'twitter.com' && $host != 'pbs.twimg.com') {
-            return '/assets/profile-images/' . $host . '/image';
-        }
-        if (mb_substr($url, 0, 20) == 'http://pbs.twimg.com') {
+        $host = parse_url($url, PHP_URL_HOST);
+        if ($host == 'pbs.twimg.com') {
+            //make sure we use HTTPS, we know twitter supports it
             return str_replace('http://', 'https://', $url);
         }
+        if ($host == 'twitter.com') {
+            if (Cache::has($url)) {
+                return Cache::get($url);
+            }
+            $username = parse_url($url, PHP_URL_PATH);
+            try {
+                $info = Twitter::getUsers(['screen_name' => $username]);
+                $profile_image = $info->profile_image_url_https;
+                Cache::put($url, $profile_image, 10080); //1 week
+            } catch (Exception $e) {
+                return $url; //not sure here
+            }
+
+            return $profile_image;
+        }
+        $filesystem = new Filesystem();
+        if ($filesystem->exists(public_path() . '/assets/profile-images/' . $host . '/image')) {
+            return '/assets/profile-images/' . $host . '/image';
+        }
+
+        return $url;
     }
 
     /**
