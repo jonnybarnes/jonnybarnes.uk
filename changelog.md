@@ -3,6 +3,8 @@
 ## Version {next}
   - Adding jsonb column to store webmentions’ mf2.
     * As of L5.2 this needs a custom command to drop NOT NULL from content, L5.3 should allow a fix for this
+  - Refactor receiving webmention code
+  - Refactor sending webmention code to pass webmention.rocks
 
 ## Version 0.0.8.5 (2016-07-18)
   - Set the size of the textarea in a form better

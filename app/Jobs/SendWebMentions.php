@@ -20,9 +20,10 @@ class SendWebMentions extends Job implements ShouldQueue
      * @param  Note $note
      * @return void
      */
-    public function __construct(Note $note)
+    public function __construct(Note $note, Client $guzzle = null)
     {
         $this->note = $note;
+        $this->guzzle = $guzzle ?? new Client();
     }
 
     /**
@@ -31,16 +32,16 @@ class SendWebMentions extends Job implements ShouldQueue
      * @param  \GuzzleHttp\Client $guzzle
      * @return void
      */
-    public function handle(Client $guzzle)
+    public function handle()
     {
         //grab the URLs
         $urlsInReplyTo = explode(' ', $this->note->in_reply_to);
         $urlsNote = $this->getLinks($this->note->note);
         $urls = array_filter(array_merge($urlsInReplyTo, $urlsNote)); //filter out none URLs
         foreach ($urls as $url) {
-            $endpoint = $this->discoverWebmentionEndpoint($url, $guzzle);
+            $endpoint = $this->discoverWebmentionEndpoint($url, $this->guzzle);
             if ($endpoint) {
-                $guzzle->post($endpoint, [
+                $this->guzzle->post($endpoint, [
                     'form_params' => [
                         'source' => $this->note->longurl,
                         'target' => $url,
@@ -73,8 +74,8 @@ class SendWebMentions extends Job implements ShouldQueue
         //check HTTP Headers for webmention endpoint
         $links = \GuzzleHttp\Psr7\parse_header($response->getHeader('Link'));
         foreach ($links as $link) {
-            if ($link['rel'] == 'webmention') {
-                return trim($link[0], '<>');
+            if (mb_stristr($link['rel'], 'webmention')) {
+                return $this->resolveUri($link[0], $url);
             }
         }
 
@@ -89,11 +90,7 @@ class SendWebMentions extends Job implements ShouldQueue
             $endpoint = $rels[0]['http://webmention.org/'][0];
         }
         if ($endpoint) {
-            if (filter_var($endpoint, FILTER_VALIDATE_URL)) {
-                return $endpoint;
-            }
-            //it must be a relative url, so resolve with php-mf2
-            return $mf2->resolveUrl($endpoint);
+            return $this->resolveUri($endpoint, $url);
         }
 
         return false;
@@ -105,7 +102,7 @@ class SendWebMentions extends Job implements ShouldQueue
      * @param  string $html
      * @return array  $urls
      */
-    private function getLinks($html)
+    public function getLinks($html)
     {
         $urls = [];
         $dom = new \DOMDocument();
@@ -116,5 +113,24 @@ class SendWebMentions extends Job implements ShouldQueue
         }
 
         return $urls;
+    }
+
+    /**
+     * Resolve a URI if necessary.
+     *
+     * @param  string $url
+     * @param  string $base
+     * @return string
+     */
+    public function resolveUri(string $url, string $base): string
+    {
+        $endpoint = \GuzzleHttp\Psr7\uri_for($url);
+        if ($endpoint->getScheme() !== null) {
+            return (string) $endpoint;
+        }
+        return (string) \GuzzleHttp\Psr7\Uri::resolve(
+            \GuzzleHttp\Psr7\uri_for($base),
+            $endpoint
+        );
     }
 }
