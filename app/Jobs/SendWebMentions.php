@@ -128,6 +128,7 @@ class SendWebMentions extends Job implements ShouldQueue
         if ($endpoint->getScheme() !== null) {
             return (string) $endpoint;
         }
+
         return (string) \GuzzleHttp\Psr7\Uri::resolve(
             \GuzzleHttp\Psr7\uri_for($base),
             $endpoint

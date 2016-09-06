@@ -102,8 +102,6 @@ class ProcessWebMention extends Job implements ShouldQueue
         $webmention->type = $type;
         $webmention->mf2 = json_encode($microformats);
         $webmention->save();
-
-        return;
     }
 
     /**
