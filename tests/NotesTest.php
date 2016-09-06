@@ -2,6 +2,7 @@
 
 namespace App\Tests;
 
+use Cache;
 use TestCase;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -131,15 +132,15 @@ class NotesTest extends TestCase
     }
 
     /**
-     * Test the bridgy url shim method.
+     * Test a correct profile link is formed from a generic URL.
      *
      * @return void
      */
-    public function testBridgy()
+    public function testCreatePhotoLinkWithNonCachedImage()
     {
-        $url = 'https://brid-gy.appspot.com/comment/twitter/jonnybarnes/497778866816299008/497781260937203712';
-        $expected = 'https://twitter.com/_/status/497781260937203712';
-        $this->assertEquals($expected, $this->notesController->bridgyReply($url));
+        $homepage = 'https://example.org/profile.png';
+        $expected = 'https://example.org/profile.png';
+        $this->assertEquals($expected, $this->notesController->createPhotoLink($homepage));
     }
 
     /**
@@ -147,10 +148,10 @@ class NotesTest extends TestCase
      *
      * @return void
      */
-    public function testCreatePhotoLinkWithGenericURL()
+    public function testCreatePhotoLinkWithCachedImage()
     {
-        $homepage = 'https://example.org';
-        $expected = '/assets/profile-images/example.org/image';
+        $homepage = 'https://aaronparecki.com/profile.png';
+        $expected = '/assets/profile-images/aaronparecki.com/image';
         $this->assertEquals($expected, $this->notesController->createPhotoLink($homepage));
     }
 
@@ -159,7 +160,7 @@ class NotesTest extends TestCase
      *
      * @return void
      */
-    public function testCreatePhotoLinkWithTwitterProfileImageURL()
+    public function testCreatePhotoLinkWithTwimgProfileImageURL()
     {
         $twitterProfileImage = 'http://pbs.twimg.com/1234';
         $expected = 'https://pbs.twimg.com/1234';
@@ -171,9 +172,11 @@ class NotesTest extends TestCase
      *
      * @return void
      */
-    public function testCreatePhotoLinkWithTwitterURL()
+    public function testCreatePhotoLinkWithCachedTwitterURL()
     {
         $twitterURL = 'https://twitter.com/example';
-        $this->assertNull($this->notesController->createPhotoLink($twitterURL));
+        $expected = 'https://pbs.twimg.com/static_profile_link.jpg';
+        Cache::put($twitterURL, $expected, 1);
+        $this->assertEquals($expected, $this->notesController->createPhotoLink($twitterURL));
     }
 }

@@ -20,13 +20,13 @@
     </div>
 @if(count($likes) > 0)<h1 class="notes-subtitle">Likes</h1>@endif
 @foreach($likes as $like)
-<a href="{{ $like['url'] }}"><img src="{{ $like['photo'] }}" alt="" class="like-photo"></a>
+<a href="{{ $like['url'] }}"><img src="{{ $like['photo'] }}" alt="profile picture of {{ $like['name'] }}" class="like-photo"></a>
 @endforeach
 @if(count($reposts) > 0)<h1 class="notes-subtitle">Reposts</h1>@endif
 @foreach($reposts as $repost)
 <p><a class="h-card vcard mini-h-card p-author" href="{{ $repost['url'] }}">
     <img src="{{ $repost['photo'] }}" alt="profile picture of {{ $repost['name'] }}" class="photo u-photo logo"> <span class="fn">{{ $repost['name'] }}</span>
-  </a> reposted this at <a href="{{ $repost['repost'] }}">{{ $repost['date'] }}</a>.</p>
+</a> reposted this at <a href="{{ $repost['source'] }}">{{ $repost['date'] }}</a>.</p>
 @endforeach
 @stop
 
