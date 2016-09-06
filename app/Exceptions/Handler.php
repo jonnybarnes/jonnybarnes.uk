@@ -3,12 +3,8 @@
 namespace App\Exceptions;
 
 use Exception;
-use Illuminate\Validation\ValidationException;
-use Illuminate\Session\TokenMismatchException;
-use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Auth\AuthenticationException;
 use Symfony\Component\Debug\Exception\FlattenException;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
 class Handler extends ExceptionHandler
@@ -19,10 +15,12 @@ class Handler extends ExceptionHandler
      * @var array
      */
     protected $dontReport = [
-        AuthorizationException::class,
-        HttpException::class,
-        ModelNotFoundException::class,
-        ValidationException::class,
+        \Illuminate\Auth\AuthenticationException::class,
+        \Illuminate\Auth\Access\AuthorizationException::class,
+        \Symfony\Component\HttpKernel\Exception\HttpException::class,
+        \Illuminate\Database\Eloquent\ModelNotFoundException::class,
+        \Illuminate\Session\TokenMismatchException::class,
+        \Illuminate\Validation\ValidationException::class,
     ];
 
     /**
@@ -30,38 +28,39 @@ class Handler extends ExceptionHandler
      *
      * This is a great spot to send exceptions to Sentry, Bugsnag, etc.
      *
-     * @param  \Exception  $exc
+     * @param  \Exception  $exception
      * @return void
      */
-    public function report(Exception $exc)
+    public function report(Exception $exception)
     {
-        parent::report($exc);
+        parent::report($exception);
     }
 
     /**
      * Render an exception into an HTTP response.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Exception  $exc
+     * @param  \Exception  $exception
      * @return \Illuminate\Http\Response
      */
-    public function render($request, Exception $exc)
+    public function render($request, Exception $exception)
     {
-        if (config('app.debug')) {
-            return $this->renderExceptionWithWhoops($exc);
-        }
+        return parent::render($request, $exception);
+    }
 
-        if ($exc instanceof ModelNotFoundException) {
-            $exc = new NotFoundHttpException($exc->getMessage(), $exc);
+    /**
+     * Convert an authentication exception into an unauthenticated response.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Auth\AuthenticationException  $exception
+     * @return \Illuminate\Http\Response
+     */
+    protected function unauthenticated($request, AuthenticationException $exception)
+    {
+        if ($request->expectsJson()) {
+            return response()->json(['error' => 'Unauthenticated.'], 401);
         }
-
-        if ($exc instanceof TokenMismatchException) {
-            return redirect()->back()
-                ->withInput($request->except('password', '_token'))
-                ->withErrors('Validation Token has expired. Please try again', 'csrf');
-        }
-
-        return parent::render($request, $exc);
+        return redirect()->guest('login');
     }
 
     /**
@@ -70,7 +69,7 @@ class Handler extends ExceptionHandler
      * @param  \Exception $exc
      * @return \Illuminate\Http\Response
      */
-    protected function renderExceptionWithWhoops(Exception $exc)
+    protected function renderExceptionWithWhoops(Exception $exception)
     {
         $whoops = new \Whoops\Run;
         $handler = new \Whoops\Handler\PrettyPageHandler();
@@ -79,7 +78,7 @@ class Handler extends ExceptionHandler
         });
         $whoops->pushHandler($handler);
 
-        $flattened = FlattenException::create($exc);
+        $flattened = FlattenException::create($exception);
 
         return new \Illuminate\Http\Response(
             $whoops->handleException($exc),
