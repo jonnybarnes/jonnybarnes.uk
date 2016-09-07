@@ -20,10 +20,9 @@ class SendWebMentions extends Job implements ShouldQueue
      * @param  Note $note
      * @return void
      */
-    public function __construct(Note $note, Client $guzzle = null)
+    public function __construct(Note $note)
     {
         $this->note = $note;
-        $this->guzzle = $guzzle ?? new Client();
     }
 
     /**
@@ -32,16 +31,16 @@ class SendWebMentions extends Job implements ShouldQueue
      * @param  \GuzzleHttp\Client $guzzle
      * @return void
      */
-    public function handle()
+    public function handle(Client $guzzle)
     {
         //grab the URLs
         $urlsInReplyTo = explode(' ', $this->note->in_reply_to);
         $urlsNote = $this->getLinks($this->note->note);
         $urls = array_filter(array_merge($urlsInReplyTo, $urlsNote)); //filter out none URLs
         foreach ($urls as $url) {
-            $endpoint = $this->discoverWebmentionEndpoint($url, $this->guzzle);
+            $endpoint = $this->discoverWebmentionEndpoint($url, $guzzle);
             if ($endpoint) {
-                $this->guzzle->post($endpoint, [
+                $guzzle->post($endpoint, [
                     'form_params' => [
                         'source' => $this->note->longurl,
                         'target' => $url,

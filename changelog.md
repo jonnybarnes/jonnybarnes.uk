@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 0.0.9.1 (2016-09-07)
+  - Fix an issue with syndicating notes.
+
 ## Version 0.0.9 (2016-09-06)
   - Adding jsonb column to store webmentions’ mf2.
     * As of L5.2 this needs a custom command to drop NOT NULL from content, L5.3 should allow a fix for this
