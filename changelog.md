@@ -1,5 +1,8 @@
 # Changelog
 
+## Version {next}
+  - Tidy some `.git*` files
+
 ## Version 0.0.9.1 (2016-09-07)
   - Fix an issue with syndicating notes.
 
