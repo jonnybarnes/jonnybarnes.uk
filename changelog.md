@@ -1,6 +1,6 @@
 # Changelog
 
-## Version {next}
+## Version 0.0.9.2 (2016-09-08)
   - Remove Piwik
   - Updated some bower dependencies
   - Tidy some `.git*` files
