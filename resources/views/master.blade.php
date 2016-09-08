@@ -36,23 +36,5 @@
   <!--scripts go here when needed-->
   @show
 
-  {{-- The piwik code that should only be shown in production --}}
-  @if (env('PIWIK_URL') !== null)
-  <!-- Piwik -->
-  <script type="text/javascript">
-    var _paq = _paq || [];
-    _paq.push(['trackPageView']);
-    _paq.push(['enableLinkTracking']);
-    (function() {
-      var u="{{ env('PIWIK_URL') }}";
-      _paq.push(['setTrackerUrl', u+'/piwik.php']);
-      _paq.push(['setSiteId', {{ env('PIWIK_SITE_ID') }}]);
-      var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
-      g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'/piwik.js'; s.parentNode.insertBefore(g,s);
-    })();
-  </script>
-  <noscript><p><img src="{{ env('PIWIK_URL') }}/piwik.php?idsite={{ env('PIWIK_SITE_ID') }}" style="border:0;" alt="" /></p></noscript>
-  <!-- End Piwik Code -->
-  @endif
 </body>
 </html>
