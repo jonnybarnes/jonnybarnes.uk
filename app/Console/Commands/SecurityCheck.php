@@ -48,6 +48,14 @@ class SecurityCheck extends Command
      */
     public function handle()
     {
-        return $this->securityChecker->check(base_path() . '/composer.lock');
+        $alerts = $this->securityChecker->check(base_path() . '/composer.lock');
+        if (count($alerts) === 0) {
+            $this->info('No security vulnerabilities found.');
+
+            return 0;
+        }
+        $this->error('vulnerabilities found');
+
+        return 1;
     }
 }
