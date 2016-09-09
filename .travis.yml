@@ -40,3 +40,4 @@ before_script:
 
 script:
   - phpdbg -qrr vendor/bin/phpunit --coverage-text
+  - php artisan security:check
