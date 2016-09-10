@@ -3,8 +3,9 @@
 namespace App\Exceptions;
 
 use Exception;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Auth\AuthenticationException;
-use Symfony\Component\Debug\Exception\FlattenException;
+use Illuminate\Session\TokenMismatchException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
 class Handler extends ExceptionHandler
@@ -45,6 +46,10 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+        if ($exception instanceof TokenMismatchException) {
+            Route::getRoutes()->match($request);
+        }
+
         return parent::render($request, $exception);
     }
 
@@ -62,29 +67,5 @@ class Handler extends ExceptionHandler
         }
 
         return redirect()->guest('login');
-    }
-
-    /**
-     * Render an exception using Whoops.
-     *
-     * @param  \Exception $exc
-     * @return \Illuminate\Http\Response
-     */
-    protected function renderExceptionWithWhoops(Exception $exception)
-    {
-        $whoops = new \Whoops\Run;
-        $handler = new \Whoops\Handler\PrettyPageHandler();
-        $handler->setEditor(function ($file, $line) {
-            return "atom://open?file=$file&line=$line";
-        });
-        $whoops->pushHandler($handler);
-
-        $flattened = FlattenException::create($exception);
-
-        return new \Illuminate\Http\Response(
-            $whoops->handleException($exc),
-            $flattened->getStatusCode(),
-            $flattened->getHeaders()
-        );
     }
 }

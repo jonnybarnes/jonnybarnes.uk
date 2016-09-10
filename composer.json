@@ -21,7 +21,8 @@
         "spatie/laravel-medialibrary": "^4.0",
         "league/flysystem-aws-s3-v3": "^1.0",
         "phaza/laravel-postgis": "~3.1",
-        "lcobucci/jwt": "^3.1"
+        "lcobucci/jwt": "^3.1",
+        "sensiolabs/security-checker": "^3.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
@@ -29,8 +30,7 @@
         "phpunit/phpunit": "~5.0",
         "symfony/css-selector": "3.1.*",
         "symfony/dom-crawler": "3.1.*",
-        "barryvdh/laravel-debugbar": "~2.0",
-        "filp/whoops": "~2.0"
+        "barryvdh/laravel-debugbar": "~2.0"
     },
     "autoload": {
         "classmap": [

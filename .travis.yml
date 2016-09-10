@@ -20,7 +20,7 @@ matrix:
     - php: nightly
 
 before_install:
-  - phpenv config-rm xdebug.ini
+  - phpenv config-rm xdebug.ini || echo "xdebug already absent"
   - travis_retry composer self-update --preview
 
 install:
@@ -40,3 +40,4 @@ before_script:
 
 script:
   - phpdbg -qrr vendor/bin/phpunit --coverage-text
+  - php artisan security:check

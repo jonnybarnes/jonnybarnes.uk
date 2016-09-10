@@ -1,5 +1,10 @@
 # Changelog
 
+## Version 0.0.10 (2016-09-10)
+  - Add an artisan command for sensiolab’s security check
+  - Remove `filp/whoops`, just use Laravel’s error reporting
+  - Better TokenMismatchException handling (issue#5)
+
 ## Version 0.0.9.2 (2016-09-08)
   - Remove Piwik
   - Updated some bower dependencies
