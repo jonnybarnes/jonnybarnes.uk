@@ -3,8 +3,9 @@
 namespace App\Exceptions;
 
 use Exception;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Auth\AuthenticationException;
-use Symfony\Component\Debug\Exception\FlattenException;
+use Illuminate\Session\TokenMismatchException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
 class Handler extends ExceptionHandler
@@ -45,6 +46,10 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+        if ($exception instanceof TokenMismatchException) {
+            Route::getRoutes()->match($request);
+        }
+
         return parent::render($request, $exception);
     }
 
