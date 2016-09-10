@@ -68,28 +68,4 @@ class Handler extends ExceptionHandler
 
         return redirect()->guest('login');
     }
-
-    /**
-     * Render an exception using Whoops.
-     *
-     * @param  \Exception $exc
-     * @return \Illuminate\Http\Response
-     */
-    protected function renderExceptionWithWhoops(Exception $exception)
-    {
-        $whoops = new \Whoops\Run;
-        $handler = new \Whoops\Handler\PrettyPageHandler();
-        $handler->setEditor(function ($file, $line) {
-            return "atom://open?file=$file&line=$line";
-        });
-        $whoops->pushHandler($handler);
-
-        $flattened = FlattenException::create($exception);
-
-        return new \Illuminate\Http\Response(
-            $whoops->handleException($exc),
-            $flattened->getStatusCode(),
-            $flattened->getHeaders()
-        );
-    }
 }
