@@ -1,5 +1,8 @@
 # Changelog
 
+## Version {next}
+  - update linked GPG key
+
 ## Version 0.0.10 (2016-09-10)
   - Add an artisan command for sensiolab’s security check
   - Remove `filp/whoops`, just use Laravel’s error reporting
