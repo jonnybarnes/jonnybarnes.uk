@@ -1,8 +1,9 @@
 # Changelog
 
 ## Version {next}
-  - update linked GPG key
-  - Added `integrity` values to external assets
+  - update linked GPG key (issue#7)
+  - Added `integrity` values to external assets (issue#10)
+  - Move mapbox links into own sub-view (issue#11)
 
 ## Version 0.0.10 (2016-09-10)
   - Add an artisan command for sensiolab’s security check
