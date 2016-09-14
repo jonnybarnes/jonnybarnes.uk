@@ -2,6 +2,7 @@
 
 ## Version {next}
   - update linked GPG key
+  - Added `integrity` values to external assets
 
 ## Version 0.0.10 (2016-09-10)
   - Add an artisan command for sensiolab’s security check
