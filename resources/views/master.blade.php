@@ -30,7 +30,7 @@
   <main>
 @yield('content')
   </main>
-  <script src="//use.typekit.net/kmb3cdb.js"></script>
+  <script src="https://use.typekit.net/kmb3cdb.js" integrity="sha384-K/4E0NzJZXdpsxDKWbpP3NkSG+eA9slO7vv62+eOYgGPD142NqbSIvjcoVGvEh/r" crossorigin="anonymous"></script>
   <script>try{Typekit.load({ async: true });}catch(e){}</script>
   @section('scripts')
   <!--scripts go here when needed-->
