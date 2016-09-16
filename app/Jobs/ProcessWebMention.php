@@ -139,7 +139,7 @@ class ProcessWebMention extends Job implements ShouldQueue
      */
     private function createFilenameFromURL($url)
     {
-        $url = str_replace(['https://', 'http://'], ['', ''], $url);
+        $url = str_replace(['https://', 'http://'], ['https/', 'http/'], $url);
         if (substr($url, -1) == '/') {
             $url = $url . 'index.html';
         }
