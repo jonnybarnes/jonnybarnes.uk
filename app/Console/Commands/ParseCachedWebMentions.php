@@ -45,7 +45,7 @@ class ParseCachedWebMentions extends Command
             $html = $filesystem->get($filepath);
             $url = $this->URLFromFilename($filepath);
             $microformats = \Mf2\parse($html, $url);
-            $webmention = WebMention::where('source' $url)->firstOrFail();
+            $webmention = WebMention::where('source', $url)->firstOrFail();
             $webmention->mf2 = json_encode($microformats);
             $webmention->save();
         }
