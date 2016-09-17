@@ -20,7 +20,6 @@ class ProcessWebMention extends Job implements ShouldQueue
 
     protected $note;
     protected $source;
-    protected $guzzle;
 
     /**
      * Create a new job instance.
@@ -29,22 +28,22 @@ class ProcessWebMention extends Job implements ShouldQueue
      * @param  string $source
      * @return void
      */
-    public function __construct(Note $note, $source, Client $guzzle = null)
+    public function __construct(Note $note, $source)
     {
         $this->note = $note;
         $this->source = $source;
-        $this->guzzle = $guzzle ?? new Client();
     }
 
     /**
      * Execute the job.
      *
-     * @param  \Jonnybarnes\WebmentionsParser\Parser $parser
+     * @param  \Jonnybarnes\WebmentionsParser\Parser  $parser
+     * @param  \GuzzleHttp\Client  $guzzle
      * @return void
      */
-    public function handle(Parser $parser)
+    public function handle(Parser $parser, Client $guzzle)
     {
-        $remoteContent = $this->getRemoteContent($this->source);
+        $remoteContent = $this->getRemoteContent($this->source, $guzzle);
         if ($remoteContent === null) {
             throw new RemoteContentNotFoundException;
         }
@@ -101,13 +100,14 @@ class ProcessWebMention extends Job implements ShouldQueue
     /**
      * Retreive the remote content from a URL, and caches the result.
      *
-     * @param  string       The URL to retreive content from
-     * @return string|null  The HTML from the URL (or null if error)
+     * @param  string  $url
+     * @param  GuzzleHttp\client  $guzzle
+     * @return string|null
      */
-    private function getRemoteContent($url)
+    private function getRemoteContent($url, Client $guzzle)
     {
         try {
-            $response = $this->guzzle->request('GET', $url);
+            $response = $guzzle->request('GET', $url);
         } catch (RequestException $e) {
             return;
         }
