@@ -43,8 +43,8 @@ class DownloadWebMention implements ShouldQueue
             $filesystem = \Illuminate\FileSystem\FileSystem();
             $filesystem->put(
                 $this->createFilenameFromURL($source),
-                (string) $response->getBody())
-            }
+                (string) $response->getBody()
+            );
         }
     }
 

@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 0.0.11.1 (2016-09-17)
+  - Fix a syntax issue in the download webmention job
+
 ## Version 0.0.11 (2016-09-17)
   - update linked GPG key (issue#7)
   - Added `integrity` values to external assets (issue#10)
