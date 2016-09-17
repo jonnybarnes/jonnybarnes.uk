@@ -44,13 +44,11 @@ class ProcessWebMention extends Job implements ShouldQueue
      */
     public function handle(Parser $parser)
     {
-        $sourceURL = parse_url($this->source);
-        $baseURL = $sourceURL['scheme'] . '://' . $sourceURL['host'];
         $remoteContent = $this->getRemoteContent($this->source);
         if ($remoteContent === null) {
             throw new RemoteContentNotFoundException;
         }
-        $microformats = Mf2\parse($remoteContent, $baseURL);
+        $microformats = Mf2\parse($remoteContent, $this->source);
         $webmentions = WebMention::where('source', $this->source)->get();
         foreach ($webmentions as $webmention) {
             //check webmention still references target
