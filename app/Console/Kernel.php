@@ -15,7 +15,7 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         Commands\SecurityCheck::class,
         Commands\ParseCachedWebMentions::class,
-        Commands\DownloadWebMentions::class,
+        Commands\ReDownloadWebMentions::class,
     ];
 
     /**

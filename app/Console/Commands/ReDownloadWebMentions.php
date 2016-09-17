@@ -6,14 +6,14 @@ use App\WebMention;
 use Illuminate\Console\Command;
 use App\Jobs\DownloadWebMention;
 
-class DownloadWebMentions extends Command
+class ReDownloadWebMentions extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'webmentions:download';
+    protected $signature = 'webmentions:redownload';
 
     /**
      * The console command description.
