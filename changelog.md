@@ -6,6 +6,7 @@
   - Move mapbox links into own sub-view (issue#11)
   - Updated mapbox version (issue#12)
   - Massive refactor of webmention code, allowing for re-parse command (issue#8)
+  - Add license file (issue#13)
 
 ## Version 0.0.10 (2016-09-10)
   - Add an artisan command for sensiolab’s security check
