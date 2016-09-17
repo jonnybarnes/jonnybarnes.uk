@@ -4,10 +4,8 @@ namespace App\Jobs;
 
 use Mf2;
 use App\Note;
-use HTMLPurifier;
 use App\WebMention;
 use GuzzleHttp\Client;
-use HTMLPurifier_Config;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Jonnybarnes\WebmentionsParser\Parser;
@@ -65,7 +63,6 @@ class ProcessWebMention extends Job implements ShouldQueue
                     return;
                 }
                 //webmenion is still a reply, so update content
-                $microformats = $this->filterHTML($microformats);
                 $this->dispatch(new SaveProfileImage($microformats));
                 $webmention->mf2 = json_encode($microformats);
                 $webmention->save();
@@ -94,7 +91,6 @@ class ProcessWebMention extends Job implements ShouldQueue
         $webmention = new WebMention();
         $type = $parser->getMentionType($microformats); //throw error here?
         $this->dispatch(new SaveProfileImage($microformats));
-        $microformats = $this->filterHTML($microformats);
         $webmention->source = $this->source;
         $webmention->target = $this->note->longurl;
         $webmention->commentable_id = $this->note->id;
@@ -145,37 +141,5 @@ class ProcessWebMention extends Job implements ShouldQueue
         }
 
         return $url;
-    }
-
-    /**
-     * Filter the HTML in a reply webmention.
-     *
-     * @param  array  The unfiltered microformats
-     * @return array  The filtered microformats
-     */
-    private function filterHTML($microformats)
-    {
-        if (isset($microformats['items'][0]['properties']['content'][0]['html'])) {
-            $microformats['items'][0]['properties']['content'][0]['html_purified'] = $this->useHTMLPurifier(
-                $microformats['items'][0]['properties']['content'][0]['html']
-            );
-        }
-
-        return $microformats;
-    }
-
-    /**
-     * Set up and use HTMLPurifer on some HTML.
-     *
-     * @param  string  The HTML to be processed
-     * @return string  The processed HTML
-     */
-    private function useHTMLPurifier($html)
-    {
-        $config = HTMLPurifier_Config::createDefault();
-        $config->set('Cache.SerializerPath', storage_path() . '/HTMLPurifier');
-        $purifier = new HTMLPurifier($config);
-
-        return $purifier->purify($html);
     }
 }
