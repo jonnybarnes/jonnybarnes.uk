@@ -37,6 +37,8 @@ class DownloadWebMention implements ShouldQueue
     public function handle(Client $guzzle)
     {
         $response = $guzzle->request('GET', $source);
+        //4XX and 5XX responses should get Guzzle to throw an exception,
+        //Laravel should catch and retry these automatically.
         if ($response->getStatusCode() == '200') {
             $filesystem = \Illuminate\FileSystem\FileSystem();
             $filesystem->put(
