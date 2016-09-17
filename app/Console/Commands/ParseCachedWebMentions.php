@@ -20,7 +20,7 @@ class ParseCachedWebMentions extends Command
      *
      * @var string
      */
-    protected $description = 'Re-parse the cached webmention’s HTML';
+    protected $description = 'Re-parse the webmention’s cached HTML';
 
     /**
      * Create a new command instance.
