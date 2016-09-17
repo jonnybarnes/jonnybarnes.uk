@@ -4,10 +4,8 @@ namespace App\Jobs;
 
 use Mf2;
 use App\Note;
-use HTMLPurifier;
 use App\WebMention;
 use GuzzleHttp\Client;
-use HTMLPurifier_Config;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Jonnybarnes\WebmentionsParser\Parser;
@@ -22,7 +20,6 @@ class ProcessWebMention extends Job implements ShouldQueue
 
     protected $note;
     protected $source;
-    protected $guzzle;
 
     /**
      * Create a new job instance.
@@ -31,28 +28,26 @@ class ProcessWebMention extends Job implements ShouldQueue
      * @param  string $source
      * @return void
      */
-    public function __construct(Note $note, $source, Client $guzzle = null)
+    public function __construct(Note $note, $source)
     {
         $this->note = $note;
         $this->source = $source;
-        $this->guzzle = $guzzle ?? new Client();
     }
 
     /**
      * Execute the job.
      *
-     * @param  \Jonnybarnes\WebmentionsParser\Parser $parser
+     * @param  \Jonnybarnes\WebmentionsParser\Parser  $parser
+     * @param  \GuzzleHttp\Client  $guzzle
      * @return void
      */
-    public function handle(Parser $parser)
+    public function handle(Parser $parser, Client $guzzle)
     {
-        $sourceURL = parse_url($this->source);
-        $baseURL = $sourceURL['scheme'] . '://' . $sourceURL['host'];
-        $remoteContent = $this->getRemoteContent($this->source);
+        $remoteContent = $this->getRemoteContent($this->source, $guzzle);
         if ($remoteContent === null) {
             throw new RemoteContentNotFoundException;
         }
-        $microformats = Mf2\parse($remoteContent, $baseURL);
+        $microformats = Mf2\parse($remoteContent, $this->source);
         $webmentions = WebMention::where('source', $this->source)->get();
         foreach ($webmentions as $webmention) {
             //check webmention still references target
@@ -65,7 +60,6 @@ class ProcessWebMention extends Job implements ShouldQueue
                     return;
                 }
                 //webmenion is still a reply, so update content
-                $microformats = $this->filterHTML($microformats);
                 $this->dispatch(new SaveProfileImage($microformats));
                 $webmention->mf2 = json_encode($microformats);
                 $webmention->save();
@@ -94,7 +88,6 @@ class ProcessWebMention extends Job implements ShouldQueue
         $webmention = new WebMention();
         $type = $parser->getMentionType($microformats); //throw error here?
         $this->dispatch(new SaveProfileImage($microformats));
-        $microformats = $this->filterHTML($microformats);
         $webmention->source = $this->source;
         $webmention->target = $this->note->longurl;
         $webmention->commentable_id = $this->note->id;
@@ -107,13 +100,14 @@ class ProcessWebMention extends Job implements ShouldQueue
     /**
      * Retreive the remote content from a URL, and caches the result.
      *
-     * @param  string       The URL to retreive content from
-     * @return string|null  The HTML from the URL (or null if error)
+     * @param  string  $url
+     * @param  GuzzleHttp\client  $guzzle
+     * @return string|null
      */
-    private function getRemoteContent($url)
+    private function getRemoteContent($url, Client $guzzle)
     {
         try {
-            $response = $this->guzzle->request('GET', $url);
+            $response = $guzzle->request('GET', $url);
         } catch (RequestException $e) {
             return;
         }
@@ -139,43 +133,11 @@ class ProcessWebMention extends Job implements ShouldQueue
      */
     private function createFilenameFromURL($url)
     {
-        $url = str_replace(['https://', 'http://'], ['', ''], $url);
+        $url = str_replace(['https://', 'http://'], ['https/', 'http/'], $url);
         if (substr($url, -1) == '/') {
             $url = $url . 'index.html';
         }
 
         return $url;
-    }
-
-    /**
-     * Filter the HTML in a reply webmention.
-     *
-     * @param  array  The unfiltered microformats
-     * @return array  The filtered microformats
-     */
-    private function filterHTML($microformats)
-    {
-        if (isset($microformats['items'][0]['properties']['content'][0]['html'])) {
-            $microformats['items'][0]['properties']['content'][0]['html_purified'] = $this->useHTMLPurifier(
-                $microformats['items'][0]['properties']['content'][0]['html']
-            );
-        }
-
-        return $microformats;
-    }
-
-    /**
-     * Set up and use HTMLPurifer on some HTML.
-     *
-     * @param  string  The HTML to be processed
-     * @return string  The processed HTML
-     */
-    private function useHTMLPurifier($html)
-    {
-        $config = HTMLPurifier_Config::createDefault();
-        $config->set('Cache.SerializerPath', storage_path() . '/HTMLPurifier');
-        $purifier = new HTMLPurifier($config);
-
-        return $purifier->purify($html);
     }
 }

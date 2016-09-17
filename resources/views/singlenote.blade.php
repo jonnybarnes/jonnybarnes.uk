@@ -31,8 +31,7 @@
 @stop
 
 @section('scripts')
-<link rel="stylesheet" href="https://api.mapbox.com/mapbox.js/v2.2.3/mapbox.css">
-<script src="https://api.mapbox.com/mapbox.js/v2.2.3/mapbox.js"></script>
+@include('templates.mapbox-links')
 
 <script src="/assets/bower/Autolinker.min.js"></script>
 <script src="/assets/js/links.js"></script>

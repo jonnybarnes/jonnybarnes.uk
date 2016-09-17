@@ -14,8 +14,7 @@
 @stop
 
 @section('scripts')
-<script src="https://api.mapbox.com/mapbox.js/v2.2.3/mapbox.js"></script>
-<link rel="stylesheet" href="https://api.mapbox.com/mapbox.js/v2.2.3/mapbox.css">
+@include('templates.mapbox-links')
 
 <script src="/assets/js/maps.js"></script>
 @stop
