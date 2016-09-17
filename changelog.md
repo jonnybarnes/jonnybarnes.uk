@@ -1,6 +1,6 @@
 # Changelog
 
-## Version {next}
+## Version 0.0.11 (2016-09-17)
   - update linked GPG key (issue#7)
   - Added `integrity` values to external assets (issue#10)
   - Move mapbox links into own sub-view (issue#11)
