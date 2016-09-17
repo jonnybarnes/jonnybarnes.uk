@@ -5,6 +5,8 @@ namespace App\Providers;
 use App\Tag;
 use App\Note;
 use Validator;
+use App\WebMention;
+use App\Observers\WebMentionObserver;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -45,6 +47,9 @@ class AppServiceProvider extends ServiceProvider
                 $note->tags()->attach($tagsToAdd);
             }
         });
+
+        //observer the webmention model
+        WebMention::observe(WebMentionObserver::class);
     }
 
     /**
