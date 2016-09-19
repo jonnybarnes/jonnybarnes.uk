@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 0.0.11.3 (2016-09-19)
+  - Simplify how we filter/cache reply html
+  - Better handling of webmention reply HTML cache
+
 ## Version 0.0.11.2 (2016-09-19)
   - Update Typekit’s js sri hash
 

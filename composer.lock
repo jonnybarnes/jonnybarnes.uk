@@ -4,7 +4,6 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "b65fffcf4b32d065494b01ada5391976",
     "content-hash": "86faec8ac49549630fc60578bcd085cc",
     "packages": [
         {
@@ -59,16 +58,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.19.6",
+            "version": "3.19.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "34060bf0db260031697b17dbb37fa1bbec92f1c4"
+                "reference": "4e976ef6750bb177f493f3b01476136213b8d0b9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/34060bf0db260031697b17dbb37fa1bbec92f1c4",
-                "reference": "34060bf0db260031697b17dbb37fa1bbec92f1c4",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/4e976ef6750bb177f493f3b01476136213b8d0b9",
+                "reference": "4e976ef6750bb177f493f3b01476136213b8d0b9",
                 "shasum": ""
             },
             "require": {
@@ -135,7 +134,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2016-09-08 20:27:15"
+            "time": "2016-09-15 21:43:53"
         },
         {
             "name": "barnabywalters/mf-cleaner",
@@ -1533,16 +1532,16 @@
         },
         {
             "name": "laravel/framework",
-            "version": "v5.3.8",
+            "version": "v5.3.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "99c74afc0b99e1af1984cb55dc242ab28a0e496b"
+                "reference": "f6fbb481672f8dc4bc6882d5d654bbfa3588c8ec"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/99c74afc0b99e1af1984cb55dc242ab28a0e496b",
-                "reference": "99c74afc0b99e1af1984cb55dc242ab28a0e496b",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/f6fbb481672f8dc4bc6882d5d654bbfa3588c8ec",
+                "reference": "f6fbb481672f8dc4bc6882d5d654bbfa3588c8ec",
                 "shasum": ""
             },
             "require": {
@@ -1656,7 +1655,7 @@
                 "framework",
                 "laravel"
             ],
-            "time": "2016-09-09 16:33:59"
+            "time": "2016-09-12 14:08:29"
         },
         {
             "name": "lcobucci/jwt",
@@ -2297,16 +2296,16 @@
         },
         {
             "name": "nikic/php-parser",
-            "version": "v2.1.0",
+            "version": "v2.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nikic/PHP-Parser.git",
-                "reference": "47b254ea51f1d6d5dc04b9b299e88346bf2369e3"
+                "reference": "4dd659edadffdc2143e4753df655d866dbfeedf0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/47b254ea51f1d6d5dc04b9b299e88346bf2369e3",
-                "reference": "47b254ea51f1d6d5dc04b9b299e88346bf2369e3",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/4dd659edadffdc2143e4753df655d866dbfeedf0",
+                "reference": "4dd659edadffdc2143e4753df655d866dbfeedf0",
                 "shasum": ""
             },
             "require": {
@@ -2344,7 +2343,7 @@
                 "parser",
                 "php"
             ],
-            "time": "2016-04-19 13:41:41"
+            "time": "2016-09-16 12:04:44"
         },
         {
             "name": "paragonie/random_compat",
@@ -2882,16 +2881,16 @@
         },
         {
             "name": "spatie/laravel-medialibrary",
-            "version": "4.8.3",
+            "version": "4.8.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/laravel-medialibrary.git",
-                "reference": "7fcb591ff0ef2d28b9b622f84f972c642ff3e8f9"
+                "reference": "8c862e270d49e8bbff6f0993900c8bb59ea165ea"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/laravel-medialibrary/zipball/7fcb591ff0ef2d28b9b622f84f972c642ff3e8f9",
-                "reference": "7fcb591ff0ef2d28b9b622f84f972c642ff3e8f9",
+                "url": "https://api.github.com/repos/spatie/laravel-medialibrary/zipball/8c862e270d49e8bbff6f0993900c8bb59ea165ea",
+                "reference": "8c862e270d49e8bbff6f0993900c8bb59ea165ea",
                 "shasum": ""
             },
             "require": {
@@ -2945,7 +2944,7 @@
                 "media",
                 "spatie"
             ],
-            "time": "2016-08-25 08:08:10"
+            "time": "2016-09-14 16:31:49"
         },
         {
             "name": "spatie/pdf-to-image",
@@ -4349,16 +4348,16 @@
         },
         {
             "name": "myclabs/deep-copy",
-            "version": "1.5.2",
+            "version": "1.5.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/myclabs/DeepCopy.git",
-                "reference": "da8529775f14f4fdae33f916eb0cf65f6afbddbc"
+                "reference": "ea74994a3dc7f8d2f65a06009348f2d63c81e61f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/myclabs/DeepCopy/zipball/da8529775f14f4fdae33f916eb0cf65f6afbddbc",
-                "reference": "da8529775f14f4fdae33f916eb0cf65f6afbddbc",
+                "url": "https://api.github.com/repos/myclabs/DeepCopy/zipball/ea74994a3dc7f8d2f65a06009348f2d63c81e61f",
+                "reference": "ea74994a3dc7f8d2f65a06009348f2d63c81e61f",
                 "shasum": ""
             },
             "require": {
@@ -4387,7 +4386,7 @@
                 "object",
                 "object graph"
             ],
-            "time": "2016-09-06 16:07:05"
+            "time": "2016-09-16 13:37:59"
         },
         {
             "name": "phpdocumentor/reflection-common",
