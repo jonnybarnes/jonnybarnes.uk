@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 0.0.11.4 (2016-09-19)
+  - Better console output for the new webmention commands
+
 ## Version 0.0.11.3 (2016-09-19)
   - Simplify how we filter/cache reply html
   - Better handling of webmention reply HTML cache
