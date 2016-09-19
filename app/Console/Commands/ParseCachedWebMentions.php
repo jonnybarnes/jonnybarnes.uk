@@ -43,12 +43,14 @@ class ParseCachedWebMentions extends Command
         foreach ($HTMLfiles as $file) {
             if ($file->getExtension() != 'backup') { //we don’t want to parse.backup files
                 $filepath = $file->getPathname();
+                $this->info('Loading HTML from: ' . $filepath);
                 $html = $filesystem->get($filepath);
                 $url = $this->URLFromFilename($filepath);
                 $microformats = \Mf2\parse($html, $url);
                 $webmention = WebMention::where('source', $url)->firstOrFail();
                 $webmention->mf2 = json_encode($microformats);
                 $webmention->save();
+                $this->info('Saved the microformats to the database.');
             }
         }
     }
