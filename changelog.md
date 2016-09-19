@@ -1,6 +1,6 @@
 # Changelog
 
-## Version {next}
+## Version 0.0.11.3 (2016-09-19)
   - Simplify how we filter/cache reply html
   - Better handling of webmention reply HTML cache
 
