@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 0.0.11.2 (2016-09-19)
+  - Update Typekit’s js sri hash
+
 ## Version 0.0.11.1 (2016-09-17)
   - Fix a syntax issue in the download webmention job
 

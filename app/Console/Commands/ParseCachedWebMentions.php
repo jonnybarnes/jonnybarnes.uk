@@ -40,7 +40,7 @@ class ParseCachedWebMentions extends Command
     public function handle(FileSystem $filesystem)
     {
         $HTMLfiles = $filesystem->allFiles(storage_path() . '/HTML');
-        foreach($HTMLfiles as $file) {
+        foreach ($HTMLfiles as $file) {
             $filepath = $file->getPathname();
             $html = $filesystem->get($filepath);
             $url = $this->URLFromFilename($filepath);
