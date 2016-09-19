@@ -43,13 +43,19 @@ class DownloadWebMention implements ShouldQueue
             $filesystem = \Illuminate\FileSystem\FileSystem();
             $filename = $this->createFilenameFromURL($source);
             //backup file first
+            $filenameBackup = $filename . '.' . date('Y-m-d') . '.backup';
             if ($filesystem->exists($filename)) {
-                $filesystem->copy($filename, $filename . '.' . date('Y-m-d') . '.backup');
+                $filesystem->copy($filename, $filenameBackup);
             }
+            //save new HTML
             $filesystem->put(
                 $filename,
                 (string) $response->getBody()
             );
+            //remove backup if the same
+            if ($filesystem->get($filename) == $filesystem->get($filenameBackup)) {
+                $filesystem->delete($filenameBackup);
+            }
         }
     }
 
