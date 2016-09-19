@@ -47,9 +47,6 @@ class AppServiceProvider extends ServiceProvider
                 $note->tags()->attach($tagsToAdd);
             }
         });
-
-        //observer the webmention model
-        WebMention::observe(WebMentionObserver::class);
     }
 
     /**

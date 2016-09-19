@@ -6,6 +6,8 @@ use Cache;
 use Twitter;
 use App\Tag;
 use App\Note;
+use HTMLPurifier;
+use HTMLPurifier_Config;
 use Jonnybarnes\IndieWeb\Numbers;
 use Illuminate\Filesystem\Filesystem;
 use Jonnybarnes\WebmentionsParser\Authorship;
@@ -103,7 +105,7 @@ class NotesController extends Controller
                 case 'in-reply-to':
                     $content['source'] = $webmention->source;
                     $content['date'] = $carbon->parse($content['date'])->toDayDateTimeString();
-                    $content['reply'] = $microformats['items'][0]['properties']['content'][0]['html_purified'];
+                    $content['reply'] = $this->filterHTML($microformats['items'][0]['properties']['content'][0]['html']);
                     $replies[] = $content;
                     break;
 
@@ -259,5 +261,20 @@ class NotesController extends Controller
         Cache::put($tweetId, $oEmbed, ($oEmbed->cache_age / 60));
 
         return $oEmbed;
+    }
+
+    /**
+     * Filter the HTML in a reply webmention.
+     *
+     * @param  string  The reply HTML
+     * @return string  The filtered HTML
+     */
+    private function filterHTML($html)
+    {
+        $config = HTMLPurifier_Config::createDefault();
+        $config->set('Cache.SerializerPath', storage_path() . '/HTMLPurifier');
+        $purifier = new HTMLPurifier($config);
+
+        return $purifier->purify($html);
     }
 }
