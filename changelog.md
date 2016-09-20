@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 0.0.11.6 (2016-09-20)
+  - Fix: save webmention HTML to correct location
+
 ## Version 0.0.11.5 (2016-09-20)
   - Fix job dispatching to more in line with Laravel 5.3 practices
 
