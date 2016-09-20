@@ -6,17 +6,17 @@ use Mf2;
 use App\Note;
 use App\WebMention;
 use GuzzleHttp\Client;
+use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Jonnybarnes\WebmentionsParser\Parser;
 use GuzzleHttp\Exception\RequestException;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Bus\DispatchesJobs;
 use App\Exceptions\RemoteContentNotFoundException;
 
-class ProcessWebMention extends Job implements ShouldQueue
+class ProcessWebMention implements ShouldQueue
 {
-    use InteractsWithQueue, SerializesModels, DispatchesJobs;
+    use InteractsWithQueue, Queueable, SerializesModels;
 
     protected $note;
     protected $source;
@@ -60,7 +60,7 @@ class ProcessWebMention extends Job implements ShouldQueue
                     return;
                 }
                 //webmenion is still a reply, so update content
-                $this->dispatch(new SaveProfileImage($microformats));
+                dispatch(new SaveProfileImage($microformats));
                 $webmention->mf2 = json_encode($microformats);
                 $webmention->save();
 
@@ -87,7 +87,7 @@ class ProcessWebMention extends Job implements ShouldQueue
         //no wemention in db so create new one
         $webmention = new WebMention();
         $type = $parser->getMentionType($microformats); //throw error here?
-        $this->dispatch(new SaveProfileImage($microformats));
+        dispatch(new SaveProfileImage($microformats));
         $webmention->source = $this->source;
         $webmention->target = $this->note->longurl;
         $webmention->commentable_id = $this->note->id;

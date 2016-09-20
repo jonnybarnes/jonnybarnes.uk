@@ -5,15 +5,16 @@ namespace App\Jobs;
 use Twitter;
 use App\Note;
 use App\Contact;
+use Illuminate\Bus\Queueable;
 use Jonnybarnes\IndieWeb\Numbers;
 use Jonnybarnes\IndieWeb\NotePrep;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class SyndicateToTwitter extends Job implements ShouldQueue
+class SyndicateToTwitter implements ShouldQueue
 {
-    use InteractsWithQueue, SerializesModels;
+    use InteractsWithQueue, Queueable, SerializesModels;
 
     protected $note;
 
