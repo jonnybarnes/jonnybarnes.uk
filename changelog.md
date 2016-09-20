@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 0.0.11.5 (2016-09-20)
+  - Fix job dispatching to more in line with Laravel 5.3 practices
+
 ## Version 0.0.11.4 (2016-09-19)
   - Better console output for the new webmention commands
 
