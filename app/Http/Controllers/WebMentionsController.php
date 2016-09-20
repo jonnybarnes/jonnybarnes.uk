@@ -38,7 +38,7 @@ class WebMentionsController extends Controller
                 $numbers = new Numbers();
                 try {
                     $note = Note::findOrFail($numbers->b60tonum($noteId));
-                    $this->dispatch(new ProcessWebMention($note, $request->input('source')));
+                    dispatch(new ProcessWebMention($note, $request->input('source')));
                 } catch (ModelNotFoundException $e) {
                     return new Response('This note doesn’t exist.', 400);
                 }

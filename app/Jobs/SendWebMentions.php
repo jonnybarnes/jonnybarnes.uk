@@ -4,13 +4,14 @@ namespace App\Jobs;
 
 use App\Note;
 use GuzzleHttp\Client;
+use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class SendWebMentions extends Job implements ShouldQueue
+class SendWebMentions implements ShouldQueue
 {
-    use InteractsWithQueue, SerializesModels;
+    use InteractsWithQueue, Queueable, SerializesModels;
 
     protected $note;
 
