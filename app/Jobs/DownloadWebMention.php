@@ -41,7 +41,7 @@ class DownloadWebMention implements ShouldQueue
         //Laravel should catch and retry these automatically.
         if ($response->getStatusCode() == '200') {
             $filesystem = \Illuminate\FileSystem\FileSystem();
-            $filename = $this->createFilenameFromURL($source);
+            $filename = storage_path() . '/HTML/' . $this->createFilenameFromURL($source);
             //backup file first
             $filenameBackup = $filename . '.' . date('Y-m-d') . '.backup';
             if ($filesystem->exists($filename)) {
