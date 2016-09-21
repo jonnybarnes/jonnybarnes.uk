@@ -48,7 +48,7 @@ class DownloadWebMention implements ShouldQueue
                 $filesystem->copy($filename, $filenameBackup);
             }
             //check if base directory exists
-            if (!$filesystem->exists($filesystem->dirname($filename))) {
+            if (! $filesystem->exists($filesystem->dirname($filename))) {
                 $filesystem->makeDirectory(
                     $filesystem->dirname($filename),
                     0755,  //mode
