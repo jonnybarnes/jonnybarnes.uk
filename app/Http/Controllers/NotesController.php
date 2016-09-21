@@ -77,6 +77,7 @@ class NotesController extends Controller
         $replies = [];
         $reposts = [];
         $likes = [];
+        $carbon = new Carbon\Carbon();
         foreach ($note->webmentions as $webmention) {
             /*
                 reply->url      |
@@ -96,7 +97,7 @@ class NotesController extends Controller
                 like->photo     |   Author
                 like->name      |
             */
-            $microformats = json_decode($webmention->mf2);
+            $microformats = json_decode($webmention->mf2, true);
             $authorHCard = $authorship->findAuthor($microformats);
             $content['url'] = $authorHCard['properties']['url'][0];
             $content['photo'] = $this->createPhotoLink($authorHCard['properties']['photo'][0]);
@@ -104,13 +105,13 @@ class NotesController extends Controller
             switch ($webmention->type) {
                 case 'in-reply-to':
                     $content['source'] = $webmention->source;
-                    $content['date'] = $carbon->parse($content['date'])->toDayDateTimeString();
+                    $content['date'] = $carbon->parse($microformats['items'][0]['properties']['published'][0])->toDayDateTimeString();
                     $content['reply'] = $this->filterHTML($microformats['items'][0]['properties']['content'][0]['html']);
                     $replies[] = $content;
                     break;
 
                 case 'repost-of':
-                    $content['date'] = $carbon->parse($content['date'])->toDayDateTimeString();
+                    $content['date'] = $carbon->parse($microformats['items'][0]['properties']['published'][0])->toDayDateTimeString();
                     $content['source'] = $webmention->source;
                     $reposts[] = $content;
                     break;
