@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 0.0.11.9 (2016-09-21)
+  - Fix: Correctly parse microformats data for single note view
+
 ## Version 0.0.11.8 (2016-09-21)
   - Fix: remove index.html from generated url
 
