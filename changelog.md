@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 0.0.11.7 (2016-09-21)
+  - Fix: need to create necessary directories first
+
 ## Version 0.0.11.6 (2016-09-20)
   - Fix: save webmention HTML to correct location
 
