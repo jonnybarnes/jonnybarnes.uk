@@ -65,7 +65,7 @@ class ParseCachedWebMentions extends Command
     {
         $dir = mb_substr($filepath, mb_strlen(storage_path() . '/HTML/'));
         $url = str_replace(['http/', 'https/'], ['http://', 'https://'], $dir);
-        if (mb_substr($url, -1) == 'index.html') {
+        if (mb_substr($url, -10) == 'index.html') {
             $url = mb_substr($url, 0, mb_strlen($url) - 10);
         }
 
