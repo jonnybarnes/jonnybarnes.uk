@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 0.0.11.8 (2016-09-21)
+  - Fix: remove index.html from generated url
+
 ## Version 0.0.11.7 (2016-09-21)
   - Fix: need to create necessary directories first
 
