@@ -1,5 +1,8 @@
 # Changelog
 
+## Version {next}
+  - Better indication of number of replies to a note (issue#17)
+
 ## Version 0.0.11.9 (2016-09-21)
   - Fix: Correctly parse microformats data for single note view
 
