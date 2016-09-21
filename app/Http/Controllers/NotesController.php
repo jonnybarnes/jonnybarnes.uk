@@ -77,7 +77,7 @@ class NotesController extends Controller
         $replies = [];
         $reposts = [];
         $likes = [];
-        $carbon = new Carbon\Carbon();
+        $carbon = new \Carbon\Carbon();
         foreach ($note->webmentions as $webmention) {
             /*
                 reply->url      |
