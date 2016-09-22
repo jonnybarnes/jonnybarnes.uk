@@ -70,7 +70,11 @@ EOD;
                                       ->header('Content-Type', 'application/json');
                     }
                     if ($request->input('h') == 'card' || $request->input('type')[0] == 'h-card') {
-                        $place = $this->placeService->createPlace($request);
+                        try {
+                            $place = $this->placeService->createPlace($request);
+                        } catch (Exception $exception) {
+                            return response()->json(['error' => true], 400);
+                        }
                         $content = <<<EOD
 {
     "response": "created",
