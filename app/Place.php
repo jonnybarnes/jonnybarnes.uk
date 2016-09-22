@@ -33,8 +33,8 @@ class Place extends Model
      * @var array
      */
     protected $postgisFields = [
-        'location' => Point::class,
-        'polygon' => Polygon::class,
+        'location',
+        'polygon',
     ];
 
     /**
