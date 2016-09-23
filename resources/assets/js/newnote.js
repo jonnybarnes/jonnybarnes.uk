@@ -1,4 +1,4 @@
-/* global L */
+/* global L, alertify */
 if ('geolocation' in navigator) {
     var button = document.querySelector('#locate');
     if (button.addEventListener) {
@@ -12,11 +12,11 @@ if ('geolocation' in navigator) {
 function getLocation() {
     navigator.geolocation.getCurrentPosition(function (position) {
         //the locate button has been clicked so add the places/map
-        addPlaces(position.coords.latitude, position.coords.longitude);
+        addPlacesMap(position.coords.latitude, position.coords.longitude);
     });
 }
 
-function addPlaces(latitude, longitude) {
+function addPlacesMap(latitude, longitude) {
     //get the nearby places
     fetch('/places/near/' + latitude + '/' + longitude, {
         credentials: 'same-origin',
@@ -24,6 +24,10 @@ function addPlaces(latitude, longitude) {
     }).then(function (response) {
         return response.json();
     }).then(function (j) {
+        if (j.error == true) {
+            alertify.reset();
+            alertify.error(j.error_description);
+        }
         if (j.length > 0) {
             var i;
             var places = [];
@@ -196,16 +200,12 @@ function addMap(latitude, longitude, places) {
                 body: formData
             })
             .then(function (response) {
-                if (response.status >= 200 && response.status < 300) {
-                    return Promise.resolve(response);
-                } else {
-                    return Promise.reject(new Error(response.statusText));
-                }
-            })
-            .then(function (response) {
                 return response.json();
             })
             .then(function (placeJson) {
+                if (placeJson.error == true) {
+                    throw new Error(placeJson.error_description);
+                }
                 //create the slug from the url
                 var urlParts = placeJson.split('/');
                 var slug = urlParts.pop();
@@ -247,7 +247,8 @@ function addMap(latitude, longitude, places) {
                 //make selected
                 selectPlace(slug);
             }).catch(function (placeError) {
-                console.error(placeError);
+                alertify.reset();
+                alertify.error(placeError);
             });
         });
     });
