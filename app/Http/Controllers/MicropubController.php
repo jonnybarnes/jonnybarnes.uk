@@ -62,6 +62,7 @@ class MicropubController extends Controller
                         } catch (Exception $exception) {
                             return response()->json(['error' => true], 400);
                         }
+
                         return response()->json([
                             'response' => 'created',
                             'location' => $note->longurl,
