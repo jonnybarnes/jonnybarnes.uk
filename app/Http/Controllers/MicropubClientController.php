@@ -204,34 +204,37 @@ class MicropubClientController extends Controller
      */
     public function postNewPlace(Request $request)
     {
+        if ($request->session()->has('token') === false) {
+            return response()->json([
+                'error' => true,
+                'error_description' => 'No known token',
+            ], 400);
+        }
         $domain = $request->session()->get('me');
         $token = $request->session()->get('token');
 
         $micropubEndpoint = $this->indieAuthService->discoverMicropubEndpoint($domain, $this->indieClient);
         if (! $micropubEndpoint) {
-            return (new Response(json_encode([
+            return response()->json([
                 'error' => true,
-                'message' => 'Could not determine the micropub endpoint.',
-            ]), 400))
-            ->header('Content-Type', 'application/json');
+                'error_description' => 'Could not determine the micropub endpoint.',
+            ], 400);
         }
 
         $place = $this->postPlaceRequest($request, $micropubEndpoint, $token);
         if ($place === false) {
-            return (new Response(json_encode([
+            return response()->json([
                 'error' => true,
-                'message' => 'Unable to create the new place',
-            ]), 400))
-            ->header('Content-Type', 'application/json');
+                'error_description' => 'Unable to create the new place',
+            ], 400);
         }
 
-        return (new Response(json_encode([
+        return response()->json([
             'url' => $place,
             'name' => $request->input('place-name'),
             'latitude' => $request->input('place-latitude'),
             'longitude' => $request->input('place-longitude'),
-        ]), 200))
-        ->header('Content-Type', 'application/json');
+        ]);
     }
 
     /**
@@ -285,12 +288,22 @@ class MicropubClientController extends Controller
         $latitude,
         $longitude
     ) {
+        if ($request->session()->has('token') === false) {
+            return response()->json([
+                'error' => true,
+                'error_description' => 'No known token',
+            ], 400);
+        }
         $domain = $request->session()->get('me');
         $token = $request->session()->get('token');
+
         $micropubEndpoint = $this->indieAuthService->discoverMicropubEndpoint($domain, $this->indieClient);
 
         if (! $micropubEndpoint) {
-            return;
+            return response()->json([
+                'error' => true,
+                'error_description' => 'No known endpoint',
+            ], 400);
         }
 
         try {
@@ -299,7 +312,10 @@ class MicropubClientController extends Controller
                 'query' => ['q' => 'geo:' . $latitude . ',' . $longitude],
             ]);
         } catch (\GuzzleHttp\Exception\BadResponseException $e) {
-            return;
+            return response()->json([
+                'error' => true,
+                'error_description' => 'The endpoint returned a non-good response',
+            ], 400);
         }
 
         return (new Response($response->getBody(), 200))
