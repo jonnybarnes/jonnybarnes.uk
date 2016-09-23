@@ -57,54 +57,43 @@ class MicropubController extends Controller
                 if (array_search('post', $scopes) !== false) {
                     $clientId = $tokenData->getClaim('client_id');
                     if (($request->input('h') == 'entry') || ($request->input('type')[0] == 'h-entry')) {
-                        $note = $this->noteService->createNote($request, $clientId);
-                        $content = <<<EOD
-{
-    "response": "created",
-    "location": "$note->longurl"
-}
-EOD;
-
-                        return (new Response($content, 201))
-                                      ->header('Location', $note->longurl)
-                                      ->header('Content-Type', 'application/json');
+                        try {
+                            $note = $this->noteService->createNote($request, $clientId);
+                        } catch (Exception $exception) {
+                            return response()->json(['error' => true], 400);
+                        }
+                        return response()->json([
+                            'response' => 'created',
+                            'location' => $note->longurl
+                        ], 201)->header('Location', $note->longurl);
                     }
                     if ($request->input('h') == 'card' || $request->input('type')[0] == 'h-card') {
-                        $place = $this->placeService->createPlace($request);
-                        $content = <<<EOD
-{
-    "response": "created",
-    "location": "$place->longurl"
-}
-EOD;
+                        try {
+                            $place = $this->placeService->createPlace($request);
+                        } catch (Exception $exception) {
+                            return response()->json(['error' => true], 400);
+                        }
 
-                        return (new Response($content, 201))
-                                      ->header('Location', $place->longurl)
-                                      ->header('Content-Type', 'application/json');
+                        return response()->json([
+                            'response' => 'created',
+                            'location' => $place->longurl
+                        ], 201)->header('Location', $place->longurl);
                     }
                 }
             }
-            $content = <<<'EOD'
-{
-    "response": "error",
-    "error": "invalid_token",
-    "error_description": "The token provided is not valid or does not have the necessary scope",
-}
-EOD;
 
-            return (new Response($content, 400))
-                          ->header('Content-Type', 'application/json');
+            return response()->json([
+                'response' => 'error',
+                'error' => 'invalid_token',
+                'error_description' => 'The token provided is not valid or does not have the necessary scope'
+            ], 400);
         }
-        $content = <<<'EOD'
-{
-    "response": "error",
-    "error": "no_token",
-    "error_description": "No OAuth token sent with request"
-}
-EOD;
 
-        return (new Response($content, 400))
-                        ->header('Content-Type', 'application/json');
+        return response()->json([
+            'response' => 'error',
+            'error' => 'no_token',
+            'error_description' => 'No OAuth token sent with request'
+        ], 400);
     }
 
     /**

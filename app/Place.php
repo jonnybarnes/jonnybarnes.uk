@@ -4,9 +4,7 @@ namespace App;
 
 use DB;
 use Illuminate\Database\Eloquent\Model;
-use Phaza\LaravelPostgis\Geometries\Point;
 use MartinBean\Database\Eloquent\Sluggable;
-use Phaza\LaravelPostgis\Geometries\Polygon;
 use Phaza\LaravelPostgis\Eloquent\PostgisTrait;
 
 class Place extends Model
@@ -33,8 +31,8 @@ class Place extends Model
      * @var array
      */
     protected $postgisFields = [
-        'location' => Point::class,
-        'polygon' => Polygon::class,
+        'location',
+        'polygon',
     ];
 
     /**
