@@ -64,7 +64,7 @@ class MicropubController extends Controller
                         }
                         return response()->json([
                             'response' => 'created',
-                            'location' => $note->longurl
+                            'location' => $note->longurl,
                         ], 201)->header('Location', $note->longurl);
                     }
                     if ($request->input('h') == 'card' || $request->input('type')[0] == 'h-card') {
@@ -76,7 +76,7 @@ class MicropubController extends Controller
 
                         return response()->json([
                             'response' => 'created',
-                            'location' => $place->longurl
+                            'location' => $place->longurl,
                         ], 201)->header('Location', $place->longurl);
                     }
                 }
@@ -85,14 +85,14 @@ class MicropubController extends Controller
             return response()->json([
                 'response' => 'error',
                 'error' => 'invalid_token',
-                'error_description' => 'The token provided is not valid or does not have the necessary scope'
+                'error_description' => 'The token provided is not valid or does not have the necessary scope',
             ], 400);
         }
 
         return response()->json([
             'response' => 'error',
             'error' => 'no_token',
-            'error_description' => 'No OAuth token sent with request'
+            'error_description' => 'No OAuth token sent with request',
         ], 400);
     }
 
