@@ -1,5 +1,8 @@
 # Changelog
 
+## Version {next}
+  - Better places support, particularly with micropub (issue#9)
+
 ## Version 0.0.12 (2016-09-21)
   - Better indication of number of replies to a note (issue#17)
   - Use generic twitter status URL so my own profile name isn’t hardcoded (issue#14)
