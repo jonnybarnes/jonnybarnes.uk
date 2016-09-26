@@ -1,5 +1,10 @@
 # Changelog
 
+## Version 0.0.13 (2016-09-26)
+  - Better places support, particularly with micropub (issue#9)
+  - Uglify js for better performance (issue#19)
+  - Autolink spotify links (issue#18)
+
 ## Version 0.0.12 (2016-09-21)
   - Better indication of number of replies to a note (issue#17)
   - Use generic twitter status URL so my own profile name isn’t hardcoded (issue#14)

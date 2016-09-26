@@ -116,6 +116,103 @@ class MicropubTest extends TestCase
             ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
         )->seeJson([
             'response' => 'created'
+        ])->assertResponseStatus(201);
+    }
+
+    public function testMicropubJSONRequestCreateNewNoteWithoutToken()
+    {
+        $faker = \Faker\Factory::create();
+        $note = $faker->text;
+        $this->json(
+            'POST',
+            $this->appurl . '/api/post',
+            [
+                'type' => ['h-entry'],
+                'properties' => [
+                    'content' => [$note],
+                ],
+            ]
+        )->seeJson([
+            'response' => 'error',
+            'error' => 'no_token'
+        ])->assertResponseStatus(400);
+    }
+
+    public function testMicropubJSONRequestCreateNewNoteWithInvalidToken()
+    {
+        $faker = \Faker\Factory::create();
+        $note = $faker->text;
+        $this->json(
+            'POST',
+            $this->appurl . '/api/post',
+            [
+                'type' => ['h-entry'],
+                'properties' => [
+                    'content' => [$note],
+                ],
+            ],
+            ['HTTP_Authorization' => 'Bearer ' . $this->getInvalidToken()]
+        )->seeJson([
+            'response' => 'error',
+            'error' => 'invalid_token'
+        ]);
+    }
+
+    public function testMicropubJSONRequestCreateNewPlace()
+    {
+        $faker = \Faker\Factory::create();
+        $this->json(
+            'POST',
+            $this->appurl . '/api/post',
+            [
+                'type' => ['h-card'],
+                'properties' => [
+                    'name' => $faker->name,
+                    'geo' => 'geo:' . $faker->latitude . ',' . $faker->longitude
+                ],
+            ],
+            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+        )->seeJson([
+            'response' => 'created'
+        ])->assertResponseStatus(201);
+    }
+
+    public function testMicropubJSONRequestCreateNewPlaceWithoutToken()
+    {
+        $faker = \Faker\Factory::create();
+        $this->json(
+            'POST',
+            $this->appurl . '/api/post',
+            [
+                'type' => ['h-entry'],
+                'properties' => [
+                    'name' => $faker->name,
+                    'geo' => 'geo:' . $faker->latitude . ',' . $faker->longitude
+                ],
+            ]
+        )->seeJson([
+            'response' => 'error',
+            'error' => 'no_token'
+        ])->assertResponseStatus(400);
+    }
+
+    public function testMicropubJSONRequestCreateNewPlaceWithInvalidToken()
+    {
+        $faker = \Faker\Factory::create();
+        $this->json(
+            'POST',
+            $this->appurl . '/api/post',
+            [
+                'type' => ['h-entry'],
+                'properties' => [
+                    'name' => $faker->name,
+                    'geo' => 'geo:' . $faker->latitude . ',' . $faker->longitude
+                ],
+            ],
+            ['HTTP_Authorization' => 'Bearer ' . $this->getInvalidToken()]
+        )->seeJson([
+            'response' => 'error',
+            'error' => 'invalid_token'
         ]);
     }
 
@@ -126,6 +223,20 @@ class MicropubTest extends TestCase
             ->set('client_id', 'https://quill.p3k.io')
             ->set('me', 'https://jonnybarnes.localhost')
             ->set('scope', 'post')
+            ->set('issued_at', time())
+            ->sign($signer, env('APP_KEY'))
+            ->getToken();
+
+        return $token;
+    }
+
+    private function getInvalidToken()
+    {
+        $signer = new Sha256();
+        $token = (new Builder())
+            ->set('client_id', 'https://quill.p3k.io')
+            ->set('me', 'https://jonnybarnes.localhost')
+            ->set('scope', 'view')
             ->set('issued_at', time())
             ->sign($signer, env('APP_KEY'))
             ->getToken();

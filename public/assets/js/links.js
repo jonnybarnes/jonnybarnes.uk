@@ -1,26 +1,2 @@
-/* global Autolinker */
-//the autlinker object
-var autolinker = new Autolinker();
-
-//the youtube regex
-var ytidregex = /watch\?v=([A-Za-z0-9\-_]+)/;
-
-//grab the notes and loop through them
-var notes = document.querySelectorAll('.e-content');
-for (var i = 0; i < notes.length; i++) {
-    //get Youtube ID
-    var ytid = notes[i].textContent.match(ytidregex);
-    if (ytid !== null) {
-        var id = ytid[1];
-        var iframe = document.createElement('iframe');
-        iframe.classList.add('youtube');
-        iframe.setAttribute('src', '//www.youtube.com/embed/' + id);
-        iframe.setAttribute('frameborder', 0);
-        iframe.setAttribute('allowfullscreen', 'true');
-        notes[i].appendChild(iframe);
-    }
-    //now linkify everything
-    var orig = notes[i].innerHTML;
-    var linked = autolinker.link(orig);
-    notes[i].innerHTML = linked;
-}
+for(var autolinker=new Autolinker,ytidregex=/watch\?v=([A-Za-z0-9\-_]+)/,spotifyregex=/https\:\/\/play\.spotify\.com\/(.*)\b/,notes=document.querySelectorAll(".e-content"),i=0;i<notes.length;i++){var ytid=notes[i].textContent.match(ytidregex);if(null!==ytid){var yid=ytid[1],yiframe=document.createElement("iframe");yiframe.classList.add("youtube"),yiframe.setAttribute("src","//www.youtube.com/embed/"+yid),yiframe.setAttribute("frameborder",0),yiframe.setAttribute("allowfullscreen","true"),notes[i].appendChild(yiframe)}var spotifyid=notes[i].textContent.match(spotifyregex);if(null!==spotifyid){var sid=spotifyid[1].replace("/",":"),siframe=document.createElement("iframe");siframe.classList.add("spotify"),siframe.setAttribute("src","https://embed.spotify.com/?uri=spotify:"+sid),siframe.setAttribute("frameborder",0),siframe.setAttribute("allowtransparency","true"),notes[i].appendChild(siframe)}var orig=notes[i].innerHTML,linked=autolinker.link(orig);notes[i].innerHTML=linked}
+//# sourceMappingURL=maps/links.js.map

@@ -1,8 +1,10 @@
 'use strict';
 
 var gulp = require('gulp');
+var pump = require('pump');
 var sass = require('gulp-sass');
 var brotli = require('gulp-brotli');
+var uglify = require('gulp-uglify');
 var zopfli = require('gulp-zopfli');
 var sourcemaps = require('gulp-sourcemaps');
 var autoprefixer = require('gulp-autoprefixer');
@@ -17,7 +19,12 @@ gulp.task('sass', function () {
 });
 
 gulp.task('js-assets', function () {
+    //return gulp.src(['resources/assets/js/**/*'])
+    //    .pipe(gulp.dest('./public/assets/js'));
     return gulp.src(['resources/assets/js/**/*'])
+        .pipe(sourcemaps.init())
+        .pipe(uglify())
+        .pipe(sourcemaps.write('./maps'))
         .pipe(gulp.dest('./public/assets/js'));
 });
 
