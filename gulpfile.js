@@ -21,13 +21,11 @@ gulp.task('sass', function () {
 gulp.task('js-assets', function () {
     //return gulp.src(['resources/assets/js/**/*'])
     //    .pipe(gulp.dest('./public/assets/js'));
-    pump([
-        gulp.src(['resources/assets/js/**/*']),
-        sourcemaps.init(),
-        uglify(),
-        sourcemaps.write('./maps'),
-        gulp.dest('./public/assets/js')
-    ]);
+    return gulp.src(['resources/assets/js/**/*'])
+        .pipe(sourcemaps.init())
+        .pipe(uglify())
+        .pipe(sourcemaps.write('./maps'))
+        .pipe(gulp.dest('./public/assets/js'));
 });
 
 gulp.task('bower', function () {
