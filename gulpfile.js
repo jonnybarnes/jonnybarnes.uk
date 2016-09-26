@@ -23,7 +23,9 @@ gulp.task('js-assets', function () {
     //    .pipe(gulp.dest('./public/assets/js'));
     pump([
         gulp.src(['resources/assets/js/**/*']),
-        uglify({outSourceMap: 'out.js.map'}),
+        sourcemaps.init(),
+        uglify(),
+        sourcemaps.write('./maps'),
         gulp.dest('./public/assets/js')
     ]);
 });
