@@ -1,6 +1,6 @@
 # Changelog
 
-## Version {next}
+## Version 0.0.13 (2016-09-26)
   - Better places support, particularly with micropub (issue#9)
   - Uglify js for better performance (issue#19)
   - Autolink spotify links (issue#18)
