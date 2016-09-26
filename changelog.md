@@ -2,6 +2,7 @@
 
 ## Version {next}
   - Better places support, particularly with micropub (issue#9)
+  - Uglify js for better performance (issue#19)
 
 ## Version 0.0.12 (2016-09-21)
   - Better indication of number of replies to a note (issue#17)
