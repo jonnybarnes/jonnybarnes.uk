@@ -53,6 +53,12 @@ class MicropubTest extends TestCase
         $this->see('the-bridgewater-pub');
     }
 
+    public function testMicropubRequestForNearbyPlacesThatExistWithUncertaintyParameter()
+    {
+        $this->call('GET', $this->appurl . '/api/post', ['q' => 'geo:53.5,-2.38;u=35'], [], [], ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]);
+        $this->see('the-bridgewater-pub');
+    }
+
     public function testMicropubRequestForNearbyPlacesThatDoNotExist()
     {
         $this->call('GET', $this->appurl . '/api/post', ['q' => 'geo:1.23,4.56'], [], [], ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]);

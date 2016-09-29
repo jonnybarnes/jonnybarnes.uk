@@ -1,9 +1,12 @@
 # Changelog
 
+## Version {next}
+  - Add support for accuracy/uncertainty in geo URIs (issue#20,issue#9)
+
 ## Version 0.0.13 (2016-09-26)
   - Better places support, particularly with micropub (issue#9)
-  - Uglify js for better performance (issue#19)
-  - Autolink spotify links (issue#18)
+  - Uglify javascript for better performance (issue#19)
+  - Auto-link Spotify links (issue#18)
 
 ## Version 0.0.12 (2016-09-21)
   - Better indication of number of replies to a note (issue#17)
@@ -32,7 +35,7 @@
   - Better handling of webmention reply HTML cache
 
 ## Version 0.0.11.2 (2016-09-19)
-  - Update Typekit’s js sri hash
+  - Update Typekit’s javascript sri hash
 
 ## Version 0.0.11.1 (2016-09-17)
   - Fix a syntax issue in the download webmention job
@@ -40,13 +43,13 @@
 ## Version 0.0.11 (2016-09-17)
   - update linked GPG key (issue#7)
   - Added `integrity` values to external assets (issue#10)
-  - Move mapbox links into own sub-view (issue#11)
-  - Updated mapbox version (issue#12)
+  - Move Mapbox links into own sub-view (issue#11)
+  - Updated Mapbox version (issue#12)
   - Massive refactor of webmention code, allowing for re-parse command (issue#8)
   - Add license file (issue#13)
 
 ## Version 0.0.10 (2016-09-10)
-  - Add an artisan command for sensiolab’s security check
+  - Add an artisan command for Sensiolab’s security check
   - Remove `filp/whoops`, just use Laravel’s error reporting
   - Better TokenMismatchException handling (issue#5)
 
@@ -59,27 +62,27 @@
   - Fix an issue with syndicating notes.
 
 ## Version 0.0.9 (2016-09-06)
-  - Adding jsonb column to store webmentions’ mf2.
+  - Adding `jsonb` column to store webmentions’ microformats.
     * As of L5.2 this needs a custom command to drop NOT NULL from content, L5.3 should allow a fix for this
   - Refactor receiving webmention code
-  - Refactor sending webmention code to pass webmention.rocks
+  - Refactor sending webmention code to pass `webmention.rocks`
   - Update to use Laravel 5.3
 
 ## Version 0.0.8.5 (2016-07-18)
-  - Set the size of the textarea in a form better
+  - Set the size of the `textarea` in a form better
   - Update to latest Guzzle to fix CVE-2016-5385
 
 ## Version 0.0.8.4 (2016-07-18)
   - Make the revised non-elixir asset links absolute
 
 ## Version 0.0.8.3 (2016-07-18)
-  - Dump laravel-elixir, use gulp natively. Also this means using nginx and etags for cache-busting
+  - Dump `laravel-elixir`, use gulp natively. Also this means using nginx and etags for cache-busting
 
 ## Version 0.0.8.2 (2016-07-15)
   - Improve syndication parsing to allow better name display on new note form
 
 ## Version 0.0.8.1 (2016-07-13)
-  - Fix anh issue in the syndication target parsing method
+  - Fix an issue in the syndication target parsing method
 
 ## Version 0.0.8 (2016-07-13)
   - Allow new notes to be made by a JSON request from a micropub client
@@ -116,11 +119,11 @@
   - Add a stylelint lint-staged hook
 
 ## Version 0.0.3 (2013-06-09)
-  - Better tag normalization code organisation
+  - Better tag normalisation code organisation
   - Remove `jonnybarnes/unicode-tools` dependency and clean up relevant code
 
 ## Version 0.0.2 (2016-05-25)
-  - Fix issue#1: tagged notes page needs the tag from the URL normalizing.
+  - Fix issue#1: tagged notes page needs the tag from the URL normalising.
 
 ## Version 0.0.1 (2016-05-25)
   - Initial release
