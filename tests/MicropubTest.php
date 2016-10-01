@@ -222,6 +222,25 @@ class MicropubTest extends TestCase
         ]);
     }
 
+    public function testMicropubJSONRequestCreateNewPlaceWithUncertaintyParam()
+    {
+        $faker = \Faker\Factory::create();
+        $this->json(
+            'POST',
+            $this->appurl . '/api/post',
+            [
+                'type' => ['h-card'],
+                'properties' => [
+                    'name' => $faker->name,
+                    'geo' => 'geo:' . $faker->latitude . ',' . $faker->longitude . ';u=35'
+                ],
+            ],
+            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+        )->seeJson([
+            'response' => 'created'
+        ])->assertResponseStatus(201);
+    }
+
     private function getToken()
     {
         $signer = new Sha256();

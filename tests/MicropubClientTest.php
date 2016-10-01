@@ -46,9 +46,6 @@ class MicropubClientTest extends TestCase
           ->see('https://twitter.com/jonnybarnes');
     }
 
-    /**
-     * This currently creates a new note that stays in the database.
-     */
     public function testClientCreatesNewNoteWithTag()
     {
         $faker = \Faker\Factory::create();
@@ -62,6 +59,11 @@ class MicropubClientTest extends TestCase
         $this->seeInDatabase('notes', ['note' => $note]);
         $this->visit($this->appurl . '/notes/tagged/PHPUnit')
              ->see('PHPUnit');
+        //my client has made a request to my endpoint, which then adds
+        //to the db, so database transaction don’t work
+        //so lets manually delete the new entry
+        $newNote = \App\Note::where('note', $note);
+        $newNote->forceDelete();
 
     }
 

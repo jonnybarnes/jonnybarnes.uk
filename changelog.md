@@ -2,6 +2,7 @@
 
 ## Version {next}
   - Add support for accuracy/uncertainty in geo URIs (issue#20,issue#9)
+  - Add some places tests
 
 ## Version 0.0.13 (2016-09-26)
   - Better places support, particularly with micropub (issue#9)
