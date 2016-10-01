@@ -12,13 +12,13 @@ if ('geolocation' in navigator) {
 function getLocation() {
     navigator.geolocation.getCurrentPosition(function (position) {
         //the locate button has been clicked so add the places/map
-        addPlacesMap(position.coords.latitude, position.coords.longitude);
+        addPlacesMap(position.coords.latitude, position.coords.longitude, position.coords.accuracy);
     });
 }
 
-function addPlacesMap(latitude, longitude) {
+function addPlacesMap(latitude, longitude, uncertainty) {
     //get the nearby places
-    fetch('/places/near/' + latitude + '/' + longitude, {
+    fetch('/places/near/' + latitude + '/' + longitude + '?' + uncertainty, {
         credentials: 'same-origin',
         method: 'get'
     }).then(function (response) {

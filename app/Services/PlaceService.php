@@ -25,10 +25,15 @@ class PlaceService
             $description = $request->input('description');
             $geo = $request->input('geo');
         }
-        $parts = explode(':', $geo);
-        $latlng = explode(',', $parts[1]);
-        $latitude = $latlng[0];
-        $longitude = $latlng[1];
+        if ($geo) {
+            preg_match_all(
+                '/([0-9\.\-]+)/',
+                $geo,
+                $matches
+            );
+            $latitude = $matches[0][0];
+            $longitude = $matches[0][1];
+        }
         if ($request->input('latitude') !== null) {
             $latitude = $request->input('latitude');
             $longitude = $request->input('longitude');

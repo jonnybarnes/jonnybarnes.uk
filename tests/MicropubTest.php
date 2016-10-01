@@ -53,6 +53,12 @@ class MicropubTest extends TestCase
         $this->see('the-bridgewater-pub');
     }
 
+    public function testMicropubRequestForNearbyPlacesThatExistWithUncertaintyParameter()
+    {
+        $this->call('GET', $this->appurl . '/api/post', ['q' => 'geo:53.5,-2.38;u=35'], [], [], ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]);
+        $this->see('the-bridgewater-pub');
+    }
+
     public function testMicropubRequestForNearbyPlacesThatDoNotExist()
     {
         $this->call('GET', $this->appurl . '/api/post', ['q' => 'geo:1.23,4.56'], [], [], ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]);
@@ -214,6 +220,25 @@ class MicropubTest extends TestCase
             'response' => 'error',
             'error' => 'invalid_token'
         ]);
+    }
+
+    public function testMicropubJSONRequestCreateNewPlaceWithUncertaintyParam()
+    {
+        $faker = \Faker\Factory::create();
+        $this->json(
+            'POST',
+            $this->appurl . '/api/post',
+            [
+                'type' => ['h-card'],
+                'properties' => [
+                    'name' => $faker->name,
+                    'geo' => 'geo:' . $faker->latitude . ',' . $faker->longitude . ';u=35'
+                ],
+            ],
+            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+        )->seeJson([
+            'response' => 'created'
+        ])->assertResponseStatus(201);
     }
 
     private function getToken()

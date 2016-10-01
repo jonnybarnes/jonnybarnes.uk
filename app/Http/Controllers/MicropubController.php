@@ -147,11 +147,13 @@ EOD;
             }
             //nope, how about a geo URL?
             if (substr($request->input('q'), 0, 4) === 'geo:') {
-                $geo = explode(':', $request->input('q'));
-                $latlng = explode(',', $geo[1]);
-                $latitude = $latlng[0];
-                $longitude = $latlng[1];
-                $places = Place::near($latitude, $longitude, 1000);
+                preg_match_all(
+                    '/([0-9\.\-]+)/',
+                    $request->input('q'),
+                    $matches
+                );
+                $distance = (count($matches[0]) == 3) ? 100 * $matches[0][2] : 1000;
+                $places = Place::near($matches[0][0], $matches[0][1], $distance);
 
                 return response()->json([
                     'response' => 'places',
