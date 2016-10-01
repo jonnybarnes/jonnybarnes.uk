@@ -1,6 +1,6 @@
 # Changelog
 
-## Version {next}
+## Version 0.0.13.1 (2016-10-01)
   - Add support for accuracy/uncertainty in geo URIs (issue#20,issue#9)
   - Add some places tests
 
