@@ -308,7 +308,7 @@ class MicropubClientController extends Controller
 
         try {
             $query = 'geo:' . $latitude . ',' . $longitude;
-            if ($request->input('uncertainty') !== null) {
+            if ($request->input('u') !== null) {
                 $query .= ';u=' . $request->input('uncertainty');
             }
             $response = $this->guzzleClient->get($micropubEndpoint, [
