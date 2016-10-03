@@ -45,6 +45,18 @@ class AppServiceProvider extends ServiceProvider
                 $note->tags()->attach($tagsToAdd);
             }
         });
+
+        //allow micropub use in development
+        if (env('APP_DEBUG') == true) {
+            $tokenService = new \App\Services\TokenService();
+            $token = $tokenService->getNewToken([
+                'me' => 'https://jonnybarnes.localhost',
+                'client_id' => 'https://jonnybarnes.localhost/notes/new',
+                'scope' => 'post'
+            ]);
+            session(['me' => 'https://jonnybarnes.localhost']);
+            session(['token' => 'abc123']);
+        }
     }
 
     /**
