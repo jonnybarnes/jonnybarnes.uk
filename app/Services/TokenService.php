@@ -38,9 +38,6 @@ class TokenService
      */
     public function validateToken($token)
     {
-        if (env('APP_DEBUG') == true) {
-            return true;
-        }
         $signer = new Sha256();
         try {
             $token = (new Parser())->parse((string) $token);
