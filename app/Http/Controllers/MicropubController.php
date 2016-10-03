@@ -115,16 +115,11 @@ class MicropubController extends Controller
             $valid = $this->tokenService->validateToken($token);
 
             if ($valid === null) {
-                $content = <<<'EOD'
-{
-    "respose": "error",
-    "error": "invalid_token",
-    "error_description": "The provided token did not pass validation"
-}
-EOD;
-
-                return (new Response($content, 400))
-                            ->header('Content-Type', 'application/json');
+                return response()->json([
+                    'response' => 'error',
+                    'error' => 'invalid_token',
+                    'error_description' => 'The provided token did not pass validation'
+                ], 400);
             }
             //we have a valid token, is `syndicate-to` set?
             if ($request->input('q') === 'syndicate-to') {
