@@ -309,7 +309,7 @@ class MicropubClientController extends Controller
         try {
             $query = 'geo:' . $latitude . ',' . $longitude;
             if ($request->input('u') !== null) {
-                $query .= ';u=' . $request->input('uncertainty');
+                $query .= ';u=' . $request->input('u');
             }
             $response = $this->guzzleClient->get($micropubEndpoint, [
                 'headers' => ['Authorization' => 'Bearer ' . $token],
@@ -319,6 +319,7 @@ class MicropubClientController extends Controller
             return response()->json([
                 'error' => true,
                 'error_description' => 'The endpoint returned a non-good response',
+                'error_stack' => $e->getMessage()
             ], 400);
         }
 
