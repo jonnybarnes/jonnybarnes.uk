@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 0.0.13.4 (2016-10-03)
+  - Better working code for places in newnote.js (issue#21)
+    * In aid of this add ability to run micropub code locally
+
 ## Version 0.0.13.3 (2016-10-03)
   - Use the actual results of places in `newnote.js` (issue#21)
 
