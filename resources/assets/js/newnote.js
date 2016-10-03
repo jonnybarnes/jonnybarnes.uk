@@ -28,11 +28,11 @@ function addPlacesMap(latitude, longitude, uncertainty) {
             alertify.reset();
             alertify.error(j.error_description);
         }
-        if (j.length > 0) {
+        if (j.places.length > 0) {
             var i;
             var places = [];
             for (i = 0; i < j.places.length; ++i) {
-                var latlng = parseLocation(j[i].location);
+                var latlng = parseLocation(j.places[i].location);
                 var name = j.places[i].name;
                 var slug = j.places[i].slug;
                 places.push([name, slug, latlng[0], latlng[1]]);
