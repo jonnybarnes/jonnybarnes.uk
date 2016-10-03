@@ -1,5 +1,8 @@
 # Changelog
 
+## Version {next}
+  - Use the actual results of places in `newnote.js` (issue#21)
+
 ## Version 0.0.13.2 (2016-10-03)
   - Fix issues with fetch API and places when using micropub client
 
