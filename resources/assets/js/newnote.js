@@ -18,7 +18,7 @@ function getLocation() {
 
 function addPlacesMap(latitude, longitude, uncertainty) {
     //get the nearby places
-    fetch('/places/near/' + latitude + '/' + longitude + '?' + uncertainty, {
+    fetch('/places/near/' + latitude + '/' + longitude + '?u=' + uncertainty, {
         credentials: 'same-origin',
         method: 'get'
     }).then(function (response) {

@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 0.0.13.2 (2016-10-03)
+  - Fix issues with fetch API and places when using micropub client
+
 ## Version 0.0.13.1 (2016-10-01)
   - Add support for accuracy/uncertainty in geo URIs (issue#20,issue#9)
   - Add some places tests
