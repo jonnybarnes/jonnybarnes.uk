@@ -1,6 +1,6 @@
 # Changelog
 
-## Version {next}
+## Version 0.0.13.3 (2016-10-03)
   - Use the actual results of places in `newnote.js` (issue#21)
 
 ## Version 0.0.13.2 (2016-10-03)
