@@ -31,10 +31,10 @@ function addPlacesMap(latitude, longitude, uncertainty) {
         if (j.length > 0) {
             var i;
             var places = [];
-            for (i = 0; i < j.length; ++i) {
+            for (i = 0; i < j.places.length; ++i) {
                 var latlng = parseLocation(j[i].location);
-                var name = j[i].name;
-                var slug = j[i].slug;
+                var name = j.places[i].name;
+                var slug = j.places[i].slug;
                 places.push([name, slug, latlng[0], latlng[1]]);
             }
             //add a map with the nearby places
