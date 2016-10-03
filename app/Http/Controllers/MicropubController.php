@@ -118,7 +118,7 @@ class MicropubController extends Controller
                 return response()->json([
                     'response' => 'error',
                     'error' => 'invalid_token',
-                    'error_description' => 'The provided token did not pass validation'
+                    'error_description' => 'The provided token did not pass validation',
                 ], 400);
             }
             //we have a valid token, is `syndicate-to` set?

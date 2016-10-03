@@ -319,7 +319,6 @@ class MicropubClientController extends Controller
             return response()->json([
                 'error' => true,
                 'error_description' => 'The endpoint returned a non-good response',
-                'error_stack' => $e->getMessage()
             ], 400);
         }
 
