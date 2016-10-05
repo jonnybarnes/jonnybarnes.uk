@@ -48,14 +48,8 @@ class AppServiceProvider extends ServiceProvider
 
         //allow micropub use in development
         if (env('APP_DEBUG') == true) {
-            $tokenService = new \App\Services\TokenService();
-            $token = $tokenService->getNewToken([
-                'me' => 'https://jonnybarnes.localhost',
-                'client_id' => 'https://jonnybarnes.localhost/notes/new',
-                'scope' => 'post'
-            ]);
             session(['me' => 'https://jonnybarnes.localhost']);
-            session(['token' => 'abc123']);
+            session(['token' => 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJtZSI6Imh0dHBzOlwvXC9qb25ueWJhcm5lcy5sb2NhbGhvc3QiLCJjbGllbnRfaWQiOiJodHRwczpcL1wvam9ubnliYXJuZXMubG9jYWxob3N0XC9ub3Rlc1wvbmV3Iiwic2NvcGUiOiJwb3N0IiwiZGF0ZV9pc3N1ZWQiOjE0NzU1MTI0NDgsIm5vbmNlIjoiYzE0MzNmNzg5ZTY4Y2M1OSJ9.7Bj9yLnWJOyVre8BPihAom2G0MEsmS3tIUraDI-GRNg']);
         }
     }
 

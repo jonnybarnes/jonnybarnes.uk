@@ -166,17 +166,11 @@ class MicropubClientController extends Controller
                 ];
             }
         }
-        if ($request->input('confirmlocation')) {
-            $latLng = $request->input('location');
-            $geoURL = 'geo:' . str_replace(' ', '', $latLng);
-            $multipart[] = [
-                'name' => 'location',
-                'contents' => $geoURL,
-            ];
-            if ($request->input('address') != '') {
+        if ($request->input('location')) {
+            if ($request->input('location') !== 'no-location') {
                 $multipart[] = [
-                    'name' => 'place_name',
-                    'contents' => $request->input('address'),
+                    'name' => 'location',
+                    'contents' => $request->input('location'),
                 ];
             }
         }
@@ -319,7 +313,6 @@ class MicropubClientController extends Controller
             return response()->json([
                 'error' => true,
                 'error_description' => 'The endpoint returned a non-good response',
-                'error_stack' => $e->getMessage()
             ], 400);
         }
 

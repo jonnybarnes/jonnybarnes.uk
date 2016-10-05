@@ -34,8 +34,8 @@ function addPlacesMap(latitude, longitude, uncertainty) {
             for (i = 0; i < j.places.length; ++i) {
                 var latlng = parseLocation(j.places[i].location);
                 var name = j.places[i].name;
-                var slug = j.places[i].slug;
-                places.push([name, slug, latlng[0], latlng[1]]);
+                var uri = j.places[i].uri;
+                places.push([name, uri, latlng[0], latlng[1]]);
             }
             //add a map with the nearby places
             addMap(latitude, longitude, places);

@@ -118,7 +118,7 @@ class MicropubController extends Controller
                 return response()->json([
                     'response' => 'error',
                     'error' => 'invalid_token',
-                    'error_description' => 'The provided token did not pass validation'
+                    'error_description' => 'The provided token did not pass validation',
                 ], 400);
             }
             //we have a valid token, is `syndicate-to` set?
@@ -149,6 +149,9 @@ class MicropubController extends Controller
                 );
                 $distance = (count($matches[0]) == 3) ? 100 * $matches[0][2] : 1000;
                 $places = Place::near($matches[0][0], $matches[0][1], $distance);
+                foreach ($places as $place) {
+                    $place->uri = config('app.url') . '/place/' . $place->slug;
+                }
 
                 return response()->json([
                     'response' => 'places',
