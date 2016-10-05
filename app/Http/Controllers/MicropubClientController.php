@@ -170,7 +170,7 @@ class MicropubClientController extends Controller
             if ($request->input('location') !== 'no-location') {
                 $multipart[] = [
                     'name' => 'location',
-                    'contents' => $request->input('location')
+                    'contents' => $request->input('location'),
                 ];
             }
         }
