@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 0.0.13.6 (2016-10-05)
+  - Syndicate lat/lng values (issue#22)
+
 ## Version 0.0.13.5 (2016-10-05)
   - Places can now be added to a new note created via micropub
 
