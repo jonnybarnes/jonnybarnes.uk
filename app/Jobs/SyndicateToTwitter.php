@@ -52,8 +52,8 @@ class SyndicateToTwitter implements ShouldQueue
             $lng = trim($location[1]);
         }
         if ($this->note->place) {
-            $lat = $this->note->place->getLat();
-            $lng = $this->note->place->getLng();
+            $lat = $this->note->place->location->getLat();
+            $lng = $this->note->place->location->getLng();
         }
         if (isset($lat) && isset($lng)) {
             $tweetOpts['lat'] = $lat;
