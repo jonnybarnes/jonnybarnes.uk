@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 0.0.13.7 (2016-10-05)
+  - Use the correct `laravel-postgis` method call during syndication
+
 ## Version 0.0.13.6 (2016-10-05)
   - Syndicate lat/lng values (issue#22)
 
