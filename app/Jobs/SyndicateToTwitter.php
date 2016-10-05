@@ -45,20 +45,20 @@ class SyndicateToTwitter implements ShouldQueue
             $tweetOpts['in_reply_to_status_id'] = $noteprep->replyTweetId($this->note->in_reply_to);
         }
 
-        /*if ($this->note->location) {
+        if ($this->note->location) {
             $explode = explode(':', $this->note->location);
             $location = (count($explode) == 2) ? explode(',', $explode[0]) : explode(',', $explode);
             $lat = trim($location[0]);
-            $long = trim($location[1]);
-            $jsonPlaceId = Twitter::getGeoReverse(array('lat' => $lat, 'long' => $long, 'format' => 'json'));
-            $parsePlaceId = json_decode($jsonPlaceId);
-            $placeId = $parsePlaceId->result->places[0]->id ?: null;
+            $lng = trim($location[1]);
+        }
+        if ($this->note->place) {
+            $lat = $this->note->place->getLat();
+            $lng = $this->note->place->getLng();
+        }
+        if (isset($lat) && isset($lng)) {
             $tweetOpts['lat'] = $lat;
-            $tweetOpts['long'] = $long;
-            if ($placeId) {
-                $tweetOpts['place_id'] = $placeId;
-            }
-        }*/
+            $tweetOpts['long'] = $lng;
+        }
 
         $mediaItems = $this->note->getMedia();
         if (count($mediaItems) > 0) {
