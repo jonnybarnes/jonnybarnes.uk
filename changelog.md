@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 0.0.13.5 (2016-10-05)
+  - Places can now be added to a new note created via micropub
+
 ## Version 0.0.13.4 (2016-10-03)
   - Better working code for places in newnote.js (issue#21)
     * In aid of this add ability to run micropub code locally
