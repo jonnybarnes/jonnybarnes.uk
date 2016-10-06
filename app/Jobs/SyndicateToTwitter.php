@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use Twitter;
 use App\Note;
+use App\Place;
 use App\Contact;
 use Illuminate\Bus\Queueable;
 use Jonnybarnes\IndieWeb\Numbers;
@@ -72,11 +73,9 @@ class SyndicateToTwitter implements ShouldQueue
             $tweetOpts['media_ids'] = implode(',', $mediaIds);
         }
 
-        //$responseJson = Twitter::postTweet($tweetOpts);
-        //$response = json_decode($responseJson);
-        //$tweetId = $response->id;
-        var_dump($tweetOpts);
-        $this->note->tweet_id = '55667788';
+        $responseJson = Twitter::postTweet($tweetOpts);
+        $response = json_decode($responseJson);
+        $this->note->tweet_id = $response->id;
         $this->note->save();
     }
 
