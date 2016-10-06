@@ -1,6 +1,6 @@
 # Changelog
 
-## Version {next}
+## Version 0.0.13.8 (2016-10-06)
   - Create a Place model instance in SyndicateToTwitter job to force laravel to access postgis methods
 
 ## Version 0.0.13.7 (2016-10-05)
