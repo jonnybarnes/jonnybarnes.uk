@@ -51,9 +51,12 @@ class SyndicateToTwitter implements ShouldQueue
             $lat = trim($location[0]);
             $lng = trim($location[1]);
         }
-        if ($this->note->place) {
-            $lat = $this->note->place->location->getLat();
-            $lng = $this->note->place->location->getLng();
+        if ($this->note->place_id) {
+            //we force the job to create a place model to get access
+            //to the postgis methods
+            $place = Place::find($this->note->place_id)
+            $lat = $place->location->getLat();
+            $lng = $place->location->getLng();
         }
         if (isset($lat) && isset($lng)) {
             $tweetOpts['lat'] = $lat;
@@ -69,10 +72,11 @@ class SyndicateToTwitter implements ShouldQueue
             $tweetOpts['media_ids'] = implode(',', $mediaIds);
         }
 
-        $responseJson = Twitter::postTweet($tweetOpts);
-        $response = json_decode($responseJson);
-        $tweetId = $response->id;
-        $this->note->tweet_id = $tweetId;
+        //$responseJson = Twitter::postTweet($tweetOpts);
+        //$response = json_decode($responseJson);
+        //$tweetId = $response->id;
+        var_dump($tweetOpts);
+        $this->note->tweet_id = '55667788';
         $this->note->save();
     }
 
