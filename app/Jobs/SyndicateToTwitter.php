@@ -55,7 +55,7 @@ class SyndicateToTwitter implements ShouldQueue
         if ($this->note->place_id) {
             //we force the job to create a place model to get access
             //to the postgis methods
-            $place = Place::find($this->note->place_id)
+            $place = Place::find($this->note->place_id);
             $lat = $place->location->getLat();
             $lng = $place->location->getLng();
         }
