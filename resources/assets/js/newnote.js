@@ -263,8 +263,8 @@ function parseLocation(point) {
     return [location[1], location[0]];
 }
 
-function selectPlace(slug) {
-    document.querySelector('select [value=' + slug + ']').selected = true;
+function selectPlace(uri) {
+    document.querySelector('select [value="' + uri + '"]').selected = true;
 }
 
 function getLatitudeFromMapboxMarker(latlng) {
