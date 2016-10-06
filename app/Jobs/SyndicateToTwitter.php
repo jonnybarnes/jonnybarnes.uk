@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use Twitter;
 use App\Note;
+use App\Place;
 use App\Contact;
 use Illuminate\Bus\Queueable;
 use Jonnybarnes\IndieWeb\Numbers;
@@ -51,9 +52,12 @@ class SyndicateToTwitter implements ShouldQueue
             $lat = trim($location[0]);
             $lng = trim($location[1]);
         }
-        if ($this->note->place) {
-            $lat = $this->note->place->location->getLat();
-            $lng = $this->note->place->location->getLng();
+        if ($this->note->place_id) {
+            //we force the job to create a place model to get access
+            //to the postgis methods
+            $place = Place::find($this->note->place_id)
+            $lat = $place->location->getLat();
+            $lng = $place->location->getLng();
         }
         if (isset($lat) && isset($lng)) {
             $tweetOpts['lat'] = $lat;
@@ -71,8 +75,7 @@ class SyndicateToTwitter implements ShouldQueue
 
         $responseJson = Twitter::postTweet($tweetOpts);
         $response = json_decode($responseJson);
-        $tweetId = $response->id;
-        $this->note->tweet_id = $tweetId;
+        $this->note->tweet_id = $response->id;
         $this->note->save();
     }
 
