@@ -1,5 +1,10 @@
 # Changelog
 
+## Version {next}
+  - Fix image upload for notes
+  - Allow co-ordinates to be sent by the client as a geo: URI
+  - Allow endpoint to process geo: URIs for location
+
 ## Version 0.0.13.9 (2016-10-06)
   - Hotfix, add missing semi-colon
 
