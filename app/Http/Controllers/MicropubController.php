@@ -150,7 +150,7 @@ class MicropubController extends Controller
                 $distance = (count($matches[0]) == 3) ? 100 * $matches[0][2] : 1000;
                 $places = Place::near($matches[0][0], $matches[0][1], $distance);
                 foreach ($places as $place) {
-                    $place->uri = config('app.url') . '/place/' . $place->slug;
+                    $place->uri = config('app.url') . '/places/' . $place->slug;
                 }
 
                 return response()->json([
