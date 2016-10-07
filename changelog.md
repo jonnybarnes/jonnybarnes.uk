@@ -1,6 +1,6 @@
 # Changelog
 
-## Version {next}
+## Version 0.0.14 (2016-10-07)
   - Fix image upload for notes
   - Allow co-ordinates to be sent by the client as a geo: URI
   - Allow endpoint to process geo: URIs for location
