@@ -224,7 +224,7 @@ class MicropubClientController extends Controller
         }
 
         return response()->json([
-            'url' => $place,
+            'uri' => $place,
             'name' => $request->input('place-name'),
             'latitude' => $request->input('place-latitude'),
             'longitude' => $request->input('place-longitude'),

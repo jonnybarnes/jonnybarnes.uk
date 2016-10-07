@@ -22,14 +22,14 @@ class NoteService
         if ($request->header('Content-Type') == 'application/json') {
             $content = $request->input('properties.content')[0];
             $inReplyTo = $request->input('properties.in-reply-to')[0];
-            $place = $request->input('properties.location');
-            if (is_array($place)) {
-                $place = $place[0];
+            $location = $request->input('properties.location');
+            if (is_array($location)) {
+                $location = $location[0];
             }
         } else {
             $content = $request->input('content');
             $inReplyTo = $request->input('in-reply-to');
-            $place = $request->input('location');
+            $location = $request->input('location');
         }
 
         $note = Note::create(
@@ -40,19 +40,19 @@ class NoteService
             ]
         );
 
-        if ($place !== null && $place !== 'no-location') {
-            if (substr($place, 0, strlen(config('app.url'))) == config('app.url')) {
-                //uri of form http://host/place/slug, we want slug so chop off start
-                //that’s the app’s url plus `/place/`
-                $slug = mb_substr($place, mb_strlen(config('app.url')) + 7);
-                $placeModel = Place::where('slug', '=', $slug)->first();
-                $note->place()->associate($placeModel);
+        if ($location !== null && $location !== 'no-location') {
+            if (substr($location, 0, strlen(config('app.url'))) == config('app.url')) {
+                //uri of form http://host/places/slug, we want slug so chop off start
+                //that’s the app’s url plus `/places/`
+                $slug = mb_substr($location, mb_strlen(config('app.url')) + 8);
+                $place = Place::where('slug', '=', $slug)->first();
+                $note->place()->associate($place);
                 $note->save();
             }
-            if (substr($place, 0, 4) == 'geo:') {
+            if (substr($location, 0, 4) == 'geo:') {
                 preg_match_all(
                     '/([0-9\.\-]+)/',
-                    $place,
+                    $location,
                     $matches
                 );
                 $note->location = $matches[0][0] . ', ' . $matches[0][1];
@@ -64,7 +64,7 @@ class NoteService
         if ($request->hasFile('photo')) {
             $files = $request->file('photo');
             foreach ($files as $file) {
-                $note->addMedia($file)->toMediaLibrary('images', 's3');
+                $note->addMedia($file)->toCollectionOnDisk('images', 's3');
             }
         }
 

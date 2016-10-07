@@ -141,10 +141,12 @@ class NotesController extends Controller
             $note->placeLink = '/places/' . $note->place->slug;
         }
 
-        $note->photoURLs = [];
-        foreach ($note->getMedia() as $photo) {
-            $note->photoURLs[] = $photo->getUrl();
+        $photoURLs = [];
+        $photos = $note->getMedia();
+        foreach ($photos as $photo) {
+            $photoURLs[] = $photo->getUrl();
         }
+        $note->photoURLs = $photoURLs;
 
         return view('singlenote', [
             'note' => $note,
