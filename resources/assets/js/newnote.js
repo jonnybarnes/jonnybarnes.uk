@@ -206,9 +206,6 @@ function addMap(latitude, longitude, places) {
                 if (placeJson.error == true) {
                     throw new Error(placeJson.error_description);
                 }
-                //create the slug from the url
-                var urlParts = placeJson.split('/');
-                var slug = urlParts.pop();
                 //remove un-needed form elements
                 form.removeChild(document.querySelector('#place-name'));
                 form.removeChild(document.querySelector('#place-description'));
@@ -224,28 +221,29 @@ function addMap(latitude, longitude, places) {
                 map.removeLayer(marker);
                 //add place marker
                 var newOption = document.createElement('option');
-                newOption.setAttribute('value', slug);
-                newOption.appendChild(document.createTextNode(placeJson['name']));
-                newOption.dataset.latitude = placeJson['latitude'];
-                newOption.dataset.longitude = placeJson['longitude'];
+                newOption.setAttribute('value', placeJson.uri);
+                newOption.appendChild(document.createTextNode(placeJson.name));
+                newOption.dataset.latitude = placeJson.latitude;
+                newOption.dataset.longitude = placeJson.longitude;
                 selectEl.appendChild(newOption);
-                var newPlaceMarker = L.marker([placeJson['latitude'], placeJson['longitude']], {
+                var newPlaceMarker = L.marker([placeJson.latitude, placeJson.longitude], {
                     icon: L.mapbox.marker.icon({
                         'marker-size': 'large',
                         'marker-symbol': 'building',
                         'marker-color': '#fa0'
                     })
                 }).addTo(map);
-                var newName = 'Name: ' + placeJson['name'];
+                map.panTo([placeJson.latitude, placeJson.longitude]);
+                var newName = 'Name: ' + placeJson.name;
                 newPlaceMarker.bindPopup(newName, {
                     closeButton: true
                 });
                 newPlaceMarker.on('click', function () {
-                    map.panTo([placeJson['latitude'], placeJson['longitude']]);
-                    selectPlace(slug);
+                    map.panTo([placeJson.latitude, placeJson.longitude]);
+                    selectPlace(placeJson.uri);
                 });
                 //make selected
-                selectPlace(slug);
+                selectPlace(placeJson.uri);
             }).catch(function (placeError) {
                 alertify.reset();
                 alertify.error(placeError);
