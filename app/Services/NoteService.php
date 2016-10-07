@@ -42,9 +42,9 @@ class NoteService
 
         if ($place !== null && $place !== 'no-location') {
             if (substr($place, 0, strlen(config('app.url'))) == config('app.url')) {
-                //uri of form http://host/place/slug, we want slug so chop off start
-                //that’s the app’s url plus `/place/`
-                $slug = mb_substr($place, mb_strlen(config('app.url')) + 7);
+                //uri of form http://host/places/slug, we want slug so chop off start
+                //that’s the app’s url plus `/places/`
+                $slug = mb_substr($place, mb_strlen(config('app.url')) + 8);
                 $placeModel = Place::where('slug', '=', $slug)->first();
                 $note->place()->associate($placeModel);
                 $note->save();
