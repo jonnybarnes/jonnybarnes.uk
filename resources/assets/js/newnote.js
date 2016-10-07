@@ -71,24 +71,34 @@ function addMap(latitude, longitude, places) {
     //when the location marker is dragged, if the new place form elements exist
     //update the lat/lng values
     marker.on('dragend', function () {
+        var mapMarkerLatitude = getLatitudeFromMapboxMarker(marker.getLatLng());
+        var mapMarkerLongitude = getLongitudeFromMapboxMarker(marker.getLatLng());
+        var coordsOption = document.querySelector('#option-coords');
+        if (coordsOption != null) {
+            coordsOption.value = 'geo:' + mapMarkerLatitude + ',' + mapMarkerLongitude;
+        }
         var placeFormLatitude = document.querySelector('#place-latitude');
         if (placeFormLatitude !== null) {
-            placeFormLatitude.value = getLatitudeFromMapboxMarker(marker.getLatLng());
+            placeFormLatitude.value = mapMarkerLatitude;
         }
         var placeFormLongitude = document.querySelector('#place-longitude');
         if (placeFormLongitude !== null) {
-            placeFormLongitude.value = getLongitudeFromMapboxMarker(marker.getLatLng());
+            placeFormLongitude.value = mapMarkerLongitude;
         }
     });
     //create the <select> element and give it a no location default
     var selectEl = document.createElement('select');
     selectEl.setAttribute('name', 'location');
     var noLocation = document.createElement('option');
-    noLocation.setAttribute('selected', 'selected');
     noLocation.setAttribute('value', 'no-location');
-    var noLocText = document.createTextNode('Select no location');
-    noLocation.appendChild(noLocText);
+    noLocation.appendChild(document.createTextNode('Don’t send location'));
     selectEl.appendChild(noLocation);
+    var geoLocation = document.createElement('option');
+    geoLocation.setAttribute('selected', 'selected');
+    geoLocation.setAttribute('id', 'option-coords');
+    geoLocation.setAttribute('value', 'geo:' + latitude + ',' + longitude);
+    geoLocation.appendChild(document.createTextNode('Send co-ordinates'));
+    selectEl.appendChild(geoLocation);
     form.insertBefore(selectEl, div);
     if (places !== null) {
         //add the places both to the map and <select>
