@@ -144,11 +144,10 @@ class MicropubClientController extends Controller
         if ($request->hasFile('photo')) {
             $photos = $request->file('photo');
             foreach ($photos as $photo) {
-                $filename = $photo->getClientOriginalName();
-                $photo->move(storage_path() . '/media-tmp', $filename);
                 $multipart[] = [
                     'name' => 'photo[]',
-                    'contents' => fopen(storage_path() . '/media-tmp/' . $filename, 'r'),
+                    'contents' => fopen($photo->path(), 'r'),
+                    'filename' => $photo->getClientOriginalName(),
                 ];
             }
         }
