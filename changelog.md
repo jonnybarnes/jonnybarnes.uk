@@ -1,6 +1,6 @@
 # Changelog
 
-## Version {next}
+## Version 0.0.14.1 (2016-10-10)
   - Allow files uploaded to the client to be sent to the endoint without needing to use `media-tmp`
 
 ## Version 0.0.14 (2016-10-07)
