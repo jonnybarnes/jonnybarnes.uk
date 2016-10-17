@@ -299,7 +299,7 @@ class NotesController extends Controller
                     'zoom' => 18,
                     'addressdetails' => 1,
                 ],
-                'headers' => ['User-Agent' => 'jonnybarnes.uk via Guzzle, email jonny@jonnybarnes.uk']
+                'headers' => ['User-Agent' => 'jonnybarnes.uk via Guzzle, email jonny@jonnybarnes.uk'],
             ]);
             $json = json_decode($response->getBody());
             if (isset($json->address->town)) {
