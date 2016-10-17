@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 0.0.14.2 (2016-10-17)
+  - Update .lock, particularly trying to get medialibrary working
+
 ## Version 0.0.14.1 (2016-10-10)
   - Allow files uploaded to the client to be sent to the endoint without needing to use `media-tmp`
 
