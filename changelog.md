@@ -1,5 +1,8 @@
 # Changelog
 
+## Version {next}
+  - Allow co-ordinates to be used for note location, reverse geocode place name will be used (w/o map)
+
 ## Version 0.0.14.2 (2016-10-17)
   - Update .lock, particularly trying to get medialibrary working
 
