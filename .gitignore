@@ -9,3 +9,4 @@ Homestead.json
 /public/files
 /public/keybase.txt
 /coverage
+/storage/*.key
