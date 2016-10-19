@@ -48,7 +48,7 @@ class SyndicateToTwitter implements ShouldQueue
 
         if ($this->note->location) {
             $explode = explode(':', $this->note->location);
-            $location = (count($explode) == 2) ? explode(',', $explode[0]) : explode(',', $explode);
+            $location = explode(',', $explode[0]); //the latlng will always be in [0]
             $lat = trim($location[0]);
             $lng = trim($location[1]);
         }
