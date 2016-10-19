@@ -19,7 +19,7 @@
       @if($note->address)<span class="note-address p-location">in @if($note->placeLink)<a href="{{ $note->placeLink }}">@endif<span class="p-name">{{ $note->address }}</span>@if($note->placeLink)</a>@endif</span>@endif
       @if($note->replies > 0)Replies: {{ $note->replies }}@endif
       @if($note->tweet_id)@include('templates.social-links', ['tweet_id' => $note->tweet_id, 'nb60id' => $note->nb60id])@endif
-@if ($note->latitude)
+@if ($note->placeLink)
       <div class="map" data-latitude="{{ $note->latitude }}" data-longitude="{{ $note->longitude }}"></div>
 @endif
     </div>

@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use Cache;
 use Twitter;
 use App\Tag;
 use App\Note;
 use HTMLPurifier;
+use GuzzleHttp\Client;
 use HTMLPurifier_Config;
 use Jonnybarnes\IndieWeb\Numbers;
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Facades\Cache;
 use Jonnybarnes\WebmentionsParser\Authorship;
 
 // Need to sort out Twitter and webmentions!
@@ -40,9 +41,7 @@ class NotesController extends Controller
                 $latlng = explode(',', $pieces[0]);
                 $note->latitude = trim($latlng[0]);
                 $note->longitude = trim($latlng[1]);
-                if (count($pieces) == 2) {
-                    $note->address = $pieces[1];
-                }
+                $note->address = $this->reverseGeoCode((float) trim($latlng[0]), (float) trim($latlng[1]));
             }
             if ($note->place !== null) {
                 $lnglat = explode(' ', $note->place->location);
@@ -129,9 +128,7 @@ class NotesController extends Controller
             $latlng = explode(',', $pieces[0]);
             $note->latitude = trim($latlng[0]);
             $note->longitude = trim($latlng[1]);
-            if (count($pieces) == 2) {
-                $note->address = $pieces[1];
-            }
+            $note->address = $this->reverseGeoCode((float) trim($latlng[0]), (float) trim($latlng[1]));
         }
         if ($note->place !== null) {
             $lnglat = explode(' ', $note->place->location);
@@ -279,5 +276,53 @@ class NotesController extends Controller
         $purifier = new HTMLPurifier($config);
 
         return $purifier->purify($html);
+    }
+
+    /**
+     * Do a reverse geocode lookup of a `lat,lng` value.
+     *
+     * @param  float  The latitude
+     * @param  float  The longitude
+     * @return string The location name
+     */
+    public function reverseGeoCode(float $latitude, float $longitude): string
+    {
+        $latlng = $latitude . ',' . $longitude;
+
+        return Cache::get($latlng, function () use ($latlng, $latitude, $longitude) {
+            $guzzle = new Client();
+            $response = $guzzle->request('GET', 'https://nominatim.openstreetmap.org/reverse', [
+                'query' => [
+                    'format' => 'json',
+                    'lat' => $latitude,
+                    'lon' => $longitude,
+                    'zoom' => 18,
+                    'addressdetails' => 1,
+                ],
+                'headers' => ['User-Agent' => 'jonnybarnes.uk via Guzzle, email jonny@jonnybarnes.uk'],
+            ]);
+            $json = json_decode($response->getBody());
+            if (isset($json->address->town)) {
+                $address = $json->address->town . ', ' . $json->address->country;
+                Cache::forever($latlng, $address);
+
+                return $address;
+            }
+            if (isset($json->address->city)) {
+                $address = $json->address->city . ', ' . $json->address->country;
+                Cache::forever($latlng, $address);
+
+                return $address;
+            }
+            if (isset($json->address->county)) {
+                $address = $json->address->county . ', ' . $json->reversegeocode->country;
+                Cache::forever($latlng, $address);
+
+                return $address;
+            }
+            Cache::forever($latlng, $json->address->country);
+
+            return $json->reversegeocode->addressparts->country;
+        });
     }
 }
