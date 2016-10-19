@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 0.0.14.4 (2016-10-19)
+  - Fix a bad explode() call in the syndicate job
+
 ## Version 0.0.14.3 (2016-10-19)
   - Allow co-ordinates to be used for note location, reverse geocode place name will be used (w/o map)
   - Switch from npm to yarn
