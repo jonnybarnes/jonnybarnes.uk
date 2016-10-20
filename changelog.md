@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 0.0.14.7 (2016-10-20)
+  - Add needed namespace (issue#23)
+
 ## Version 0.0.14.6 (2016-10-20)
   - issue#23 again, also pinning against a tagged webmentions-parser release
 
