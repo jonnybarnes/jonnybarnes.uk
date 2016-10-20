@@ -9,7 +9,7 @@
         "php": ">=7.0.0",
         "laravel/framework": "5.3.*",
         "jonnybarnes/indieweb": "dev-master",
-        "jonnybarnes/webmentions-parser": "dev-master",
+        "jonnybarnes/webmentions-parser": "0.4.*",
         "guzzlehttp/guzzle": "~6.0",
         "predis/predis": "~1.0",
         "thujohn/twitter": "~2.0",
