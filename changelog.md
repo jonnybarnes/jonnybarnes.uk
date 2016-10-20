@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 0.0.14.8 (2016-10-20)
+  - Use the correct namespace
+
 ## Version 0.0.14.7 (2016-10-20)
   - Add needed namespace (issue#23)
 
