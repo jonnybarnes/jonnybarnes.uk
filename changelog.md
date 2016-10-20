@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 0.0.14.5 (2016-10-20)
+  - Fix an issue in the save profile image job (issue#23)
+
 ## Version 0.0.14.4 (2016-10-19)
   - Fix a bad explode() call in the syndicate job
 
