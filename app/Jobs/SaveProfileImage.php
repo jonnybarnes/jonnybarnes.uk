@@ -34,7 +34,7 @@ class SaveProfileImage implements ShouldQueue
     public function handle(Authorship $authorship)
     {
         try {
-            $author = $authorship->findAuthor($microformats);
+            $author = $authorship->findAuthor($this->microformats);
         } catch (AuthorshipParserException $e) {
             return;
         }
