@@ -38,8 +38,8 @@ class SaveProfileImage implements ShouldQueue
         } catch (AuthorshipParserException $e) {
             return;
         }
-        $photo = $author['properties'][0]['photo'][0];
-        $home = $author['properties'][0]['url'][0];
+        $photo = $author['properties']['photo'][0];
+        $home = $author['properties']['url'][0];
         //dont save pbs.twimg.com links
         if (parse_url($photo, PHP_URL_HOST) != 'pbs.twimg.com'
               && parse_url($photo, PHP_URL_HOST) != 'twitter.com') {
