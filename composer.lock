@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "52f9f6e1c88cb732b6b5c0c01646cdde",
+    "content-hash": "6109ed77e9efda6af2d9607834c88beb",
     "packages": [
         {
             "name": "anahkiasen/underscore-php",
@@ -1485,16 +1485,16 @@
         },
         {
             "name": "jonnybarnes/webmentions-parser",
-            "version": "dev-master",
+            "version": "v0.4.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jonnybarnes/webmentions-parser.git",
-                "reference": "087be9b61d509f20ec5808fee32bb8d40bd553ad"
+                "reference": "111aae8fdf9fd31417865d28fe2160ad3c2a10c5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jonnybarnes/webmentions-parser/zipball/087be9b61d509f20ec5808fee32bb8d40bd553ad",
-                "reference": "087be9b61d509f20ec5808fee32bb8d40bd553ad",
+                "url": "https://api.github.com/repos/jonnybarnes/webmentions-parser/zipball/111aae8fdf9fd31417865d28fe2160ad3c2a10c5",
+                "reference": "111aae8fdf9fd31417865d28fe2160ad3c2a10c5",
                 "shasum": ""
             },
             "require": {
@@ -1528,7 +1528,7 @@
                 "microformats",
                 "webmentions"
             ],
-            "time": "2016-07-13T07:54:27+00:00"
+            "time": "2016-10-20T15:48:02+00:00"
         },
         {
             "name": "laravel/framework",
@@ -5716,8 +5716,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "jonnybarnes/indieweb": 20,
-        "jonnybarnes/webmentions-parser": 20
+        "jonnybarnes/indieweb": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
