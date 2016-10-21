@@ -10,7 +10,7 @@
       {!! $note->note !!}
       @if(count($note->photoURLs) > 0)
         @foreach($note->photoURLs as $photoURL)
-          <img src="{{ $photoURL }}" alt="" class="u-photo">
+          <img src="{{ $photoURL }}" alt="" class="note-photo u-photo">
         @endforeach
       @endif
     </div>
