@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 0.0.14.9 (2016-10-21)
+  - Include co-ordinates with notes and markup with appropriate microformats
+  - Add correct microformats for photos
+
 ## Version 0.0.14.8 (2016-10-20)
   - Use the correct namespace
 
