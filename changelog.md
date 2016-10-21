@@ -1,5 +1,8 @@
 # Changelog
 
+## Version {next}
+  - Fix: Trying to get brid.gy markup compatibility
+
 ## Version 0.0.14.9 (2016-10-21)
   - Include co-ordinates with notes and markup with appropriate microformats
   - Add correct microformats for photos
