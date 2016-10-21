@@ -1,7 +1,6 @@
 'use strict';
 
 var gulp = require('gulp');
-var pump = require('pump');
 var sass = require('gulp-sass');
 var brotli = require('gulp-brotli');
 var uglify = require('gulp-uglify');
