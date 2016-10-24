@@ -3,6 +3,7 @@
 ## Version {next}
   - Having used `yarn` for npm packages, we now also use it for bower packages
   - Update typekit sri hash
+  - Hide co-ordinates, in data tags, we want them to be read by machines, but not humans
 
 ## Version 0.0.14.10 (2016-10-21)
   - Fix: Trying to get brid.gy markup compatibility
