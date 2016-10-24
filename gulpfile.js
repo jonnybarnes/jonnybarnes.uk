@@ -27,22 +27,22 @@ gulp.task('js-assets', function () {
         .pipe(gulp.dest('./public/assets/js'));
 });
 
-gulp.task('bower', function () {
+gulp.task('frontend', function () {
     //copy JS files
     gulp.src([
-            'bower_components/fetch/fetch.js',
-            'bower_components/alertify.js/dist/js/alertify.js',
-            'bower_components/store2/dist/store2.min.js',
-            'bower_components/Autolinker.js/dist/Autolinker.min.js',
-            'bower_components/marked/marked.min.js',
+            'node_modules/whatwg-fetch/fetch.js',
+            'node_modules/alertify.js/dist/js/alertify.js',
+            'node_modules/store2/dist/store2.min.js',
+            'node_modules/autolinker/dist/Autolinker.min.js',
+            'node_modules/marked/marked.min.js',
         ])
-        .pipe(gulp.dest('public/assets/bower/'));
+        .pipe(gulp.dest('public/assets/frontend/'));
     //copy CSS files
     gulp.src([
-            'bower_components/alertify.js/dist/css/alertify.css',
-            'bower_components/sanitize-css/sanitize.css',
+            'node_modules/alertify.js/dist/css/alertify.css',
+            'node_modules/sanitize.css/sanitize.css',
         ])
-        .pipe(gulp.dest('public/assets/bower/'));
+        .pipe(gulp.dest('public/assets/frontend/'));
 });
 
 gulp.task('compress', function () {
@@ -61,18 +61,18 @@ gulp.task('compress', function () {
         .pipe(brotli.compress({mode: 1, quality: 11}))
         .pipe(gulp.dest('public/assets/js/'));
     //bower components
-    gulp.src('public/assets/bower/*.css')
+    gulp.src('public/assets/frontend/*.css')
         .pipe(zopfli({ format: 'gzip', append: true }))
-        .pipe(gulp.dest('public/assets/bower/'));
-    gulp.src('public/assets/bower/*.js')
+        .pipe(gulp.dest('public/assets/frontend/'));
+    gulp.src('public/assets/frontend/*.js')
         .pipe(zopfli({ format: 'gzip', append: true }))
-        .pipe(gulp.dest('public/assets/bower/'));
+        .pipe(gulp.dest('public/assets/frontend/'));
     gulp.src('public/assets/bower/*.css')
         .pipe(brotli.compress({mode: 1, quality: 11}))
-        .pipe(gulp.dest('public/assets/bower/'));
+        .pipe(gulp.dest('public/assets/frontend/'));
     gulp.src('public/assets/bower/*.js')
         .pipe(brotli.compress({mode: 1, quality: 11}))
-        .pipe(gulp.dest('public/assets/bower/'));
+        .pipe(gulp.dest('public/assets/frontend/'));
     //prism
     gulp.src('public/assets/prism/*.css')
         .pipe(zopfli({ format: 'gzip', append: true }))

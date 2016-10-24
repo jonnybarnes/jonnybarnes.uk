@@ -29,7 +29,7 @@ New Article « Admin CP
 
 @section('scripts')
 @parent
-<script src="/assets/bower/marked.min.js"></script>
+<script src="/assets/frontend/marked.min.js"></script>
 <script>
   var preview = document.createElement('div');
   preview.classList.add('preview');
@@ -41,9 +41,9 @@ New Article « Admin CP
     preview.innerHTML = marked(markdown);
   }, 5000);
 </script>
-<script src="/assets/bower/store2.min.js"></script>
-<script src="/assets/bower/alertify.js"></script>
+<script src="/assets/frontend/store2.min.js"></script>
+<script src="/assets/frontend/alertify.js"></script>
 <script src="/assets/js/form-save.js"></script>
 
-<link rel="stylesheet" href="/assets/bower/alertify.css">
+<link rel="stylesheet" href="/assets/frontend/alertify.css">
 @stop

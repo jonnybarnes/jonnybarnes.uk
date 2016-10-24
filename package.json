@@ -27,5 +27,13 @@
   },
   "pre-commit": [
     "lint-staged"
-  ]
+  ],
+  "dependencies": {
+    "alertify.js": "^1.0.12",
+    "autolinker": "^1.2.0",
+    "marked": "^0.3.6",
+    "sanitize.css": "^4.1.0",
+    "store2": "^2.3.2",
+    "whatwg-fetch": "^1.0.0"
+  }
 }
