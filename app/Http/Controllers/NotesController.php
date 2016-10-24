@@ -283,7 +283,7 @@ class NotesController extends Controller
      *
      * @param  float  The latitude
      * @param  float  The longitude
-     * @return string The location name
+     * @return string The location HTML
      */
     public function reverseGeoCode(float $latitude, float $longitude): string
     {
@@ -303,7 +303,7 @@ class NotesController extends Controller
             ]);
             $json = json_decode($response->getBody());
             if (isset($json->address->town)) {
-                $address = $json->address->town . ', ' . $json->address->country;
+                $address = '<span class="p-locality">' . $json->address->town . '</span>, <span class="p-country-name">' . $json->address->country . '</span>';
                 Cache::forever($latlng, $address);
 
                 return $address;
@@ -315,14 +315,15 @@ class NotesController extends Controller
                 return $address;
             }
             if (isset($json->address->county)) {
-                $address = $json->address->county . ', ' . $json->reversegeocode->country;
+                $address = '<span class="p-region">' . $json->address->county . '</span>, <span class="p-country-name">' . $json->address->country . '</span>';
                 Cache::forever($latlng, $address);
 
                 return $address;
             }
-            Cache::forever($latlng, $json->address->country);
+            $adress = '<span class="p-country-name">' . $json->address->country . '</span>';
+            Cache::forever($latlng, $address);
 
-            return $json->reversegeocode->addressparts->country;
+            return $address;
         });
     }
 }

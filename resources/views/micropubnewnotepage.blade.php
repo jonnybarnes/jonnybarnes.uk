@@ -34,11 +34,11 @@ New Note « Jonny Barnes
 @section('scripts')
 @include('templates.mapbox-links')
 
-<script src="/assets/bower/fetch.js"></script>
-<script src="/assets/bower/store2.min.js"></script>
-<script src="/assets/bower/alertify.js"></script>
+<script src="/assets/frontend/fetch.js"></script>
+<script src="/assets/frontend/store2.min.js"></script>
+<script src="/assets/frontend/alertify.js"></script>
 <script src="/assets/js/form-save.js"></script>
 <script src="/assets/js/newnote.js"></script>
 
-<link rel="stylesheet" href="/assets/bower/alertify.css">
+<link rel="stylesheet" href="/assets/frontend/alertify.css">
 @stop

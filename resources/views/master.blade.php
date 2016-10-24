@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>@if (App::environment() == 'local'){!! "[testing] -"!!}@endif @yield('title')</title>
   <meta name="viewport" content="width=device-width">
-  <link rel="stylesheet" href="/assets/bower/sanitize.css">
+  <link rel="stylesheet" href="/assets/frontend/sanitize.css">
   <link rel="stylesheet" href="/assets/css/global.css">
   <link rel="openid.server" href="https://indieauth.com/openid">
   <link rel="openid.delegate" href="https://jonnybarnes.uk">
@@ -30,7 +30,7 @@
   <main>
 @yield('content')
   </main>
-  <script src="https://use.typekit.net/kmb3cdb.js" integrity="sha384-0dhd7OudcM5zfMelBVFKeuV+wz6Y3xYrssP9G2sYBCDnCKWmcaAl9oqYzmhiSO7k" crossorigin="anonymous"></script>
+  <script src="https://use.typekit.net/kmb3cdb.js" integrity="sha384-RwBRSXqm+z0+RE6M8Mke3nQ6yWmZv3+DBu36h/9JOE2s2qXm+MaDa6l8E2NIgJvD" crossorigin="anonymous"></script>
   <script>try{Typekit.load({ async: true });}catch(e){}</script>
   @section('scripts')
   <!--scripts go here when needed-->
