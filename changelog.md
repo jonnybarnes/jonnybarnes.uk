@@ -1,6 +1,9 @@
 # Changelog
 
-## Version 0.0.14.11 (2016-1024)
+## Version 0.0.14.12 (2016-10-24)
+  - Attempt to fix some HTML validation issues
+
+## Version 0.0.14.11 (2016-10-24)
   - Having used `yarn` for npm packages, we now also use it for bower packages
   - Update typekit sri hash
   - Hide co-ordinates, in data tags, we want them to be read by machines, but not humans
