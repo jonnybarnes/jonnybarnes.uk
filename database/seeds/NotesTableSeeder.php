@@ -35,5 +35,9 @@ class NotesTableSeeder extends Seeder
             mkdir(public_path() . '/assets/profile-images/aaronparecki.com', 0755);
             copy(base_path() . '/tests/aaron.png', public_path() . '/assets/profile-images/aaronparecki.com/image');
         }
+        $noteWithCoords = App\Note::create([
+            'note' => 'Note from somehwere',
+            'location' => '53.499,-2.379'
+        ]);
     }
 }
