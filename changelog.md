@@ -1,5 +1,8 @@
 # Changelog
 
+## Version {next}
+  - Attempt to fix some HTML validation issues
+
 ## Version 0.0.14.11 (2016-1024)
   - Having used `yarn` for npm packages, we now also use it for bower packages
   - Update typekit sri hash
