@@ -1,5 +1,9 @@
 # Changelog
 
+## Version {next}
+  - Having used `yarn` for npm packages, we now also use it for bower packages
+  - Update typekit sri hash
+
 ## Version 0.0.14.10 (2016-10-21)
   - Fix: Trying to get brid.gy markup compatibility
 
