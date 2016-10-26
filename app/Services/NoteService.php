@@ -70,16 +70,29 @@ class NoteService
 
         dispatch(new SendWebMentions($note));
 
-        if (//micropub request, syndication sent as array
+        //syndication targets
+        //string sent from either local admin CP or micropub
+        if ($request->input('twitter') == true || $request->input('syndicate-to') == 'https://twitter.com/jonnybarnes') {
+            dispatch(new SyndicateToTwitter($note));
+        }
+        if ($request->input('facebook') == true || $request->input('syndicate-to') == 'https://facebook.com/jonnybarnes') {
+            dispatch(new SyndicateToFacebook($note));
+        }
+
+        //micropub request, syndication sent as array
+        if (
             (is_array($request->input('syndicate-to'))
                 &&
             (in_array('https://twitter.com/jonnybarnes', $request->input('syndicate-to')))
-            || //micropub request, syndication sent as string
-            ($request->input('syndicate-to') == 'https://twitter.com/jonnybarnes')
-            || //local admin cp request
-            ($request->input('twitter') == true))
         ) {
             dispatch(new SyndicateToTwitter($note));
+        }
+        if (
+            (is_array($request->input('syndicate-to'))
+                &&
+            (in_array('https://facebook.com/jonnybarnes', $request->input('syndicate-to')))
+        ) {
+            dispatch(new SyndicateToFacebook($note));
         }
 
         return $note;
