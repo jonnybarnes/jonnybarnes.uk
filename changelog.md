@@ -1,5 +1,10 @@
 # Changelog
 
+## Version {next}
+  - Modify SyndicateToTwitter to use bridgy publish
+  - Add a SyndicateToFacebook job which also uses bridgy publish (issue#24)
+  - Modify views to facilitate bridgy publish (issue#26)
+
 ## Version 0.0.14.13 (2016-10-26)
   - Fix: correct the syntax of Link headers (issue#25)
 
