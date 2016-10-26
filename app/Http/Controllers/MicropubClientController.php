@@ -160,7 +160,7 @@ class MicropubClientController extends Controller
         if ($request->input('syndicate-to')) {
             foreach ($request->input('syndicate-to') as $syn) {
                 $multipart[] = [
-                    'name' => 'syndicate-to',
+                    'name' => 'syndicate-to[]',
                     'contents' => $syn,
                 ];
             }
