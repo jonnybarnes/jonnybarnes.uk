@@ -9,7 +9,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class SyndicateToTwitter implements ShouldQueue
+class SyndicateToFacebook implements ShouldQueue
 {
     use InteractsWithQueue, Queueable, SerializesModels;
 
@@ -28,7 +28,6 @@ class SyndicateToTwitter implements ShouldQueue
     /**
      * Execute the job.
      *
-     * @param  \GuzzleHttp\Client $guzzle
      * @return void
      */
     public function handle(Client $guzzle)
@@ -40,15 +39,14 @@ class SyndicateToTwitter implements ShouldQueue
             [
                 'form_params' => [
                     'source' => $this->note->longurl,
-                    'target' => 'https://brid.gy/publish/twitter',
+                    'target' => 'https://brid.gy/publish/facebook',
                 ],
             ]
         );
         //parse for syndication URL
         if ($response->getStatusCode() == 201) {
             $json = json_decode((string) $response->getBody());
-            $tweet_id = basename(parse_url($json->url, PHP_URL_PATH));
-            $this->note->tweet_id = $tweet_id;
+            $this->note->facebook_url = $json->url;
             $this->note->save();
         }
     }
