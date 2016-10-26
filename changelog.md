@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 0.0.15.3 (2016-10-26)
+  - Fix: didn’t import the namespace for the facebook job
+
 ## Version 0.0.15.2 (2016-10-26)
   - Fix: syntax error introduced in v0.0.15.1
 

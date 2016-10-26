@@ -7,6 +7,7 @@ use App\Place;
 use Illuminate\Http\Request;
 use App\Jobs\SendWebMentions;
 use App\Jobs\SyndicateToTwitter;
+use App\Jobs\SyndicateToFacebook;
 
 class NoteService
 {
