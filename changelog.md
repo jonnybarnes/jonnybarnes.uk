@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 0.0.15.4 (2016-10-26)
+  - Use an array with `syndicate-to` to allow multiple values
+
 ## Version 0.0.15.3 (2016-10-26)
   - Fix: didn’t import the namespace for the facebook job
 
