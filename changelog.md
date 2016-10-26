@@ -1,6 +1,6 @@
 # Changelog
 
-## Version {next}
+## Version 0.0.14.13 (2016-10-26)
   - Fix: correct the syntax of Link headers (issue#25)
 
 ## Version 0.0.14.12 (2016-10-24)
