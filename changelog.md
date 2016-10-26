@@ -1,5 +1,8 @@
 # Changelog
 
+## Version {next}
+  - Fix: correct the syntax of Link headers (issue#25)
+
 ## Version 0.0.14.12 (2016-10-24)
   - Attempt to fix some HTML validation issues
 
