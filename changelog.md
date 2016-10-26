@@ -1,6 +1,6 @@
 # Changelog
 
-## Version {next}
+## Version 0.0.15 (2016-10-26)
   - Modify SyndicateToTwitter to use bridgy publish
   - Add a SyndicateToFacebook job which also uses bridgy publish (issue#24)
   - Modify views to facilitate bridgy publish (issue#26)
