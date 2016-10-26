@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 0.0.15.2 (2016-10-26)
+  - Fix: syntax error introduced in v0.0.15.1
+
 ## Version 0.0.15.1 (2016-10-26)
   - Add facebook as a syndication target
 
