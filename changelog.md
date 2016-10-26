@@ -1,6 +1,6 @@
 # Changelog
 
-## Version {next}
+## Version 0.0.15.1 (2016-10-26)
   - Add facebook as a syndication target
 
 ## Version 0.0.15 (2016-10-26)
