@@ -81,14 +81,14 @@ class NoteService
 
         //micropub request, syndication sent as array
         if (
-            (is_array($request->input('syndicate-to'))
+            (is_array($request->input('syndicate-to')))
                 &&
             (in_array('https://twitter.com/jonnybarnes', $request->input('syndicate-to')))
         ) {
             dispatch(new SyndicateToTwitter($note));
         }
         if (
-            (is_array($request->input('syndicate-to'))
+            (is_array($request->input('syndicate-to')))
                 &&
             (in_array('https://facebook.com/jonnybarnes', $request->input('syndicate-to')))
         ) {
