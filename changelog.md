@@ -1,6 +1,6 @@
 # Changelog
 
-## Version {next}
+## Version 0.0.15.5 (2016-10-31)
   - Fix: update note view to use longitude in h-card for a place
 
 ## Version 0.0.15.4 (2016-10-26)
