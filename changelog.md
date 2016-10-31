@@ -1,5 +1,8 @@
 # Changelog
 
+## Version {next}
+  - Fix: update note view to use longitude in h-card for a place
+
 ## Version 0.0.15.4 (2016-10-26)
   - Use an array with `syndicate-to` to allow multiple values
 
