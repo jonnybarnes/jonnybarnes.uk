@@ -1,5 +1,8 @@
 # Changelog
 
+## Version {next}
+  - Add a reply icon in note metadata
+
 ## Version 0.0.15.6 (2016-11-03)
   - Remove reply/like/repost links, not needed without indie-action
   - Add facebook syndication link (issue#29)
