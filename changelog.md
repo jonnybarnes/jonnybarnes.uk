@@ -1,5 +1,9 @@
 # Changelog
 
+## Version {next}
+  - Remove reply/like/repost links, not needed without indie-action
+  - Add facebook syndication link (issue#29)
+
 ## Version 0.0.15.5 (2016-10-31)
   - Fix: update note view to use longitude in h-card for a place
 
