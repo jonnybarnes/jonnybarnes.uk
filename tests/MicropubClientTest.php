@@ -48,6 +48,7 @@ class MicropubClientTest extends TestCase
 
     public function testClientCreatesNewNoteWithTag()
     {
+        //in this test, the syndication targets are blank
         $faker = \Faker\Factory::create();
         $note = 'Fake note from #PHPUnit: ' . $faker->text;
         $this->withSession([

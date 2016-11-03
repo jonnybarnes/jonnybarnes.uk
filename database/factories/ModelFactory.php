@@ -25,5 +25,6 @@ $factory->define(App\Note::class, function (Faker\Generator $faker) {
     return [
         'note' => $faker->paragraph,
         'tweet_id' => $faker->randomNumber(9),
+        'facebook_url' => 'https://facebook.com/' . $faker->randomNumber(9),
     ];
 });
