@@ -107,7 +107,7 @@ class NotesController extends Controller
                     if (isset($microformats['items'][0]['properties']['published'][0])) {
                         $content['date'] = $carbon->parse($microformats['items'][0]['properties']['published'][0])->toDayDateTimeString();
                     } else {
-                        $content['date'] = $note->webmention->updated_at->toDayDateTimeString();
+                        $content['date'] = $webmention->updated_at->toDayDateTimeString();
                     }
                     $content['reply'] = $this->filterHTML($microformats['items'][0]['properties']['content'][0]['html']);
                     $replies[] = $content;
