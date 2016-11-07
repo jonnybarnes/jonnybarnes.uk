@@ -1,6 +1,9 @@
 # Changelog
 
-## Verion 0.0.15.11 (2016-11-07)
+## Version 0.0.15.12 (2016-11-07)
+  - Fix micropub client in-reply-to name
+
+## Version 0.0.15.11 (2016-11-07)
   - Fix send webmention
 
 ## Version 0.0.15.10 (2016-11-07)

@@ -154,7 +154,7 @@ class MicropubClientController extends Controller
         if ($request->input('in-reply-to') != '') {
             $multipart[] = [
                 'name' => 'in-reply-to',
-                'contents' => $request->input('reply-to'),
+                'contents' => $request->input('in-reply-to'),
             ];
         }
         if ($request->input('syndicate-to')) {
