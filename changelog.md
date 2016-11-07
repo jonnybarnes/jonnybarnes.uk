@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 0.0.15.10 (2016-11-07)
+  - Update typekit’s sri hash
+
 ## Version 0.0.15.9 (2016-11-07)
   - Hotfix: not using cerated variable of foreach loop
 
