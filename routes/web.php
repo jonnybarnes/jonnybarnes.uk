@@ -45,8 +45,10 @@ Route::group(['domain' => config('url.longurl')], function () {
         Route::get('admin/note/new', 'NotesAdminController@newNotePage');
         Route::get('admin/note/edit', 'NotesAdminController@listNotesPage');
         Route::get('admin/note/edit/{id}', 'NotesAdminController@editNotePage');
+        Route::get('admin/note/delete/{id}', 'NotesAdminController@deleteNotePage');
         Route::post('admin/note/new', 'NotesAdminController@createNote');
         Route::post('admin/note/edit/{id}', 'NotesAdminController@editNote');
+        Route::post('admin/note/delete/{id}', 'NotesAdminController@deleteNote');
 
         //Tokens
         Route::get('admin/tokens', 'TokensController@showTokens');

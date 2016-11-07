@@ -58,7 +58,7 @@ class SendWebMentions implements ShouldQueue
      * @param  \GuzzleHttp\Client $guzzle
      * @return string  The webmention endpoint URL
      */
-    private function discoverWebmentionEndpoint($url, $guzzle)
+    public function discoverWebmentionEndpoint($url, $guzzle)
     {
         //let’s not send webmentions to myself
         if (parse_url($url, PHP_URL_HOST) == env('LONG_URL', 'localhost')) {

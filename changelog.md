@@ -2,6 +2,7 @@
 
 ## Version {next}
   - Add a reply icon in note metadata
+  - Allow notes to be deleted
 
 ## Version 0.0.15.6 (2016-11-03)
   - Remove reply/like/repost links, not needed without indie-action

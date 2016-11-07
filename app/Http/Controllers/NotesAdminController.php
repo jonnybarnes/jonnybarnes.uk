@@ -6,6 +6,7 @@ use App\Note;
 use Validator;
 use Illuminate\Http\Request;
 use App\Services\NoteService;
+use App\Jobs\SendWebMentions;
 
 class NotesAdminController extends Controller
 {
@@ -39,6 +40,17 @@ class NotesAdminController extends Controller
         }
 
         return view('admin.listnotes', ['notes' => $notes]);
+    }
+
+    /**
+     * The delete note page.
+     *
+     * @param  int id
+     * @return view
+     */
+    public function deleteNotePage($id)
+    {
+        return view('admin.deletenote', ['id' => $id]);
     }
 
     /**
@@ -92,16 +104,29 @@ class NotesAdminController extends Controller
     public function editNote($noteId, Request $request)
     {
         //update note data
-        $note = Note::find($noteId);
+        $note = Note::findOrFail($noteId);
         $note->note = $request->input('content');
         $note->in_reply_to = $request->input('in-reply-to');
         $note->save();
 
         if ($request->input('webmentions')) {
-            $wmc = new WebMentionsController();
-            $wmc->send($note);
+            dispatch(new SendWebMentions($note));
         }
 
         return view('admin.editnotesuccess', ['id' => $noteId]);
+    }
+
+    /**
+     * Delete the note.
+     *
+     * @param  int id
+     * @return view
+     */
+    public function deleteNote($id)
+    {
+        $note = Note::findOrFail($id);
+        $note->delete();
+
+        return view('admin.deletenotesuccess');
     }
 }
