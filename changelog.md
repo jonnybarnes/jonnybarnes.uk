@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 0.0.15.9 (2016-11-07)
+  - Hotfix: not using cerated variable of foreach loop
+
 ## Version 0.0.15.8 (2016-11-07)
   - Hotfix: facebook’s love-of appears as an in-reply-to without a published date
 
