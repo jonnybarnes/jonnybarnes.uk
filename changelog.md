@@ -1,5 +1,8 @@
 # Changelog
 
+## Verion 0.0.15.11 (2016-11-07)
+  - Fix send webmention
+
 ## Version 0.0.15.10 (2016-11-07)
   - Update typekit’s sri hash
 
