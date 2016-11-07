@@ -1,6 +1,6 @@
 # Changelog
 
-## Version {next}
+## Version 0.0.15.7 (2016-11-07)
   - Add a reply icon in note metadata
   - Allow notes to be deleted
 
