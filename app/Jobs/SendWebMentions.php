@@ -75,7 +75,7 @@ class SendWebMentions implements ShouldQueue
         $links = \GuzzleHttp\Psr7\parse_header($response->getHeader('Link'));
         foreach ($links as $link) {
             if (mb_stristr($link['rel'], 'webmention')) {
-                return $this->resolveUri($link[0], $url);
+                return $this->resolveUri(trim($link[0], '<>'), $url);
             }
         }
 
@@ -125,7 +125,7 @@ class SendWebMentions implements ShouldQueue
     public function resolveUri(string $url, string $base): string
     {
         $endpoint = \GuzzleHttp\Psr7\uri_for($url);
-        if ($endpoint->getScheme() !== null) {
+        if ($endpoint->getScheme() != '') {
             return (string) $endpoint;
         }
 
