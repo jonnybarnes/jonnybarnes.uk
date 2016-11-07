@@ -18,7 +18,7 @@
       <a class="u-url" href="/notes/{{ $note->nb60id }}"><time class="dt-published" datetime="{{ $note->iso8601_time }}">{{ $note->human_time }}</time></a>@if($note->client_name) via <a class="client" href="{{ $note->client_id }}">{{ $note->client_name }}</a>@endif
       @if($note->placeLink)in <span class="p-location h-card"><a class="p-name u-url" href="{{ $note->placeLink }}">{{ $note->address }}</a><data class="p-latitude" value="{{ $note->latitude }}"></data><data class="p-longitude" value="{{ $note->longitude }}"></data></span>
       @elseif($note->address)in <span class="p-location h-adr">{!! $note->address !!}<data class="p-latitude" value="{{ $note->latitude }}"></data><data class="p-longitude" value="{{ $note->longitude }}"></data></span>@endif
-      @if($note->replies > 0)Replies: {{ $note->replies }}@endif
+      @if($note->replies > 0) @include('templates.replies-icon'): {{ $note->replies }}@endif
       @if($note->tweet_id || $note->facebook_url)@include('templates.social-links', ['tweet_id' => $note->tweet_id, 'facebook_url' => $note->facebook_url])@endif
 @if ($note->placeLink)
       <div class="map" data-latitude="{{ $note->latitude }}" data-longitude="{{ $note->longitude }}"></div>
