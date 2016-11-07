@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 0.0.15.8 (2016-11-07)
+  - Hotfix: facebook’s love-of appears as an in-reply-to without a published date
+
 ## Version 0.0.15.7 (2016-11-07)
   - Add a reply icon in note metadata
   - Allow notes to be deleted
