@@ -1,5 +1,8 @@
 # Changelog
 
+## Verison 0.0.15.13 (2016-11-08)
+  - Link to the source of a reply correctly (issue#33)
+
 ## Version 0.0.15.12 (2016-11-07)
   - Fix micropub client in-reply-to name
 
