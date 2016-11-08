@@ -2,7 +2,7 @@
   {!! $note->twitter->html !!}
 @elseif ($note->in_reply_to)
   <div class="p-in-reply-to h-cite reply-to">
-    In reply to <a href="{{ $note->reply_to }}" class="u-url">{{ $note->in_reply_to }}</a>
+    In reply to <a href="{{ $note->in_reply_to }}" class="u-url">{{ $note->in_reply_to }}</a>
   </div>
 @endif
   <div class="note">
