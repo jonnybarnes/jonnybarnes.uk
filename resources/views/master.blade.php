@@ -37,5 +37,9 @@
   <!--scripts go here when needed-->
   @show
 
+<footer>
+    <p>The code for <code>{{ env('APP_LONGURL') }}</code> can be found on <a href="https://github.com/jonnybarnes/jonnybarnes.uk">GitHub</a>.</p>
+    <p>Built with love: <a href="/colophon">Colophon</a></p>
+</footer>
 </body>
 </html>
