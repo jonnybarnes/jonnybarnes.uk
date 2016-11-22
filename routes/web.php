@@ -12,10 +12,7 @@
 */
 
 Route::group(['domain' => config('url.longurl')], function () {
-    //Static homepage
-    Route::get('/', function () {
-        return view('homepage');
-    });
+    Route::get('/', 'NotesController@showNotes');
 
     //Static project page
     Route::get('projects', function () {

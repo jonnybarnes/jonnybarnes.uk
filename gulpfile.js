@@ -9,7 +9,7 @@ var sourcemaps = require('gulp-sourcemaps');
 var autoprefixer = require('gulp-autoprefixer');
 
 gulp.task('sass', function () {
-    return gulp.src('./resources/assets/sass/global.scss')
+    return gulp.src('./resources/assets/sass/app.scss')
         .pipe(sourcemaps.init())
         .pipe(sass({outputStyle: 'compressed'}).on('error', sass.logError))
         .pipe(autoprefixer({browsers: ['last 2 version']}))
@@ -40,7 +40,7 @@ gulp.task('frontend', function () {
     //copy CSS files
     gulp.src([
             'node_modules/alertify.js/dist/css/alertify.css',
-            'node_modules/sanitize.css/sanitize.css',
+            'node_modules/normalize.css/normalize.css',
         ])
         .pipe(gulp.dest('public/assets/frontend/'));
 });
@@ -67,10 +67,10 @@ gulp.task('compress', function () {
     gulp.src('public/assets/frontend/*.js')
         .pipe(zopfli({ format: 'gzip', append: true }))
         .pipe(gulp.dest('public/assets/frontend/'));
-    gulp.src('public/assets/bower/*.css')
+    gulp.src('public/assets/frontend/*.css')
         .pipe(brotli.compress({mode: 1, quality: 11}))
         .pipe(gulp.dest('public/assets/frontend/'));
-    gulp.src('public/assets/bower/*.js')
+    gulp.src('public/assets/frontend/*.js')
         .pipe(brotli.compress({mode: 1, quality: 11}))
         .pipe(gulp.dest('public/assets/frontend/'));
     //prism

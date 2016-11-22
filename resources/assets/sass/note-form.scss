@@ -1,0 +1,39 @@
+// note-form.scss
+
+.note-ui {
+    display: flex;
+    flex-direction: column;
+}
+
+@media (min-width: 600px) {
+    .note-ui > div {
+        display: flex;
+        flex-direction: row;
+        padding: 0.2rem;
+    }
+}
+
+@media (max-width: 599px) {
+    input[name="photo[]"] {
+        width: 100%;
+    }
+}
+
+.note-ui label {
+    width: 5em;
+    margin-right: 0.5rem;
+    text-align: right;
+}
+
+.note-ui input:not([type=submit]),
+.note-ui textarea {
+    flex: 1;
+}
+
+.note-ui textarea {
+    padding: 0.1rem 0.3rem;
+}
+
+#locate {
+    margin-right: 0.4rem;
+}

@@ -1,2 +1,20 @@
-// @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+// app.scss
 
+// https://css-tricks.com/box-sizing/#article-header-id-6
+// and https://css-tricks.com/rems-ems/
+html {
+    box-sizing: border-box;
+    font-size: 24px;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: inherit;
+}
+
+@import "layout";
+@import "styles";
+@import "pagination";
+@import "note-form";
+@import "mapbox";

@@ -1,4 +1,4 @@
-/* global L, alertify */
+/* global mapboxgl, alertify */
 if ('geolocation' in navigator) {
     var button = document.querySelector('#locate');
     if (button.addEventListener) {
@@ -53,39 +53,59 @@ function addMap(latitude, longitude, places) {
     if (arguments.length == 2) {
         places = null;
     }
-    var form = button.parentNode;
-    var div = document.createElement('div');
-    div.setAttribute('id', 'map');
+    // the form has a fieldset element that we are actually targetting
+    var form = document.querySelector('.note-ui');
+    var mapDiv = document.createElement('div');
+    mapDiv.classList.add('map');
     //add the map div
-    form.appendChild(div);
-    L.mapbox.accessToken = 'pk.eyJ1Ijoiam9ubnliYXJuZXMiLCJhIjoiVlpndW1EYyJ9.aP9fxAqLKh7lj0LpFh5k1w';
-    var map = L.mapbox.map('map', 'jonnybarnes.gnoihnim')
-        .setView([latitude, longitude], 15)
-        .addLayer(L.mapbox.tileLayer('jonnybarnes.gnoihnim', {
-            detectRetina: true
-        }));
-    //add a marker for the current location
-    var marker = L.marker([latitude, longitude], {
-        draggable: true
-    }).addTo(map);
-    //when the location marker is dragged, if the new place form elements exist
-    //update the lat/lng values
-    marker.on('dragend', function () {
-        var mapMarkerLatitude = getLatitudeFromMapboxMarker(marker.getLatLng());
-        var mapMarkerLongitude = getLongitudeFromMapboxMarker(marker.getLatLng());
-        var coordsOption = document.querySelector('#option-coords');
-        if (coordsOption != null) {
-            coordsOption.value = 'geo:' + mapMarkerLatitude + ',' + mapMarkerLongitude;
-        }
-        var placeFormLatitude = document.querySelector('#place-latitude');
-        if (placeFormLatitude !== null) {
-            placeFormLatitude.value = mapMarkerLatitude;
-        }
-        var placeFormLongitude = document.querySelector('#place-longitude');
-        if (placeFormLongitude !== null) {
-            placeFormLongitude.value = mapMarkerLongitude;
-        }
+    form.appendChild(mapDiv);
+    //set up the mapbox gl map
+    mapboxgl.accessToken = 'pk.eyJ1Ijoiam9ubnliYXJuZXMiLCJhIjoiY2l2cDhjYW04MDAwcjJ0cG1uZnhqcm82ayJ9.qA2zeVA-nsoMh9IFrd5KQw';
+    var map = new mapboxgl.Map({
+        container: mapDiv,
+        style: 'mapbox://styles/mapbox/streets-v9',
+        center: [longitude, latitude],
+        zoom: 15
     });
+    //create the current location marker
+    var el = document.createElement('div');
+    el.classList.add('marker');
+    //create the map style menu
+    var mapMenu = document.createElement('div');
+    mapMenu.classList.add('map-menu');
+    var streetsInput = document.createElement('input');
+    streetsInput.setAttribute('id', 'streets');
+    streetsInput.setAttribute('type', 'radio');
+    streetsInput.setAttribute('name', 'toggle');
+    streetsInput.setAttribute('value', 'streets');
+    streetsInput.setAttribute('checked', 'checked');
+    streetsInput.addEventListener('click', function () {
+        map.setStyle('mapbox://styles/mapbox/streets-v9');
+    });
+    var streetsLabel = document.createElement('label');
+    streetsLabel.setAttribute('for', 'streets');
+    streetsLabel.appendChild(document.createTextNode('Streets'));
+    var satelliteInput = document.createElement('input');
+    satelliteInput.setAttribute('id', 'satellite');
+    satelliteInput.setAttribute('type', 'radio');
+    satelliteInput.setAttribute('name', 'toggle');
+    satelliteInput.setAttribute('value', 'streets');
+    satelliteInput.addEventListener('click', function () {
+        map.setStyle('mapbox://styles/mapbox/satellite-v9');
+    });
+    var satelliteLabel = document.createElement('label');
+    satelliteLabel.setAttribute('for', 'satellite');
+    satelliteLabel.appendChild(document.createTextNode('Satellite'));
+    mapMenu.appendChild(streetsInput);
+    mapMenu.appendChild(streetsLabel);
+    mapMenu.appendChild(satelliteInput);
+    mapMenu.appendChild(satelliteLabel);
+    //add the map menu
+    mapDiv.appendChild(mapMenu);
+    //add a marker for the current location
+    new mapboxgl.Marker(el, {offset: [-10, -20]}).setLngLat([longitude, latitude]).addTo(map);
+    //create containing div for flexbox
+    var containingDiv = document.createElement('div');
     //create the <select> element and give it a no location default
     var selectEl = document.createElement('select');
     selectEl.setAttribute('name', 'location');
@@ -97,9 +117,12 @@ function addMap(latitude, longitude, places) {
     geoLocation.setAttribute('selected', 'selected');
     geoLocation.setAttribute('id', 'option-coords');
     geoLocation.setAttribute('value', 'geo:' + latitude + ',' + longitude);
+    geoLocation.dataset.latitude = latitude;
+    geoLocation.dataset.longitude = longitude;
     geoLocation.appendChild(document.createTextNode('Send co-ordinates'));
     selectEl.appendChild(geoLocation);
-    form.insertBefore(selectEl, div);
+    containingDiv.appendChild(selectEl);
+    form.insertBefore(containingDiv, mapDiv);
     if (places !== null) {
         //add the places both to the map and <select>
         places.forEach(function (item) {
@@ -110,19 +133,16 @@ function addMap(latitude, longitude, places) {
             option.dataset.latitude = item[2];
             option.dataset.longitude = item[3];
             selectEl.appendChild(option);
-            var placeMarker = L.marker([item[2], item[3]], {
-                icon: L.mapbox.marker.icon({
-                    'marker-size': 'large',
-                    'marker-symbol': 'building',
-                    'marker-color': '#fa0'
-                })
-            }).addTo(map);
-            var name = 'Name: ' + item[0];
-            placeMarker.bindPopup(name, {
-                closeButton: true
-            });
-            placeMarker.on('click', function () {
-                map.panTo([item[2], item[3]]);
+            var placeMarkerIcon = document.createElement('div');
+            placeMarkerIcon.classList.add('marker');
+            new mapboxgl.Marker(placeMarkerIcon, {offset: [-10, -20]}).setLngLat([item[3], item[2]]).addTo(map);
+            placeMarkerIcon.addEventListener('click', function () {
+                map.flyTo({
+                    center: [
+                        item[3],
+                        item[2]
+                    ]
+                });
                 selectPlace(item[1]);
             });
         });
@@ -131,7 +151,12 @@ function addMap(latitude, longitude, places) {
             if (selectEl.value !== 'no-location') {
                 var placeLat = selectEl[selectEl.selectedIndex].dataset.latitude;
                 var placeLon = selectEl[selectEl.selectedIndex].dataset.longitude;
-                map.panTo([placeLat, placeLon]);
+                map.flyTo({
+                    center: [
+                        placeLon,
+                        placeLat
+                    ]
+                });
             }
         });
     }
@@ -143,6 +168,7 @@ function addMap(latitude, longitude, places) {
     //the event listener
     newLocButton.addEventListener('click', function() {
         //add the form elements
+        var nameDiv = document.createElement('div');
         var nameLabel = document.createElement('label');
         nameLabel.setAttribute('for', 'place-name');
         nameLabel.classList.add('place-label');
@@ -152,6 +178,9 @@ function addMap(latitude, longitude, places) {
         nameEl.setAttribute('name', 'place-name');
         nameEl.setAttribute('id', 'place-name');
         nameEl.setAttribute('type', 'text');
+        nameDiv.appendChild(nameLabel);
+        nameDiv.appendChild(nameEl);
+        var descDiv = document.createElement('div');
         var descLabel = document.createElement('label');
         descLabel.setAttribute('for', 'place-description');
         descLabel.classList.add('place-label');
@@ -161,6 +190,9 @@ function addMap(latitude, longitude, places) {
         descEl.setAttribute('name', 'place-description');
         descEl.setAttribute('id', 'place-description');
         descEl.setAttribute('type', 'text');
+        descDiv.appendChild(descLabel);
+        descDiv.appendChild(descEl);
+        var latDiv = document.createElement('div');
         var latLabel = document.createElement('label');
         latLabel.setAttribute('for', 'place-latitude');
         latLabel.classList.add('place-label');
@@ -169,7 +201,10 @@ function addMap(latitude, longitude, places) {
         latEl.setAttribute('name', 'place-latitude');
         latEl.setAttribute('id', 'place-latitude');
         latEl.setAttribute('type', 'text');
-        latEl.value = getLatitudeFromMapboxMarker(marker.getLatLng());
+        latEl.value = getLatitudeFromMapbox(map.getCenter());
+        latDiv.appendChild(latLabel);
+        latDiv.appendChild(latEl);
+        var lonDiv = document.createElement('div');
         var lonLabel = document.createElement('label');
         lonLabel.setAttribute('for', 'place-longitude');
         lonLabel.classList.add('place-label');
@@ -178,21 +213,19 @@ function addMap(latitude, longitude, places) {
         lonEl.setAttribute('name', 'place-longitude');
         lonEl.setAttribute('id', 'place-longitude');
         lonEl.setAttribute('type', 'text');
-        lonEl.value = getLongitudeFromMapboxMarker(marker.getLatLng());
+        lonEl.value = getLongitudeFromMapbox(map.getCenter());
+        lonDiv.appendChild(lonLabel);
+        lonDiv.appendChild(lonEl);
         var placeSubmit = document.createElement('button');
         placeSubmit.setAttribute('id', 'place-submit');
         placeSubmit.setAttribute('value', 'Submit New Place');
         placeSubmit.setAttribute('name', 'place-submit');
         placeSubmit.setAttribute('type', 'button');
         placeSubmit.appendChild(document.createTextNode('Submit New Place'));
-        form.appendChild(nameLabel);
-        form.appendChild(nameEl);
-        form.appendChild(descLabel);
-        form.appendChild(descEl);
-        form.appendChild(latLabel);
-        form.appendChild(latEl);
-        form.appendChild(lonLabel);
-        form.appendChild(lonEl);
+        form.appendChild(nameDiv);
+        form.appendChild(descDiv);
+        form.appendChild(latDiv);
+        form.appendChild(lonDiv);
         form.appendChild(placeSubmit);
         //the event listener for the new place form
         placeSubmit.addEventListener('click', function () {
@@ -217,18 +250,15 @@ function addMap(latitude, longitude, places) {
                     throw new Error(placeJson.error_description);
                 }
                 //remove un-needed form elements
-                form.removeChild(document.querySelector('#place-name'));
-                form.removeChild(document.querySelector('#place-description'));
-                form.removeChild(document.querySelector('#place-latitude'));
-                form.removeChild(document.querySelector('#place-longitude'));
+                //iterate through labels and remove parent div elements
                 var labels = document.querySelectorAll('.place-label');
                 for (var i = 0; i < labels.length; ++i) {
-                    form.removeChild(labels[i]);
+                    form.removeChild(labels[i].parentNode);
                 }
                 form.removeChild(document.querySelector('#place-submit'));
-                form.removeChild(document.querySelector('#create-new-place'));
-                //remove location marker
-                map.removeLayer(marker);
+                var newPlaceButton = document.querySelector('#create-new-place');
+                //in order to remove a DOM Node, you need to run removeChild on the parent Node
+                newPlaceButton.parentNode.removeChild(newPlaceButton);
                 //add place marker
                 var newOption = document.createElement('option');
                 newOption.setAttribute('value', placeJson.uri);
@@ -236,20 +266,13 @@ function addMap(latitude, longitude, places) {
                 newOption.dataset.latitude = placeJson.latitude;
                 newOption.dataset.longitude = placeJson.longitude;
                 selectEl.appendChild(newOption);
-                var newPlaceMarker = L.marker([placeJson.latitude, placeJson.longitude], {
-                    icon: L.mapbox.marker.icon({
-                        'marker-size': 'large',
-                        'marker-symbol': 'building',
-                        'marker-color': '#fa0'
-                    })
-                }).addTo(map);
-                map.panTo([placeJson.latitude, placeJson.longitude]);
-                var newName = 'Name: ' + placeJson.name;
-                newPlaceMarker.bindPopup(newName, {
-                    closeButton: true
-                });
-                newPlaceMarker.on('click', function () {
-                    map.panTo([placeJson.latitude, placeJson.longitude]);
+                var newPlaceMarkerIcon = document.createElement('div');
+                newPlaceMarkerIcon.classList.add('marker');
+                var newPlaceMarker = new mapboxgl.Marker(newPlaceMarkerIcon, {offset: [-10, -20]}).setLngLat([placeJson.longitude, placeJson.latitude]).addTo(map);
+                map.flyTo({center: [placeJson.longitude, placeJson.latitude]});
+
+                newPlaceMarkerIcon.addEventListener('click', function () {
+                    map.flyTo({center: [placeJson.longitude, placeJson.latitude]});
                     selectPlace(placeJson.uri);
                 });
                 //make selected
@@ -260,7 +283,7 @@ function addMap(latitude, longitude, places) {
             });
         });
     });
-    form.insertBefore(newLocButton, div);
+    containingDiv.appendChild(newLocButton);
 }
 
 function parseLocation(point) {
@@ -275,16 +298,16 @@ function selectPlace(uri) {
     document.querySelector('select [value="' + uri + '"]').selected = true;
 }
 
-function getLatitudeFromMapboxMarker(latlng) {
-    var resultArray = /\((.*)\)/.exec(latlng);
-    var location = resultArray[1].split(' ');
-
-    return location[0].replace(',', '');
-}
-
-function getLongitudeFromMapboxMarker(latlng) {
-    var resultArray = /\((.*)\)/.exec(latlng);
+function getLatitudeFromMapbox(lnglat) {
+    var resultArray = /\((.*)\)/.exec(lnglat);
     var location = resultArray[1].split(' ');
 
     return location[1];
+}
+
+function getLongitudeFromMapbox(lnglat) {
+    var resultArray = /\((.*)\)/.exec(lnglat);
+    var location = resultArray[1].split(' ');
+
+    return location[0].replace(',', '');
 }

@@ -8,6 +8,7 @@ use App\Note;
 use HTMLPurifier;
 use GuzzleHttp\Client;
 use HTMLPurifier_Config;
+use Illuminate\Http\Request;
 use Jonnybarnes\IndieWeb\Numbers;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Cache;
@@ -20,11 +21,12 @@ class NotesController extends Controller
     /**
      * Show all the notes.
      *
+     * @param  Illuminate\Http\Request request;
      * @return \Illuminte\View\Factory view
      */
-    public function showNotes()
+    public function showNotes(Request $request)
     {
-        $notes = Note::orderBy('id', 'desc')->with('webmentions', 'place', 'media')->simplePaginate(10);
+        $notes = Note::orderBy('id', 'desc')->with('webmentions', 'place', 'media')->paginate(10);
         foreach ($notes as $note) {
             $replies = 0;
             foreach ($note->webmentions as $webmention) {
@@ -58,7 +60,9 @@ class NotesController extends Controller
             $note->photoURLs = $photoURLs;
         }
 
-        return view('allnotes', ['notes' => $notes]);
+        $homepage = ($request->path() == '/');
+
+        return view('allnotes', ['notes' => $notes, 'homepage' => $homepage]);
     }
 
     /**
