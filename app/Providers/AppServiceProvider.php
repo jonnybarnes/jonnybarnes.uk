@@ -49,7 +49,7 @@ class AppServiceProvider extends ServiceProvider
         //allow micropub use in development
         if (env('APP_DEBUG') == true) {
             session(['me' => 'https://jonnybarnes.localhost']);
-            session(['token' => 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJtZSI6Imh0dHBzOlwvXC9qb25ueWJhcm5lcy5sb2NhbGhvc3QiLCJjbGllbnRfaWQiOiJodHRwczpcL1wvam9ubnliYXJuZXMubG9jYWxob3N0XC9ub3Rlc1wvbmV3Iiwic2NvcGUiOiJwb3N0IiwiZGF0ZV9pc3N1ZWQiOjE0NzU1MTI0NDgsIm5vbmNlIjoiYzE0MzNmNzg5ZTY4Y2M1OSJ9.7Bj9yLnWJOyVre8BPihAom2G0MEsmS3tIUraDI-GRNg']);
+            session(['token' => 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJtZSI6Imh0dHBzOlwvXC9qb25ueWJhcm5lcy5sb2NhbGhvc3QiLCJjbGllbnRfaWQiOiJodHRwczpcL1wvam9ubnliYXJuZXMubG9jYWxob3N0XC9ub3Rlc1wvbmV3Iiwic2NvcGUiOiJwb3N0IiwiZGF0ZV9pc3N1ZWQiOjE0Nzk3NzM1NDIsIm5vbmNlIjoiNzU1MTdmMjc0MjBkYjJiZCJ9.2Px--_L-n2E15I3P4tS98C-eAKrmLOLExXgBiwZuYHI']);
         }
     }
 

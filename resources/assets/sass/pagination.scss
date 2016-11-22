@@ -1,0 +1,14 @@
+// pagination.scss
+
+.pagination {
+    width: 100%;
+    height: 3rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.pagination li {
+    list-style-type: none;
+}

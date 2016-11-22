@@ -3,18 +3,25 @@
   "version": "0.0.1",
   "repository": "https://github.com/jonnybarnes/jonnybarnes.uk",
   "license": "CC0-1.0",
+  "dependencies": {
+    "alertify.js": "^1.0.12",
+    "autolinker": "^1.2.0",
+    "marked": "^0.3.6",
+    "normalize.css": "^5.0.0",
+    "store2": "^2.3.2",
+    "whatwg-fetch": "^1.0.0"
+  },
   "devDependencies": {
     "gulp": "~3.9",
     "gulp-autoprefixer": "^3.1.0",
     "gulp-brotli": "^1.0.1",
     "gulp-sass": "^2.3.2",
-    "gulp-sourcemaps": "^1.6.0",
+    "gulp-sourcemaps": "^2.2.0",
     "gulp-uglify": "^2.0.0",
     "gulp-zopfli": "^1.0.0",
-    "lint-staged": "^1.0.1",
+    "lint-staged": "^3.2.1",
     "pre-commit": "^1.1.3",
-    "stylelint": "^6.6.0",
-    "stylelint-config-standard": "^9.0.0"
+    "stylelint-config-standard": "^14.0.0"
   },
   "private": true,
   "scripts": {
@@ -27,13 +34,5 @@
   },
   "pre-commit": [
     "lint-staged"
-  ],
-  "dependencies": {
-    "alertify.js": "^1.0.12",
-    "autolinker": "^1.2.0",
-    "marked": "^0.3.6",
-    "sanitize.css": "^4.1.0",
-    "store2": "^2.3.2",
-    "whatwg-fetch": "^1.0.0"
-  }
+  ]
 }

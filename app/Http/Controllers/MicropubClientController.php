@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Services\IndieAuthService;
+use Illuminate\Support\Facades\Log;
 use IndieAuth\Client as IndieClient;
 use GuzzleHttp\Client as GuzzleClient;
+use GuzzleHttp\Exception\ClientException;
 
 class MicropubClientController extends Controller
 {
@@ -309,9 +311,11 @@ class MicropubClientController extends Controller
                 'query' => ['q' => $query],
             ]);
         } catch (\GuzzleHttp\Exception\BadResponseException $e) {
+            Log::info($e->getResponse()->getBody());
+
             return response()->json([
                 'error' => true,
-                'error_description' => 'The endpoint returned a non-good response',
+                'error_description' => 'The endpoint ' . $micropubEndpoint . ' returned a non-good response',
             ], 400);
         }
 
