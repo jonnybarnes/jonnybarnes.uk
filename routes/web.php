@@ -19,6 +19,11 @@ Route::group(['domain' => config('url.longurl')], function () {
         return view('projects');
     });
 
+    //Static colophon page
+    Route::get('colophon', function () {
+        return view('colophon');
+    });
+
     //The login routes to get authe'd for admin
     Route::get('login', ['as' => 'login', function () {
         return view('login');

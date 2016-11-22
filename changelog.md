@@ -2,6 +2,8 @@
 
 ## Version {next}
   - Break words
+  - Added a footer to all pages
+  - Added a colophon page
 
 ## Version 0.0.16 (2016-11-22)
   - Much simpler website design
