@@ -1,6 +1,6 @@
 # Changelog
 
-## Version {redesign}
+## Version 0.0.16 (2016-11-22)
   - Much simpler website design
   - Update mapbox to use Mapbox GL JS, things can be improved
   - Make the homepage show notes, as well as bio (issue#16)
