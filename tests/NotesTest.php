@@ -73,7 +73,7 @@ class NotesTest extends TestCase
     public function testDefaultImageUsed()
     {
         $this->visit($this->appurl . '/notes/C')
-             ->see('<img class="u-photo photo logo" alt="" src="/assets/profile-images/default-image">');
+             ->see('<img class="u-photo" alt="" src="/assets/profile-images/default-image">');
     }
 
     /**
@@ -84,7 +84,7 @@ class NotesTest extends TestCase
     public function testProfileImageUsed()
     {
         $this->visit($this->appurl . '/notes/D')
-             ->see('<img class="u-photo photo logo" alt="" src="/assets/profile-images/aaronparecki.com/image">');
+             ->see('<img class="u-photo" alt="" src="/assets/profile-images/aaronparecki.com/image">');
     }
 
     /**
