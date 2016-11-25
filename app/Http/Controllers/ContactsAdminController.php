@@ -89,7 +89,7 @@ class ContactsAdminController extends Controller
         $contact->nick = $request->input('nick');
         $contact->homepage = $request->input('homepage');
         $contact->twitter = $request->input('twitter');
-        $contact->facebook =$request->input('facebook');
+        $contact->facebook = $request->input('facebook');
         $contact->save();
 
         if ($request->hasFile('avatar')) {
