@@ -178,15 +178,16 @@ class Note extends Model implements HasMedia
                 try {
                     $contact = Contact::where('nick', '=', mb_strtolower($matches[1]))->firstOrFail();
                 } catch (ModelNotFoundException $e) {
+                    //assume its an actual twitter handle
                     return '<a href="https://twitter.com/' . $matches[1] . '">' . $matches[0] . '</a>';
                 }
-                $path = parse_url($contact->homepage)['host'];
-                $contact->photo = (file_exists(public_path() . '/assets/profile-images/' . $path . '/image')) ?
-                    '/assets/profile-images/' . $path . '/image'
+                $host = parse_url($contact->homepage, PHP_URL_HOST);
+                $contact->photo = (file_exists(public_path() . '/assets/profile-images/' . $host . '/image')) ?
+                    '/assets/profile-images/' . $host . '/image'
                 :
                     '/assets/profile-images/default-image';
 
-                return trim(view('mini-hcard-template', ['contact' => $contact])->render());
+                return trim(view('templates.mini-hcard', ['contact' => $contact])->render());
             },
             $text
         );

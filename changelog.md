@@ -1,5 +1,10 @@
 # Changelog
 
+## Version {next}
+  - improved contact h-cards
+  - Better look in /contacts
+  - h-cards now have person-tags (issue#36)
+
 ## Version 0.0.16.1 (2016-11-22)
   - Break words
   - Added a footer to all pages

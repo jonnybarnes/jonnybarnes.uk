@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Contact;
 use GuzzleHttp\Client;
+use Illuminate\Http\Request;
 use Illuminate\Filesystem\Filesystem;
 
 class ContactsAdminController extends Controller
@@ -66,10 +67,10 @@ class ContactsAdminController extends Controller
         $contact->nick = $request->input('nick');
         $contact->homepage = $request->input('homepage');
         $contact->twitter = $request->input('twitter');
+        $contact->facebook = $request->input('facebook');
         $contact->save();
-        $contactId = $contact->id;
 
-        return view('admin.newcontactsuccess', ['id' => $contactId]);
+        return view('admin.newcontactsuccess', ['id' => $contact->id]);
     }
 
     /**
@@ -88,6 +89,7 @@ class ContactsAdminController extends Controller
         $contact->nick = $request->input('nick');
         $contact->homepage = $request->input('homepage');
         $contact->twitter = $request->input('twitter');
+        $contact->facebook =$request->input('facebook');
         $contact->save();
 
         if ($request->hasFile('avatar')) {
