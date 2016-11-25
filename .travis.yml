@@ -34,7 +34,6 @@ before_script:
   - cp .env.travis .env
   - php artisan key:generate
   - php artisan migrate
-  - php artisan scout:flush 'App\Note'
   - php artisan db:seed
   - php artisan serve &
   - sleep 5 # Give artisan some time to start serving
