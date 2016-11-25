@@ -38,6 +38,10 @@
   @show
 
 <footer>
+    <form action="search" method="get">
+        <input type="text" name="terms"><button type="submit">Search</button>
+    </form>
+    <p class="algolia-credit">Search powered by </p><img class="algolia-image" src="/assets/img/algolia.svg">
     <p>The code for <code>{{ env('APP_LONGURL') }}</code> can be found on <a href="https://github.com/jonnybarnes/jonnybarnes.uk">GitHub</a>.</p>
     <p>Built with love: <a href="/colophon">Colophon</a></p>
 </footer>

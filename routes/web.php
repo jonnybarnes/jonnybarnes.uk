@@ -129,6 +129,8 @@ Route::group(['domain' => config('url.longurl')], function () {
     Route::post('places/new', 'MicropubClientController@postNewPlace');
 
     Route::get('feed', 'ArticlesController@makeRSS');
+
+    Route::get('search', 'SearchController@search');
 });
 
 //Short URL

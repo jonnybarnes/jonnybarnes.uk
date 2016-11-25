@@ -203,6 +203,11 @@ return [
          */
         Phaza\LaravelPostgis\DatabaseServiceProvider::class,
 
+        /*
+         * Laravel scout
+         */
+        Laravel\Scout\ScoutServiceProvider::class,
+
     ],
 
     /*
