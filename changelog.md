@@ -1,6 +1,6 @@
 # Changelog
 
-## Version {next}
+## Version 0.0.16.2 (2016-11-25)
   - improved contact h-cards
   - Better look in /contacts
   - h-cards now have person-tags (issue#36)
