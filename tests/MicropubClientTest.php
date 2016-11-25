@@ -63,8 +63,9 @@ class MicropubClientTest extends TestCase
         //my client has made a request to my endpoint, which then adds
         //to the db, so database transaction don’t work
         //so lets manually delete the new entry
-        $newNote = \App\Note::where('note', $note);
-        $newNote->forceDelete();
+        $newNote = \App\Note::where('note', $note)->first();
+        $newNote->unsearchable();
+        $newNote->delete();
 
     }
 
