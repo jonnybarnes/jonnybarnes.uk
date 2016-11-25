@@ -67,6 +67,7 @@ function addMap(latitude, longitude, places) {
         center: [longitude, latitude],
         zoom: 15
     });
+    map.addControl(new mapboxgl.NavigationControl());
     //create the current location marker
     var el = document.createElement('div');
     el.classList.add('marker');

@@ -5,5 +5,5 @@ Contacts « Jonny Barnes
 @stop
 
 @section('content')
-@include('contact-template', array('contact' => $contact))
+@include('templates.contact', array('contact' => $contact))
 @stop

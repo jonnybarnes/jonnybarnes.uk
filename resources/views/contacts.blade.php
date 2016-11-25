@@ -6,6 +6,6 @@ Contacts « Jonny Barnes
 
 @section('content')
 @foreach($contacts as $contact)
-@include('contact-template', array('contact' => $contact))
+@include('templates.contact', array('contact' => $contact))
 @endforeach
 @stop

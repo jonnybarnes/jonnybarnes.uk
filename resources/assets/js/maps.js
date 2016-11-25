@@ -44,6 +44,7 @@ for (var i = 0; i < mapDivs.length; i++) {
         zoom: 15,
         scrollZoom: false
     });
+    map.addControl(new mapboxgl.NavigationControl());
     new mapboxgl.Marker(el, {offset: [-10, -20]}).setLngLat([longitude, latitude]).addTo(map);
     mapDiv.appendChild(mapMenu);
 }

@@ -1,0 +1,14 @@
+//contacts.scss
+
+.contact {
+    display: flex;
+    flex-direction: row;
+    margin-top: 1em;
+    border-bottom: 1px dashed grey;
+}
+
+.contact img {
+    margin-right: 0.2rem;
+    width: 100px;
+    height:100px;
+}
