@@ -8,10 +8,10 @@
     <div class="h-entry">
       @include('templates.note', ['note' => $note])
 @foreach($replies as $reply)
-      <div class="reply p-comment h-cite">
-        <a class="h-card vcard mini-h-card p-author" href="{{ $reply['url'] }}">
+      <div class="u-comment h-cite">
+        <a class="u-author h-card mini-h-card" href="{{ $reply['url'] }}">
           <img src="{{ $reply['photo'] }}" alt="" class="photo u-photo logo"> <span class="fn">{{ $reply['name'] }}</span>
-        </a> said at <a class="dt-published" href="{{ $reply['source'] }}">{{ $reply['date'] }}</a>
+        </a> said at <a class="dt-published u-url" href="{{ $reply['source'] }}">{{ $reply['date'] }}</a>
         <div class="e-content p-name">
           {!! $reply['reply'] !!}
         </div>
@@ -28,8 +28,8 @@
 </a> reposted this at <a href="{{ $repost['source'] }}">{{ $repost['date'] }}</a>.</p>
 @endforeach
       <!-- these empty tags are for https://brid.gy’s publishing service -->
-      <a href="https://brid.gy/publish/twitter">
-      <a href="https://brid.gy/publish/facebook">
+      <a href="https://brid.gy/publish/twitter"></a>
+      <a href="https://brid.gy/publish/facebook"></a>
     </div>
 @stop
 
