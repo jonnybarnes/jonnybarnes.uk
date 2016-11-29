@@ -63,9 +63,21 @@ class MicropubClientTest extends TestCase
         //my client has made a request to my endpoint, which then adds
         //to the db, so database transaction don’t work
         //so lets manually delete the new entry
+        //first, if we are using algolia, we need to delete it
+        if (env('SCOUT_DRIVER') == 'algolia') {
+            //we need to allow the index to update in order to query it
+            sleep(2);
+            $client = new \AlgoliaSearch\Client(env('ALGOLIA_APP_ID'), env('ALGOLIA_SECRET'));
+            $index = $client->initIndex('notes');
+            //here we query for the new note and tell algolia too delete it
+            $res = $index->deleteByQuery('Fake note from');
+            if ($res == 0) {
+                //somehow the new not didn’t get deleted
+                $this->fail('Didn’t delete the note from the index');
+            }
+        }
         $newNote = \App\Note::where('note', $note)->first();
-        $newNote->unsearchable();
-        $newNote->delete();
+        $newNote->forceDelete();
 
     }
 
