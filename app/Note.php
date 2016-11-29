@@ -3,6 +3,7 @@
 namespace App;
 
 use Normalizer;
+use Laravel\Scout\Searchable;
 use Jonnybarnes\IndieWeb\Numbers;
 use Illuminate\Database\Eloquent\Model;
 use League\CommonMark\CommonMarkConverter;
@@ -13,6 +14,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class Note extends Model implements HasMedia
 {
+    use Searchable;
     use SoftDeletes;
     use HasMediaTrait;
 

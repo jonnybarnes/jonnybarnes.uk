@@ -46,3 +46,27 @@ body > .h-card {
     margin-top: 5px;
     border-top: 1px solid grey;
 }
+
+footer button {
+    margin-left: 5px;
+}
+
+.algolia-image {
+    display: inline;
+    height: 2em;
+}
+
+.u-comment {
+    margin-top: 1em;
+    padding: 0 1em;
+    font-size: 0.75rem;
+}
+
+.u-comment.h-cite img {
+    height: 0.75rem;
+}
+
+.u-comment .e-content {
+    margin-top: 0.5em;
+    font-size: 1rem;
+}
