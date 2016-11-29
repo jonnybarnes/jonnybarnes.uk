@@ -1,6 +1,6 @@
 # Changelog
 
-## Version {next}
+## Version 0.0.17 (2016-11-25)
   - Add a basic search feature using Laravel Scout and Algolia (issue#38)
   - Get CI testing working with algolia
   - Slightly better layout of replies
