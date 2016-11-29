@@ -2,6 +2,7 @@
 
 ## Version {next}
   - Add a basic search feature using Laravel Scout and Algolia (issue#38)
+  - Get CI testing working with algolia
 
 ## Version 0.0.16.3 (2016-11-25)
   - StyleCI fix
