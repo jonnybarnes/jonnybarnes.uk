@@ -2,6 +2,7 @@
 
 ## Version {next}
   - Some minor style tweaks
+  - Fix some validation issues
 
 ## Version 0.0.17 (2016-11-25)
   - Add a basic search feature using Laravel Scout and Algolia (issue#38)
