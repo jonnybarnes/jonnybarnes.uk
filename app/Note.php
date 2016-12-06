@@ -63,11 +63,30 @@ class Note extends Model implements HasMedia
     protected $guarded = ['id'];
 
     /**
+     * Hide the column used with Laravel Scout.
+     *
+     * @var array
+     */
+    protected $hidden = ['searchable'];
+
+    /**
      * The attributes that should be mutated to dates.
      *
      * @var array
      */
     protected $dates = ['deleted_at'];
+
+    /**
+     * Set the attributes to be indexed for searching with Scout.
+     *
+     * @return array
+     */
+    public function toSearchableArray()
+    {
+        return [
+            'note' => $this->note,
+        ];
+    }
 
     /**
      * A mutator to ensure that in-reply-to is always non-empty or null.

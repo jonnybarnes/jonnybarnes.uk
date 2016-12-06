@@ -80,4 +80,11 @@ return [
         ],
     ],
 
+    'pgsql' => [
+        'connection' => env('DB_CONNECTION', 'pgsql'),
+        // You may want to update index documents directly in PostgreSQL (i.e. via triggers).
+        // In this case you can set this value to false.
+        'maintain_index' => true,
+    ],
+
 ];
