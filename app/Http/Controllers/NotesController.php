@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Twitter;
 use App\Tag;
+use Twitter;
 use App\Note;
 use HTMLPurifier;
 use GuzzleHttp\Client;

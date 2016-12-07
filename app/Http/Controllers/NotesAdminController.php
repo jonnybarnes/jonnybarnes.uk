@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\Note;
 use Validator;
 use Illuminate\Http\Request;
-use App\Services\NoteService;
 use App\Jobs\SendWebMentions;
+use App\Services\NoteService;
 
 class NotesAdminController extends Controller
 {

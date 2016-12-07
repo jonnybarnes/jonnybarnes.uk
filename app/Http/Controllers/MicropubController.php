@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Place;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use App\Services\NoteService;
-use App\Services\TokenService;
+use Illuminate\Http\Response;
 use App\Services\PlaceService;
+use App\Services\TokenService;
 
 class MicropubController extends Controller
 {
