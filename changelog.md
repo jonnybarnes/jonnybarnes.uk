@@ -6,6 +6,7 @@
   - Switch to Makefile for front-end build tasks
   - Switch to Postgres based search
   - Update travis to use aforementioned search and php 7.1
+  - Move syndication tarhets into a config file (issue#27)
 
 ## Version 0.0.17 (2016-11-25)
   - Add a basic search feature using Laravel Scout and Algolia (issue#38)

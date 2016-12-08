@@ -36,6 +36,7 @@ before_script:
   - php artisan key:generate
   - php artisan migrate
   - php artisan db:seed
+  - php artisan token:generate
   - php artisan serve &
   - sleep 5 # Give artisan some time to start serving
 
