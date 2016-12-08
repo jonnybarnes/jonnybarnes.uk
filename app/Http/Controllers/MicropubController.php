@@ -124,7 +124,7 @@ class MicropubController extends Controller
             //we have a valid token, is `syndicate-to` set?
             if ($request->input('q') === 'syndicate-to') {
                 return response()->json([
-                    'syndicate-to' => config('syndication.targets')
+                    'syndicate-to' => config('syndication.targets'),
                 ]);
             }
             //nope, how about a geo URL?
@@ -148,7 +148,7 @@ class MicropubController extends Controller
             //nope, ho about a config query?
             if ($request->input('q') == 'config') {
                 return response()->json([
-                    'syndicate-to' => config('syndication.targets')
+                    'syndicate-to' => config('syndication.targets'),
                 ]);
             }
 
