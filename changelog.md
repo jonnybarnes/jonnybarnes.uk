@@ -1,6 +1,6 @@
 # Changelog
 
-## Version {next}
+## Version 0.0.18 (2016-12-08)
   - Some minor style tweaks
   - Fix some validation issues
   - Switch to Makefile for front-end build tasks
