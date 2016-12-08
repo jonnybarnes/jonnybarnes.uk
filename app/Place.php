@@ -10,7 +10,6 @@ use Phaza\LaravelPostgis\Eloquent\PostgisTrait;
 class Place extends Model
 {
     use PostgisTrait;
-
     /*
      * We want to turn the names into slugs.
      */

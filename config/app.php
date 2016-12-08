@@ -208,6 +208,11 @@ return [
          */
         Laravel\Scout\ScoutServiceProvider::class,
 
+        /*
+         * Postgres Engine for Scout
+         */
+        ScoutEngines\Postgres\PostgresEngineServiceProvider::class,
+
     ],
 
     /*
