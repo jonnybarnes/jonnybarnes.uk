@@ -35,5 +35,5 @@ $ php artisan migrate
 Now we need to edit some config values. In `config/app.php` edit `name`, and in
 `config/syndication.php` edit it to the appropriate values or set targets to `null`.
 
-Now point your server to `publix/index.php` and viola. Essetnally this is a
+Now point your server to `publix/index.php` and viola. Essentially this is a
 Laravel app so debugging things shouldn’t be too hard.
