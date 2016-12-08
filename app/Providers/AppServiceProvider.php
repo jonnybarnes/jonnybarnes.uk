@@ -48,7 +48,7 @@ class AppServiceProvider extends ServiceProvider
         });
 
         //allow micropub use in development
-        if (env('APP_DEBUG') == true) {
+        if (env('APP_DEBUG') == true || env('APP_ENV') == 'testing') {
             session(['me' => env('APP_URL')]);
             if (Storage::exists('dev-token')) {
                 session(['token' => Storage::get('dev-token')]);
