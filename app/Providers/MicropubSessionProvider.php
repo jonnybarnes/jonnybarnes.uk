@@ -15,7 +15,7 @@ class MicropubSessionProvider extends ServiceProvider
     public function boot()
     {
         //allow micropub use in development
-        if (env('APP_DEBUG') == true) {
+        if (config('app.env') !== 'production') {
             session(['me' => env('APP_URL')]);
             if (Storage::exists('dev-token')) {
                 session(['token' => Storage::get('dev-token')]);
