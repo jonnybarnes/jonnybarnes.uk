@@ -145,7 +145,8 @@ class MicropubController extends Controller
                     'places' => $places,
                 ]);
             }
-            //nope, ho about a config query?
+            //nope, how about a config query?
+            //this should have a media endpoint as well at some point
             if ($request->input('q') == 'config') {
                 return response()->json([
                     'syndicate-to' => config('syndication.targets'),
