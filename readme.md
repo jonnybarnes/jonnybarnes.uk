@@ -4,9 +4,13 @@ This is the code that runs my website, [jonnybarnes.uk](https://jonnybarnes.uk).
 
 In theory this is usable by other now :D
 
-Set up the database, this software needs PostgresQL with the postgis plugin:
+Set up the database, this software needs [PostgreSQL](https://wwwpostgresql.org)
+with the [PostGIS](http://postgis.net) plugin. After installing these:
 
-...
+```shell
+$ createdb -E utf8 db_name
+$ psql -d db_name -c 'CREATE EXTENSION postgis'
+```
 
 First get the code, and make sure you’re on the `master` branch. This branch will
 only have tagged releases:
@@ -35,5 +39,5 @@ $ php artisan migrate
 Now we need to edit some config values. In `config/app.php` edit `name`, and in
 `config/syndication.php` edit it to the appropriate values or set targets to `null`.
 
-Now point your server to `publix/index.php` and viola. Essentially this is a
+Now point your server to `public/index.php` and viola. Essentially this is a
 Laravel app so debugging things shouldn’t be too hard.
