@@ -1,4 +1,5 @@
 @extends('master')
+{{-- This can either be edited or dropped --}}
 @section('title')Jonny Barnes’ Projects @stop
 
 @section('content')
