@@ -24,7 +24,7 @@ function addPlacesMap(latitude, longitude, uncertainty) {
     }).then(function (response) {
         return response.json();
     }).then(function (j) {
-        if (j.error == true) {
+        if (j.error === true) {
             alertify.reset();
             alertify.error(j.error_description);
         }
@@ -247,7 +247,7 @@ function addMap(latitude, longitude, places) {
                 return response.json();
             })
             .then(function (placeJson) {
-                if (placeJson.error == true) {
+                if (placeJson.error === true) {
                     throw new Error(placeJson.error_description);
                 }
                 //remove un-needed form elements
@@ -269,7 +269,7 @@ function addMap(latitude, longitude, places) {
                 selectEl.appendChild(newOption);
                 var newPlaceMarkerIcon = document.createElement('div');
                 newPlaceMarkerIcon.classList.add('marker');
-                var newPlaceMarker = new mapboxgl.Marker(newPlaceMarkerIcon, {offset: [-10, -20]}).setLngLat([placeJson.longitude, placeJson.latitude]).addTo(map);
+                new mapboxgl.Marker(newPlaceMarkerIcon, {offset: [-10, -20]}).setLngLat([placeJson.longitude, placeJson.latitude]).addTo(map);
                 map.flyTo({center: [placeJson.longitude, placeJson.latitude]});
 
                 newPlaceMarkerIcon.addEventListener('click', function () {
