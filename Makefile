@@ -1,8 +1,12 @@
 # A Makefile to run various tasks
 
-.PHONY: sass js compress
+.PHONY: sass frontend js compress lint-sass lint-js lint-php
 jsfiles := $(wildcard resources/assets/js/*.js)
 sassfiles := $(wildcard resources/assets/sass/*.scss)
+phpfiles := $(wildcard app/*.php) \
+$(wildcard app/**/*.php) \
+$(wildcard app/**/**/*.php) \
+$(wildcard app/**/**/**/*.php)
 yarnfiles:= node_modules/whatwg-fetch/fetch.js \
 node_modules/alertify.js/dist/js/alertify.js \
 node_modules/store2/dist/store2.min.js \
@@ -33,4 +37,19 @@ compress: $(assets)
 	for f in $^; do \
 		zopfli $$f; \
 		bro --force --quality 11 --input $$f --output $$f.br; \
+	done;
+
+lint-sass: $(sassfiles)
+	for f in $^; do \
+		stylelint --syntax=scss $$f; \
+	done;
+
+lint-js: $(jsfiles)
+	for f in $^; do \
+		eslint $$f; \
+	done;
+
+lint-php: $(phpfiles)
+	for f in $^; do \
+		php -l $$f; \
 	done;
