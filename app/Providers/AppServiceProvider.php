@@ -5,7 +5,6 @@ namespace App\Providers;
 use App\Tag;
 use App\Note;
 use Validator;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -46,14 +45,6 @@ class AppServiceProvider extends ServiceProvider
                 $note->tags()->attach($tagsToAdd);
             }
         });
-
-        //allow micropub use in development
-        if (env('APP_DEBUG') == true) {
-            session(['me' => env('APP_URL')]);
-            if (Storage::exists('dev-token')) {
-                session(['token' => Storage::get('dev-token')]);
-            }
-        }
     }
 
     /**

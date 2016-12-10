@@ -1,7 +1,7 @@
 @extends('master')
 
 @section('title')
-Places « Jonny Barnes
+Places « 
 @stop
 
 @section('content')

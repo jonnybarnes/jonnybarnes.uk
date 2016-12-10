@@ -32,18 +32,8 @@ class MicropubClientTest extends TestCase
 
     public function testClientPageRecentAuth()
     {
-        $syndication = [
-            [
-                'target' => 'https://twitter.com/jonnybarnes',
-                'name' => 'jonnybarnes on Twitter',
-            ]
-        ];
-        $this->withSession([
-            'me' => $this->appurl,
-            'syndication' => $syndication,
-        ])->visit($this->appurl . '/notes/new')
-          ->see($this->appurl)
-          ->see('https://twitter.com/jonnybarnes');
+        $this->visit($this->appurl . '/notes/new')
+          ->see($this->appurl);
     }
 
     public function testClientCreatesNewNoteWithTag()
@@ -51,10 +41,7 @@ class MicropubClientTest extends TestCase
         //in this test, the syndication targets are blank
         $faker = \Faker\Factory::create();
         $note = 'Fake note from #PHPUnit: ' . $faker->text;
-        $this->withSession([
-            'me' => $this->appurl,
-            'token' => $this->getToken()
-        ])->visit($this->appurl . '/notes/new')
+        $this->visit($this->appurl . '/notes/new')
           ->type($note, 'content')
           ->press('Submit');
         $this->seeInDatabase('notes', ['note' => $note]);
@@ -78,20 +65,5 @@ class MicropubClientTest extends TestCase
         }
         $newNote = \App\Note::where('note', $note)->first();
         $newNote->forceDelete();
-
-    }
-
-    private function getToken()
-    {
-        $signer = new Sha256();
-        $token = (new Builder())
-            ->set('client_id', 'https://quill.p3k.io')
-            ->set('me', $this->appurl)
-            ->set('scope', 'post')
-            ->set('issued_at', time())
-            ->sign($signer, env('APP_KEY'))
-            ->getToken();
-
-        return $token;
     }
 }

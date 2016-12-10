@@ -1,7 +1,7 @@
 @extends('master')
 
 @section('title')
-Search « Jonny Barnes
+Search « 
 @stop
 
 @section('content')

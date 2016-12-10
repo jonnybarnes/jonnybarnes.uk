@@ -1,7 +1,7 @@
 @extends('master')
 
 @section('title')
-Contacts « Jonny Barnes
+Contacts « 
 @stop
 
 @section('content')

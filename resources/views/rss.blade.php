@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 <channel>
-  <title>Jonny Barnes.uk</title>
+  <title>{{ env('DISPLAY_NAME') }}</title>
   <atom:link href="{{ config('app.url') }}/feed" rel="self" type="application/rss+xml" />
-  <description>An RSS feed of the blog posts found on jonnybarnes.uk</description>
-  <link>https://jonnybarnes.uk</link>
+  <description>An RSS feed of the blog posts found on {{ config('url.longurl') }}</description>
+  <link>{{ config('app.url') }}</link>
   <lastBuildDate>{{ $buildDate }}</lastBuildDate>
   <ttl>1800</ttl>
 

@@ -1,7 +1,7 @@
 @extends('master')
 
 @section('title')
-{{ strip_tags($article->title) }} <?php echo html_entity_decode("&laquo;"); ?> Jonny Barnes
+{{ strip_tags($article->title) }} « 
 @stop
 
 @section('content')

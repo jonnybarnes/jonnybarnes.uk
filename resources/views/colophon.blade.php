@@ -1,5 +1,5 @@
 @extends('master')
-@section('title')Colophon for Jonny Barnes.uk @stop
+@section('title')Colophon for @stop
 
 @section('content')
 <h2>Colophon</h2>

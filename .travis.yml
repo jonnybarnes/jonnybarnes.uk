@@ -1,9 +1,10 @@
 language: php
 
 sudo: false
+dist: trusty
 
 addons:
-  postgresql: "9.4"
+  postgresql: "9.5"
 
 services:
   - postgresql
@@ -13,7 +14,7 @@ env:
     - setup=basic
 
 php:
-  - 7.0
+  - 7.0.13 # trusty comes with 7.0.7 by default which segfaults with phpdbg
   - 7.1
   - nightly
 matrix:

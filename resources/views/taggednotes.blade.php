@@ -1,7 +1,7 @@
 @extends('master')
 
 @section('title')
-Notes <?php echo html_entity_decode('&laquo;'); ?> Jonny Barnes
+Tagged Notes « 
 @stop
 
 @section('content')
