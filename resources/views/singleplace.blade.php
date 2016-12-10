@@ -1,7 +1,7 @@
 @extends('master')
 
 @section('title')
-{{ $place->name }} « Places « Jonny Barnes
+{{ $place->name }} « Places « 
 @stop
 
 @section('content')

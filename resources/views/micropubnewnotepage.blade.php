@@ -1,7 +1,7 @@
 @extends('master')
 
 @section('title')
-New Note « Jonny Barnes
+New Note « 
 @stop
 
 @section('content')

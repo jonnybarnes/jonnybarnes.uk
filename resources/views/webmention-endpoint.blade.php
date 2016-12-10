@@ -1,7 +1,7 @@
 @extends('master')
 
 @section('title')
-WebMentions « Jonny Barnes
+WebMentions « 
 @stop
 
 @section('content')
