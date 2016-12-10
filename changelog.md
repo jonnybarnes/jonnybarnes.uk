@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 0.1.1 (2016-12-10)
+  - Fix: use correct link for footer iwc icon
+
 ## Version 0.1 (2016-12-10)
   - Much better testing of micropub endpoints locally and on TravisCI
   - Updating README

@@ -43,7 +43,7 @@
     </form>
     <p>The code for <code>{{ env('APP_LONGURL') }}</code> can be found on <a href="https://github.com/jonnybarnes/jonnybarnes.uk">GitHub</a>.</p>
     <p>Built with love: <a href="/colophon">Colophon</a></p>
-    <p><a href="https://indieweb.org"><img src="assets/img/iwc.png" alt="Indie Web Camp logo" class="iwc-logo"></a></p>
+    <p><a href="https://indieweb.org"><img src="/assets/img/iwc.png" alt="Indie Web Camp logo" class="iwc-logo"></a></p>
 </footer>
 </body>
 </html>
