@@ -3,6 +3,7 @@
 ## Version {next}
   - Much better testing of micropub endpoints locally and on TravisCI
   - Updating README
+  - Add IWC logo to footer
 
 ## Version 0.0.18 (2016-12-08)
   - Some minor style tweaks
