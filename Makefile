@@ -3,10 +3,6 @@
 .PHONY: sass frontend js compress lint-sass lint-js lint-php
 jsfiles := $(wildcard resources/assets/js/*.js)
 sassfiles := $(wildcard resources/assets/sass/*.scss)
-phpfiles := $(wildcard app/*.php) \
-$(wildcard app/**/*.php) \
-$(wildcard app/**/**/*.php) \
-$(wildcard app/**/**/**/*.php)
 yarnfiles:= node_modules/whatwg-fetch/fetch.js \
 node_modules/alertify.js/dist/js/alertify.js \
 node_modules/store2/dist/store2.min.js \
@@ -47,9 +43,4 @@ lint-sass: $(sassfiles)
 lint-js: $(jsfiles)
 	for f in $^; do \
 		eslint $$f; \
-	done;
-
-lint-php: $(phpfiles)
-	for f in $^; do \
-		php -l $$f; \
 	done;
