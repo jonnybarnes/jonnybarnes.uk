@@ -1,6 +1,6 @@
 # A Makefile to run various tasks
 
-.PHONY: sass frontend js compress lint-sass lint-js lint-php
+.PHONY: sass frontend js compress lint-sass lint-js
 jsfiles := $(wildcard resources/assets/js/*.js)
 sassfiles := $(wildcard resources/assets/sass/*.scss)
 yarnfiles:= node_modules/whatwg-fetch/fetch.js \
@@ -16,8 +16,9 @@ $(wildcard public/assets/frontend/*.js)
 
 sass: public/assets/css/app.css
 
-public/assets/css/app.css: $(sassfiles)
+public/assets/css/app.css: lint-sass
 	sassc --style compressed --sourcemap resources/assets/sass/app.scss public/assets/css/app.css
+	postcss --use autoprefixer --autoprefixer.browsers "> 5%" --output public/assets/css/app.css public/assets/css/app.css
 
 frontend: $(yarnfiles)
 	for f in $^; do \
