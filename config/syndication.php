@@ -6,6 +6,7 @@
  */
 
 return [
+    // if you don’t have any targets, then set this to 'targets' => [];
     'targets' => [
         [
             'uid' => 'https://twitter.com/jonnybarnes',
