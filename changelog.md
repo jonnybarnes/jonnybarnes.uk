@@ -1,5 +1,8 @@
 # Changelog
 
+## Version {next}
+  - Improve syndication flow when working out which targets to use
+
 ## Version 0.1.1 (2016-12-10)
   - Fix: use correct link for footer iwc icon
 
