@@ -103,7 +103,6 @@ class MicropubController extends Controller
      * appropriately. Further if the request has the query parameter
      * synidicate-to we respond with the known syndication endpoints.
      *
-     * @todo   Move the syndication endpoints into a .env variable
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */

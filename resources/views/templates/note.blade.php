@@ -26,6 +26,7 @@
       </div>
     </div>
 @if ($note->placeLink)
-    <div class="map" data-latitude="{{ $note->latitude }}" data-longitude="{{ $note->longitude }}"></div>
+    <div class="map" data-latitude="{{ $note->latitude }}" data-longitude="{{ $note->longitude }}" data-id="{{ $note->nb60id }}"></div>
+    <script>var geojson{{ $note->nb60id }} = {!! $note->geoJson !!};</script>
 @endif
   </div>

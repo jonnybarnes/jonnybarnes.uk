@@ -1,7 +1,7 @@
 @extends('master')
 
 @section('title')
-New Note « 
+New Note «
 @stop
 
 @section('content')
@@ -26,19 +26,19 @@ New Note «
 @endif
   @include('templates.new-note-form', [
     'micropub' => true,
-    'action' => '/notes/new',
-    'id' => 'newnote'
+    'action' => '/notes/new'
   ])
 @stop
 
 @section('scripts')
-@include('templates.mapbox-links')
-
-<script src="/assets/frontend/fetch.js"></script>
-<script src="/assets/frontend/store2.min.js"></script>
-<script src="/assets/frontend/alertify.js"></script>
-<script src="/assets/js/form-save.js"></script>
-<script src="/assets/js/newnote.js"></script>
+<script>
+    window.Promise || document.write('<script src="https://unpkg.com/promise-polyfill/promise.min.js"><\/script>');
+    window.fetch || document.write('<script src="https://unpkg.com/whatwg-fetch/fetch.js"><\/script>');
+</script>
+<!--<script src="/assets/frontend/store2.min.js"></script>
+<script src="/assets/js/form-save.js"></script>-->
+<script defer src="/assets/js/newnote.js"></script>
 
 <link rel="stylesheet" href="/assets/frontend/alertify.css">
+<link rel="stylesheet" href="/assets/frontend/mapbox-gl.css">
 @stop

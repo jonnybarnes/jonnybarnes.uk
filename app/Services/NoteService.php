@@ -72,28 +72,35 @@ class NoteService
         dispatch(new SendWebMentions($note));
 
         //syndication targets
-        //string sent from either local admin CP or micropub
-        if ($request->input('twitter') == true || $request->input('syndicate-to') == 'https://twitter.com/jonnybarnes') {
+        //from admin CP
+        if ($request->input('twitter')) {
             dispatch(new SyndicateToTwitter($note));
         }
-        if ($request->input('facebook') == true || $request->input('syndicate-to') == 'https://facebook.com/jonnybarnes') {
+        if ($request->input('facebook')) {
             dispatch(new SyndicateToFacebook($note));
         }
-
-        //micropub request, syndication sent as array
-        if (
-            (is_array($request->input('syndicate-to')))
-                &&
-            (in_array('https://twitter.com/jonnybarnes', $request->input('syndicate-to')))
-        ) {
-            dispatch(new SyndicateToTwitter($note));
+        //from a micropub request
+        $targets = array_pluck(config('syndication.targets'), 'uid', 'service.name');
+        if (is_string($request->input('syndicate-to'))) {
+            $service = array_search($request->input('syndicate-to'));
+            if ($service == 'Twitter') {
+                dispatch(new SyndicateToTwitter($note));
+            }
+            if ($service == 'Facebook') {
+                dispatch(new SyndicateToFacebook($note));
+            }
         }
-        if (
-            (is_array($request->input('syndicate-to')))
-                &&
-            (in_array('https://facebook.com/jonnybarnes', $request->input('syndicate-to')))
-        ) {
-            dispatch(new SyndicateToFacebook($note));
+        if (is_array($request->input('syndicate-to'))) {
+            foreach ($targets as $service => $target) {
+                if (in_array($target, $request->input('syndicate-to'))) {
+                    if ($service == 'Twitter') {
+                        dispatch(new SyndicateToTwitter($note));
+                    }
+                    if ($service == 'Facebook') {
+                        dispatch(new SyndicateToFacebook($note));
+                    }
+                }
+            }
         }
 
         return $note;

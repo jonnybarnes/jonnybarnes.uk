@@ -51,6 +51,7 @@ class NotesController extends Controller
                 $note->longitude = $lnglat[0];
                 $note->address = $note->place->name;
                 $note->placeLink = '/places/' . $note->place->slug;
+                $note->geoJson = $this->getGeoJson($note->longitude, $note->latitude, $note->place->name, $note->place->icon);
             }
             $photoURLs = [];
             $photos = $note->getMedia();
@@ -109,16 +110,22 @@ class NotesController extends Controller
                 case 'in-reply-to':
                     $content['source'] = $webmention->source;
                     if (isset($microformats['items'][0]['properties']['published'][0])) {
-                        $content['date'] = $carbon->parse($microformats['items'][0]['properties']['published'][0])->toDayDateTimeString();
+                        $content['date'] = $carbon->parse(
+                            $microformats['items'][0]['properties']['published'][0]
+                        )->toDayDateTimeString();
                     } else {
                         $content['date'] = $webmention->updated_at->toDayDateTimeString();
                     }
-                    $content['reply'] = $this->filterHTML($microformats['items'][0]['properties']['content'][0]['html']);
+                    $content['reply'] = $this->filterHTML(
+                        $microformats['items'][0]['properties']['content'][0]['html']
+                    );
                     $replies[] = $content;
                     break;
 
                 case 'repost-of':
-                    $content['date'] = $carbon->parse($microformats['items'][0]['properties']['published'][0])->toDayDateTimeString();
+                    $content['date'] = $carbon->parse(
+                        $microformats['items'][0]['properties']['published'][0]
+                    )->toDayDateTimeString();
                     $content['source'] = $webmention->source;
                     $reposts[] = $content;
                     break;
@@ -144,6 +151,7 @@ class NotesController extends Controller
             $note->longitude = $lnglat[0];
             $note->address = $note->place->name;
             $note->placeLink = '/places/' . $note->place->slug;
+            $note->geoJson = $this->getGeoJson($note->longitude, $note->latitude, $note->place->name, $note->place->icon);
         }
 
         $photoURLs = [];
@@ -311,7 +319,11 @@ class NotesController extends Controller
             ]);
             $json = json_decode($response->getBody());
             if (isset($json->address->town)) {
-                $address = '<span class="p-locality">' . $json->address->town . '</span>, <span class="p-country-name">' . $json->address->country . '</span>';
+                $address = '<span class="p-locality">'
+                    . $json->address->town
+                    . '</span>, <span class="p-country-name">'
+                    . $json->address->country
+                    . '</span>';
                 Cache::forever($latlng, $address);
 
                 return $address;
@@ -323,7 +335,11 @@ class NotesController extends Controller
                 return $address;
             }
             if (isset($json->address->county)) {
-                $address = '<span class="p-region">' . $json->address->county . '</span>, <span class="p-country-name">' . $json->address->country . '</span>';
+                $address = '<span class="p-region">'
+                    . $json->address->county
+                    . '</span>, <span class="p-country-name">'
+                    . $json->address->country
+                    . '</span>';
                 Cache::forever($latlng, $address);
 
                 return $address;
@@ -333,5 +349,22 @@ class NotesController extends Controller
 
             return $address;
         });
+    }
+
+    private function getGeoJson($longitude, $latitude, $title, $icon)
+    {
+        $icon = $icon ?? 'marker';
+
+        return '{
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [' . $longitude . ', ' . $latitude . ']
+            },
+            "properties": {
+                "title": "' . $title . '",
+                "icon": "' . $icon . '"
+            }
+        }';
     }
 }

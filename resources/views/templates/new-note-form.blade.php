@@ -1,4 +1,4 @@
-<form action="{{ $action }}" method="post" enctype="multipart/form-data" accept-charset="utf-8" id="{{ $id }}">
+<form action="{{ $action }}" method="post" enctype="multipart/form-data" accept-charset="utf-8"@if($micropub) name="micropub"@endif>
   <input type="hidden" name="_token" value="{{ csrf_token() }}">
   <fieldset class="note-ui">
   	<legend>New Note</legend>
