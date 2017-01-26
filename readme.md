@@ -37,7 +37,7 @@ $ php artisan migrate
 ```
 
 Now we need to edit some config values. In `config/app.php` edit `name`, and in
-`config/syndication.php` edit it to the appropriate values or set targets to `null`.
+`config/syndication.php` edit it to the appropriate values or set targets to `[]`.
 
 Some other things that should be changed. Go to `resources/views/master.blade.php`,
 you may not want to link to a projects page. Also in the `<head>` the two last links

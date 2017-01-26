@@ -7,7 +7,8 @@ yarnfiles:= node_modules/whatwg-fetch/fetch.js \
 node_modules/alertify.js/dist/js/alertify.js \
 node_modules/store2/dist/store2.min.js \
 node_modules/autolinker/dist/Autolinker.min.js \
-node_modules/marked/marked.min.js
+node_modules/marked/marked.min.js \
+node_modules/mapbox-gl/dist/mapbox-gl.css
 assets := public/assets/css/app.css \
 public/assets/prism/prism.css public/assets/prism/prism.js \
 $(wildcard public/assets/js/*.js) \
