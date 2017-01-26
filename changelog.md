@@ -1,6 +1,6 @@
 # Changelog
 
-## Version {next}
+## Version 0.1.3 (2017-01-26)
   - cleanup frontend assets, update compressed versions
 
 ## Version 0.1.2 (2017-01-26)
