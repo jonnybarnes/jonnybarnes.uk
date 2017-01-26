@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 0.1.3 (2017-01-26)
+  - cleanup frontend assets, update compressed versions
+
 ## Version 0.1.2 (2017-01-26)
   - Improve syndication flow when working out which targets to use
   - Use webpack/babel/es6 (this was a big one, code wise, functionality now basically the same though)
