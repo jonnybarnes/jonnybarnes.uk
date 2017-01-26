@@ -2,6 +2,7 @@
 
 ## Version {next}
   - Improve syndication flow when working out which targets to use
+  - Use webpack/babel/es6 (this was a big one, code wise, functionality now basically the same though)
 
 ## Version 0.1.1 (2016-12-10)
   - Fix: use correct link for footer iwc icon
