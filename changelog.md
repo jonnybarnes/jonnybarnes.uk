@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 0.1.5 (2017-01-27)
+  - Update the webmention parser version to fix a bug with displaying webmentions
+
 ## Version 0.1.4 (2017-01-27)
   - Fix: refactor code slightly to allow multiple maps to be added to a page
 

@@ -58,16 +58,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.21.5",
+            "version": "3.21.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "adaabe1e1b2c29a8748e52146194ab42222df8b5"
+                "reference": "b51512a4ad4aa080ab963942a1e234265771fcde"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/adaabe1e1b2c29a8748e52146194ab42222df8b5",
-                "reference": "adaabe1e1b2c29a8748e52146194ab42222df8b5",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/b51512a4ad4aa080ab963942a1e234265771fcde",
+                "reference": "b51512a4ad4aa080ab963942a1e234265771fcde",
                 "shasum": ""
             },
             "require": {
@@ -134,7 +134,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2017-01-25T22:06:08+00:00"
+            "time": "2017-01-27T00:34:55+00:00"
         },
         {
             "name": "barnabywalters/mf-cleaner",
@@ -1489,16 +1489,16 @@
         },
         {
             "name": "jonnybarnes/webmentions-parser",
-            "version": "v0.4.4",
+            "version": "v0.4.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jonnybarnes/webmentions-parser.git",
-                "reference": "111aae8fdf9fd31417865d28fe2160ad3c2a10c5"
+                "reference": "de542562e0bba1b96e976abf22acc4c82a7472ec"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jonnybarnes/webmentions-parser/zipball/111aae8fdf9fd31417865d28fe2160ad3c2a10c5",
-                "reference": "111aae8fdf9fd31417865d28fe2160ad3c2a10c5",
+                "url": "https://api.github.com/repos/jonnybarnes/webmentions-parser/zipball/de542562e0bba1b96e976abf22acc4c82a7472ec",
+                "reference": "de542562e0bba1b96e976abf22acc4c82a7472ec",
                 "shasum": ""
             },
             "require": {
@@ -1532,7 +1532,7 @@
                 "microformats",
                 "webmentions"
             ],
-            "time": "2016-10-20T15:48:02+00:00"
+            "time": "2017-01-27T16:54:43+00:00"
         },
         {
             "name": "laravel/framework",
@@ -4542,16 +4542,16 @@
         },
         {
             "name": "myclabs/deep-copy",
-            "version": "1.5.5",
+            "version": "1.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/myclabs/DeepCopy.git",
-                "reference": "399c1f9781e222f6eb6cc238796f5200d1b7f108"
+                "reference": "5a5a9fc8025a08d8919be87d6884d5a92520cefe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/myclabs/DeepCopy/zipball/399c1f9781e222f6eb6cc238796f5200d1b7f108",
-                "reference": "399c1f9781e222f6eb6cc238796f5200d1b7f108",
+                "url": "https://api.github.com/repos/myclabs/DeepCopy/zipball/5a5a9fc8025a08d8919be87d6884d5a92520cefe",
+                "reference": "5a5a9fc8025a08d8919be87d6884d5a92520cefe",
                 "shasum": ""
             },
             "require": {
@@ -4580,7 +4580,7 @@
                 "object",
                 "object graph"
             ],
-            "time": "2016-10-31T17:19:45+00:00"
+            "time": "2017-01-26T22:05:40+00:00"
         },
         {
             "name": "phpdocumentor/reflection-common",
@@ -5037,16 +5037,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "5.7.7",
+            "version": "5.7.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "e52551bbc229c6cee26c7a00deef80c2108c5b15"
+                "reference": "bee7755d964f8e56d6ecb79046480fd0320b686d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/e52551bbc229c6cee26c7a00deef80c2108c5b15",
-                "reference": "e52551bbc229c6cee26c7a00deef80c2108c5b15",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/bee7755d964f8e56d6ecb79046480fd0320b686d",
+                "reference": "bee7755d964f8e56d6ecb79046480fd0320b686d",
                 "shasum": ""
             },
             "require": {
@@ -5115,7 +5115,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2017-01-25T19:19:41+00:00"
+            "time": "2017-01-26T15:28:51+00:00"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
