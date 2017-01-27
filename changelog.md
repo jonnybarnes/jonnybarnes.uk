@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 0.1.6 (2017-01-27)
+  - Update the webmention parser to a version with a verified fix
+
 ## Version 0.1.5 (2017-01-27)
   - Update the webmention parser version to fix a bug with displaying webmentions
 
