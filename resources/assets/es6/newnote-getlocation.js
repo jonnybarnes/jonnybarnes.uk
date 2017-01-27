@@ -11,6 +11,6 @@ export default function getLocation() {
         mapDiv.dataset.latitude = position.coords.latitude;
         mapDiv.dataset.longitude = position.coords.longitude;
         mapDiv.dataset.accuracy = position.coords.accuracy;
-        addMapWithPlaces(position);
+        addMapWithPlaces(mapDiv, position);
     });
 }

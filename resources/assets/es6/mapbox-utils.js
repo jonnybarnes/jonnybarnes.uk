@@ -38,84 +38,79 @@ const makeMapMenu = (map) => {
 }
 
 //the main function
-export default function addMap(position = null, places = null) {
-    //console.log(position);
-    //console.log(places);
-    let mapDivs = document.querySelectorAll('.map');
-    for (let div of mapDivs) {
-        let dataLatitude = div.dataset.latitude;
-        let dataLongitude = div.dataset.longitude;
-        let dataId = div.dataset.id;
-        let data = window['geojson'+dataId];
-        if (data == null) {
-            data = {
-                "type": "FeatureCollection",
-                "features": [{
-                    "type": "Feature",
-                    "geometry": {
-                        "type": "Point",
-                        "coordinates": [dataLongitude, dataLatitude]
-                    },
-                    "properties": {
-                        "title": "Current Location",
-                        "icon": "circle-stroked",
-                        "uri": "current-location"
-                    }
-                }]
-            };
-        }
-        if (places != null) {
-            for (let place of places) {
-                let placeLongitude = parseLocation(place.location).longitude;
-                let placeLatitude = parseLocation(place.location).latitude;
-                data.features.push({
-                    "type": "Feature",
-                    "geometry": {
-                        "type": "Point",
-                        "coordinates": [placeLongitude, placeLatitude]
-                    },
-                    "properties": {
-                        "title": place.name,
-                        "icon": "circle",
-                        "uri": place.slug
-                    }
-                });
-            }
-        }
-        if (! dataLongitude) {
-            let dataLongitude = position.coords.longitude;
-        }
-        if (! dataLatitude) {
-            let dataLatitude = position.coords.latitude;
-        }
-        let map = new mapboxgl.Map({
-            container: div,
-            style: 'mapbox://styles/mapbox/streets-v9',
-            center: [dataLongitude, dataLatitude],
-            zoom: 15
-        });
-        if (position == null) {
-            map.scrollZoom.disable();
-        }
-        map.addControl(new mapboxgl.NavigationControl());
-        div.appendChild(makeMapMenu(map));
-        map.on('load', function () {
-            map.addSource('points', {
-                "type": "geojson",
-                "data": data
-            });
-            map.addLayer({
-                "id": "points",
-                "interactive": true,
-                "type": "symbol",
-                "source": "points",
-                "layout": {
-                    "icon-image": "{icon}-15",
-                    "text-field": "{title}",
-                    "text-offset": [0, 1]
+export default function addMap(div, position = null, places = null) {
+    let dataLatitude = div.dataset.latitude;
+    let dataLongitude = div.dataset.longitude;
+    let dataId = div.dataset.id;
+    let data = window['geojson'+dataId];
+    if (data == null) {
+        data = {
+            "type": "FeatureCollection",
+            "features": [{
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [dataLongitude, dataLatitude]
+                },
+                "properties": {
+                    "title": "Current Location",
+                    "icon": "circle-stroked",
+                    "uri": "current-location"
+                }
+            }]
+        };
+    }
+    if (places != null) {
+        for (let place of places) {
+            let placeLongitude = parseLocation(place.location).longitude;
+            let placeLatitude = parseLocation(place.location).latitude;
+            data.features.push({
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [placeLongitude, placeLatitude]
+                },
+                "properties": {
+                    "title": place.name,
+                    "icon": "circle",
+                    "uri": place.slug
                 }
             });
+        }
+    }
+    if (position != null) {
+        let dataLongitude = position.coords.longitude;
+        let dataLatitude = position.coords.latitude;
+    }
+    let map = new mapboxgl.Map({
+        container: div,
+        style: 'mapbox://styles/mapbox/streets-v9',
+        center: [dataLongitude, dataLatitude],
+        zoom: 15
+    });
+    if (position == null) {
+        map.scrollZoom.disable();
+    }
+    map.addControl(new mapboxgl.NavigationControl());
+    div.appendChild(makeMapMenu(map));
+    map.on('load', function () {
+        map.addSource('points', {
+            "type": "geojson",
+            "data": data
         });
+        map.addLayer({
+            "id": "points",
+            "interactive": true,
+            "type": "symbol",
+            "source": "points",
+            "layout": {
+                "icon-image": "{icon}-15",
+                "text-field": "{title}",
+                "text-offset": [0, 1]
+            }
+        });
+    });
+    if (position != null) {
         map.on('click', function (e) {
             let features = map.queryRenderedFeatures(e.point, {
                 layer: ['points']
@@ -128,14 +123,14 @@ export default function addMap(position = null, places = null) {
                 selectPlaceInForm(features[0].properties.uri);
             }
         });
-        if (data.features && data.features.length > 1) {
-            let bounds = new mapboxgl.LngLatBounds();
-            for (let feature of data.features) {
-                bounds.extend(feature.geometry.coordinates);
-            }
-            map.fitBounds(bounds, { padding: 65});
-        }
-
-        return map;
     }
+    if (data.features && data.features.length > 1) {
+        let bounds = new mapboxgl.LngLatBounds();
+        for (let feature of data.features) {
+            bounds.extend(feature.geometry.coordinates);
+        }
+        map.fitBounds(bounds, { padding: 65});
+    }
+
+    return map;
 }

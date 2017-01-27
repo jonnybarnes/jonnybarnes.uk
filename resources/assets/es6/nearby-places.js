@@ -45,7 +45,7 @@ const makeOptionsForForm = (map, position, places = null) => {
 }
 
 //position is output of navigator.geolocation call
-export default function addMapWithPlaces(position) {
+export default function addMapWithPlaces(div, position) {
     fetch('/places/near/' + position.coords.latitude + '/' + position.coords.longitude + '?u=' + position.coords.accuracy, {
         credentials: 'same-origin',
         method: 'get'
@@ -65,7 +65,7 @@ export default function addMapWithPlaces(position) {
         if (json.places.length > 0) {
             places = json.places;
         }
-        let map = addMap(position, places);
+        let map = addMap(div, position, places);
         //create a containting div for flexbox styling purposes
         let flexboxDiv = document.createElement('div');
         let options = makeOptionsForForm(map, position, places);
