@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 0.1.7 (2017-01-27)
+  - Add a rel=me link to my own domain in my h-card.
+
 ## Version 0.1.6 (2017-01-27)
   - Update the webmention parser to a version with a verified fix
 
