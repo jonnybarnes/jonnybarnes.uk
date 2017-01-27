@@ -1,6 +1,6 @@
 # Changelog
 
-## Version {next}
+## Version 0.1.4 (2017-01-27)
   - Fix: refactor code slightly to allow multiple maps to be added to a page
 
 ## Version 0.1.3 (2017-01-26)
