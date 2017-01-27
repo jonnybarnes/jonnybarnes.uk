@@ -1,5 +1,8 @@
 # Changelog
 
+## Version {next}
+  - Update `syndicate-to` property to `mp-syndicate-to`
+
 ## Version 0.1.7 (2017-01-27)
   - Add a rel=me link to my own domain in my h-card.
 
