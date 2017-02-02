@@ -1,7 +1,7 @@
 @extends('master')
 
 @section('title')
-Notes « 
+Notes «
 @stop
 
 @section('content')
@@ -19,11 +19,11 @@ Notes «
 @stop
 
 @section('scripts')
-@include('templates.mapbox-links')
 
-<script src="/assets/frontend/Autolinker.min.js"></script>
-<script src="/assets/js/links.js"></script>
-<script src="/assets/js/maps.js"></script>
+<!--<script src="/assets/frontend/Autolinker.min.js"></script>
+<script src="/assets/js/links.js"></script>-->
+<link rel="stylesheet" href="/assets/frontend/mapbox-gl.css">
+<script defer src="/assets/js/maps.js"></script>
 
 <script src="/assets/prism/prism.js"></script>
 <link rel="stylesheet" href="/assets/prism/prism.css">
@@ -32,7 +32,7 @@ Notes «
 @section('bio')
     @if ($homepage === true)
   <div class="h-card">
-    <p>My name is <span class="p-name p-author">Jonny Barnes</span>, and I’m from <a href="https://en.wikipedia.org/wiki/Manchester" class="h-adr p-adr"><span class="p-locality">Manchester</span>, <abbr class="p-country-name" title="United Kingdom">UK</abbr></a>.</p>
+    <p>My name is <span class="p-name p-author">Jonny Barnes</span>, and <a rel="me" href="https://jonnybarnes.uk" class="u-url"><code>jonnybarnes.uk</code></a> is my site. I’m from <a href="https://en.wikipedia.org/wiki/Manchester" class="h-adr p-adr"><span class="p-locality">Manchester</span>, <abbr class="p-country-name" title="United Kingdom">UK</abbr></a>.</p>
     <p>I am active to varying degrees on several <a href="https://indieweb.org/silo">silos</a>:</p>
     <ul class="social-list">
       <li>I keep in touch with friends on <a rel="me" href="https://www.facebook.com/jonnybarnes" class="u-url">Facebook</a></li>

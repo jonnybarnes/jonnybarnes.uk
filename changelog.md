@@ -1,7 +1,23 @@
 # Changelog
 
-## Version {next}
+## Version 0.1.7 (2017-01-27)
+  - Add a rel=me link to my own domain in my h-card.
+
+## Version 0.1.6 (2017-01-27)
+  - Update the webmention parser to a version with a verified fix
+
+## Version 0.1.5 (2017-01-27)
+  - Update the webmention parser version to fix a bug with displaying webmentions
+
+## Version 0.1.4 (2017-01-27)
+  - Fix: refactor code slightly to allow multiple maps to be added to a page
+
+## Version 0.1.3 (2017-01-26)
+  - cleanup frontend assets, update compressed versions
+
+## Version 0.1.2 (2017-01-26)
   - Improve syndication flow when working out which targets to use
+  - Use webpack/babel/es6 (this was a big one, code wise, functionality now basically the same though)
 
 ## Version 0.1.1 (2016-12-10)
   - Fix: use correct link for footer iwc icon
