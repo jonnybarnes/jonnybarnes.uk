@@ -2,12 +2,12 @@
 
 namespace App\Tests;
 
-use TestCase;
+use BrowserKitTest;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
-class ArticlesTest extends TestCase
+class ArticlesTest extends BrowserKitTest
 {
     protected $appurl;
 
