@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "f01992db8f967fa62b1a66a60d43be59",
+    "content-hash": "2fde3e4238c4f285f6c6d2348a6d695c",
     "packages": [
         {
             "name": "anahkiasen/underscore-php",
@@ -1442,6 +1442,50 @@
                 "geospatial"
             ],
             "time": "2015-09-27T15:35:21+00:00"
+        },
+        {
+            "name": "jonnybarnes/emoji-a11y",
+            "version": "v0.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jonnybarnes/emoji-a11y.git",
+                "reference": "bb9d7427bdaab139d746de1c4273fea6ebc52206"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jonnybarnes/emoji-a11y/zipball/bb9d7427bdaab139d746de1c4273fea6ebc52206",
+                "reference": "bb9d7427bdaab139d746de1c4273fea6ebc52206",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~5.7"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Jonnybarnes\\EmojiA11y\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "CC0-1.0"
+            ],
+            "authors": [
+                {
+                    "name": "Jonny Barnes",
+                    "email": "jonny@jonnybarnes.uk"
+                }
+            ],
+            "description": "Make emoji more accessible",
+            "keywords": [
+                "a11y",
+                "accessibility",
+                "emoji"
+            ],
+            "time": "2017-02-02T00:20:12+00:00"
         },
         {
             "name": "jonnybarnes/indieweb",
