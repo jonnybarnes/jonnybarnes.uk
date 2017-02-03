@@ -1,0 +1,51 @@
+//emoji.scss
+
+//thanks to http://adrianroselli.com/2016/12/accessible-emoji-tweaked.html
+
+span[role=img][aria-label],
+span[role=img][aria-label] {
+    position: relative;
+}
+
+span[role=img][aria-label]:focus::after,
+span[role=img][aria-label]:hover::after {
+    position: absolute;
+    display: block;
+    z-index: 1;
+    bottom: 1.5em;
+    left: 0;
+    max-width: 5em;
+    padding: 0.5em 0.75em;
+    border: 0.05em solid rgba(255, 255, 255, 1);
+    border-radius: 0.2em;
+    box-shadow: 0.15em 0.15em 0.5em rgba(0, 0, 0, 1);
+    content: attr(aria-label);
+    background-color: rgba(0, 0, 0, 0.85);
+    color: rgba(255, 255, 255, 1);
+    font-size: 80%;
+    animation: TOOLTIP 0.1s ease-out 1;
+}
+
+@keyframes TOOLTIP {
+    from {
+        bottom: 0.5em;
+        background-color: rgba(0, 0, 0, 0);
+        border: 0.05em solid rgba(255, 255, 255, 0);
+        color: rgba(255, 255, 255, 0);
+        box-shadow: 0 0 0 rgba(0, 0, 0, 1);
+    }
+
+    to {
+        bottom: 1.5em;
+        background-color: rgba(0, 0, 0, 0.85);
+        border: 0.05em solid rgba(255, 255, 255, 1);
+        color: rgba(255, 255, 255, 1);
+        box-shadow: 0.15em 0.15em 0.5em rgba(0, 0, 0, 1);
+    }
+}
+
+@media print {
+    span[role=img][aria-label]::after {
+        content: " (" attr(aria-label) ") ";
+    }
+}
