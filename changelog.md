@@ -1,5 +1,8 @@
 # Changelog
 
+## Version {next}
+  - Add css for emoji labels
+
 ## Version 0.2 (2017-02-03)
   - Update `syndicate-to` property to `mp-syndicate-to`
   - Add my emoji-a11y dependency
