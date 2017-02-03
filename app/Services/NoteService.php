@@ -81,8 +81,8 @@ class NoteService
         }
         //from a micropub request
         $targets = array_pluck(config('syndication.targets'), 'uid', 'service.name');
-        if (is_string($request->input('syndicate-to'))) {
-            $service = array_search($request->input('syndicate-to'));
+        if (is_string($request->input('mp-syndicate-to'))) {
+            $service = array_search($request->input('mp-syndicate-to'));
             if ($service == 'Twitter') {
                 dispatch(new SyndicateToTwitter($note));
             }
@@ -90,9 +90,9 @@ class NoteService
                 dispatch(new SyndicateToFacebook($note));
             }
         }
-        if (is_array($request->input('syndicate-to'))) {
+        if (is_array($request->input('mp-syndicate-to'))) {
             foreach ($targets as $service => $target) {
-                if (in_array($target, $request->input('syndicate-to'))) {
+                if (in_array($target, $request->input('mp-syndicate-to'))) {
                     if ($service == 'Twitter') {
                         dispatch(new SyndicateToTwitter($note));
                     }

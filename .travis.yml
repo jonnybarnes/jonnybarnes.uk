@@ -14,7 +14,7 @@ env:
     - setup=basic
 
 php:
-  - 7.0.13 # trusty comes with 7.0.7 by default which segfaults with phpdbg
+  - 7.0.15
   - 7.1
   - nightly
 matrix:

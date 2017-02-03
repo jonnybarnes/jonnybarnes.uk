@@ -3,12 +3,12 @@
 namespace App\Tests;
 
 use Cache;
-use TestCase;
+use BrowserKitTest;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
-class NotesTest extends TestCase
+class NotesTest extends BrowserKitTest
 {
     protected $appurl;
     protected $notesController;

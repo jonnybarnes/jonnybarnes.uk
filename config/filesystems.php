@@ -11,8 +11,6 @@ return [
     | by the framework. A "local" driver, as well as a variety of cloud
     | based drivers are available for your choosing. Just store away!
     |
-    | Supported: "local", "ftp", "s3", "rackspace"
-    |
     */
 
     'default' => 'local',
@@ -39,6 +37,8 @@ return [
     | may even configure multiple disks of the same driver. Defaults have
     | been setup for each driver as an example of the required options.
     |
+    | Supported Drivers: "local", "ftp", "s3", "rackspace"
+    |
     */
 
     'disks' => [
@@ -51,12 +51,13 @@ return [
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
+            'url' => env('APP_URL').'/storage',
             'visibility' => 'public',
         ],
 
         's3' => [
             'driver' => 's3',
-            'key'    => env('AWS_S3_KEY'),
+            'key' => env('AWS_S3_KEY'),
             'secret' => env('AWS_S3_SECRET'),
             'region' => env('AWS_S3_REGION'),
             'bucket' => env('AWS_S3_BUCKET'),

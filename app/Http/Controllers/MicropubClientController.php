@@ -159,10 +159,10 @@ class MicropubClientController extends Controller
                 'contents' => $request->input('in-reply-to'),
             ];
         }
-        if ($request->input('syndicate-to')) {
-            foreach ($request->input('syndicate-to') as $syn) {
+        if ($request->input('mp-syndicate-to')) {
+            foreach ($request->input('mp-syndicate-to') as $syn) {
                 $multipart[] = [
-                    'name' => 'syndicate-to[]',
+                    'name' => 'mp-syndicate-to[]',
                     'contents' => $syn,
                 ];
             }

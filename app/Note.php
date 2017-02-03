@@ -6,6 +6,7 @@ use Normalizer;
 use Laravel\Scout\Searchable;
 use Jonnybarnes\IndieWeb\Numbers;
 use Illuminate\Database\Eloquent\Model;
+use Jonnybarnes\EmojiA11y\EmojiModifier;
 use League\CommonMark\CommonMarkConverter;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
@@ -119,11 +120,13 @@ class Note extends Model implements HasMedia
     public function getNoteAttribute($value)
     {
         $markdown = new CommonMarkConverter();
+        $emoji = new EmojiModifier();
         $html = $markdown->convertToHtml($value);
         $hcards = $this->makeHCards($html);
         $hashtags = $this->autoLinkHashtag($hcards);
+        $modified = $emoji->makeEmojiAccessible($hashtags);
 
-        return $hashtags;
+        return $modified;
     }
 
     /**

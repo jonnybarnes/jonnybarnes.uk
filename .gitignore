@@ -1,12 +1,12 @@
-/vendor
 /node_modules
-/bower_components
 /public/storage
+/public/hot
+/storage/*.key
+/vendor
+/.idea
 Homestead.yaml
 Homestead.json
 .env
-/.sass-cache
 /public/files
 /public/keybase.txt
 /coverage
-/storage/*.key

@@ -2,12 +2,12 @@
 
 namespace App\Tests;
 
-use TestCase;
+use BrowserKitTest;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
-class NotesAdminTest extends TestCase
+class NotesAdminTest extends BrowserKitTest
 {
     use DatabaseTransactions;
 

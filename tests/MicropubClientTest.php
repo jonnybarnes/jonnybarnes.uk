@@ -2,14 +2,14 @@
 
 namespace App\Tests;
 
-use TestCase;
+use BrowserKitTest;
 use Lcobucci\JWT\Builder;
 use Lcobucci\JWT\Signer\Hmac\Sha256;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
-class MicropubClientTest extends TestCase
+class MicropubClientTest extends BrowserKitTest
 {
     protected $appurl;
 
