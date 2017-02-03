@@ -1,6 +1,6 @@
 # Changelog
 
-## Version {next}
+## Version 0.2.1 (2017-02-03)
   - Add css for emoji labels
 
 ## Version 0.2 (2017-02-03)
