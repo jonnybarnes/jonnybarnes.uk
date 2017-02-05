@@ -1,6 +1,6 @@
 # Changelog
 
-## Version {next}
+## Version 0.2.3 (2017-02-05)
   - Autolink/embed youtube videos and spotify links
 
 ## Version 0.2.2 (2017-02-05)
