@@ -4,6 +4,7 @@ const config = {
   context: __dirname + '/resources/assets/es6',
   entry: {
     //app: './app.js',
+    links: './links.js',
     maps: './maps.js',
     newnote: './newnote.js'
   },

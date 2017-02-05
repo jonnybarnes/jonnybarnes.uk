@@ -1,7 +1,7 @@
 @extends('master')
 
 @section('title')
-{{ strip_tags($note->note) }} « Notes « 
+{{ strip_tags($note->note) }} « Notes «
 @stop
 
 @section('content')
@@ -34,11 +34,10 @@
 @stop
 
 @section('scripts')
-@include('templates.mapbox-links')
 
-<script src="/assets/frontend/Autolinker.min.js"></script>
-<script src="/assets/js/links.js"></script>
-<script src="/assets/js/maps.js"></script>
+<script defer src="/assets/js/links.js"></script>
+<link rel="stylesheet" href="/assets/frontend/mapbox-gl.css">
+<script defer src="/assets/js/maps.js"></script>
 
 <script src="/assets/prism/prism.js"></script>
 <link rel="stylesheet" href="/assets/prism/prism.css">
