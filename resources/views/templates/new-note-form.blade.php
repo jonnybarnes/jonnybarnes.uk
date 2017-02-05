@@ -25,7 +25,7 @@
       <ul class="syndication-targets-list" name="syndication">
         @foreach($syndication as $syn)
         <li><input type="checkbox"
-                   name="syndicate-to[]"
+                   name="mp-syndicate-to[]"
                    id="{{ $syn['target'] }}"
                    value="{{ $syn['target'] }}"
                    checked="checked"
