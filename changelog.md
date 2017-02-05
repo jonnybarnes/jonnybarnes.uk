@@ -1,5 +1,8 @@
 # Changelog
 
+## Version {next}
+  - Fix: allow syndication to work again (issue#42)
+
 ## Version 0.2.1 (2017-02-03)
   - Add css for emoji labels
 
