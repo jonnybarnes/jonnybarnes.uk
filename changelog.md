@@ -1,5 +1,8 @@
 # Changelog
 
+## Version {next}
+  - Make embedded youtube iframe a dynamic size
+
 ## Version 0.2.3 (2017-02-05)
   - Autolink/embed youtube videos and spotify links
 
