@@ -1,5 +1,22 @@
 # Changelog
 
+## Version {next}
+  - Make embedded youtube iframe a dynamic size
+
+## Version 0.2.3 (2017-02-05)
+  - Autolink/embed youtube videos and spotify links
+
+## Version 0.2.2 (2017-02-05)
+  - Fix: allow syndication to work again (issue#42)
+
+## Version 0.2.1 (2017-02-03)
+  - Add css for emoji labels
+
+## Version 0.2 (2017-02-03)
+  - Update `syndicate-to` property to `mp-syndicate-to`
+  - Add my emoji-a11y dependency
+  - Upgrade to Laravel 5.4
+
 ## Version 0.1.7 (2017-01-27)
   - Add a rel=me link to my own domain in my h-card.
 

@@ -20,12 +20,11 @@ Notes «
 
 @section('scripts')
 
-<!--<script src="/assets/frontend/Autolinker.min.js"></script>
-<script src="/assets/js/links.js"></script>-->
+<script defer src="/assets/js/links.js"></script>
 <link rel="stylesheet" href="/assets/frontend/mapbox-gl.css">
 <script defer src="/assets/js/maps.js"></script>
 
-<script src="/assets/prism/prism.js"></script>
+<script defer src="/assets/prism/prism.js"></script>
 <link rel="stylesheet" href="/assets/prism/prism.css">
 @stop
 

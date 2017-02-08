@@ -13,7 +13,7 @@ class NotesTableSeeder extends Seeder
     {
         factory(App\Note::class, 10)->create();
         $noteWithPlace = App\Note::create([
-            'note' => 'Having a #beer at the local.',
+            'note' => 'Having a #beer at the local. 🍺',
             'tweet_id' => '123456789',
         ]);
         $place = App\Place::find(1);

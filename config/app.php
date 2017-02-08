@@ -213,6 +213,11 @@ return [
          */
         ScoutEngines\Postgres\PostgresEngineServiceProvider::class,
 
+        /*
+         * Laravel Tinker
+         */
+        Laravel\Tinker\TinkerServiceProvider::class,
+
     ],
 
     /*
