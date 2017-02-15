@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Article;
-use Illuminate\Http\Response;
 use Jonnybarnes\IndieWeb\Numbers;
 
 class ArticlesController extends Controller
@@ -16,11 +15,11 @@ class ArticlesController extends Controller
     public function showAllArticles($year = null, $month = null)
     {
         $articles = Article::where('published', '1')
-                    ->date($year, $month)
-                    ->orderBy('updated_at', 'desc')
-                    ->simplePaginate(5);
+                        ->date($year, $month)
+                        ->orderBy('updated_at', 'desc')
+                        ->simplePaginate(5);
 
-        return view('multipost', ['data' => $articles]);
+        return view('articles', compact('articles'));
     }
 
     /**
@@ -35,7 +34,7 @@ class ArticlesController extends Controller
             throw new \Exception;
         }
 
-        return view('singlepost', ['article' => $article]);
+        return view('article', compact('article'));
     }
 
     /**
@@ -62,8 +61,9 @@ class ArticlesController extends Controller
     {
         $articles = Article::where('published', '1')->orderBy('updated_at', 'desc')->get();
         $buildDate = $articles->first()->updated_at->toRssString();
-        $contents = (string) view('rss', ['articles' => $articles, 'buildDate' => $buildDate]);
 
-        return (new Response($contents, '200'))->header('Content-Type', 'application/rss+xml');
+        return response()
+                    ->view('rss', compact('articles', 'buildDate'), 200)
+                    ->header('Content-Type', 'application/rss+xml');
     }
 }

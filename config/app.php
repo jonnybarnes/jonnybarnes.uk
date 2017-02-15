@@ -271,4 +271,6 @@ return [
 
     ],
 
+    'piwik' => env('PIWIK', false),
+
 ];

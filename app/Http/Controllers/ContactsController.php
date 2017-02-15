@@ -25,7 +25,7 @@ class ContactsController extends Controller
                 '/assets/profile-images/default-image';
         }
 
-        return view('contacts', ['contacts' => $contacts]);
+        return view('contacts', compact('contacts'));
     }
 
     /**

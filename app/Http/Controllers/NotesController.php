@@ -63,7 +63,7 @@ class NotesController extends Controller
 
         $homepage = ($request->path() == '/');
 
-        return view('allnotes', ['notes' => $notes, 'homepage' => $homepage]);
+        return view('notes', compact('notes', 'homepage'));
     }
 
     /**
@@ -161,12 +161,7 @@ class NotesController extends Controller
         }
         $note->photoURLs = $photoURLs;
 
-        return view('singlenote', [
-            'note' => $note,
-            'replies' => $replies,
-            'reposts' => $reposts,
-            'likes' => $likes,
-        ]);
+        return view('note', compact('note', 'replies', 'reposts', 'likes'));
     }
 
     /**
@@ -201,7 +196,7 @@ class NotesController extends Controller
             $note->human_time = $note->updated_at->diffForHumans();
         }
 
-        return view('taggednotes', ['notes' => $notes, 'tag' => $tag]);
+        return view('taggednotes', compact('notes', 'tag'));
     }
 
     /**

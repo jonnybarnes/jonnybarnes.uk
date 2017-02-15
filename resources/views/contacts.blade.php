@@ -1,11 +1,11 @@
 @extends('master')
 
 @section('title')
-Contacts « 
+Contacts «
 @stop
 
 @section('content')
 @foreach($contacts as $contact)
-@include('templates.contact', array('contact' => $contact))
+    @include('templates.contact', ['contact' => $contact])
 @endforeach
 @stop

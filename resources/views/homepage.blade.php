@@ -16,13 +16,10 @@ Jonny Barnes
         <ul class="social-list">
           <li>I keep in touch with friends on <a rel="me" href="https://www.facebook.com/jonnybarnes" class="u-url">Facebook</a></li>
           <li>I follow people I find interesting on <a rel="me" href="https://twitter.com/jonnybarnes" class="u-url">Twitter</a></li>
-          <li>I geek out on <a rel="me" href="https://alpha.app.net/jonnybarnes" class="u-url">app.net</a></li>
-          <li>I exist on <a rel="me" href="https://plus.google.com/117317270900655269082" class="u-url">Google+</a></li>
-          <!--<li>I post photos to <a rel="me" href="http://www.flickr.com/photos/22212133@N03/" class="u-url">flickr</a></li>-->
           <li>I push code to <a rel="me" href="https://github.com/jonnybarnes" class="u-url">GitHub</a></li>
-          <li>I scrobble songs to <a rel="me" href="https://last.fm/user/jonnymbarnes" class="u-url">last.fm</a> that I listen to on <a rel="me" href="https://open.spotify.com/user/jonnybarnes89" class="u-url">Spotify</a></li>
+          <li>I scrobble songs to <a rel="me" href="http://www.last.fm/user/jonnymbarnes" class="u-url">last.fm</a> that I listen to on <a rel="me" href="https://open.spotify.com/user/jonnybarnes89" class="u-url">Spotify</a></li>
         </ul>
-        <p>My usual online handle is <span class="nickname">jonnybarnes</span> for other services, though if they’re not listed above then I don’t actively use the service. My usual <a href="/assets/img/jmb-bw.png" class="u-photo photo">profile pic</a>. I also have a <a class="pgpkey" href="/assets/jonnybarnes-public-key-ecc.asc">PGP key</a>, with <a href="/notes/5g">fingerprint</a>.</p>
+        <p>My usual online handle is <span class="nickname">jonnybarnes</span> for other services, though if they’re not listed above then I don’t actively use the service. My usual <a href="/assets/img/jmb-bw.png" class="u-photo photo">profile pic</a>. I also have a <a class="pgpkey" href="/assets/jonnybarnes-public-key-ecc.asc">PGP key</a>, with <a href="/notes/5g">fingerprint</a>. You can email me at <a href="mailto:jonny@jonnybarnes.uk">jonny at my domain</a>, or simliarly XMPP me with the same address.</p>
 
         <p>Though of course all this activity should eventually “flow” through this website if it is to truely be my online identity.</p>
       </div>

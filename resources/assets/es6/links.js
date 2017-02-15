@@ -8,12 +8,15 @@ let notes = document.querySelectorAll('.e-content');
 for (let note of notes) {
     let ytid = note.textContent.match(youtubeRegex);
     if (ytid) {
+        let ytcontainer = document.createElement('div');
+        ytcontainer.classList.add('container');
         let ytiframe = document.createElement('iframe');
         ytiframe.classList.add('youtube');
         ytiframe.setAttribute('src', 'https://www.youtube.com/embed/' + ytid[1]);
         ytiframe.setAttribute('frameborder', 0);
         ytiframe.setAttribute('allowfullscreen', 'true');
-        note.appendChild(ytiframe);
+        ytcontainer.appendChild(ytiframe)
+        note.appendChild(ytcontainer);
     }
     let spotifyid = note.textContent.match(spotifyRegex);
     if (spotifyid) {

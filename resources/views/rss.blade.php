@@ -11,7 +11,12 @@
   @foreach($articles as $article)
   <item>
     <title>{{ strip_tags($article->title) }}</title>
-    <description><![CDATA[{{ $article->main }}@if($article->url)<p><a href="{{ config('app.url') }}{{ $article->link }}">Permalink</a></p>@endif]]></description>
+    <description>
+        <![CDATA[
+            {{ $article->main }}
+            @if($article->url)<p><a href="{{ config('app.url') }}{{ $article->link }}">Permalink</a></p>@endif
+        ]]>
+    </description>
     <link>@if($article->url != ''){{ $article->url }}@else{{ config('app.url') }}{{ $article->link }}@endif</link>
     <guid>{{ config('app.url') }}{{ $article->link }}</guid>
     <pubDate>{{ $article->pubdate }}</pubDate>
