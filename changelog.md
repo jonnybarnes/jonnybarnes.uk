@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 0.2.5 (2017-02-15)
+  - Small fix for homepage bio, removed confusing un-needed view that caused fix to be necessary
+
 ## Version 0.2.4 (2017-02-15)
   - Make embedded youtube iframe a dynamic size
   - Add Piwik tracking code
