@@ -93,10 +93,10 @@ Route::group(['domain' => config('url.longurl')], function () {
     Route::post('notes/new', 'MicropubClientController@postNewNote');
 
     //Notes pages using NotesController
-    Route::get('notes', 'NotesController@showNotes');
-    Route::get('note/{id}', 'NotesController@singleNoteRedirect');
-    Route::get('notes/{id}', 'NotesController@singleNote');
-    Route::get('notes/tagged/{tag}', 'NotesController@taggedNotes');
+    Route::get('notes', 'NotesController@index');
+    Route::get('notes/{id}', 'NotesController@show');
+    Route::get('note/{id}', 'NotesController@redirect');
+    Route::get('notes/tagged/{tag}', 'NotesController@tagged');
 
     //indieauth
     Route::any('beginauth', 'IndieAuthController@beginauth');
