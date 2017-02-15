@@ -20,7 +20,7 @@ class AdminController extends Controller
      */
     public function __construct()
     {
-        $this->username = env('ADMIN_USER');
+        $this->username = config('admin.user');
     }
 
     /**

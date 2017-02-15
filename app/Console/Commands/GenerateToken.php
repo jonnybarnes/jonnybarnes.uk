@@ -47,8 +47,8 @@ class GenerateToken extends Command
     public function handle(TokenService $tokenService)
     {
         $data = [
-            'me' => env('APP_URL'),
-            'client_id' => env('APP_URL') . '/notes/new',
+            'me' => config('app.url'),
+            'client_id' => config('app.url') . '/notes/new',
             'scope' => 'post',
         ];
         $token = $tokenService->getNewToken($data);

@@ -24,7 +24,7 @@ class TokenService
             ->set('scope', $data['scope'])
             ->set('date_issued', time())
             ->set('nonce', bin2hex(random_bytes(8)))
-            ->sign($signer, env('APP_KEY'))
+            ->sign($signer, config('app.key'))
             ->getToken();
 
         return $token;
@@ -46,7 +46,7 @@ class TokenService
         } catch (RuntimeException $e) {
             return;
         }
-        if ($token->verify($signer, env('APP_KEY'))) {
+        if ($token->verify($signer, config('app.key'))) {
             //signuture valid
             return $token;
         }

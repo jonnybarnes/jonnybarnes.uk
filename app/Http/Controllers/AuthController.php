@@ -15,9 +15,9 @@ class AuthController extends Controller
      */
     public function login(Request $request)
     {
-        if ($request->input('username') === env('ADMIN_USER')
+        if ($request->input('username') === config('admin.user')
             &&
-            $request->input('password') === env('ADMIN_PASS')
+            $request->input('password') === config('admin.pass')
         ) {
             session(['loggedin' => true]);
 
