@@ -26,7 +26,7 @@ New Note «
 @endif
   @include('templates.new-note-form', [
     'micropub' => true,
-    'action' => '/notes/new'
+    'action' => route('micropub-client-post')
   ])
 @stop
 
@@ -35,8 +35,6 @@ New Note «
     window.Promise || document.write('<script src="https://unpkg.com/promise-polyfill/promise.min.js"><\/script>');
     window.fetch || document.write('<script src="https://unpkg.com/whatwg-fetch/fetch.js"><\/script>');
 </script>
-<!--<script src="/assets/frontend/store2.min.js"></script>
-<script src="/assets/js/form-save.js"></script>-->
 <script defer src="/assets/js/newnote.js"></script>
 
 <link rel="stylesheet" href="/assets/frontend/alertify.css">

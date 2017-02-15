@@ -12,7 +12,7 @@
 */
 
 Route::group(['domain' => config('url.longurl')], function () {
-    Route::get('/', 'NotesController@showNotes');
+    Route::get('/', 'NotesController@index');
 
     //Static project page
     Route::get('projects', function () {
@@ -89,8 +89,7 @@ Route::group(['domain' => config('url.longurl')], function () {
 
     //micropub new notes page
     //this needs to be first so `notes/new` doesn't match `notes/{id}`
-    Route::get('notes/new', 'MicropubClientController@newNotePage');
-    Route::post('notes/new', 'MicropubClientController@postNewNote');
+
 
     //Notes pages using NotesController
     Route::get('notes', 'NotesController@index');
@@ -104,10 +103,11 @@ Route::group(['domain' => config('url.longurl')], function () {
     Route::post('api/token', 'IndieAuthController@tokenEndpoint');
     Route::get('logout', 'IndieAuthController@indieauthLogout');
 
-    //micropub endoints
-    Route::post('api/post', 'MicropubController@post');
+    // Micropub
+    Route::get('micropub/create', 'MicropubClientController@create')->name('micropub-client');
+    Route::post('micropub', 'MicropubClientController@store')->name('micropub-client-post');
     Route::get('api/post', 'MicropubController@getEndpoint');
-
+    Route::post('api/post', 'MicropubController@post');
     //micropub refresh syndication targets
     Route::get('refresh-syndication-targets', 'MicropubClientController@refreshSyndicationTargets');
 

@@ -36,15 +36,12 @@ class MicropubClientController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\View\Factory view
      */
-    public function newNotePage(Request $request)
+    public function create(Request $request)
     {
         $url = $request->session()->get('me');
         $syndication = $request->session()->get('syndication');
 
-        return view('micropubnewnotepage', [
-            'url' => $url,
-            'syndication' => $syndication,
-        ]);
+        return view('micropub.create', compact('url', 'syndication'));
     }
 
     /**
@@ -55,7 +52,7 @@ class MicropubClientController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return mixed
      */
-    public function postNewNote(Request $request)
+    public function store(Request $request)
     {
         $domain = $request->session()->get('me');
         $token = $request->session()->get('token');
@@ -65,7 +62,7 @@ class MicropubClientController extends Controller
             $this->indieClient
         );
         if (! $micropubEndpoint) {
-            return redirect('notes/new')->withErrors('Unable to determine micropub API endpoint', 'endpoint');
+            return redirect(route('micropub-client'))->withErrors('Unable to determine micropub API endpoint', 'endpoint');
         }
 
         $response = $this->postNoteRequest($request, $micropubEndpoint, $token);
@@ -79,7 +76,7 @@ class MicropubClientController extends Controller
             return redirect($location);
         }
 
-        return redirect('notes/new')->withErrors('Endpoint didn’t create the note.', 'endpoint');
+        return redirect(route('micropub-client'))->withErrors('Endpoint didn’t create the note.', 'endpoint');
     }
 
     /**
@@ -99,9 +96,8 @@ class MicropubClientController extends Controller
         $domain = $request->session()->get('me');
         $token = $request->session()->get('token');
         $micropubEndpoint = $this->indieAuthService->discoverMicropubEndpoint($domain, $this->indieClient);
-
         if (! $micropubEndpoint) {
-            return redirect('notes/new')->withErrors('Unable to determine micropub API endpoint', 'endpoint');
+            return redirect(route('micropub-client'))->withErrors('Unable to determine micropub API endpoint', 'endpoint');
         }
 
         try {
@@ -110,14 +106,14 @@ class MicropubClientController extends Controller
                 'query' => ['q' => 'syndicate-to'],
             ]);
         } catch (\GuzzleHttp\Exception\BadResponseException $e) {
-            return redirect('notes/new')->withErrors('Bad response when refreshing syndication targets', 'endpoint');
+            return redirect(route('micropub-client'))->withErrors('Bad response when refreshing syndication targets', 'endpoint');
         }
         $body = (string) $response->getBody();
         $syndication = $this->parseSyndicationTargets($body);
 
         $request->session()->put('syndication', $syndication);
 
-        return redirect('notes/new');
+        return redirect(route('micropub-client'));
     }
 
     /**
@@ -184,7 +180,7 @@ class MicropubClientController extends Controller
                 'headers' => $headers,
             ]);
         } catch (\GuzzleHttp\Exception\BadResponseException $e) {
-            return redirect('notes/new')
+            return redirect(route('micropub-client'))
                 ->withErrors('There was a bad response from the micropub endpoint.', 'endpoint');
         }
 
