@@ -12,7 +12,7 @@ class ContactsController extends Controller
      *
      * @return \Illuminate\View\Factory view
      */
-    public function showAll()
+    public function index()
     {
         $filesystem = new Filesystem();
         $contacts = Contact::all();
@@ -25,7 +25,7 @@ class ContactsController extends Controller
                 '/assets/profile-images/default-image';
         }
 
-        return view('contacts', compact('contacts'));
+        return view('contacts.index', compact('contacts'));
     }
 
     /**
@@ -33,7 +33,7 @@ class ContactsController extends Controller
      *
      * @return \Illuminate\View\Factory view
      */
-    public function showSingle($nick)
+    public function show($nick)
     {
         $filesystem = new Filesystem();
         $contact = Contact::where('nick', '=', $nick)->firstOrFail();
@@ -44,6 +44,6 @@ class ContactsController extends Controller
         :
             '/assets/profile-images/default-image';
 
-        return view('contact', ['contact' => $contact]);
+        return view('contacts.show', ['contact' => $contact]);
     }
 }

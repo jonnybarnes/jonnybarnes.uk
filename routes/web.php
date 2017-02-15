@@ -118,8 +118,8 @@ Route::group(['domain' => config('url.longurl')], function () {
     Route::post('webmention', 'WebMentionsController@receive');
 
     //Contacts
-    Route::get('contacts', 'ContactsController@showAll');
-    Route::get('contacts/{nick}', 'ContactsController@showSingle');
+    Route::get('contacts', 'ContactsController@index');
+    Route::get('contacts/{nick}', 'ContactsController@show');
 
     //Places
     Route::get('places', 'PlacesController@index');
