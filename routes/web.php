@@ -84,8 +84,8 @@ Route::group(['domain' => config('url.longurl')], function () {
 
     //Blog pages using ArticlesController
     Route::get('blog/s/{id}', 'ArticlesController@onlyIdInURL');
-    Route::get('blog/{year?}/{month?}', 'ArticlesController@showAllArticles');
-    Route::get('blog/{year}/{month}/{slug}', 'ArticlesController@singleArticle');
+    Route::get('blog/{year?}/{month?}', 'ArticlesController@index');
+    Route::get('blog/{year}/{month}/{slug}', 'ArticlesController@show');
 
     //micropub new notes page
     //this needs to be first so `notes/new` doesn't match `notes/{id}`
