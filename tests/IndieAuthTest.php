@@ -52,24 +52,24 @@ class IndieAuthTest extends BrowserKitTest
     }
 
     /**
-     * Test the `beginauth` method redirects to the client on error.
+     * Test the `start` method redirects to the client on error.
      *
      * @return void
      */
     public function testIndieAuthControllerBeginAuthRedirectsToClientOnFail()
     {
-        $response = $this->call('GET', $this->appurl . '/beginauth', ['me' => 'http://example.org']);
-        $this->assertSame($this->appurl . '/notes/new', $response->headers->get('Location'));
+        $response = $this->call('GET', $this->appurl . '/indieauth/start', ['me' => 'http://example.org']);
+        $this->assertSame($this->appurl . '/micropub/create', $response->headers->get('Location'));
     }
 
     /**
-     * Now we test the `beginauth` method as a whole.
+     * Now we test the `start` method as a whole.
      *
      * @return void
      */
     public function testIndieAuthControllerBeginAuthRedirectsToEndpoint()
     {
-        $response = $this->call('GET', $this->appurl . '/beginauth', ['me' => $this->appurl]);
+        $response = $this->call('GET', $this->appurl . '/indieauth/start', ['me' => $this->appurl]);
         $this->assertSame(
             'https://indieauth.com/auth?me=',
             substr($response->headers->get('Location'), 0, 30)

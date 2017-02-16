@@ -26,13 +26,13 @@ class MicropubClientTest extends BrowserKitTest
      */
     public function testClientPageUnauthorised()
     {
-        $this->visit($this->appurl . '/notes/new')
+        $this->visit($this->appurl . '/micropub/create')
              ->see('IndieAuth');
     }
 
     public function testClientPageRecentAuth()
     {
-        $this->visit($this->appurl . '/notes/new')
+        $this->visit($this->appurl . '/micropub/create')
           ->see($this->appurl);
     }
 
@@ -41,7 +41,7 @@ class MicropubClientTest extends BrowserKitTest
         //in this test, the syndication targets are blank
         $faker = \Faker\Factory::create();
         $note = 'Fake note from #PHPUnit: ' . $faker->text;
-        $this->visit($this->appurl . '/notes/new')
+        $this->visit($this->appurl . '/micropub/create')
           ->type($note, 'content')
           ->press('Submit');
         $this->seeInDatabase('notes', ['note' => $note]);
