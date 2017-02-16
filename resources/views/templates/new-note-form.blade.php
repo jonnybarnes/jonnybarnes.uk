@@ -22,7 +22,7 @@
   @if($syndication)
     <div>
       <label for="syndication" accesskey="s">Syndication: </label>
-      <ul class="syndication-targets-list" name="syndication">
+      <ul class="/micropub/syndication-targets-list" name="syndication">
         @foreach($syndication as $syn)
         <li><input type="checkbox"
                    name="mp-syndicate-to[]"

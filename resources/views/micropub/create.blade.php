@@ -13,7 +13,7 @@ New Note «
 <p class="error">{{ $errors->indieauth->first() }}</p>
 @endif
 @if($url === null)
-<form action="/beginauth" method="post" id="login">
+<form action="{{ route('indieauth-start') }}" method="post">
   <input type="hidden" name="_token" value="{{ csrf_token() }}">
   <fieldset>
     <legend>IndieAuth</legend>

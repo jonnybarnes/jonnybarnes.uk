@@ -30,8 +30,8 @@ class IndieAuthService
         $domain = $client->normalizeMeURL($domain);
         $state = bin2hex(openssl_random_pseudo_bytes(16));
         session(['state' => $state]);
-        $redirectURL = config('app.url') . '/indieauth';
-        $clientId = config('app.url') . '/notes/new';
+        $redirectURL = route('indieauth-callback');
+        $clientId = route('micropub-client');
         $scope = 'post';
         $authorizationURL = $client->buildAuthorizationURL(
             $authEndpoint,

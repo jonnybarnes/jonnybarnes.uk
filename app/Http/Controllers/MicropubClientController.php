@@ -193,7 +193,7 @@ class MicropubClientController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return mixed
      */
-    public function postNewPlace(Request $request)
+    public function newPlace(Request $request)
     {
         if ($request->session()->has('token') === false) {
             return response()->json([
@@ -270,15 +270,10 @@ class MicropubClientController extends Controller
      * Make a request to the micropub endpoint requesting any nearby places.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param  string $latitude
-     * @param  string $longitude
      * @return \Illuminate\Http\Response
      */
-    public function nearbyPlaces(
-        Request $request,
-        $latitude,
-        $longitude
-    ) {
+    public function nearbyPlaces(Request $request)
+    {
         if ($request->session()->has('token') === false) {
             return response()->json([
                 'error' => true,
@@ -298,7 +293,7 @@ class MicropubClientController extends Controller
         }
 
         try {
-            $query = 'geo:' . $latitude . ',' . $longitude;
+            $query = 'geo:' . $request->input('latitude') . ',' . $request->input('longitude');
             if ($request->input('u') !== null) {
                 $query .= ';u=' . $request->input('u');
             }
@@ -315,7 +310,7 @@ class MicropubClientController extends Controller
             ], 400);
         }
 
-        return (new Response($response->getBody(), 200))
+        return response($response->getBody(), 200)
                 ->header('Content-Type', 'application/json');
     }
 

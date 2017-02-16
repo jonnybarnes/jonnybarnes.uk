@@ -106,7 +106,7 @@ class MicropubController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function getEndpoint(Request $request)
+    public function get(Request $request)
     {
         $httpAuth = $request->header('Authorization');
         if (preg_match('/Bearer (.+)/', $httpAuth, $match)) {
@@ -162,16 +162,11 @@ class MicropubController extends Controller
                 ],
             ]);
         }
-        $content = 'No OAuth token sent with request.';
-        $content = <<<'EOD'
-{
-    "response": "error",
-    "error": "no_token",
-    "error_description": "No token provided with request"
-}
-EOD;
 
-        return (new Response($content, 400))
-                        ->header('Content-Type', 'application/json');
+        return response()->json([
+            'response' => 'error',
+            'error' => 'no_token',
+            'error_description'
+        ], 400);
     }
 }

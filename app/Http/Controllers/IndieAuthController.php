@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use IndieAuth\Client;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use App\Services\TokenService;
 use Illuminate\Cookie\CookieJar;
 use App\Services\IndieAuthService;
@@ -52,7 +51,7 @@ class IndieAuthController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Routing\RedirectResponse redirect
      */
-    public function beginauth(Request $request)
+    public function start(Request $request)
     {
         $authorizationEndpoint = $this->indieAuthService->getAuthorizationEndpoint(
             $request->input('me'),
@@ -69,7 +68,7 @@ class IndieAuthController extends Controller
             }
         }
 
-        return redirect('/notes/new')->withErrors('Unable to determine authorisation endpoint', 'indieauth');
+        return redirect(route('micropub-client'))->withErrors('Unable to determine authorisation endpoint', 'indieauth');
     }
 
     /**
@@ -79,23 +78,24 @@ class IndieAuthController extends Controller
      * @param  \Illuminate\Http\Rrequest $request
      * @return \Illuminate\Routing\RedirectResponse redirect
      */
-    public function indieauth(Request $request)
+    public function callback(Request $request)
     {
         if ($request->session()->get('state') != $request->input('state')) {
-            return redirect('/notes/new')->withErrors(
+            return redirect(route('micropub-client'))->withErrors(
                 'Invalid <code>state</code> value returned from indieauth server',
                 'indieauth'
             );
         }
         $tokenEndpoint = $this->indieAuthService->getTokenEndpoint($request->input('me'), $this->client);
-        $redirectURL = config('app.url') . '/indieauth';
-        $clientId = config('app.url') . '/notes/new';
+        if ($tokenEndpoint === false) {
+            return redirect(route('micropub-client'))->withErrors('Unable to determine token endpoint', 'indieauth');
+        }
         $data = [
             'endpoint' => $tokenEndpoint,
             'code' => $request->input('code'),
             'me' => $request->input('me'),
-            'redirect_url' => $redirectURL,
-            'client_id' => $clientId,
+            'redirect_url' => route('indieauth-callback'),
+            'client_id' => route('micropub-client'),
             'state' => $request->input('state'),
         ];
         $token = $this->indieAuthService->getAccessToken($data, $this->client);
@@ -104,10 +104,22 @@ class IndieAuthController extends Controller
             $request->session()->put('me', $token['me']);
             $request->session()->put('token', $token['access_token']);
 
-            return redirect('/notes/new');
+            return redirect(route('micropub-client'));
         }
 
-        return redirect('/notes/new')->withErrors('Unable to get a token from the endpoint', 'indieauth');
+        return redirect(route('micropub-client'))->withErrors('Unable to get a token from the endpoint', 'indieauth');
+    }
+
+    /**
+     * Log out the user, flush an session data, and overwrite any cookie data.
+     *
+     * @return \Illuminate\Routing\RedirectResponse redirect
+     */
+    public function logout(Request $request)
+    {
+        $request->session()->flush();
+
+        return redirect(route('micropub-client'))->cookie('me', 'loggedout', 1);
     }
 
     /**
@@ -140,25 +152,11 @@ class IndieAuthController extends Controller
                 'access_token' => $token,
             ]);
 
-            return (new Response($content, 200))
-                           ->header('Content-Type', 'application/x-www-form-urlencoded');
+            return response($content)
+                    ->header('Content-Type', 'application/x-www-form-urlencoded');
         }
         $content = 'There was an error verifying the authorisation code.';
 
-        return new Response($content, 400);
-    }
-
-    /**
-     * Log out the user, flush an session data, and overwrite any cookie data.
-     *
-     * @param  \Illuminate\Cookie\CookieJar $cookie
-     * @return \Illuminate\Routing\RedirectResponse redirect
-     */
-    public function indieauthLogout(Request $request, CookieJar $cookie)
-    {
-        $request->session()->flush();
-        $cookie->queue('me', 'loggedout', 5);
-
-        return redirect('/notes/new');
+        return response($content, 400);
     }
 }

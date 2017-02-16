@@ -46,7 +46,7 @@ const makeOptionsForForm = (map, position, places = null) => {
 
 //position is output of navigator.geolocation call
 export default function addMapWithPlaces(div, position) {
-    fetch('/places/near/' + position.coords.latitude + '/' + position.coords.longitude + '?u=' + position.coords.accuracy, {
+    fetch('/micropub/places?latitude=' + position.coords.latitude + '&longitude=' + position.coords.longitude + '&u=' + position.coords.accuracy, {
         credentials: 'same-origin',
         method: 'get'
     }).then(function (response) {

@@ -98,18 +98,21 @@ Route::group(['domain' => config('url.longurl')], function () {
     Route::get('notes/tagged/{tag}', 'NotesController@tagged');
 
     //indieauth
-    Route::any('beginauth', 'IndieAuthController@beginauth');
-    Route::get('indieauth', 'IndieAuthController@indieauth');
-    Route::post('api/token', 'IndieAuthController@tokenEndpoint');
-    Route::get('logout', 'IndieAuthController@indieauthLogout');
+    Route::any('indieauth/start', 'IndieAuthController@start')->name('indieauth-start');
+    Route::get('indieauth/callback', 'IndieAuthController@callback')->name('indieauth-callback');
+    Route::get('logout', 'IndieAuthController@logout')->name('indieauth-logout');
+    Route::post('api/token', 'IndieAuthController@tokenEndpoint'); //hmmm?
 
-    // Micropub
+    // Micropub Client
     Route::get('micropub/create', 'MicropubClientController@create')->name('micropub-client');
     Route::post('micropub', 'MicropubClientController@store')->name('micropub-client-post');
-    Route::get('api/post', 'MicropubController@getEndpoint');
+    Route::get('micropub/refresh-syndication-targets', 'MicropubClientController@refreshSyndicationTargets');
+    Route::get('micropub/places', 'MicropubClientController@nearbyPlaces');
+    Route::post('micropub/places', 'MicropubClientController@newPlace');
+
+    // Micropub Endpoint
+    Route::get('api/post', 'MicropubController@get');
     Route::post('api/post', 'MicropubController@post');
-    //micropub refresh syndication targets
-    Route::get('refresh-syndication-targets', 'MicropubClientController@refreshSyndicationTargets');
 
     //webmention
     Route::get('webmention', function () {
@@ -124,9 +127,6 @@ Route::group(['domain' => config('url.longurl')], function () {
     //Places
     Route::get('places', 'PlacesController@index');
     Route::get('places/{slug}', 'PlacesController@show');
-    //Places micropub
-    Route::get('places/near/{lat}/{lng}', 'MicropubClientController@nearbyPlaces');
-    Route::post('places/new', 'MicropubClientController@postNewPlace');
 
     Route::get('feed', 'ArticlesController@makeRSS');
 
