@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Place;
-use Illuminate\Http\Request;
 
 class PlacesController extends Controller
 {
