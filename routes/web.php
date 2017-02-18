@@ -31,26 +31,26 @@ Route::group(['domain' => config('url.longurl')], function () {
     Route::post('login', 'AuthController@login');
 
     //Admin pages grouped for filter
-    Route::group(['middleware' => 'myauth'], function () {
+    Route::group(['middleware' => 'myauth', 'namespace' => 'Admin'], function () {
         Route::get('admin', 'AdminController@showWelcome');
 
         //Articles
-        Route::get('admin/blog/new', 'ArticlesAdminController@newArticle');
-        Route::get('admin/blog/edit', 'ArticlesAdminController@listArticles');
-        Route::get('admin/blog/edit/{id}', 'ArticlesAdminController@editArticle');
-        Route::get('admin/blog/delete/{id}', 'ArticlesAdminController@deleteArticle');
-        Route::post('admin/blog/new', 'ArticlesAdminController@postNewArticle');
-        Route::post('admin/blog/edit/{id}', 'ArticlesAdminController@postEditArticle');
-        Route::post('admin/blog/delete/{id}', 'ArticlesAdminController@postDeleteArticle');
+        Route::get('admin/blog/new', 'ArticlesAdminController@create');
+        Route::get('admin/blog/edit', 'ArticlesAdminController@index');
+        Route::get('admin/blog/edit/{id}', 'ArticlesAdminController@edit');
+        Route::get('admin/blog/delete/{id}', 'ArticlesAdminController@delete');
+        Route::post('admin/blog/new', 'ArticlesAdminController@store');
+        Route::post('admin/blog/edit/{id}', 'ArticlesAdminController@update');
+        Route::post('admin/blog/delete/{id}', 'ArticlesAdminController@detroy');
 
         //Notes
-        Route::get('admin/note/new', 'NotesAdminController@newNotePage');
-        Route::get('admin/note/edit', 'NotesAdminController@listNotesPage');
-        Route::get('admin/note/edit/{id}', 'NotesAdminController@editNotePage');
-        Route::get('admin/note/delete/{id}', 'NotesAdminController@deleteNotePage');
-        Route::post('admin/note/new', 'NotesAdminController@createNote');
-        Route::post('admin/note/edit/{id}', 'NotesAdminController@editNote');
-        Route::post('admin/note/delete/{id}', 'NotesAdminController@deleteNote');
+        Route::get('admin/note/edit', 'NotesAdminController@index');
+        Route::get('admin/note/new', 'NotesAdminController@create');
+        Route::get('admin/note/edit/{id}', 'NotesAdminController@edit');
+        Route::get('admin/note/delete/{id}', 'NotesAdminController@delete');
+        Route::post('admin/note/new', 'NotesAdminController@store');
+        Route::post('admin/note/edit/{id}', 'NotesAdminController@update');
+        Route::post('admin/note/delete/{id}', 'NotesAdminController@destroy');
 
         //Tokens
         Route::get('admin/tokens', 'TokensController@showTokens');
@@ -58,28 +58,28 @@ Route::group(['domain' => config('url.longurl')], function () {
         Route::post('admin/tokens/delete/{id}', 'TokensController@postDeleteToken');
 
         //Micropub Clients
-        Route::get('admin/clients', 'ClientsAdminController@listClients');
-        Route::get('admin/clients/new', 'ClientsAdminController@newClient');
-        Route::get('admin/clients/edit/{id}', 'ClientsAdminController@editClient');
-        Route::post('admin/clients/new', 'ClientsAdminController@postNewClient');
-        Route::post('admin/clients/edit/{id}', 'ClientsAdminController@postEditClient');
+        Route::get('admin/clients', 'ClientsAdminController@index');
+        Route::get('admin/clients/new', 'ClientsAdminController@create');
+        Route::get('admin/clients/edit/{id}', 'ClientsAdminController@edit');
+        Route::post('admin/clients/new', 'ClientsAdminController@store');
+        Route::post('admin/clients/edit/{id}', 'ClientsAdminController@update');
 
         //Contacts
-        Route::get('admin/contacts/new', 'ContactsAdminController@newContact');
-        Route::get('admin/contacts/edit', 'ContactsAdminController@listContacts');
-        Route::get('admin/contacts/edit/{id}', 'ContactsAdminController@editContact');
+        Route::get('admin/contacts/edit', 'ContactsAdminController@index');
+        Route::get('admin/contacts/new', 'ContactsAdminController@create');
+        Route::get('admin/contacts/edit/{id}', 'ContactsAdminController@edit');
+        Route::get('admin/contacts/delete/{id}', 'ContactsAdminController@delete');
+        Route::post('admin/contacts/new', 'ContactsAdminController@store');
+        Route::post('admin/contacts/edit/{id}', 'ContactsAdminController@update');
+        Route::post('admin/contacts/delete/{id}', 'ContactsAdminController@destroy');
         Route::get('admin/contacts/edit/{id}/getavatar', 'ContactsAdminController@getAvatar');
-        Route::get('admin/contacts/delete/{id}', 'ContactsAdminController@deleteContact');
-        Route::post('admin/contacts/new', 'ContactsAdminController@postNewContact');
-        Route::post('admin/contacts/edit/{id}', 'ContactsAdminController@postEditContact');
-        Route::post('admin/contacts/delete/{id}', 'ContactsAdminController@postDeleteContact');
 
         //Places
-        Route::get('admin/places/new', 'PlacesAdminController@newPlacePage');
-        Route::get('admin/places/edit', 'PlacesAdminController@listPlacesPage');
-        Route::get('admin/places/edit/{id}', 'PlacesAdminController@editPlacePage');
-        Route::post('admin/places/new', 'PlacesAdminController@createPlace');
-        Route::post('admin/places/edit/{id}', 'PlacesAdminController@editPlace');
+        Route::get('admin/places/edit', 'PlacesAdminController@index');
+        Route::get('admin/places/new', 'PlacesAdminController@create');
+        Route::get('admin/places/edit/{id}', 'PlacesAdminController@edit');
+        Route::post('admin/places/new', 'PlacesAdminController@store');
+        Route::post('admin/places/edit/{id}', 'PlacesAdminController@update');
     });
 
     //Blog pages using ArticlesController

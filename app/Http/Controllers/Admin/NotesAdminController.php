@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use App\Note;
 use Validator;
 use Illuminate\Http\Request;
 use App\Jobs\SendWebMentions;
 use App\Services\NoteService;
+use App\Http\Controllers\Controller;
 
 class NotesAdminController extends Controller
 {
@@ -18,21 +19,11 @@ class NotesAdminController extends Controller
     }
 
     /**
-     * Show the form to make a new note.
-     *
-     * @return \Illuminate\View\Factory view
-     */
-    public function newNotePage()
-    {
-        return view('admin.newnote');
-    }
-
-    /**
      * List the notes that can be edited.
      *
      * @return \Illuminate\View\Factory view
      */
-    public function listNotesPage()
+    public function index()
     {
         $notes = Note::select('id', 'note')->orderBy('id', 'desc')->get();
         foreach ($notes as $note) {
@@ -43,14 +34,13 @@ class NotesAdminController extends Controller
     }
 
     /**
-     * The delete note page.
+     * Show the form to make a new note.
      *
-     * @param  int id
-     * @return view
+     * @return \Illuminate\View\Factory view
      */
-    public function deleteNotePage($id)
+    public function create()
     {
-        return view('admin.deletenote', ['id' => $id]);
+        return view('admin.newnote');
     }
 
     /**
@@ -59,7 +49,7 @@ class NotesAdminController extends Controller
      * @param  string The note id
      * @return \Illuminate\View\Factory view
      */
-    public function editNotePage($noteId)
+    public function edit($noteId)
     {
         $note = Note::find($noteId);
         $note->originalNote = $note->getOriginal('note');
@@ -68,12 +58,23 @@ class NotesAdminController extends Controller
     }
 
     /**
+     * The delete note page.
+     *
+     * @param  int id
+     * @return view
+     */
+    public function delete($noteId)
+    {
+        return view('admin.deletenote', ['id' => $id]);
+    }
+
+    /**
      * Process a request to make a new note.
      *
      * @param Illuminate\Http\Request $request
      * @todo  Sort this mess out
      */
-    public function createNote(Request $request)
+    public function store(Request $request)
     {
         $validator = Validator::make(
             $request->all(),
@@ -101,7 +102,7 @@ class NotesAdminController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\View\Factory view
      */
-    public function editNote($noteId, Request $request)
+    public function update($noteId, Request $request)
     {
         //update note data
         $note = Note::findOrFail($noteId);
@@ -122,7 +123,7 @@ class NotesAdminController extends Controller
      * @param  int id
      * @return view
      */
-    public function deleteNote($id)
+    public function destroy($id)
     {
         $note = Note::findOrFail($id);
         $note->delete();

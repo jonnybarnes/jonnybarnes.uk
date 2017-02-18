@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use App\MicropubClient;
+use App\Http\Controllers\Controller;
 
 class ClientsAdminController extends Controller
 {
@@ -11,7 +12,7 @@ class ClientsAdminController extends Controller
      *
      * @return \Illuminate\View\Factory view
      */
-    public function listClients()
+    public function index()
     {
         $clients = MicropubClient::all();
 
@@ -23,25 +24,9 @@ class ClientsAdminController extends Controller
      *
      * @return \Illuminate\View\Factory view
      */
-    public function newClient()
+    public function create()
     {
         return view('admin.newclient');
-    }
-
-    /**
-     * Process the request to adda new client name.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\View\Factory view
-     */
-    public function postNewClient(Request $request)
-    {
-        MicropubClient::create([
-            'client_url' => $request->input('client_url'),
-            'client_name' => $request->input('client_name'),
-        ]);
-
-        return view('admin.newclientsuccess');
     }
 
     /**
@@ -50,7 +35,7 @@ class ClientsAdminController extends Controller
      * @param  string The client id
      * @return \Illuminate\View\Factory view
      */
-    public function editClient($clientId)
+    public function edit($clientId)
     {
         $client = MicropubClient::findOrFail($clientId);
 
@@ -62,13 +47,29 @@ class ClientsAdminController extends Controller
     }
 
     /**
+     * Process the request to adda new client name.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\View\Factory view
+     */
+    public function store(Request $request)
+    {
+        MicropubClient::create([
+            'client_url' => $request->input('client_url'),
+            'client_name' => $request->input('client_name'),
+        ]);
+
+        return view('admin.newclientsuccess');
+    }
+
+    /**
      * Process the request to edit a client name.
      *
      * @param  string  The client id
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\View\Factory view
      */
-    public function postEditClient($clientId, Request $request)
+    public function update($clientId, Request $request)
     {
         $client = MicropubClient::findOrFail($clientId);
         if ($request->input('edit')) {
