@@ -10,7 +10,7 @@ return [
     | The username of the admin account.
     */
 
-    'name' => env('ADMIN_NAME'),
+    'user' => env('ADMIN_USER'),
 
     /*
     |--------------------------------------------------------------------------
