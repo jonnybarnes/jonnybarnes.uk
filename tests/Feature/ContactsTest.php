@@ -10,7 +10,7 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 class ContactsTest extends TestCase
 {
     /**
-     * Check the `/contatcs` page gives a good response.
+     * Check the `/contacts` page gives a good response.
      *
      * @return void
      */
