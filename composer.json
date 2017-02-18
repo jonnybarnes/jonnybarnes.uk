@@ -29,14 +29,12 @@
         "laravel/tinker": "^1.0"
     },
     "require-dev": {
-        "fzaninotto/faker": "~1.4",
-        "mockery/mockery": "0.9.*",
-        "phpunit/phpunit": "~5.7",
-        "symfony/css-selector": "3.1.*",
-        "symfony/dom-crawler": "3.1.*",
         "barryvdh/laravel-debugbar": "~2.0",
+        "fzaninotto/faker": "~1.4",
         "jakub-onderka/php-parallel-lint": "^0.9.2",
-        "laravel/browser-kit-testing": "^1.0"
+        "laravel/dusk": "^1.0",
+        "mockery/mockery": "0.9.*",
+        "phpunit/phpunit": "~5.7"
     },
     "autoload": {
         "classmap": [
@@ -47,10 +45,9 @@
         }
     },
     "autoload-dev": {
-        "classmap": [
-            "tests/TestCase.php",
-            "tests/BrowserKitTest.php"
-        ]
+        "psr-4": {
+            "Tests\\": "tests"
+        }
     },
     "scripts": {
         "post-root-package-install": [
