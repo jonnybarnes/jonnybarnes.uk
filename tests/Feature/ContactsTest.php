@@ -38,7 +38,7 @@ class ContactsTest extends TestCase
      */
     public function test_contact_page_with_specific_pic()
     {
-        $response = $this->get('/contacts/tantek');
+        $response = $this->get('/contacts/aaron');
         $response->assertViewHas('image', '/assets/profile-images/aaronparecki.com/image');
     }
 }
