@@ -46,4 +46,4 @@ script:
   - phpdbg -qrr vendor/bin/phpunit --coverage-text
   - php artisan dusk
   - php artisan security:check
-  - ls storage/logs
+  - ls -l storage/logs
