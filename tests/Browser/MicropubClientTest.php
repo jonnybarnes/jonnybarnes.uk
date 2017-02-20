@@ -28,6 +28,7 @@ class MicropubClientTest extends DuskTestCase
             $browser->visit('/micropub/create')
                     ->type('content', $note)
                     ->press('submit');
+            sleep(2);
             $this->assertDatabaseHas('notes', ['note' => $note]);
         });
         //reset database
