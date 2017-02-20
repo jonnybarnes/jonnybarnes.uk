@@ -12,11 +12,11 @@ class MicropubClientTest extends DuskTestCase
      *
      * @return void
      */
-    public function test_client_page_see_me_url()
+    public function test_client_page_see_authenticated()
     {
         $this->browse(function ($browser) {
             $browser->visit('/micropub/create')
-                    ->assertSee(config('app.url'));
+                    ->assertSee('You are authenticated');
         });
     }
 
