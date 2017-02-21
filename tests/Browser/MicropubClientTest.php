@@ -26,7 +26,7 @@ class MicropubClientTest extends DuskTestCase
         $note = $faker->text;
         $this->browse(function ($browser) use ($note) {
             $browser->visit('/micropub/create')
-                    ->type('content', $note)
+                    ->type('textarea[name="content"]', $note)
                     ->press('submit');
             sleep(2);
             $this->assertDatabaseHas('notes', ['note' => $note]);
