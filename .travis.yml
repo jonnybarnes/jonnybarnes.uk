@@ -38,7 +38,7 @@ before_script:
   - php artisan migrate
   - php artisan db:seed
   - php artisan token:generate
-  - phantomjs --webdriver=127.0.0.1:9515 &
+  - phantomjs --webdriver=127.0.0.1:9515 --webdriver-loglevel=DEBUG &
   - php artisan serve &
   - sleep 5 # Give artisan some time to start serving
 
