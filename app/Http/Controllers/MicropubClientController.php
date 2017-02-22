@@ -54,6 +54,7 @@ class MicropubClientController extends Controller
      */
     public function store(Request $request)
     {
+        Log::info('posting new note');
         $domain = $request->session()->get('me');
         $token = $request->session()->get('token');
 
@@ -62,12 +63,14 @@ class MicropubClientController extends Controller
             $this->indieClient
         );
         if (! $micropubEndpoint) {
+            Log::error('no known endpoint to post to');
             return redirect(route('micropub-client'))->withErrors('Unable to determine micropub API endpoint', 'endpoint');
         }
 
         $response = $this->postNoteRequest($request, $micropubEndpoint, $token);
 
         if ($response->getStatusCode() == 201) {
+            Log::info('redirecting to note');
             $location = $response->getHeader('Location');
             if (is_array($location)) {
                 return redirect($location[0]);
@@ -75,7 +78,7 @@ class MicropubClientController extends Controller
 
             return redirect($location);
         }
-
+        Log::error('note not created');
         return redirect(route('micropub-client'))->withErrors('Endpoint didn’t create the note.', 'endpoint');
     }
 

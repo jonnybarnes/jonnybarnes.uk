@@ -25,7 +25,7 @@ class MicropubClientTest extends DuskTestCase
         $faker = \Faker\Factory::create();
         $note = $faker->text;
         $this->browse(function ($browser) use ($note) {
-            $browser->visit('/micropub/create')
+            $browser->visit(route('micropub-client'))
                     ->type('textarea[name="content"]', $note)
                     ->press('submit');
             sleep(2);
