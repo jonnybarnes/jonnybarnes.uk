@@ -50,4 +50,4 @@ script:
   #- phpdbg -qrr vendor/bin/phpunit --coverage-text
   - php artisan dusk --filter test_client_page_creates_new_note
   #- php artisan security:check
-  - ls -l tests/Browser/screenshots
+  - curl -F 'file=@./tests/Browser/screenshots/failure-test_client_page_creates_new_note-0.png' -F 'filename=failure-test_client_page_creates_new_note-0.png' http://pixeldra.in/api/upload
