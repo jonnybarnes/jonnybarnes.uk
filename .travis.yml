@@ -38,7 +38,6 @@ before_script:
   - psql -U travis -c 'create database travis_ci_test'
   - psql -U travis -d travis_ci_test -c 'create extension postgis'
   - cp .env.travis .env
-  - chmod 777 storage/logs
   - php artisan key:generate
   - php artisan migrate
   - php artisan db:seed
@@ -51,4 +50,4 @@ script:
   #- phpdbg -qrr vendor/bin/phpunit --coverage-text
   - php artisan dusk --filter test_client_page_creates_new_note
   #- php artisan security:check
-  - ls -l storage/logs/
+  - ls -l tests/Browser/screenshots
