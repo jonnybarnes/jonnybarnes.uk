@@ -13,6 +13,7 @@ addons:
       - nginx
       - realpath
   artifacts:
+    s3_region: "eu-west-2"
     paths:
       - $(ls tests/Browser/screenshots/*.png | tr "\n" ":")
 
