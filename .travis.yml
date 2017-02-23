@@ -58,3 +58,4 @@ script:
   - phpdbg -qrr vendor/bin/phpunit --coverage-text
   - php artisan dusk
   - php artisan security:check
+  - travis/upload-failure-screenshots.sh
