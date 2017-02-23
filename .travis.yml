@@ -14,7 +14,7 @@ addons:
       - realpath
   artifacts:
     paths:
-      - $(ls tests/Browser/screenshot/*.png | tr "\n" ":")
+      - $(ls tests/Browser/screenshots/*.png | tr "\n" ":")
 
 services:
   - postgresql
