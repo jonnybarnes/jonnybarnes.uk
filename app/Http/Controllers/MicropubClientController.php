@@ -87,8 +87,6 @@ class MicropubClientController extends Controller
      *       and syndicate-to
      *
      * @param  \Illuminate\Http\Request $request
-     * @param  \IndieAuth\Client $indieClient
-     * @param  \GuzzleHttp\Client $guzzleClient
      * @return \Illuminate\Routing\Redirector redirect
      */
     public function refreshSyndicationTargets(Request $request)
