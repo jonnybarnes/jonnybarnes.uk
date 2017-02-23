@@ -24,8 +24,10 @@ class MicropubClientTest extends DuskTestCase
     {
         $this->browse(function ($browser) {
             $browser->visit(route('micropub-client'))
+                    ->assertDontSee('jonnybarnes on Twitter')
                     ->clickLink('Refresh Syndication Targets')
-                    ->assertSee('jonnybarnes');
+                    ->pause(5000)
+                    ->assertSee('jonnybarnes on Twitter');
         });
     }
 }
