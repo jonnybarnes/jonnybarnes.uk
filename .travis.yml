@@ -9,6 +9,8 @@ cache:
 addons:
   postgresql: "9.6"
   apt:
+    sources:
+      - sourceline: 'deb http://ppa.launchpad.net/nginx/development/ubuntu trusty main'
     packages:
       - nginx
       - realpath
