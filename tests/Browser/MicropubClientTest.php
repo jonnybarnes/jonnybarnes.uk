@@ -20,19 +20,12 @@ class MicropubClientTest extends DuskTestCase
         });
     }
 
-    public function test_client_page_creates_new_note()
+    public function test_client_page_updates_syndication()
     {
-        $faker = \Faker\Factory::create();
-        $note = $faker->text;
         $this->browse(function ($browser) use ($note) {
             $browser->visit(route('micropub-client'))
-                    ->type('textarea[name="content"]', $note)
-                    ->press('submit');
-            sleep(2);
-            $this->assertDatabaseHas('notes', ['note' => $note]);
+                    ->clickLink('Refresh Syndication Targets')
+                    ->assertSee('jonnybarnes');
         });
-        //reset database
-        $newNote = \App\Note::where('note', $note)->first();
-        $newNote->forceDelete();
     }
 }

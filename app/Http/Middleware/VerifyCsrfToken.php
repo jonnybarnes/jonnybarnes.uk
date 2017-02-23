@@ -16,6 +16,5 @@ class VerifyCsrfToken extends BaseVerifier
         'api/post',
         'webmention',
         'places/new',
-        'micropub'
     ];
 }
