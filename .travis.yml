@@ -58,10 +58,9 @@ before_script:
   - php artisan db:seed
   - php artisan token:generate
   - phantomjs --webdriver=127.0.0.1:9515 --webdriver-loglevel=ERROR &
-  #- php artisan serve &
   - sleep 5 # Give artisan some time to start serving
 
 script:
   - phpdbg -qrr vendor/bin/phpunit --coverage-text
-  - php artisan dusk
+  - php artisan dusk --filter syndication
   - php artisan security:check
