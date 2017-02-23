@@ -7,7 +7,7 @@ DIR=$(realpath $(dirname "$0"))
 USER=$(whoami)
 PHP_VERSION=$(phpenv version-name)
 ROOT=$(realpath "$DIR/..")
-PORT=8000
+PORT=9000
 SERVER="/tmp/php.sock"
 
 function tpl {
