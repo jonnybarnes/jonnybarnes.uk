@@ -22,7 +22,7 @@ class MicropubClientTest extends DuskTestCase
 
     public function test_client_page_updates_syndication()
     {
-        $this->browse(function ($browser) use ($note) {
+        $this->browse(function ($browser) {
             $browser->visit(route('micropub-client'))
                     ->clickLink('Refresh Syndication Targets')
                     ->assertSee('jonnybarnes');
