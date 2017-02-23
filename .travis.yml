@@ -12,6 +12,9 @@ addons:
     packages:
       - nginx
       - realpath
+  artifacts:
+    paths:
+      - $(ls tests/Browser/screenshot/*.png | tr "\n" ":")
 
 services:
   - postgresql
@@ -58,4 +61,3 @@ script:
   - phpdbg -qrr vendor/bin/phpunit --coverage-text
   - php artisan dusk
   - php artisan security:check
-  - travis/upload-failure-screenshots.sh
