@@ -42,12 +42,11 @@ before_script:
   - php artisan migrate
   - php artisan db:seed
   - php artisan token:generate
-  - phantomjs --webdriver=127.0.0.1:9515 --webdriver-loglevel=DEBUG &
+  - phantomjs --webdriver=127.0.0.1:9515 --webdriver-loglevel=ERROR &
   - php artisan serve &
   - sleep 5 # Give artisan some time to start serving
 
 script:
-  #- phpdbg -qrr vendor/bin/phpunit --coverage-text
-  - php artisan dusk --filter test_client_page_updates_syndication
-  #- php artisan security:check
-  #- curl -v -F 'upload=@./tests/Browser/screenshots/failure-test_client_page_creates_new_note-0.png' http://uploads.im/api
+  - phpdbg -qrr vendor/bin/phpunit --coverage-text
+  - php artisan dusk
+  - php artisan security:check
