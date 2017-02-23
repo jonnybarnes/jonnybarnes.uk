@@ -36,7 +36,7 @@
     </div>
   @endif
     <div>
-      <a href="/refresh-syndication-targets">Refresh Syndication Targets</a>
+      <a href="/micropub/refresh-syndication-targets">Refresh Syndication Targets</a>
     </div>
 @endif
     <div>
