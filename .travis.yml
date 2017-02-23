@@ -14,7 +14,7 @@ addons:
       - realpath
   artifacts:
     debug: true
-    s3_region: "eu-west-2"
+    s3_region: "eu-west-1"
     paths:
       - $(ls tests/Browser/screenshots/*.png | tr "\n" ":")
 
