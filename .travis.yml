@@ -3,8 +3,15 @@ language: php
 sudo: false
 dist: trusty
 
+cache:
+  - apt
+
 addons:
-  postgresql: "9.5"
+  postgresql: "9.6"
+  apt:
+    packages:
+      - nginx
+      - realpath
 
 services:
   - postgresql
@@ -33,6 +40,7 @@ install:
   - if [[ $setup = 'basic' ]];  then travis_retry composer install --no-interaction --prefer-dist; fi
   - if [[ $setup = 'stable' ]]; then travis_retry composer update --no-interaction --prefer-dist --prefer-stable; fi
   - if [[ $setup = 'lowest' ]]; then travis_retry composer update --no-interaction --prefer-dist --prefer-lowest --prefer-stable; fi
+  - travis/install-nginx.sh
 
 before_script:
   - psql -U travis -c 'create database travis_ci_test'
@@ -43,7 +51,7 @@ before_script:
   - php artisan db:seed
   - php artisan token:generate
   - phantomjs --webdriver=127.0.0.1:9515 --webdriver-loglevel=ERROR &
-  - php artisan serve &
+  #- php artisan serve &
   - sleep 5 # Give artisan some time to start serving
 
 script:
