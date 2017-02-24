@@ -322,7 +322,9 @@ class MicropubClientController extends Controller
     private function parseSyndicationTargets($syndicationTargets = null)
     {
         if ($syndicationTargets === null) {
-            return;
+            return [
+                ['target' => 'http://example.org', 'name' => 'Joe Bloggs on Example']
+            ];
         }
         $syndicateTo = [];
         $data = json_decode($syndicationTargets, true);
