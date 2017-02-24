@@ -95,6 +95,7 @@ class MicropubClientController extends Controller
         $token = $request->session()->get('token');
         $micropubEndpoint = $this->indieAuthService->discoverMicropubEndpoint($domain, $this->indieClient);
         if (! $micropubEndpoint) {
+            die('No known endpoint');
             return redirect(route('micropub-client'))->withErrors('Unable to determine micropub API endpoint', 'endpoint');
         }
 
@@ -104,6 +105,7 @@ class MicropubClientController extends Controller
                 'query' => ['q' => 'syndicate-to'],
             ]);
         } catch (\GuzzleHttp\Exception\BadResponseException $e) {
+            dd($e);
             return redirect(route('micropub-client'))->withErrors('Bad response when refreshing syndication targets', 'endpoint');
         }
         $body = (string) $response->getBody();
