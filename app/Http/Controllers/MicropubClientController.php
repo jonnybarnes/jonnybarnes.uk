@@ -335,6 +335,8 @@ class MicropubClientController extends Controller
                     'name' => $syn['name'],
                 ];
             }
+        } else {
+            $syndicateTo[] = ['target' => 'http://example.org', 'name' => 'Joe Bloggs on Example'];
         }
         if (count($syndicateTo) > 0) {
             return $syndicateTo;
