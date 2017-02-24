@@ -108,6 +108,7 @@ class MicropubClientController extends Controller
         }
         $body = (string) $response->getBody();
         $syndication = $this->parseSyndicationTargets($body);
+        print_r($syndication); die();
 
         $request->session()->put('syndication', $syndication);
 
