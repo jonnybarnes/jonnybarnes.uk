@@ -3,7 +3,8 @@
 .PHONY: sass frontend js compress lint-sass lint-js
 jsfiles := $(wildcard resources/assets/js/*.js)
 sassfiles := $(wildcard resources/assets/sass/*.scss)
-yarnfiles:= node_modules/mapbox-gl/dist/mapbox-gl.css
+yarnfiles:= node_modules/mapbox-gl/dist/mapbox-gl.css \
+node_modules/alertify.js/dist/css/alertify.css
 assets := public/assets/css/app.css \
 public/assets/prism/prism.css public/assets/prism/prism.js \
 $(wildcard public/assets/js/*.js) \
