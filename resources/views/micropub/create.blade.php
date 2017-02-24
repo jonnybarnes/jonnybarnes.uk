@@ -5,13 +5,10 @@ New Note «
 @stop
 
 @section('content')
+@if (session('error'))
+<p class="error">{{ session('error') }}</p>
+@endif
 <p>This is my UI for posting new notes, hopefully you’ll soon be able to use this if your site supports the micropub API.</p>
-@if($errors->endpoint->first() != '')
-<p class="error">{{ $errors->endpoint->first() }}</p>
-@endif
-@if($errors->indieauth->first() != '')
-<p class="error">{{ $errors->indieauth->first() }}</p>
-@endif
 @if($url === null)
 <form action="{{ route('indieauth-start') }}" method="post">
   <input type="hidden" name="_token" value="{{ csrf_token() }}">
