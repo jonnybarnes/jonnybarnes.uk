@@ -95,7 +95,6 @@ class MicropubClientController extends Controller
         $token = $request->session()->get('token');
         $micropubEndpoint = $this->indieAuthService->discoverMicropubEndpoint($domain, $this->indieClient);
         if (! $micropubEndpoint) {
-            die('No known endpoint');
             return redirect(route('micropub-client'))->withErrors('Unable to determine micropub API endpoint', 'endpoint');
         }
 
@@ -105,12 +104,10 @@ class MicropubClientController extends Controller
                 'query' => ['q' => 'syndicate-to'],
             ]);
         } catch (\GuzzleHttp\Exception\BadResponseException $e) {
-            dd($e);
             return redirect(route('micropub-client'))->withErrors('Bad response when refreshing syndication targets', 'endpoint');
         }
         $body = (string) $response->getBody();
         $syndication = $this->parseSyndicationTargets($body);
-        dd($syndication);
 
         $request->session()->put('syndication', $syndication);
 
@@ -325,9 +322,7 @@ class MicropubClientController extends Controller
     private function parseSyndicationTargets($syndicationTargets = null)
     {
         if ($syndicationTargets === null) {
-            return [
-                ['target' => 'http://example.org', 'name' => 'Joe Bloggs on Example']
-            ];
+            return;
         }
         $syndicateTo = [];
         $data = json_decode($syndicationTargets, true);
