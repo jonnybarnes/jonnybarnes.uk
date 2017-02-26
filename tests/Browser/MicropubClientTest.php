@@ -15,9 +15,23 @@ class MicropubClientTest extends DuskTestCase
     public function test_client_page_see_authenticated()
     {
         $this->browse(function ($browser) {
-            $browser->visit('/micropub/create')
+            $browser->visit(route('micropub-client'))
                     ->assertSee('You are authenticated');
         });
+    }
+
+    public function test_client_page_creates_new_note()
+    {
+        $faker = \Faker\Factory::create();
+        $note = 'Fake note from #LaravelDusk: ' . $faker->text;
+        $this->browse(function ($browser) use ($note) {
+            $browser->visit(route('micropub-client'))
+                    ->type('content', $note)
+                    ->press('Submit');
+        });
+        $this->assertDatabaseHas('notes', ['note' => $note]);
+        $newNote = \App\Note::where('note', $note)->first();
+        $newNote->forceDelete();
     }
 
     public function test_client_page_updates_syndication()
