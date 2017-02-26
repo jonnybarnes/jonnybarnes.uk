@@ -25,7 +25,7 @@
         "sensiolabs/security-checker": "^4.0",
         "laravel/scout": "^3.0",
         "pmatseykanets/laravel-scout-postgres": "^0.5.0",
-        "jonnybarnes/emoji-a11y": "^0.1.1",
+        "jonnybarnes/emoji-a11y": "^0.2",
         "laravel/tinker": "^1.0"
     },
     "require-dev": {

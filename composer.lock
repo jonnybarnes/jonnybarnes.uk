@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "e4236aef74a9e56de4a85dc50bf32dcf",
+    "content-hash": "52f682d51fc4b93251a08a230fbd5c24",
     "packages": [
         {
             "name": "anahkiasen/underscore-php",
@@ -1375,23 +1375,23 @@
         },
         {
             "name": "jonnybarnes/emoji-a11y",
-            "version": "v0.1.1",
+            "version": "v0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jonnybarnes/emoji-a11y.git",
-                "reference": "bb9d7427bdaab139d746de1c4273fea6ebc52206"
+                "reference": "ee9062d345ce05c02036b5d5a990b3b0e8bfc34f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jonnybarnes/emoji-a11y/zipball/bb9d7427bdaab139d746de1c4273fea6ebc52206",
-                "reference": "bb9d7427bdaab139d746de1c4273fea6ebc52206",
+                "url": "https://api.github.com/repos/jonnybarnes/emoji-a11y/zipball/ee9062d345ce05c02036b5d5a990b3b0e8bfc34f",
+                "reference": "ee9062d345ce05c02036b5d5a990b3b0e8bfc34f",
                 "shasum": ""
             },
             "require": {
                 "php": ">=7.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "~5.7"
+                "phpunit/phpunit": "~6.0"
             },
             "type": "library",
             "autoload": {
@@ -1415,7 +1415,7 @@
                 "accessibility",
                 "emoji"
             ],
-            "time": "2017-02-02T00:20:12+00:00"
+            "time": "2017-02-15T17:23:34+00:00"
         },
         {
             "name": "jonnybarnes/indieweb",
