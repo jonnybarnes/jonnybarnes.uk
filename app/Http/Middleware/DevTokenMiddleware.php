@@ -20,6 +20,14 @@ class DevTokenMiddleware
             session(['me' => config('app.url')]);
             if (Storage::exists('dev-token')) {
                 session(['token' => Storage::get('dev-token')]);
+            } else {
+                $data = [
+                    'me' => config('app.url'),
+                    'client_id' => route('micropub-client'),
+                    'scope' => 'post',
+                ];
+                $tokenService = new \App\Services\TokenService();
+                session(['token' => $tokenService->getNewToken($data)]);
             }
         }
 

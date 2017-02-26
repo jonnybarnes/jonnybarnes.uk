@@ -1,6 +1,6 @@
 <div class="h-card contact">
     <div>
-        <img src="{{ $contact->image }}" alt="" class="u-photo">
+        <img src="{{ $image }}" alt="" class="u-photo">
     </div>
     <div>
         <span class="p-name">{{ $contact->name }}</span> <a href="/contacts/{{ $contact->nick }}">{{ '@' . $contact->nick }}</a>

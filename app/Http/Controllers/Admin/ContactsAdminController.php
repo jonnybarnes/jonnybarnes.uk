@@ -1,34 +1,35 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use App\Contact;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Filesystem\Filesystem;
 
 class ContactsAdminController extends Controller
 {
     /**
-     * Display the form to add a new contact.
-     *
-     * @return \Illuminate\View\Factory view
-     */
-    public function newContact()
-    {
-        return view('admin.newcontact');
-    }
-
-    /**
      * List the currect contacts that can be edited.
      *
      * @return \Illuminate\View\Factory view
      */
-    public function listContacts()
+    public function index()
     {
         $contacts = Contact::all();
 
         return view('admin.listcontacts', ['contacts' => $contacts]);
+    }
+
+    /**
+     * Display the form to add a new contact.
+     *
+     * @return \Illuminate\View\Factory view
+     */
+    public function create()
+    {
+        return view('admin.newcontact');
     }
 
     /**
@@ -37,7 +38,7 @@ class ContactsAdminController extends Controller
      * @param  string  The contact id
      * @return \Illuminate\View\Factory view
      */
-    public function editContact($contactId)
+    public function edit($contactId)
     {
         $contact = Contact::findOrFail($contactId);
 
@@ -49,7 +50,7 @@ class ContactsAdminController extends Controller
      *
      * @return \Illuminate\View\Factory view
      */
-    public function deleteContact($contactId)
+    public function delete($contactId)
     {
         return view('admin.deletecontact', ['id' => $contactId]);
     }
@@ -60,7 +61,7 @@ class ContactsAdminController extends Controller
      * @param  \Illuminate\Http|request $request
      * @return \Illuminate\View\Factory view
      */
-    public function postNewContact(Request $request)
+    public function store(Request $request)
     {
         $contact = new Contact();
         $contact->name = $request->input('name');
@@ -82,7 +83,7 @@ class ContactsAdminController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\View\Factory view
      */
-    public function postEditContact($contactId, Request $request)
+    public function update($contactId, Request $request)
     {
         $contact = Contact::findOrFail($contactId);
         $contact->name = $request->input('name');
@@ -113,7 +114,7 @@ class ContactsAdminController extends Controller
      * @param  string  The contact id
      * @return \Illuminate\View\Factory view
      */
-    public function postDeleteContact($contactId)
+    public function destroy($contactId)
     {
         $contact = Contact::findOrFail($contactId);
         $contact->delete();

@@ -62,7 +62,7 @@ class MicropubClientController extends Controller
             $this->indieClient
         );
         if (! $micropubEndpoint) {
-            return redirect(route('micropub-client'))->withErrors('Unable to determine micropub API endpoint', 'endpoint');
+            return redirect(route('micropub-client'))->with('error', 'Unable to determine micropub API endpoint');
         }
 
         $response = $this->postNoteRequest($request, $micropubEndpoint, $token);
@@ -76,7 +76,7 @@ class MicropubClientController extends Controller
             return redirect($location);
         }
 
-        return redirect(route('micropub-client'))->withErrors('Endpoint didn’t create the note.', 'endpoint');
+        return redirect(route('micropub-client'))->with('error', 'Endpoint didn’t create the note.');
     }
 
     /**
@@ -87,8 +87,6 @@ class MicropubClientController extends Controller
      *       and syndicate-to
      *
      * @param  \Illuminate\Http\Request $request
-     * @param  \IndieAuth\Client $indieClient
-     * @param  \GuzzleHttp\Client $guzzleClient
      * @return \Illuminate\Routing\Redirector redirect
      */
     public function refreshSyndicationTargets(Request $request)
@@ -97,7 +95,7 @@ class MicropubClientController extends Controller
         $token = $request->session()->get('token');
         $micropubEndpoint = $this->indieAuthService->discoverMicropubEndpoint($domain, $this->indieClient);
         if (! $micropubEndpoint) {
-            return redirect(route('micropub-client'))->withErrors('Unable to determine micropub API endpoint', 'endpoint');
+            return redirect(route('micropub-client'))->with('error', 'Unable to determine micropub API endpoint');
         }
 
         try {
@@ -106,7 +104,7 @@ class MicropubClientController extends Controller
                 'query' => ['q' => 'syndicate-to'],
             ]);
         } catch (\GuzzleHttp\Exception\BadResponseException $e) {
-            return redirect(route('micropub-client'))->withErrors('Bad response when refreshing syndication targets', 'endpoint');
+            return redirect(route('micropub-client'))->with('error', 'Bad response when refreshing syndication targets');
         }
         $body = (string) $response->getBody();
         $syndication = $this->parseSyndicationTargets($body);
@@ -180,8 +178,7 @@ class MicropubClientController extends Controller
                 'headers' => $headers,
             ]);
         } catch (\GuzzleHttp\Exception\BadResponseException $e) {
-            return redirect(route('micropub-client'))
-                ->withErrors('There was a bad response from the micropub endpoint.', 'endpoint');
+            return redirect(route('micropub-client'))->with('error', 'There was a bad response from the micropub endpoint.');
         }
 
         return $response;
@@ -335,6 +332,8 @@ class MicropubClientController extends Controller
                     'name' => $syn['name'],
                 ];
             }
+        } else {
+            $syndicateTo[] = ['target' => 'http://example.org', 'name' => 'Joe Bloggs on Example'];
         }
         if (count($syndicateTo) > 0) {
             return $syndicateTo;

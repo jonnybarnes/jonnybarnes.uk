@@ -1,9 +1,9 @@
 @extends('master')
 
 @section('title')
-Contacts « 
+Contacts «
 @stop
 
 @section('content')
-@include('templates.contact', array('contact' => $contact))
+@include('templates.contact', ['contact' => $contact, 'image' => $image])
 @stop

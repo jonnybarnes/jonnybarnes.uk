@@ -39,11 +39,11 @@ class ContactsController extends Controller
         $contact = Contact::where('nick', '=', $nick)->firstOrFail();
         $contact->homepageHost = parse_url($contact->homepage, PHP_URL_HOST);
         $file = public_path() . '/assets/profile-images/' . $contact->homepageHost . '/image';
-        $contact->image = ($filesystem->exists($file)) ?
+        $image = ($filesystem->exists($file)) ?
             '/assets/profile-images/' . $contact->homepageHost . '/image'
         :
             '/assets/profile-images/default-image';
 
-        return view('contacts.show', ['contact' => $contact]);
+        return view('contacts.show', compact('contact', 'image'));
     }
 }

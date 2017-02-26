@@ -1,30 +1,19 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use App\Article;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class ArticlesAdminController extends Controller
 {
-    /**
-     * Show the new article form.
-     *
-     * @return \Illuminate\View\Factory view
-     */
-    public function newArticle()
-    {
-        $message = session('message');
-
-        return view('admin.newarticle', ['message' => $message]);
-    }
-
     /**
      * List the articles that can be edited.
      *
      * @return \Illuminate\View\Factory view
      */
-    public function listArticles()
+    public function index()
     {
         $posts = Article::select('id', 'title', 'published')->orderBy('id', 'desc')->get();
 
@@ -32,32 +21,15 @@ class ArticlesAdminController extends Controller
     }
 
     /**
-     * Show the edit form for an existing article.
+     * Show the new article form.
      *
-     * @param  string  The article id
      * @return \Illuminate\View\Factory view
      */
-    public function editArticle($articleId)
+    public function create()
     {
-        $post = Article::select(
-            'title',
-            'main',
-            'url',
-            'published'
-        )->where('id', $articleId)->get();
+        $message = session('message');
 
-        return view('admin.editarticle', ['id' => $articleId, 'post' => $post]);
-    }
-
-    /**
-     * Show the delete confirmation form for an article.
-     *
-     * @param  string  The article id
-     * @return \Illuminate\View\Factory view
-     */
-    public function deleteArticle($articleId)
-    {
-        return view('admin.deletearticle', ['id' => $articleId]);
+        return view('admin.newarticle', ['message' => $message]);
     }
 
     /**
@@ -66,7 +38,7 @@ class ArticlesAdminController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\View\Factory view
      */
-    public function postNewArticle(Request $request)
+    public function store(Request $request)
     {
         $published = $request->input('published');
         if ($published == null) {
@@ -103,13 +75,31 @@ class ArticlesAdminController extends Controller
     }
 
     /**
+     * Show the edit form for an existing article.
+     *
+     * @param  string  The article id
+     * @return \Illuminate\View\Factory view
+     */
+    public function edit($articleId)
+    {
+        $post = Article::select(
+            'title',
+            'main',
+            'url',
+            'published'
+        )->where('id', $articleId)->get();
+
+        return view('admin.editarticle', ['id' => $articleId, 'post' => $post]);
+    }
+
+    /**
      * Process an incoming request to edit an article.
      *
-     * @param  string
      * @param  \Illuminate\Http\Request $request
+     * @param  string
      * @return \Illuminate|View\Factory view
      */
-    public function postEditArticle($articleId, Request $request)
+    public function update(Request $request, $articleId)
     {
         $published = $request->input('published');
         if ($published == null) {
@@ -126,12 +116,23 @@ class ArticlesAdminController extends Controller
     }
 
     /**
+     * Show the delete confirmation form for an article.
+     *
+     * @param  string  The article id
+     * @return \Illuminate\View\Factory view
+     */
+    public function delete($articleId)
+    {
+        return view('admin.deletearticle', ['id' => $articleId]);
+    }
+
+    /**
      * Process a request to delete an aricle.
      *
      * @param  string The article id
      * @return \Illuminate\View\Factory view
      */
-    public function postDeleteArticle($articleId)
+    public function destroy($articleId)
     {
         Article::where('id', $articleId)->delete();
 

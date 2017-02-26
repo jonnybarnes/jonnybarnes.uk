@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use App\Place;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Phaza\LaravelPostgis\Geometries\Point;
 
 class PlacesAdminController extends Controller
@@ -13,7 +14,7 @@ class PlacesAdminController extends Controller
      *
      * @return \Illuminate\View\Factory view
      */
-    public function listPlacesPage()
+    public function index()
     {
         $places = Place::all();
 
@@ -25,7 +26,7 @@ class PlacesAdminController extends Controller
      *
      * @return \Illuminate\View\Factory view
      */
-    public function newPlacePage()
+    public function create()
     {
         return view('admin.newplace');
     }
@@ -36,7 +37,7 @@ class PlacesAdminController extends Controller
      * @param  string The place id
      * @return \Illuminate\View\Factory view
      */
-    public function editPlacePage($placeId)
+    public function edit($placeId)
     {
         $place = Place::findOrFail($placeId);
 
@@ -58,7 +59,7 @@ class PlacesAdminController extends Controller
      * @param  Illuminate\Http\Request $request
      * @return Illuminate\View\Factory view
      */
-    public function createPlace(Request $request)
+    public function store(Request $request)
     {
         $this->placeService->createPlace($request);
 
@@ -72,7 +73,7 @@ class PlacesAdminController extends Controller
      * @param Illuminate\Http\Request $request
      * @return Illuminate\View\Factory view
      */
-    public function editPlace($placeId, Request $request)
+    public function update($placeId, Request $request)
     {
         $place = Place::findOrFail($placeId);
         $place->name = $request->name;

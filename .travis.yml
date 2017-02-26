@@ -3,8 +3,22 @@ language: php
 sudo: false
 dist: trusty
 
+cache:
+  - apt
+
 addons:
-  postgresql: "9.5"
+  postgresql: "9.6"
+  apt:
+    sources:
+      - sourceline: 'deb http://ppa.launchpad.net/nginx/development/ubuntu trusty main'
+    packages:
+      - nginx
+      - realpath
+  artifacts:
+    s3_region: "eu-west-1"
+    paths:
+      - $(ls tests/Browser/screenshots/*.png | tr "\n" ":")
+      - $(ls /tmp/*.log | tr "\n" ":")
 
 services:
   - postgresql
@@ -22,6 +36,10 @@ matrix:
     - php: nightly
 
 before_install:
+  - mkdir travis-phantomjs
+  - wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2 -O $PWD/travis-phantomjs/phantomjs-2.1.1-linux-x86_64.tar.bz2
+  - tar -xvf $PWD/travis-phantomjs/phantomjs-2.1.1-linux-x86_64.tar.bz2 -C $PWD/travis-phantomjs
+  - export PATH=$PWD/travis-phantomjs/phantomjs-2.1.1-linux-x86_64/bin:$PATH
   - phpenv config-rm xdebug.ini || echo "xdebug already absent"
   - travis_retry composer self-update --preview
 
@@ -29,6 +47,7 @@ install:
   - if [[ $setup = 'basic' ]];  then travis_retry composer install --no-interaction --prefer-dist; fi
   - if [[ $setup = 'stable' ]]; then travis_retry composer update --no-interaction --prefer-dist --prefer-stable; fi
   - if [[ $setup = 'lowest' ]]; then travis_retry composer update --no-interaction --prefer-dist --prefer-lowest --prefer-stable; fi
+  - travis/install-nginx.sh
 
 before_script:
   - psql -U travis -c 'create database travis_ci_test'
@@ -37,10 +56,10 @@ before_script:
   - php artisan key:generate
   - php artisan migrate
   - php artisan db:seed
-  - php artisan token:generate
-  - php artisan serve &
+  - phantomjs --webdriver=127.0.0.1:9515 --webdriver-loglevel=DEBUG &
   - sleep 5 # Give artisan some time to start serving
 
 script:
   - phpdbg -qrr vendor/bin/phpunit --coverage-text
+  - php artisan dusk --filter syndication
   - php artisan security:check

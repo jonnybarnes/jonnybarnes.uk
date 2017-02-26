@@ -48,7 +48,7 @@ class GenerateToken extends Command
     {
         $data = [
             'me' => config('app.url'),
-            'client_id' => config('app.url') . '/notes/new',
+            'client_id' => route('micropub-client'),
             'scope' => 'post',
         ];
         $token = $tokenService->getNewToken($data);
