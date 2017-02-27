@@ -5,8 +5,7 @@
     "license": "CC0-1.0",
     "type": "project",
     "require": {
-        "ext-intl": "*",
-        "php": ">=7.0.0",
+        "php": ">=7.1.0",
         "laravel/framework": "5.4.*",
         "jonnybarnes/indieweb": "dev-master",
         "jonnybarnes/webmentions-parser": "0.4.*",

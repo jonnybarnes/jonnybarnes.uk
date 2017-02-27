@@ -41,9 +41,7 @@ class TokenService
         $signer = new Sha256();
         try {
             $token = (new Parser())->parse((string) $token);
-        } catch (InvalidArgumentException $e) {
-            return;
-        } catch (RuntimeException $e) {
+        } catch (InvalidArgumentException | RuntimeException $e) {
             return;
         }
         if ($token->verify($signer, config('app.key'))) {
