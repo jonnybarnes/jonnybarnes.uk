@@ -28,7 +28,6 @@ env:
     - setup=basic
 
 php:
-  - 7.0.15
   - 7.1
   - nightly
 matrix:
