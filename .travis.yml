@@ -60,5 +60,5 @@ before_script:
 
 script:
   - phpdbg -qrr vendor/bin/phpunit --coverage-text
-  - php artisan dusk --filter syndication
+  - php artisan dusk
   - php artisan security:check
