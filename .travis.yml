@@ -28,7 +28,7 @@ env:
     - setup=basic
 
 php:
-  - 7.1.1
+  - 7.1
   - nightly
 matrix:
   allow_failures:
