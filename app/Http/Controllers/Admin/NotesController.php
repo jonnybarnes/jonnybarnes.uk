@@ -9,7 +9,7 @@ use App\Jobs\SendWebMentions;
 use App\Services\NoteService;
 use App\Http\Controllers\Controller;
 
-class NotesAdminController extends Controller
+class NotesController extends Controller
 {
     protected $noteService;
 

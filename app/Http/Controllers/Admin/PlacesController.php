@@ -8,7 +8,7 @@ use App\Services\PlaceService;
 use App\Http\Controllers\Controller;
 use Phaza\LaravelPostgis\Geometries\Point;
 
-class PlacesAdminController extends Controller
+class PlacesController extends Controller
 {
     protected $placeService;
 
