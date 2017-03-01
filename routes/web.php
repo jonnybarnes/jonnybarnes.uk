@@ -36,58 +36,60 @@ Route::group(['domain' => config('url.longurl')], function () {
         'namespace' => 'Admin',
         'prefix' => 'admin',
     ], function () {
-        Route::get('/', 'AdminController@showWelcome');
+        Route::get('/', function () {
+            return view('admin.welcome', ['name' => config('admin.user')]);
+        });
 
         //Articles
         Route::group(['prefix' => 'blog'], function () {
-            Route::get('/new', 'ArticlesAdminController@create');
-            Route::get('/edit', 'ArticlesAdminController@index');
-            Route::get('/edit/{id}', 'ArticlesAdminController@edit');
-            Route::get('/delete/{id}', 'ArticlesAdminController@delete');
-            Route::post('/new', 'ArticlesAdminController@store');
-            Route::post('/edit/{id}', 'ArticlesAdminController@update');
-            Route::post('/delete/{id}', 'ArticlesAdminController@detroy');
+            Route::get('/new', 'ArticlesController@create');
+            Route::get('/edit', 'ArticlesController@index');
+            Route::get('/edit/{id}', 'ArticlesController@edit');
+            Route::get('/delete/{id}', 'ArticlesController@delete');
+            Route::post('/new', 'ArticlesController@store');
+            Route::post('/edit/{id}', 'ArticlesController@update');
+            Route::post('/delete/{id}', 'ArticlesController@detroy');
         });
 
         //Notes
         Route::group(['prefix' => 'note'], function () {
-            Route::get('/edit', 'NotesAdminController@index');
-            Route::get('/new', 'NotesAdminController@create');
-            Route::get('/edit/{id}', 'NotesAdminController@edit');
-            Route::get('/delete/{id}', 'NotesAdminController@delete');
-            Route::post('/new', 'NotesAdminController@store');
-            Route::post('/edit/{id}', 'NotesAdminController@update');
-            Route::post('/delete/{id}', 'NotesAdminController@destroy');
+            Route::get('/edit', 'NotesController@index');
+            Route::get('/new', 'NotesController@create');
+            Route::get('/edit/{id}', 'NotesController@edit');
+            Route::get('/delete/{id}', 'NotesController@delete');
+            Route::post('/new', 'NotesController@store');
+            Route::post('/edit/{id}', 'NotesController@update');
+            Route::post('/delete/{id}', 'NotesController@destroy');
         });
 
         //Micropub Clients
         Route::group(['prefix' => 'clients'], function () {
-            Route::get('/', 'ClientsAdminController@index');
-            Route::get('/new', 'ClientsAdminController@create');
-            Route::get('/edit/{id}', 'ClientsAdminController@edit');
-            Route::post('/new', 'ClientsAdminController@store');
-            Route::post('/edit/{id}', 'ClientsAdminController@update');
+            Route::get('/', 'ClientsController@index');
+            Route::get('/new', 'ClientsController@create');
+            Route::get('/edit/{id}', 'ClientsController@edit');
+            Route::post('/new', 'ClientsController@store');
+            Route::post('/edit/{id}', 'ClientsController@update');
         });
 
         //Contacts
         Route::group(['prefix' => 'contacts'], function () {
-            Route::get('/edit', 'ContactsAdminController@index');
-            Route::get('/new', 'ContactsAdminController@create');
-            Route::get('/edit/{id}', 'ContactsAdminController@edit');
-            Route::get('/delete/{id}', 'ContactsAdminController@delete');
-            Route::post('/new', 'ContactsAdminController@store');
-            Route::post('/edit/{id}', 'ContactsAdminController@update');
-            Route::post('/delete/{id}', 'ContactsAdminController@destroy');
-            Route::get('/edit/{id}/getavatar', 'ContactsAdminController@getAvatar');
+            Route::get('/edit', 'ContactsController@index');
+            Route::get('/new', 'ContactsController@create');
+            Route::get('/edit/{id}', 'ContactsController@edit');
+            Route::get('/delete/{id}', 'ContactsController@delete');
+            Route::post('/new', 'ContactsController@store');
+            Route::post('/edit/{id}', 'ContactsController@update');
+            Route::post('/delete/{id}', 'ContactsController@destroy');
+            Route::get('/edit/{id}/getavatar', 'ContactsController@getAvatar');
         });
 
         //Places
         Route::group(['prefix' => 'places'], function () {
-            Route::get('/edit', 'PlacesAdminController@index');
-            Route::get('/new', 'PlacesAdminController@create');
-            Route::get('/edit/{id}', 'PlacesAdminController@edit');
-            Route::post('/new', 'PlacesAdminController@store');
-            Route::post('/edit/{id}', 'PlacesAdminController@update');
+            Route::get('/edit', 'PlacesController@index');
+            Route::get('/new', 'PlacesController@create');
+            Route::get('/edit/{id}', 'PlacesController@edit');
+            Route::post('/new', 'PlacesController@store');
+            Route::post('/edit/{id}', 'PlacesController@update');
         });
     });
 
