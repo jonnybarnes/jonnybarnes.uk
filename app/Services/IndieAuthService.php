@@ -26,7 +26,7 @@ class IndieAuthService
     {
         $endpoint = $this->client->discoverAuthorizationEndpoint($this->client->normalizeMeURL($domain));
         if ($endpoint === false) {
-            return;
+            return null;
         }
 
         return $endpoint;

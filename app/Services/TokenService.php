@@ -45,7 +45,7 @@ class TokenService
         try {
             $token = (new Parser())->parse((string) $token);
         } catch (InvalidArgumentException | RuntimeException $e) {
-            return;
+            return null;
         }
         if ($token->verify($signer, config('app.key'))) {
             //signuture valid
