@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services;
 
 use App\Place;
@@ -11,37 +13,26 @@ class PlaceService
     /**
      * Create a place.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param  array $data
      * @return \App\Place
      */
-    public function createPlace(Request $request)
+    public function createPlace(array $data): Place
     {
-        if ($request->header('Content-Type') == 'application/json') {
-            $name = $request->input('properties.name');
-            $description = $request->input('properties.description') ?? null;
-            $geo = $request->input('properties.geo');
-        } else {
-            $name = $request->input('name');
-            $description = $request->input('description');
-            $geo = $request->input('geo');
-        }
-        if ($geo) {
+        //obviously a place needs a lat/lng, but this could be sent in a geo-url
+        //if no geo array key, we assume the array already has lat/lng values
+        if (array_key_exists('geo', $data)) {
             preg_match_all(
                 '/([0-9\.\-]+)/',
-                $geo,
+                $data['geo'],
                 $matches
             );
-            $latitude = $matches[0][0];
-            $longitude = $matches[0][1];
-        }
-        if ($request->input('latitude') !== null) {
-            $latitude = $request->input('latitude');
-            $longitude = $request->input('longitude');
+            $data['latitude'] = $matches[0][0];
+            $data['longitude'] = $matches[0][1];
         }
         $place = new Place();
-        $place->name = $name;
-        $place->description = $description;
-        $place->location = new Point((float) $latitude, (float) $longitude);
+        $place->name = $data['name'];
+        $place->description = $data['description'];
+        $place->location = new Point((float) $data['latitude'], (float) $data['longitude']);
         $place->save();
 
         return $place;

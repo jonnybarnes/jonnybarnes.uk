@@ -87,7 +87,19 @@ class NotesAdminController extends Controller
                 ->withInput();
         }
 
-        $note = $this->noteService->createNote($request);
+        $data = [];
+        $data['content'] = $request->input('content');
+        $data['in-reply-to'] = $request->input('in-reply-to');
+        $data['location'] = $request->input('location');
+        $data['syndicate'] = [];
+        if ($request->input('twitter')) {
+            $data['syndicate'][] = 'twitter';
+        }
+        if ($request->input('facebook')) {
+            $data['syndicate'][] = 'facebook';
+        }
+
+        $note = $this->noteService->createNote($data);
 
         return view('admin.newnotesuccess', [
             'id' => $note->id,

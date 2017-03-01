@@ -4,11 +4,19 @@ namespace App\Http\Controllers\Admin;
 
 use App\Place;
 use Illuminate\Http\Request;
+use App\Services\PlaceService;
 use App\Http\Controllers\Controller;
 use Phaza\LaravelPostgis\Geometries\Point;
 
 class PlacesAdminController extends Controller
 {
+    protected $placeService;
+
+    public function __construct(PlaceService $placeService = null)
+    {
+        $this->placeService = $placeService ?? new PlaceService();
+    }
+
     /**
      * List the places that can be edited.
      *
@@ -61,7 +69,12 @@ class PlacesAdminController extends Controller
      */
     public function store(Request $request)
     {
-        $this->placeService->createPlace($request);
+        $data = [];
+        $data['name'] = $request->name;
+        $data['description'] = $request->description;
+        $data['latitude'] = $request->latitude;
+        $data['longitude'] = $request->longitude;
+        $place = $this->placeService->createPlace($data);
 
         return view('admin.newplacesuccess');
     }
