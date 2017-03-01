@@ -109,7 +109,7 @@ Route::group(['domain' => config('url.longurl')], function () {
     Route::get('notes/tagged/{tag}', 'NotesController@tagged');
 
     //indieauth
-    Route::any('indieauth/start', 'IndieAuthController@start')->name('indieauth-start');
+    Route::post('indieauth/start', 'IndieAuthController@start')->name('indieauth-start');
     Route::get('indieauth/callback', 'IndieAuthController@callback')->name('indieauth-callback');
     Route::get('logout', 'IndieAuthController@logout')->name('indieauth-logout');
     Route::post('api/token', 'IndieAuthController@tokenEndpoint'); //hmmm?

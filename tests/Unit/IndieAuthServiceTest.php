@@ -16,9 +16,20 @@ class IndieAuthServiceTest extends TestCase
     public function test_indieauthservice_getauthorizationendpoint_method()
     {
         $service = new \App\Services\IndieAuthService();
-        $client = new \IndieAuth\Client();
-        $result = $service->getAuthorizationEndpoint(config('app.url'), $client);
+        $result = $service->getAuthorizationEndpoint(config('app.url'));
         $this->assertEquals('https://indieauth.com/auth', $result);
+    }
+
+    /**
+     * Test the getAuthorizationEndpoint method returns null on failure.
+     *
+     * @return void
+     */
+    public function test_indieauthservice_getauthorizationendpoint_method_returns_null_on_failure()
+    {
+        $service = new \App\Services\IndieAuthService();
+        $result = $service->getAuthorizationEndpoint('http://example.org');
+        $this->assertEquals(null, $result);
     }
 
     /**
@@ -29,11 +40,9 @@ class IndieAuthServiceTest extends TestCase
     public function test_indieauthservice_builds_correct_redirect_url()
     {
         $service = new \App\Services\IndieAuthService();
-        $client = new \IndieAuth\Client();
         $result = $service->buildAuthorizationURL(
             'https://indieauth.com/auth',
-            config('app.url'),
-            $client
+            config('app.url')
         );
         $this->assertEquals(
             'https://indieauth.com/auth?me=',
@@ -49,8 +58,7 @@ class IndieAuthServiceTest extends TestCase
     public function test_indieauthservice_gettokenendpoint_method()
     {
         $service = new \App\Services\IndieAuthService();
-        $client = new \IndieAuth\Client();
-        $result = $service->getTokenEndpoint(config('app.url'), $client);
+        $result = $service->getTokenEndpoint(config('app.url'));
         $this->assertEquals(config('app.url') . '/api/token', $result);
     }
 
@@ -62,8 +70,7 @@ class IndieAuthServiceTest extends TestCase
     public function test_indieauthservice_discovermicropubendpoint_method()
     {
         $service = new \App\Services\IndieAuthService();
-        $client = new \IndieAuth\Client();
-        $result = $service->discoverMicropubEndpoint(config('app.url'), $client);
+        $result = $service->discoverMicropubEndpoint(config('app.url'));
         $this->assertEquals(config('app.url') . '/api/post', $result);
     }
 }

@@ -15,8 +15,8 @@ class IndieAuthControllerTest extends TestCase
      */
     public function test_indieauthcontroller_begin_auth_flow_redirects_back_to_client_on_error()
     {
-        $response = $this->call('GET', '/indieauth/start', ['me' => 'http://example.org']);
-        $this->assertSame(config('app.url') . '/micropub/create', $response->headers->get('Location'));
+        $response = $this->call('POST', '/indieauth/start', ['me' => 'http://example.org']);
+        $this->assertSame(route('micropub-client'), $response->headers->get('Location'));
     }
 
     /**
@@ -26,7 +26,7 @@ class IndieAuthControllerTest extends TestCase
      */
     public function test_indieauthcontroller_begin_auth_redirects_to_endpoint()
     {
-        $response = $this->call('GET', '/indieauth/start', ['me' => config('app.url')]);
+        $response = $this->call('POST', '/indieauth/start', ['me' => config('app.url')]);
         $this->assertSame(
             'https://indieauth.com/auth?me=',
             substr($response->headers->get('Location'), 0, 30)
@@ -46,6 +46,6 @@ class IndieAuthControllerTest extends TestCase
                             'indieauth/callback',
                             ['me', config('app.url'), 'state' => 'request-session']
                         );
-        $response->assertSessionHasErrors();
+        $response->assertSessionHas(['error' => 'Invalid <code>state</code> value returned from indieauth server']);
     }
 }
