@@ -6,7 +6,7 @@ use App\Article;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class ArticlesAdminController extends Controller
+class ArticlesConrtoller extends Controller
 {
     /**
      * List the articles that can be edited.

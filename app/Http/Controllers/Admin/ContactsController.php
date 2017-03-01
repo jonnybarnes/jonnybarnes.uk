@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Filesystem\Filesystem;
 
-class ContactsAdminController extends Controller
+class ContactsController extends Controller
 {
     /**
      * List the currect contacts that can be edited.

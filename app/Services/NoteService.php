@@ -6,7 +6,6 @@ namespace App\Services;
 
 use App\Note;
 use App\Place;
-use Illuminate\Http\Request;
 use App\Jobs\SendWebMentions;
 use App\Jobs\SyndicateToTwitter;
 use App\Jobs\SyndicateToFacebook;
@@ -65,7 +64,7 @@ class NoteService
         if (in_array('twitter', $data['syndicate'])) {
             dispatch(new SyndicateToTwitter($note));
         }
-        if (in_arraY('facebook', $data['syndicate'])) {
+        if (in_array('facebook', $data['syndicate'])) {
             dispatch(new SyndicateToFacebook($note));
         }
 

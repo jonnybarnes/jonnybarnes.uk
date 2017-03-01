@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\MicropubClient;
 use App\Http\Controllers\Controller;
 
-class ClientsAdminController extends Controller
+class ClientsController extends Controller
 {
     /**
      * Show a list of known clients.

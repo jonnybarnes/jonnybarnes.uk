@@ -14,6 +14,7 @@ class IndieAuthService
     {
         $this->client = new Client();
     }
+
     /**
      * Given a domain, determing the assocaited authorization endpoint,
      * if one exists.
@@ -25,7 +26,7 @@ class IndieAuthService
     {
         $endpoint = $this->client->discoverAuthorizationEndpoint($this->client->normalizeMeURL($domain));
         if ($endpoint === false) {
-            return null;
+            return;
         }
 
         return $endpoint;
