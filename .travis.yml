@@ -60,5 +60,6 @@ before_script:
 
 script:
   - phpdbg -qrr vendor/bin/phpunit --coverage-text
+  - php vendor/bin/phpunit
   - php artisan dusk
   - php artisan security:check
