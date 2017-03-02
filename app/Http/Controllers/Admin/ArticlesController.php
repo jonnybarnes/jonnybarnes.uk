@@ -6,7 +6,7 @@ use App\Article;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class ArticlesConrtoller extends Controller
+class ArticlesController extends Controller
 {
     /**
      * List the articles that can be edited.
@@ -17,7 +17,7 @@ class ArticlesConrtoller extends Controller
     {
         $posts = Article::select('id', 'title', 'published')->orderBy('id', 'desc')->get();
 
-        return view('admin.listarticles', ['posts' => $posts]);
+        return view('admin.articles.list', ['posts' => $posts]);
     }
 
     /**
@@ -29,7 +29,7 @@ class ArticlesConrtoller extends Controller
     {
         $message = session('message');
 
-        return view('admin.newarticle', ['message' => $message]);
+        return view('admin.articles.new', ['message' => $message]);
     }
 
     /**
@@ -71,7 +71,7 @@ class ArticlesConrtoller extends Controller
             throw $e;
         }
 
-        return view('admin.newarticlesuccess', ['id' => $article->id, 'title' => $article->title]);
+        return view('admin.articles.newsuccess', ['id' => $article->id, 'title' => $article->title]);
     }
 
     /**
@@ -89,7 +89,7 @@ class ArticlesConrtoller extends Controller
             'published'
         )->where('id', $articleId)->get();
 
-        return view('admin.editarticle', ['id' => $articleId, 'post' => $post]);
+        return view('admin.articles.edit', ['id' => $articleId, 'post' => $post]);
     }
 
     /**
@@ -112,7 +112,7 @@ class ArticlesConrtoller extends Controller
         $article->published = $published;
         $article->save();
 
-        return view('admin.editarticlesuccess', ['id' => $articleId]);
+        return view('admin.articles.editsuccess', ['id' => $articleId]);
     }
 
     /**
@@ -123,7 +123,7 @@ class ArticlesConrtoller extends Controller
      */
     public function delete($articleId)
     {
-        return view('admin.deletearticle', ['id' => $articleId]);
+        return view('admin.articles.delete', ['id' => $articleId]);
     }
 
     /**
@@ -136,6 +136,6 @@ class ArticlesConrtoller extends Controller
     {
         Article::where('id', $articleId)->delete();
 
-        return view('admin.deletearticlesuccess', ['id' => $articleId]);
+        return view('admin.articles.deletesuccess', ['id' => $articleId]);
     }
 }

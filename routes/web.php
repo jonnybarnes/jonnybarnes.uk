@@ -41,7 +41,7 @@ Route::group(['domain' => config('url.longurl')], function () {
         });
 
         //Articles
-        Route::group(['prefix' => 'blog'], function () {
+        Route::group(['prefix' => 'articles'], function () {
             Route::get('/new', 'ArticlesController@create');
             Route::get('/edit', 'ArticlesController@index');
             Route::get('/edit/{id}', 'ArticlesController@edit');
@@ -52,7 +52,7 @@ Route::group(['domain' => config('url.longurl')], function () {
         });
 
         //Notes
-        Route::group(['prefix' => 'note'], function () {
+        Route::group(['prefix' => 'notes'], function () {
             Route::get('/edit', 'NotesController@index');
             Route::get('/new', 'NotesController@create');
             Route::get('/edit/{id}', 'NotesController@edit');
