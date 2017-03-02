@@ -30,7 +30,7 @@ class NotesController extends Controller
             $note->originalNote = $note->getOriginal('note');
         }
 
-        return view('admin.listnotes', ['notes' => $notes]);
+        return view('admin.notes.list', ['notes' => $notes]);
     }
 
     /**
@@ -40,7 +40,7 @@ class NotesController extends Controller
      */
     public function create()
     {
-        return view('admin.newnote');
+        return view('admin.notes.new');
     }
 
     /**
@@ -54,7 +54,7 @@ class NotesController extends Controller
         $note = Note::find($noteId);
         $note->originalNote = $note->getOriginal('note');
 
-        return view('admin.editnote', ['id' => $noteId, 'note' => $note]);
+        return view('admin.notes.edit', ['id' => $noteId, 'note' => $note]);
     }
 
     /**
@@ -65,7 +65,7 @@ class NotesController extends Controller
      */
     public function delete($noteId)
     {
-        return view('admin.deletenote', ['id' => $id]);
+        return view('admin.notes.delete', ['id' => $id]);
     }
 
     /**
@@ -101,7 +101,7 @@ class NotesController extends Controller
 
         $note = $this->noteService->createNote($data);
 
-        return view('admin.newnotesuccess', [
+        return view('admin.notes.newsuccess', [
             'id' => $note->id,
             'shorturl' => $note->shorturl,
         ]);
@@ -126,7 +126,7 @@ class NotesController extends Controller
             dispatch(new SendWebMentions($note));
         }
 
-        return view('admin.editnotesuccess', ['id' => $noteId]);
+        return view('admin.notes.editsuccess', ['id' => $noteId]);
     }
 
     /**
@@ -140,6 +140,6 @@ class NotesController extends Controller
         $note = Note::findOrFail($id);
         $note->delete();
 
-        return view('admin.deletenotesuccess');
+        return view('admin.notes.deletesuccess');
     }
 }
