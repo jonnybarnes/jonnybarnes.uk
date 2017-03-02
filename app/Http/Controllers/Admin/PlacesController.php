@@ -26,7 +26,7 @@ class PlacesController extends Controller
     {
         $places = Place::all();
 
-        return view('admin.listplaces', ['places' => $places]);
+        return view('admin.places.list', ['places' => $places]);
     }
 
     /**
@@ -36,7 +36,7 @@ class PlacesController extends Controller
      */
     public function create()
     {
-        return view('admin.newplace');
+        return view('admin.places.new');
     }
 
     /**
@@ -52,7 +52,7 @@ class PlacesController extends Controller
         $latitude = $place->getLatitude();
         $longitude = $place->getLongitude();
 
-        return view('admin.editplace', [
+        return view('admin.places.edit', [
             'id' => $placeId,
             'name' => $place->name,
             'description' => $place->description,
@@ -76,7 +76,7 @@ class PlacesController extends Controller
         $data['longitude'] = $request->longitude;
         $place = $this->placeService->createPlace($data);
 
-        return view('admin.newplacesuccess');
+        return view('admin.places.newsuccess');
     }
 
     /**
@@ -94,6 +94,6 @@ class PlacesController extends Controller
         $place->location = new Point((float) $request->latitude, (float) $request->longitude);
         $place->save();
 
-        return view('admin.editplacesuccess');
+        return view('admin.places.editsuccess');
     }
 }
