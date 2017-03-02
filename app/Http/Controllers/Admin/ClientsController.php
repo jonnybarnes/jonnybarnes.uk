@@ -16,7 +16,7 @@ class ClientsController extends Controller
     {
         $clients = MicropubClient::all();
 
-        return view('admin.listclients', ['clients' => $clients]);
+        return view('admin.clients.list', ['clients' => $clients]);
     }
 
     /**
@@ -26,7 +26,7 @@ class ClientsController extends Controller
      */
     public function create()
     {
-        return view('admin.newclient');
+        return view('admin.clients.new');
     }
 
     /**
@@ -39,7 +39,7 @@ class ClientsController extends Controller
     {
         $client = MicropubClient::findOrFail($clientId);
 
-        return view('admin.editclient', [
+        return view('admin.clients.edit', [
             'id' => $clientId,
             'client_url' => $client->client_url,
             'client_name' => $client->client_name,
@@ -59,7 +59,7 @@ class ClientsController extends Controller
             'client_name' => $request->input('client_name'),
         ]);
 
-        return view('admin.newclientsuccess');
+        return view('admin.clients.newsuccess');
     }
 
     /**
@@ -77,12 +77,12 @@ class ClientsController extends Controller
             $client->client_name = $request->input('client_name');
             $client->save();
 
-            return view('admin.editclientsuccess');
+            return view('admin.clietns.editsuccess');
         }
         if ($request->input('delete')) {
             $client->delete();
 
-            return view('admin.deleteclientsuccess');
+            return view('admin.clients.deletesuccess');
         }
     }
 }
