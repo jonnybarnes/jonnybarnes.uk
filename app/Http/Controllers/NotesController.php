@@ -51,7 +51,12 @@ class NotesController extends Controller
                 $note->longitude = $lnglat[0];
                 $note->address = $note->place->name;
                 $note->placeLink = '/places/' . $note->place->slug;
-                $note->geoJson = $this->getGeoJson($note->longitude, $note->latitude, $note->place->name, $note->place->icon);
+                $note->geoJson = $this->getGeoJson(
+                    $note->longitude,
+                    $note->latitude,
+                    $note->place->name,
+                    $note->place->icon
+                );
             }
             $photoURLs = [];
             $photos = $note->getMedia();
@@ -151,7 +156,12 @@ class NotesController extends Controller
             $note->longitude = $lnglat[0];
             $note->address = $note->place->name;
             $note->placeLink = '/places/' . $note->place->slug;
-            $note->geoJson = $this->getGeoJson($note->longitude, $note->latitude, $note->place->name, $note->place->icon);
+            $note->geoJson = $this->getGeoJson(
+                $note->longitude,
+                $note->latitude,
+                $note->place->name,
+                $note->place->icon
+            );
         }
 
         $photoURLs = [];

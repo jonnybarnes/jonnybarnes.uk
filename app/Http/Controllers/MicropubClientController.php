@@ -104,7 +104,10 @@ class MicropubClientController extends Controller
                 'query' => ['q' => 'syndicate-to'],
             ]);
         } catch (\GuzzleHttp\Exception\BadResponseException $e) {
-            return redirect(route('micropub-client'))->with('error', 'Bad response when refreshing syndication targets');
+            return redirect(route('micropub-client'))->with(
+                'error',
+                'Bad response when refreshing syndication targets'
+            );
         }
         $body = (string) $response->getBody();
         $syndication = $this->parseSyndicationTargets($body);
@@ -178,7 +181,10 @@ class MicropubClientController extends Controller
                 'headers' => $headers,
             ]);
         } catch (\GuzzleHttp\Exception\BadResponseException $e) {
-            return redirect(route('micropub-client'))->with('error', 'There was a bad response from the micropub endpoint.');
+            return redirect(route('micropub-client'))->with(
+                'error',
+                'There was a bad response from the micropub endpoint.'
+            );
         }
 
         return $response;
