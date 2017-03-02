@@ -18,6 +18,7 @@ addons:
     s3_region: "eu-west-1"
     paths:
       - $(ls tests/Browser/screenshots/*.png | tr "\n" ":")
+      - $(ls tests/Browser/console/*.log | tr "\n" ":")
       - $(ls /tmp/*.log | tr "\n" ":")
 
 services:
