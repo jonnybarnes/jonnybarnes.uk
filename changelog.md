@@ -1,5 +1,13 @@
 # Changelog
 
+## Version {next}
+  - convert env() calls to config() calls for cacheing
+  - refactor routes and give important one names
+  - Add Dusk tests
+  - Add a deploy script
+  - Add a .editorconfig file
+  - Bump to PHP 7.1 to start using nullable return types and strict types
+
 ## Version 0.2.5 (2017-02-15)
   - Small fix for homepage bio, removed confusing un-needed view that caused fix to be necessary
 
