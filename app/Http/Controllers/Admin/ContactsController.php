@@ -19,7 +19,7 @@ class ContactsController extends Controller
     {
         $contacts = Contact::all();
 
-        return view('admin.listcontacts', ['contacts' => $contacts]);
+        return view('admin.contacts.list', ['contacts' => $contacts]);
     }
 
     /**
@@ -29,7 +29,7 @@ class ContactsController extends Controller
      */
     public function create()
     {
-        return view('admin.newcontact');
+        return view('admin.contacts.new');
     }
 
     /**
@@ -42,7 +42,7 @@ class ContactsController extends Controller
     {
         $contact = Contact::findOrFail($contactId);
 
-        return view('admin.editcontact', ['contact' => $contact]);
+        return view('admin.contacts.edit', ['contact' => $contact]);
     }
 
     /**
@@ -52,7 +52,7 @@ class ContactsController extends Controller
      */
     public function delete($contactId)
     {
-        return view('admin.deletecontact', ['id' => $contactId]);
+        return view('admin.contacts.delete', ['id' => $contactId]);
     }
 
     /**
@@ -71,7 +71,7 @@ class ContactsController extends Controller
         $contact->facebook = $request->input('facebook');
         $contact->save();
 
-        return view('admin.newcontactsuccess', ['id' => $contact->id]);
+        return view('admin.contacts.newsuccess', ['id' => $contact->id]);
     }
 
     /**
@@ -105,7 +105,7 @@ class ContactsController extends Controller
             }
         }
 
-        return view('admin.editcontactsuccess');
+        return view('admin.contacts.editsuccess');
     }
 
     /**
@@ -119,7 +119,7 @@ class ContactsController extends Controller
         $contact = Contact::findOrFail($contactId);
         $contact->delete();
 
-        return view('admin.deletecontactsuccess');
+        return view('admin.contacts.deletesuccess');
     }
 
     /**
@@ -163,7 +163,7 @@ class ContactsController extends Controller
             }
             $filesystem->put($directory . '/image', $avatar->getBody());
 
-            return view('admin.getavatarsuccess', ['homepage' => parse_url($homepage)['host']]);
+            return view('admin.contacts.getavatarsuccess', ['homepage' => parse_url($homepage)['host']]);
         }
     }
 }
