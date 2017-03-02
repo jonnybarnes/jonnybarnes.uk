@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services;
 
 use RuntimeException;
+use Lcobucci\JWT\Token;
 use Lcobucci\JWT\Parser;
 use Lcobucci\JWT\Builder;
 use InvalidArgumentException;
@@ -24,10 +27,10 @@ class TokenService
             ->set('scope', $data['scope'])
             ->set('date_issued', time())
             ->set('nonce', bin2hex(random_bytes(8)))
-            ->sign($signer, env('APP_KEY'))
+            ->sign($signer, config('app.key'))
             ->getToken();
 
-        return $token;
+        return (string) $token;
     }
 
     /**
@@ -36,17 +39,15 @@ class TokenService
      * @param  string The token
      * @return mixed
      */
-    public function validateToken($token)
+    public function validateToken(string $token): ?Token
     {
         $signer = new Sha256();
         try {
             $token = (new Parser())->parse((string) $token);
-        } catch (InvalidArgumentException $e) {
-            return;
-        } catch (RuntimeException $e) {
-            return;
+        } catch (InvalidArgumentException | RuntimeException $e) {
+            return null;
         }
-        if ($token->verify($signer, env('APP_KEY'))) {
+        if ($token->verify($signer, config('app.key'))) {
             //signuture valid
             return $token;
         }

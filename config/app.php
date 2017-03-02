@@ -55,6 +55,17 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Application Long URL
+    |--------------------------------------------------------------------------
+    |
+    | The short URL for the application
+    |
+    */
+
+    'longurl' => env('APP_LONGURL', 'longurl.local'),
+
+    /*
+    |--------------------------------------------------------------------------
     | Application Short URL
     |--------------------------------------------------------------------------
     |
@@ -62,7 +73,18 @@ return [
     |
     */
 
-    'shorturl' => env('APP_SHORTURL', 'http://shorturl.local'),
+    'shorturl' => env('APP_SHORTURL', 'shorturl.local'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Application Display Name
+    |--------------------------------------------------------------------------
+    |
+    | The display name for the application, used for example in titles.
+    |
+    */
+
+    'display_name' => env('DISPLAY_NAME', 'Joe Bloggs'),
 
     /*
     |--------------------------------------------------------------------------

@@ -8,13 +8,13 @@ Admin CP
 <h1>Hello {{ $name }}!</h1>
 
 <h2>Articles</h2>
-<p>You can either <a href="/admin/blog/new">create</a> new blog posts, or <a href="/admin/blog/edit">edit</a> them.<p>
+<p>You can either <a href="/admin/articles/new">create</a> new blog posts, or <a href="/admin/articles/edit">edit</a> them.<p>
 
 <h2>Notes</h2>
-<p>You can either <a href="/admin/note/new">create</a> new notes, or <a href="/admin/note/edit">edit</a> them.<p>
+<p>You can either <a href="/admin/notes/new">create</a> new notes, or <a href="/admin/notes/edit">edit</a> them.<p>
 
-<h2>Tokens</h2>
-<p>See all <a href="/admin/tokens">issued tokens</a>.</p>
+<h2>Clients</h2>
+<p>You can either <a href="/admin/clients/new">create</a> new contacts, or <a href="/admin/contacts/edit">edit</a> them.</p>
 
 <h2>Contacts</h2>
 <p>You can either <a href="/admin/contacts/new">create</a> new contacts, or <a href="/admin/contacts/edit">edit</a> them.</p>

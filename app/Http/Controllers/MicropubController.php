@@ -57,8 +57,46 @@ class MicropubController extends Controller
                 if (array_search('post', $scopes) !== false) {
                     $clientId = $tokenData->getClaim('client_id');
                     if (($request->input('h') == 'entry') || ($request->input('type')[0] == 'h-entry')) {
+                        $data = [];
+                        $data['client-id'] = $clientId;
+                        if ($request->header('Content-Type') == 'application/json') {
+                            $data['content'] = $request->input('properties.content')[0];
+                            $data['in-reply-to'] = $request->input('properties.in-reply-to')[0];
+                            $data['location'] = $request->input('properties.location');
+                            //flatten location if array
+                            if (is_array($data['location'])) {
+                                $data['location'] = $data['location'][0];
+                            }
+                        } else {
+                            $data['content'] = $request->input('content');
+                            $data['in-reply-to'] = $request->input('in-reply-to');
+                            $data['location'] = $request->input('location');
+                        }
+                        $data['syndicate'] = [];
+                        $targets = array_pluck(config('syndication.targets'), 'uid', 'service.name');
+                        if (is_string($request->input('mp-syndicate-to'))) {
+                            $service = array_search($request->input('mp-syndicate-to'));
+                            if ($service == 'Twitter') {
+                                $data['syndicate'][] = 'twitter';
+                            }
+                            if ($service == 'Facebook') {
+                                $data['syndicate'][] = 'facebook';
+                            }
+                        }
+                        if (is_array($request->input('mp-syndicate-to'))) {
+                            foreach ($targets as $service => $target) {
+                                if (in_array($target, $request->input('mp-syndicate-to'))) {
+                                    if ($service == 'Twitter') {
+                                        $data['syndicate'][] = 'twitter';
+                                    }
+                                    if ($service == 'Facebook') {
+                                        $data['syndicate'][] = 'facebook';
+                                    }
+                                }
+                            }
+                        }
                         try {
-                            $note = $this->noteService->createNote($request, $clientId);
+                            $note = $this->noteService->createNote($data);
                         } catch (Exception $exception) {
                             return response()->json(['error' => true], 400);
                         }
@@ -69,8 +107,26 @@ class MicropubController extends Controller
                         ], 201)->header('Location', $note->longurl);
                     }
                     if ($request->input('h') == 'card' || $request->input('type')[0] == 'h-card') {
+                        $data = [];
+                        if ($request->header('Content-Type') == 'application/json') {
+                            $data['name'] = $request->input('properties.name');
+                            $data['description'] = $request->input('properties.description') ?? null;
+                            if ($request->has('properties.geo')) {
+                                $data['geo'] = $request->input('properties.geo');
+                            }
+                        } else {
+                            $data['name'] = $request->input('name');
+                            $data['description'] = $request->input('description');
+                            if ($request->has('geo')) {
+                                $data['geo'] = $request->input('geo');
+                            }
+                            if ($request->has('latitude')) {
+                                $data['latitude'] = $request->input('latitude');
+                                $data['longitude'] = $request->input('longitude');
+                            }
+                        }
                         try {
-                            $place = $this->placeService->createPlace($request);
+                            $place = $this->placeService->createPlace($data);
                         } catch (Exception $exception) {
                             return response()->json(['error' => true], 400);
                         }
@@ -106,7 +162,7 @@ class MicropubController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function getEndpoint(Request $request)
+    public function get(Request $request)
     {
         $httpAuth = $request->header('Authorization');
         if (preg_match('/Bearer (.+)/', $httpAuth, $match)) {
@@ -162,16 +218,11 @@ class MicropubController extends Controller
                 ],
             ]);
         }
-        $content = 'No OAuth token sent with request.';
-        $content = <<<'EOD'
-{
-    "response": "error",
-    "error": "no_token",
-    "error_description": "No token provided with request"
-}
-EOD;
 
-        return (new Response($content, 400))
-                        ->header('Content-Type', 'application/json');
+        return response()->json([
+            'response' => 'error',
+            'error' => 'no_token',
+            'error_description' => 'No token provided with request',
+        ], 400);
     }
 }

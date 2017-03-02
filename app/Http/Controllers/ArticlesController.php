@@ -12,14 +12,14 @@ class ArticlesController extends Controller
      *
      * @return \Illuminate\View\Factory view
      */
-    public function showAllArticles($year = null, $month = null)
+    public function index($year = null, $month = null)
     {
         $articles = Article::where('published', '1')
                         ->date($year, $month)
                         ->orderBy('updated_at', 'desc')
                         ->simplePaginate(5);
 
-        return view('articles', compact('articles'));
+        return view('articles.index', compact('articles'));
     }
 
     /**
@@ -27,14 +27,14 @@ class ArticlesController extends Controller
      *
      * @return \Illuminate\View\Factory view
      */
-    public function singleArticle($year, $month, $slug)
+    public function show($year, $month, $slug)
     {
         $article = Article::where('titleurl', $slug)->first();
         if ($article->updated_at->year != $year || $article->updated_at->month != $month) {
             throw new \Exception;
         }
 
-        return view('article', compact('article'));
+        return view('articles.show', compact('article'));
     }
 
     /**
@@ -63,7 +63,7 @@ class ArticlesController extends Controller
         $buildDate = $articles->first()->updated_at->toRssString();
 
         return response()
-                    ->view('rss', compact('articles', 'buildDate'), 200)
+                    ->view('articles.rss', compact('articles', 'buildDate'), 200)
                     ->header('Content-Type', 'application/rss+xml');
     }
 }

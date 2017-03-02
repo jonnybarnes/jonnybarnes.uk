@@ -24,7 +24,7 @@ class NotesController extends Controller
      * @param  Illuminate\Http\Request request;
      * @return \Illuminte\View\Factory view
      */
-    public function showNotes(Request $request)
+    public function index(Request $request)
     {
         $notes = Note::orderBy('id', 'desc')->with('webmentions', 'place', 'media')->paginate(10);
         foreach ($notes as $note) {
@@ -51,7 +51,12 @@ class NotesController extends Controller
                 $note->longitude = $lnglat[0];
                 $note->address = $note->place->name;
                 $note->placeLink = '/places/' . $note->place->slug;
-                $note->geoJson = $this->getGeoJson($note->longitude, $note->latitude, $note->place->name, $note->place->icon);
+                $note->geoJson = $this->getGeoJson(
+                    $note->longitude,
+                    $note->latitude,
+                    $note->place->name,
+                    $note->place->icon
+                );
             }
             $photoURLs = [];
             $photos = $note->getMedia();
@@ -63,7 +68,7 @@ class NotesController extends Controller
 
         $homepage = ($request->path() == '/');
 
-        return view('notes', compact('notes', 'homepage'));
+        return view('notes.index', compact('notes', 'homepage'));
     }
 
     /**
@@ -72,7 +77,7 @@ class NotesController extends Controller
      * @param  string The id of the note
      * @return \Illuminate\View\Factory view
      */
-    public function singleNote($urlId)
+    public function show($urlId)
     {
         $numbers = new Numbers();
         $authorship = new Authorship();
@@ -151,7 +156,12 @@ class NotesController extends Controller
             $note->longitude = $lnglat[0];
             $note->address = $note->place->name;
             $note->placeLink = '/places/' . $note->place->slug;
-            $note->geoJson = $this->getGeoJson($note->longitude, $note->latitude, $note->place->name, $note->place->icon);
+            $note->geoJson = $this->getGeoJson(
+                $note->longitude,
+                $note->latitude,
+                $note->place->name,
+                $note->place->icon
+            );
         }
 
         $photoURLs = [];
@@ -161,7 +171,7 @@ class NotesController extends Controller
         }
         $note->photoURLs = $photoURLs;
 
-        return view('note', compact('note', 'replies', 'reposts', 'likes'));
+        return view('notes.show', compact('note', 'replies', 'reposts', 'likes'));
     }
 
     /**
@@ -170,7 +180,7 @@ class NotesController extends Controller
      * @param  string The decimal id of he note
      * @return \Illuminate\Routing\RedirectResponse redirect
      */
-    public function singleNoteRedirect($decId)
+    public function redirect($decId)
     {
         $numbers = new Numbers();
         $realId = $numbers->numto60($decId);
@@ -186,7 +196,7 @@ class NotesController extends Controller
      * @param  string The tag
      * @return \Illuminate\View\Factory view
      */
-    public function taggedNotes($tag)
+    public function tagged($tag)
     {
         $notes = Note::whereHas('tags', function ($query) use ($tag) {
             $query->where('tag', $tag);
@@ -196,7 +206,7 @@ class NotesController extends Controller
             $note->human_time = $note->updated_at->diffForHumans();
         }
 
-        return view('taggednotes', compact('notes', 'tag'));
+        return view('notes.tagged', compact('notes', 'tag'));
     }
 
     /**

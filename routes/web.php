@@ -12,7 +12,7 @@
 */
 
 Route::group(['domain' => config('url.longurl')], function () {
-    Route::get('/', 'NotesController@showNotes');
+    Route::get('/', 'NotesController@index');
 
     //Static project page
     Route::get('projects', function () {
@@ -31,85 +31,99 @@ Route::group(['domain' => config('url.longurl')], function () {
     Route::post('login', 'AuthController@login');
 
     //Admin pages grouped for filter
-    Route::group(['middleware' => 'myauth'], function () {
-        Route::get('admin', 'AdminController@showWelcome');
+    Route::group([
+        'middleware' => 'myauth',
+        'namespace' => 'Admin',
+        'prefix' => 'admin',
+    ], function () {
+        Route::get('/', function () {
+            return view('admin.welcome', ['name' => config('admin.user')]);
+        });
 
         //Articles
-        Route::get('admin/blog/new', 'ArticlesAdminController@newArticle');
-        Route::get('admin/blog/edit', 'ArticlesAdminController@listArticles');
-        Route::get('admin/blog/edit/{id}', 'ArticlesAdminController@editArticle');
-        Route::get('admin/blog/delete/{id}', 'ArticlesAdminController@deleteArticle');
-        Route::post('admin/blog/new', 'ArticlesAdminController@postNewArticle');
-        Route::post('admin/blog/edit/{id}', 'ArticlesAdminController@postEditArticle');
-        Route::post('admin/blog/delete/{id}', 'ArticlesAdminController@postDeleteArticle');
+        Route::group(['prefix' => 'articles'], function () {
+            Route::get('/new', 'ArticlesController@create');
+            Route::get('/edit', 'ArticlesController@index');
+            Route::get('/edit/{id}', 'ArticlesController@edit');
+            Route::get('/delete/{id}', 'ArticlesController@delete');
+            Route::post('/new', 'ArticlesController@store');
+            Route::post('/edit/{id}', 'ArticlesController@update');
+            Route::post('/delete/{id}', 'ArticlesController@detroy');
+        });
 
         //Notes
-        Route::get('admin/note/new', 'NotesAdminController@newNotePage');
-        Route::get('admin/note/edit', 'NotesAdminController@listNotesPage');
-        Route::get('admin/note/edit/{id}', 'NotesAdminController@editNotePage');
-        Route::get('admin/note/delete/{id}', 'NotesAdminController@deleteNotePage');
-        Route::post('admin/note/new', 'NotesAdminController@createNote');
-        Route::post('admin/note/edit/{id}', 'NotesAdminController@editNote');
-        Route::post('admin/note/delete/{id}', 'NotesAdminController@deleteNote');
-
-        //Tokens
-        Route::get('admin/tokens', 'TokensController@showTokens');
-        Route::get('admin/tokens/delete/{id}', 'TokensController@deleteToken');
-        Route::post('admin/tokens/delete/{id}', 'TokensController@postDeleteToken');
+        Route::group(['prefix' => 'notes'], function () {
+            Route::get('/edit', 'NotesController@index');
+            Route::get('/new', 'NotesController@create');
+            Route::get('/edit/{id}', 'NotesController@edit');
+            Route::get('/delete/{id}', 'NotesController@delete');
+            Route::post('/new', 'NotesController@store');
+            Route::post('/edit/{id}', 'NotesController@update');
+            Route::post('/delete/{id}', 'NotesController@destroy');
+        });
 
         //Micropub Clients
-        Route::get('admin/clients', 'ClientsAdminController@listClients');
-        Route::get('admin/clients/new', 'ClientsAdminController@newClient');
-        Route::get('admin/clients/edit/{id}', 'ClientsAdminController@editClient');
-        Route::post('admin/clients/new', 'ClientsAdminController@postNewClient');
-        Route::post('admin/clients/edit/{id}', 'ClientsAdminController@postEditClient');
+        Route::group(['prefix' => 'clients'], function () {
+            Route::get('/', 'ClientsController@index');
+            Route::get('/new', 'ClientsController@create');
+            Route::get('/edit/{id}', 'ClientsController@edit');
+            Route::post('/new', 'ClientsController@store');
+            Route::post('/edit/{id}', 'ClientsController@update');
+        });
 
         //Contacts
-        Route::get('admin/contacts/new', 'ContactsAdminController@newContact');
-        Route::get('admin/contacts/edit', 'ContactsAdminController@listContacts');
-        Route::get('admin/contacts/edit/{id}', 'ContactsAdminController@editContact');
-        Route::get('admin/contacts/edit/{id}/getavatar', 'ContactsAdminController@getAvatar');
-        Route::get('admin/contacts/delete/{id}', 'ContactsAdminController@deleteContact');
-        Route::post('admin/contacts/new', 'ContactsAdminController@postNewContact');
-        Route::post('admin/contacts/edit/{id}', 'ContactsAdminController@postEditContact');
-        Route::post('admin/contacts/delete/{id}', 'ContactsAdminController@postDeleteContact');
+        Route::group(['prefix' => 'contacts'], function () {
+            Route::get('/edit', 'ContactsController@index');
+            Route::get('/new', 'ContactsController@create');
+            Route::get('/edit/{id}', 'ContactsController@edit');
+            Route::get('/delete/{id}', 'ContactsController@delete');
+            Route::post('/new', 'ContactsController@store');
+            Route::post('/edit/{id}', 'ContactsController@update');
+            Route::post('/delete/{id}', 'ContactsController@destroy');
+            Route::get('/edit/{id}/getavatar', 'ContactsController@getAvatar');
+        });
 
         //Places
-        Route::get('admin/places/new', 'PlacesAdminController@newPlacePage');
-        Route::get('admin/places/edit', 'PlacesAdminController@listPlacesPage');
-        Route::get('admin/places/edit/{id}', 'PlacesAdminController@editPlacePage');
-        Route::post('admin/places/new', 'PlacesAdminController@createPlace');
-        Route::post('admin/places/edit/{id}', 'PlacesAdminController@editPlace');
+        Route::group(['prefix' => 'places'], function () {
+            Route::get('/edit', 'PlacesController@index');
+            Route::get('/new', 'PlacesController@create');
+            Route::get('/edit/{id}', 'PlacesController@edit');
+            Route::post('/new', 'PlacesController@store');
+            Route::post('/edit/{id}', 'PlacesController@update');
+        });
     });
 
     //Blog pages using ArticlesController
     Route::get('blog/s/{id}', 'ArticlesController@onlyIdInURL');
-    Route::get('blog/{year?}/{month?}', 'ArticlesController@showAllArticles');
-    Route::get('blog/{year}/{month}/{slug}', 'ArticlesController@singleArticle');
+    Route::get('blog/{year?}/{month?}', 'ArticlesController@index');
+    Route::get('blog/{year}/{month}/{slug}', 'ArticlesController@show');
 
     //micropub new notes page
     //this needs to be first so `notes/new` doesn't match `notes/{id}`
-    Route::get('notes/new', 'MicropubClientController@newNotePage');
-    Route::post('notes/new', 'MicropubClientController@postNewNote');
+
 
     //Notes pages using NotesController
-    Route::get('notes', 'NotesController@showNotes');
-    Route::get('note/{id}', 'NotesController@singleNoteRedirect');
-    Route::get('notes/{id}', 'NotesController@singleNote');
-    Route::get('notes/tagged/{tag}', 'NotesController@taggedNotes');
+    Route::get('notes', 'NotesController@index');
+    Route::get('notes/{id}', 'NotesController@show');
+    Route::get('note/{id}', 'NotesController@redirect');
+    Route::get('notes/tagged/{tag}', 'NotesController@tagged');
 
     //indieauth
-    Route::any('beginauth', 'IndieAuthController@beginauth');
-    Route::get('indieauth', 'IndieAuthController@indieauth');
-    Route::post('api/token', 'IndieAuthController@tokenEndpoint');
-    Route::get('logout', 'IndieAuthController@indieauthLogout');
+    Route::post('indieauth/start', 'IndieAuthController@start')->name('indieauth-start');
+    Route::get('indieauth/callback', 'IndieAuthController@callback')->name('indieauth-callback');
+    Route::get('logout', 'IndieAuthController@logout')->name('indieauth-logout');
+    Route::post('api/token', 'IndieAuthController@tokenEndpoint'); //hmmm?
 
-    //micropub endoints
+    // Micropub Client
+    Route::get('micropub/create', 'MicropubClientController@create')->name('micropub-client');
+    Route::post('micropub', 'MicropubClientController@store')->name('micropub-client-post');
+    Route::get('micropub/refresh-syndication-targets', 'MicropubClientController@refreshSyndicationTargets');
+    Route::get('micropub/places', 'MicropubClientController@nearbyPlaces');
+    Route::post('micropub/places', 'MicropubClientController@newPlace');
+
+    // Micropub Endpoint
+    Route::get('api/post', 'MicropubController@get');
     Route::post('api/post', 'MicropubController@post');
-    Route::get('api/post', 'MicropubController@getEndpoint');
-
-    //micropub refresh syndication targets
-    Route::get('refresh-syndication-targets', 'MicropubClientController@refreshSyndicationTargets');
 
     //webmention
     Route::get('webmention', function () {
@@ -118,15 +132,12 @@ Route::group(['domain' => config('url.longurl')], function () {
     Route::post('webmention', 'WebMentionsController@receive');
 
     //Contacts
-    Route::get('contacts', 'ContactsController@showAll');
-    Route::get('contacts/{nick}', 'ContactsController@showSingle');
+    Route::get('contacts', 'ContactsController@index');
+    Route::get('contacts/{nick}', 'ContactsController@show');
 
     //Places
     Route::get('places', 'PlacesController@index');
     Route::get('places/{slug}', 'PlacesController@show');
-    //Places micropub
-    Route::get('places/near/{lat}/{lng}', 'MicropubClientController@nearbyPlaces');
-    Route::post('places/new', 'MicropubClientController@postNewPlace');
 
     Route::get('feed', 'ArticlesController@makeRSS');
 
