@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 0.3.2 (2017-03-03)
+  - Remove route closures to allow route:cache-ing
+
 ## Version 0.3.1 (2017-03-03)
    - Correct command to restart daemon queues in deploy.sh
    - Improve Admin CP by “resource”-ifying the controllers

@@ -11,6 +11,11 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class WebMentionsController extends Controller
 {
+    public function get()
+    {
+        return view('webmention-endpoint');
+    }
+
     /**
      * Receive and process a webmention.
      *

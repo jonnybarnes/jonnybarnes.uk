@@ -15,19 +15,13 @@ Route::group(['domain' => config('url.longurl')], function () {
     Route::get('/', 'NotesController@index');
 
     //Static project page
-    Route::get('projects', function () {
-        return view('projects');
-    });
+    Route::get('projects', 'StaticRoutesController@projects');
 
     //Static colophon page
-    Route::get('colophon', function () {
-        return view('colophon');
-    });
+    Route::get('colophon', 'StaticRoutesController@colophon');
 
     //The login routes to get authe'd for admin
-    Route::get('login', ['as' => 'login', function () {
-        return view('login');
-    }]);
+    Route::get('login', 'AuthController@showLogin')->name('login');
     Route::post('login', 'AuthController@login');
 
     //Admin pages grouped for filter
@@ -36,9 +30,7 @@ Route::group(['domain' => config('url.longurl')], function () {
         'namespace' => 'Admin',
         'prefix' => 'admin',
     ], function () {
-        Route::get('/', function () {
-            return view('admin.welcome', ['name' => config('admin.user')]);
-        });
+        Route::get('/', 'HomeConrtoller@welcome');
 
         //Articles
         Route::group(['prefix' => 'blog'], function () {
@@ -125,9 +117,7 @@ Route::group(['domain' => config('url.longurl')], function () {
     Route::post('api/post', 'MicropubController@post');
 
     //webmention
-    Route::get('webmention', function () {
-        return view('webmention-endpoint');
-    });
+    Route::get('webmention', 'WebMentionsController@get');
     Route::post('webmention', 'WebMentionsController@receive');
 
     //Contacts
