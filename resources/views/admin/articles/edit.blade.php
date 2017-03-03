@@ -5,8 +5,9 @@ Edit Article « Admin CP
 @stop
 
 @section('content')
-<form action="/admin/blog/edit/{{ $id }}" method="post" accept-charset="utf-8">
-<input type="hidden" name="_token" value="{{ csrf_token() }}">
+<form action="/admin/blog/{{ $id }}" method="post" accept-charset="utf-8">
+{{ csrf_field() }}
+{{ method_field('PUT') }}
 <label for="title">Title (URL):</label>
 <br>
 <input type="text" name="title" id="title" value="{!! $post['0']['title'] !!}">
@@ -21,21 +22,12 @@ Edit Article « Admin CP
 <br>
 <input type="submit" name="save" value="Save">
 </form>
-<h2>Preview</h2>
-@stop
-
-@section('scripts')
-@parent
-<script src="/assets/frontend/marked.min.js"></script>
-<script>
-  var preview = document.createElement('div');
-  preview.classList.add('preview');
-  var main = document.querySelector('main');
-  main.appendChild(preview);
-  var textarea = document.querySelector('textarea');
-  window.setInterval(function () {
-    var markdown = textarea.value;
-    preview.innerHTML = marked(markdown);
-  }, 5000);
-</script>
+<hr>
+<form action="/admin/blog/{{ $id }}" method="post">
+{{ csrf_field() }}
+{{ method_field('DELETE') }}
+<button type="submit" name="submit">
+    Delete
+</button>
+</form>
 @stop

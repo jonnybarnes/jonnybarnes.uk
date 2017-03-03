@@ -9,9 +9,9 @@ List Clients « Admin CP
 <ul>
 @foreach($clients as $client)
 <li>{{ $client['client_url'] }} : {{ $client['client_name'] }}
-  <a href="/admin/clients/edit/{{ $client['id'] }}">edit?</a>
+  <a href="/admin/clients/{{ $client['id'] }}/edit">edit?</a>
 </li>
 @endforeach
 </ul>
-<p>Createn a <a href="/admin/clients/new">new entry</a>?</p>
+<p>Create a <a href="/admin/clients/new">new entry</a>?</p>
 @stop

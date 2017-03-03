@@ -6,8 +6,8 @@ New Place « Admin CP
 
 @section('content')
 <h1>New Place</h1>
-<form action="/admin/places/new" method="post" accept-charset="utf-8">
-  <input type="hidden" name="_token" value="{{ csrf_token() }}">
+<form action="/admin/places/" method="post" accept-charset="utf-8">
+  {{ csrf_field() }}
   <label for="name">Name:</label> <input type="text" name="name" id="name" placeholder="Place Name"><br>
   <label for="description">Description:</label> <input type="text" name="description" id="description" placeholder="Description"><br>
   <label for="latitude">Latitude:</label> <input type="text" name="latitude" id="latitude" placeholder="Latitude"><br>

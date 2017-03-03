@@ -6,8 +6,9 @@ Edit Contact « Admin CP
 
 @section('content')
 <h1>Edit Contact</h1>
-<form action="/admin/contacts/edit/{{ $contact->id }}" method="post" enctype="multipart/form-data" accept-charset="utf-8">
-    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+<form action="/admin/contacts/{{ $contact->id }}" method="post" enctype="multipart/form-data" accept-charset="utf-8">
+    {{ csrf_field() }}
+    {{ method_field('PUT') }}
     <fieldset class="note-ui">
         <legend>Conctact</legend>
         <div>
@@ -37,6 +38,5 @@ Edit Contact « Admin CP
         <input type="submit" name="submit" value="Submit">
     </fieldset>
 </form>
-<p>Or do you want to <a href="/admin/contacts/delete/{{ $contact->id }}">delete</a> this contact?</p>
 <p>Instead of uploading an image, you can <a href="/admin/contacts/edit/{{ $contact->id }}/getavatar">grab from their homepage</a>?</p>
 @stop

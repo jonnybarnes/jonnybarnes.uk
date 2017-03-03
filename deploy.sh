@@ -11,7 +11,7 @@ php artisan route:cache
 php artisan config:cache
 
 echo "Restarting the queue daemon"
-sudo systemctl restart supervisorctl
+sudo supervisorctl restart all
 
 echo "Bringing the Laravel app back online"
 php artisan up

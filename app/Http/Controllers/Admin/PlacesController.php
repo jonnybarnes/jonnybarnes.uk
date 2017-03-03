@@ -26,7 +26,7 @@ class PlacesController extends Controller
     {
         $places = Place::all();
 
-        return view('admin.places.list', ['places' => $places]);
+        return view('admin.places.index', compact('places'));
     }
 
     /**
@@ -36,7 +36,25 @@ class PlacesController extends Controller
      */
     public function create()
     {
-        return view('admin.places.new');
+        return view('admin.places.create');
+    }
+
+    /**
+     * Process a request to make a new place.
+     *
+     * @param  Illuminate\Http\Request $request
+     * @return Illuminate\View\Factory view
+     */
+    public function store(Request $request)
+    {
+        $data = [];
+        $data['name'] = $request->name;
+        $data['description'] = $request->description;
+        $data['latitude'] = $request->latitude;
+        $data['longitude'] = $request->longitude;
+        $place = $this->placeService->createPlace($data);
+
+        return redirect('/admin/places');
     }
 
     /**
@@ -62,24 +80,6 @@ class PlacesController extends Controller
     }
 
     /**
-     * Process a request to make a new place.
-     *
-     * @param  Illuminate\Http\Request $request
-     * @return Illuminate\View\Factory view
-     */
-    public function store(Request $request)
-    {
-        $data = [];
-        $data['name'] = $request->name;
-        $data['description'] = $request->description;
-        $data['latitude'] = $request->latitude;
-        $data['longitude'] = $request->longitude;
-        $place = $this->placeService->createPlace($data);
-
-        return view('admin.places.newsuccess');
-    }
-
-    /**
      * Process a request to edit a place.
      *
      * @param string The place id
@@ -94,6 +94,6 @@ class PlacesController extends Controller
         $place->location = new Point((float) $request->latitude, (float) $request->longitude);
         $place->save();
 
-        return view('admin.places.editsuccess');
+        return redirect('/admin/places');
     }
 }
