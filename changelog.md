@@ -1,7 +1,8 @@
 # Changelog
 
 ## Version {next}
-   - Correct command to restart daemon queues in deply.sh
+   - Correct command to restart daemon queues in deploy.sh
+   - Improve Admin CP by “resource”-ifying the controllers
 
 ## Version 0.3 (2017-03-02)
   - convert env() calls to config() calls for cacheing
