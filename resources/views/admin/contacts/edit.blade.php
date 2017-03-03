@@ -7,7 +7,7 @@ Edit Contact « Admin CP
 @section('content')
 <h1>Edit Contact</h1>
 <form action="/admin/contacts/{{ $contact->id }}" method="post" enctype="multipart/form-data" accept-charset="utf-8">
-    {{ csrf_token() }}
+    {{ csrf_field() }}
     {{ method_field('PUT') }}
     <fieldset class="note-ui">
         <legend>Conctact</legend>

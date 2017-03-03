@@ -65,7 +65,7 @@ Route::group(['domain' => config('url.longurl')], function () {
             Route::get('/', 'ClientsController@index');
             Route::get('/create', 'ClientsController@create');
             Route::post('/', 'ClientsController@store');
-            Route::get('/{id}', 'ClientsController@edit');
+            Route::get('/{id}/edit', 'ClientsController@edit');
             Route::put('/{id}', 'ClientsController@update');
             Route::delete('/{id}', 'ClientsController@destroy');
         });
@@ -75,7 +75,7 @@ Route::group(['domain' => config('url.longurl')], function () {
             Route::get('/', 'ContactsController@index');
             Route::get('/create', 'ContactsController@create');
             Route::post('/', 'ContactsController@store');
-            Route::get('/{id}', 'ContactsController@edit');
+            Route::get('/{id}/edit', 'ContactsController@edit');
             Route::put('/{id}', 'ContactsController@update');
             Route::delete('/{id}', 'ContactsController@destroy');
             Route::get('/{id}/getavatar', 'ContactsController@getAvatar');
@@ -86,7 +86,7 @@ Route::group(['domain' => config('url.longurl')], function () {
             Route::get('/', 'PlacesController@index');
             Route::get('/create', 'PlacesController@create');
             Route::post('/', 'PlacesController@store');
-            Route::get('/{id}', 'PlacesController@edit');
+            Route::get('/{id}/edit', 'PlacesController@edit');
             Route::put('/{id}', 'PlacesController@update');
             Route::delete('/{id}', 'PlacesController@destroy');
         });
