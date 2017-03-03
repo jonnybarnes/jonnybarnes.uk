@@ -64,7 +64,7 @@ Route::group(['domain' => config('url.longurl')], function () {
 
         //Micropub Clients
         Route::group(['prefix' => 'clients'], function () {
-            Route::get('/', 'ClientsController@index');
+            Route::get('/edit', 'ClientsController@index');
             Route::get('/new', 'ClientsController@create');
             Route::get('/edit/{id}', 'ClientsController@edit');
             Route::post('/new', 'ClientsController@store');
