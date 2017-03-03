@@ -1,5 +1,8 @@
 # Changelog
 
+## Version {next}
+   - Correct command to restart daemon queues in deply.sh
+
 ## Version 0.3 (2017-03-02)
   - convert env() calls to config() calls for cacheing
   - refactor routes and give important one names
