@@ -30,7 +30,7 @@ Route::group(['domain' => config('url.longurl')], function () {
         'namespace' => 'Admin',
         'prefix' => 'admin',
     ], function () {
-        Route::get('/', 'HomeConrtoller@welcome');
+        Route::get('/', 'HomeController@welcome');
 
         //Articles
         Route::group(['prefix' => 'blog'], function () {
