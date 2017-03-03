@@ -1,6 +1,6 @@
 # Changelog
 
-## Version {next}
+## Version 0.3.2 (2017-03-03)
   - Remove route closures to allow route:cache-ing
 
 ## Version 0.3.1 (2017-03-03)
