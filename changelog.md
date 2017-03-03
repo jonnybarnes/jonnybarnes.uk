@@ -1,6 +1,6 @@
 # Changelog
 
-## Version {next}
+## Version 0.3.3 (2017-03-03)
   - Fix issue when accessing /admin
 
 ## Version 0.3.2 (2017-03-03)
