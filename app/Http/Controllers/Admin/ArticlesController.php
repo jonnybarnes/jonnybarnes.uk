@@ -17,7 +17,7 @@ class ArticlesController extends Controller
     {
         $posts = Article::select('id', 'title', 'published')->orderBy('id', 'desc')->get();
 
-        return view('admin.articles.list', ['posts' => $posts]);
+        return view('admin.articles.index', ['posts' => $posts]);
     }
 
     /**
@@ -29,7 +29,7 @@ class ArticlesController extends Controller
     {
         $message = session('message');
 
-        return view('admin.articles.new', ['message' => $message]);
+        return view('admin.articles.create', ['message' => $message]);
     }
 
     /**
@@ -65,13 +65,13 @@ class ArticlesController extends Controller
             $unique = strpos($msg, '1062');
             if ($unique !== false) {
                 //We've checked for error 1062, i.e. duplicate titleurl
-                return redirect('admin/blog/new')->withInput()->with('message', 'Duplicate title, please change');
+                return redirect('/admin/blog/create')->withInput()->with('message', 'Duplicate title, please change');
             }
             //this isn't the error you're looking for
             throw $e;
         }
 
-        return view('admin.articles.newsuccess', ['id' => $article->id, 'title' => $article->title]);
+        return redirect('/admin/blog');
     }
 
     /**
@@ -112,18 +112,7 @@ class ArticlesController extends Controller
         $article->published = $published;
         $article->save();
 
-        return view('admin.articles.editsuccess', ['id' => $articleId]);
-    }
-
-    /**
-     * Show the delete confirmation form for an article.
-     *
-     * @param  string  The article id
-     * @return \Illuminate\View\Factory view
-     */
-    public function delete($articleId)
-    {
-        return view('admin.articles.delete', ['id' => $articleId]);
+        return redirect('/admin/blog');
     }
 
     /**
@@ -136,6 +125,6 @@ class ArticlesController extends Controller
     {
         Article::where('id', $articleId)->delete();
 
-        return view('admin.articles.deletesuccess', ['id' => $articleId]);
+        return redirect('/admin/blog');
     }
 }

@@ -8,8 +8,8 @@ List Places « Admin CP
 <h1>Places</h1>
 <ul>
 @foreach($places as $place)
-<li>{{ $place['name'] }} <a href="/admin/places/edit/{{ $place['id'] }}">edit?</a></li>
+<li>{{ $place['name'] }} <a href="/admin/places/{{ $place['id'] }}/edit">edit?</a></li>
 @endforeach
 </ul>
-<p>Createn a <a href="/admin/places/new">new entry</a>?</p>
+<p>Create a <a href="/admin/places/create">new entry</a>?</p>
 @stop

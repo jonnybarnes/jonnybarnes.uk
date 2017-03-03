@@ -8,7 +8,7 @@ List Notes « Admin CP
 <p>Select note to edit:</p>
 <ol reversed>
 @foreach($notes as $note)
-<li><a href="/admin/note/edit/{{ $note->id }}">{{ $note->originalNote }}</a></li>
+<li><a href="/admin/notes/{{ $note->id }}/edit">{{ $note->originalNote }}</a></li>
 @endforeach
 </ol>
 @stop

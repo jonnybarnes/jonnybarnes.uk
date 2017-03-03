@@ -6,8 +6,9 @@ Edit Place « Admin CP
 
 @section('content')
 <h1>Edit Place</h1>
-<form action="/admin/places/edit/{{ $id }}" method="post" accept-charset="utf-8">
-  <input type="hidden" name="_token" value="{{ csrf_token() }}">
+<form action="/admin/places/{{ $id }}" method="post" accept-charset="utf-8">
+  {{ csrf_field() }}
+  {{ method_field('PUT') }}
   <input type="text" name="name" id="name" value="{{ $name }}"><br>
   <input type="text" name="description" id="description" value="{{ $description }}"><br>
   <input type="text" name="latitude" id="latitude" value="{{ $latitude }}"><br>

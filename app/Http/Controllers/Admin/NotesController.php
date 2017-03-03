@@ -30,7 +30,7 @@ class NotesController extends Controller
             $note->originalNote = $note->getOriginal('note');
         }
 
-        return view('admin.notes.list', ['notes' => $notes]);
+        return view('admin.notes.index', comapct('notes'));
     }
 
     /**
@@ -40,32 +40,7 @@ class NotesController extends Controller
      */
     public function create()
     {
-        return view('admin.notes.new');
-    }
-
-    /**
-     * Display the form to edit a specific note.
-     *
-     * @param  string The note id
-     * @return \Illuminate\View\Factory view
-     */
-    public function edit($noteId)
-    {
-        $note = Note::find($noteId);
-        $note->originalNote = $note->getOriginal('note');
-
-        return view('admin.notes.edit', ['id' => $noteId, 'note' => $note]);
-    }
-
-    /**
-     * The delete note page.
-     *
-     * @param  int id
-     * @return view
-     */
-    public function delete($noteId)
-    {
-        return view('admin.notes.delete', ['id' => $id]);
+        return view('admin.notes.create');
     }
 
     /**
@@ -82,7 +57,7 @@ class NotesController extends Controller
             ['photosize' => 'At least one uploaded file exceeds size limit of 5MB']
         );
         if ($validator->fails()) {
-            return redirect('/admin/note/new')
+            return redirect('/admin/notes/create')
                 ->withErrors($validator)
                 ->withInput();
         }
@@ -101,10 +76,21 @@ class NotesController extends Controller
 
         $note = $this->noteService->createNote($data);
 
-        return view('admin.notes.newsuccess', [
-            'id' => $note->id,
-            'shorturl' => $note->shorturl,
-        ]);
+        return redirect('/admin/notes');
+    }
+
+    /**
+     * Display the form to edit a specific note.
+     *
+     * @param  string The note id
+     * @return \Illuminate\View\Factory view
+     */
+    public function edit($noteId)
+    {
+        $note = Note::find($noteId);
+        $note->originalNote = $note->getOriginal('note');
+
+        return view('admin.notes.edit', compact('note'));
     }
 
     /**
@@ -126,7 +112,7 @@ class NotesController extends Controller
             dispatch(new SendWebMentions($note));
         }
 
-        return view('admin.notes.editsuccess', ['id' => $noteId]);
+        return redirect('/admin/notes');
     }
 
     /**
@@ -140,6 +126,6 @@ class NotesController extends Controller
         $note = Note::findOrFail($id);
         $note->delete();
 
-        return view('admin.notes.deletesuccess');
+        return redirect('/admin/notes');
     }
 }

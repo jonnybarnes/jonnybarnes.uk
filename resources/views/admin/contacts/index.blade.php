@@ -22,7 +22,7 @@ List Contacts « Admin CP
         <td>{{ $contact->homepage }}</td>
         <td>{{ $contact->twitter }}</td>
         <td>{{ $contact->facebook }}</td>
-        <td><a href="/admin/contacts/edit/{{ $contact->id }}">edit</a></td>
+        <td><a href="/admin/contacts/{{ $contact->id }}/edit">edit</a></td>
     </tr>
 @endforeach
 </table>

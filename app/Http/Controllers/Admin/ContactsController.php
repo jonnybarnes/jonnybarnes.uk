@@ -19,7 +19,7 @@ class ContactsController extends Controller
     {
         $contacts = Contact::all();
 
-        return view('admin.contacts.list', ['contacts' => $contacts]);
+        return view('admin.contacts.index', compact('contacts'));
     }
 
     /**
@@ -29,30 +29,7 @@ class ContactsController extends Controller
      */
     public function create()
     {
-        return view('admin.contacts.new');
-    }
-
-    /**
-     * Show the form to edit an existing contact.
-     *
-     * @param  string  The contact id
-     * @return \Illuminate\View\Factory view
-     */
-    public function edit($contactId)
-    {
-        $contact = Contact::findOrFail($contactId);
-
-        return view('admin.contacts.edit', ['contact' => $contact]);
-    }
-
-    /**
-     * Show the form to confirm deleting a contact.
-     *
-     * @return \Illuminate\View\Factory view
-     */
-    public function delete($contactId)
-    {
-        return view('admin.contacts.delete', ['id' => $contactId]);
+        return view('admin.contacts.create');
     }
 
     /**
@@ -71,7 +48,20 @@ class ContactsController extends Controller
         $contact->facebook = $request->input('facebook');
         $contact->save();
 
-        return view('admin.contacts.newsuccess', ['id' => $contact->id]);
+        return redirect('/admin/contacts');
+    }
+
+    /**
+     * Show the form to edit an existing contact.
+     *
+     * @param  string  The contact id
+     * @return \Illuminate\View\Factory view
+     */
+    public function edit($contactId)
+    {
+        $contact = Contact::findOrFail($contactId);
+
+        return view('admin.contacts.edit', compact('contact'));
     }
 
     /**
@@ -105,7 +95,7 @@ class ContactsController extends Controller
             }
         }
 
-        return view('admin.contacts.editsuccess');
+        return redirect('/admin/contacts');
     }
 
     /**
@@ -119,7 +109,7 @@ class ContactsController extends Controller
         $contact = Contact::findOrFail($contactId);
         $contact->delete();
 
-        return view('admin.contacts.deletesuccess');
+        return redirect('/admin/contacts');
     }
 
     /**

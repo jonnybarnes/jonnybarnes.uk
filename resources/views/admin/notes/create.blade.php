@@ -16,7 +16,7 @@ New Note « Admin CP
 @endif
 @include('templates.new-note-form', [
   'micropub' => false,
-  'action' => '/admin/note/new',
+  'action' => '/admin/note',
   'id' => 'newnote-admin'
 ])
 @stop
@@ -25,9 +25,6 @@ New Note « Admin CP
 @include('templates.mapbox-links')
 
 <script src="/assets/js/newnote.js"></script>
-<script src="/assets/frontend/store2.min.js"></script>
-<script src="/assets/frontend/alertify.js"></script>
-<script src="/assets/js/form-save.js"></script>
 
 <link rel="stylesheet" href="/assets/frontend/alertify.css">
 @stop

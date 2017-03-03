@@ -17,7 +17,7 @@ class ClientsController extends Controller
     {
         $clients = MicropubClient::all();
 
-        return view('admin.clients.list', ['clients' => $clients]);
+        return view('admin.clients.index', compact('clients'));
     }
 
     /**
@@ -27,7 +27,23 @@ class ClientsController extends Controller
      */
     public function create()
     {
-        return view('admin.clients.new');
+        return view('admin.clients.create');
+    }
+
+    /**
+     * Process the request to adda new client name.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\View\Factory view
+     */
+    public function store(Request $request)
+    {
+        MicropubClient::create([
+            'client_url' => $request->input('client_url'),
+            'client_name' => $request->input('client_name'),
+        ]);
+
+        return redirect('/admin/clients');
     }
 
     /**
@@ -48,22 +64,6 @@ class ClientsController extends Controller
     }
 
     /**
-     * Process the request to adda new client name.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\View\Factory view
-     */
-    public function store(Request $request)
-    {
-        MicropubClient::create([
-            'client_url' => $request->input('client_url'),
-            'client_name' => $request->input('client_name'),
-        ]);
-
-        return view('admin.clients.newsuccess');
-    }
-
-    /**
      * Process the request to edit a client name.
      *
      * @param  string  The client id
@@ -73,17 +73,23 @@ class ClientsController extends Controller
     public function update($clientId, Request $request)
     {
         $client = MicropubClient::findOrFail($clientId);
-        if ($request->input('edit')) {
-            $client->client_url = $request->input('client_url');
-            $client->client_name = $request->input('client_name');
-            $client->save();
+        $client->client_url = $request->input('client_url');
+        $client->client_name = $request->input('client_name');
+        $client->save();
 
-            return view('admin.clietns.editsuccess');
-        }
-        if ($request->input('delete')) {
-            $client->delete();
+        return redirect('/admin/clients');
+    }
 
-            return view('admin.clients.deletesuccess');
-        }
+    /**
+     * Process a request to delete a client.
+     *
+     * @param  string The client id
+     * @return redirect
+     */
+    public function destroy($articleId)
+    {
+        MicropubClient::where('id', $articleId)->delete();
+
+        return redirect('/admin/clients');
     }
 }
