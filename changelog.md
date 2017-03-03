@@ -1,6 +1,6 @@
 # Changelog
 
-## Version {next}
+## Version 0.3.1 (2017-03-03)
    - Correct command to restart daemon queues in deploy.sh
    - Improve Admin CP by “resource”-ifying the controllers
 
