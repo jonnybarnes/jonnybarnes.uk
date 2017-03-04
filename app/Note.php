@@ -9,15 +9,12 @@ use Illuminate\Database\Eloquent\Model;
 use Jonnybarnes\EmojiA11y\EmojiModifier;
 use League\CommonMark\CommonMarkConverter;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
-use Spatie\MediaLibrary\HasMedia\Interfaces\HasMedia;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
-class Note extends Model implements HasMedia
+class Note extends Model
 {
     use Searchable;
     use SoftDeletes;
-    use HasMediaTrait;
 
     /**
      * The database table used by the model.

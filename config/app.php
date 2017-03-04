@@ -216,11 +216,6 @@ return [
         Thujohn\Twitter\TwitterServiceProvider::class,
 
         /*
-         * Laravel Medialibrary
-         */
-        Spatie\MediaLibrary\MediaLibraryServiceProvider::class,
-
-        /*
          * Phaza’s Postgis library
          */
         Phaza\LaravelPostgis\DatabaseServiceProvider::class,
