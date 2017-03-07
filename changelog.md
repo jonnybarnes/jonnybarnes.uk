@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 0.3.6 (2017-03-07)
+  - Pull in Piwik’s own piwik.js manually, again for CSP
+
 ## Version 0.3.5 (2017-03-07)
   - Move piwik code into its own js file to allow for CSP
 
