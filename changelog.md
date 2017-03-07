@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 0.3.5 (2017-03-07)
+  - Move piwik code into its own js file to allow for CSP
+
 ## Version 0.3.4 (2017-03-07)
   - Remove document.write to allow CSP to work
 
