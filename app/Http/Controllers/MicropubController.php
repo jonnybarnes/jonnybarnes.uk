@@ -225,4 +225,42 @@ class MicropubController extends Controller
             'error_description' => 'No token provided with request',
         ], 400);
     }
+
+    /**
+     * Process a media item posted to the media endpoint.
+     *
+     * @param  Illuminate\Http\Request $request
+     * @return Illuminate\Http\Response
+     */
+    public function media(Request $request)
+    {
+        //can this go in middleware
+        $httpAuth = $request->header('Authorization');
+        if (preg_match('/Bearer (.+)/', $httpAuth, $match)) {
+            $token = $match[1];
+            $valid = $this->tokenService->validateToken($token);
+
+            if ($valid === null) {
+                return response()->json([
+                    'response' => 'error',
+                    'error' => 'invalid_token',
+                    'error_description' => 'The provided token did not pass validation',
+                ], 400);
+            }
+
+            //check post scope
+
+            //check media valid
+
+            //save media
+
+            //return URL for media
+        }
+
+        return response()->json([
+            'response' => 'error',
+            'error' => 'no_token',
+            'error_description' => 'There was no token provided with the request'
+        ], 400);
+    }
 }

@@ -115,6 +115,7 @@ Route::group(['domain' => config('url.longurl')], function () {
     // Micropub Endpoint
     Route::get('api/post', 'MicropubController@get');
     Route::post('api/post', 'MicropubController@post');
+    Route::post('api/media', 'MicropubController@media');
 
     //webmention
     Route::get('webmention', 'WebMentionsController@get');
