@@ -28,10 +28,6 @@ New Note «
 @stop
 
 @section('scripts')
-<script>
-    window.Promise || document.write('<script src="https://unpkg.com/promise-polyfill/promise.min.js"><\/script>');
-    window.fetch || document.write('<script src="https://unpkg.com/whatwg-fetch/fetch.js"><\/script>');
-</script>
 <script defer src="/assets/js/newnote.js"></script>
 
 <link rel="stylesheet" href="/assets/frontend/alertify.css">
