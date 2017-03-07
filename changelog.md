@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 0.3.4 (2017-03-07)
+  - Remove document.write to allow CSP to work
+
 ## Version 0.3.3 (2017-03-03)
   - Fix issue when accessing /admin
 
