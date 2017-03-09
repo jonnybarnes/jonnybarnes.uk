@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Place;
+use Ramsey\Uuid\Uuid;
 use Illuminate\Http\Request;
 use App\Services\NoteService;
 use Illuminate\Http\Response;
 use App\Services\PlaceService;
 use App\Services\TokenService;
+use Ramsey\Uuid\Exception\UnsatisfiedDependencyException;
 
 class MicropubController extends Controller
 {
@@ -238,9 +240,9 @@ class MicropubController extends Controller
         $httpAuth = $request->header('Authorization');
         if (preg_match('/Bearer (.+)/', $httpAuth, $match)) {
             $token = $match[1];
-            $valid = $this->tokenService->validateToken($token);
+            $tokenData = $this->tokenService->validateToken($token);
 
-            if ($valid === null) {
+            if ($tokenData === null) {
                 return response()->json([
                     'response' => 'error',
                     'error' => 'invalid_token',
@@ -249,10 +251,33 @@ class MicropubController extends Controller
             }
 
             //check post scope
+            if ($tokenData->hasClaim('scope')) {
+                $scopes = explode(' ', $tokenData->getClaim('scope'));
+                if (array_search('post', $scopes) !== false) {
+                    //check media valid
+                    if ($request->file('file')->isValid()) {
+                        //save media
+                        try {
+                            $filename = Uuid::uuid4() . $request->file->extension();
+                        } catch (UnsatisfiedDependencyException $e) {
+                            return response()->json([
+                                'response' => 'error',
+                                'error' => 'internal_server_error',
+                                'error_description' => 'A problem occured handling your request'
+                            ], 500)
+                        }
+                        try {
+                            $path = $request->file->storeAs('media', $filename, 's3');
+                        } catch(Excetion $e) { // which exception?
+                            return response()->json([
+                                'response' => 'error',
+                                'error' => 'service_unavailable',
+                                'error_description' => 'Unable to save media to S3'
+                            ], 503)
+                        }
 
-            //check media valid
-
-            //save media
+                        return $path;
+                    }
 
             //return URL for media
         }

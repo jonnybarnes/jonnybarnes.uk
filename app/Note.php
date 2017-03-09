@@ -54,6 +54,16 @@ class Note extends Model
     }
 
     /**
+     * Define the relationship with media.
+     *
+     * @return void
+     */
+    public function media()
+    {
+        return $this->hasMany('App\Media');
+    }
+
+    /**
      * We shall set a blacklist of non-modifiable model attributes.
      *
      * @var array
