@@ -204,10 +204,10 @@ class MicropubController extends Controller
                 ]);
             }
             //nope, how about a config query?
-            //this should have a media endpoint as well at some point
             if ($request->input('q') == 'config') {
                 return response()->json([
                     'syndicate-to' => config('syndication.targets'),
+                    'media-endpoint' => route('media-endpoint'),
                 ]);
             }
 
