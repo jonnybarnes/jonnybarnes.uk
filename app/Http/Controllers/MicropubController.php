@@ -258,7 +258,7 @@ class MicropubController extends Controller
                     if ($request->file('file')->isValid()) {
                         //save media
                         try {
-                            $filename = Uuid::uuid4() . $request->file->extension();
+                            $filename = Uuid::uuid4() . $request->file('file')->extension();
                         } catch (UnsatisfiedDependencyException $e) {
                             return response()->json([
                                 'response' => 'error',
@@ -267,16 +267,20 @@ class MicropubController extends Controller
                             ], 500)
                         }
                         try {
-                            $path = $request->file->storeAs('media', $filename, 's3');
-                        } catch(Excetion $e) { // which exception?
+                            $path = $request->file('file')->storeAs('media', $filename, 's3');
+                        } catch (Exception $e) { // which exception?
                             return response()->json([
                                 'response' => 'error',
                                 'error' => 'service_unavailable',
                                 'error_description' => 'Unable to save media to S3'
                             ], 503)
                         }
+                        $media = new Media();
+                        $media->token = $token;
+                        $media->path = $path;
+                        $media->save();
 
-                        return $path;
+                        return $media->url;
                     }
 
             //return URL for media

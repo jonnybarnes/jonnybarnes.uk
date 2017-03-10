@@ -61,6 +61,7 @@ return [
             'secret' => env('AWS_S3_SECRET'),
             'region' => env('AWS_S3_REGION'),
             'bucket' => env('AWS_S3_BUCKET'),
+            'url' => env('AWS_S3_URL'),
         ],
 
         'media' => [
