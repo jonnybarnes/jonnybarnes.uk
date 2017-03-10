@@ -8,11 +8,6 @@
   <div class="note">
     <div class="e-content p-name">
       {!! $note->note !!}
-      @if(count($note->photoURLs) > 0)
-        @foreach($note->photoURLs as $photoURL)
-          <img src="{{ $photoURL }}" alt="" class="note-photo u-photo">
-        @endforeach
-      @endif
     </div>
     <div class="note-metadata">
       <div>
