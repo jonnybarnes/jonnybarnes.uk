@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Media;
 use App\Place;
 use Ramsey\Uuid\Uuid;
 use Illuminate\Http\Request;
@@ -258,13 +259,13 @@ class MicropubController extends Controller
                     if ($request->file('file')->isValid()) {
                         //save media
                         try {
-                            $filename = Uuid::uuid4() . $request->file('file')->extension();
+                            $filename = Uuid::uuid4() . '.' . $request->file('file')->extension();
                         } catch (UnsatisfiedDependencyException $e) {
                             return response()->json([
                                 'response' => 'error',
                                 'error' => 'internal_server_error',
                                 'error_description' => 'A problem occured handling your request'
-                            ], 500)
+                            ], 500);
                         }
                         try {
                             $path = $request->file('file')->storeAs('media', $filename, 's3');
@@ -273,17 +274,38 @@ class MicropubController extends Controller
                                 'response' => 'error',
                                 'error' => 'service_unavailable',
                                 'error_description' => 'Unable to save media to S3'
-                            ], 503)
+                            ], 503);
                         }
                         $media = new Media();
                         $media->token = $token;
                         $media->path = $path;
                         $media->save();
 
-                        return $media->url;
+                        return response()->json([
+                            'response' => 'created',
+                            'location' => $media->url,
+                        ], 201)->header('Location', $media->url);
                     }
 
-            //return URL for media
+                    return response()->json([
+                        'response' => 'error',
+                        'error' => 'invalid_request',
+                        'error_description' => 'The uploaded file failed validation',
+                    ], 400);
+                }
+
+                return response()->json([
+                    'response' => 'error',
+                    'error' => 'insufficient_scope',
+                    'error_description' => 'The provided token has insufficient scopes',
+                ], 401);
+            }
+
+            return response()->json([
+                'response' => 'error',
+                'error' => 'unauthorized',
+                'error_description' => 'No token provided with request',
+            ], 401);
         }
 
         return response()->json([

@@ -28,6 +28,6 @@ class Media extends Model
      */
     public function getUrlAttribute()
     {
-        return config('filesystems.s3.url') . '/' . $this->path;
+        return config('filesystems.disks.s3.url') . '/' . $this->path;
     }
 }
