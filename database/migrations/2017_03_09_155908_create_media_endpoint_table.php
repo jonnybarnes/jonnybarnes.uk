@@ -16,7 +16,7 @@ class CreateMediaEndpointTable extends Migration
         Schema::create('media_endpoint', function (Blueprint $table) {
             $table->increments('id');
             $table->text('token')->nullable();
-            $table->varchar('path');
+            $table->string('path');
             $table->unsignedInteger('note_id')->nullable();
             $table->timestamps();
 
