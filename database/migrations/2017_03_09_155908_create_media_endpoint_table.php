@@ -20,7 +20,6 @@ class CreateMediaEndpointTable extends Migration
             $table->unsignedInteger('note_id')->nullable();
             $table->timestamps();
 
-            $table->primary('id');
             $table->index('token');
             $table->foreign('note_id')->references('id')->on('notes');
         });
