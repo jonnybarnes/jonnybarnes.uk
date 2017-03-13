@@ -14,13 +14,13 @@ class CreateMediaEndpointTable extends Migration
     public function up()
     {
         Schema::create('media_endpoint', function (Blueprint $table) {
-            $table->uuid('id');
-            $table->varchar('client_id')->nullable();
-            $table->varchar('filetype');
+            $table->increments('id');
+            $table->text('token')->nullable();
+            $table->string('path');
             $table->unsignedInteger('note_id')->nullable();
             $table->timestamps();
 
-            $table->primary('id');
+            $table->index('token');
             $table->foreign('note_id')->references('id')->on('notes');
         });
     }

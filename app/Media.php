@@ -20,4 +20,14 @@ class Media extends Model
     {
         return $this->belongsTo('App\Note');
     }
+
+    /**
+     * Get the URL for an S3 media file.
+     *
+     * @return string
+     */
+    public function getUrlAttribute()
+    {
+        return config('filesystems.disks.s3.url') . '/' . $this->path;
+    }
 }

@@ -58,12 +58,6 @@ class NotesController extends Controller
                     $note->place->icon
                 );
             }
-            $photoURLs = [];
-            $photos = $note->getMedia();
-            foreach ($photos as $photo) {
-                $photoURLs[] = $photo->getUrl();
-            }
-            $note->photoURLs = $photoURLs;
         }
 
         $homepage = ($request->path() == '/');
@@ -163,13 +157,6 @@ class NotesController extends Controller
                 $note->place->icon
             );
         }
-
-        $photoURLs = [];
-        $photos = $note->getMedia();
-        foreach ($photos as $photo) {
-            $photoURLs[] = $photo->getUrl();
-        }
-        $note->photoURLs = $photoURLs;
 
         return view('notes.show', compact('note', 'replies', 'reposts', 'likes'));
     }
