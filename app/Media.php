@@ -14,13 +14,6 @@ class Media extends Model
     protected $table = 'media_endpoint';
 
     /**
-     * Our primaru key is a UUID value, therefore not incrementing.
-     *
-     * @var boolean
-     */
-    protected $incrementing = false;
-
-    /**
      * Get the note that owns this media.
      */
     public function note()
