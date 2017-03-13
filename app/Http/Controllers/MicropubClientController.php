@@ -80,6 +80,20 @@ class MicropubClientController extends Controller
     }
 
     /**
+     * Show currently stored configuration values.
+     *
+     * @param  Illuminate\Http\Request $request
+     * @return view
+     */
+    public function config(Request $request)
+    {
+        $data['me'] = $request->session()->get('me');
+        $data['token'] = $request->session()->get('token');
+        $data['syndication'] = $request->session()->get('syndication') ?? 'none defined';
+        return view('micropub.config', compact('data'));
+    }
+
+    /**
      * We make a request to the micropub endpoint requesting syndication targets
      * and store them in the session.
      *

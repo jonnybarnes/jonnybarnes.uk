@@ -20,6 +20,7 @@ New Note «
 </form>
 @else
 <p>You are authenticated as <code>{{ $url }}</code>, <a href="/logout">log out</a>.</p>
+<p>Check your <a href="{{ route('micropub-config') }}">configuration</a>.</p>
 @endif
   @include('templates.new-note-form', [
     'micropub' => true,

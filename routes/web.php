@@ -108,6 +108,7 @@ Route::group(['domain' => config('url.longurl')], function () {
     // Micropub Client
     Route::get('micropub/create', 'MicropubClientController@create')->name('micropub-client');
     Route::post('micropub', 'MicropubClientController@store')->name('micropub-client-post');
+    Route::get('micropub/config', 'MicropubClientController@config')->name('micropub-config');
     Route::get('micropub/refresh-syndication-targets', 'MicropubClientController@refreshSyndicationTargets');
     Route::get('micropub/places', 'MicropubClientController@nearbyPlaces');
     Route::post('micropub/places', 'MicropubClientController@newPlace');
