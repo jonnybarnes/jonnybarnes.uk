@@ -109,9 +109,12 @@ Route::group(['domain' => config('url.longurl')], function () {
     Route::get('micropub/create', 'MicropubClientController@create')->name('micropub-client');
     Route::post('micropub', 'MicropubClientController@store')->name('micropub-client-post');
     Route::get('micropub/config', 'MicropubClientController@config')->name('micropub-config');
-    Route::get('micropub/refresh-syndication-targets', 'MicropubClientController@refreshSyndicationTargets');
+    Route::get('micropub/query-endpoint', 'MicropubClientController@queryEndpoint')->name('micropub-query-action');
+    //Route::get('micropub/refresh-syndication-targets', 'MicropubClientController@refreshSyndicationTargets');
     Route::get('micropub/places', 'MicropubClientController@nearbyPlaces');
     Route::post('micropub/places', 'MicropubClientController@newPlace');
+    Route::post('micropub/media', 'MicropubClientController@processMedia')->name('process-media');
+    Route::get('micropub/media/clearlinks', 'MicropubClientController@clearLinks');
 
     // Micropub Endpoint
     Route::get('api/post', 'MicropubController@get');
