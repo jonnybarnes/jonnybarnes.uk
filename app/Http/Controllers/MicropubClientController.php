@@ -8,6 +8,7 @@ use App\Services\IndieAuthService;
 use Illuminate\Support\Facades\Log;
 use IndieAuth\Client as IndieClient;
 use GuzzleHttp\Client as GuzzleClient;
+use GuzzleHttp\Exception\ServerException;
 use GuzzleHttp\Exception\ClientException;
 
 class MicropubClientController extends Controller
@@ -40,8 +41,60 @@ class MicropubClientController extends Controller
     {
         $url = $request->session()->get('me');
         $syndication = $request->session()->get('syndication');
+        $mediaEndpoint = $request->session()->get('media-endpoint');
+        $mediaURLs = $request->session()->get('media-links');
 
-        return view('micropub.create', compact('url', 'syndication'));
+        return view('micropub.create', compact('url', 'syndication', 'mediaEndpoint', 'mediaURLs'));
+    }
+
+    /**
+     * Process an upload to the media endpoint.
+     *
+     * @param  Illuminate\Http\Request $request
+     * @return Illuminate\Http\Response
+     */
+    public function processMedia(Request $request)
+    {
+        if ($request->hasFile('file') == false) {
+            return back();
+        }
+
+        $mediaEndpoint = $request->session()->get('media-endpoint');
+        if ($mediaEndpoint == null) {
+            return back();
+        }
+
+        $token = $request->session()->get('token');
+
+        $mediaURLs = [];
+        foreach ($request->file('file') as $file) {
+            try {
+                $response = $this->guzzleClient->request('POST', $mediaEndpoint, [
+                    'headers' => ['Authorization' => 'Bearer ' . $token],
+                    'mulitpart' => [
+                        [
+                            'name' => $file->getClientOriginalName(),
+                            'file' => fopen($file->path(), 'r'),
+                        ],
+                    ],
+                ]);
+            } catch (ClientException | ServerException $e) {
+                continue;
+            }
+
+            $mediaURLs[] = $response->header('Location');
+        }
+
+        $request->session()->put('media-links', $mediaURLs);
+
+        return redirect(route('micropub-client'));
+    }
+
+    public function clearLinks(Request $request)
+    {
+        $request->session()->forget('media-links');
+
+        return redirect(route('micropub-client'));
     }
 
     /**
@@ -90,7 +143,41 @@ class MicropubClientController extends Controller
         $data['me'] = $request->session()->get('me');
         $data['token'] = $request->session()->get('token');
         $data['syndication'] = $request->session()->get('syndication') ?? 'none defined';
+        $data['media-endpoint'] = $request->session()->get('media-endpoint') ?? 'none defined';
+
         return view('micropub.config', compact('data'));
+    }
+
+    /**
+     * Query the micropub endpoint and store response in the session.
+     *
+     * @param  Illuminate\Http\Request $request
+     * @return redirect
+     */
+    public function queryEndpoint(Request $request)
+    {
+        $domain = $request->session()->get('me');
+        $token = $request->session()->get('token');
+        $micropubEndpoint = $this->indieAuthService->discoverMicropubEndpoint($domain);
+        if ($micropubEndpoint !== null) {
+            try {
+                $response = $this->guzzleClient->get($micropubEndpoint, [
+                    'headers' => ['Authorization' => 'Bearer ' . $token],
+                    'query' => 'q=config',
+                ]);
+            } catch (ClientException | ServerException $e) {
+                return back();
+            }
+            $body = (string) $response->getBody();
+
+            $syndication = $this->parseSyndicationTargets($body);
+            $request->session()->put('syndication', $syndication);
+
+            $mediaEndpoint = $this->parseMediaEndpoint($body);
+            $request->session()->put('media-endpoint', $mediaEndpoint);
+
+            return back();
+        }
     }
 
     /**
@@ -352,11 +439,27 @@ class MicropubClientController extends Controller
                     'name' => $syn['name'],
                 ];
             }
-        } else {
-            $syndicateTo[] = ['target' => 'http://example.org', 'name' => 'Joe Bloggs on Example'];
         }
         if (count($syndicateTo) > 0) {
             return $syndicateTo;
+        }
+    }
+
+    /**
+     * Parse the media-endpoint retrieved from querying a micropub endpoint.
+     *
+     * @param  string|null
+     * @return string
+     */
+    private function parseMediaEndpoint($queryResponse = null)
+    {
+        if ($queryResponse === null) {
+            return;
+        }
+
+        $data = json_decode($queryResponse, true);
+        if (array_key_exists('media-endpoint', $data)) {
+            return $data['media-endpoint'];
         }
     }
 }
