@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\{Note, Tag};
 use Twitter;
 use HTMLPurifier;
+use App\{Note, Tag};
 use GuzzleHttp\Client;
 use HTMLPurifier_Config;
 use Illuminate\Http\Request;

@@ -318,7 +318,7 @@ class MicropubController extends Controller
         return response()->json([
             'response' => 'error',
             'error' => 'no_token',
-            'error_description' => 'There was no token provided with the request'
+            'error_description' => 'There was no token provided with the request',
         ], 400);
     }
 }
