@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Log;
-
 use Ramsey\Uuid\Uuid;
 use App\{Media, Place};
 use Illuminate\Http\{Request, Response};
@@ -97,12 +95,9 @@ class MicropubController extends Controller
                             }
                         }
                         $data['photo'] = [];
-                        Log::info('Checking request for photos');
-                        Log::info($request->all());
                         if (is_array($request->input('photo'))) {
                             foreach ($request->input('photo') as $photo) {
                                 if (is_string($photo)) {
-                                    Log::info($photo);
                                     //only supporting media URLs for now
                                     $data['photo'][] = $photo;
                                 }
@@ -276,7 +271,7 @@ class MicropubController extends Controller
                             return response()->json([
                                 'response' => 'error',
                                 'error' => 'internal_server_error',
-                                'error_description' => 'A problem occured handling your request'
+                                'error_description' => 'A problem occured handling your request',
                             ], 500);
                         }
                         try {
@@ -285,7 +280,7 @@ class MicropubController extends Controller
                             return response()->json([
                                 'response' => 'error',
                                 'error' => 'service_unavailable',
-                                'error_description' => 'Unable to save media to S3'
+                                'error_description' => 'Unable to save media to S3',
                             ], 503);
                         }
                         $media = new Media();

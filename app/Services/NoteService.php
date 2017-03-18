@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use Illuminate\Support\Facades\Log;
-
 use App\{Media, Note, Place};
 use App\Jobs\{SendWebMentions, SyndicateToFacebook, SyndicateToTwitter};
 
