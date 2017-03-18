@@ -32,7 +32,7 @@ class CreateMediaEndpointTable extends Migration
      */
     public function down()
     {
-        Scheme::table('media_endpoint', function (Blueprint $table) {
+        Schema::table('media_endpoint', function (Blueprint $table) {
             $table->dropForeign(['note_id']);
         });
         Schema::dropIfExists('media_endpoint');
