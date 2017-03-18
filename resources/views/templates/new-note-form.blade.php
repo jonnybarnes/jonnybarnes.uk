@@ -22,7 +22,7 @@
   @if($syndication)
     <div>
       <label for="syndication" accesskey="s">Syndication: </label>
-      <ul name="syndication">
+      <ul id="syndication">
         @foreach($syndication as $syn)
         <li><input type="checkbox"
                    name="mp-syndicate-to[]"
@@ -36,12 +36,21 @@
     </div>
   @endif
   @if($mediaURLs)
-    <ul>
+    <div class="mp-media">
+      <label for="media">Media:</label>
+      <ul>
     @foreach($mediaURLs as $mediaURL)
-      <li>{{ $mediaURL }}</li>
+        <li>
+          <input type="checkbox" name="media[]" id="{{ $mediaURL }}" value="{{ $mediaURL }}" checked>
+          <label for="{{ $mediaURL }}"><img src="{{ $mediaURL }}" alt=""></label>
+        </li>
     @endforeach
-    </ul>
-    <a href="/micropub/media/clearlinks">Clear media</a> 
+      </ul>
+    </div>
+    <div>
+      <label for="kludge"></label>
+      <a href="/micropub/media/clearlinks">Clear media</a>
+    </div>
   @endif
 @endif
 @if(!$mediaEndpoint)

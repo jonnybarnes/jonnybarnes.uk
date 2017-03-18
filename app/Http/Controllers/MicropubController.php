@@ -2,15 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Media;
-use App\Place;
+use Illuminate\Support\Facades\Log;
+
 use Ramsey\Uuid\Uuid;
-use Illuminate\Http\Request;
-use App\Services\NoteService;
-use Illuminate\Http\Response;
-use App\Services\PlaceService;
-use App\Services\TokenService;
+use App\{Media, Place};
+use Illuminate\Http\{Request, Response};
 use Ramsey\Uuid\Exception\UnsatisfiedDependencyException;
+use App\Services\{NoteService, PlaceService, TokenService};
 
 class MicropubController extends Controller
 {
@@ -95,6 +93,18 @@ class MicropubController extends Controller
                                     if ($service == 'Facebook') {
                                         $data['syndicate'][] = 'facebook';
                                     }
+                                }
+                            }
+                        }
+                        $data['photo'] = [];
+                        Log::info('Checking request for photos');
+                        Log::info($request->all());
+                        if (is_array($request->input('photo'))) {
+                            foreach ($request->input('photo') as $photo) {
+                                if (is_string($photo)) {
+                                    Log::info($photo);
+                                    //only supporting media URLs for now
+                                    $data['photo'][] = $photo;
                                 }
                             }
                         }
@@ -185,6 +195,15 @@ class MicropubController extends Controller
                     'syndicate-to' => config('syndication.targets'),
                 ]);
             }
+
+            //nope, how about a config query?
+            if ($request->input('q') == 'config') {
+                return response()->json([
+                    'syndicate-to' => config('syndication.targets'),
+                    'media-endpoint' => route('media-endpoint'),
+                ]);
+            }
+
             //nope, how about a geo URL?
             if (substr($request->input('q'), 0, 4) === 'geo:') {
                 preg_match_all(
@@ -201,13 +220,6 @@ class MicropubController extends Controller
                 return response()->json([
                     'response' => 'places',
                     'places' => $places,
-                ]);
-            }
-            //nope, how about a config query?
-            if ($request->input('q') == 'config') {
-                return response()->json([
-                    'syndicate-to' => config('syndication.targets'),
-                    'media-endpoint' => route('media-endpoint'),
                 ]);
             }
 
@@ -256,7 +268,7 @@ class MicropubController extends Controller
                 $scopes = explode(' ', $tokenData->getClaim('scope'));
                 if (array_search('post', $scopes) !== false) {
                     //check media valid
-                    if ($request->file('file')->isValid()) {
+                    if ($request->hasFile('file') && $request->file('file')->isValid()) {
                         //save media
                         try {
                             $filename = Uuid::uuid4() . '.' . $request->file('file')->extension();

@@ -2,14 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use App\Services\IndieAuthService;
 use Illuminate\Support\Facades\Log;
 use IndieAuth\Client as IndieClient;
 use GuzzleHttp\Client as GuzzleClient;
-use GuzzleHttp\Exception\ServerException;
-use GuzzleHttp\Exception\ClientException;
+use Illuminate\Http\{Request, Response};
+use GuzzleHttp\Exception\{ClientException, ServerException};
 
 class MicropubClientController extends Controller
 {
@@ -70,11 +68,14 @@ class MicropubClientController extends Controller
         foreach ($request->file('file') as $file) {
             try {
                 $response = $this->guzzleClient->request('POST', $mediaEndpoint, [
-                    'headers' => ['Authorization' => 'Bearer ' . $token],
-                    'mulitpart' => [
+                    'headers' => [
+                        'Authorization' => 'Bearer ' . $token,
+                    ],
+                    'multipart' => [
                         [
-                            'name' => $file->getClientOriginalName(),
-                            'file' => fopen($file->path(), 'r'),
+                            'name' => 'file',
+                            'contents' => fopen($file->path(), 'r'),
+                            'filename' => $file->getClientOriginalName(),
                         ],
                     ],
                 ]);
@@ -82,7 +83,7 @@ class MicropubClientController extends Controller
                 continue;
             }
 
-            $mediaURLs[] = $response->header('Location');
+            $mediaURLs[] = $response->getHeader('Location')[0];
         }
 
         $request->session()->put('media-links', $mediaURLs);
@@ -121,6 +122,7 @@ class MicropubClientController extends Controller
         $response = $this->postNoteRequest($request, $micropubEndpoint, $token);
 
         if ($response->getStatusCode() == 201) {
+            $request->session()->forget('media-links');
             $location = $response->getHeader('Location');
             if (is_array($location)) {
                 return redirect($location[0]);
@@ -270,6 +272,14 @@ class MicropubClientController extends Controller
                 $multipart[] = [
                     'name' => 'location',
                     'contents' => $request->input('location'),
+                ];
+            }
+        }
+        if ($request->input('media')) {
+            foreach ($request->input('media') as $media) {
+                $multipart[] = [
+                    'name' => 'photo[]',
+                    'contents' => $media,
                 ];
             }
         }

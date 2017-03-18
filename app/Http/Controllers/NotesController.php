@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Tag;
+use App\{Note, Tag};
 use Twitter;
-use App\Note;
 use HTMLPurifier;
 use GuzzleHttp\Client;
 use HTMLPurifier_Config;
@@ -58,6 +57,10 @@ class NotesController extends Controller
                     $note->place->icon
                 );
             }
+            /*$mediaLinks = [];
+            foreach ($note->media()->get() as $media) {
+                $mediaLinks[] = $media->url;
+            }*/
         }
 
         $homepage = ($request->path() == '/');

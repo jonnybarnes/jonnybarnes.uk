@@ -8,6 +8,9 @@
   <div class="note">
     <div class="e-content p-name">
       {!! $note->note !!}
+      @foreach($note->media()->get() as $media)
+        <img src="{{ $media->url }}" alt="">
+      @endforeach
     </div>
     <div class="note-metadata">
       <div>
