@@ -12,9 +12,10 @@ class VerifyCsrfToken extends BaseVerifier
      * @var array
      */
     protected $except = [
-        'api/token',
+        'api/media',
         'api/post',
-        'webmention',
+        'api/token',
         'places/new',
+        'webmention',
     ];
 }

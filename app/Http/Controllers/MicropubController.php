@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Place;
-use Illuminate\Http\Request;
-use App\Services\NoteService;
-use Illuminate\Http\Response;
-use App\Services\PlaceService;
-use App\Services\TokenService;
+use Ramsey\Uuid\Uuid;
+use App\{Media, Place};
+use Illuminate\Http\{Request, Response};
+use Ramsey\Uuid\Exception\UnsatisfiedDependencyException;
+use App\Services\{NoteService, PlaceService, TokenService};
 
 class MicropubController extends Controller
 {
@@ -92,6 +91,15 @@ class MicropubController extends Controller
                                     if ($service == 'Facebook') {
                                         $data['syndicate'][] = 'facebook';
                                     }
+                                }
+                            }
+                        }
+                        $data['photo'] = [];
+                        if (is_array($request->input('photo'))) {
+                            foreach ($request->input('photo') as $photo) {
+                                if (is_string($photo)) {
+                                    //only supporting media URLs for now
+                                    $data['photo'][] = $photo;
                                 }
                             }
                         }
@@ -182,6 +190,15 @@ class MicropubController extends Controller
                     'syndicate-to' => config('syndication.targets'),
                 ]);
             }
+
+            //nope, how about a config query?
+            if ($request->input('q') == 'config') {
+                return response()->json([
+                    'syndicate-to' => config('syndication.targets'),
+                    'media-endpoint' => route('media-endpoint'),
+                ]);
+            }
+
             //nope, how about a geo URL?
             if (substr($request->input('q'), 0, 4) === 'geo:') {
                 preg_match_all(
@@ -198,13 +215,6 @@ class MicropubController extends Controller
                 return response()->json([
                     'response' => 'places',
                     'places' => $places,
-                ]);
-            }
-            //nope, how about a config query?
-            //this should have a media endpoint as well at some point
-            if ($request->input('q') == 'config') {
-                return response()->json([
-                    'syndicate-to' => config('syndication.targets'),
                 ]);
             }
 
@@ -224,5 +234,136 @@ class MicropubController extends Controller
             'error' => 'no_token',
             'error_description' => 'No token provided with request',
         ], 400);
+    }
+
+    /**
+     * Process a media item posted to the media endpoint.
+     *
+     * @param  Illuminate\Http\Request $request
+     * @return Illuminate\Http\Response
+     */
+    public function media(Request $request)
+    {
+        //can this go in middleware
+        $httpAuth = $request->header('Authorization');
+        if (preg_match('/Bearer (.+)/', $httpAuth, $match)) {
+            $token = $match[1];
+            $tokenData = $this->tokenService->validateToken($token);
+
+            if ($tokenData === null) {
+                return response()->json([
+                    'response' => 'error',
+                    'error' => 'invalid_token',
+                    'error_description' => 'The provided token did not pass validation',
+                ], 400);
+            }
+
+            //check post scope
+            if ($tokenData->hasClaim('scope')) {
+                $scopes = explode(' ', $tokenData->getClaim('scope'));
+                if (array_search('post', $scopes) !== false) {
+                    //check media valid
+                    if ($request->hasFile('file') && $request->file('file')->isValid()) {
+                        $type = $this->getFileTypeFromMimeType($request->file('file')->getMimeType());
+                        try {
+                            $filename = Uuid::uuid4() . '.' . $request->file('file')->extension();
+                        } catch (UnsatisfiedDependencyException $e) {
+                            return response()->json([
+                                'response' => 'error',
+                                'error' => 'internal_server_error',
+                                'error_description' => 'A problem occured handling your request',
+                            ], 500);
+                        }
+                        try {
+                            $path = $request->file('file')->storeAs('media', $filename, 's3');
+                        } catch (Exception $e) { // which exception?
+                            return response()->json([
+                                'response' => 'error',
+                                'error' => 'service_unavailable',
+                                'error_description' => 'Unable to save media to S3',
+                            ], 503);
+                        }
+                        $media = new Media();
+                        $media->token = $token;
+                        $media->path = $path;
+                        $media->type = $type;
+                        $media->save();
+
+                        return response()->json([
+                            'response' => 'created',
+                            'location' => $media->url,
+                        ], 201)->header('Location', $media->url);
+                    }
+
+                    return response()->json([
+                        'response' => 'error',
+                        'error' => 'invalid_request',
+                        'error_description' => 'The uploaded file failed validation',
+                    ], 400);
+                }
+
+                return response()->json([
+                    'response' => 'error',
+                    'error' => 'insufficient_scope',
+                    'error_description' => 'The provided token has insufficient scopes',
+                ], 401);
+            }
+
+            return response()->json([
+                'response' => 'error',
+                'error' => 'unauthorized',
+                'error_description' => 'No token provided with request',
+            ], 401);
+        }
+
+        return response()->json([
+            'response' => 'error',
+            'error' => 'no_token',
+            'error_description' => 'There was no token provided with the request',
+        ], 400);
+    }
+
+    /**
+     * Get the file type from the mimetype of the uploaded file.
+     *
+     * @param  string The mimetype
+     * @return string The type
+     */
+    private function getFileTypeFromMimeType($mimetype)
+    {
+        //try known images
+        $imageMimeTypes = [
+            'image/gif',
+            'image/jpeg',
+            'image/png',
+            'image/svg+xml',
+            'image/tiff',
+            'image/webp',
+        ];
+        if (in_array($mimetype, $imageMimeTypes)) {
+            return 'image';
+        }
+        //try known video
+        $videoMimeTypes = [
+            'video/mp4',
+            'video/mpeg',
+            'video/quicktime',
+            'video/webm',
+        ];
+        if (in_array($mimetype, $videoMimeTypes)) {
+            return 'video';
+        }
+        //try known audio types
+        $audioMimeTypes = [
+            'audio/midi',
+            'audio/mpeg',
+            'audio/ogg',
+            'audio/x-m4a',
+        ];
+        if (in_array($mimetype, $audioMimeTypes)) {
+            return 'audio';
+        }
+
+        return 'download';
     }
 }

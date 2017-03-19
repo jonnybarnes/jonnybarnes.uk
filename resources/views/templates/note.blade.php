@@ -8,11 +8,12 @@
   <div class="note">
     <div class="e-content p-name">
       {!! $note->note !!}
-      @if(count($note->photoURLs) > 0)
-        @foreach($note->photoURLs as $photoURL)
-          <img src="{{ $photoURL }}" alt="" class="note-photo u-photo">
-        @endforeach
-      @endif
+      @foreach($note->media()->get() as $media)
+        @if($media->type == 'image')<img class="u-photo" src="{{ $media->url }}" alt="">@endif
+        @if($media->type == 'audio')<audio class="u-audio" src="{{ $media->url }}" controls>@endif
+        @if($media->type == 'video')<video class="u-video" src="{{ $media->url }}" controls>@endif
+        @if($media->type == 'download')<p><a class="u-attachment" href="{{ $media->url }}">Download the attached media</a></p>@endif
+      @endforeach
     </div>
     <div class="note-metadata">
       <div>
