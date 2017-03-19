@@ -33,15 +33,4 @@ class MicropubClientTest extends DuskTestCase
         $newNote = \App\Note::where('note', $note)->first();
         $newNote->forceDelete();
     }
-
-    public function test_client_page_updates_syndication()
-    {
-        $this->browse(function ($browser) {
-            $browser->visit(route('micropub-client'))
-                    ->assertDontSee('jonnybarnes on Twitter')
-                    ->clickLink('Refresh Syndication Targets')
-                    ->pause(5000)
-                    ->assertSee('jonnybarnes on Twitter');
-        });
-    }
 }

@@ -4,11 +4,8 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use App\Note;
-use App\Place;
-use App\Jobs\SendWebMentions;
-use App\Jobs\SyndicateToTwitter;
-use App\Jobs\SyndicateToFacebook;
+use App\{Media, Note, Place};
+use App\Jobs\{SendWebMentions, SyndicateToFacebook, SyndicateToTwitter};
 
 class NoteService
 {
@@ -55,6 +52,15 @@ class NoteService
             }
         }
         */
+        //add support for media uploaded as URLs
+        foreach ($data['photo'] as $photo) {
+            // check the media was uploaded to my endpoint
+            if (starts_with($photo, config('filesystems.disks.s3.url'))) {
+                $path = substr($photo, strlen(config('filesystems.disks.s3.url')));
+                $media = Media::where('path', ltrim($path, '/'))->firstOrFail();
+                $note->media()->save($media);
+            }
+        }
 
         $note->save();
 

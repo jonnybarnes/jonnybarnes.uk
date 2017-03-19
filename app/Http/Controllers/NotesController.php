@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Tag;
 use Twitter;
-use App\Note;
 use HTMLPurifier;
+use App\{Note, Tag};
 use GuzzleHttp\Client;
 use HTMLPurifier_Config;
 use Illuminate\Http\Request;
@@ -58,12 +57,10 @@ class NotesController extends Controller
                     $note->place->icon
                 );
             }
-            $photoURLs = [];
-            $photos = $note->getMedia();
-            foreach ($photos as $photo) {
-                $photoURLs[] = $photo->getUrl();
-            }
-            $note->photoURLs = $photoURLs;
+            /*$mediaLinks = [];
+            foreach ($note->media()->get() as $media) {
+                $mediaLinks[] = $media->url;
+            }*/
         }
 
         $homepage = ($request->path() == '/');
@@ -163,13 +160,6 @@ class NotesController extends Controller
                 $note->place->icon
             );
         }
-
-        $photoURLs = [];
-        $photos = $note->getMedia();
-        foreach ($photos as $photo) {
-            $photoURLs[] = $photo->getUrl();
-        }
-        $note->photoURLs = $photoURLs;
 
         return view('notes.show', compact('note', 'replies', 'reposts', 'likes'));
     }

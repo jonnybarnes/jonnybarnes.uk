@@ -22,7 +22,7 @@
   @if($syndication)
     <div>
       <label for="syndication" accesskey="s">Syndication: </label>
-      <ul class="/micropub/syndication-targets-list" name="syndication">
+      <ul id="syndication">
         @foreach($syndication as $syn)
         <li><input type="checkbox"
                    name="mp-syndicate-to[]"
@@ -35,10 +35,25 @@
       </ul>
     </div>
   @endif
-    <div>
-      <a href="/micropub/refresh-syndication-targets">Refresh Syndication Targets</a>
+  @if($mediaURLs)
+    <div class="mp-media">
+      <label for="media">Media:</label>
+      <ul>
+    @foreach($mediaURLs as $mediaURL)
+        <li>
+          <input type="checkbox" name="media[]" id="{{ $mediaURL }}" value="{{ $mediaURL }}" checked>
+          <label for="{{ $mediaURL }}"><img src="{{ $mediaURL }}" alt=""></label>
+        </li>
+    @endforeach
+      </ul>
     </div>
+    <div>
+      <label for="kludge"></label>
+      <a href="/micropub/media/clearlinks">Clear media</a>
+    </div>
+  @endif
 @endif
+@if(!$mediaEndpoint)
     <div>
       <label for="photo" accesskey="p">Photo: </label>
       <input type="file"
@@ -49,6 +64,7 @@
              multiple
       >
     </div>
+@endif
     <div>
       <label for="locate" accesskey="l"></label>
       <button type="button"
@@ -65,3 +81,26 @@
     </div>
   </fieldset>
 </form>
+
+@if($mediaEndpoint)
+  <form action="{{ route('process-media') }}" method="post" enctype="multipart/form-data" accept-charset="utf8" name="media-upload">
+    {{ csrf_field() }}
+    <fieldset class="note-ui">
+      <legend>Media Upload</legend>
+      <div>
+        <label for="media" accesskey="m">Media: </label>
+        <input type="file"
+               accept="audio/*,video/*,image/*,application/pdf,.md"
+               value="Upload"
+               name="file[]"
+               id="media"
+               multiple
+        >
+      </div>
+      <div>
+        <label for="kludge"></label>
+        <button type="submit" name="upload-media" id="upload-media">Upload Media</button>
+      </div>
+    </fieldset>
+  </form>
+@endif
