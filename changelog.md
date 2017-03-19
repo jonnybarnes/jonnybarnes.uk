@@ -1,6 +1,6 @@
 # Changelog
 
-## Version {next}
+## Version 0.4 (2017-03-18)
   - Media endpoint added
 
 ## Version 0.3.6 (2017-03-07)
