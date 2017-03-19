@@ -1,5 +1,8 @@
 # Changelog
 
+## Version {next}
+  - Media endpoint added
+
 ## Version 0.3.6 (2017-03-07)
   - Pull in Piwik’s own piwik.js manually, again for CSP
 
