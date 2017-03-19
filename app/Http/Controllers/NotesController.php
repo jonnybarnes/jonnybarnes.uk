@@ -284,6 +284,7 @@ class NotesController extends Controller
     {
         $config = HTMLPurifier_Config::createDefault();
         $config->set('Cache.SerializerPath', storage_path() . '/HTMLPurifier');
+        $config->set('HTML.TargetBlank', true);
         $purifier = new HTMLPurifier($config);
 
         return $purifier->purify($html);
