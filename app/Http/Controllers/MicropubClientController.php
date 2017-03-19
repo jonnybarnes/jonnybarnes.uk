@@ -86,7 +86,9 @@ class MicropubClientController extends Controller
             $mediaURLs[] = $response->getHeader('Location')[0];
         }
 
-        $request->session()->put('media-links', $mediaURLs);
+        $storedMediaURLs = $request->session()->get('media-links') ?? [];
+        $mediaURLsToSave = array_merge($storedMediaURLs, $mediaURLs);
+        $request->session()->put('media-links', $mediaURLsToSave);
 
         return redirect(route('micropub-client'));
     }
