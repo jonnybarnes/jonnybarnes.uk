@@ -17,6 +17,7 @@ class CreateMediaEndpointTable extends Migration
             $table->increments('id');
             $table->text('token')->nullable();
             $table->string('path');
+            $table->string('type');
             $table->unsignedInteger('note_id')->nullable();
             $table->timestamps();
 

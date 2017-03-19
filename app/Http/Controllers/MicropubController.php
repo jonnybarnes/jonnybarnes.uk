@@ -264,7 +264,7 @@ class MicropubController extends Controller
                 if (array_search('post', $scopes) !== false) {
                     //check media valid
                     if ($request->hasFile('file') && $request->file('file')->isValid()) {
-                        //save media
+                        $type = $this->getFileTypeFromMimeType($request->file('file')->getMimeType());
                         try {
                             $filename = Uuid::uuid4() . '.' . $request->file('file')->extension();
                         } catch (UnsatisfiedDependencyException $e) {
@@ -286,6 +286,7 @@ class MicropubController extends Controller
                         $media = new Media();
                         $media->token = $token;
                         $media->path = $path;
+                        $media->type = $type;
                         $media->save();
 
                         return response()->json([
@@ -320,5 +321,49 @@ class MicropubController extends Controller
             'error' => 'no_token',
             'error_description' => 'There was no token provided with the request',
         ], 400);
+    }
+
+    /**
+     * Get the file type from the mimetype of the uploaded file.
+     *
+     * @param  string The mimetype
+     * @return string The type
+     */
+    private function getFileTypeFromMimeType($mimetype)
+    {
+        //try known images
+        $imageMimeTypes = [
+            'image/gif',
+            'image/jpeg',
+            'image/png',
+            'image/svg+xml',
+            'image/tiff',
+            'image/webp',
+        ];
+        if (in_array($mimetype, $imageMimeTypes)) {
+            return 'image';
+        }
+        //try known video
+        $videoMimeTypes = [
+            'video/mp4',
+            'video/mpeg',
+            'video/quicktime',
+            'video/webm',
+        ];
+        if (in_array($mimetype, $videoMimeTypes)) {
+            return 'video';
+        }
+        //try known audio types
+        $audioMimeTypes = [
+            'audio/midi',
+            'audio/mpeg',
+            'audio/ogg',
+            'audio/x-m4a',
+        ];
+        if (in_array($mimetype, $audioMimeTypes)) {
+            return 'audio';
+        }
+
+        return 'download';
     }
 }

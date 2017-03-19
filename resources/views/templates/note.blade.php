@@ -9,7 +9,10 @@
     <div class="e-content p-name">
       {!! $note->note !!}
       @foreach($note->media()->get() as $media)
-        <img src="{{ $media->url }}" alt="">
+        @if($media->type == 'image')<img class="u-photo" src="{{ $media->url }}" alt="">@endif
+        @if($media->type == 'audio')<audio class="u-audio" src="{{ $media->url }}" controls>@endif
+        @if($media->type == 'video')<video class="u-video" src="{{ $media->url }}" controls>@endif
+        @if($media->type == 'download')<p><a class="u-attachment" href="{{ $media->url }}">Download the attached media</a></p>@endif
       @endforeach
     </div>
     <div class="note-metadata">
