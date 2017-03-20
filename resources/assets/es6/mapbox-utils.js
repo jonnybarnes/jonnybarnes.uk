@@ -7,7 +7,7 @@ mapboxgl.accessToken = 'pk.eyJ1Ijoiam9ubnliYXJuZXMiLCJhIjoiY2l2cDhjYW04MDAwcjJ0c
 
 //define some functions to be used in the default function.
 const titlecase = (string) => {
-    return string.split('-').map(([first,...rest]) => first.toUpperCase() + rest.join('').toLowerCase()).join(' ')
+    return string.split('-').map(([first,...rest]) => first.toUpperCase() + rest.join('').toLowerCase()).join(' ');
 };
 
 const addMapTypeOption = (map, menu, option, checked = false) => {
@@ -27,7 +27,7 @@ const addMapTypeOption = (map, menu, option, checked = false) => {
     label.appendChild(document.createTextNode(titlecase(option)));
     menu.appendChild(input);
     menu.appendChild(label);
-}
+};
 
 const makeMapMenu = (map) => {
     let mapMenu = document.createElement('div');
@@ -35,7 +35,7 @@ const makeMapMenu = (map) => {
     addMapTypeOption(map, mapMenu, 'streets', true);
     addMapTypeOption(map, mapMenu, 'satellite-streets');
     return mapMenu;
-}
+};
 
 //the main function
 export default function addMap(div, position = null, places = null) {
@@ -45,17 +45,17 @@ export default function addMap(div, position = null, places = null) {
     let data = window['geojson'+dataId];
     if (data == null) {
         data = {
-            "type": "FeatureCollection",
-            "features": [{
-                "type": "Feature",
-                "geometry": {
-                    "type": "Point",
-                    "coordinates": [dataLongitude, dataLatitude]
+            'type': 'FeatureCollection',
+            'features': [{
+                'type': 'Feature',
+                'geometry': {
+                    'type': 'Point',
+                    'coordinates': [dataLongitude, dataLatitude]
                 },
-                "properties": {
-                    "title": "Current Location",
-                    "icon": "circle-stroked",
-                    "uri": "current-location"
+                'properties': {
+                    'title': 'Current Location',
+                    'icon': 'circle-stroked',
+                    'uri': 'current-location'
                 }
             }]
         };
@@ -65,22 +65,22 @@ export default function addMap(div, position = null, places = null) {
             let placeLongitude = parseLocation(place.location).longitude;
             let placeLatitude = parseLocation(place.location).latitude;
             data.features.push({
-                "type": "Feature",
-                "geometry": {
-                    "type": "Point",
-                    "coordinates": [placeLongitude, placeLatitude]
+                'type': 'Feature',
+                'geometry': {
+                    'type': 'Point',
+                    'coordinates': [placeLongitude, placeLatitude]
                 },
-                "properties": {
-                    "title": place.name,
-                    "icon": "circle",
-                    "uri": place.slug
+                'properties': {
+                    'title': place.name,
+                    'icon': 'circle',
+                    'uri': place.slug
                 }
             });
         }
     }
     if (position != null) {
-        let dataLongitude = position.coords.longitude;
-        let dataLatitude = position.coords.latitude;
+        dataLongitude = position.coords.longitude;
+        dataLatitude = position.coords.latitude;
     }
     let map = new mapboxgl.Map({
         container: div,
@@ -95,18 +95,18 @@ export default function addMap(div, position = null, places = null) {
     div.appendChild(makeMapMenu(map));
     map.on('load', function () {
         map.addSource('points', {
-            "type": "geojson",
-            "data": data
+            'type': 'geojson',
+            'data': data
         });
         map.addLayer({
-            "id": "points",
-            "interactive": true,
-            "type": "symbol",
-            "source": "points",
-            "layout": {
-                "icon-image": "{icon}-15",
-                "text-field": "{title}",
-                "text-offset": [0, 1]
+            'id': 'points',
+            'interactive': true,
+            'type': 'symbol',
+            'source': 'points',
+            'layout': {
+                'icon-image': '{icon}-15',
+                'text-field': '{title}',
+                'text-offset': [0, 1]
             }
         });
     });
