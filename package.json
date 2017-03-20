@@ -6,7 +6,7 @@
     "license": "CC0-1.0",
     "dependencies": {
         "alertify.js": "^1.0.12",
-        "mapbox-gl": "^0.32.0",
+        "mapbox-gl": "^0.34.0",
         "marked": "^0.3.6",
         "normalize.css": "^5.0.0",
         "webStorage": "^1.2.2"
@@ -33,7 +33,8 @@
         "compress": "./compress",
         "copy-dist": "cp ./node_modules/mapbox-gl/dist/mapbox-gl.css ./public/assets/frontend/ && cp ./node_modules/alertify.js/dist/css/alertify.css ./public/assets/frontend/ && cp ./node_modules/normalize.css/normalize.css ./public/assets/frontend/",
         "lint:sass": "stylelint --syntax=scss resources/assets/sass/**/*.scss",
-        "lint:es6": "eslint resources/assets/es6/*.js"
+        "lint:es6": "eslint resources/assets/es6/*.js",
+        "uglifyjs": "uglifyjs ./public/assets/js/*.js --screw-ie8 --source-map-inline --compress --mangle $1"
     },
     "lint-staged": {
         "eslint-staged": "resources/assets/es6/*.js",

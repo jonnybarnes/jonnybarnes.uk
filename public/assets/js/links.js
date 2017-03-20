@@ -1,1 +1,129 @@
-!function(t){function e(n){if(r[n])return r[n].exports;var o=r[n]={i:n,l:!1,exports:{}};return t[n].call(o.exports,o,o.exports,e),o.l=!0,o.exports}var r={};return e.m=t,e.c=r,e.i=function(t){return t},e.d=function(t,r,n){e.o(t,r)||Object.defineProperty(t,r,{configurable:!1,enumerable:!0,get:n})},e.n=function(t){var r=t&&t.__esModule?function(){return t.default}:function(){return t};return e.d(r,"a",r),r},e.o=function(t,e){return Object.prototype.hasOwnProperty.call(t,e)},e.p="",e(e.s=18)}({18:function(t,e){var r=/watch\?v=([A-Za-z0-9\-_]+)\b/,n=/https\:\/\/play\.spotify\.com\/(.*)\b/,o=document.querySelectorAll(".e-content"),a=!0,u=!1,i=void 0;try{for(var c,l=o[Symbol.iterator]();!(a=(c=l.next()).done);a=!0){var s=c.value,d=s.textContent.match(r);if(d){var f=document.createElement("div");f.classList.add("container");var p=document.createElement("iframe");p.classList.add("youtube"),p.setAttribute("src","https://www.youtube.com/embed/"+d[1]),p.setAttribute("frameborder",0),p.setAttribute("allowfullscreen","true"),f.appendChild(p),s.appendChild(f)}var m=s.textContent.match(n);if(m){var b=m[1].replace("/",":"),y=document.createElement("iframe");y.classList.add("spotify"),y.setAttribute("src","https://embed.spotify.com/?uri=spotify:"+b),y.setAttribute("frameborder",0),y.setAttribute("allowtransparency","true"),s.appendChild(y)}}}catch(t){u=!0,i=t}finally{try{!a&&l.return&&l.return()}finally{if(u)throw i}}}});
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId])
+/******/ 			return installedModules[moduleId].exports;
+/******/
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// identity function for calling harmony imports with the correct context
+/******/ 	__webpack_require__.i = function(value) { return value; };
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, {
+/******/ 				configurable: false,
+/******/ 				enumerable: true,
+/******/ 				get: getter
+/******/ 			});
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(__webpack_require__.s = 18);
+/******/ })
+/************************************************************************/
+/******/ ({
+
+/***/ 18:
+/***/ (function(module, exports) {
+
+//links.js
+
+var youtubeRegex = /watch\?v=([A-Za-z0-9\-_]+)\b/;
+var spotifyRegex = /https\:\/\/play\.spotify\.com\/(.*)\b/;
+
+var notes = document.querySelectorAll('.e-content');
+
+var _iteratorNormalCompletion = true;
+var _didIteratorError = false;
+var _iteratorError = undefined;
+
+try {
+    for (var _iterator = notes[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+        var note = _step.value;
+
+        var ytid = note.textContent.match(youtubeRegex);
+        if (ytid) {
+            var ytcontainer = document.createElement('div');
+            ytcontainer.classList.add('container');
+            var ytiframe = document.createElement('iframe');
+            ytiframe.classList.add('youtube');
+            ytiframe.setAttribute('src', 'https://www.youtube.com/embed/' + ytid[1]);
+            ytiframe.setAttribute('frameborder', 0);
+            ytiframe.setAttribute('allowfullscreen', 'true');
+            ytcontainer.appendChild(ytiframe);
+            note.appendChild(ytcontainer);
+        }
+        var spotifyid = note.textContent.match(spotifyRegex);
+        if (spotifyid) {
+            var sid = spotifyid[1].replace('/', ':');
+            var siframe = document.createElement('iframe');
+            siframe.classList.add('spotify');
+            siframe.setAttribute('src', 'https://embed.spotify.com/?uri=spotify:' + sid);
+            siframe.setAttribute('frameborder', 0);
+            siframe.setAttribute('allowtransparency', 'true');
+            note.appendChild(siframe);
+        }
+    }
+} catch (err) {
+    _didIteratorError = true;
+    _iteratorError = err;
+} finally {
+    try {
+        if (!_iteratorNormalCompletion && _iterator.return) {
+            _iterator.return();
+        }
+    } finally {
+        if (_didIteratorError) {
+            throw _iteratorError;
+        }
+    }
+}
+
+/***/ })
+
+/******/ });

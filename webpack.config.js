@@ -20,16 +20,7 @@ const config = {
         loader: 'babel-loader'
       }
     ]
-  },
-  plugins: [
-    new webpack.optimize.UglifyJsPlugin({
-      compress: true,
-      mangle: {
-        except: ['fetch', 'map'],
-        screw_ie8: true
-      }
-    })
-  ]
+  }
 };
 
 module.exports = config;
