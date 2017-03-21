@@ -15,7 +15,7 @@ for (let note of notes) {
         ytiframe.setAttribute('src', 'https://www.youtube.com/embed/' + ytid[1]);
         ytiframe.setAttribute('frameborder', 0);
         ytiframe.setAttribute('allowfullscreen', 'true');
-        ytcontainer.appendChild(ytiframe)
+        ytcontainer.appendChild(ytiframe);
         note.appendChild(ytcontainer);
     }
     let spotifyid = note.textContent.match(spotifyRegex);

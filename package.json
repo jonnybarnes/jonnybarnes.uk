@@ -1,37 +1,47 @@
 {
-  "name": "jbuk-frontend",
-  "version": "0.0.1",
-  "repository": "https://github.com/jonnybarnes/jonnybarnes.uk",
-  "license": "CC0-1.0",
-  "dependencies": {
-    "alertify.js": "^1.0.12",
-    "mapbox-gl": "^0.32.0",
-    "marked": "^0.3.6",
-    "normalize.css": "^5.0.0",
-    "webStorage": "^1.2.2"
-  },
-  "devDependencies": {
-    "babel-cli": "^6.18.0",
-    "babel-core": "^6.21.0",
-    "babel-loader": "^6.2.10",
-    "babel-preset-es2015": "^6.18.0",
-    "babel-preset-latest": "^6.16.0",
-    "babel-runtime": "^6.20.0",
-    "lint-staged": "^3.2.1",
-    "pre-commit": "^1.1.3",
-    "stylelint-config-standard": "^16.0.0",
-    "webpack": "^2.2.0"
-  },
-  "private": true,
-  "scripts": {
-    "lint-staged": "lint-staged",
-    "stylelint-staged": "stylelint --syntax=scss"
-  },
-  "lint-staged": {
-    "eslint": "resources/assets/js/*.js",
-    "stylelint-staged": "resources/assets/sass/**/*.scss"
-  },
-  "pre-commit": [
-    "lint-staged"
-  ]
+    "private": true,
+    "name": "jbuk-frontend",
+    "version": "0.0.1",
+    "repository": "https://github.com/jonnybarnes/jonnybarnes.uk",
+    "license": "CC0-1.0",
+    "dependencies": {
+        "alertify.js": "^1.0.12",
+        "mapbox-gl": "^0.34.0",
+        "marked": "^0.3.6",
+        "normalize.css": "^5.0.0",
+        "webStorage": "^1.2.2"
+    },
+    "devDependencies": {
+        "babel-cli": "^6.18.0",
+        "babel-core": "^6.21.0",
+        "babel-loader": "^6.2.10",
+        "babel-preset-env": "^1.2.2",
+        "babel-preset-es2015": "^6.18.0",
+        "babel-preset-latest": "^6.16.0",
+        "babel-runtime": "^6.20.0",
+        "lint-staged": "^3.2.1",
+        "pre-commit": "^1.1.3",
+        "stylelint-config-standard": "^16.0.0",
+        "webpack": "^2.2.0"
+    },
+    "scripts": {
+        "lint-staged": "lint-staged",
+        "stylelint-staged": "stylelint --syntax=scss",
+        "eslint-staged": "eslint",
+        "sass": "sassc --style compressed --sourcemap resources/assets/sass/app.scss public/assets/css/app.css",
+        "postcss": "postcss --use autoprefixer --autoprefixer.browsers \"> 5%\" --output public/assets/css/app.css public/assets/css/app.css",
+        "make:css": "npm run sass && npm run postcss",
+        "compress": "./compress",
+        "copy-dist": "cp ./node_modules/mapbox-gl/dist/mapbox-gl.css ./public/assets/frontend/ && cp ./node_modules/alertify.js/dist/css/alertify.css ./public/assets/frontend/ && cp ./node_modules/normalize.css/normalize.css ./public/assets/frontend/",
+        "lint:sass": "stylelint --syntax=scss resources/assets/sass/**/*.scss",
+        "lint:es6": "eslint resources/assets/es6/*.js",
+        "uglifyjs": "for f in ./public/assets/js/*.js; do uglifyjs $f --screw-ie8 --in-source-map $f.map --source-map $f.map --source-map-url /assets/js/`basename $f`.map --output $f; done"
+    },
+    "lint-staged": {
+        "eslint-staged": "resources/assets/es6/*.js",
+        "stylelint-staged": "resources/assets/sass/**/*.scss"
+    },
+    "pre-commit": [
+        "lint-staged"
+    ]
 }

@@ -8,7 +8,7 @@ const loadData = () => {
     replyTo.value = webStorage.getItem('replyTo');
     let content = document.querySelector('#content');
     content.value = webStorage.getItem('content');
-}
+};
 
 const saveData = () => {
     let replyTo = document.querySelector('#in-reply-to');
@@ -16,12 +16,12 @@ const saveData = () => {
     webStorage.setItem('replyTo', replyTo.value);
     webStorage.setItem('content', content.value);
     alertify.success('Auto-saved data');
-}
+};
 
 const clearData = () => {
     webStorage.removeItem('replyTo');
     webStorage.removeItem('content');
-}
+};
 
 export default function persistFormData()
 {

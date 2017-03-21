@@ -6,12 +6,14 @@ const config = {
     //app: './app.js',
     links: './links.js',
     maps: './maps.js',
-    newnote: './newnote.js'
+    newnote: './newnote.js',
+    piwik: './piwik.js'
   },
   output: {
     path: __dirname + '/public/assets/js',
     filename: '[name].js'
   },
+  devtool: 'source-map',
   module: {
     loaders: [
       {
@@ -20,16 +22,7 @@ const config = {
         loader: 'babel-loader'
       }
     ]
-  },
-  plugins: [
-    new webpack.optimize.UglifyJsPlugin({
-      compress: true,
-      mangle: {
-        except: ['fetch', 'map'],
-        screw_ie8: true
-      }
-    })
-  ]
+  }
 };
 
 module.exports = config;

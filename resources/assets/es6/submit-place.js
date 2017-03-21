@@ -39,21 +39,21 @@ export default function submitNewPlace(map) {
         });
         //add new place to map
         newFeatures.push({
-            "type": "Feature",
-            "geometry": {
-                "type": "Point",
-                "coordinates": [placeJson.longitude, placeJson.latitude]
+            'type': 'Feature',
+            'geometry': {
+                'type': 'Point',
+                'coordinates': [placeJson.longitude, placeJson.latitude]
             },
-            "properties": {
-                "title": placeJson.name,
-                "icon": "circle",
-                "uri": placeJson.uri
+            'properties': {
+                'title': placeJson.name,
+                'icon': 'circle',
+                'uri': placeJson.uri
             }
         });
         let newSource = {
-            "type": "FeatureCollection",
-            "features": newFeatures
-        }
+            'type': 'FeatureCollection',
+            'features': newFeatures
+        };
         map.getSource('points').setData(newSource);
         //add new place to select menu
         let selectElement = document.querySelector('select');

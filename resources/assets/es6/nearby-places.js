@@ -41,8 +41,8 @@ const makeOptionsForForm = (map, position, places = null) => {
         }
     });
 
-    return selectElement
-}
+    return selectElement;
+};
 
 //position is output of navigator.geolocation call
 export default function addMapWithPlaces(div, position) {
