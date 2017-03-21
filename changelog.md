@@ -1,6 +1,6 @@
 # Changelog
 
-## Version {next}
+## Version 0.4.1 (2017-03-18)
   - Improve HTML Purification, target=blank rel-nofollow and rel-noopener should
 now be added to external links
   - Better handling of javascript compilation/minification and source-map generation
