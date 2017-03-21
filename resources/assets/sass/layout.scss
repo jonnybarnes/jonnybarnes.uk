@@ -28,6 +28,12 @@ body {
     font-size: 0.75em;
 }
 
+.note img {
+    max-height: 80vh;
+    width: auto;
+    image-orientation: from-image;
+}
+
 .social-links {
     display: flex;
     align-items: center;

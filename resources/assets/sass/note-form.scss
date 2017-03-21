@@ -11,10 +11,19 @@
         flex-direction: row;
         padding: 0.2rem;
     }
+
+    input[type="file"] {
+        width: 5vw;
+    }
 }
 
 @media (max-width: 599px) {
-    input[name="photo[]"] {
+    input[type="file"] {
+        width: 100%;
+    }
+
+    textarea,
+    input[type="text"] {
         width: 100%;
     }
 }
