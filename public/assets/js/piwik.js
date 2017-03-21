@@ -1,1 +1,2 @@
 var _paq=_paq||[];_paq.push(["trackPageView"]);_paq.push(["enableLinkTracking"]);_paq.push(["setTrackerUrl","https://analytics.jmb.lv/piwik.php"]);_paq.push(["setSiteId","1"]);
+//# sourceMappingURL=./public/assets/js/piwik.js.map

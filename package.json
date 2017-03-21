@@ -34,7 +34,7 @@
         "copy-dist": "cp ./node_modules/mapbox-gl/dist/mapbox-gl.css ./public/assets/frontend/ && cp ./node_modules/alertify.js/dist/css/alertify.css ./public/assets/frontend/ && cp ./node_modules/normalize.css/normalize.css ./public/assets/frontend/",
         "lint:sass": "stylelint --syntax=scss resources/assets/sass/**/*.scss",
         "lint:es6": "eslint resources/assets/es6/*.js",
-        "uglifyjs": "for f in ./public/assets/js/*.js; do uglifyjs $f --screw-ie8 --output $f; done"
+        "uglifyjs": "for f in ./public/assets/js/*.js; do uglifyjs $f --screw-ie8 --source-map $f.map --output $f; done"
     },
     "lint-staged": {
         "eslint-staged": "resources/assets/es6/*.js",
