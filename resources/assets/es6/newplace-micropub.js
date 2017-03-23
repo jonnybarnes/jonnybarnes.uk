@@ -73,61 +73,6 @@ export default function makeNewPlaceForm(map) {
         form.appendChild(newPlaceLatitudeDiv);
         form.appendChild(newPlaceLongitudeDiv);
         form.appendChild(newPlaceSubmit);
-        //the event listener for the new place form
-        /*placeSubmit.addEventListener('click', function () {
-            //create the form data to send
-            var formData = new FormData();
-            formData.append('place-name', document.querySelector('#place-name').value);
-            formData.append('place-description', document.querySelector('#place-description').value);
-            formData.append('place-latitude', document.querySelector('#place-latitude').value);
-            formData.append('place-longitude', document.querySelector('#place-longitude').value);
-            //post the new place
-            fetch('/micropub/places', {
-                //send cookies with the request
-                credentials: 'same-origin',
-                method: 'post',
-                body: formData
-            })
-            .then(function (response) {
-                return response.json();
-            })
-            .then(function (placeJson) {
-                if (placeJson.error === true) {
-                    throw new Error(placeJson.error_description);
-                }
-                //remove un-needed form elements
-                //iterate through labels and remove parent div elements
-                var labels = document.querySelectorAll('.place-label');
-                for (var i = 0; i < labels.length; ++i) {
-                    form.removeChild(labels[i].parentNode);
-                }
-                form.removeChild(document.querySelector('#place-submit'));
-                var newPlaceButton = document.querySelector('#create-new-place');
-                //in order to remove a DOM Node, you need to run removeChild on the parent Node
-                newPlaceButton.parentNode.removeChild(newPlaceButton);
-                //add place marker
-                var newOption = document.createElement('option');
-                newOption.setAttribute('value', placeJson.uri);
-                newOption.appendChild(document.createTextNode(placeJson.name));
-                newOption.dataset.latitude = placeJson.latitude;
-                newOption.dataset.longitude = placeJson.longitude;
-                selectEl.appendChild(newOption);
-                var newPlaceMarkerIcon = document.createElement('div');
-                newPlaceMarkerIcon.classList.add('marker');
-                new mapboxgl.Marker(newPlaceMarkerIcon, {offset: [-10, -20]}).setLngLat([placeJson.longitude, placeJson.latitude]).addTo(map);
-                map.flyTo({center: [placeJson.longitude, placeJson.latitude]});
-
-                newPlaceMarkerIcon.addEventListener('click', function () {
-                    map.flyTo({center: [placeJson.longitude, placeJson.latitude]});
-                    selectPlace(placeJson.uri);
-                });
-                //make selected
-                selectPlace(placeJson.uri);
-            }).catch(function (placeError) {
-                alertify.reset();
-                alertify.error(placeError);
-            });
-        });*/
     });
 
     return newLocationButton;
