@@ -1,5 +1,9 @@
 # Changelog
 
+## Version {next}
+  - fixed issue#47, only the slug was being sent by client, which was messing up endpoint code
+  - minor changes to es6 code, bet lint-staged working again
+
 ## Version 0.4.1 (2017-03-18)
   - Improve HTML Purification, target=blank rel-nofollow and rel-noopener should
 now be added to external links
