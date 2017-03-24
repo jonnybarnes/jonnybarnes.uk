@@ -30,7 +30,7 @@ class NoteService
                 //uri of form http://host/places/slug, we want slug
                 //get the URL path, then take last part, we can hack with basename
                 //as path looks like file path.
-                $slug = basename(parse_Url($data['location'], PHP_URL_PATH));
+                $slug = basename(parse_url($data['location'], PHP_URL_PATH));
                 $place = Place::where('slug', $slug)->first();
                 $note->place()->associate($place);
             }
