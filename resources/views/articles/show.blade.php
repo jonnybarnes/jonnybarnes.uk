@@ -1,7 +1,7 @@
 @extends('master')
 
 @section('title')
-{{ strip_tags($article->title) }} « 
+{{ strip_tags($article->title) }} «
 @stop
 
 @section('content')
@@ -13,7 +13,7 @@
 <span class="post-info">Posted <time class="dt-published" title="{{ $article->tooltip_time }}" datetime="{{ $article->w3c_time }}">{{ $article->human_time }}</time> - <a title="Permalink" href="{{ $article->link }}">⚓</a></span>
 </header>
 <div class="e-content">
-{!! $article->main !!}
+{!! $article->html !!}
 </div>
 </article>
 @stop

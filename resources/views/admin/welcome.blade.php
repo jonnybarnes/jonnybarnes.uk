@@ -8,7 +8,7 @@ Admin CP
 <h1>Hello {{ $name }}!</h1>
 
 <h2>Articles</h2>
-<p>You can either <a href="/admin/articles/create">create</a> new blog posts, or <a href="/admin/articles/">edit</a> them.<p>
+<p>You can either <a href="/admin/blog/create">create</a> new blog posts, or <a href="/admin/blog/">edit</a> them.<p>
 
 <h2>Notes</h2>
 <p>You can either <a href="/admin/notes/create">create</a> new notes, or <a href="/admin/notes/">edit</a> them.<p>

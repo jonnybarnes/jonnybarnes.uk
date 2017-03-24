@@ -26,11 +26,12 @@ class NoteService
         );
 
         if (array_key_exists('location', $data) && $data['location'] !== null && $data['location'] !== 'no-location') {
-            if (substr($data['location'], 0, strlen(config('app.url'))) == config('app.url')) {
-                //uri of form http://host/places/slug, we want slug so chop off start
-                //that’s the app’s url plus `/places/`
-                $slug = mb_substr($location, mb_strlen(config('app.url')) + 8);
-                $place = Place::where('slug', '=', $slug)->first();
+            if (starts_with($data['location'], config('app.url'))) {
+                //uri of form http://host/places/slug, we want slug
+                //get the URL path, then take last part, we can hack with basename
+                //as path looks like file path.
+                $slug = basename(parse_url($data['location'], PHP_URL_PATH));
+                $place = Place::where('slug', $slug)->first();
                 $note->place()->associate($place);
             }
             if (substr($data['location'], 0, 4) == 'geo:') {

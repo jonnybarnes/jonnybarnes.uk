@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Services\IndieAuthService;
-use Illuminate\Support\Facades\Log;
 use IndieAuth\Client as IndieClient;
 use GuzzleHttp\Client as GuzzleClient;
 use Illuminate\Http\{Request, Response};
@@ -182,44 +181,6 @@ class MicropubClientController extends Controller
 
             return back();
         }
-    }
-
-    /**
-     * We make a request to the micropub endpoint requesting syndication targets
-     * and store them in the session.
-     *
-     * @todo better handling of response regarding mp-syndicate-to
-     *       and syndicate-to
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Routing\Redirector redirect
-     */
-    public function refreshSyndicationTargets(Request $request)
-    {
-        $domain = $request->session()->get('me');
-        $token = $request->session()->get('token');
-        $micropubEndpoint = $this->indieAuthService->discoverMicropubEndpoint($domain, $this->indieClient);
-        if (! $micropubEndpoint) {
-            return redirect(route('micropub-client'))->with('error', 'Unable to determine micropub API endpoint');
-        }
-
-        try {
-            $response = $this->guzzleClient->get($micropubEndpoint, [
-                'headers' => ['Authorization' => 'Bearer ' . $token],
-                'query' => ['q' => 'syndicate-to'],
-            ]);
-        } catch (\GuzzleHttp\Exception\BadResponseException $e) {
-            return redirect(route('micropub-client'))->with(
-                'error',
-                'Bad response when refreshing syndication targets'
-            );
-        }
-        $body = (string) $response->getBody();
-        $syndication = $this->parseSyndicationTargets($body);
-
-        $request->session()->put('syndication', $syndication);
-
-        return redirect(route('micropub-client'));
     }
 
     /**
@@ -418,8 +379,6 @@ class MicropubClientController extends Controller
                 'query' => ['q' => $query],
             ]);
         } catch (\GuzzleHttp\Exception\BadResponseException $e) {
-            Log::info($e->getResponse()->getBody());
-
             return response()->json([
                 'error' => true,
                 'error_description' => 'The endpoint ' . $micropubEndpoint . ' returned a non-good response',

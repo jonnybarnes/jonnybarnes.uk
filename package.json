@@ -27,7 +27,6 @@
     "scripts": {
         "lint-staged": "lint-staged",
         "stylelint-staged": "stylelint --syntax=scss",
-        "eslint-staged": "eslint",
         "sass": "sassc --style compressed --sourcemap resources/assets/sass/app.scss public/assets/css/app.css",
         "postcss": "postcss --use autoprefixer --autoprefixer.browsers \"> 5%\" --output public/assets/css/app.css public/assets/css/app.css",
         "make:css": "npm run sass && npm run postcss",
@@ -38,8 +37,8 @@
         "uglifyjs": "for f in ./public/assets/js/*.js; do uglifyjs $f --screw-ie8 --in-source-map $f.map --source-map $f.map --source-map-url /assets/js/`basename $f`.map --output $f; done"
     },
     "lint-staged": {
-        "eslint-staged": "resources/assets/es6/*.js",
-        "stylelint-staged": "resources/assets/sass/**/*.scss"
+        "resources/assets/es6/*.js": "eslint",
+        "resources/assets/sass/**/*.scss": "stylelint-staged"
     },
     "pre-commit": [
         "lint-staged"
