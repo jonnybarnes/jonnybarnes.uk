@@ -116,9 +116,9 @@ Route::group(['domain' => config('url.longurl')], function () {
     Route::get('micropub/media/clearlinks', 'MicropubClientController@clearLinks');
 
     // Micropub Endpoint
-    Route::get('api/post', 'MicropubController@get');
-    Route::post('api/post', 'MicropubController@post');
-    Route::post('api/media', 'MicropubController@media')->name('media-endpoint');
+    Route::get('api/post', 'MicropubController@get')->middleware('micropub.token');
+    Route::post('api/post', 'MicropubController@post')->middleware('micropub.token');
+    Route::post('api/media', 'MicropubController@media')->middleware('micropub.token')->name('media-endpoint');
 
     //webmention
     Route::get('webmention', 'WebMentionsController@get');

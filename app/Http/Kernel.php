@@ -58,5 +58,6 @@ class Kernel extends HttpKernel
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'myauth' => \App\Http\Middleware\MyAuthMiddleware::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
+        'micropub.token' => \App\Http\Middleware\VerifyMicropubToken::class,
     ];
 }
