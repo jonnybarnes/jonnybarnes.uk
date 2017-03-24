@@ -275,6 +275,7 @@ class MicropubController extends Controller
                     'error_description' => 'The uploaded file failed validation',
                 ], 400);
             }
+        }
 
         return response()->json([
             'response' => 'error',
