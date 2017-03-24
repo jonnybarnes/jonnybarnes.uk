@@ -53,10 +53,10 @@ class Article extends Model
      *
      * @return string
      */
-    public function getMainAttribute($value)
+    public function getHtmlAttribute()
     {
         $markdown = new CommonMarkConverter();
-        $html = $markdown->convertToHtml($value);
+        $html = $markdown->convertToHtml($this->main);
         //change <pre><code>[lang] ~> <pre><code data-language="lang">
         $match = '/<pre><code>\[(.*)\]\n/';
         $replace = '<pre><code class="language-$1">';
