@@ -3,7 +3,8 @@
 echo "Putting the Laravel app in maintenance mode"
 php artisan down
 
-echo "Updating composer dependencies"
+echo "Updating composer and dependencies"
+composer self-update
 composer install
 
 echo "Caching Laravel route and config files"
