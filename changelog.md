@@ -1,6 +1,6 @@
 # Changelog
 
-## Version {next}
+## Version 0.4.2 (2017-03-24)
   - fixed issue#47, only the slug was being sent by client, which was messing up endpoint code
   - minor changes to es6 code, bet lint-staged working again
   - Make processed article content its own fake attribute, articles can now be uploaded as a file
