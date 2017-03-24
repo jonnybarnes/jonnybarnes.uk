@@ -25,7 +25,7 @@ const makeOptionsForForm = (map, position, places = null) => {
         for (let place of places) {
             let parsedCoords = parseLocation(place.location);
             let option = document.createElement('option');
-            option.setAttribute('value', place.slug);
+            option.setAttribute('value', place.uri);
             option.dataset.latitude = parsedCoords.latitude;
             option.dataset.longitude = parsedCoords.longitude;
             option.appendChild(document.createTextNode(place.name));
