@@ -13,4 +13,5 @@ Micropub Config «
     <dt>Media Endpoint</dt><dd>{{ $data['media-endpoint'] }}</dd>
 </dl>
 <p><a href="{{ route('micropub-query-action') }}">Re-query</a> the endpoint.</p>
+<p>Return to <a href="{{ route('micropub-client') }}">client</a>.
 @stop
