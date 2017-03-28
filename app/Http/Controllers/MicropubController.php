@@ -163,7 +163,7 @@ class MicropubController extends Controller
     public function get(Request $request)
     {
         $tokenData = $this->tokenService->validateToken($request->bearerToken());
-        if ($valid === null) {
+        if ($tokenData === null) {
             return response()->json([
                 'response' => 'error',
                 'error' => 'invalid_token',
@@ -208,9 +208,9 @@ class MicropubController extends Controller
         return response()->json([
             'response' => 'token',
             'token' => [
-                'me' => $valid->getClaim('me'),
-                'scope' => $valid->getClaim('scope'),
-                'client_id' => $valid->getClaim('client_id'),
+                'me' => $tokenData->getClaim('me'),
+                'scope' => $tokenData->getClaim('scope'),
+                'client_id' => $tokenData->getClaim('client_id'),
             ],
         ]);
     }

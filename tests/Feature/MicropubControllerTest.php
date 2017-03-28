@@ -19,11 +19,11 @@ class MicropubControllerTest extends TestCase
      *
      * @return void
      */
-    public function test_micropub_request_without_token_returns_400_response()
+    public function test_micropub_request_without_token_returns_401_response()
     {
         $response = $this->get('/api/post');
-        $response->assertStatus(400);
-        $response->assertJsonFragment(['error_description' => 'No token provided with request']);
+        $response->assertStatus(401);
+        $response->assertJsonFragment(['error_description' => 'No access token was provided in the request']);
     }
 
     /**
@@ -202,9 +202,9 @@ class MicropubControllerTest extends TestCase
         $response
             ->assertJson([
                 'response' => 'error',
-                'error' => 'no_token'
+                'error' => 'unauthorized'
             ])
-            ->assertStatus(400);
+            ->assertStatus(401);
     }
 
     /**
