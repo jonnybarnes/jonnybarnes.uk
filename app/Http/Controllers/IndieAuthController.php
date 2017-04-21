@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\IndieWebUser;
+use IndieAuth\Client;
 use Illuminate\Http\Request;
 use App\Services\TokenService;
-use App\Services\IndieAuthService;
 
 class IndieAuthController extends Controller
 {
     /**
-     * This service isolates the IndieAuth Client code.
+     * The IndieAuth Client.
      */
-    protected $indieAuthService;
+    protected $client;
 
     /**
      * The Token handling service.
@@ -21,15 +22,15 @@ class IndieAuthController extends Controller
     /**
      * Inject the dependencies.
      *
-     * @param  \App\Services\IndieAuthService $indieAuthService
+     * @param  \IndieAuth\Client $client
      * @param  \App\Services\TokenService $tokenService
      * @return void
      */
     public function __construct(
-        IndieAuthService $indieAuthService = null,
+        Client $client = null,
         TokenService $tokenService = null
     ) {
-        $this->indieAuthService = $indieAuthService ?? new IndieAuthService();
+        $this->client = $client ?? new Client();
         $this->tokenService = $tokenService ?? new TokenService();
     }
 
@@ -44,25 +45,31 @@ class IndieAuthController extends Controller
      */
     public function start(Request $request)
     {
-        $authorizationEndpoint = $this->indieAuthService->getAuthorizationEndpoint(
-            $request->input('me')
-        );
-        if ($authorizationEndpoint !== null) {
-            $authorizationURL = $this->indieAuthService->buildAuthorizationURL(
+        $url = normalize_url($request->input('me'));
+        $authorizationEndpoint = $this->client->discoverAuthorizationEndpoint($url);
+        if ($authorizationEndpoint != null) {
+            $state = bin2hex(openssl_random_pseudo_bytes(16));
+            session(['state' => $state]);
+            $authorizationURL = $this->client->buildAuthorizationURL(
                 $authorizationEndpoint,
-                $request->input('me')
+                $url,
+                route('indieauth-callback'), //redirect_uri
+                route('micropub-client'), //client_id
+                $state
             );
             if ($authorizationURL) {
                 return redirect($authorizationURL);
             }
+
+            return redirect(route('micropub-client'))->with('error', 'Error building authorization URL');
         }
 
         return redirect(route('micropub-client'))->with('error', 'Unable to determine authorisation endpoint');
     }
 
     /**
-     * Once they have verified themselves through the authorisation endpint
-     * the next step is retreiveing a token from the token endpoint.
+     * Once they have verified themselves through the authorisation endpoint
+     * the next step is register/login the user.
      *
      * @param  \Illuminate\Http\Rrequest $request
      * @return \Illuminate\Routing\RedirectResponse redirect
@@ -75,6 +82,15 @@ class IndieAuthController extends Controller
                 'Invalid <code>state</code> value returned from indieauth server'
             );
         }
+
+        $url = normalize_url($request->input('me'));
+        $indiewebUser = IndieWebUser::firstOrCreate(['me' => $url]);
+        $request->session()->put(['me' => $url]);
+
+        return redirect(route('micropub-client'));
+    }
+
+/*
         $tokenEndpoint = $this->indieAuthService->getTokenEndpoint($request->input('me'));
         if ($tokenEndpoint === false) {
             return redirect(route('micropub-client'))->with(
@@ -103,10 +119,10 @@ class IndieAuthController extends Controller
             'error',
             'Unable to get a token from the endpoint'
         );
-    }
+*/
 
     /**
-     * Log out the user, flush an session data, and overwrite any cookie data.
+     * Log out the user, flush the session data.
      *
      * @return \Illuminate\Routing\RedirectResponse redirect
      */
@@ -114,7 +130,7 @@ class IndieAuthController extends Controller
     {
         $request->session()->flush();
 
-        return redirect(route('micropub-client'))->cookie('me', 'loggedout', 1);
+        return redirect(route('micropub-client'));
     }
 
     /**

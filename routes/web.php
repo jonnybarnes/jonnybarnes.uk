@@ -109,7 +109,10 @@ Route::group(['domain' => config('url.longurl')], function () {
     Route::get('micropub/create', 'MicropubClientController@create')->name('micropub-client');
     Route::post('micropub', 'MicropubClientController@store')->name('micropub-client-post');
     Route::get('micropub/config', 'MicropubClientController@config')->name('micropub-config');
+    Route::get('micropub/get-new-token', 'MicropubClientController@getNewToken')->name('micropub-client-get-new-token');
+    Route::get('micropub/get-new-token/callback', 'MicropubClientController@getNewTokenCallback')->name('micropub-client-get-new-token-callback');
     Route::get('micropub/query-endpoint', 'MicropubClientController@queryEndpoint')->name('micropub-query-action');
+    Route::post('micropub/update-syntax', 'MicropubClientController@updateSyntax')->name('micropub-update-syntax');
     Route::get('micropub/places', 'MicropubClientController@nearbyPlaces');
     Route::post('micropub/places', 'MicropubClientController@newPlace');
     Route::post('micropub/media', 'MicropubClientController@processMedia')->name('process-media');

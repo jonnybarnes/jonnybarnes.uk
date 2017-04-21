@@ -47,10 +47,18 @@ class MicropubController extends Controller
      */
     public function post(Request $request)
     {
-        $tokenData = $this->tokenService->validateToken($request->bearerToken());
+        try {
+            $tokenData = $this->tokenService->validateToken($request->bearerToken());
+        } catch (\Exception $e) {
+            return response()->json([
+                'response' => 'error',
+                'error' => 'invalid_token',
+                'error_description' => 'The provided token did not pass validation',
+            ], 400);
+        }
         if ($tokenData->hasClaim('scope')) {
             $scopes = explode(' ', $tokenData->getClaim('scope'));
-            if (array_search('post', $scopes) !== false) {
+            if (array_search('create', $scopes) !== false) {
                 $clientId = $tokenData->getClaim('client_id');
                 if (($request->input('h') == 'entry') || ($request->input('type')[0] == 'h-entry')) {
                     $data = [];
@@ -162,8 +170,9 @@ class MicropubController extends Controller
      */
     public function get(Request $request)
     {
-        $tokenData = $this->tokenService->validateToken($request->bearerToken());
-        if ($tokenData === null) {
+        try {
+            $tokenData = $this->tokenService->validateToken($request->bearerToken());
+        } catch (\Exception $e) {
             return response()->json([
                 'response' => 'error',
                 'error' => 'invalid_token',
@@ -258,7 +267,7 @@ class MicropubController extends Controller
                         ], 503);
                     }
                     $media = new Media();
-                    $media->token = $token;
+                    $media->token = $request->bearerToken();
                     $media->path = $path;
                     $media->type = $type;
                     $media->save();

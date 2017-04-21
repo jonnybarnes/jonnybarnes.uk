@@ -287,7 +287,7 @@ class MicropubControllerTest extends TestCase
         $token = (new Builder())
             ->set('client_id', 'https://quill.p3k.io')
             ->set('me', 'https://jonnybarnes.localhost')
-            ->set('scope', 'post')
+            ->set('scope', 'create update')
             ->set('issued_at', time())
             ->sign($signer, env('APP_KEY'))
             ->getToken();
