@@ -202,7 +202,7 @@ class MicropubController extends Controller
                         $note->save();
 
                         return response()->json([
-                            'update' => 'succesful'
+                            'update' => 'succesful',
                         ]);
                     }
                     //how about “add”
@@ -236,7 +236,7 @@ class MicropubController extends Controller
                         $note->save();
 
                         return response()->json([
-                            'update' => 'succesful'
+                            'update' => 'succesful',
                         ]);
                     }
                 }
@@ -246,7 +246,7 @@ class MicropubController extends Controller
         return response()->json([
             'response' => 'error',
             'error' => 'forbidden',
-            'error_description' => 'The token has no scopes'
+            'error_description' => 'The token has no scopes',
         ], 403);
     }
 
