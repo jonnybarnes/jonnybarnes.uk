@@ -124,7 +124,7 @@ class MicropubController extends Controller
                 ], 201)->header('Location', $note->longurl);
             }
             if ($request->input('h') == 'card' || $request->input('type')[0] == 'h-card') {
-                if (stristr($tokenData->getClaem('scope'), 'create') === false) {
+                if (stristr($tokenData->getClaim('scope'), 'create') === false) {
                     return response()->json([
                         'response' => 'error',
                         'error' => 'insufficient_scope',
@@ -223,7 +223,7 @@ class MicropubController extends Controller
                             }
                             if ($property == 'photo') {
                                 foreach ($value as $photoURL) {
-                                    if (start_with($photo, 'https://') {
+                                    if (start_with($photo, 'https://')) {
                                         $media = new Media();
                                         $media->path = $photoURL;
                                         $media->type = 'image';
