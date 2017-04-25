@@ -231,9 +231,9 @@ class MicropubControllerTest extends TestCase
         $response
             ->assertJson([
                 'response' => 'error',
-                'error' => 'invalid_token'
+                'error' => 'insufficient_scope'
             ])
-            ->assertStatus(400);
+            ->assertStatus(401);
     }
 
     public function test_micropub_request_with_json_syntax_creates_new_place()
