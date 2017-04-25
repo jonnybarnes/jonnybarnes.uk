@@ -192,6 +192,20 @@ class Note extends Model
     }
 
     /**
+     * Scope a query to select a note via a NewBase60 id.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param string $nb60id
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeNb60($query, $nb60id)
+    {
+        $numbers = new Numbers();
+
+        return $query->where('id', $numbers->b60tonum($nb60id));
+    }
+
+    /**
      * Take note that this method does two things, given @username (NOT [@username](URL)!)
      * we try to create a fancy hcard from our contact info. If this is not possible
      * due to lack of contact info, we assume @username is a twitter handle and link it
