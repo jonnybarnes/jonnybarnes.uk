@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Ramsey\Uuid\Uuid;
-use App\{Media, Place};
+use App\{Media, Note, Place};
 use Illuminate\Http\{Request, Response};
 use Ramsey\Uuid\Exception\UnsatisfiedDependencyException;
 use App\Services\{NoteService, PlaceService, TokenService};
@@ -57,106 +57,197 @@ class MicropubController extends Controller
             ], 400);
         }
         if ($tokenData->hasClaim('scope')) {
-            $scopes = explode(' ', $tokenData->getClaim('scope'));
-            if (array_search('create', $scopes) !== false) {
-                $clientId = $tokenData->getClaim('client_id');
-                if (($request->input('h') == 'entry') || ($request->input('type')[0] == 'h-entry')) {
-                    $data = [];
-                    $data['client-id'] = $clientId;
-                    if ($request->header('Content-Type') == 'application/json') {
-                        $data['content'] = $request->input('properties.content')[0];
-                        $data['in-reply-to'] = $request->input('properties.in-reply-to')[0];
-                        $data['location'] = $request->input('properties.location');
-                        //flatten location if array
-                        if (is_array($data['location'])) {
-                            $data['location'] = $data['location'][0];
-                        }
-                    } else {
-                        $data['content'] = $request->input('content');
-                        $data['in-reply-to'] = $request->input('in-reply-to');
-                        $data['location'] = $request->input('location');
-                    }
-                    $data['syndicate'] = [];
-                    $targets = array_pluck(config('syndication.targets'), 'uid', 'service.name');
-                    if (is_string($request->input('mp-syndicate-to'))) {
-                        $service = array_search($request->input('mp-syndicate-to'));
-                        if ($service == 'Twitter') {
-                            $data['syndicate'][] = 'twitter';
-                        }
-                        if ($service == 'Facebook') {
-                            $data['syndicate'][] = 'facebook';
-                        }
-                    }
-                    if (is_array($request->input('mp-syndicate-to'))) {
-                        foreach ($targets as $service => $target) {
-                            if (in_array($target, $request->input('mp-syndicate-to'))) {
-                                if ($service == 'Twitter') {
-                                    $data['syndicate'][] = 'twitter';
-                                }
-                                if ($service == 'Facebook') {
-                                    $data['syndicate'][] = 'facebook';
-                                }
-                            }
-                        }
-                    }
-                    $data['photo'] = [];
-                    if (is_array($request->input('photo'))) {
-                        foreach ($request->input('photo') as $photo) {
-                            if (is_string($photo)) {
-                                //only supporting media URLs for now
-                                $data['photo'][] = $photo;
-                            }
-                        }
-                    }
-                    try {
-                        $note = $this->noteService->createNote($data);
-                    } catch (Exception $exception) {
-                        return response()->json(['error' => true], 400);
-                    }
-
+            if (($request->input('h') == 'entry') || ($request->input('type')[0] == 'h-entry')) {
+                if (stristr($tokenData->getClaim('scope'), 'create') === false) {
                     return response()->json([
-                        'response' => 'created',
-                        'location' => $note->longurl,
-                    ], 201)->header('Location', $note->longurl);
+                        'response' => 'error',
+                        'error' => 'insufficient_scope',
+                        'error_description' => 'The scope of this token does not meet the requirements for this request.',
+                    ], 401);
                 }
-                if ($request->input('h') == 'card' || $request->input('type')[0] == 'h-card') {
-                    $data = [];
-                    if ($request->header('Content-Type') == 'application/json') {
-                        $data['name'] = $request->input('properties.name');
-                        $data['description'] = $request->input('properties.description') ?? null;
-                        if ($request->has('properties.geo')) {
-                            $data['geo'] = $request->input('properties.geo');
-                        }
-                    } else {
-                        $data['name'] = $request->input('name');
-                        $data['description'] = $request->input('description');
-                        if ($request->has('geo')) {
-                            $data['geo'] = $request->input('geo');
-                        }
-                        if ($request->has('latitude')) {
-                            $data['latitude'] = $request->input('latitude');
-                            $data['longitude'] = $request->input('longitude');
+                $data = [];
+                $data['client-id'] = $tokenData->getClaim('client_id');
+                if ($request->header('Content-Type') == 'application/json') {
+                    $data['content'] = $request->input('properties.content')[0];
+                    $data['in-reply-to'] = $request->input('properties.in-reply-to')[0];
+                    $data['location'] = $request->input('properties.location');
+                    //flatten location if array
+                    if (is_array($data['location'])) {
+                        $data['location'] = $data['location'][0];
+                    }
+                } else {
+                    $data['content'] = $request->input('content');
+                    $data['in-reply-to'] = $request->input('in-reply-to');
+                    $data['location'] = $request->input('location');
+                }
+                $data['syndicate'] = [];
+                $targets = array_pluck(config('syndication.targets'), 'uid', 'service.name');
+                if (is_string($request->input('mp-syndicate-to'))) {
+                    $service = array_search($request->input('mp-syndicate-to'));
+                    if ($service == 'Twitter') {
+                        $data['syndicate'][] = 'twitter';
+                    }
+                    if ($service == 'Facebook') {
+                        $data['syndicate'][] = 'facebook';
+                    }
+                }
+                if (is_array($request->input('mp-syndicate-to'))) {
+                    foreach ($targets as $service => $target) {
+                        if (in_array($target, $request->input('mp-syndicate-to'))) {
+                            if ($service == 'Twitter') {
+                                $data['syndicate'][] = 'twitter';
+                            }
+                            if ($service == 'Facebook') {
+                                $data['syndicate'][] = 'facebook';
+                            }
                         }
                     }
-                    try {
-                        $place = $this->placeService->createPlace($data);
-                    } catch (Exception $exception) {
-                        return response()->json(['error' => true], 400);
+                }
+                $data['photo'] = [];
+                if (is_array($request->input('photo'))) {
+                    foreach ($request->input('photo') as $photo) {
+                        if (is_string($photo)) {
+                            //only supporting media URLs for now
+                            $data['photo'][] = $photo;
+                        }
                     }
+                }
+                try {
+                    $note = $this->noteService->createNote($data);
+                } catch (\Exception $exception) {
+                    return response()->json(['error' => true], 400);
+                }
 
+                return response()->json([
+                    'response' => 'created',
+                    'location' => $note->longurl,
+                ], 201)->header('Location', $note->longurl);
+            }
+            if ($request->input('h') == 'card' || $request->input('type')[0] == 'h-card') {
+                if (stristr($tokenData->getClaem('scope'), 'create') === false) {
                     return response()->json([
-                        'response' => 'created',
-                        'location' => $place->longurl,
-                    ], 201)->header('Location', $place->longurl);
+                        'response' => 'error',
+                        'error' => 'insufficient_scope',
+                        'error_description' => 'The scope of this token does not meet the requirements for this request.',
+                    ], 401);
+                }
+                $data = [];
+                if ($request->header('Content-Type') == 'application/json') {
+                    $data['name'] = $request->input('properties.name');
+                    $data['description'] = $request->input('properties.description') ?? null;
+                    if ($request->has('properties.geo')) {
+                        $data['geo'] = $request->input('properties.geo');
+                    }
+                } else {
+                    $data['name'] = $request->input('name');
+                    $data['description'] = $request->input('description');
+                    if ($request->has('geo')) {
+                        $data['geo'] = $request->input('geo');
+                    }
+                    if ($request->has('latitude')) {
+                        $data['latitude'] = $request->input('latitude');
+                        $data['longitude'] = $request->input('longitude');
+                    }
+                }
+                try {
+                    $place = $this->placeService->createPlace($data);
+                } catch (\Exception $exception) {
+                    return response()->json(['error' => true], 400);
+                }
+
+                return response()->json([
+                    'response' => 'created',
+                    'location' => $place->longurl,
+                ], 201)->header('Location', $place->longurl);
+            }
+            if ($request->input('action') == 'update') {
+                if (stristr($tokenData->getClaim('scope'), 'update') === false) {
+                    return response()->json([
+                        'response' => 'error',
+                        'error' => 'insufficient_scope',
+                        'error_description' => 'The scope of this token does not meet the requirements for this request.',
+                    ], 401);
+                }
+                $urlPath = parse_url($request->input('url'), PHP_URL_PATH);
+                //is it a note we are updating?
+                if (mb_substr($urlPath, 1, 5) === 'notes') {
+                    try {
+                        $note = Note::nb60(basename($urlPath))->get();
+                    } catch (\Exception $exception) {
+                        return response()->json([
+                            'error' => 'invalid_request',
+                            'error_description' => 'No known note with given ID',
+                        ]);
+                    }
+                    //got the note, are we dealing with a “replace” request?
+                    if ($request->has('replace')) {
+                        foreach ($request->input('replace') as $property => $value) {
+                            if ($property == 'content') {
+                                $note->note = $value[0];
+                            }
+                            if ($property == 'syndication') {
+                                foreach ($value as $syndicationURL) {
+                                    if (starts_with($syndicationURL, 'https://www.facebook.com')) {
+                                        $note->facebook_url = $syndicationURL;
+                                    }
+                                    if (starts_with($syndicationURL, 'https://www.swarmapp.com')) {
+                                        $note->swarm_url = $syndicationURL;
+                                    }
+                                    if (starts_with($syndicationURL, 'https://twitter.com')) {
+                                        $note->tweet_id = basename(parse_url($syndicationURL, PHP_URL_PATH));
+                                    }
+                                }
+                            }
+                        }
+                        $note->save();
+
+                        return response()->json([
+                            'update' => 'succesful'
+                        ]);
+                    }
+                    //how about “add”
+                    if ($request->has('add')) {
+                        foreach ($request->input('add') as $property => $value) {
+                            if ($property == 'syndication') {
+                                foreach ($value as $syndicationURL) {
+                                    if (starts_with($syndicationURL, 'https://www.facebook.com')) {
+                                        $note->facebook_url = $syndicationURL;
+                                    }
+                                    if (starts_with($syndicationURL, 'https://www.swarmapp.com')) {
+                                        $note->swarm_url = $syndicationURL;
+                                    }
+                                    if (starts_with($syndicationURL, 'https://twitter.com')) {
+                                        $note->tweet_id = basename(parse_url($syndicationURL, PHP_URL_PATH));
+                                    }
+                                }
+                            }
+                            if ($property == 'photo') {
+                                foreach ($value as $photoURL) {
+                                    if (start_with($photo, 'https://') {
+                                        $media = new Media();
+                                        $media->path = $photoURL;
+                                        $media->type = 'image';
+                                        $media->save();
+                                        $note->media()->save($media);
+                                    }
+                                }
+                            }
+                        }
+                        $note->save();
+
+                        return response()->json([
+                            'update' => 'succesful'
+                        ]);
+                    }
                 }
             }
         }
 
         return response()->json([
             'response' => 'error',
-            'error' => 'invalid_token',
-            'error_description' => 'The token provided is not valid or does not have the necessary scope',
-        ], 400);
+            'error' => 'forbidden',
+            'error_description' => 'The token has no scopes'
+        ], 403);
     }
 
     /**
