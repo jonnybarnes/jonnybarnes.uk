@@ -29,6 +29,11 @@ class MicropubClientController extends Controller
      */
     public function create(Request $request)
     {
+        //initiate varaibles
+        $indiewebUser = null;
+        $syndication = null;
+        $mediaEndpoint = null;
+        $mediaURLs = null;
         $url = $request->session()->get('me');
         if ($url) {
             $indiewebUser = IndieWebUser::where('me', $url)->first();
