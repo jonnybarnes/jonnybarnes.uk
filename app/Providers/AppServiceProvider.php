@@ -33,7 +33,7 @@ class AppServiceProvider extends ServiceProvider
         //Add tags for notes
         Note::created(function ($note) {
             $tagsToAdd = [];
-            preg_match_all('/#([^\s<>]+)\b/', $note, $tags);
+            preg_match_all('/#([^\s<>]+)\b/', $note->note, $tags);
             foreach ($tags[1] as $tag) {
                 $tag = Tag::normalizeTag($tag);
             }

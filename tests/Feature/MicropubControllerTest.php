@@ -231,9 +231,9 @@ class MicropubControllerTest extends TestCase
         $response
             ->assertJson([
                 'response' => 'error',
-                'error' => 'invalid_token'
+                'error' => 'insufficient_scope'
             ])
-            ->assertStatus(400);
+            ->assertStatus(401);
     }
 
     public function test_micropub_request_with_json_syntax_creates_new_place()
@@ -274,6 +274,47 @@ class MicropubControllerTest extends TestCase
         $response
             ->assertJson(['response' => 'created'])
             ->assertStatus(201);
+    }
+
+    public function test_micropub_request_with_json_syntax_update_replace_post()
+    {
+        $response = $this->json(
+            'POST',
+            '/api/post',
+            [
+                'action' => 'update',
+                'url' => config('app.url') . '/notes/A',
+                'replace' => [
+                    'content' => ['replaced content'],
+                ],
+            ],
+            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+        );
+        $response
+            ->assertJson(['response' => 'updated'])
+            ->assertStatus(200);
+    }
+
+    public function test_micropub_request_with_json_syntax_update_add_post()
+    {
+        $response = $this->json(
+            'POST',
+            '/api/post',
+            [
+                'action' => 'update',
+                'url' => config('app.url') . '/notes/A',
+                'add' => [
+                    'syndication' => ['https://www.swarmapp.com/checkin/123'],
+                ],
+            ],
+            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+        );
+        $response
+            ->assertJson(['response' => 'updated'])
+            ->assertStatus(200);
+        $this->assertDatabaseHas('notes', [
+            'swarm_url' => 'https://www.swarmapp.com/checkin/123'
+        ]);
     }
 
     /**

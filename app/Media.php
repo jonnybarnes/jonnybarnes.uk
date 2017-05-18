@@ -28,6 +28,10 @@ class Media extends Model
      */
     public function getUrlAttribute()
     {
+        if (starts_with($this->path, 'https://')) {
+            return $this->path;
+        }
+
         return config('filesystems.disks.s3.url') . '/' . $this->path;
     }
 }
