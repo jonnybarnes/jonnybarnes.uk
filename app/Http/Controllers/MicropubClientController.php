@@ -33,9 +33,11 @@ class MicropubClientController extends Controller
         if ($url) {
             $indiewebUser = IndieWebUser::where('me', $url)->first();
         }
-        $syndication = $this->parseSyndicationTargets($indiewebUser->syndication);
-        $mediaEndpoint = $indiewebUser->mediaEndpoint ?? null;
-        $mediaURLs = $request->session()->get('media-links');
+        if ($indiewebUser) {
+            $syndication = $this->parseSyndicationTargets($indiewebUser->syndication);
+            $mediaEndpoint = $indiewebUser->mediaEndpoint ?? null;
+            $mediaURLs = $request->session()->get('media-links');
+        }
 
         return view('micropub.create', compact('url', 'syndication', 'mediaEndpoint', 'mediaURLs'));
     }
