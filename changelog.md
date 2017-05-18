@@ -1,5 +1,10 @@
 # Changelog
 
+## Version 0.5 (2017-06-18)
+  - Update micropub client to allow indieweb users
+  - Update micropub endpoint to allow for entry updates
+  - Add support for checkins, so we can use ownyourswarm
+
 ## Version 0.4.2 (2017-03-24)
   - fixed issue#47, only the slug was being sent by client, which was messing up endpoint code
   - minor changes to es6 code, bet lint-staged working again
