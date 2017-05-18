@@ -1,6 +1,9 @@
 # Changelog
 
-## Version 0.5 (2017-06-18)
+## Version 0.5.1 (2017-05-18)
+  - Fix issue on micropub create page when not logged in
+
+## Version 0.5 (2017-05-18)
   - Update micropub client to allow indieweb users
   - Update micropub endpoint to allow for entry updates
   - Add support for checkins, so we can use ownyourswarm
