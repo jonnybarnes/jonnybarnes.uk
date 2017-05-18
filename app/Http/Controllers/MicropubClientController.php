@@ -326,7 +326,7 @@ class MicropubClientController extends Controller
                 $request->input('code'),
                 $request->input('me'),
                 route('micropub-client-get-new-token-callback'), // redirect_uri
-                route('micropub-client'), // client_id
+                route('micropub-client') // client_id
             );
             if (array_key_exists('access_token', $token)) {
                 $url = normalize_url($token['me']);
