@@ -1,5 +1,8 @@
 # Changelog
 
+## Version {next}
+  - Fix issues with using the indieauth client
+
 ## Version 0.5.3 (2017-05-18)
   - Tweak config page and get token method to better handle/show errors
 
