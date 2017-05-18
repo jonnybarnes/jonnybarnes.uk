@@ -1,6 +1,6 @@
 # Changelog
 
-## Version {next}
+## Version 0.5.4 (2017-05-18)
   - Fix issues with using the indieauth client
 
 ## Version 0.5.3 (2017-05-18)
