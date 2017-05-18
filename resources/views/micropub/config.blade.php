@@ -5,6 +5,9 @@ Micropub Config «
 @stop
 
 @section('content')
+@if (session('error'))
+<p class="error">{{ session('error') }}</p>
+@endif
 <p>The values for your micropub endpoint.</p>
 <dl>
     <dt>Me (your url)</dt><dd><code>{{ $data['me'] }}</code></dd>
