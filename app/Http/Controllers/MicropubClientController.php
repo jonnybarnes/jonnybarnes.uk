@@ -90,7 +90,7 @@ class MicropubClientController extends Controller
         $mediaURLsToSave = array_merge($storedMediaURLs, $mediaURLs);
         $request->session()->put('media-links', $mediaURLsToSave);
 
-        return redirect(route('micropub-client'));
+        return redirect()->route('micropub-client');
     }
 
     public function clearLinks(Request $request)
@@ -114,12 +114,12 @@ class MicropubClientController extends Controller
         $user = IndieWebUser::where('me', $url)->firstOrFail();
 
         if ($user->token == null) {
-            return redirect(route('micropub-client'))->with('error', 'You haven’t requested a token yet');
+            return redirect()->route('micropub-client')->with('error', 'You haven’t requested a token yet');
         }
 
         $micropubEndpoint = $this->indieClient->discoverMicropubEndpoint($url);
         if (! $micropubEndpoint) {
-            return redirect(route('micropub-client'))->with('error', 'Unable to determine micropub API endpoint');
+            return redirect()->route('micropub-client')->with('error', 'Unable to determine micropub API endpoint');
         }
 
         $headers = [
@@ -183,7 +183,7 @@ class MicropubClientController extends Controller
                     'headers' => $headers,
                 ]);
             } catch (\GuzzleHttp\Exception\BadResponseException $e) {
-                return redirect(route('micropub-client'))->with(
+                return redirect()->route('micropub-client')->with(
                     'error',
                     'There was a bad response from the micropub endpoint.'
                 );
@@ -231,7 +231,7 @@ class MicropubClientController extends Controller
                     'headers' => $headers,
                 ]);
             } catch (\GuzzleHttp\Exception\BadResponseException $e) {
-                return redirect(route('micropub-client'))->with(
+                return redirect()->route('micropub-client')->with(
                     'error',
                     'There was a bad response from the micropub endpoint.'
                 );
@@ -248,7 +248,7 @@ class MicropubClientController extends Controller
             }
         }
 
-        return redirect(route('micropub-client'))->with('error', 'Endpoint didn’t create the note.');
+        return redirect()->route('micropub-client')->with('error', 'Endpoint didn’t create the note.');
     }
 
     /**
@@ -305,10 +305,10 @@ class MicropubClientController extends Controller
                 return redirect($authorizationURL);
             }
 
-            return back();
+            return redirect()->route('micropub-config')->with('error', 'Unable to find authorisation endpoint');
         }
 
-        return back();
+        return redirect()->route('micropub-config')->with('error', 'You aren’t logged in');
     }
 
     /**
@@ -317,7 +317,7 @@ class MicropubClientController extends Controller
     public function getNewTokenCallback(Request $request)
     {
         if ($request->input('state') !== $request->session()->get('state')) {
-            return route('micropub-client')->with('error', 'The <code>state</code> didn’t match.');
+            return redirect()->route('micropub-config')->with('error', 'The <code>state</code> didn’t match.');
         }
         $tokenEndpoint = $this->indieClient->discoverTokenEndpoint(normalize_url($request->input('me')));
         if ($tokenEndpoint) {
@@ -335,9 +335,13 @@ class MicropubClientController extends Controller
                 $user->token = $token['access_token'];
                 $user->save();
 
-                return redirect('micropub-config');
+                return redirect()->route('micropub-config');
             }
+
+            return redirect()->route('micropub-config')->with('error', 'Error getting token from the endpoint');
         }
+
+        return redirect()->route('micropub-config')->with('error', 'Unable to find token endpoint');
     }
 
     /**
@@ -390,7 +394,7 @@ class MicropubClientController extends Controller
         $user->syntax = $request->syntax;
         $user->save();
 
-        return redirect(route('micropub-config'));
+        return redirect()->route('micropub-config');
     }
 
     /**
