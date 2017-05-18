@@ -1,6 +1,6 @@
 # Changelog
 
-## Version {next}
+## Version 0.5.2 (2017-05-18)
   - Fix variable issues in making client page
 
 ## Version 0.5.1 (2017-05-18)
