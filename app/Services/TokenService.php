@@ -4,12 +4,9 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use RuntimeException;
-use Lcobucci\JWT\Token;
-use Lcobucci\JWT\Parser;
-use Lcobucci\JWT\Builder;
-use InvalidArgumentException;
 use Lcobucci\JWT\Signer\Hmac\Sha256;
+use App\Exceptions\InvalidTokenException;
+use Lcobucci\JWT\{Builder, Parser, Token};
 
 class TokenService
 {
@@ -39,17 +36,18 @@ class TokenService
      * @param  string The token
      * @return mixed
      */
-    public function validateToken(string $token): ?Token
+    public function validateToken(string $bearerToken): ?Token
     {
         $signer = new Sha256();
         try {
-            $token = (new Parser())->parse((string) $token);
-        } catch (InvalidArgumentException | RuntimeException $e) {
-            return null;
+            $token = (new Parser())->parse((string) $bearerToken);
+        } catch (\InvalidArgumentException $e) {
+            throw new InvalidTokenException('Token could not be parsed');
         }
-        if ($token->verify($signer, config('app.key'))) {
-            //signuture valid
-            return $token;
+        if (! $token->verify($signer, config('app.key'))) {
+            throw new InvalidTokenException('Token failed verification');
         }
+
+        return $token;
     }
 }

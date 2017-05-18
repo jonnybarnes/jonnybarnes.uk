@@ -2,9 +2,9 @@
 
 namespace App\Console\Commands;
 
+use App\IndieWebUser;
 use App\Services\TokenService;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Storage;
 
 class GenerateToken extends Command
 {
@@ -49,10 +49,12 @@ class GenerateToken extends Command
         $data = [
             'me' => config('app.url'),
             'client_id' => route('micropub-client'),
-            'scope' => 'post',
+            'scope' => 'create update',
         ];
         $token = $tokenService->getNewToken($data);
-        Storage::disk('local')->put('dev-token', $token);
+        $user = IndieWebUser::where('me', config('app.url'))->first();
+        $user->token = $token;
+        $user->save();
 
         $this->info('Set token');
     }

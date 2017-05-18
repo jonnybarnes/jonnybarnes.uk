@@ -19,6 +19,7 @@ addons:
     paths:
       - $(ls tests/Browser/screenshots/*.png | tr "\n" ":")
       - $(ls tests/Browser/console/*.log | tr "\n" ":")
+      - $(ls storage/logs/*.log | tr "\n" ":")
       - $(ls /tmp/*.log | tr "\n" ":")
 
 services:
@@ -49,16 +50,18 @@ install:
   - travis/install-nginx.sh
 
 before_script:
+  - echo 'error_log = "/tmp/php.error.log"' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
   - psql -U travis -c 'create database travis_ci_test'
   - psql -U travis -d travis_ci_test -c 'create extension postgis'
   - cp .env.travis .env
   - php artisan key:generate
   - php artisan migrate
   - php artisan db:seed
+  - php artisan token:generate
   - phantomjs --webdriver=127.0.0.1:9515 --webdriver-loglevel=DEBUG &
   - sleep 5 # Give artisan some time to start serving
 
 script:
   - php vendor/bin/phpunit --coverage-text
   - php artisan dusk
-  - php artisan security:check
+  - php vendor/bin/security-checker security:check ./composer.lock --end-point=http://security.sensiolabs.org/check_lock

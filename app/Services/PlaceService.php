@@ -36,4 +36,39 @@ class PlaceService
 
         return $place;
     }
+
+    /**
+     * Create a place from a h-card checkin, for exameple from OwnYourSwarm.
+     *
+     * @param  array
+     * @return bool
+     */
+    public function createPlaceFromCheckin(array $checkin): bool
+    {
+        //check if the place exists if from swarm
+        if (array_key_exists('url', $checkin['properties'])) {
+            $search = Place::where('foursquare', $checkin['properties']['url'][0])->count();
+            if ($search === 1) {
+                return true;
+            }
+        }
+        if (array_key_exists('name', $checkin['properties']) === false) {
+            throw new \InvalidArgumentException('Missing required name');
+        }
+        if (array_key_exists('latitude', $checkin['properties']) === false) {
+            throw new \InvalidArgumentException('Missing required longitude/latitude');
+        }
+        $place = new Place();
+        $place->name = $checkin['properties']['name'][0];
+        if (starts_with($checkin['properties']['url'][0], 'https://foursquare.com')) {
+            $place->foursquare = $checkin['properties']['url'][0];
+        }
+        $place->location = new Point(
+            (float) $checkin['properties']['latitude'][0],
+            (float) $checkin['properties']['longitude'][0]
+        );
+        $place->save();
+
+        return true;
+    }
 }

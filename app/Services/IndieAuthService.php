@@ -45,14 +45,12 @@ class IndieAuthService
         session(['state' => $state]);
         $redirectURL = route('indieauth-callback');
         $clientId = route('micropub-client');
-        $scope = 'post';
         $authorizationURL = $this->client->buildAuthorizationURL(
             $authEndpoint,
             $this->client->normalizeMeURL($domain),
             $redirectURL,
             $clientId,
-            $state,
-            $scope
+            $state
         );
 
         return $authorizationURL;

@@ -19,11 +19,11 @@ class MicropubControllerTest extends TestCase
      *
      * @return void
      */
-    public function test_micropub_request_without_token_returns_400_response()
+    public function test_micropub_request_without_token_returns_401_response()
     {
         $response = $this->get('/api/post');
-        $response->assertStatus(400);
-        $response->assertJsonFragment(['error_description' => 'No token provided with request']);
+        $response->assertStatus(401);
+        $response->assertJsonFragment(['error_description' => 'No access token was provided in the request']);
     }
 
     /**
@@ -202,9 +202,9 @@ class MicropubControllerTest extends TestCase
         $response
             ->assertJson([
                 'response' => 'error',
-                'error' => 'no_token'
+                'error' => 'unauthorized'
             ])
-            ->assertStatus(400);
+            ->assertStatus(401);
     }
 
     /**
@@ -231,9 +231,9 @@ class MicropubControllerTest extends TestCase
         $response
             ->assertJson([
                 'response' => 'error',
-                'error' => 'invalid_token'
+                'error' => 'insufficient_scope'
             ])
-            ->assertStatus(400);
+            ->assertStatus(401);
     }
 
     public function test_micropub_request_with_json_syntax_creates_new_place()
@@ -276,6 +276,47 @@ class MicropubControllerTest extends TestCase
             ->assertStatus(201);
     }
 
+    public function test_micropub_request_with_json_syntax_update_replace_post()
+    {
+        $response = $this->json(
+            'POST',
+            '/api/post',
+            [
+                'action' => 'update',
+                'url' => config('app.url') . '/notes/A',
+                'replace' => [
+                    'content' => ['replaced content'],
+                ],
+            ],
+            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+        );
+        $response
+            ->assertJson(['response' => 'updated'])
+            ->assertStatus(200);
+    }
+
+    public function test_micropub_request_with_json_syntax_update_add_post()
+    {
+        $response = $this->json(
+            'POST',
+            '/api/post',
+            [
+                'action' => 'update',
+                'url' => config('app.url') . '/notes/A',
+                'add' => [
+                    'syndication' => ['https://www.swarmapp.com/checkin/123'],
+                ],
+            ],
+            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+        );
+        $response
+            ->assertJson(['response' => 'updated'])
+            ->assertStatus(200);
+        $this->assertDatabaseHas('notes', [
+            'swarm_url' => 'https://www.swarmapp.com/checkin/123'
+        ]);
+    }
+
     /**
      * Generate a valid token to be used in the tests.
      *
@@ -287,7 +328,7 @@ class MicropubControllerTest extends TestCase
         $token = (new Builder())
             ->set('client_id', 'https://quill.p3k.io')
             ->set('me', 'https://jonnybarnes.localhost')
-            ->set('scope', 'post')
+            ->set('scope', 'create update')
             ->set('issued_at', time())
             ->sign($signer, env('APP_KEY'))
             ->getToken();

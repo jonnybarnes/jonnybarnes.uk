@@ -17,6 +17,16 @@ class NoteService
      */
     public function createNote(array $data): Note
     {
+        //check the input
+        if (array_key_exists('content', $data) === false) {
+            throw new \Exception('No content defined'); //we can’t fudge the data
+        }
+        if (array_key_exists('in-reply-to', $data) === false) {
+            $data['in-reply-to'] = null;
+        }
+        if (array_key_exists('client-id', $data) === false) {
+            $data['client-id'] = null;
+        }
         $note = Note::create(
             [
                 'note' => $data['content'],
@@ -24,6 +34,11 @@ class NoteService
                 'client_id' => $data['client-id'],
             ]
         );
+
+        if (array_key_exists('published', $data) && empty($data['published']) === false) {
+            $carbon = new \Carbon\Carbon($data['published']);
+            $note->created_at = $note->updated_at = $carbon->toDateTimeString();
+        }
 
         if (array_key_exists('location', $data) && $data['location'] !== null && $data['location'] !== 'no-location') {
             if (starts_with($data['location'], config('app.url'))) {
@@ -44,6 +59,13 @@ class NoteService
             }
         }
 
+        if (array_key_exists('checkin', $data) && $data['checkin'] !== null) {
+            $place = Place::where('foursquare', $data['checkin'])->first();
+            if ($place !== null) {
+                $note->place()->associate($place);
+            }
+        }
+
         /* drop image support for now
         //add images to media library
         if ($request->hasFile('photo')) {
@@ -55,12 +77,17 @@ class NoteService
         */
         //add support for media uploaded as URLs
         foreach ($data['photo'] as $photo) {
-            // check the media was uploaded to my endpoint
+            // check the media was uploaded to my endpoint, and use path
             if (starts_with($photo, config('filesystems.disks.s3.url'))) {
                 $path = substr($photo, strlen(config('filesystems.disks.s3.url')));
                 $media = Media::where('path', ltrim($path, '/'))->firstOrFail();
-                $note->media()->save($media);
+            } else {
+                $media = Media::firstOrNew(['path' => $photo]);
+                // currently assuming this is a photo from Swarm
+                $media->type = 'image';
+                $media->save();
             }
+            $note->media()->save($media);
         }
 
         $note->save();

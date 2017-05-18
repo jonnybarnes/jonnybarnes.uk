@@ -34,7 +34,8 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \App\Http\Middleware\LinkHeadersMiddleware::class,
-            \App\Http\Middleware\DevTokenMiddleware::class,
+            //\App\Http\Middleware\DevTokenMiddleware::class,
+            \App\Http\Middleware\LocalhostSessionMiddleware::class,
         ],
 
         'api' => [
@@ -58,5 +59,6 @@ class Kernel extends HttpKernel
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'myauth' => \App\Http\Middleware\MyAuthMiddleware::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
+        'micropub.token' => \App\Http\Middleware\VerifyMicropubToken::class,
     ];
 }
