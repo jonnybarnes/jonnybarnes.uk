@@ -1,5 +1,8 @@
 # Changelog
 
+## Version {next}
+  - Tweak config page and get token method to better handle/show errors
+
 ## Version 0.5.2 (2017-05-18)
   - Fix variable issues in making client page
 
