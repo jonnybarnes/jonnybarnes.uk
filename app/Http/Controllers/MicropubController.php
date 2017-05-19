@@ -97,8 +97,14 @@ class MicropubController extends Controller
                 }
                 $data['syndicate'] = [];
                 $targets = array_pluck(config('syndication.targets'), 'uid', 'service.name');
-                if (is_string($request->input('mp-syndicate-to'))) {
-                    $service = array_search($request->input('mp-syndicate-to'), $targets);
+                if ($request->has('mp-syndicate-to')) {
+                    $mpSyndicateTo = $request->input('mp-syndicate-to');
+                }
+                if ($request->has('properties.mp-syndicate-to')) {
+                    $mpSyndicateTo = $request->input('properties.mp-syndicate-to');
+                }
+                if (is_string($mpSyndicateTo)) {
+                    $service = array_search($mpSyndicateTo, $targets);
                     if ($service == 'Twitter') {
                         $data['syndicate'][] = 'twitter';
                     }
@@ -106,21 +112,27 @@ class MicropubController extends Controller
                         $data['syndicate'][] = 'facebook';
                     }
                 }
-                if (is_array($request->input('mp-syndicate-to'))) {
-                    foreach ($targets as $service => $target) {
-                        if (in_array($target, $request->input('mp-syndicate-to'))) {
-                            if ($service == 'Twitter') {
-                                $data['syndicate'][] = 'twitter';
-                            }
-                            if ($service == 'Facebook') {
-                                $data['syndicate'][] = 'facebook';
-                            }
+                if (is_array($mpSyndicateTo)) {
+                    foreach ($mpSyndicateTo as $uid) {
+                        $service = array_search($uid, $targets);
+                        if ($service == 'Twitter') {
+                            $data['syndicate'][] = 'twitter';
+                        }
+                        if ($service == 'Facebook') {
+                            $data['syndicate'][] = 'facebook';
                         }
                     }
                 }
                 $data['photo'] = [];
-                if (is_array($request->input('photo'))) {
-                    foreach ($request->input('photo') as $photo) {
+                $photos = null;
+                if ($request->has('photo')) {
+                    $photos = $request->input('photo');
+                }
+                if ($request->has('properties.photo')) {
+                    $photos = $request->input('properties.photo');
+                }
+                if ($photos !== null) {
+                    foreach ($photos as $photo) {
                         if (is_string($photo)) {
                             //only supporting media URLs for now
                             $data['photo'][] = $photo;
