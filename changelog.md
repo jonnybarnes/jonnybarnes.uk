@@ -1,6 +1,6 @@
 # Changelog
 
-## Version {next}
+## Version 0.5.7 (2017-05-19)
   - Hotfix: make sure `mpSyndicateTo` variable exists when accessed in if statements
 
 ## Version 0.5.6 (2017-05-19)
