@@ -1,5 +1,8 @@
 # Changelog
 
+## Version {next}
+  - Hotfix: make sure `mpSyndicateTo` variable exists when accessed in if statements
+
 ## Version 0.5.6 (2017-05-19)
   - Update micropub code to support html-form and json syntax for mp-syndicate-to and photos
 
