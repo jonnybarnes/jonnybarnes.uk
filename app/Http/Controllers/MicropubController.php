@@ -98,7 +98,7 @@ class MicropubController extends Controller
                 $data['syndicate'] = [];
                 $targets = array_pluck(config('syndication.targets'), 'uid', 'service.name');
                 if (is_string($request->input('mp-syndicate-to'))) {
-                    $service = array_search($request->input('mp-syndicate-to'));
+                    $service = array_search($request->input('mp-syndicate-to'), $targets);
                     if ($service == 'Twitter') {
                         $data['syndicate'][] = 'twitter';
                     }
