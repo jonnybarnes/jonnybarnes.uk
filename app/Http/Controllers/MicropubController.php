@@ -97,6 +97,7 @@ class MicropubController extends Controller
                 }
                 $data['syndicate'] = [];
                 $targets = array_pluck(config('syndication.targets'), 'uid', 'service.name');
+                $mpSyndicateTo = null;
                 if ($request->has('mp-syndicate-to')) {
                     $mpSyndicateTo = $request->input('mp-syndicate-to');
                 }
