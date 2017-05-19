@@ -76,18 +76,20 @@ class NoteService
         }
         */
         //add support for media uploaded as URLs
-        foreach ($data['photo'] as $photo) {
-            // check the media was uploaded to my endpoint, and use path
-            if (starts_with($photo, config('filesystems.disks.s3.url'))) {
-                $path = substr($photo, strlen(config('filesystems.disks.s3.url')));
-                $media = Media::where('path', ltrim($path, '/'))->firstOrFail();
-            } else {
-                $media = Media::firstOrNew(['path' => $photo]);
-                // currently assuming this is a photo from Swarm
-                $media->type = 'image';
-                $media->save();
+        if (array_key_exists('photo', $data)) {
+            foreach ($data['photo'] as $photo) {
+                // check the media was uploaded to my endpoint, and use path
+                if (starts_with($photo, config('filesystems.disks.s3.url'))) {
+                    $path = substr($photo, strlen(config('filesystems.disks.s3.url')));
+                    $media = Media::where('path', ltrim($path, '/'))->firstOrFail();
+                } else {
+                    $media = Media::firstOrNew(['path' => $photo]);
+                    // currently assuming this is a photo from Swarm
+                    $media->type = 'image';
+                    $media->save();
+                }
+                $note->media()->save($media);
             }
-            $note->media()->save($media);
         }
 
         $note->save();

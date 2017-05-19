@@ -206,16 +206,16 @@ class MicropubClientController extends Controller
             $json['properties'] = ['content' => [$request->input('content')]];
 
             if ($request->input('in-reply-to') != '') {
-                $json['properties']['in-reply-to'] = [$request->input('in-reply-to')];
+                $json['properties']['in-reply-to'][] = $request->input('in-reply-to');
             }
             if ($request->input('mp-syndicate-to')) {
                 foreach ($request->input('mp-syndicate-to') as $syn) {
-                    $json['properties']['mp-syndicate-to'] = [$syn];
+                    $json['properties']['mp-syndicate-to'][] = $syn;
                 }
             }
             if ($request->input('location')) {
                 if ($request->input('location') !== 'no-location') {
-                    $json['properties']['location'] = [$request->input('location')];
+                    $json['properties']['location'][] = $request->input('location');
                 }
             }
             if ($request->input('media')) {

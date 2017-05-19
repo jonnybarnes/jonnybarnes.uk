@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 0.5.5 (2017-05-19)
+  - improve test suite
+  - Syndication should now work
+
 ## Version 0.5.4 (2017-05-18)
   - Fix issues with using the indieauth client
 
