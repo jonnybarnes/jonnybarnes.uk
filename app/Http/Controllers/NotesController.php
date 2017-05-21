@@ -112,9 +112,13 @@ class NotesController extends Controller
                 case 'in-reply-to':
                     $content['source'] = $webmention->source;
                     if (isset($microformats['items'][0]['properties']['published'][0])) {
-                        $content['date'] = $carbon->parse(
-                            $microformats['items'][0]['properties']['published'][0]
-                        )->toDayDateTimeString();
+                        try {
+                            $content['date'] = $carbon->parse(
+                                $microformats['items'][0]['properties']['published'][0]
+                            )->toDayDateTimeString();
+                        } catch (\Exception $exception) {
+                            $content['date'] = $webmention->updated_at->toDayDateTimeString();
+                        }
                     } else {
                         $content['date'] = $webmention->updated_at->toDayDateTimeString();
                     }
