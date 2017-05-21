@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 0.5.8 (2017-05-21)
+  - Hotfix: if Carbon can’t parse the supplied published date of a webmention, use the Model’s `updated_at` value
+
 ## Version 0.5.7 (2017-05-19)
   - Hotfix: make sure `mpSyndicateTo` variable exists when accessed in if statements
 
