@@ -30,11 +30,11 @@
         "sass": "sassc --style compressed --sourcemap resources/assets/sass/app.scss public/assets/css/app.css",
         "postcss": "postcss --use autoprefixer --autoprefixer.browsers \"> 5%\" --output public/assets/css/app.css public/assets/css/app.css",
         "make:css": "npm run sass && npm run postcss",
-        "compress": "./compress",
+        "compress": "scripts/compress",
         "copy-dist": "cp ./node_modules/mapbox-gl/dist/mapbox-gl.css ./public/assets/frontend/ && cp ./node_modules/alertify.js/dist/css/alertify.css ./public/assets/frontend/ && cp ./node_modules/normalize.css/normalize.css ./public/assets/frontend/",
         "lint:sass": "stylelint --syntax=scss resources/assets/sass/**/*.scss",
         "lint:es6": "eslint resources/assets/es6/*.js",
-        "uglifyjs": "./uglifyjs",
+        "uglifyjs": "scripts/uglifyjs",
         "webpack": "./node_modules/.bin/webpack --progress --colors"
     },
     "lint-staged": {
