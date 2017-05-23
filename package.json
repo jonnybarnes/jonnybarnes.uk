@@ -25,15 +25,17 @@
         "webpack": "^2.2.0"
     },
     "scripts": {
-        "lint-staged": "lint-staged",
-        "stylelint-staged": "stylelint --syntax=scss",
-        "sass": "sassc --style compressed --sourcemap resources/assets/sass/app.scss public/assets/css/app.css",
-        "postcss": "postcss --use autoprefixer --autoprefixer.browsers \"> 5%\" --output public/assets/css/app.css public/assets/css/app.css",
-        "make:css": "npm run sass && npm run postcss",
         "compress": "scripts/compress",
         "copy-dist": "cp ./node_modules/mapbox-gl/dist/mapbox-gl.css ./public/assets/frontend/ && cp ./node_modules/alertify.js/dist/css/alertify.css ./public/assets/frontend/ && cp ./node_modules/normalize.css/normalize.css ./public/assets/frontend/",
-        "lint:sass": "stylelint --syntax=scss resources/assets/sass/**/*.scss",
+        "lint-staged": "lint-staged",
         "lint:es6": "eslint resources/assets/es6/*.js",
+        "lint:sass": "stylelint --syntax=scss resources/assets/sass/**/*.scss",
+        "make": "npm run make:css && npm run make:js",
+        "make:css": "npm run lint:sass && npm run sass && npm run postcss",
+        "make:js": "npm run lint:es6 && npm run webpack && npm run uglifyjs",
+        "postcss": "postcss public/assets/css/app.css --use autoprefixer --autoprefixer.browsers \"> 5%\" --replace --map",
+        "sass": "sassc --style compressed --sourcemap resources/assets/sass/app.scss public/assets/css/app.css",
+        "stylelint-staged": "stylelint --syntax=scss",
         "uglifyjs": "scripts/uglifyjs",
         "webpack": "./node_modules/.bin/webpack --progress --colors"
     },
