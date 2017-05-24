@@ -14,7 +14,7 @@ Admin CP
 <p>You can either <a href="/admin/notes/create">create</a> new notes, or <a href="/admin/notes/">edit</a> them.<p>
 
 <h2>Clients</h2>
-<p>You can either <a href="/admin/clients/create">create</a> new contacts, or <a href="/admin/clients/">edit</a> them.</p>
+<p>You can either <a href="/admin/clients/create">create</a> new client names, or <a href="/admin/clients/">edit</a> them.</p>
 
 <h2>Contacts</h2>
 <p>You can either <a href="/admin/contacts/create">create</a> new contacts, or <a href="/admin/contacts/">edit</a> them.</p>
