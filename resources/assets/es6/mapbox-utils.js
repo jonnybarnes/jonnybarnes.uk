@@ -41,8 +41,7 @@ const makeMapMenu = (map) => {
 export default function addMap(div, position = null, places = null) {
     let dataLatitude = div.dataset.latitude;
     let dataLongitude = div.dataset.longitude;
-    let dataId = div.dataset.id;
-    let data = window['geojson'+dataId];
+    let data = window['geojson'+div.dataset.id];
     if (data == null) {
         data = {
             'type': 'FeatureCollection',
@@ -94,15 +93,13 @@ export default function addMap(div, position = null, places = null) {
     map.addControl(new mapboxgl.NavigationControl());
     div.appendChild(makeMapMenu(map));
     map.on('load', function () {
-        map.addSource('points', {
-            'type': 'geojson',
-            'data': data
-        });
         map.addLayer({
             'id': 'points',
-            'interactive': true,
             'type': 'symbol',
-            'source': 'points',
+            'source': {
+                'type': 'geojson',
+                'data': data
+            },
             'layout': {
                 'icon-image': '{icon}-15',
                 'text-field': '{title}',

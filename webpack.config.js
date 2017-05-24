@@ -15,6 +15,7 @@ const config = {
   },
   devtool: 'source-map',
   module: {
+    noParse: [/(mapbox-gl)\.js$/],
     loaders: [
       {
         test: /\.js$/,
