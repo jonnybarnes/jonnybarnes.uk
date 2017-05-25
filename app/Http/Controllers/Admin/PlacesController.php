@@ -67,15 +67,13 @@ class PlacesController extends Controller
     {
         $place = Place::findOrFail($placeId);
 
-        $latitude = $place->getLatitude();
-        $longitude = $place->getLongitude();
-
         return view('admin.places.edit', [
             'id' => $placeId,
             'name' => $place->name,
             'description' => $place->description,
-            'latitude' => $latitude,
-            'longitude' => $longitude,
+            'latitude' => $place->latitude,
+            'longitude' => $place->longitude,
+            'icon' => $place->icon ?? 'marker',
         ]);
     }
 
@@ -92,6 +90,7 @@ class PlacesController extends Controller
         $place->name = $request->name;
         $place->description = $request->description;
         $place->location = new Point((float) $request->latitude, (float) $request->longitude);
+        $place->icon = $request->icon;
         $place->save();
 
         return redirect('/admin/places');
