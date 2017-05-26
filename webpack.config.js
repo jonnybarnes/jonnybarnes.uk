@@ -7,7 +7,8 @@ const config = {
     links: './links.js',
     maps: './maps.js',
     newnote: './newnote.js',
-    piwik: './piwik.js'
+    piwik: './piwik.js',
+    places: './places.js'
   },
   output: {
     path: __dirname + '/public/assets/js',

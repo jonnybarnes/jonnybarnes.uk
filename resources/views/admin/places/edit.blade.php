@@ -13,11 +13,27 @@ Edit Place « Admin CP
   <input type="text" name="name" id="name" value="{{ $name }}"><br>
   <p>Description</p>
   <textarea name="description" id="description">{{ $description }}</textarea><br>
-  <p>Latitude/Longitude</p>
+  <p>Location</p>
+  <div class="map" data-latitude="{{ $latitude }}" data-longitude="{{ $longitude }}" data-id="{{ $id }}"></div>
+  <script>
+    var geojson{{ $id }} = {
+        "type": "FeatureCollection",
+        "features": [{
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [{{ $longitude }}, {{ $latitude }}]
+            },
+            "properties": {
+                "title": "{{ $name }}",
+                "icon": "{{ $icon }}"
+            }
+        }]
+    }
+  </script>
   <input type="text" name="latitude" id="latitude" value="{{ $latitude }}"><br>
   <input type="text" name="longitude" id="longitude" value="{{ $longitude }}"><br>
   <p>Map Icon</p>
-  <small></small>
   <select name="icon" id="icon">
     <option value="airfield"@if($icon == 'airfield')selected @endif>airfield</option>
     <option value="airport"@if($icon == 'airport')selected @endif>airport</option>
@@ -103,4 +119,9 @@ Edit Place « Admin CP
   <input type="submit" name="edit" value="Edit"><br><br>
   <input type="submit" name="delete" value="Delete">
 </form>
+@stop
+
+@section('scripts')
+  <script src="/assets/js/places.js"></script>
+  <link rel="stylesheet" href="/assets/frontend/mapbox-gl.css">
 @stop
