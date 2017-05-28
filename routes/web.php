@@ -80,6 +80,9 @@ Route::group(['domain' => config('url.longurl')], function () {
             Route::post('/', 'PlacesController@store');
             Route::get('/{id}/edit', 'PlacesController@edit');
             Route::put('/{id}', 'PlacesController@update');
+            Route::get('/{id}/merge', 'PlacesController@mergeIndex');
+            Route::get('/{place1_id}/merge/{place2_id}', 'PlacesController@mergeEdit');
+            Route::post('/merge', 'PlacesController@mergeStore');
             Route::delete('/{id}', 'PlacesController@destroy');
         });
     });

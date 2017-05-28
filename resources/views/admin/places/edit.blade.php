@@ -119,6 +119,8 @@ Edit Place « Admin CP
   <input type="submit" name="edit" value="Edit"><br><br>
   <input type="submit" name="delete" value="Delete">
 </form>
+
+<p><a href="/admin/places/{{ $id }}/merge">Merge with another place?</a></p>
 @stop
 
 @section('scripts')

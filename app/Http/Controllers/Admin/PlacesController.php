@@ -95,4 +95,55 @@ class PlacesController extends Controller
 
         return redirect('/admin/places');
     }
+
+    /**
+     * List the places we can merge with the current place.
+     *
+     * @param string Place id
+     * @return Illuminate\View\Factory view
+     */
+    public function mergeIndex($placeId)
+    {
+        $first = Place::find($placeId);
+        $results = Place::near(new Point($first->latitude, $first->longitude))->get();
+        $places = [];
+        foreach ($results as $place) {
+            if ($place->slug !== $first->slug) {
+                $places[] = $place;
+            }
+        }
+
+        return view('admin.places.merge.index', compact('first', 'places'));
+    }
+
+    public function mergeEdit($place1_id, $place2_id)
+    {
+        $place1 = Place::find($place1_id);
+        $place2 = Place::find($place2_id);
+
+        return view('admin.places.merge.edit', compact('place1', 'place2'));
+    }
+
+    public function mergeStore(Request $request)
+    {
+        $place1 = Place::find($request->input('place1'));
+        $place2 = Place::find($request->input('place2'));
+
+        if ($request->input('delete') === '1') {
+            foreach ($place1->notes as $note) {
+                $note->place()->dissociate();
+                $note->place()->associate($place2->id);
+            }
+            $place1->delete();
+        }
+        if ($request->input('delete') === '2') {
+            foreach ($place2->notes as $note) {
+                $note->place()->dissociate();
+                $note->place()->associate($place1->id);
+            }
+            $place2->delete();
+        }
+
+        return redirect('/admin/places');
+    }
 }
