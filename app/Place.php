@@ -54,7 +54,7 @@ class Place extends Model
      * @param  int Distance
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeNear(Builder $query, Point $point, $distance = 100)
+    public function scopeNear(Builder $query, Point $point, $distance = 1000)
     {
         $field = DB::raw(
             sprintf("ST_Distance(%s.location, ST_GeogFromText('%s'))",
