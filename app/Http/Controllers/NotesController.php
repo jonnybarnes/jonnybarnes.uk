@@ -356,15 +356,18 @@ class NotesController extends Controller
         $icon = $icon ?? 'marker';
 
         return '{
-            "type": "Feature",
-            "geometry": {
-                "type": "Point",
-                "coordinates": [' . $longitude . ', ' . $latitude . ']
-            },
-            "properties": {
-                "title": "' . $title . '",
-                "icon": "' . $icon . '"
-            }
+            "type": "FeatureCollection",
+            "features": [{
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [' . $longitude . ', ' . $latitude . ']
+                },
+                "properties": {
+                    "title": "' . $title . '",
+                    "icon": "' . $icon . '"
+                }
+            }]
         }';
     }
 }
