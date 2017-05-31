@@ -1,6 +1,6 @@
 # Changelog
 
-## Version {next}
+## Version 0.5.9 (2017-05-31)
   - Mapping improvements
   - Basic place merging
 
