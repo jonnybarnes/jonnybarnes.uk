@@ -6,6 +6,7 @@ use Ramsey\Uuid\Uuid;
 use App\{Media, Note, Place};
 use Illuminate\Http\{Request, Response};
 use App\Exceptions\InvalidTokenException;
+use Phaza\LaravelPostgis\Geometries\Point;
 use Ramsey\Uuid\Exception\UnsatisfiedDependencyException;
 use App\Services\{NoteService, PlaceService, TokenService};
 
@@ -313,7 +314,7 @@ class MicropubController extends Controller
                 $matches
             );
             $distance = (count($matches[0]) == 3) ? 100 * $matches[0][2] : 1000;
-            $places = Place::near($matches[0][0], $matches[0][1], $distance);
+            $places = Place::near(new Point($matches[0][0], $matches[0][1]))->get();
             foreach ($places as $place) {
                 $place->uri = config('app.url') . '/places/' . $place->slug;
             }

@@ -4,6 +4,8 @@ namespace App;
 
 use DB;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
+use Phaza\LaravelPostgis\Geometries\Point;
 use MartinBean\Database\Eloquent\Sluggable;
 use Phaza\LaravelPostgis\Eloquent\PostgisTrait;
 
@@ -45,33 +47,23 @@ class Place extends Model
     }
 
     /**
-     * Get all places within a specified distance.
+     * Select places near a given location.
      *
-     * @param  float latitude
-     * @param  float longitude
-     * @param  int maximum distance
-     * @todo Check this shit.
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  Point $point
+     * @param  int Distance
+     * @return \Illuminate\Database\Eloquent\Builder
      */
-    public static function near(float $lat, float $lng, int $distance)
+    public function scopeNear(Builder $query, Point $point, $distance = 1000)
     {
-        $point = $lng . ' ' . $lat;
-        $distace = $distance ?? 1000;
-        $places = DB::select(DB::raw("select
-            name,
-            slug,
-            ST_AsText(location) AS location,
-            ST_Distance(
-                ST_GeogFromText('SRID=4326;POINT($point)'),
-                location
-            ) AS distance
-        from places
-        where ST_DWithin(
-            ST_GeogFromText('SRID=4326;POINT($point)'),
-            location,
-            $distance
-        ) ORDER BY distance"));
+        $field = DB::raw(
+            sprintf("ST_Distance(%s.location, ST_GeogFromText('%s'))",
+                $this->getTable(),
+                $point->toWKT()
+            )
+        );
 
-        return $places;
+        return $query->where($field, '<=', $distance)->orderBy($field);
     }
 
     /*

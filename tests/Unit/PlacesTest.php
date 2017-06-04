@@ -4,6 +4,7 @@ namespace Tests\Unit;
 
 use App\Place;
 use Tests\TestCase;
+use Phaza\LaravelPostgis\Geometries\Point;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
@@ -16,7 +17,7 @@ class PlacesTest extends TestCase
      */
     public function test_near_method()
     {
-        $nearby = Place::near(53.5, -2.38, 1000);
+        $nearby = Place::near(new Point(53.5, -2.38), 1000)->get();
         $this->assertEquals('the-bridgewater-pub', $nearby[0]->slug);
     }
 }
