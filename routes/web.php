@@ -88,12 +88,18 @@ Route::group(['domain' => config('url.longurl')], function () {
     });
 
     //Blog pages using ArticlesController
+    Route::get('blog/feed.rss', 'FeedsController@blogRss');
+    Route::get('blog/feed.atom', 'FeedsController@blogAtom');
+    Route::get('blog/feed.json', 'FeedsController@blogJson');
     Route::get('blog/s/{id}', 'ArticlesController@onlyIdInURL');
     Route::get('blog/{year?}/{month?}', 'ArticlesController@index');
     Route::get('blog/{year}/{month}/{slug}', 'ArticlesController@show');
 
     //Notes pages using NotesController
     Route::get('notes', 'NotesController@index');
+    Route::get('notes/feed.rss', 'FeedsController@notesRss');
+    Route::get('notes/feed.atom', 'FeedsController@notesAtom');
+    Route::get('notes/feed.json', 'FeedsController@notesJson');
     Route::get('notes/{id}', 'NotesController@show');
     Route::get('note/{id}', 'NotesController@redirect');
     Route::get('notes/tagged/{tag}', 'NotesController@tagged');
@@ -135,8 +141,6 @@ Route::group(['domain' => config('url.longurl')], function () {
     //Places
     Route::get('places', 'PlacesController@index');
     Route::get('places/{slug}', 'PlacesController@show');
-
-    Route::get('feed', 'ArticlesController@makeRSS');
 
     Route::get('search', 'SearchController@search');
 });

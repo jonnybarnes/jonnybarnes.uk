@@ -169,6 +169,16 @@ class Note extends Model
     }
 
     /**
+     * Get the pubdate value for RSS feeds.
+     *
+     * @return string
+     */
+    public function getPubdateAttribute()
+    {
+        return $this->updated_at->toRSSString();
+    }
+
+    /**
      * Get the relavent client name assocaited with the client id.
      *
      * @return string|null
