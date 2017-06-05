@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Note;
 use App\Article;
-use Illuminate\Http\Request;
 
 class FeedsController extends Controller
 {
@@ -79,7 +78,7 @@ class FeedsController extends Controller
             'title' => 'The JSON Feed for ' . config('app.display_name') . '’s blog',
             'home_page_url' => config('app.url') . '/blog',
             'feed_url' => config('app.url') . '/blog/feed.json',
-            'items' => []
+            'items' => [],
         ];
 
         foreach ($articles as $key => $article) {
@@ -91,8 +90,8 @@ class FeedsController extends Controller
                 'date_published' => $article->created_at->tz('UTC')->toRfc3339String(),
                 'date_modified' => $article->updated_at->tz('UTC')->toRfc3339String(),
                 'author' => [
-                    'name' => config('app.display_name')
-                ]
+                    'name' => config('app.display_name'),
+                ],
             ];
         }
 
@@ -112,7 +111,7 @@ class FeedsController extends Controller
             'title' => 'The JSON Feed for ' . config('app.display_name') . '’s notes',
             'home_page_url' => config('app.url') . '/notes',
             'feed_url' => config('app.url') . '/notes/feed.json',
-            'items' => []
+            'items' => [],
         ];
 
         foreach ($notes as $key => $note) {
@@ -124,8 +123,8 @@ class FeedsController extends Controller
                 'date_published' => $note->created_at->tz('UTC')->toRfc3339String(),
                 'date_modified' => $note->updated_at->tz('UTC')->toRfc3339String(),
                 'author' => [
-                    'name' => config('app.display_name')
-                ]
+                    'name' => config('app.display_name'),
+                ],
             ];
         }
 
