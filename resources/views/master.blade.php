@@ -6,6 +6,12 @@
   <meta name="viewport" content="width=device-width">
   <link rel="stylesheet" href="/assets/frontend/normalize.css">
   <link rel="stylesheet" href="/assets/css/app.css">
+  <link rel="alternate" type="application/rss+xml" title="Blog RSS Feed" href="/blog/feed.rss">
+  <link rel="alternate" type="application/atom+xml" title="Blog Atom Feed" href="/blog/feed.atom">
+  <link rel="alternate" type="application/json" title="Blog JSON Feed" href="/blog/feed.json">
+  <link rel="alternate" type="application/rss+xml" title="Notes RSS Feed" href="/notes/feed.rss">
+  <link rel="alternate" type="application/atom+xml" title="Notes Atom Feed" href="/notes/feed.atom">
+  <link rel="alternate" type="application/json" title="Notes JSON Feed" href="/notes/feed.json">
   <link rel="openid.server" href="https://indieauth.com/openid">
   <link rel="openid.delegate" href="{{ config('app.url') }}">
   <link rel="authorization_endpoint" href="https://indieauth.com/auth">

@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 0.5.10 (2017-06-09)
+  - Add a link to instagram account
+  - Add syndication feeds for articles/notes, supporting RSS/Atom/JSON (issue#52)
+
 ## Version 0.5.9 (2017-05-31)
   - Mapping improvements
   - Basic place merging

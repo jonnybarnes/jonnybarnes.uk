@@ -51,19 +51,4 @@ class ArticlesController extends Controller
 
         return redirect($article->link);
     }
-
-    /**
-     * Returns the RSS feed.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function makeRSS()
-    {
-        $articles = Article::where('published', '1')->orderBy('updated_at', 'desc')->get();
-        $buildDate = $articles->first()->updated_at->toRssString();
-
-        return response()
-                    ->view('articles.rss', compact('articles', 'buildDate'), 200)
-                    ->header('Content-Type', 'application/rss+xml');
-    }
 }
