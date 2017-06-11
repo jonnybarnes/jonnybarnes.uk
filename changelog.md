@@ -1,5 +1,8 @@
 # Changelog
 
+## Version {next}
+  - Add ability to delete notes
+
 ## Version 0.5.11 (2017-06-11)
   - to help with micropub clients, log requests made to micropub endpoint
 
