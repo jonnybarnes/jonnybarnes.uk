@@ -1,6 +1,6 @@
 # Changelog
 
-## Version {next}
+## Version 0.5.14 (2017-06-11)
   - Remove some Log statements in-appropriate for porduction
 
 ## Version 0.5.13 (2017-06-11)
