@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Log;
 use Ramsey\Uuid\Uuid;
 use App\{Media, Note, Place};
 use Illuminate\Http\{Request, Response};
@@ -58,6 +59,8 @@ class MicropubController extends Controller
                 'error_description' => 'The provided token did not pass validation',
             ], 400);
         }
+        // Log the request
+        Log::debug($request);
         if ($tokenData->hasClaim('scope')) {
             if (($request->input('h') == 'entry') || ($request->input('type')[0] == 'h-entry')) {
                 if (stristr($tokenData->getClaim('scope'), 'create') === false) {
