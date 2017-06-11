@@ -87,6 +87,7 @@ class MicropubController extends Controller
                     //create checkin place
                     if (array_key_exists('checkin', $request->input('properties'))) {
                         $data['checkin'] = $request->input('properties.checkin.0.properties.url.0');
+                        $data['swarm-url'] = $request->input('properties.syndication.0');
                         try {
                             $this->placeService->createPlaceFromCheckin($request->input('properties.checkin.0'));
                         } catch (\Exception $e) {
@@ -142,6 +143,9 @@ class MicropubController extends Controller
                             //only supporting media URLs for now
                             $data['photo'][] = $photo;
                         }
+                    }
+                    if (starts_with($request->input('properties.syndication.0'), 'https://www.instagram.com')) {
+                        $data['instagram-url'] = $request->input('properties.syndication.0');
                     }
                 }
                 try {
