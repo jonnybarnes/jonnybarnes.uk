@@ -14,6 +14,13 @@ class Media extends Model
     protected $table = 'media_endpoint';
 
     /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = ['path'];
+
+    /**
      * Get the note that owns this media.
      */
     public function note()
