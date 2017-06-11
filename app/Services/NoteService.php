@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 namespace App\Services;
-use Log;
+
 use App\{Media, Note, Place};
 use App\Jobs\{SendWebMentions, SyndicateToFacebook, SyndicateToTwitter};
 
@@ -17,7 +17,7 @@ class NoteService
      */
     public function createNote(array $data): Note
     {
-        Log::info($data);
+
         //check the input
         if (array_key_exists('content', $data) === false) {
             throw new \Exception('No content defined'); //we can’t fudge the data
