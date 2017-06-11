@@ -1,6 +1,6 @@
 # Changelog
 
-## Version {next}
+## Version 0.5.11 (2017-06-11)
   - to help with micropub clients, log requests made to micropub endpoint
 
 ## Version 0.5.10 (2017-06-09)
