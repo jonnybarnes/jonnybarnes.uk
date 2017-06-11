@@ -30,7 +30,7 @@ class NotesController extends Controller
             $note->originalNote = $note->getOriginal('note');
         }
 
-        return view('admin.notes.index', comapct('notes'));
+        return view('admin.notes.index', compact('notes'));
     }
 
     /**
