@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 0.5.13 (2017-06-11)
+  - Fix issues around using ownyourgram.com
+
 ## Version 0.5.12 (2017-06-11)
   - Add ability to delete notes
 
