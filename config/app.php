@@ -235,6 +235,11 @@ return [
          */
         Laravel\Tinker\TinkerServiceProvider::class,
 
+        /*
+         * Eolquent Sluggable
+         */
+        Cviebrock\EloquentSluggable\ServiceProvider::class,
+
     ],
 
     /*
