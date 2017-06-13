@@ -78,10 +78,20 @@ class MicropubController extends Controller
                         $data['content'] = $request->input('properties.content')[0]['html'];
                     }
                     $data['in-reply-to'] = $request->input('properties.in-reply-to')[0];
-                    $data['location'] = $request->input('properties.location');
-                    //flatten location if array
-                    if (is_array($data['location'])) {
-                        $data['location'] = $data['location'][0];
+                    // check location is geo: string
+                    if (is_string($request->input('properties.location.0'))) {
+                        $data['location'] = $request->input('properties.location.0');
+                    }
+                    // check location is h-card
+                    if (is_array($request->input('properties.location.0'))) {
+                        if ($request->input('properties.location.0.type' === 'h-card')) {
+                            try {
+                                $place = $this->placeService->createPlaceFromCheckin($request->input('properties.location.0'));
+                                $data['checkin'] = $place->longurl;
+                            } catch (\Exception $e) {
+                                //
+                            }
+                        }
                     }
                     $data['published'] = $request->input('properties.published')[0];
                     //create checkin place
@@ -89,7 +99,8 @@ class MicropubController extends Controller
                         $data['checkin'] = $request->input('properties.checkin.0.properties.url.0');
                         $data['swarm-url'] = $request->input('properties.syndication.0');
                         try {
-                            $this->placeService->createPlaceFromCheckin($request->input('properties.checkin.0'));
+                            $place = $this->placeService->createPlaceFromCheckin($request->input('properties.checkin.0'));
+                            $data['checkin'] = $place->longurl;
                         } catch (\Exception $e) {
                             $data['checkin'] = null;
                         }
