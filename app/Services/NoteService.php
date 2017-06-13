@@ -46,8 +46,7 @@ class NoteService
                 //uri of form http://host/places/slug, we want slug
                 //get the URL path, then take last part, we can hack with basename
                 //as path looks like file path.
-                $slug = basename(parse_url($data['location'], PHP_URL_PATH));
-                $place = Place::where('slug', $slug)->first();
+                $place = Place::where('slug', basename(parse_url($data['location'], PHP_URL_PATH)))->first();
                 $note->place()->associate($place);
             }
             if (substr($data['location'], 0, 4) == 'geo:') {
@@ -61,7 +60,7 @@ class NoteService
         }
 
         if (array_key_exists('checkin', $data) && $data['checkin'] !== null) {
-            $place = Place::where('foursquare', $data['checkin'])->first();
+            $place = Place::where('slug', basename(parse_url($data['checkin'], PHP_URL_PATH)))->first();
             if ($place !== null) {
                 $note->place()->associate($place);
                 $note->swarm_url = $data['swarm-url'];

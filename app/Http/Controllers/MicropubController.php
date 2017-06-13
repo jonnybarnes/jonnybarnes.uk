@@ -96,13 +96,13 @@ class MicropubController extends Controller
                     $data['published'] = $request->input('properties.published')[0];
                     //create checkin place
                     if (array_key_exists('checkin', $request->input('properties'))) {
-                        $data['checkin'] = $request->input('properties.checkin.0.properties.url.0');
                         $data['swarm-url'] = $request->input('properties.syndication.0');
                         try {
                             $place = $this->placeService->createPlaceFromCheckin($request->input('properties.checkin.0'));
                             $data['checkin'] = $place->longurl;
                         } catch (\Exception $e) {
                             $data['checkin'] = null;
+                            $data['swarm-url'] = null;
                         }
                     }
                 } else {
