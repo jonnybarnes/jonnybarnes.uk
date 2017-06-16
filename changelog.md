@@ -3,6 +3,7 @@
 ## Version {next}
   - Add support for ownyourgram.com sending h-card locations
   - change sluggable implementation
+  - Add tests for uploading new articles from .md files
 
 ## Version 0.5.14 (2017-06-11)
   - Remove some Log statements in-appropriate for porduction
