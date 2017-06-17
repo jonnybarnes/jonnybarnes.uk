@@ -1,6 +1,6 @@
 # Changelog
 
-## Version {next}
+## Version 0.5.16
   - Allow place `slug`s to be re-generated
   - Add syndication links for swarm and instagram
   - Move bio to its own template, next step database?
