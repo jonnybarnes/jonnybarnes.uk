@@ -40,5 +40,12 @@ class NotesTableSeeder extends Seeder
             'note' => 'Note from somehwere',
             'location' => '53.499,-2.379'
         ]);
+        $noteSyndicated = App\Note::create([
+            'note' => 'This note has all the syndication targets',
+            'tweet_id' => '123456',
+            'facebook_url' => 'https://www.facebook.com/post/12345789',
+            'swarm_url' => 'https://www.swarmapp.com/checking/123456789',
+            'instagram_url' => 'https://www.instagra.com/p/aWsEd123Jh',
+        ]);
     }
 }
