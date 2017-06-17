@@ -5,8 +5,8 @@ namespace App;
 use DB;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
-use Phaza\LaravelPostgis\Geometries\Point;
 use Cviebrock\EloquentSluggable\Sluggable;
+use Phaza\LaravelPostgis\Geometries\Point;
 use Phaza\LaravelPostgis\Eloquent\PostgisTrait;
 
 class Place extends Model
@@ -40,8 +40,8 @@ class Place extends Model
     {
         return [
             'slug' => [
-                'source' => 'name'
-            ]
+                'source' => 'name',
+            ],
         ];
     }
 

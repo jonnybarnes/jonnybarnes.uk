@@ -3,8 +3,8 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use League\CommonMark\CommonMarkConverter;
 use Cviebrock\EloquentSluggable\Sluggable;
+use League\CommonMark\CommonMarkConverter;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Article extends Model
@@ -35,8 +35,8 @@ class Article extends Model
     {
         return [
             'titleurl' => [
-                'source' => 'title'
-            ]
+                'source' => 'title',
+            ],
         ];
     }
 
