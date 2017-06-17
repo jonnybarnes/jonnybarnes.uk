@@ -23,7 +23,18 @@
         @if($note->replies > 0) @include('templates.replies-icon'): {{ $note->replies }}@endif
       </div>
       <div class="social-links">
-        @if($note->tweet_id || $note->facebook_url)@include('templates.social-links', ['tweet_id' => $note->tweet_id, 'facebook_url' => $note->facebook_url])@endif
+        @if(
+            $note->tweet_id ||
+            $note->facebook_url ||
+            $note->swarm_url ||
+            $note->instagram_url)
+            @include('templates.social-links', [
+                'tweet_id' => $note->tweet_id,
+                'facebook_url' => $note->facebook_url,
+                'swarm_url' => $note->swarm_url,
+                'instagram_url' => $note->instagram_url,
+            ])
+        @endif
       </div>
     </div>
 @if ($note->placeLink)
