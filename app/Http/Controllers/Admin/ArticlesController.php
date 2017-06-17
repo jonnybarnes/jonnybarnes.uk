@@ -45,31 +45,19 @@ class ArticlesController extends Controller
             $published = '0';
         }
         //if a `.md` is attached use that for the main content.
-        $content = null; //set default value
         if ($request->hasFile('article')) {
             $file = $request->file('article')->openFile();
             $content = $file->fread($file->getSize());
         }
         $main = $content ?? $request->input('main');
-        try {
-            $article = Article::create(
-                [
-                    'url' => $request->input('url'),
-                    'title' => $request->input('title'),
-                    'main' => $main,
-                    'published' => $published,
-                ]
-            );
-        } catch (Exception $e) {
-            $msg = $e->getMessage();
-            $unique = strpos($msg, '1062');
-            if ($unique !== false) {
-                //We've checked for error 1062, i.e. duplicate titleurl
-                return redirect('/admin/blog/create')->withInput()->with('message', 'Duplicate title, please change');
-            }
-            //this isn't the error you're looking for
-            throw $e;
-        }
+        $article = Article::create(
+            [
+                'url' => $request->input('url'),
+                'title' => $request->input('title'),
+                'main' => $main,
+                'published' => $published,
+            ]
+        );
 
         return redirect('/admin/blog');
     }

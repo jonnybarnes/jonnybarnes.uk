@@ -1,5 +1,11 @@
 # Changelog
 
+## Version 0.5.15 (2017-06-17)
+  - Add support for ownyourgram.com sending h-card locations
+  - change sluggable implementation
+  - Add tests for uploading new articles from .md files
+  - Fix issue with maps not loading geojson data
+
 ## Version 0.5.14 (2017-06-11)
   - Remove some Log statements in-appropriate for porduction
 

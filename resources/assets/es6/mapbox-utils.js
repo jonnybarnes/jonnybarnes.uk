@@ -55,10 +55,15 @@ const makeMapMenu = (map) => {
 
 //the main function
 export default function addMap(div, position = null, places = null) {
+    let data;
     let dataLatitude = div.dataset.latitude;
     let dataLongitude = div.dataset.longitude;
-    let data = window['geojson'+div.dataset.id];
-    if (data == null) {
+    let dataName = div.dataset.name;
+    let dataMarker = div.dataset.marker;
+    if (dataMarker == '') {
+        dataMarker = 'circle';
+    }
+    if (dataName == null) {
         data = {
             'type': 'FeatureCollection',
             'features': [{
@@ -71,6 +76,21 @@ export default function addMap(div, position = null, places = null) {
                     'title': 'Current Location',
                     'icon': 'circle-stroked',
                     'uri': 'current-location'
+                }
+            }]
+        };
+    } else {
+        data = {
+            'type': 'FeatureCollection',
+            'features': [{
+                'type': 'Feature',
+                'geometry': {
+                    'type': 'Point',
+                    'coordinates': [dataLongitude, dataLatitude]
+                },
+                'properties': {
+                    'title': dataName,
+                    'icon': dataMarker,
                 }
             }]
         };

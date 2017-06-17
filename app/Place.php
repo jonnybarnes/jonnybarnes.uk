@@ -5,19 +5,14 @@ namespace App;
 use DB;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Cviebrock\EloquentSluggable\Sluggable;
 use Phaza\LaravelPostgis\Geometries\Point;
-use MartinBean\Database\Eloquent\Sluggable;
 use Phaza\LaravelPostgis\Eloquent\PostgisTrait;
 
 class Place extends Model
 {
-    use PostgisTrait;
-    /*
-     * We want to turn the names into slugs.
-     */
     use Sluggable;
-    const DISPLAY_NAME = 'name';
-    const SLUG = 'slug';
+    use PostgisTrait;
 
     /**
      * The attributes that are mass assignable.
@@ -35,6 +30,20 @@ class Place extends Model
         'location',
         'polygon',
     ];
+
+    /**
+     * Return the sluggable configuration array for this model.
+     *
+     * @return array
+     */
+    public function sluggable()
+    {
+        return [
+            'slug' => [
+                'source' => 'name',
+            ],
+        ];
+    }
 
     /**
      * Define the relationship with Notes.

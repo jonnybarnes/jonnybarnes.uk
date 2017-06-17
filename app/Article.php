@@ -3,19 +3,14 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Cviebrock\EloquentSluggable\Sluggable;
 use League\CommonMark\CommonMarkConverter;
-use MartinBean\Database\Eloquent\Sluggable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Article extends Model
 {
-    use SoftDeletes;
-    /*
-     * We want to turn the titles into slugs
-     */
     use Sluggable;
-    const DISPLAY_NAME = 'title';
-    const SLUG = 'titleurl';
+    use SoftDeletes;
 
     /**
      * The attributes that should be mutated to dates.
@@ -30,6 +25,20 @@ class Article extends Model
      * @var string
      */
     protected $table = 'articles';
+
+    /**
+     * Return the sluggable configuration array for this model.
+     *
+     * @return array
+     */
+    public function sluggable()
+    {
+        return [
+            'titleurl' => [
+                'source' => 'title',
+            ],
+        ];
+    }
 
     /**
      * Define the relationship with webmentions.

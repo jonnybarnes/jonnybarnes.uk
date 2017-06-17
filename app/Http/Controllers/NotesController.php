@@ -50,12 +50,6 @@ class NotesController extends Controller
                 $note->longitude = $lnglat[0];
                 $note->address = $note->place->name;
                 $note->placeLink = '/places/' . $note->place->slug;
-                $note->geoJson = $this->getGeoJson(
-                    $note->longitude,
-                    $note->latitude,
-                    $note->place->name,
-                    $note->place->icon
-                );
             }
             /*$mediaLinks = [];
             foreach ($note->media()->get() as $media) {
@@ -157,12 +151,6 @@ class NotesController extends Controller
             $note->longitude = $lnglat[0];
             $note->address = $note->place->name;
             $note->placeLink = '/places/' . $note->place->slug;
-            $note->geoJson = $this->getGeoJson(
-                $note->longitude,
-                $note->latitude,
-                $note->place->name,
-                $note->place->icon
-            );
         }
 
         return view('notes.show', compact('note', 'replies', 'reposts', 'likes'));
@@ -355,19 +343,20 @@ class NotesController extends Controller
     {
         $icon = $icon ?? 'marker';
 
-        return '{
-            "type": "FeatureCollection",
-            "features": [{
-                "type": "Feature",
-                "geometry": {
-                    "type": "Point",
-                    "coordinates": [' . $longitude . ', ' . $latitude . ']
-                },
-                "properties": {
-                    "title": "' . $title . '",
-                    "icon": "' . $icon . '"
-                }
-            }]
-        }';
+        return
+"{
+    'type': 'FeatureCollection',
+    'features': [{
+        'type': 'Feature',
+        'geometry': {
+            'type': 'Point',
+            'coordinates': [$longitude, $latitude]
+        },
+        'properties': {
+            'title': '$title',
+            'icon': '$icon'
+        }
+    }]
+}";
     }
 }
