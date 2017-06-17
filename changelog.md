@@ -1,5 +1,8 @@
 # Changelog
 
+## Version {next}
+  - Allow place `slug`s to be re-generated
+
 ## Version 0.5.15 (2017-06-17)
   - Add support for ownyourgram.com sending h-card locations
   - change sluggable implementation
