@@ -41,6 +41,7 @@ class Place extends Model
         return [
             'slug' => [
                 'source' => 'name',
+                'onUpdate' => true,
             ],
         ];
     }
