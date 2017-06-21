@@ -3,5 +3,5 @@
 for file in ./public/assets/js/*.js
 do
     echo "uglifying `basename $file`"
-    echo "uglifyjs --verbose --compress --source-map content=${file:2}.map,url=`basename $file`.map,filename=${file:2}.map,includeSources=true --output $file $file"
+    uglifyjs --verbose --compress --source-map content=${file:2}.map,url=`basename $file`.map,filename=${file:2}.map,includeSources=true --output $file $file
 done
