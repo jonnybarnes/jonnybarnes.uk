@@ -3,16 +3,14 @@
 namespace App\Jobs;
 
 use Mf2;
-use App\Note;
-use App\WebMention;
 use GuzzleHttp\Client;
+use App\{Note, WebMention};
 use Illuminate\Bus\Queueable;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Queue\InteractsWithQueue;
 use Jonnybarnes\WebmentionsParser\Parser;
 use GuzzleHttp\Exception\RequestException;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use App\Exceptions\RemoteContentNotFoundException;
+use Illuminate\Queue\{InteractsWithQueue, SerializesModels};
 
 class ProcessWebMention implements ShouldQueue
 {
