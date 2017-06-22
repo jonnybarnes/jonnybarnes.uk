@@ -25,37 +25,11 @@ class NotesController extends Controller
      */
     public function index(Request $request)
     {
-        $notes = Note::orderBy('id', 'desc')->with('webmentions', 'place', 'media')->paginate(10);
-        foreach ($notes as $note) {
-            $replies = 0;
-            foreach ($note->webmentions as $webmention) {
-                if ($webmention->type == 'in-reply-to') {
-                    $replies++;
-                }
-            }
-            $note->replies = $replies;
-            $note->twitter = $this->checkTwitterReply($note->in_reply_to);
-            $note->iso8601_time = $note->updated_at->toISO8601String();
-            $note->human_time = $note->updated_at->diffForHumans();
-            if ($note->location && ($note->place === null)) {
-                $pieces = explode(':', $note->location);
-                $latlng = explode(',', $pieces[0]);
-                $note->latitude = trim($latlng[0]);
-                $note->longitude = trim($latlng[1]);
-                $note->address = $this->reverseGeoCode((float) trim($latlng[0]), (float) trim($latlng[1]));
-            }
-            if ($note->place !== null) {
-                $lnglat = explode(' ', $note->place->location);
-                $note->latitude = $lnglat[1];
-                $note->longitude = $lnglat[0];
-                $note->address = $note->place->name;
-                $note->placeLink = '/places/' . $note->place->slug;
-            }
-            /*$mediaLinks = [];
-            foreach ($note->media()->get() as $media) {
-                $mediaLinks[] = $media->url;
-            }*/
-        }
+        $notes = Note::orderBy('id', 'desc')
+            ->with('place', 'media', 'client')
+            ->withCount(['webmentions As replies' => function ($query) {
+                $query->where('type', 'in-reply-to');
+            }])->paginate(10);
 
         $homepage = ($request->path() == '/');
 
@@ -70,10 +44,8 @@ class NotesController extends Controller
      */
     public function show($urlId)
     {
-        $numbers = new Numbers();
         $authorship = new Authorship();
-        $realId = $numbers->b60tonum($urlId);
-        $note = Note::find($realId);
+        $note = Note::nb60($urlId)->first();
         $replies = [];
         $reposts = [];
         $likes = [];
@@ -134,23 +106,6 @@ class NotesController extends Controller
                     $likes[] = $content;
                     break;
             }
-        }
-        $note->twitter = $this->checkTwitterReply($note->in_reply_to);
-        $note->iso8601_time = $note->updated_at->toISO8601String();
-        $note->human_time = $note->updated_at->diffForHumans();
-        if ($note->location && ($note->place === null)) {
-            $pieces = explode(':', $note->location);
-            $latlng = explode(',', $pieces[0]);
-            $note->latitude = trim($latlng[0]);
-            $note->longitude = trim($latlng[1]);
-            $note->address = $this->reverseGeoCode((float) trim($latlng[0]), (float) trim($latlng[1]));
-        }
-        if ($note->place !== null) {
-            $lnglat = explode(' ', $note->place->location);
-            $note->latitude = $lnglat[1];
-            $note->longitude = $lnglat[0];
-            $note->address = $note->place->name;
-            $note->placeLink = '/places/' . $note->place->slug;
         }
 
         return view('notes.show', compact('note', 'replies', 'reposts', 'likes'));
@@ -231,42 +186,6 @@ class NotesController extends Controller
     }
 
     /**
-     * Twitter!!!
-     *
-     * @param  string  The reply to URL
-     * @return string | null
-     */
-    private function checkTwitterReply($url)
-    {
-        if ($url == null) {
-            return;
-        }
-
-        if (mb_substr($url, 0, 20, 'UTF-8') !== 'https://twitter.com/') {
-            return;
-        }
-
-        $arr = explode('/', $url);
-        $tweetId = end($arr);
-        if (Cache::has($tweetId)) {
-            return Cache::get($tweetId);
-        }
-        try {
-            $oEmbed = Twitter::getOembed([
-                'id' => $tweetId,
-                'align' => 'center',
-                'omit_script' => true,
-                'maxwidth' => 550,
-            ]);
-        } catch (\Exception $e) {
-            return;
-        }
-        Cache::put($tweetId, $oEmbed, ($oEmbed->cache_age / 60));
-
-        return $oEmbed;
-    }
-
-    /**
      * Filter the HTML in a reply webmention.
      *
      * @param  string  The reply HTML
@@ -280,83 +199,5 @@ class NotesController extends Controller
         $purifier = new HTMLPurifier($config);
 
         return $purifier->purify($html);
-    }
-
-    /**
-     * Do a reverse geocode lookup of a `lat,lng` value.
-     *
-     * @param  float  The latitude
-     * @param  float  The longitude
-     * @return string The location HTML
-     */
-    public function reverseGeoCode(float $latitude, float $longitude): string
-    {
-        $latlng = $latitude . ',' . $longitude;
-
-        return Cache::get($latlng, function () use ($latlng, $latitude, $longitude) {
-            $guzzle = new Client();
-            $response = $guzzle->request('GET', 'https://nominatim.openstreetmap.org/reverse', [
-                'query' => [
-                    'format' => 'json',
-                    'lat' => $latitude,
-                    'lon' => $longitude,
-                    'zoom' => 18,
-                    'addressdetails' => 1,
-                ],
-                'headers' => ['User-Agent' => 'jonnybarnes.uk via Guzzle, email jonny@jonnybarnes.uk'],
-            ]);
-            $json = json_decode($response->getBody());
-            if (isset($json->address->town)) {
-                $address = '<span class="p-locality">'
-                    . $json->address->town
-                    . '</span>, <span class="p-country-name">'
-                    . $json->address->country
-                    . '</span>';
-                Cache::forever($latlng, $address);
-
-                return $address;
-            }
-            if (isset($json->address->city)) {
-                $address = $json->address->city . ', ' . $json->address->country;
-                Cache::forever($latlng, $address);
-
-                return $address;
-            }
-            if (isset($json->address->county)) {
-                $address = '<span class="p-region">'
-                    . $json->address->county
-                    . '</span>, <span class="p-country-name">'
-                    . $json->address->country
-                    . '</span>';
-                Cache::forever($latlng, $address);
-
-                return $address;
-            }
-            $adress = '<span class="p-country-name">' . $json->address->country . '</span>';
-            Cache::forever($latlng, $address);
-
-            return $address;
-        });
-    }
-
-    private function getGeoJson($longitude, $latitude, $title, $icon)
-    {
-        $icon = $icon ?? 'marker';
-
-        return
-"{
-    'type': 'FeatureCollection',
-    'features': [{
-        'type': 'Feature',
-        'geometry': {
-            'type': 'Point',
-            'coordinates': [$longitude, $latitude]
-        },
-        'properties': {
-            'title': '$title',
-            'icon': '$icon'
-        }
-    }]
-}";
     }
 }
