@@ -18,6 +18,8 @@ Notes «
 {!! $notes->render() !!}
 @stop
 
+@if (Request::path() == '/')@include('templates.bio')@endif
+
 @section('scripts')
 
 <script defer src="/assets/js/links.js"></script>
@@ -27,5 +29,3 @@ Notes «
 <script defer src="/assets/prism/prism.js"></script>
 <link rel="stylesheet" href="/assets/prism/prism.css">
 @stop
-
-@if ($homepage === true)@include('templates.bio')@endif

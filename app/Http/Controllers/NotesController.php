@@ -24,9 +24,7 @@ class NotesController extends Controller
                 $query->where('type', 'in-reply-to');
             }])->paginate(10);
 
-        $homepage = ($request->path() == '/');
-
-        return view('notes.index', compact('notes', 'homepage'));
+        return view('notes.index', compact('notes'));
     }
 
     /**
