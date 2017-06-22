@@ -1,5 +1,8 @@
 # Changelog
 
+## Version {next}
+  - Lots of code tidying, especially in the notes controller
+
 ## Version 0.5.16
   - Allow place `slug`s to be re-generated
   - Add syndication links for swarm and instagram
