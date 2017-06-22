@@ -12,7 +12,7 @@ class WebMentionsTableSeeder extends Seeder
     public function run()
     {
         $webmention = App\WebMention::create([
-            'source' => 'https://aaornpk.local/reply/1',
+            'source' => 'https://aaornpk.localhost/reply/1',
             'target' => 'https://jonnybarnes.localhost/notes/D',
             'commentable_id' => '13',
             'commentable_type' => 'App\Note',

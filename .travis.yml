@@ -14,6 +14,7 @@ addons:
     packages:
       - nginx
       - realpath
+      - postgresql-9.6-postgis-2.3
   artifacts:
     s3_region: "eu-west-1"
     paths:

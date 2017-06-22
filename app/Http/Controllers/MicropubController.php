@@ -62,29 +62,29 @@ class MicropubController extends Controller
         // Log the request
         Log::debug($request);
         if ($tokenData->hasClaim('scope')) {
-            if (($request->input('h') == 'entry') || ($request->input('type')[0] == 'h-entry')) {
+            if (($request->input('h') == 'entry') || ($request->input('type.0') == 'h-entry')) {
                 if (stristr($tokenData->getClaim('scope'), 'create') === false) {
                     return $this->returnInsufficientScopeResponse();
                 }
                 $data = [];
                 $data['client-id'] = $tokenData->getClaim('client_id');
                 if ($request->header('Content-Type') == 'application/json') {
-                    if (is_string($request->input('properties.content')[0])) {
-                        $data['content'] = $request->input('properties.content')[0]; //plaintext content
+                    if (is_string($request->input('properties.content.0'))) {
+                        $data['content'] = $request->input('properties.content.0'); //plaintext content
                     }
-                    if (is_array($request->input('properties.content')[0])
-                        && array_key_exists('html', $request->input('properties.content')[0])
+                    if (is_array($request->input('properties.content.0'))
+                        && array_key_exists('html', $request->input('properties.content.0'))
                     ) {
-                        $data['content'] = $request->input('properties.content')[0]['html'];
+                        $data['content'] = $request->input('properties.content.0.html');
                     }
-                    $data['in-reply-to'] = $request->input('properties.in-reply-to')[0];
+                    $data['in-reply-to'] = $request->input('properties.in-reply-to.0');
                     // check location is geo: string
                     if (is_string($request->input('properties.location.0'))) {
                         $data['location'] = $request->input('properties.location.0');
                     }
                     // check location is h-card
                     if (is_array($request->input('properties.location.0'))) {
-                        if ($request->input('properties.location.0.type' === 'h-card')) {
+                        if ($request->input('properties.location.0.type.0' === 'h-card')) {
                             try {
                                 $place = $this->placeService->createPlaceFromCheckin($request->input('properties.location.0'));
                                 $data['checkin'] = $place->longurl;
@@ -93,7 +93,7 @@ class MicropubController extends Controller
                             }
                         }
                     }
-                    $data['published'] = $request->input('properties.published')[0];
+                    $data['published'] = $request->input('properties.published.0');
                     //create checkin place
                     if (array_key_exists('checkin', $request->input('properties'))) {
                         $data['swarm-url'] = $request->input('properties.syndication.0');
@@ -374,7 +374,7 @@ class MicropubController extends Controller
 
         //check post scope
         if ($tokenData->hasClaim('scope')) {
-            if (stristr($token->getClaim('scope'), 'post') === false) {
+            if (stristr($tokenData->getClaim('scope'), 'create') === false) {
                 return $this->returnInsufficientScopeResponse();
             }
             //check media valid

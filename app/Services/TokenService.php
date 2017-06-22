@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Jobs\AddClientToDatabase;
 use Lcobucci\JWT\Signer\Hmac\Sha256;
 use App\Exceptions\InvalidTokenException;
 use Lcobucci\JWT\{Builder, Parser, Token};
@@ -26,6 +27,7 @@ class TokenService
             ->set('nonce', bin2hex(random_bytes(8)))
             ->sign($signer, config('app.key'))
             ->getToken();
+        dispatch(new AddClientToDatabase($data['client_id']));
 
         return (string) $token;
     }

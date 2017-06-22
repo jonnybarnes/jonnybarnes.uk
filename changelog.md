@@ -1,6 +1,10 @@
 # Changelog
 
-## Version 0.5.16
+## Version 0.5.17 (2017-06-22)
+  - Lots of code tidying, especially in the notes controller
+  - Fix issue#53 regarding uploading photos
+
+## Version 0.5.16 (2017-06-17)
   - Allow place `slug`s to be re-generated
   - Add syndication links for swarm and instagram
   - Move bio to its own template, next step database?

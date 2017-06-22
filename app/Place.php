@@ -76,19 +76,6 @@ class Place extends Model
         return $query->where($field, '<=', $distance)->orderBy($field);
     }
 
-    /*
-     * Convert location to text.
-     *
-     * @param  text $value
-     * @return text
-     *
-    public function getLocationAttribute($value)
-    {
-        $result = DB::select(DB::raw("SELECT ST_AsText('$value')"));
-
-        return $result[0]->st_astext;
-    }*/
-
     /**
      * Get the latitude from the `location` property.
      *

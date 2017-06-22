@@ -2,7 +2,10 @@
 
 namespace App;
 
+use Cache;
+use Twitter;
 use Normalizer;
+use GuzzleHttp\Client;
 use Laravel\Scout\Searchable;
 use Jonnybarnes\IndieWeb\Numbers;
 use Illuminate\Database\Eloquent\Model;
@@ -31,6 +34,16 @@ class Note extends Model
     public function tags()
     {
         return $this->belongsToMany('App\Tag');
+    }
+
+    /**
+     * Define the relationship with clients.
+     *
+     * @var array?
+     */
+    public function client()
+    {
+        return $this->belongsTo('App\MicropubClient', 'client_id', 'client_url');
     }
 
     /**
@@ -97,17 +110,6 @@ class Note extends Model
     }
 
     /**
-     * A mutator to ensure that in-reply-to is always non-empty or null.
-     *
-     * @param  string  value
-     * @return string
-     */
-    public function setInReplyToAttribute($value)
-    {
-        $this->attributes['in_reply_to'] = empty($value) ? null : $value;
-    }
-
-    /**
      * Normalize the note to Unicode FORM C.
      *
      * @param  string  $value
@@ -169,6 +171,26 @@ class Note extends Model
     }
 
     /**
+     * Get the ISO8601 value for mf2.
+     *
+     * @return string
+     */
+    public function getIso8601Attribute()
+    {
+        return $this->updated_at->toISO8601String();
+    }
+
+    /**
+     * Get the ISO8601 value for mf2.
+     *
+     * @return string
+     */
+    public function getHumandiffAttribute()
+    {
+        return $this->updated_at->diffForHumans();
+    }
+
+    /**
      * Get the pubdate value for RSS feeds.
      *
      * @return string
@@ -179,26 +201,85 @@ class Note extends Model
     }
 
     /**
-     * Get the relavent client name assocaited with the client id.
+     * Get the latitude value.
      *
      * @return string|null
      */
-    public function getClientNameAttribute()
+    public function getLatitudeAttribute()
     {
-        if ($this->client_id == null) {
+        if ($this->place !== null) {
+            $lnglat = explode(' ', $this->place->location);
+
+            return $lnglat[1];
+        }
+        if ($this->location !== null) {
+            $pieces = explode(':', $this->location);
+            $latlng = explode(',', $pieces[0]);
+
+            return trim($latlng[0]);
+        }
+    }
+
+    /**
+     * Get the longitude value.
+     *
+     * @return string|null
+     */
+    public function getLongitudeAttribute()
+    {
+        if ($this->place !== null) {
+            $lnglat = explode(' ', $this->place->location);
+
+            return $lnglat[1];
+        }
+        if ($this->location !== null) {
+            $pieces = explode(':', $this->location);
+            $latlng = explode(',', $pieces[0]);
+
+            return trim($latlng[1]);
+        }
+    }
+
+    /**
+     * Get the address for a note. This is either a reverse geo-code from the
+     * location, or is derived from the associated place.
+     *
+     * @return string|null
+     */
+    public function getAddressAttribute()
+    {
+        if ($this->place !== null) {
+            return $this->place->name;
+        }
+        if ($this->location !== null) {
+            return $this->reverseGeoCode((float) $this->latitude, (float) $this->longitude);
+        }
+    }
+
+    public function getTwitterAttribute()
+    {
+        if ($this->in_reply_to == null || mb_substr($this->in_reply_to, 0, 20, 'UTF-8') !== 'https://twitter.com/') {
             return;
         }
-        $name = MicropubClient::where('client_url', $this->client_id)->value('client_name');
-        if ($name == null) {
-            $url = parse_url($this->client_id);
-            if (isset($url['path'])) {
-                return $url['host'] . $url['path'];
-            }
 
-            return $url['host'];
+        $arr = explode('/', $url);
+        $tweetId = end($arr);
+        if (Cache::has($tweetId)) {
+            return Cache::get($tweetId);
         }
+        try {
+            $oEmbed = Twitter::getOembed([
+                'id' => $tweetId,
+                'align' => 'center',
+                'omit_script' => true,
+                'maxwidth' => 550,
+            ]);
+        } catch (\Exception $e) {
+            return;
+        }
+        Cache::put($tweetId, $oEmbed, ($oEmbed->cache_age / 60));
 
-        return $name;
+        return $oEmbed;
     }
 
     /**
@@ -283,5 +364,62 @@ class Note extends Model
         }
 
         return $text;
+    }
+
+    /**
+     * Do a reverse geocode lookup of a `lat,lng` value.
+     *
+     * @param  float  The latitude
+     * @param  float  The longitude
+     * @return string The location HTML
+     */
+    public function reverseGeoCode(float $latitude, float $longitude): string
+    {
+        $latlng = $latitude . ',' . $longitude;
+
+        return Cache::get($latlng, function () use ($latlng, $latitude, $longitude) {
+            $guzzle = new Client();
+            $response = $guzzle->request('GET', 'https://nominatim.openstreetmap.org/reverse', [
+                'query' => [
+                    'format' => 'json',
+                    'lat' => $latitude,
+                    'lon' => $longitude,
+                    'zoom' => 18,
+                    'addressdetails' => 1,
+                ],
+                'headers' => ['User-Agent' => 'jonnybarnes.uk via Guzzle, email jonny@jonnybarnes.uk'],
+            ]);
+            $json = json_decode($response->getBody());
+            if (isset($json->address->town)) {
+                $address = '<span class="p-locality">'
+                    . $json->address->town
+                    . '</span>, <span class="p-country-name">'
+                    . $json->address->country
+                    . '</span>';
+                Cache::forever($latlng, $address);
+
+                return $address;
+            }
+            if (isset($json->address->city)) {
+                $address = $json->address->city . ', ' . $json->address->country;
+                Cache::forever($latlng, $address);
+
+                return $address;
+            }
+            if (isset($json->address->county)) {
+                $address = '<span class="p-region">'
+                    . $json->address->county
+                    . '</span>, <span class="p-country-name">'
+                    . $json->address->country
+                    . '</span>';
+                Cache::forever($latlng, $address);
+
+                return $address;
+            }
+            $adress = '<span class="p-country-name">' . $json->address->country . '</span>';
+            Cache::forever($latlng, $address);
+
+            return $address;
+        });
     }
 }
