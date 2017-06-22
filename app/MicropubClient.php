@@ -25,7 +25,8 @@ class MicropubClient extends Model
      *
      * @return void
      */
-    public function notes() {
+    public function notes()
+    {
         return $this->hasMany('App\Note', 'client_id', 'client_url');
     }
 }
