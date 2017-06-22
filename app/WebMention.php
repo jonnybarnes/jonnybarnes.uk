@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Cache;
 use Twitter;
 use HTMLPurifier;
 use Carbon\Carbon;

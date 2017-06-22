@@ -261,29 +261,6 @@ class Note extends Model
         return;
     }
 
-    /*
-     * Get the relavent client name assocaited with the client id.
-     *
-     * @return string|null
-     *
-    public function getClientNameAttribute()
-    {
-        if ($this->client_id == null) {
-            return;
-        }
-        $name = MicropubClient::where('client_url', $this->client_id)->value('client_name');
-        if ($name == null) {
-            $url = parse_url($this->client_id);
-            if (isset($url['path'])) {
-                return $url['host'] . $url['path'];
-            }
-
-            return $url['host'];
-        }
-
-        return $name;
-    }*/
-
     public function getTwitterAttribute()
     {
         if ($this->in_reply_to == null || mb_substr($this->in_reply_to, 0, 20, 'UTF-8') !== 'https://twitter.com/') {
