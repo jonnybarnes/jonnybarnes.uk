@@ -2,6 +2,7 @@
 
 ## Version {next}
   - Lots of code tidying, especially in the notes controller
+  - Fix issue#53 regarding uploading photos
 
 ## Version 0.5.16
   - Allow place `slug`s to be re-generated
