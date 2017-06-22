@@ -37,35 +37,9 @@ class NotesController extends Controller
      */
     public function show($urlId)
     {
-        $note = Note::nb60($urlId)->first();
-        $replies = [];
-        $reposts = [];
-        $likes = [];
-        foreach ($note->webmentions as $webmention) {
-            $content['author'] = $webmention->author;
-            $content['published'] = $webmention->published;
-            $content['source'] = $webmention->source;
-            switch ($webmention->type) {
-                case 'in-reply-to':
-                    $content['reply'] = $webmention->reply;
-                    $microformats = json_decode($webmention->mf2, true);
-                    $content['reply'] = $this->filterHTML(
-                        $microformats['items'][0]['properties']['content'][0]['html']
-                    );
-                    $replies[] = $content;
-                    break;
+        $note = Note::nb60($urlId)->with('webmentions')->first();
 
-                case 'repost-of':
-                    $reposts[] = $content;
-                    break;
-
-                case 'like-of':
-                    $likes[] = $content;
-                    break;
-            }
-        }
-
-        return view('notes.show', compact('note', 'replies', 'reposts', 'likes'));
+        return view('notes.show', compact('note'));
     }
 
     /**
