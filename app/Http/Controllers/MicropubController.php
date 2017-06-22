@@ -374,7 +374,7 @@ class MicropubController extends Controller
 
         //check post scope
         if ($tokenData->hasClaim('scope')) {
-            if (stristr($token->getClaim('scope'), 'post') === false) {
+            if (stristr($tokenData->getClaim('scope'), 'create') === false) {
                 return $this->returnInsufficientScopeResponse();
             }
             //check media valid
