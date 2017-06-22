@@ -41,7 +41,8 @@ class Note extends Model
      *
      * @var array?
      */
-    public function client() {
+    public function client()
+    {
         return $this->belongsTo('App\MicropubClient', 'client_id', 'client_url');
     }
 
@@ -217,8 +218,6 @@ class Note extends Model
 
             return trim($latlng[0]);
         }
-
-        return;
     }
 
     /**
@@ -239,8 +238,6 @@ class Note extends Model
 
             return trim($latlng[1]);
         }
-
-        return;
     }
 
     /**
@@ -257,8 +254,6 @@ class Note extends Model
         if ($this->location !== null) {
             return $this->reverseGeoCode((float) $this->latitude, (float) $this->longitude);
         }
-
-        return;
     }
 
     public function getTwitterAttribute()
