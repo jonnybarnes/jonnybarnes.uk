@@ -1,5 +1,8 @@
 # Changelog
 
+## Version {next}
+  - Minor change in deploy script to speed things up
+
 ## Version 0.5.17 (2017-06-22)
   - Lots of code tidying, especially in the notes controller
   - Fix issue#53 regarding uploading photos
