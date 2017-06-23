@@ -3,6 +3,9 @@
 echo "Putting the Laravel app in maintenance mode"
 php artisan down
 
+echo "Pulling the latest changes"
+git pull
+
 echo "Updating composer and dependencies"
 sudo composer self-update
 composer install
