@@ -1,6 +1,6 @@
 # Changelog
 
-## Version {next}
+## Version 0.5.18 (2017-06-23)
   - Minor change in deploy script to speed things up
 
 ## Version 0.5.17 (2017-06-22)
