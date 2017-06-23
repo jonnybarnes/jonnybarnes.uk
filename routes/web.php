@@ -88,21 +88,40 @@ Route::group(['domain' => config('url.longurl')], function () {
     });
 
     //Blog pages using ArticlesController
-    Route::get('blog/feed.rss', 'FeedsController@blogRss');
-    Route::get('blog/feed.atom', 'FeedsController@blogAtom');
-    Route::get('blog/feed.json', 'FeedsController@blogJson');
-    Route::get('blog/s/{id}', 'ArticlesController@onlyIdInURL');
-    Route::get('blog/{year?}/{month?}', 'ArticlesController@index');
-    Route::get('blog/{year}/{month}/{slug}', 'ArticlesController@show');
+    Route::group(['prefix' => 'blog'], function () {
+        Route::get('/feed.rss', 'FeedsController@blogRss');
+        Route::get('/feed.atom', 'FeedsController@blogAtom');
+        Route::get('/feed.json', 'FeedsController@blogJson');
+        Route::get('/s/{id}', 'ArticlesController@onlyIdInURL');
+        Route::get('/{year?}/{month?}', 'ArticlesController@index');
+        Route::get('/{year}/{month}/{slug}', 'ArticlesController@show');
+    });
 
     //Notes pages using NotesController
-    Route::get('notes', 'NotesController@index');
-    Route::get('notes/feed.rss', 'FeedsController@notesRss');
-    Route::get('notes/feed.atom', 'FeedsController@notesAtom');
-    Route::get('notes/feed.json', 'FeedsController@notesJson');
-    Route::get('notes/{id}', 'NotesController@show');
-    Route::get('note/{id}', 'NotesController@redirect');
-    Route::get('notes/tagged/{tag}', 'NotesController@tagged');
+    Route::group(['prefix' => 'notes'], function () {
+        Route::get('/', 'NotesController@index');
+        Route::get('/feed.rss', 'FeedsController@notesRss');
+        Route::get('/feed.atom', 'FeedsController@notesAtom');
+        Route::get('/feed.json', 'FeedsController@notesJson');
+        Route::get('/{id}', 'NotesController@show');
+        Route::get('/tagged/{tag}', 'NotesController@tagged');
+    });
+    Route::get('note/{id}', 'NotesController@redirect'); // for legacy note URLs
+
+    // Micropub Client
+    Route::group(['prefix' => 'micropub'], function () {
+        Route::get('/create', 'MicropubClientController@create')->name('micropub-client');
+        Route::post('/', 'MicropubClientController@store')->name('micropub-client-post');
+        Route::get('/config', 'MicropubClientController@config')->name('micropub-config');
+        Route::get('/get-new-token', 'MicropubClientController@getNewToken')->name('micropub-client-get-new-token');
+        Route::get('/get-new-token/callback', 'MicropubClientController@getNewTokenCallback')->name('micropub-client-get-new-token-callback');
+        Route::get('/query-endpoint', 'MicropubClientController@queryEndpoint')->name('micropub-query-action');
+        Route::post('/update-syntax', 'MicropubClientController@updateSyntax')->name('micropub-update-syntax');
+        Route::get('/places', 'MicropubClientController@nearbyPlaces');
+        Route::post('/places', 'MicropubClientController@newPlace');
+        Route::post('/media', 'MicropubClientController@processMedia')->name('process-media');
+        Route::get('/media/clearlinks', 'MicropubClientController@clearLinks');
+    });
 
     // IndieAuth
     Route::post('indieauth/start', 'IndieAuthController@start')->name('indieauth-start');
@@ -111,19 +130,6 @@ Route::group(['domain' => config('url.longurl')], function () {
 
     // Token Endpoint
     Route::post('api/token', 'TokenEndpointController@create');
-
-    // Micropub Client
-    Route::get('micropub/create', 'MicropubClientController@create')->name('micropub-client');
-    Route::post('micropub', 'MicropubClientController@store')->name('micropub-client-post');
-    Route::get('micropub/config', 'MicropubClientController@config')->name('micropub-config');
-    Route::get('micropub/get-new-token', 'MicropubClientController@getNewToken')->name('micropub-client-get-new-token');
-    Route::get('micropub/get-new-token/callback', 'MicropubClientController@getNewTokenCallback')->name('micropub-client-get-new-token-callback');
-    Route::get('micropub/query-endpoint', 'MicropubClientController@queryEndpoint')->name('micropub-query-action');
-    Route::post('micropub/update-syntax', 'MicropubClientController@updateSyntax')->name('micropub-update-syntax');
-    Route::get('micropub/places', 'MicropubClientController@nearbyPlaces');
-    Route::post('micropub/places', 'MicropubClientController@newPlace');
-    Route::post('micropub/media', 'MicropubClientController@processMedia')->name('process-media');
-    Route::get('micropub/media/clearlinks', 'MicropubClientController@clearLinks');
 
     // Micropub Endpoints
     Route::get('api/post', 'MicropubController@get')->middleware('micropub.token');
