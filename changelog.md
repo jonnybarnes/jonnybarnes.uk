@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 0.5.19 (2017-06-27)
+  - Fix error in App\\WebMention.php
+
 ## Version 0.5.18 (2017-06-23)
   - Minor change in deploy script to speed things up
 
