@@ -49,7 +49,7 @@ class PlaceService
         if (array_key_exists('url', $checkin['properties']) && ends_with(parse_url($checkin['properties']['url'][0], PHP_URL_HOST), 'foursquare.com')) {
             $place = Place::where('foursquare', $checkin['properties']['url'][0])->get();
             if (count($place) === 1) {
-                return $place;
+                return $place->first();
             }
         }
         if (array_key_exists('name', $checkin['properties']) === false) {
