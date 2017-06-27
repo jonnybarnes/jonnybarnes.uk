@@ -70,10 +70,10 @@ class WebMention extends Model
                     $microformats['items'][0]['properties']['published'][0]
                 )->toDayDateTimeString();
             } catch (\Exception $exception) {
-                $published = $webmention->updated_at->toDayDateTimeString();
+                $published = $this->updated_at->toDayDateTimeString();
             }
         } else {
-            $published = $webmention->updated_at->toDayDateTimeString();
+            $published = $this->updated_at->toDayDateTimeString();
         }
 
         return $published;
