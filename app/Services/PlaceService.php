@@ -50,7 +50,7 @@ class PlaceService
             $place = Place::where(
                 'external_urls',
                 '@>',
-                json_encode('foursquare' => $checkin['properties']['url'][0]
+                json_encode(['foursquare' => $checkin['properties']['url'][0]])
             )->get();
             if (count($place) === 1) {
                 return $place->first();
