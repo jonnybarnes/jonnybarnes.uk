@@ -1,6 +1,8 @@
 <?php
 
+use App\Place;
 use Illuminate\Database\Seeder;
+use Phaza\LaravelPostgis\Geometries\Point;
 
 class PlacesTableSeeder extends Seeder
 {
@@ -11,13 +13,14 @@ class PlacesTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('places')->insert([
-            'name' => 'The Bridgewater Pub',
-            'slug' => 'the-bridgewater-pub',
-            'description' => 'A lovely local pub with a decent selection of cask ales',
-            'location' => 'POINT(-2.3805 53.4983)',
-            'created_at' => '2016-01-12 16:19:00',
-            'updated_at' => '2016-01-12 16:19:00',
+        $place = new Place();
+        $place->name = 'The Bridgewater Pub';
+        $place->description = 'A lovely local pub with a decent selection of cask ales';
+        $place->location = new Point('53.4983', '-2.3805');
+        $place->external_urls = json_encode([
+            'foursqaure' => 'https://foursqaure.com/v/123435/the-bridgewater-pub',
+            'osm' => 'https://www.openstreetmap.org/way/987654',
         ]);
+        $place->save();
     }
 }

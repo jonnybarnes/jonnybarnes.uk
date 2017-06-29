@@ -9,7 +9,7 @@
         "mapbox-gl": "^0.38.0",
         "marked": "^0.3.6",
         "normalize.css": "^7.0.0",
-        "webStorage": "^1.2.3"
+        "webStorage": "^1.2.4"
     },
     "devDependencies": {
         "babel-cli": "^6.18.0",

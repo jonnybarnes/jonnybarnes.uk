@@ -47,7 +47,11 @@ class PlaceService
     {
         //check if the place exists if from swarm
         if (array_key_exists('url', $checkin['properties']) && ends_with(parse_url($checkin['properties']['url'][0], PHP_URL_HOST), 'foursquare.com')) {
-            $place = Place::where('foursquare', $checkin['properties']['url'][0])->get();
+            $place = Place::where(
+                'external_urls',
+                '@>',
+                json_encode('foursquare' => $checkin['properties']['url'][0]
+            )->get();
             if (count($place) === 1) {
                 return $place->first();
             }
