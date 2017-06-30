@@ -17,6 +17,7 @@ class Kernel extends ConsoleKernel
         Commands\ParseCachedWebMentions::class,
         Commands\ReDownloadWebMentions::class,
         Commands\GenerateToken::class,
+        Commands\UpdatePlacesURLs::class,
     ];
 
     /**
