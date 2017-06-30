@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 0.5.20 (2017-06-30)
+  - Transition to using a JSON column for external urls of places
+
 ## Version 0.5.19 (2017-06-27)
   - Fix error in App\\WebMention.php
 

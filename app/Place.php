@@ -76,6 +76,20 @@ class Place extends Model
         return $query->where($field, '<=', $distance)->orderBy($field);
     }
 
+    public function scopeWhereExternalURL(Builder $query, string $url)
+    {
+        $type = $this->getType($url);
+        if ($type === null) {
+            // we haven’t set a type, therefore result must be empty set
+            // id can’t be null, so this will return empty set
+            return $query->whereNull('id');
+        }
+
+        return $query->where('external_urls', '@>', json_encode([
+            $type => $url,
+        ]));
+    }
+
     /**
      * Get the latitude from the `location` property.
      *
@@ -114,5 +128,32 @@ class Place extends Model
     public function getShorturlAttribute()
     {
         return config('app.shorturl') . '/places/' . $this->slug;
+    }
+
+    public function setExternalUrlsAttribute($url)
+    {
+        $type = $this->getType($url);
+        if ($type === null) {
+            throw new \Exception('Unkown external url type ' . $url);
+        }
+        $already = [];
+        if (array_key_exists('external_urls', $this->attributes)) {
+            $already = json_decode($this->attributes['external_urls'], true);
+        }
+        $already[$type] = $url;
+        $this->attributes['external_urls'] = json_encode($already);
+    }
+
+    private function getType(string $url): ?string
+    {
+        $host = parse_url($url, PHP_URL_HOST);
+        if (ends_with($host, 'foursquare.com') === true) {
+            return 'foursquare';
+        }
+        if (ends_with($host, 'openstreetmap.org') === true) {
+            return 'osm';
+        }
+
+        return null;
     }
 }
