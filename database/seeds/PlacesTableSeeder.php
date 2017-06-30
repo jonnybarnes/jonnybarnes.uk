@@ -17,10 +17,8 @@ class PlacesTableSeeder extends Seeder
         $place->name = 'The Bridgewater Pub';
         $place->description = 'A lovely local pub with a decent selection of cask ales';
         $place->location = new Point('53.4983', '-2.3805');
-        $place->external_urls = json_encode([
-            'foursqaure' => 'https://foursqaure.com/v/123435/the-bridgewater-pub',
-            'osm' => 'https://www.openstreetmap.org/way/987654',
-        ]);
+        $place->external_urls = 'https://foursquare.com/v/123435/the-bridgewater-pub';
+        $place->external_urls = 'https://www.openstreetmap.org/way/987654';
         $place->save();
     }
 }

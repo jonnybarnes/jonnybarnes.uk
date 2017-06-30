@@ -130,17 +130,17 @@ class Place extends Model
         return config('app.shorturl') . '/places/' . $this->slug;
     }
 
-    public function setExternalUrlsAttribute($value)
+    public function setExternalUrlsAttribute($url)
     {
-        $type = $this->getType($value);
+        $type = $this->getType($url);
         if ($type === null) {
-            throw new \Exception('Unkown external url type');
+            throw new \Exception('Unkown external url type ' . $url);
         }
         $already = [];
         if (array_key_exists('external_urls', $this->attributes)) {
             $already = json_decode($this->attributes['external_urls'], true);
         }
-        $already[$type] = $value;
+        $already[$type] = $url;
         $this->attributes['external_urls'] = json_encode($already);
     }
 
