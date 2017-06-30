@@ -84,8 +84,9 @@ class Place extends Model
             // id can’t be null, so this will return empty set
             return $query->whereNull('id');
         }
+
         return $query->where('external_urls', '@>', json_encode([
-            $type => $url
+            $type => $url,
         ]));
     }
 
