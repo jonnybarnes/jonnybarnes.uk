@@ -40,10 +40,6 @@ class ArticlesController extends Controller
      */
     public function store(Request $request)
     {
-        $published = $request->input('published');
-        if ($published == null) {
-            $published = '0';
-        }
         //if a `.md` is attached use that for the main content.
         if ($request->hasFile('article')) {
             $file = $request->file('article')->openFile();
@@ -55,7 +51,7 @@ class ArticlesController extends Controller
                 'url' => $request->input('url'),
                 'title' => $request->input('title'),
                 'main' => $main,
-                'published' => $published,
+                'published' => $request->input('published') ?? 0,
             ]
         );
 
@@ -89,15 +85,11 @@ class ArticlesController extends Controller
      */
     public function update(Request $request, $articleId)
     {
-        $published = $request->input('published');
-        if ($published == null) {
-            $published = '0';
-        }
         $article = Article::find($articleId);
         $article->title = $request->input('title');
         $article->url = $request->input('url');
         $article->main = $request->input('main');
-        $article->published = $published;
+        $article->published = $request->input('published') ?? 0;
         $article->save();
 
         return redirect('/admin/blog');
