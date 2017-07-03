@@ -1,5 +1,8 @@
 # Changelog
 
+## Version {next}
+  - Better logging of micropub requests
+
 ## Version 0.5.20 (2017-06-30)
   - Transition to using a JSON column for external urls of places
 
