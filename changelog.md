@@ -2,6 +2,7 @@
 
 ## Version {next}
   - Better logging of micropub requests
+  - fix a style issue with images
 
 ## Version 0.5.20 (2017-06-30)
   - Transition to using a JSON column for external urls of places
