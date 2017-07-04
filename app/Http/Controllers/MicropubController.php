@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Log;
+use Monolog\Logger;
 use Ramsey\Uuid\Uuid;
 use App\{Media, Note, Place};
+use Monolog\Handler\StreamHandler;
 use Illuminate\Http\{Request, Response};
 use App\Exceptions\InvalidTokenException;
 use Phaza\LaravelPostgis\Geometries\Point;
@@ -60,7 +61,9 @@ class MicropubController extends Controller
             ], 400);
         }
         // Log the request
-        Log::debug($request);
+        $logger = new Logger('micropub');
+        $logger->pushHandler(new StreamHandler(storage_path('logs/micropub.log')), Logger::DEBUG);
+        $logger->debug('MicropubLog', $request->all());
         if ($tokenData->hasClaim('scope')) {
             if (($request->input('h') == 'entry') || ($request->input('type.0') == 'h-entry')) {
                 if (stristr($tokenData->getClaim('scope'), 'create') === false) {
