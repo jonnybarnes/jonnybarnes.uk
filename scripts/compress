@@ -1,9 +1,9 @@
 #!/usr/bin/env zsh
 
 echo "compressing app.css and prism files"
-zopfli --i1000 ./public/assets/css/app.css
-zopfli --i1000 ./public/assets/prism/prism.css
-zopfli --i1000 ./public/assets/prism/prism.js
+zopfli --i100 ./public/assets/css/app.css
+zopfli --i100 ./public/assets/prism/prism.css
+zopfli --i100 ./public/assets/prism/prism.js
 bro --force --quality 11 --input ./public/assets/css/app.css --output ./public/assets/css/app.css.br
 bro --force --quality 11 --input ./public/assets/prism/prism.css --output ./public/assets/prism/prism.css.br
 bro --force --quality 11 --input ./public/assets/prism/prism.js --output ./public/assets/prism/prism.js.br
@@ -11,13 +11,13 @@ bro --force --quality 11 --input ./public/assets/prism/prism.js --output ./publi
 echo "compressing js assets"
 for file in ./public/assets/js/*.js
 do
-    zopfli --i1000 $file
+    zopfli --i100 $file
     bro --force --quality 11 --input $file --output $file.br
 done
 
 echo "compressing frontend assets"
 for file in ./public/assets/frontend/*.css
 do
-    zopfli --i1000 $file
+    zopfli --i100 $file
     bro --force --quality 11 --input $file --output $file.br
 done
