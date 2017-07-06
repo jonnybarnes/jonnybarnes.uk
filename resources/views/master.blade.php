@@ -53,7 +53,7 @@
 </footer>
 @if (config('app.piwik') === true)
 <!-- Piwik -->
-<script defer src="https://analytics.jmb.lv/piwik.js"></script>
+<script src="https://analytics.jmb.lv/piwik.js" async defer></script>
 <script src="/assets/js/piwik.js"></script>
 @endif
 </body>
