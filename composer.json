@@ -10,7 +10,7 @@
         "ezyang/htmlpurifier": "~4.6",
         "guzzlehttp/guzzle": "~6.0",
         "indieauth/client": "~0.1",
-        "jonnybarnes/emoji-a11y": "^0.2",
+        "jonnybarnes/emoji-a11y": "^0.3",
         "jonnybarnes/indieweb": "dev-master",
         "jonnybarnes/webmentions-parser": "0.4.*",
         "laravel/framework": "5.4.*",
