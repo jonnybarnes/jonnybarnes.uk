@@ -1,4 +1,5 @@
 const webpack = require('webpack');
+const Dotenv = require('dotenv-webpack');
 
 const config = {
   context: __dirname + '/resources/assets/es6',
@@ -24,7 +25,12 @@ const config = {
         loader: 'babel-loader'
       }
     ]
-  }
+  },
+  plugins: [
+    new Dotenv({
+      path: './.env'
+    })
+  ]
 };
 
 module.exports = config;
