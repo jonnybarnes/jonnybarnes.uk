@@ -10,7 +10,7 @@ export default function submitNewPlace(map) {
     formData.append('place-latitude', document.querySelector('#place-latitude').value);
     formData.append('place-longitude', document.querySelector('#place-longitude').value);
     //post the new place
-    fetch('/places/new', {
+    fetch('/micropub/places', {
         //send cookies with the request
         credentials: 'same-origin',
         method: 'post',
