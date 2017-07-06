@@ -2,6 +2,7 @@
 
 ## Version {next}
   - Add emoji 5.0 support with newer `emoji-a11y` package
+  - Places can be “added” to a note in the mp-client again, (issue#47)
 
 ## Version 0.5.22 (2017-07-06)
   - A small improvement to the piwik tracking script
