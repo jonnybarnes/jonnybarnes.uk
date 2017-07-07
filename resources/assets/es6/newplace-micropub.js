@@ -10,6 +10,38 @@ export default function makeNewPlaceForm(map) {
     newLocationButton.appendChild(document.createTextNode('Create New Place?'));
     //the event listener
     newLocationButton.addEventListener('click', function() {
+        //add an icon
+        let latitude = map.getCenter().lat;
+        let longitude = map.getCenter().lng;
+        map.addSource('new-place', {
+            'type': 'geojson',
+            'data': {
+                'type': 'FeatureCollection',
+                'features': [
+                    {
+                        'type': 'Feature',
+                        'geometry': {
+                            'type': 'Point',
+                            'coordinates': [longitude, latitude]
+                        },
+                        'properties': {
+                            'title': '',
+                            'icon': 'circle'
+                        }
+                    }
+                ]
+            }
+        });
+        map.addLayer({
+            'id': 'new-place',
+            'type': 'symbol',
+            'source': 'new-place',
+            'layout': {
+                'icon-image': '{icon}-15',
+                'text-field': '{title}',
+                'text-offset': [0, 1]
+            }
+        });
         //add the form elements
         let newPlaceNameDiv = document.createElement('div');
         let newPlaceNameLabel = document.createElement('label');
@@ -21,6 +53,11 @@ export default function makeNewPlaceForm(map) {
         newPlaceNameInput.setAttribute('name', 'place-name');
         newPlaceNameInput.setAttribute('id', 'place-name');
         newPlaceNameInput.setAttribute('type', 'text');
+        newPlaceNameInput.addEventListener('keyup', function () {
+            let source = map.getSource('new-place');
+            source._data.features[0].properties.title = newPlaceNameInput.value;
+            map.getSource('new-place').setData(source._data);
+        });
         newPlaceNameDiv.appendChild(newPlaceNameLabel);
         newPlaceNameDiv.appendChild(newPlaceNameInput);
         let newPlaceDescDiv = document.createElement('div');
