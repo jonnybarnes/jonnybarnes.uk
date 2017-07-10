@@ -7,11 +7,16 @@ use Twitter;
 use Normalizer;
 use GuzzleHttp\Client;
 use Laravel\Scout\Searchable;
+use League\CommonMark\Converter;
+use League\CommonMark\DocParser;
 use Jonnybarnes\IndieWeb\Numbers;
+use League\CommonMark\Environment;
+use League\CommonMark\HtmlRenderer;
 use Illuminate\Database\Eloquent\Model;
 use Jonnybarnes\EmojiA11y\EmojiModifier;
 use League\CommonMark\CommonMarkConverter;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Jonnybarnes\CommonmarkLinkify\LinkifyExtension;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class Note extends Model
@@ -128,9 +133,12 @@ class Note extends Model
      */
     public function getNoteAttribute($value)
     {
-        $markdown = new CommonMarkConverter();
+        $environment = Environment::createCommonMarkEnvironment();
+        $environment->addExtension(new LinkifyExtension());
+        $converter = new Converter(new DocParser($environment), new HtmlRenderer($environment));
         $emoji = new EmojiModifier();
-        $html = $markdown->convertToHtml($value);
+
+        $html = $converter->convertToHtml($value);
         $hcards = $this->makeHCards($html);
         $hashtags = $this->autoLinkHashtag($hcards);
         $modified = $emoji->makeEmojiAccessible($hashtags);

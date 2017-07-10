@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "0f8de1d2b229308f3862ff61f5468fcf",
+    "content-hash": "4d74fa17d49cf82d75452686d13b3610",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -1452,6 +1452,51 @@
                 "geospatial"
             ],
             "time": "2015-09-27T15:35:21+00:00"
+        },
+        {
+            "name": "jonnybarnes/commonmark-linkify",
+            "version": "v0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jonnybarnes/commonmark-linkify.git",
+                "reference": "e2db28ede8d82fc040131e9137c167805f16a1a9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jonnybarnes/commonmark-linkify/zipball/e2db28ede8d82fc040131e9137c167805f16a1a9",
+                "reference": "e2db28ede8d82fc040131e9137c167805f16a1a9",
+                "shasum": ""
+            },
+            "require": {
+                "league/commonmark": "^0.15.4",
+                "php": "^7.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~6.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Jonnybarnes\\CommonmarkLinkify\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "CC0-1.0"
+            ],
+            "authors": [
+                {
+                    "name": "Jonny Barnes",
+                    "email": "jonny@jonnybarnes.uk"
+                }
+            ],
+            "description": "Turn plaintext urls into clickable links",
+            "homepage": "https://github.com/jonnybarnes/commonmark-linkify",
+            "keywords": [
+                "commonmark",
+                "markdown"
+            ],
+            "time": "2017-07-07T16:05:01+00:00"
         },
         {
             "name": "jonnybarnes/emoji-a11y",
