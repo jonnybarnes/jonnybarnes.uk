@@ -14,7 +14,6 @@ use League\CommonMark\Environment;
 use League\CommonMark\HtmlRenderer;
 use Illuminate\Database\Eloquent\Model;
 use Jonnybarnes\EmojiA11y\EmojiModifier;
-use League\CommonMark\CommonMarkConverter;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Jonnybarnes\CommonmarkLinkify\LinkifyExtension;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
