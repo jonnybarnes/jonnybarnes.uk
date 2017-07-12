@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "4d74fa17d49cf82d75452686d13b3610",
+    "content-hash": "747517e009c9d23ea87f46b70fd7d80b",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.31.1",
+            "version": "3.31.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "551865464a2779b9038aa871094a24bb9e254e24"
+                "reference": "582e7764e0fa389c3248450cd6db2564dd656d99"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/551865464a2779b9038aa871094a24bb9e254e24",
-                "reference": "551865464a2779b9038aa871094a24bb9e254e24",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/582e7764e0fa389c3248450cd6db2564dd656d99",
+                "reference": "582e7764e0fa389c3248450cd6db2564dd656d99",
                 "shasum": ""
             },
             "require": {
@@ -84,7 +84,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2017-07-05T17:26:26+00:00"
+            "time": "2017-07-06T21:11:49+00:00"
         },
         {
             "name": "barnabywalters/mf-cleaner",
@@ -1455,16 +1455,16 @@
         },
         {
             "name": "jonnybarnes/commonmark-linkify",
-            "version": "v0.1",
+            "version": "v0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jonnybarnes/commonmark-linkify.git",
-                "reference": "e2db28ede8d82fc040131e9137c167805f16a1a9"
+                "reference": "e41c51abdc2ccc9b71f719be0198cb78371574b4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jonnybarnes/commonmark-linkify/zipball/e2db28ede8d82fc040131e9137c167805f16a1a9",
-                "reference": "e2db28ede8d82fc040131e9137c167805f16a1a9",
+                "url": "https://api.github.com/repos/jonnybarnes/commonmark-linkify/zipball/e41c51abdc2ccc9b71f719be0198cb78371574b4",
+                "reference": "e41c51abdc2ccc9b71f719be0198cb78371574b4",
                 "shasum": ""
             },
             "require": {
@@ -1496,7 +1496,7 @@
                 "commonmark",
                 "markdown"
             ],
-            "time": "2017-07-07T16:05:01+00:00"
+            "time": "2017-07-10T16:12:15+00:00"
         },
         {
             "name": "jonnybarnes/emoji-a11y",
@@ -1764,16 +1764,16 @@
         },
         {
             "name": "laravel/scout",
-            "version": "v3.0.5",
+            "version": "v3.0.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/scout.git",
-                "reference": "547ff55530a16e31b3b1142dd4dfdb654ad2bae0"
+                "reference": "5a899828bf154ae7d957a2a78b4b6002e9fdf0fa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/scout/zipball/547ff55530a16e31b3b1142dd4dfdb654ad2bae0",
-                "reference": "547ff55530a16e31b3b1142dd4dfdb654ad2bae0",
+                "url": "https://api.github.com/repos/laravel/scout/zipball/5a899828bf154ae7d957a2a78b4b6002e9fdf0fa",
+                "reference": "5a899828bf154ae7d957a2a78b4b6002e9fdf0fa",
                 "shasum": ""
             },
             "require": {
@@ -1797,6 +1797,11 @@
             "extra": {
                 "branch-alias": {
                     "dev-master": "3.0-dev"
+                },
+                "laravel": {
+                    "providers": [
+                        "Laravel\\Scout\\ScoutServiceProvider"
+                    ]
                 }
             },
             "autoload": {
@@ -1820,7 +1825,7 @@
                 "laravel",
                 "search"
             ],
-            "time": "2017-06-01T13:21:09+00:00"
+            "time": "2017-07-12T12:29:47+00:00"
         },
         {
             "name": "laravel/tinker",
@@ -2780,16 +2785,16 @@
         },
         {
             "name": "psy/psysh",
-            "version": "v0.8.8",
+            "version": "v0.8.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bobthecow/psysh.git",
-                "reference": "fe65c30cbc55c71e61ba3a38b5a581149be31b8e"
+                "reference": "58a31cc4404c8f632d8c557bc72056af2d3a83db"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bobthecow/psysh/zipball/fe65c30cbc55c71e61ba3a38b5a581149be31b8e",
-                "reference": "fe65c30cbc55c71e61ba3a38b5a581149be31b8e",
+                "url": "https://api.github.com/repos/bobthecow/psysh/zipball/58a31cc4404c8f632d8c557bc72056af2d3a83db",
+                "reference": "58a31cc4404c8f632d8c557bc72056af2d3a83db",
                 "shasum": ""
             },
             "require": {
@@ -2849,7 +2854,7 @@
                 "interactive",
                 "shell"
             ],
-            "time": "2017-06-24T06:16:19+00:00"
+            "time": "2017-07-06T14:53:52+00:00"
         },
         {
             "name": "ramsey/uuid",
