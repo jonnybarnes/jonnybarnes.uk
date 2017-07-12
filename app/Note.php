@@ -269,8 +269,7 @@ class Note extends Model
             return;
         }
 
-        $arr = explode('/', $url);
-        $tweetId = end($arr);
+        $tweetId = basename($this->in_reply_to);
         if (Cache::has($tweetId)) {
             return Cache::get($tweetId);
         }
