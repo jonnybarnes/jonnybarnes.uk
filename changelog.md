@@ -1,5 +1,9 @@
 # Changelog
 
+## Version {next}
+  - Add my `commonmark-linkify` extension
+  - Some minor tweaks, including logging of micropub media requests
+
 ## Version 0.5.23 (2017-07-07)
   - Add emoji 5.0 support with newer `emoji-a11y` package
   - Places can be “added” to a note in the mp-client again, (issue#47)
