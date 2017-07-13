@@ -375,6 +375,9 @@ class MicropubController extends Controller
             ], 400);
         }
 
+        $logger = new Logger('micropub');
+        $logger->pushHandler(new StreamHandler(storage_path('logs/micropub.log')), Logger::DEBUG);
+        $logger->debug('MicropubMediaLog', $request->all());
         //check post scope
         if ($tokenData->hasClaim('scope')) {
             if (stristr($tokenData->getClaim('scope'), 'create') === false) {
