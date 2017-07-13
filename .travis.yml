@@ -66,3 +66,8 @@ script:
   - php vendor/bin/phpunit --coverage-text
   - php artisan dusk
   - php vendor/bin/security-checker security:check ./composer.lock --end-point=http://security.sensiolabs.org/check_lock
+
+after_script:
+  - killall -9 postgresql
+  - killall -9 php-fpm
+  - killall -9 nginx
