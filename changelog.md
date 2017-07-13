@@ -1,6 +1,6 @@
 # Changelog
 
-## Version {next}
+## Version 0.5.24 (2017-07-13)
   - Add my `commonmark-linkify` extension
   - Some minor tweaks, including logging of micropub media requests
 
