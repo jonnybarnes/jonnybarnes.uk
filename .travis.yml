@@ -32,10 +32,6 @@ env:
 
 php:
   - 7.1
-  - nightly
-matrix:
-  allow_failures:
-    - php: nightly
 
 before_install:
   - cp .env.travis .env
