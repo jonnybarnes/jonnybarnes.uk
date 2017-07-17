@@ -29,12 +29,7 @@ class NotesTest extends TestCase
      */
     public function test_default_image_used_in_makehcards_method()
     {
-        $expected = '<p>Hi <span class="u-category h-card">
-    <a class="mini-h-card u-url p-name" href="http://tantek.com">
-        <img class="u-photo" alt="" src="/assets/profile-images/default-image">
-        Tantek Çelik
-    </a>
-        <a class="u-url" href="https://twitter.com/t"></a></span></p>' . PHP_EOL;
+        $expected = '<p>Hi <span class="u-category h-card mini-h-card"><a class="u-url p-name" href="http://tantek.com">Tantek Çelik</a><span class="hovercard"> <a class="u-url" href="https://twitter.com/t"><img class="social-icon" src="/assets/img/social-icons/twitter.svg"> t</a><img class="u-photo" alt="" src="/assets/profile-images/default-image"></span></span></p>' . PHP_EOL;
         $note = Note::find(12);
         $this->assertEquals($expected, $note->note);
     }
@@ -46,12 +41,7 @@ class NotesTest extends TestCase
      */
     public function test_specific_profile_image_used_in_makehcards_method()
     {
-        $expected = '<p>Hi <span class="u-category h-card">
-    <a class="mini-h-card u-url p-name" href="https://aaronparecki.com">
-        <img class="u-photo" alt="" src="/assets/profile-images/aaronparecki.com/image">
-        Aaron Parecki
-    </a>
-        <a class="u-url" href="https://twitter.com/aaronpk"></a></span></p>' . PHP_EOL;
+        $expected = '<p>Hi <span class="u-category h-card mini-h-card"><a class="u-url p-name" href="https://aaronparecki.com">Aaron Parecki</a><span class="hovercard"><a class="u-url" href="https://www.facebook.com/123456"><img class="social-icon" src="/assets/img/social-icons/facebook.svg"> Facebook</a> <a class="u-url" href="https://twitter.com/aaronpk"><img class="social-icon" src="/assets/img/social-icons/twitter.svg"> aaronpk</a><img class="u-photo" alt="" src="/assets/profile-images/aaronparecki.com/image"></span></span></p>' . PHP_EOL;
         $note = Note::find(13);
         $this->assertEquals($expected, $note->note);
     }
