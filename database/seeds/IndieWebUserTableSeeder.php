@@ -1,5 +1,6 @@
 <?php
 
+use App\IndieWebUser;
 use Illuminate\Database\Seeder;
 
 class IndieWebUserTableSeeder extends Seeder
@@ -11,6 +12,6 @@ class IndieWebUserTableSeeder extends Seeder
      */
     public function run()
     {
-        App\IndieWebUser::create(['me' => config('app.url')]);
+        IndieWebUser::create(['me' => config('app.url')]);
     }
 }

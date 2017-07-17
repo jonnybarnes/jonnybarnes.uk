@@ -14,7 +14,7 @@ class ContactsTableSeeder extends Seeder
     {
         Contact::create([
             'nick' => 'tantek',
-            'name' => 'Tanetk Çelik',
+            'name' => 'Tantek Çelik',
             'homepage' => 'http://tantek.com',
             'twitter' => 't',
         ]);
