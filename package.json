@@ -13,6 +13,7 @@
     },
     "devDependencies": {
         "ajv": "^5.2.2",
+        "autoprefixer": "^7.1.2",
         "babel-cli": "^6.18.0",
         "babel-core": "^6.21.0",
         "babel-loader": "^7.1.1",
@@ -21,11 +22,21 @@
         "babel-preset-latest": "^6.16.0",
         "babel-runtime": "^6.20.0",
         "dotenv-webpack": "^1.5.3",
+        "eslint": "^4.2.0",
+        "eslint-config-standard": "^10.2.1",
+        "eslint-plugin-import": "^2.7.0",
+        "eslint-plugin-node": "^5.1.1",
+        "eslint-plugin-promise": "^3.5.0",
+        "eslint-plugin-standard": "^3.0.1",
         "lint-staged": "^4.0.2",
+        "postcss-cli": "^4.1.0",
         "pre-commit": "^1.1.3",
+        "source-list-map": "^2.0.0",
         "stylelint": "^8.0.0",
         "stylelint-config-standard": "^17.0.0",
-        "webpack": "^3.3.0"
+        "uglify-js": "^3.0.25",
+        "webpack": "^3.3.0",
+        "webpack-sources": "^1.0.1"
     },
     "scripts": {
         "compress": "scripts/compress",
@@ -40,7 +51,7 @@
         "sass": "sassc --style compressed --sourcemap resources/assets/sass/app.scss public/assets/css/app.css",
         "stylelint-staged": "stylelint --syntax=scss",
         "uglifyjs": "scripts/uglifyjs",
-        "webpack": "./node_modules/.bin/webpack --progress --colors"
+        "webpack": "webpack --progress --colors"
     },
     "lint-staged": {
         "resources/assets/es6/*.js": "eslint",

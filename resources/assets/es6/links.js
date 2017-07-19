@@ -1,7 +1,7 @@
 //links.js
 
 let youtubeRegex = /watch\?v=([A-Za-z0-9\-_]+)\b/;
-let spotifyRegex = /https\:\/\/play\.spotify\.com\/(.*)\b/;
+let spotifyRegex = /https:\/\/play\.spotify\.com\/(.*)\b/;
 
 let notes = document.querySelectorAll('.e-content');
 
