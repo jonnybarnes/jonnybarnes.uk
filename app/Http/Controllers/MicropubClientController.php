@@ -55,8 +55,8 @@ class MicropubClientController extends Controller
      */
     public function processMedia(Request $request)
     {
-        if ($request->hasFile('file') == false) {
-            return back()->with('error', 'No file uploaded');
+        if ($request->hasFile('files') == false) {
+            return back()->with('error', 'No files uploaded');
         }
 
         $user = IndieWebUser::where('me', $request->session()->get('me'))->firstOrFail();
@@ -65,7 +65,7 @@ class MicropubClientController extends Controller
         }
 
         $mediaURLs = [];
-        foreach ($request->file('file') as $file) {
+        foreach ($request->file('files') as $file) {
             try {
                 $response = $this->guzzleClient->request('POST', $user->mediaEndpoint, [
                     'headers' => [

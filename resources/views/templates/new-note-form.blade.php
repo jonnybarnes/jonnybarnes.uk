@@ -90,9 +90,8 @@
       <div>
         <label for="media" accesskey="m">Media: </label>
         <input type="file"
-               accept="audio/*,video/*,image/*,application/pdf,.md"
                value="Upload"
-               name="file[]"
+               name="files[]"
                id="media"
                multiple
         >
