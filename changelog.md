@@ -1,6 +1,6 @@
 # Changelog
 
-## Version {next}
+## Version 0.5.26 (2017-07-20)
   - Remove some file checking to see if we can get uploads working again
 
 ## Version 0.5.25 (2017-07-20)
