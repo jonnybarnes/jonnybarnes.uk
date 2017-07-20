@@ -1,5 +1,8 @@
 # Changelog
 
+## Version {next}
+  - Remove some file checking to see if we can get uploads working again
+
 ## Version 0.5.25 (2017-07-20)
   - Update npm dev dependencies to use local installs over global installs
   - Improve contact info display in note mentions by using hovercards
