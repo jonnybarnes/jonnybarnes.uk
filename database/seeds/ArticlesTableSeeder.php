@@ -1,5 +1,6 @@
 <?php
 
+use App\Article;
 use Illuminate\Database\Seeder;
 
 class ArticlesTableSeeder extends Seeder
@@ -11,13 +12,10 @@ class ArticlesTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('articles')->insert([
-            'titleurl' => 'my-new-blog',
+        Article::create([
             'title' => 'My New Blog',
-            'main' => 'This is my new blog. It uses `Markdown`.',
+            'main' => 'This is *my* new blog. It uses `Markdown`.',
             'published' => 1,
-            'created_at' => '2016-01-12 15:51:01',
-            'updated_at' => '2016-01-12 15:51:01',
         ]);
     }
 }

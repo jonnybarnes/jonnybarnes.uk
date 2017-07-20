@@ -1,5 +1,6 @@
 <?php
 
+use App\WebMention;
 use Illuminate\Database\Seeder;
 
 class WebMentionsTableSeeder extends Seeder
@@ -11,7 +12,7 @@ class WebMentionsTableSeeder extends Seeder
      */
     public function run()
     {
-        $webmention = App\WebMention::create([
+        $webmention = WebMention::create([
             'source' => 'https://aaornpk.localhost/reply/1',
             'target' => 'https://jonnybarnes.localhost/notes/D',
             'commentable_id' => '13',

@@ -47,7 +47,7 @@ class OwnYourGramTest extends TestCase
     {
         $signer = new Sha256();
         $token = (new Builder())
-            ->set('client_id', 'http://ownyourgram.com')
+            ->set('client_id', 'https://ownyourgram.com')
             ->set('me', config('app.url'))
             ->set('scope', 'create')
             ->set('issued_at', time())

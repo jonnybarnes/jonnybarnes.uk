@@ -385,7 +385,6 @@ class MicropubController extends Controller
             }
             //check media valid
             if ($request->hasFile('file') && $request->file('file')->isValid()) {
-                $type = $this->getFileTypeFromMimeType($request->file('file')->getMimeType());
                 try {
                     $filename = Uuid::uuid4() . '.' . $request->file('file')->extension();
                 } catch (UnsatisfiedDependencyException $e) {
@@ -407,7 +406,7 @@ class MicropubController extends Controller
                 $media = new Media();
                 $media->token = $request->bearerToken();
                 $media->path = $path;
-                $media->type = $type;
+                $media->type = $this->getFileTypeFromMimeType($request->file('file')->getMimeType());
                 $media->save();
 
                 return response()->json([

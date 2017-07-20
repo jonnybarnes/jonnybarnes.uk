@@ -14,9 +14,9 @@ class Contact extends Model
     protected $table = 'contacts';
 
     /**
-     * We shall set a blacklist of non-modifiable model attributes.
+     * We shall guard against mass-migration.
      *
      * @var array
      */
-    protected $guarded = ['id'];
+    protected $fillable = ['nick', 'name', 'homepage', 'twitter', 'facebook'];
 }

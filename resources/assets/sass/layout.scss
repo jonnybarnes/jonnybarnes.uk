@@ -44,9 +44,47 @@ body {
     padding-left: 3px;
 }
 
-.mini-h-card img {
-    display: inline-block;
-    height: 1rem;
+.mini-h-card {
+    position: relative;
+}
+
+.mini-h-card .p-name {
+    position: relative;
+    z-index: 100; /* we want this to still appear in the hovercard */
+}
+
+.mini-h-card .hovercard {
+    display: none;
+}
+
+.mini-h-card:hover .hovercard {
+    display: inline;
+    background-color: white;
+    border: solid 1px grey;
+    position: absolute;
+    min-width: 300px;
+    left: -10px;
+    top: -10px;
+    z-index: 50; /* less than p-name */
+    padding: 2rem 3rem 10px 10px;
+}
+
+.hovercard .u-photo {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 3rem;
+    height: auto;
+    padding-bottom: 10px;
+}
+
+.hovercard .social-icon {
+    height: 0.8rem;
+}
+
+.hovercard a::before {
+    content: "\A";
+    white-space: pre;
 }
 
 body > .h-card {

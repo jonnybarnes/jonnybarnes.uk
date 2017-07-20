@@ -56,12 +56,12 @@ class MicropubClientController extends Controller
     public function processMedia(Request $request)
     {
         if ($request->hasFile('file') == false) {
-            return back();
+            return back()->with('error', 'No file uploaded');
         }
 
         $user = IndieWebUser::where('me', $request->session()->get('me'))->firstOrFail();
         if ($user->mediaEndpoint == null || $user->token == null) {
-            return back();
+            return back()->with('error', 'No user token or known endpoint');
         }
 
         $mediaURLs = [];
