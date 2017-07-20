@@ -1,5 +1,10 @@
 # Changelog
 
+## Version {next}
+  - Update npm dev dependencies to use local installs over global installs
+  - Improve contact info display in note mentions by using hovercards
+  - Add some error messages when trying to upload media to aid debugging
+
 ## Version 0.5.24 (2017-07-13)
   - Add my `commonmark-linkify` extension
   - Some minor tweaks, including logging of micropub media requests
