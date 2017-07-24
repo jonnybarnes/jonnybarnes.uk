@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 0.5.27 (2017-07-24)
+  - Just a bump in dependency versions used
+
 ## Version 0.5.26 (2017-07-20)
   - Remove some file checking to see if we can get uploads working again
 
