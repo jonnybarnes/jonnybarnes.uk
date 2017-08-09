@@ -104,6 +104,9 @@ class SendWebMentions implements ShouldQueue
      */
     public function getLinks($html)
     {
+        if ($html == '' || is_null($html)) {
+            return [];
+        }
         $urls = [];
         $dom = new \DOMDocument();
         $dom->loadHTML($html);
