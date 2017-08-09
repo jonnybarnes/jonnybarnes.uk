@@ -29,7 +29,7 @@ class ArticlesController extends Controller
      */
     public function show($year, $month, $slug)
     {
-        $article = Article::where('titleurl', $slug)->first();
+        $article = Article::where('titleurl', $slug)->firstOrFail();
         if ($article->updated_at->year != $year || $article->updated_at->month != $month) {
             throw new \Exception;
         }
