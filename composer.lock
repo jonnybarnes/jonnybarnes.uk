@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.32.4",
+            "version": "3.32.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "bf3a26b9706b6a91ca2d8a5b74d1d7ebd085a244"
+                "reference": "db5bd8d617012d4afb3e5e1f3e8f4b9899242b62"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/bf3a26b9706b6a91ca2d8a5b74d1d7ebd085a244",
-                "reference": "bf3a26b9706b6a91ca2d8a5b74d1d7ebd085a244",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/db5bd8d617012d4afb3e5e1f3e8f4b9899242b62",
+                "reference": "db5bd8d617012d4afb3e5e1f3e8f4b9899242b62",
                 "shasum": ""
             },
             "require": {
@@ -84,7 +84,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2017-08-08T23:24:05+00:00"
+            "time": "2017-08-10T20:29:21+00:00"
         },
         {
             "name": "barnabywalters/mf-cleaner",
