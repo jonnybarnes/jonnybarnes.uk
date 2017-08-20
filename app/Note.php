@@ -294,7 +294,6 @@ class Note extends Model
 
     /**
      * Show a specific form of the note for twitter.
-     *
      */
     public function getTwitterContentAttribute()
     {
