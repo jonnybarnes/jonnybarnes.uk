@@ -20,7 +20,7 @@ class NoteService
 
         //check the input
         if (array_key_exists('content', $data) === false) {
-            throw new \Exception('No content defined'); //we can’t fudge the data
+            $data['content'] = null;
         }
         if (array_key_exists('in-reply-to', $data) === false) {
             $data['in-reply-to'] = null;
@@ -64,6 +64,9 @@ class NoteService
             if ($place !== null) {
                 $note->place()->associate($place);
                 $note->swarm_url = $data['swarm-url'];
+                if ($note->note === null || $note->note == '') {
+                    $note->note = 'I’ve just checked in with Swarm';
+                }
             }
         }
 

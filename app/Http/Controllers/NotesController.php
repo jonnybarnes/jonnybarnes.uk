@@ -35,7 +35,7 @@ class NotesController extends Controller
      */
     public function show($urlId)
     {
-        $note = Note::nb60($urlId)->with('webmentions')->first();
+        $note = Note::nb60($urlId)->with('webmentions')->firstOrFail();
 
         return view('notes.show', compact('note'));
     }

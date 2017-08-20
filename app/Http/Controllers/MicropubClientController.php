@@ -269,7 +269,7 @@ class MicropubClientController extends Controller
         ];
         if ($request->session()->has('me')) {
             $data['me'] = normalize_url($request->session()->get('me'));
-            $user = IndieWebUser::where('me', $request->session()->get('me'))->first();
+            $user = IndieWebUser::where('me', $request->session()->get('me'))->firstOrFail();
             $data['token'] = $user->token ?? 'none defined';
             $data['syndication'] = $user->syndication ?? 'none defined';
             $data['media-endpoint'] = $user->mediaEndpoint ?? 'none defined';

@@ -161,7 +161,7 @@ return [
     |
     */
 
-    'secure' => (config('app.env') != 'testing'),
+    'secure' => env('SESSION_SECURE_COOKIE', false),
 
     /*
     |--------------------------------------------------------------------------

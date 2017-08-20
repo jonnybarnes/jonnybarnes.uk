@@ -9,6 +9,7 @@ use Monolog\Handler\StreamHandler;
 use Illuminate\Http\{Request, Response};
 use App\Exceptions\InvalidTokenException;
 use Phaza\LaravelPostgis\Geometries\Point;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Ramsey\Uuid\Exception\UnsatisfiedDependencyException;
 use App\Services\{NoteService, PlaceService, TokenService};
 
@@ -214,8 +215,8 @@ class MicropubController extends Controller
                 //is it a note we are updating?
                 if (mb_substr($urlPath, 1, 5) === 'notes') {
                     try {
-                        $note = Note::nb60(basename($urlPath))->first();
-                    } catch (\Exception $exception) {
+                        $note = Note::nb60(basename($urlPath))->firstOrFail();
+                    } catch (ModelNotFoundException $exception) {
                         return response()->json([
                             'error' => 'invalid_request',
                             'error_description' => 'No known note with given ID',

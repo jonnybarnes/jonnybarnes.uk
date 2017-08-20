@@ -15,6 +15,12 @@
         @if($media->type == 'download')<p><a class="u-attachment" href="{{ $media->url }}">Download the attached media</a></p>@endif
       @endforeach
     </div>
+    @if($note->twitter_content)<div class="p-bridgy-twitter-content">
+      {!! $note->twitter_content !!}
+    </div>@endif
+    @if($note->facebook_content)<div class="p-bridgy-facebook-content">
+      {!! $note->facebook_content !!}
+    </div>@endif
     <div class="note-metadata">
       <div>
         <a class="u-url" href="/notes/{{ $note->nb60id }}"><time class="dt-published" datetime="{{ $note->iso8601 }}" title="{{ $note->iso8601 }}">{{ $note->humandiff }}</time></a>@if($note->client) via <a class="client" href="{{ $note->client->client_url }}">{{ $note->client->client_name }}</a>@endif

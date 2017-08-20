@@ -24,6 +24,13 @@ class Note extends Model
     use SoftDeletes;
 
     /**
+     * The reges for matching lone usernames.
+     *
+     * @var string
+     */
+    private const USERNAMES_REGEX = '/\[.*?\](*SKIP)(*F)|@(\w+)/';
+
+    /**
      * The database table used by the model.
      *
      * @var string
@@ -132,12 +139,9 @@ class Note extends Model
      */
     public function getNoteAttribute($value)
     {
-        $environment = Environment::createCommonMarkEnvironment();
-        $environment->addExtension(new LinkifyExtension());
-        $converter = new Converter(new DocParser($environment), new HtmlRenderer($environment));
         $emoji = new EmojiModifier();
 
-        $html = $converter->convertToHtml($value);
+        $html = $this->convertMarkdown($value);
         $hcards = $this->makeHCards($html);
         $hashtags = $this->autoLinkHashtag($hcards);
         $modified = $emoji->makeEmojiAccessible($hashtags);
@@ -289,6 +293,93 @@ class Note extends Model
     }
 
     /**
+     * Show a specific form of the note for twitter.
+     */
+    public function getTwitterContentAttribute()
+    {
+        // find @mentions
+        preg_match_all(self::USERNAMES_REGEX, $this->getOriginal('note'), $matches);
+        if (count($matches[1]) === 0) {
+            return;
+        }
+
+        // check if any @mentions have a contact associated with them
+        $count = 0;
+        foreach ($matches[1] as $match) {
+            $contact = Contact::where('nick', '=', mb_strtolower($match))->first();
+            if ($contact) {
+                $count++;
+            }
+        }
+        if ($count === 0) {
+            return;
+        }
+
+        // swap in twitter usernames
+        $swapped = preg_replace_callback(
+            self::USERNAMES_REGEX,
+            function ($matches) {
+                try {
+                    $contact = Contact::where('nick', '=', mb_strtolower($matches[1]))->firstOrFail();
+                } catch (ModelNotFoundException $e) {
+                    //assume its an actual twitter handle
+                    return $matches[0];
+                }
+                if ($contact->twitter) {
+                    return '@' . $contact->twitter;
+                }
+
+                return $contact->name;
+            },
+            $this->getOriginal('note')
+        );
+
+        return $this->convertMarkdown($swapped);
+    }
+
+    public function getFacebookContentAttribute()
+    {
+        // find @mentions
+        preg_match_all(self::USERNAMES_REGEX, $this->getOriginal('note'), $matches);
+        if (count($matches[1]) === 0) {
+            return;
+        }
+
+        // check if any @mentions have a contact associated with them
+        $count = 0;
+        foreach ($matches[1] as $match) {
+            $contact = Contact::where('nick', '=', mb_strtolower($match))->first();
+            if ($contact) {
+                $count++;
+            }
+        }
+        if ($count === 0) {
+            return;
+        }
+
+        // swap in facebook usernames
+        $swapped = preg_replace_callback(
+            self::USERNAMES_REGEX,
+            function ($matches) {
+                try {
+                    $contact = Contact::where('nick', '=', mb_strtolower($matches[1]))->firstOrFail();
+                } catch (ModelNotFoundException $e) {
+                    //assume its an actual twitter handle
+                    return $matches[0];
+                }
+                if ($contact->facebook) {
+                    return '<a class="u-category h-card" href="https://facebook.com/' . $contact->facebook . '">' . $contact->name . '</a>';
+                }
+
+                return $contact->name;
+            },
+            $this->getOriginal('note')
+        );
+
+        return $this->convertMarkdown($swapped);
+    }
+
+    /**
      * Scope a query to select a note via a NewBase60 id.
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
@@ -313,9 +404,8 @@ class Note extends Model
      */
     private function makeHCards($text)
     {
-        $regex = '/\[.*?\](*SKIP)(*F)|@(\w+)/'; //match @alice but not [@bob](...)
         $hcards = preg_replace_callback(
-            $regex,
+            self::USERNAMES_REGEX,
             function ($matches) {
                 try {
                     $contact = Contact::where('nick', '=', mb_strtolower($matches[1]))->firstOrFail();
@@ -370,6 +460,15 @@ class Note extends Model
         }
 
         return $text;
+    }
+
+    private function convertMarkdown($text)
+    {
+        $environment = Environment::createCommonMarkEnvironment();
+        $environment->addExtension(new LinkifyExtension());
+        $converter = new Converter(new DocParser($environment), new HtmlRenderer($environment));
+
+        return $converter->convertToHtml($text);
     }
 
     /**

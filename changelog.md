@@ -1,5 +1,11 @@
 # Changelog
 
+## Version 0.5.28 (2017-08-20)
+  - Improve Swarm checkin code to allow checkins without text
+    + this required a change in the notes table schema
+  - Improve code by bringing in latest changes in laravel/laravel
+  - Improve POSSE compatability with bridgy and silos
+
 ## Version 0.5.27 (2017-07-24)
   - Just a bump in dependency versions used
 
