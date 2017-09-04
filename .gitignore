@@ -7,7 +7,7 @@
 /.vagrant
 Homestead.yaml
 Homestead.json
-.npm-debug.log
+npm-debug.log
 yarn-error.log
 .env
 /public/files

@@ -5,8 +5,6 @@ namespace Tests\Unit;
 use Cache;
 use App\WebMention;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class WebMentionTest extends TestCase
 {

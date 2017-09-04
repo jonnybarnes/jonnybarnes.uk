@@ -13,9 +13,9 @@ class NotesController extends Controller
 {
     protected $noteService;
 
-    public function __construct(NoteService $noteService = null)
+    public function __construct(NoteService $noteService)
     {
-        $this->noteService = $noteService ?? new NoteService();
+        $this->noteService = $noteService;
     }
 
     /**

@@ -4,8 +4,6 @@ namespace Tests\Unit;
 
 use App\Note;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class NotesTest extends TestCase
 {

@@ -34,13 +34,13 @@ class MicropubController extends Controller
      * Inject the dependencies.
      */
     public function __construct(
-        TokenService $tokenService = null,
-        NoteService $noteService = null,
-        PlaceService $placeService = null
+        TokenService $tokenService,
+        NoteService $noteService,
+        PlaceService $placeService
     ) {
-        $this->tokenService = $tokenService ?? new TokenService();
-        $this->noteService = $noteService ?? new NoteService();
-        $this->placeService = $placeService ?? new PlaceService();
+        $this->tokenService = $tokenService;
+        $this->noteService = $noteService;
+        $this->placeService = $placeService;
     }
 
     /**

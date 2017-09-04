@@ -12,9 +12,9 @@ class PlacesController extends Controller
 {
     protected $placeService;
 
-    public function __construct(PlaceService $placeService = null)
+    public function __construct(PlaceService $placeService)
     {
-        $this->placeService = $placeService ?? new PlaceService();
+        $this->placeService = $placeService;
     }
 
     /**

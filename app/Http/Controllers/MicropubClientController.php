@@ -14,11 +14,11 @@ class MicropubClientController extends Controller
      * Inject the dependencies.
      */
     public function __construct(
-        IndieClient $indieClient = null,
-        GuzzleClient $guzzleClient = null
+        IndieClient $indieClient,
+        GuzzleClient $guzzleClient
     ) {
-        $this->guzzleClient = $guzzleClient ?? new GuzzleClient();
-        $this->indieClient = $indieClient ?? new IndieClient();
+        $this->indieClient = $indieClient;
+        $this->guzzleClient = $guzzleClient;
     }
 
     /**

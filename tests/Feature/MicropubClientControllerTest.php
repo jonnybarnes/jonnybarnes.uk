@@ -2,17 +2,12 @@
 
 namespace Tests\Feature;
 
-use Mockery;
 use Tests\TestCase;
-use App\IndieWebUser;
-use IndieAuth\Client as IndieClient;
-use GuzzleHttp\Client as GuzzleClient;
+use GuzzleHttp\Client;
 use GuzzleHttp\Middleware;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Handler\MockHandler;
-use Illuminate\Foundation\Testing\WithoutMiddleware;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class MicropubClientControllerTest extends TestCase
@@ -29,10 +24,11 @@ class MicropubClientControllerTest extends TestCase
         ]);
 
         $stack = HandlerStack::create($mock);
+        // add the history middleware to the stack
         $stack->push($history);
-        $guzzleClient = new GuzzleClient(['handler' => $stack]);
+        $client = new Client(['handler' => $stack]);
 
-        $this->app->instance(GuzzleClient::class, $guzzleClient);
+        app()->instance(Client::class, $client);
 
         $response = $this->post(
             '/micropub',
@@ -42,8 +38,8 @@ class MicropubClientControllerTest extends TestCase
                 'mp-syndicate-to' => ['https://twitter.com/jonnybarnes', 'https://facebook.com/jonnybarnes'],
             ]
         );
-
         $expected = '{"type":["h-entry"],"properties":{"content":["Hello Fred"],"in-reply-to":["https:\/\/fredbloggs.com\/note\/abc"],"mp-syndicate-to":["https:\/\/twitter.com\/jonnybarnes","https:\/\/facebook.com\/jonnybarnes"]}}';
+
         foreach ($container as $transaction) {
             $this->assertEquals($expected, $transaction['request']->getBody()->getContents());
         }

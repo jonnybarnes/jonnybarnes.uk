@@ -19,9 +19,9 @@ class IndieAuthController extends Controller
      * @param  \IndieAuth\Client $client
      * @return void
      */
-    public function __construct(Client $client = null)
+    public function __construct(Client $client)
     {
-        $this->client = $client ?? new Client();
+        $this->client = $client;
     }
 
     /**

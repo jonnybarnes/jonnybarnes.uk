@@ -3,9 +3,7 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithoutMiddleware;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
+use App\Services\TokenService;
 
 class TokenServiceTest extends TestCase
 {
@@ -17,7 +15,7 @@ class TokenServiceTest extends TestCase
      */
     public function test_token_creation_and_validation()
     {
-        $tokenService = new \App\Services\TokenService();
+        $tokenService = new TokenService();
         $data = [
             'me' => 'https://example.org',
             'client_id' => 'https://quill.p3k.io',
