@@ -1,5 +1,8 @@
 # Changelog
 
+## Version {next}
+  - Update laravel version to 5.5
+
 ## Version 0.5.28 (2017-08-20)
   - Improve Swarm checkin code to allow checkins without text
     + this required a change in the notes table schema
