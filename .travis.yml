@@ -53,7 +53,6 @@ before_script:
   - php artisan db:seed
   - php artisan token:generate
   - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9515 http://localhost:8000 &
-  - sleep 5 # Give artisan some time to start serving
 
 script:
   - php vendor/bin/phpunit --coverage-text
