@@ -8,7 +8,7 @@ git pull
 
 echo "Updating composer and dependencies"
 sudo composer self-update
-composer install
+composer install --no-dev
 
 echo "Caching Laravel route and config files"
 php artisan route:cache
