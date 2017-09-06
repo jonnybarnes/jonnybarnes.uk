@@ -7,6 +7,7 @@ cache:
   - apt
 
 addons:
+  chrome: stable
   postgresql: "9.6"
   apt:
     sources:
@@ -38,10 +39,6 @@ before_install:
   - echo 'error_log = "/tmp/php.error.log"' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
   - psql -U travis -c 'create database travis_ci_test'
   - psql -U travis -d travis_ci_test -c 'create extension postgis'
-  - mkdir travis-phantomjs
-  - wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2 -O $PWD/travis-phantomjs/phantomjs-2.1.1-linux-x86_64.tar.bz2
-  - tar -xvf $PWD/travis-phantomjs/phantomjs-2.1.1-linux-x86_64.tar.bz2 -C $PWD/travis-phantomjs
-  - export PATH=$PWD/travis-phantomjs/phantomjs-2.1.1-linux-x86_64/bin:$PATH
   - travis_retry composer self-update --preview
 
 install:
@@ -55,14 +52,9 @@ before_script:
   - php artisan migrate
   - php artisan db:seed
   - php artisan token:generate
-  - phantomjs --webdriver=127.0.0.1:9515 --webdriver-loglevel=DEBUG &
-  - sleep 5 # Give artisan some time to start serving
+  - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9515 http://localhost:8000 &
 
 script:
   - php vendor/bin/phpunit --coverage-text
+  - php artisan dusk
   - php vendor/bin/security-checker security:check ./composer.lock --end-point=http://security.sensiolabs.org/check_lock
-
-after_script:
-  - killall -9 postgresql
-  - killall -9 php-fpm
-  - killall -9 nginx

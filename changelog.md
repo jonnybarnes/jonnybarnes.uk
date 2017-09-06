@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 0.6 (2017-09-06)
+  - Update laravel version to 5.5
+  - Improve .travis.yml and add back dusk tests
+
 ## Version 0.5.28 (2017-08-20)
   - Improve Swarm checkin code to allow checkins without text
     + this required a change in the notes table schema

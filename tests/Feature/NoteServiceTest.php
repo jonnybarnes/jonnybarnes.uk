@@ -7,8 +7,6 @@ use App\Services\NoteService;
 use App\Jobs\SyndicateToTwitter;
 use App\Jobs\SyndicateToFacebook;
 use Illuminate\Support\Facades\Queue;
-use Illuminate\Foundation\Testing\WithoutMiddleware;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class NoteServiceTest extends TestCase

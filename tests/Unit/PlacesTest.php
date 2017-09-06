@@ -5,8 +5,6 @@ namespace Tests\Unit;
 use App\Place;
 use Tests\TestCase;
 use Phaza\LaravelPostgis\Geometries\Point;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class PlacesTest extends TestCase
 {

@@ -16,7 +16,7 @@ class MicropubClientTest extends DuskTestCase
     {
         $this->browse(function ($browser) {
             $browser->visit(route('micropub-client'))
-                    ->assertSee('You are authenticated');
+                    ->assertSee('You are authenticated as');
         });
     }
 
@@ -26,10 +26,10 @@ class MicropubClientTest extends DuskTestCase
         $faker = \Faker\Factory::create();
         $note = 'Fake note from #LaravelDusk: ' . $faker->text;
         $this->browse(function ($browser) use ($note) {
-            $browser->visit(route('micropub-client'))
+            $response = $browser->visit(route('micropub-client'))
                     ->assertSeeLink('log out')
-                    ->type('content', $note)
-                    ->press('Submit');
+                    ->type('content', $note);
+            $response->element('form')->submit();
         });
         sleep(2);
         $this->assertDatabaseHas('notes', ['note' => $note]);

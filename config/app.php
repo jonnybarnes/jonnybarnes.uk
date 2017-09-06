@@ -10,6 +10,7 @@ return [
     | This value is the name of your application. This value is used when the
     | framework needs to place the application's name in a notification or
     | any other location as required by the application or its packages.
+    |
     */
 
     'name' => 'jonnybarnes.uk',
@@ -206,39 +207,9 @@ return [
         App\Providers\RouteServiceProvider::class,
 
         /*
-         * Laravel Debugbar
-         */
-        Barryvdh\Debugbar\ServiceProvider::class,
-
-        /*
          * Thujohn’s Twitter API client
          */
         Thujohn\Twitter\TwitterServiceProvider::class,
-
-        /*
-         * Phaza’s Postgis library
-         */
-        Phaza\LaravelPostgis\DatabaseServiceProvider::class,
-
-        /*
-         * Laravel scout
-         */
-        Laravel\Scout\ScoutServiceProvider::class,
-
-        /*
-         * Postgres Engine for Scout
-         */
-        ScoutEngines\Postgres\PostgresEngineServiceProvider::class,
-
-        /*
-         * Laravel Tinker
-         */
-        Laravel\Tinker\TinkerServiceProvider::class,
-
-        /*
-         * Eolquent Sluggable
-         */
-        Cviebrock\EloquentSluggable\ServiceProvider::class,
 
     ],
 

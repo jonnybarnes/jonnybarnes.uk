@@ -26,11 +26,11 @@ class TokenEndpointController extends Controller
      * @return void
      */
     public function __construct(
-        Client $client = null,
-        TokenService $tokenService = null
+        Client $client,
+        TokenService $tokenService
     ) {
-        $this->client = $client ?? new Client();
-        $this->tokenService = $tokenService ?? new TokenService();
+        $this->client = $client;
+        $this->tokenService = $tokenService;
     }
 
     /**

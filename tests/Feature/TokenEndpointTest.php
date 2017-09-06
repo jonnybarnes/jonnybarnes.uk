@@ -5,9 +5,6 @@ namespace Tests\Feature;
 use Mockery;
 use Tests\TestCase;
 use IndieAuth\Client;
-use Illuminate\Foundation\Testing\WithoutMiddleware;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class TokenEndpointTest extends TestCase
 {

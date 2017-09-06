@@ -5,9 +5,6 @@ namespace Tests\Feature;
 use Tests\TestCase;
 use App\Jobs\ProcessWebMention;
 use Illuminate\Support\Facades\Queue;
-use Illuminate\Foundation\Testing\WithoutMiddleware;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class WebMentionsControllerTest extends TestCase
 {
