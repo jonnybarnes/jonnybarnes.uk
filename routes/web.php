@@ -15,10 +15,10 @@ Route::group(['domain' => config('url.longurl')], function () {
     Route::get('/', 'NotesController@index');
 
     //Static project page
-    Route::get('projects', 'StaticRoutesController@projects');
+    Route::view('projects', 'projects');
 
     //Static colophon page
-    Route::get('colophon', 'StaticRoutesController@colophon');
+    Route::view('colophon', 'colophon');
 
     //The login routes to get authe'd for admin
     Route::get('login', 'AuthController@showLogin')->name('login');
