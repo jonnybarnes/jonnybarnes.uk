@@ -1,5 +1,8 @@
 # Changelog
 
+## Version {next}
+  - Add Laravel Horizon
+
 ## Version 0.6 (2017-09-06)
   - Update laravel version to 5.5
   - Improve .travis.yml and add back dusk tests

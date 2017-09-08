@@ -16,6 +16,7 @@
         "jonnybarnes/indieweb": "dev-master",
         "jonnybarnes/webmentions-parser": "0.4.*",
         "laravel/framework": "5.5.*",
+        "laravel/horizon": "^1.0",
         "laravel/scout": "^3.0",
         "laravel/tinker": "^1.0",
         "lcobucci/jwt": "^3.1",
