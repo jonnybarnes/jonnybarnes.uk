@@ -2,8 +2,8 @@
 
 namespace App\Providers;
 
-use Laravel\Horizon\Horizon;
 use Illuminate\Http\Request;
+use Laravel\Horizon\Horizon;
 use Illuminate\Support\ServiceProvider;
 
 class HorizonServiceProvider extends ServiceProvider
