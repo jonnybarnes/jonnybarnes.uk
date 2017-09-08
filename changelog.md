@@ -1,6 +1,6 @@
 # Changelog
 
-## Version {next}
+## Version 0.7 (2017-09-08)
   - Add Laravel Horizon
 
 ## Version 0.6 (2017-09-06)
