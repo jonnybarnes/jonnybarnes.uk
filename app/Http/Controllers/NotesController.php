@@ -20,9 +20,9 @@ class NotesController extends Controller
         if (request()->wantsActivityStream()) {
             $data = json_encode([
                 '@context' => 'https://www.w3.org/ns/activitystreams',
-                'id' => 'https://jonnybarnes.uk',
+                'id' => config('app.url'),
                 'type' => 'Person',
-                'name' => 'Jonny Barnes',
+                'name' => config('app.display_name'),
                 'preferredUsername' => 'jonnybarnes',
             ]);
 
