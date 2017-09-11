@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Tag;
 use App\Note;
 use Validator;
+use Illuminate\Http\Request;
 use Laravel\Dusk\DuskServiceProvider;
 use Illuminate\Support\ServiceProvider;
 
@@ -45,6 +46,11 @@ class AppServiceProvider extends ServiceProvider
             if (count($tagsToAdd > 0)) {
                 $note->tags()->attach($tagsToAdd);
             }
+        });
+
+        // Request AS macro
+        Request::macro('wantsActivityStream', function() {
+            return str_contains(mb_strtolower($this->header('Accept')), 'application/activity+json');
         });
     }
 
