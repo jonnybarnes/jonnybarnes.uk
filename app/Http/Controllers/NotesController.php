@@ -11,13 +11,24 @@ use Jonnybarnes\IndieWeb\Numbers;
 class NotesController extends Controller
 {
     /**
-     * Show all the notes.
+     * Show all the notes. This is also the homepage.
      *
-     * @param  Illuminate\Http\Request request;
      * @return \Illuminte\View\Factory view
      */
-    public function index(Request $request)
+    public function index()
     {
+        if (request()->wantsActivityStream()) {
+            $data = json_encode([
+                '@context' => 'https://www.w3.org/ns/activitystreams',
+                'id' => 'https://jonnybarnes.uk',
+                'type' => 'Person',
+                'name' => 'Jonny Barnes',
+                'preferredUsername' => 'jonnybarnes',
+            ]);
+
+            return response($data)->header('Content-Type', 'application/activity+json');
+        }
+
         $notes = Note::orderBy('id', 'desc')
             ->with('place', 'media', 'client')
             ->withCount(['webmentions As replies' => function ($query) {
