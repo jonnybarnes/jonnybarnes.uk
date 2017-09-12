@@ -16,6 +16,7 @@ if (! function_exists('normalize_url')) {
         $newUrl = '';
         $url = parse_url($url);
         $defaultSchemes = ['http' => 80, 'https' => 443];
+
         if (isset($url['scheme'])) {
             $url['scheme'] = strtolower($url['scheme']);
             // Strip scheme default ports
@@ -27,10 +28,12 @@ if (! function_exists('normalize_url')) {
             }
             $newUrl .= "{$url['scheme']}://";
         }
+
         if (isset($url['host'])) {
             $url['host'] = mb_strtolower($url['host']);
             $newUrl .= $url['host'];
         }
+
         if (isset($url['port'])) {
             $newUrl .= ":{$url['port']}";
         }
@@ -63,10 +66,14 @@ if (! function_exists('normalize_url')) {
             }
             $url['path'] = preg_replace_callback(
                 array_map(
-                    create_function('$str', 'return "/%" . strtoupper($str) . "/x";'),
+                    function ($str) {
+                        return "/%" . strtoupper($str) . "/x";
+                    },
                     $u
                 ),
-                create_function('$matches', 'return chr(hexdec($matches[0]));'),
+                function ($matches) {
+                    return chr(hexdec($matches[0]));
+                },
                 $url['path']
             );
             // Remove directory index

@@ -42,7 +42,7 @@ class AppServiceProvider extends ServiceProvider
                 $tag = Tag::firstOrCreate(['tag' => $tag]);
                 $tagsToAdd[] = $tag->id;
             }
-            if (count($tagsToAdd > 0)) {
+            if (count($tagsToAdd) > 0) {
                 $note->tags()->attach($tagsToAdd);
             }
         });
