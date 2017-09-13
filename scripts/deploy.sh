@@ -2,7 +2,7 @@
 
 echo "Putting the Laravel app in maintenance mode"
 php artisan down
-#php artisan horizon:terminate
+php artisan horizon:terminate
 
 echo "Pulling the latest changes"
 git pull
