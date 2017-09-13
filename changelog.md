@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 0.7.2 (2017-09-13)
+  - Small AS2.0 improvements
+
 ## Version 0.7.1 (2017-09-13)
   - Add content-negotiated AS data for homepage and single notes
 
