@@ -23,7 +23,7 @@ class ActivityStreamsService
     {
         $data = json_encode([
             '@context' => 'https://www.w3.org/ns/activitystreams',
-            'summary' => strtok(config('user.displayname'), ' ') . ' added a note to his microblog',
+            'summary' => strtok(config('user.displayname'), ' ') . ' added a note to their microblog',
             'type' => 'Add',
             'published' => $note->updated_at->toW3cString(),
             'actor' => [
