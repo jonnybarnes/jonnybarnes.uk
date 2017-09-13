@@ -41,7 +41,7 @@ class ActivityStreamsService
                 'id' => $note->longurl,
                 'type' => 'Note',
                 'url' => $note->longurl,
-                'name' => strip_tags($note->note)
+                'name' => strip_tags($note->note),
             ],
         ]);
 
