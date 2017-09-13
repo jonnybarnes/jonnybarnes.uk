@@ -5,7 +5,6 @@ namespace App;
 use Cache;
 use Twitter;
 use HTMLPurifier;
-use Carbon\Carbon;
 use HTMLPurifier_Config;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Database\Eloquent\Model;
@@ -63,10 +62,9 @@ class WebMention extends Model
     public function getPublishedAttribute()
     {
         $microformats = json_decode($this->mf2, true);
-        $carbon = new Carbon();
         if (isset($microformats['items'][0]['properties']['published'][0])) {
             try {
-                $published = $carbon->parse(
+                $published = carbon()->parse(
                     $microformats['items'][0]['properties']['published'][0]
                 )->toDayDateTimeString();
             } catch (\Exception $exception) {
