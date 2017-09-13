@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 0.7.3 (2017-09-13)
+  - Fix a test
+
 ## Version 0.7.2 (2017-09-13)
   - Small AS2.0 improvements
 
