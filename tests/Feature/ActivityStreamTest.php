@@ -20,7 +20,7 @@ class ActivityStreamTest extends TestCase
             '@context' => 'https://www.w3.org/ns/activitystreams',
             'id' => config('app.url'),
             'type' => 'Person',
-            'name' => config('app.display_name'),
+            'name' => config('user.displayname'),
         ]);
     }
 
