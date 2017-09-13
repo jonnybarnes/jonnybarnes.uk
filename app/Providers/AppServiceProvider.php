@@ -49,7 +49,7 @@ class AppServiceProvider extends ServiceProvider
         });
 
         // Request AS macro
-        Request::macro('wantsActivityStream', function() {
+        Request::macro('wantsActivityStream', function () {
             return str_contains(mb_strtolower($this->header('Accept')), 'application/activity+json');
         });
     }
