@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "551d407b87a7d9ff3e65969f33605014",
+    "content-hash": "ee80722747b7215eddfb5da75063b542",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.36.3",
+            "version": "3.36.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "7ffaee4359c161339867e565f18f6e3b7e77e44e"
+                "reference": "acb08da60a042e17b0cd9e5e111ba895c8a79f2d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/7ffaee4359c161339867e565f18f6e3b7e77e44e",
-                "reference": "7ffaee4359c161339867e565f18f6e3b7e77e44e",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/acb08da60a042e17b0cd9e5e111ba895c8a79f2d",
+                "reference": "acb08da60a042e17b0cd9e5e111ba895c8a79f2d",
                 "shasum": ""
             },
             "require": {
@@ -84,7 +84,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2017-09-07T22:30:02+00:00"
+            "time": "2017-09-08T19:50:29+00:00"
         },
         {
             "name": "barnabywalters/mf-cleaner",
@@ -303,16 +303,16 @@
         },
         {
             "name": "composer/ca-bundle",
-            "version": "1.0.7",
+            "version": "1.0.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/ca-bundle.git",
-                "reference": "b17e6153cb7f33c7e44eb59578dc12eee5dc8e12"
+                "reference": "9dd73a03951357922d8aee6cc084500de93e2343"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/ca-bundle/zipball/b17e6153cb7f33c7e44eb59578dc12eee5dc8e12",
-                "reference": "b17e6153cb7f33c7e44eb59578dc12eee5dc8e12",
+                "url": "https://api.github.com/repos/composer/ca-bundle/zipball/9dd73a03951357922d8aee6cc084500de93e2343",
+                "reference": "9dd73a03951357922d8aee6cc084500de93e2343",
                 "shasum": ""
             },
             "require": {
@@ -358,7 +358,7 @@
                 "ssl",
                 "tls"
             ],
-            "time": "2017-03-06T11:59:08+00:00"
+            "time": "2017-09-11T07:24:36+00:00"
         },
         {
             "name": "cviebrock/eloquent-sluggable",
@@ -1947,16 +1947,16 @@
         },
         {
             "name": "laravel/horizon",
-            "version": "v1.0.1",
+            "version": "v1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/horizon.git",
-                "reference": "856fe55c6d054dc063e71d97c0873013803d96df"
+                "reference": "ec52cd6c304eb9dfc3320e32d9e43c5ee55e7d7c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/horizon/zipball/856fe55c6d054dc063e71d97c0873013803d96df",
-                "reference": "856fe55c6d054dc063e71d97c0873013803d96df",
+                "url": "https://api.github.com/repos/laravel/horizon/zipball/ec52cd6c304eb9dfc3320e32d9e43c5ee55e7d7c",
+                "reference": "ec52cd6c304eb9dfc3320e32d9e43c5ee55e7d7c",
                 "shasum": ""
             },
             "require": {
@@ -2011,7 +2011,7 @@
                 "laravel",
                 "queue"
             ],
-            "time": "2017-09-06T19:57:45+00:00"
+            "time": "2017-09-08T16:30:09+00:00"
         },
         {
             "name": "laravel/scout",
@@ -4401,6 +4401,67 @@
             "time": "2017-08-29T08:54:25+00:00"
         },
         {
+            "name": "bmitch/churn-php",
+            "version": "0.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/bmitch/churn-php.git",
+                "reference": "0026a7db3bebb83dc9b1cd1941e1cb15629c1dc8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/bmitch/churn-php/zipball/0026a7db3bebb83dc9b1cd1941e1cb15629c1dc8",
+                "reference": "0026a7db3bebb83dc9b1cd1941e1cb15629c1dc8",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.0",
+                "symfony/console": "^3.2",
+                "symfony/process": "^3.2",
+                "symfony/yaml": "^3.3",
+                "tightenco/collect": "^5.4"
+            },
+            "require-dev": {
+                "bmitch/codor": "^1.0",
+                "jakub-onderka/php-console-highlighter": "^0.3.2",
+                "jakub-onderka/php-parallel-lint": "^0.9.2",
+                "larapack/dd": "^1.1",
+                "mockery/mockery": "dev-master",
+                "phploc/phploc": "^3.0",
+                "phpmd/phpmd": "^2.5",
+                "phpunit/phpunit": "^5.7",
+                "sebastian/phpcpd": "^2.0",
+                "sensiolabs/security-checker": "^4.0",
+                "slevomat/coding-standard": "^2.0"
+            },
+            "bin": [
+                "churn"
+            ],
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Churn\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Bill Mitchell",
+                    "email": "wkmitch@gmail.com"
+                }
+            ],
+            "description": "Discover files in need of refactoring.",
+            "homepage": "https://github.com/bmitch/churn-php",
+            "keywords": [
+                "bmitch",
+                "churn-php"
+            ],
+            "time": "2017-09-02T00:42:45+00:00"
+        },
+        {
             "name": "doctrine/instantiator",
             "version": "1.1.0",
             "source": {
@@ -6289,6 +6350,61 @@
             "description": "Library that helps with managing the version number of Git-hosted PHP projects",
             "homepage": "https://github.com/sebastianbergmann/version",
             "time": "2016-10-03T07:35:21+00:00"
+        },
+        {
+            "name": "symfony/yaml",
+            "version": "v3.3.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/yaml.git",
+                "reference": "1d8c2a99c80862bdc3af94c1781bf70f86bccac0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/1d8c2a99c80862bdc3af94c1781bf70f86bccac0",
+                "reference": "1d8c2a99c80862bdc3af94c1781bf70f86bccac0",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.5.9|>=7.0.8"
+            },
+            "require-dev": {
+                "symfony/console": "~2.8|~3.0"
+            },
+            "suggest": {
+                "symfony/console": "For validating YAML files using the lint command"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.3-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\Yaml\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony Yaml Component",
+            "homepage": "https://symfony.com",
+            "time": "2017-07-29T21:54:42+00:00"
         },
         {
             "name": "theseer/fdomdocument",

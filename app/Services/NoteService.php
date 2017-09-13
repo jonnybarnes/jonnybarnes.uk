@@ -37,7 +37,7 @@ class NoteService
         );
 
         if (array_key_exists('published', $data) && empty($data['published']) === false) {
-            $carbon = new \Carbon\Carbon($data['published']);
+            $carbon = carbon($data['published']);
             $note->created_at = $note->updated_at = $carbon->toDateTimeString();
         }
 
