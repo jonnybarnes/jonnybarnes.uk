@@ -12,8 +12,8 @@ class ActivityStreamsService
             '@context' => 'https://www.w3.org/ns/activitystreams',
             'id' => config('app.url'),
             'type' => 'Person',
-            'name' => config('app.display_name'),
-            'preferredUsername' => 'jonnybarnes',
+            'name' => config('user.displayname'),
+            'preferredUsername' => config('user.username'),
         ]);
 
         return response($data)->header('Content-Type', 'application/activity+json');
@@ -23,7 +23,7 @@ class ActivityStreamsService
     {
         $data = json_encode([
             '@context' => 'https://www.w3.org/ns/activitystreams',
-            'summary' => 'Jonny added a note to his microblog',
+            'summary' => strtok(config('user.displayname'), ' ') . ' added a note to his microblog',
             'type' => 'Add',
             'published' => $note->updated_at->toW3cString(),
             'actor' => [
@@ -33,7 +33,7 @@ class ActivityStreamsService
                 'url' => config('app.url'),
                 'image' => [
                     'type' => 'Link',
-                    'href' => config('app.url') . '/assets/img/jmb-bw.jpg',
+                    'href' => config('app.url') . '/assets/img/profile.jpg',
                     'mediaType' => '/image/jpeg',
                 ],
             ],
