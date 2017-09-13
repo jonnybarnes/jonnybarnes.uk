@@ -204,3 +204,10 @@ if (! function_exists('prettyPrintJson')) {
         return str_replace("\t", '    ', $result);
     }
 }
+
+// sourced from https://twitter.com/jrubsc/status/907776591320764416/photo/1
+if (! function_exists('carbon')) {
+    function carbon(...$args) {
+        return new Carbon\Carbon(...$args);
+    }
+}
