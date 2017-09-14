@@ -280,8 +280,8 @@ class Note extends Model
         try {
             $oEmbed = Twitter::getOembed([
                 'id' => $tweetId,
+                'dnt' => true,
                 'align' => 'center',
-                'omit_script' => true,
                 'maxwidth' => 550,
             ]);
         } catch (\Exception $e) {
