@@ -1,5 +1,8 @@
 # Changelog
 
+## Version {next}
+  - Improve embedding of tweets (issue#66)
+
 ## Version 0.7.3 (2017-09-13)
   - Fix a test
 
