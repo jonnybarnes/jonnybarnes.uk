@@ -368,7 +368,8 @@ class Note extends Model
                     return $matches[0];
                 }
                 if ($contact->facebook) {
-                    return '<a class="u-category h-card" href="https://facebook.com/' . $contact->facebook . '">' . $contact->name . '</a>';
+                    return '<a class="u-category h-card" href="https://facebook.com/'
+                           . $contact->facebook . '">' . $contact->name . '</a>';
                 }
 
                 return $contact->name;

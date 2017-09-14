@@ -90,7 +90,9 @@ class MicropubController extends Controller
                     if (is_array($request->input('properties.location.0'))) {
                         if ($request->input('properties.location.0.type.0' === 'h-card')) {
                             try {
-                                $place = $this->placeService->createPlaceFromCheckin($request->input('properties.location.0'));
+                                $place = $this->placeService->createPlaceFromCheckin(
+                                    $request->input('properties.location.0')
+                                );
                                 $data['checkin'] = $place->longurl;
                             } catch (\Exception $e) {
                                 //
@@ -102,7 +104,9 @@ class MicropubController extends Controller
                     if (array_key_exists('checkin', $request->input('properties'))) {
                         $data['swarm-url'] = $request->input('properties.syndication.0');
                         try {
-                            $place = $this->placeService->createPlaceFromCheckin($request->input('properties.checkin.0'));
+                            $place = $this->placeService->createPlaceFromCheckin(
+                                $request->input('properties.checkin.0')
+                            );
                             $data['checkin'] = $place->longurl;
                         } catch (\Exception $e) {
                             $data['checkin'] = null;

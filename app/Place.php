@@ -67,7 +67,8 @@ class Place extends Model
     public function scopeNear(Builder $query, Point $point, $distance = 1000)
     {
         $field = DB::raw(
-            sprintf("ST_Distance(%s.location, ST_GeogFromText('%s'))",
+            sprintf(
+                "ST_Distance(%s.location, ST_GeogFromText('%s'))",
                 $this->getTable(),
                 $point->toWKT()
             )
