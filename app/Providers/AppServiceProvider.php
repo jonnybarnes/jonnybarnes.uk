@@ -52,6 +52,11 @@ class AppServiceProvider extends ServiceProvider
         Request::macro('wantsActivityStream', function () {
             return str_contains(mb_strtolower($this->header('Accept')), 'application/activity+json');
         });
+
+        // configure Intervention/Image
+        $this->app->bind('Intervention\Image\ImageManager', function () {
+            return new \Intervention\Image\ImageManager(['driver' => config('image.driver')]);
+        });
     }
 
     /**

@@ -9,7 +9,7 @@
     <div class="e-content p-name">
       {!! $note->note !!}
       @foreach($note->media as $media)
-        @if($media->type == 'image')<img class="u-photo" src="{{ $media->url }}" alt="">@endif
+        @if($media->type == 'image')<a class="naked-link" href="{{ $media->url }}"><img class="u-photo" src="{{ $media->url }}" alt="" @if($media->image_widths !== null) srcset="{{ $media->url }} {{ $media->image_widths }}w, {{ $media->mediumurl }} 1000w, {{ $media->smallurl }} 500w" sizes="80vh"@endif></a>@endif
         @if($media->type == 'audio')<audio class="u-audio" src="{{ $media->url }}" controls>@endif
         @if($media->type == 'video')<video class="u-video" src="{{ $media->url }}" controls>@endif
         @if($media->type == 'download')<p><a class="u-attachment" href="{{ $media->url }}">Download the attached media</a></p>@endif

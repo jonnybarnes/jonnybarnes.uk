@@ -2,14 +2,17 @@
 
 echo "Putting the Laravel app in maintenance mode"
 php artisan down
-#php artisan horizon:terminate
+php artisan horizon:terminate
 
 echo "Pulling the latest changes"
 git pull
 
 echo "Updating composer and dependencies"
 sudo composer self-update
-composer install --no-dev
+composer install --no-dev --optimize-autoloader
+
+echo "running any migrations"
+php artisan migrate
 
 echo "Caching Laravel route and config files"
 php artisan route:cache

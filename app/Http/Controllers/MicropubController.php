@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use Storage;
 use Monolog\Logger;
 use Ramsey\Uuid\Uuid;
+use App\Jobs\ProcessImage;
 use App\{Media, Note, Place};
 use Monolog\Handler\StreamHandler;
+use Intervention\Image\ImageManager;
 use Illuminate\Http\{Request, Response};
 use App\Exceptions\InvalidTokenException;
 use Phaza\LaravelPostgis\Geometries\Point;
@@ -90,7 +93,9 @@ class MicropubController extends Controller
                     if (is_array($request->input('properties.location.0'))) {
                         if ($request->input('properties.location.0.type.0' === 'h-card')) {
                             try {
-                                $place = $this->placeService->createPlaceFromCheckin($request->input('properties.location.0'));
+                                $place = $this->placeService->createPlaceFromCheckin(
+                                    $request->input('properties.location.0')
+                                );
                                 $data['checkin'] = $place->longurl;
                             } catch (\Exception $e) {
                                 //
@@ -102,7 +107,9 @@ class MicropubController extends Controller
                     if (array_key_exists('checkin', $request->input('properties'))) {
                         $data['swarm-url'] = $request->input('properties.syndication.0');
                         try {
-                            $place = $this->placeService->createPlaceFromCheckin($request->input('properties.checkin.0'));
+                            $place = $this->placeService->createPlaceFromCheckin(
+                                $request->input('properties.checkin.0')
+                            );
                             $data['checkin'] = $place->longurl;
                         } catch (\Exception $e) {
                             $data['checkin'] = null;
@@ -395,8 +402,11 @@ class MicropubController extends Controller
                         'error_description' => 'A problem occured handling your request',
                     ], 500);
                 }
+
+                $size = $request->file('file')->getClientSize();
+                Storage::disk('local')->put($filename, $request->file('file')->openFile()->fread($size));
                 try {
-                    $path = $request->file('file')->storeAs('media', $filename, 's3');
+                    Storage::disk('s3')->put('media/' . $filename, $request->file('file')->openFile()->fread($size));
                 } catch (Exception $e) { // which exception?
                     return response()->json([
                         'response' => 'error',
@@ -404,11 +414,24 @@ class MicropubController extends Controller
                         'error_description' => 'Unable to save media to S3',
                     ], 503);
                 }
+
+                $manager = app()->make(ImageManager::class);
+                try {
+                    $image = $manager->make($request->file('file'));
+                    $width = $image->width();
+                } catch (\Intervention\Image\Exception\NotReadableException $exception) {
+                    // not an image
+                    $width = null;
+                }
+
                 $media = new Media();
                 $media->token = $request->bearerToken();
-                $media->path = $path;
+                $media->path = 'media/' . $filename;
                 $media->type = $this->getFileTypeFromMimeType($request->file('file')->getMimeType());
+                $media->image_widths = $width;
                 $media->save();
+
+                dispatch(new ProcessImage($filename));
 
                 return response()->json([
                     'response' => 'created',
