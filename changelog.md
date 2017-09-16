@@ -1,6 +1,6 @@
 # Changelog
 
-## Version {next}
+## Version 0.8.1 (2017-09-16)
   - Order notes by latest (issue#70)
   - AcitivtyStream support is now indicated with HTTP Link headers
 
