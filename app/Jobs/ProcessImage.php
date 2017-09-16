@@ -40,6 +40,7 @@ class ProcessImage implements ShouldQueue
         } catch (NotReadableException $exception) {
             // not an image; delete file and end job
             unlink(storage_path('app') . '/' . $this->filename);
+
             return;
         }
         //create smaller versions if necessary
