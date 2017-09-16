@@ -22,14 +22,13 @@ class NotesController extends Controller
             return (new ActivityStreamsService)->siteOwnerResponse();
         }
 
-        $notes = Note::orderBy('id', 'desc')
+        $notes = Note::latest()
             ->with('place', 'media', 'client')
             ->withCount(['webmentions As replies' => function ($query) {
                 $query->where('type', 'in-reply-to');
             }])->paginate(10);
-        $aslink = config('app.url');
 
-        return view('notes.index', compact('notes', 'aslink'));
+        return view('notes.index', compact('notes'));
     }
 
     /**
@@ -46,9 +45,7 @@ class NotesController extends Controller
             return (new ActivityStreamsService)->singleNoteResponse($note);
         }
 
-        $aslink = $note->longurl;
-
-        return view('notes.show', compact('note', 'aslink'));
+        return view('notes.show', compact('note'));
     }
 
     /**
