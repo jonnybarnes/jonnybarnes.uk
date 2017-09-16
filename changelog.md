@@ -2,6 +2,7 @@
 
 ## Version {next}
   - Order notes by latest (issue#70)
+  - AcitivtyStream support is now indicated with HTTP Link headers
 
 ## Version 0.8 (2017-09-16)
   - Improve embedding of tweets (issue#66)
