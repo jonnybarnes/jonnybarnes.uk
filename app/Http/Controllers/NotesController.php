@@ -22,7 +22,7 @@ class NotesController extends Controller
             return (new ActivityStreamsService)->siteOwnerResponse();
         }
 
-        $notes = Note::orderBy('id', 'desc')
+        $notes = Note::latest()
             ->with('place', 'media', 'client')
             ->withCount(['webmentions As replies' => function ($query) {
                 $query->where('type', 'in-reply-to');
