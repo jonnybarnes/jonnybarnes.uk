@@ -1,6 +1,6 @@
 # Changelog
 
-## Version {next}
+## Version 0.8 (2017-09-16)
   - Improve embedding of tweets (issue#66)
   - Allow for “responsive” images (issue#62)
 
