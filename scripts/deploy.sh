@@ -11,6 +11,9 @@ echo "Updating composer and dependencies"
 sudo composer self-update
 composer install --no-dev --optimize-autoloader
 
+echo "running any migrations"
+php artisan migrate
+
 echo "Caching Laravel route and config files"
 php artisan route:cache
 php artisan config:cache

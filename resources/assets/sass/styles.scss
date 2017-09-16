@@ -22,6 +22,11 @@ a {
     color: blue;
 }
 
+a.naked-link {
+    border-bottom: none;
+    color: inherit;
+}
+
 .social-links a {
     border-bottom: none;
 }

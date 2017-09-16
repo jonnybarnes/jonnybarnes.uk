@@ -2,6 +2,7 @@
 
 ## Version {next}
   - Improve embedding of tweets (issue#66)
+  - Allow for “responsive” images (issue#62)
 
 ## Version 0.7.3 (2017-09-13)
   - Fix a test
