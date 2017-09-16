@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.36.7",
+            "version": "3.36.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "421088947540b1c7956cd693b032124e2c74eb76"
+                "reference": "7b89fa65cccb966da1599b715dcea8c09eafc175"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/421088947540b1c7956cd693b032124e2c74eb76",
-                "reference": "421088947540b1c7956cd693b032124e2c74eb76",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/7b89fa65cccb966da1599b715dcea8c09eafc175",
+                "reference": "7b89fa65cccb966da1599b715dcea8c09eafc175",
                 "shasum": ""
             },
             "require": {
@@ -84,7 +84,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2017-09-13T18:56:17+00:00"
+            "time": "2017-09-15T19:12:04+00:00"
         },
         {
             "name": "barnabywalters/mf-cleaner",
@@ -2085,16 +2085,16 @@
         },
         {
             "name": "laravel/scout",
-            "version": "v3.0.9",
+            "version": "v3.0.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/scout.git",
-                "reference": "84762c8ed51cb57f09b5f465e09993e48baf9d55"
+                "reference": "681c15a26bbc973528af2e77e0bb61981dc07206"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/scout/zipball/84762c8ed51cb57f09b5f465e09993e48baf9d55",
-                "reference": "84762c8ed51cb57f09b5f465e09993e48baf9d55",
+                "url": "https://api.github.com/repos/laravel/scout/zipball/681c15a26bbc973528af2e77e0bb61981dc07206",
+                "reference": "681c15a26bbc973528af2e77e0bb61981dc07206",
                 "shasum": ""
             },
             "require": {
@@ -2146,7 +2146,7 @@
                 "laravel",
                 "search"
             ],
-            "time": "2017-09-13T18:24:31+00:00"
+            "time": "2017-09-14T12:32:30+00:00"
         },
         {
             "name": "laravel/tinker",
