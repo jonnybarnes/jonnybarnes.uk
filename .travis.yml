@@ -16,6 +16,7 @@ addons:
       - nginx
       - realpath
       - postgresql-9.6-postgis-2.3
+      - imagemagick
   artifacts:
     s3_region: "eu-west-1"
     paths:
@@ -36,6 +37,7 @@ php:
   - 7.2
 
 before_install:
+  - printf "\n" | pecl install imagick
   - cp .env.travis .env
   - echo 'error_log = "/tmp/php.error.log"' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
   - psql -U travis -c 'create database travis_ci_test'
