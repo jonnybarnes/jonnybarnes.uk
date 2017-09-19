@@ -38,6 +38,7 @@ class MicropubClientControllerTest extends TestCase
                 'mp-syndicate-to' => ['https://twitter.com/jonnybarnes', 'https://facebook.com/jonnybarnes'],
             ]
         );
+
         $expected = '{"type":["h-entry"],"properties":{"content":["Hello Fred"],"in-reply-to":["https:\/\/fredbloggs.com\/note\/abc"],"mp-syndicate-to":["https:\/\/twitter.com\/jonnybarnes","https:\/\/facebook.com\/jonnybarnes"]}}';
 
         foreach ($container as $transaction) {
