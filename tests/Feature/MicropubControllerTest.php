@@ -3,13 +3,14 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
+use Tests\TestToken;
 use Lcobucci\JWT\Builder;
 use Lcobucci\JWT\Signer\Hmac\Sha256;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class MicropubControllerTest extends TestCase
 {
-    use DatabaseTransactions;
+    use DatabaseTransactions, TestToken;
 
     /**
      * Test a GET request for the micropub endpoint without a token gives a
@@ -313,43 +314,5 @@ class MicropubControllerTest extends TestCase
         $this->assertDatabaseHas('notes', [
             'swarm_url' => 'https://www.swarmapp.com/checkin/123'
         ]);
-    }
-
-    /**
-     * Generate a valid token to be used in the tests.
-     *
-     * @return Lcobucci\JWT\Token\Plain $token
-     */
-    private function getToken()
-    {
-        $signer = new Sha256();
-        $token = (new Builder())
-            ->set('client_id', 'https://quill.p3k.io')
-            ->set('me', 'https://jonnybarnes.localhost')
-            ->set('scope', 'create update')
-            ->set('issued_at', time())
-            ->sign($signer, env('APP_KEY'))
-            ->getToken();
-
-        return $token;
-    }
-
-    /**
-     * Generate an invalid token to be used in the tests.
-     *
-     * @return Lcobucci\JWT\Token\Plain $token
-     */
-    private function getInvalidToken()
-    {
-        $signer = new Sha256();
-        $token = (new Builder())
-            ->set('client_id', 'https://quill.p3k.io')
-            ->set('me', 'https://jonnybarnes.localhost')
-            ->set('scope', 'view') //error here
-            ->set('issued_at', time())
-            ->sign($signer, env('APP_KEY'))
-            ->getToken();
-
-        return $token;
     }
 }

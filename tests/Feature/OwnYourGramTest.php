@@ -3,13 +3,14 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
+use Tests\TestToken;
 use Lcobucci\JWT\Builder;
 use Lcobucci\JWT\Signer\Hmac\Sha256;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class OwnYourGramTest extends TestCase
 {
-    use DatabaseTransactions;
+    use DatabaseTransactions, TestToken;
 
     public function test_ownyourgram_post()
     {
@@ -39,19 +40,5 @@ class OwnYourGramTest extends TestCase
             'note' => 'How beautiful are the plates and chopsticks',
             'instagram_url' => 'https://www.instagram.com/p/BVC_nVTBFfi/'
         ]);
-    }
-
-    private function getToken()
-    {
-        $signer = new Sha256();
-        $token = (new Builder())
-            ->set('client_id', 'https://ownyourgram.com')
-            ->set('me', config('app.url'))
-            ->set('scope', 'create')
-            ->set('issued_at', time())
-            ->sign($signer, env('APP_KEY'))
-            ->getToken();
-
-        return $token;
     }
 }

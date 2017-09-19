@@ -3,13 +3,14 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
+use Tests\TestToken;
 use Lcobucci\JWT\Builder;
 use Lcobucci\JWT\Signer\Hmac\Sha256;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class SwarmTest extends TestCase
 {
-    use DatabaseTransactions;
+    use DatabaseTransactions, TestToken;
 
     public function test_faked_ownyourswarm_request()
     {
@@ -81,24 +82,5 @@ class SwarmTest extends TestCase
         $this->assertDatabaseHas('notes', [
             'swarm_url' => 'https://www.swarmapp.com/checkin/def'
         ]);
-    }
-
-    /**
-     * Generate a valid token to be used in the tests.
-     *
-     * @return Lcobucci\JWT\Token\Plain $token
-     */
-    private function getToken()
-    {
-        $signer = new Sha256();
-        $token = (new Builder())
-            ->set('client_id', 'https://ownyourswarm.p3k.io')
-            ->set('me', 'https://jonnybarnes.localhost')
-            ->set('scope', 'create update')
-            ->set('issued_at', time())
-            ->sign($signer, env('APP_KEY'))
-            ->getToken();
-
-        return $token;
     }
 }
