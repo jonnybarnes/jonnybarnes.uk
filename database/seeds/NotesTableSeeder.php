@@ -12,6 +12,7 @@ class NotesTableSeeder extends Seeder
     public function run()
     {
         factory(App\Note::class, 10)->create();
+        sleep(1);
         $noteWithPlace = App\Note::create([
             'note' => 'Having a #beer at the local. 🍺',
             'tweet_id' => '123456789',
@@ -19,17 +20,21 @@ class NotesTableSeeder extends Seeder
         $place = App\Place::find(1);
         $noteWithPlace->place()->associate($place);
         $noteWithPlace->save();
+        sleep(1);
         $noteWithContact = App\Note::create([
             'note' => 'Hi @tantek'
         ]);
+        sleep(1);
         $noteWithContactPlusPic = App\Note::create([
             'note' => 'Hi @aaron',
             'client_id' => 'https://jbl5.dev/notes/new'
         ]);
+        sleep(1);
         $noteWithoutContact = App\Note::create([
             'note' => 'Hi @bob',
             'client_id' => 'https://quill.p3k.io'
         ]);
+        sleep(1);
         //copy aaron’s profile pic in place
         $spl = new SplFileInfo(public_path() . '/assets/profile-images/aaronparecki.com');
         if ($spl->isDir() === false) {
@@ -40,6 +45,7 @@ class NotesTableSeeder extends Seeder
             'note' => 'Note from somehwere',
             'location' => '53.499,-2.379'
         ]);
+        sleep(1);
         $noteSyndicated = App\Note::create([
             'note' => 'This note has all the syndication targets',
             'tweet_id' => '123456',

@@ -6,8 +6,9 @@ use Storage;
 use Monolog\Logger;
 use Ramsey\Uuid\Uuid;
 use App\Jobs\ProcessImage;
-use App\{Media, Note, Place};
+use App\Services\LikeService;
 use Monolog\Handler\StreamHandler;
+use App\{Like, Media, Note, Place};
 use Intervention\Image\ImageManager;
 use Illuminate\Http\{Request, Response};
 use App\Exceptions\InvalidTokenException;
@@ -72,6 +73,14 @@ class MicropubController extends Controller
             if (($request->input('h') == 'entry') || ($request->input('type.0') == 'h-entry')) {
                 if (stristr($tokenData->getClaim('scope'), 'create') === false) {
                     return $this->returnInsufficientScopeResponse();
+                }
+                if ($request->has('properties.like-of') || $request->has('like-of')) {
+                    $like = (new LikeService())->createLike($request);
+
+                    return response()->json([
+                        'response' => 'created',
+                        'location' => config('app.url') . "/likes/$like->id",
+                    ], 201)->header('Location', config('app.url') . "/likes/$like->id");
                 }
                 $data = [];
                 $data['client-id'] = $tokenData->getClaim('client_id');
