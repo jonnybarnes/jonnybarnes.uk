@@ -41,6 +41,7 @@ class SyndicateToTwitter implements ShouldQueue
                 'form_params' => [
                     'source' => $this->note->longurl,
                     'target' => 'https://brid.gy/publish/twitter',
+                    'bridgy_omit_link' => 'maybe',
                 ],
             ]
         );

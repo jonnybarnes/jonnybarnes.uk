@@ -40,6 +40,7 @@ class SyndicateToFacebook implements ShouldQueue
                 'form_params' => [
                     'source' => $this->note->longurl,
                     'target' => 'https://brid.gy/publish/facebook',
+                    'bridgy_omit_link' => 'maybe',
                 ],
             ]
         );
