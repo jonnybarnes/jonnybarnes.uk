@@ -5,20 +5,24 @@ namespace App\Http\Controllers;
 use App\Note;
 use Illuminate\Http\Request;
 use Jonnybarnes\IndieWeb\Numbers;
+use App\Services\ActivityStreamsService;
 
 // Need to sort out Twitter and webmentions!
 
 class NotesController extends Controller
 {
     /**
-     * Show all the notes.
+     * Show all the notes. This is also the homepage.
      *
-     * @param  Illuminate\Http\Request request;
      * @return \Illuminte\View\Factory view
      */
-    public function index(Request $request)
+    public function index()
     {
-        $notes = Note::orderBy('id', 'desc')
+        if (request()->wantsActivityStream()) {
+            return (new ActivityStreamsService)->siteOwnerResponse();
+        }
+
+        $notes = Note::latest()
             ->with('place', 'media', 'client')
             ->withCount(['webmentions As replies' => function ($query) {
                 $query->where('type', 'in-reply-to');
@@ -36,6 +40,10 @@ class NotesController extends Controller
     public function show($urlId)
     {
         $note = Note::nb60($urlId)->with('webmentions')->firstOrFail();
+
+        if (request()->wantsActivityStream()) {
+            return (new ActivityStreamsService)->singleNoteResponse($note);
+        }
 
         return view('notes.show', compact('note'));
     }

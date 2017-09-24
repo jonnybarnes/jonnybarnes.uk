@@ -41,4 +41,40 @@ class Media extends Model
 
         return config('filesystems.disks.s3.url') . '/' . $this->path;
     }
+
+    /**
+     * Get the URL for the medium size of an S3 image file.
+     *
+     * @return string
+     */
+    public function getMediumurlAttribute()
+    {
+        $filenameParts = explode('.', $this->path);
+        $extension = array_pop($filenameParts);
+        // the following acheives this data flow
+        // foo.bar.png => ['foo', 'bar', 'png'] => ['foo', 'bar'] => foo.bar
+        $basename = ltrim(array_reduce($filenameParts, function ($carry, $item) {
+            return $carry . '.' . $item;
+        }, ''), '.');
+
+        return config('filesystems.disks.s3.url') . '/' . $basename . '-medium.' . $extension;
+    }
+
+    /**
+     * Get the URL for the small size of an S3 image file.
+     *
+     * @return string
+     */
+    public function getSmallurlAttribute()
+    {
+        $filenameParts = explode('.', $this->path);
+        $extension = array_pop($filenameParts);
+        // the following acheives this data flow
+        // foo.bar.png => ['foo', 'bar', 'png'] => ['foo', 'bar'] => foo.bar
+        $basename = ltrim(array_reduce($filenameParts, function ($carry, $item) {
+            return $carry . '.' . $item;
+        }, ''), '.');
+
+        return config('filesystems.disks.s3.url') . '/' . $basename . '-small.' . $extension;
+    }
 }

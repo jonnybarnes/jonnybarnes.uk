@@ -11,6 +11,7 @@
         "fideloper/proxy": "~3.3",
         "guzzlehttp/guzzle": "~6.0",
         "indieauth/client": "~0.1",
+        "intervention/image": "^2.4",
         "jonnybarnes/commonmark-linkify": "^0.2",
         "jonnybarnes/emoji-a11y": "^0.3",
         "jonnybarnes/indieweb": "dev-master",
@@ -32,6 +33,7 @@
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "~3.0",
+        "bmitch/churn-php": "^0.2.0",
         "filp/whoops": "~2.0",
         "fzaninotto/faker": "~1.4",
         "jakub-onderka/php-parallel-lint": "^0.9.2",

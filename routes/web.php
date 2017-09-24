@@ -108,6 +108,12 @@ Route::group(['domain' => config('url.longurl')], function () {
     });
     Route::get('note/{id}', 'NotesController@redirect'); // for legacy note URLs
 
+    // Likes
+    Route::group(['prefix' => 'likes'], function () {
+        Route::get('/', 'LikesController@index');
+        Route::get('/{like}', 'LikesController@show');
+    });
+
     // Micropub Client
     Route::group(['prefix' => 'micropub'], function () {
         Route::get('/create', 'MicropubClientController@create')->name('micropub-client');

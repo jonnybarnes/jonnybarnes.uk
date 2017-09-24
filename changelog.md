@@ -1,5 +1,26 @@
 # Changelog
 
+## Version {next}
+  - Add support for `likes` (issue#69)
+  - Only included links on truncated syndicated notes https://brid.gy/about#omit-link
+
+## Version 0.8.1 (2017-09-16)
+  - Order notes by latest (issue#70)
+  - AcitivtyStream support is now indicated with HTTP Link headers
+
+## Version 0.8 (2017-09-16)
+  - Improve embedding of tweets (issue#66)
+  - Allow for “responsive” images (issue#62)
+
+## Version 0.7.3 (2017-09-13)
+  - Fix a test
+
+## Version 0.7.2 (2017-09-13)
+  - Small AS2.0 improvements
+
+## Version 0.7.1 (2017-09-13)
+  - Add content-negotiated AS data for homepage and single notes
+
 ## Version 0.7 (2017-09-08)
   - Add Laravel Horizon
 

@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Tag;
 use App\Note;
 use Validator;
+use Illuminate\Http\Request;
 use Laravel\Dusk\DuskServiceProvider;
 use Illuminate\Support\ServiceProvider;
 
@@ -42,9 +43,19 @@ class AppServiceProvider extends ServiceProvider
                 $tag = Tag::firstOrCreate(['tag' => $tag]);
                 $tagsToAdd[] = $tag->id;
             }
-            if (count($tagsToAdd > 0)) {
+            if (count($tagsToAdd) > 0) {
                 $note->tags()->attach($tagsToAdd);
             }
+        });
+
+        // Request AS macro
+        Request::macro('wantsActivityStream', function () {
+            return str_contains(mb_strtolower($this->header('Accept')), 'application/activity+json');
+        });
+
+        // configure Intervention/Image
+        $this->app->bind('Intervention\Image\ImageManager', function () {
+            return new \Intervention\Image\ImageManager(['driver' => config('image.driver')]);
         });
     }
 
