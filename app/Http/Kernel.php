@@ -38,6 +38,7 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\LinkHeadersMiddleware::class,
             //\App\Http\Middleware\DevTokenMiddleware::class,
             \App\Http\Middleware\LocalhostSessionMiddleware::class,
+            \App\Http\Middleware\ActivityStreamLinks::class,
         ],
 
         'api' => [

@@ -12,8 +12,6 @@
   <link rel="alternate" type="application/rss+xml" title="Notes RSS Feed" href="/notes/feed.rss">
   <link rel="alternate" type="application/atom+xml" title="Notes Atom Feed" href="/notes/feed.atom">
   <link rel="alternate" type="application/json" title="Notes JSON Feed" href="/notes/feed.json">
-@isset($aslink)  <link rel="alternate" type="application/activity+json" href="{{ $aslink }}">
-@endisset
   <link rel="openid.server" href="https://indieauth.com/openid">
   <link rel="openid.delegate" href="{{ config('app.url') }}">
   <link rel="authorization_endpoint" href="https://indieauth.com/auth">
