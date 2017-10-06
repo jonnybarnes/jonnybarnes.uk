@@ -1,6 +1,6 @@
 # Changelog
 
-## Version {next}
+## Version 0.9 (2017-10-06)
   - Add support for `likes` (issue#69)
   - Only included links on truncated syndicated notes https://brid.gy/about#omit-link
 
