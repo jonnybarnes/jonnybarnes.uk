@@ -16,7 +16,7 @@ Bookmarks «
       @empty($bookmark->name)
         {{ $bookmark->url }}
       @endempty
-    </a>
+    </a> &nbsp; <a href="/bookmarks/{{ $bookmark->id }}">🔗</a>
   </div>
 @endforeach
 </div>
