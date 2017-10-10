@@ -12,4 +12,9 @@ class BookmarksController extends Controller
 
         return view('bookmarks.index', compact('bookmarks'));
     }
+
+    public function show(Bookmark $bookmark)
+    {
+        return view('bookmarks.show', compact('bookmark'));
+    }
 }
