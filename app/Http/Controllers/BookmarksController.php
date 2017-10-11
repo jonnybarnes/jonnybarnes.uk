@@ -8,7 +8,7 @@ class BookmarksController extends Controller
 {
     public function index()
     {
-        $bookmarks = Bookmark::paginate(10);
+        $bookmarks = Bookmark::with('tags')->latest()->paginate(10);
 
         return view('bookmarks.index', compact('bookmarks'));
     }

@@ -15,5 +15,15 @@ Bookmark «
       {{ $bookmark->url }}
     @endempty
   </a>
+  @isset($bookmark->content)
+  <p>{{ $bookmark->content }}</p>
+  @endisset
+  @if(count($bookmark->tags()->get()) > 0)
+    <ul>
+      @foreach($bookmark->tags as $tag)
+      <li><a href="/bookmarks/tagged/{{ $tag->tag }}">{{ $tag->tag }}</a></li>
+      @endforeach
+    </ul>
+    @endif
 </div>
 @stop
