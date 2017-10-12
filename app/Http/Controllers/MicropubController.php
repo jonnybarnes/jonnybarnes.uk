@@ -82,6 +82,14 @@ class MicropubController extends Controller
                         'location' => config('app.url') . "/likes/$like->id",
                     ], 201)->header('Location', config('app.url') . "/likes/$like->id");
                 }
+                if ($request->has('properties.bookmark-of') || $request->has('bookmark-of')) {
+                    $bookmark = (new BookmarkService())->createBookmark($request);
+
+                    return response()->json([
+                        'response' => 'created',
+                        'location' => config('app.url') . "/bookmarks/$bookmark->id",
+                    ], 201)->header('Location', config('app.url') . "/bookmarks/$bookmark->id");
+                }
                 $data = [];
                 $data['client-id'] = $tokenData->getClaim('client_id');
                 if ($request->header('Content-Type') == 'application/json') {
