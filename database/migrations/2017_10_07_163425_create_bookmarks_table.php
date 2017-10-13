@@ -20,6 +20,7 @@ class CreateBookmarksTable extends Migration
             $table->text('content')->nullable();
             $table->uuid('screenshot')->nullable();
             $table->string('archive')->nullable();
+            $table->jsonb('syndicates')->nullable();
             $table->timestamps();
         });
     }

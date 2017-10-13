@@ -8,6 +8,8 @@ use App\Tag;
 use App\Bookmark;
 use Illuminate\Http\Request;
 use App\Jobs\ProcessBookmark;
+use App\Jobs\SyndicateBookmarkToTwitter;
+use App\Jobs\SyndicateBookmarkToFacebook;
 
 class BookmarkService
 {
@@ -45,6 +47,35 @@ class BookmarkService
         foreach((array) $categories as $category) {
             $tag = Tag::firstOrCreate(['tag' => $category]);
             $bookmark->tags()->save($tag);
+        }
+
+        $targets = array_pluck(config('syndication.targets'), 'uid', 'service.name');
+        $mpSyndicateTo = null;
+        if ($request->has('mp-syndicate-to')) {
+            $mpSyndicateTo = $request->input('mp-syndicate-to');
+        }
+        if ($request->has('properties.mp-syndicate-to')) {
+            $mpSyndicateTo = $request->input('properties.mp-syndicate-to');
+        }
+        if (is_string($mpSyndicateTo)) {
+            $service = array_search($mpSyndicateTo, $targets);
+            if ($service == 'Twitter') {
+                SyndicateBookmarkToTwitter::dispatch($bookmark);
+            }
+            if ($service == 'Facebook') {
+                SyndicateBookmarkToFacebook::dispatch($bookmark);
+            }
+        }
+        if (is_array($mpSyndicateTo)) {
+            foreach ($mpSyndicateTo as $uid) {
+                $service = array_search($uid, $targets);
+                if ($service == 'Twitter') {
+                    SyndicateBookmarkToTwitter::dispatch($bookmark);
+                }
+                if ($service == 'Facebook') {
+                    SyndicateBookmarkToFacebook::dispatch($bookmark);
+                }
+            }
         }
 
         ProcessBookmark::dispatch($bookmark);

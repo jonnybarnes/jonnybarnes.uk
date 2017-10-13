@@ -25,11 +25,14 @@ Bookmark «
   <p><a href="https://web.archive.org{{ $bookmark->archive }}">Internet Archive backup</a></p>
   @endisset
   @if(count($bookmark->tags) > 0)
-    <ul>
-      @foreach($bookmark->tags as $tag)
-      <li><a href="/bookmarks/tagged/{{ $tag->tag }}">{{ $tag->tag }}</a></li>
-      @endforeach
-    </ul>
-    @endif
+  <ul>
+    @foreach($bookmark->tags as $tag)
+    <li><a href="/bookmarks/tagged/{{ $tag->tag }}">{{ $tag->tag }}</a></li>
+    @endforeach
+  </ul>
+  @endif
+  <!-- these empty tags are for https://brid.gy’s publishing service -->
+  <a href="https://brid.gy/publish/twitter"></a>
+  <a href="https://brid.gy/publish/facebook"></a>
 </div>
 @stop

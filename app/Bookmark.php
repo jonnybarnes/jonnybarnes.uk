@@ -20,4 +20,12 @@ class Bookmark extends Model
     {
         return $this->belongsToMany('App\Tag');
     }
+
+    /**
+     * The full url of a bookmark
+     */
+    public function getLongurlAttribute()
+    {
+        return config('app.url') . '/bookmarks/' . $this->id;
+    }
 }

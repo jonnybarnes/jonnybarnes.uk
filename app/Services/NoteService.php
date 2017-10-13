@@ -105,10 +105,10 @@ class NoteService
 
         //syndication targets
         if (in_array('twitter', $data['syndicate'])) {
-            dispatch(new SyndicateToTwitter($note));
+            dispatch(new SyndicateNoteToTwitter($note));
         }
         if (in_array('facebook', $data['syndicate'])) {
-            dispatch(new SyndicateToFacebook($note));
+            dispatch(new SyndicateNoteToFacebook($note));
         }
 
         return $note;
