@@ -6,7 +6,6 @@ use App\Bookmark;
 use Ramsey\Uuid\Uuid;
 use GuzzleHttp\Client;
 use Illuminate\Bus\Queueable;
-use Spatie\Image\Manipulations;
 use Spatie\Browsershot\Browsershot;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
