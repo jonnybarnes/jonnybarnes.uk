@@ -32,7 +32,7 @@ Bookmark «
   </ul>
   @endif
   <p class="p-bridgy-facebook-content">🔖 {{ $bookmark->url }} 🔗 {{ $bookmark->longurl }}</p>
-  <p class="p-bridgy-twitter-content">🔖 {{ $bookmark->url 🔗 $bookmark->longurl }}</p>
+  <p class="p-bridgy-twitter-content">🔖 {{ $bookmark->url }} 🔗 {{ $bookmark->longurl }}</p>
   <!-- these empty tags are for https://brid.gy’s publishing service -->
   <a href="https://brid.gy/publish/twitter"></a>
   <a href="https://brid.gy/publish/facebook"></a>
