@@ -23,6 +23,9 @@ Bookmarks «
     @isset($bookmark->screenshot)
     <img src="/assets/img/bookmarks/{{ $bookmark->screenshot }}.png">
     @endisset
+    @isset($bookmark->archive)
+    <p><a href="https://web.archive.org{{ $bookmark->archive }}">Internet Archive backup</a></p>
+    @endisset
     @if($bookmark->tags_count > 0)
     <ul>
       @foreach($bookmark->tags as $tag)
