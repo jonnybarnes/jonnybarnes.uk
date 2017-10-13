@@ -1,6 +1,6 @@
 # Changelog
 
-## Version {next}
+## Version 0.10 (20017-10-13)
   - Bookmarks!
     - They can only be added via micropub
     - A screenshot is taken
