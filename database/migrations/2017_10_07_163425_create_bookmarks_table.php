@@ -19,7 +19,7 @@ class CreateBookmarksTable extends Migration
             $table->string('name')->nullable();
             $table->text('content')->nullable();
             $table->uuid('screenshot')->nullable();
-            $table->string('archve')->nullable();
+            $table->string('archive')->nullable();
             $table->timestamps();
         });
     }

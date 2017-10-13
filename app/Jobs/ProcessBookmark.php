@@ -46,8 +46,8 @@ class ProcessBookmark implements ShouldQueue
         //get an internet archive link
         $response = $client->request('GET', 'https://web.archive.org/save/' . $this->bookmark->url);
         if ($response->hasHeader('Content-Location')) {
-            if (starts_with($response->getHeader('Content-Location'), '/web')) {
-                $this->bookmark->archive = $response->getHeader('Content-Location');
+            if (starts_with($response->getHeader('Content-Location')[0], '/web')) {
+                $this->bookmark->archive = $response->getHeader('Content-Location')[0];
             }
         }
 
