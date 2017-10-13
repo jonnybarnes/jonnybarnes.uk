@@ -1,5 +1,11 @@
 # Changelog
 
+## Version {next}
+  - Bookmarks!
+    - They can only be added via micropub
+    - A screenshot is taken
+    - The page is saved to the internet archive
+
 ## Version 0.9 (2017-10-06)
   - Add support for `likes` (issue#69)
   - Only included links on truncated syndicated notes https://brid.gy/about#omit-link
