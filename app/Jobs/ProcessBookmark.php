@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Bookmark;
 use Ramsey\Uuid\Uuid;
+use GuzzleHttp\Client;
 use Illuminate\Bus\Queueable;
 use Spatie\Image\Manipulations;
 use Spatie\Browsershot\Browsershot;
@@ -33,13 +34,24 @@ class ProcessBookmark implements ShouldQueue
      *
      * @return void
      */
-    public function handle(Browsershot $browsershot)
+    public function handle(Browsershot $browsershot, Client $client)
     {
+        //save a local screenshot
         $uuid = Uuid::uuid4();
         $browsershot->url($this->bookmark->url)
                     ->windowSize(960, 640)
                     ->save(public_path() . '/assets/img/bookmarks/' . $uuid . '.png');
         $this->bookmark->screenshot = $uuid;
+
+        //get an internet archive link
+        $response = $client->request('GET', 'https://web.archive.org/save/' . $this->bookmark->url);
+        if ($response->hasHeader('Content-Location')) {
+            if (starts_with($response->getHeader('Content-Location'), '/web')) {
+                $this->bookmark->archive = $response->getHeader('Content-Location');
+            }
+        }
+
+        //save
         $this->bookmark->save();
     }
 }
