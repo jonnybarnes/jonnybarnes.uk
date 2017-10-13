@@ -7,6 +7,7 @@ use Monolog\Logger;
 use Ramsey\Uuid\Uuid;
 use App\Jobs\ProcessImage;
 use App\Services\LikeService;
+use App\Services\BookmarkService;
 use Monolog\Handler\StreamHandler;
 use App\{Like, Media, Note, Place};
 use Intervention\Image\ImageManager;
@@ -81,6 +82,14 @@ class MicropubController extends Controller
                         'response' => 'created',
                         'location' => config('app.url') . "/likes/$like->id",
                     ], 201)->header('Location', config('app.url') . "/likes/$like->id");
+                }
+                if ($request->has('properties.bookmark-of') || $request->has('bookmark-of')) {
+                    $bookmark = (new BookmarkService())->createBookmark($request);
+
+                    return response()->json([
+                        'response' => 'created',
+                        'location' => config('app.url') . "/bookmarks/$bookmark->id",
+                    ], 201)->header('Location', config('app.url') . "/bookmarks/$bookmark->id");
                 }
                 $data = [];
                 $data['client-id'] = $tokenData->getClaim('client_id');

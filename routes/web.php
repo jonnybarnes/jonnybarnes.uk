@@ -114,6 +114,12 @@ Route::group(['domain' => config('url.longurl')], function () {
         Route::get('/{like}', 'LikesController@show');
     });
 
+    // Bookmarks
+    Route::group(['prefix' => 'bookmarks'], function () {
+        Route::get('/', 'BookmarksController@index');
+        Route::get('/{bookmark}', 'BookmarksController@show');
+    });
+
     // Micropub Client
     Route::group(['prefix' => 'micropub'], function () {
         Route::get('/create', 'MicropubClientController@create')->name('micropub-client');

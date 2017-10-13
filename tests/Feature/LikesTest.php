@@ -28,8 +28,8 @@ class LikesTest extends TestCase
 
     public function test_single_like_page()
     {
-        $response = $this->get('/likes');
-        $response->assertViewIs('likes.index');
+        $response = $this->get('/likes/1');
+        $response->assertViewIs('likes.show');
     }
 
     public function test_like_micropub_request()

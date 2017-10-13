@@ -1,0 +1,85 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Services;
+
+use App\Tag;
+use App\Bookmark;
+use Illuminate\Http\Request;
+use App\Jobs\ProcessBookmark;
+use App\Jobs\SyndicateBookmarkToTwitter;
+use App\Jobs\SyndicateBookmarkToFacebook;
+
+class BookmarkService
+{
+    /**
+     * Create a new Bookmark.
+     *
+     * @param  Request $request
+     */
+    public function createBookmark(Request $request): Bookmark
+    {
+        if ($request->header('Content-Type') == 'application/json') {
+            //micropub request
+            $url = normalize_url($request->input('properties.bookmark-of.0'));
+            $name = $request->input('properties.name.0');
+            $content = $request->input('properties.content.0');
+            $categories = $request->input('properties.category');
+        }
+        if (
+            ($request->header('Content-Type') == 'application/x-www-form-urlencoded')
+            ||
+            (str_contains($request->header('Content-Type'), 'multipart/form-data'))
+        ) {
+            $url = normalize_url($request->input('bookmark-of'));
+            $name = $request->input('name');
+            $content = $request->input('content');
+            $categories = $request->input('category');
+        }
+
+        $bookmark = Bookmark::create([
+            'url' => $url,
+            'name' => $name,
+            'content' => $content,
+        ]);
+
+        foreach ((array) $categories as $category) {
+            $tag = Tag::firstOrCreate(['tag' => $category]);
+            $bookmark->tags()->save($tag);
+        }
+
+        $targets = array_pluck(config('syndication.targets'), 'uid', 'service.name');
+        $mpSyndicateTo = null;
+        if ($request->has('mp-syndicate-to')) {
+            $mpSyndicateTo = $request->input('mp-syndicate-to');
+        }
+        if ($request->has('properties.mp-syndicate-to')) {
+            $mpSyndicateTo = $request->input('properties.mp-syndicate-to');
+        }
+        if (is_string($mpSyndicateTo)) {
+            $service = array_search($mpSyndicateTo, $targets);
+            if ($service == 'Twitter') {
+                SyndicateBookmarkToTwitter::dispatch($bookmark);
+            }
+            if ($service == 'Facebook') {
+                SyndicateBookmarkToFacebook::dispatch($bookmark);
+            }
+        }
+        if (is_array($mpSyndicateTo)) {
+            foreach ($mpSyndicateTo as $uid) {
+                $service = array_search($uid, $targets);
+                if ($service == 'Twitter') {
+                    SyndicateBookmarkToTwitter::dispatch($bookmark);
+                }
+                if ($service == 'Facebook') {
+                    SyndicateBookmarkToFacebook::dispatch($bookmark);
+                }
+            }
+        }
+
+        ProcessBookmark::dispatch($bookmark);
+
+        return $bookmark;
+    }
+}
