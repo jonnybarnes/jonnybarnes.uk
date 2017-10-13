@@ -20,6 +20,9 @@ Bookmarks «
     @isset($bookmark->content)
     <p>{{ $bookmark->content }}</p>
     @endisset
+    @isset($bookmark->screenshot)
+    <img src="/assets/img/bookmarks/{{ $bookmark->screenshot }}.png">
+    @endisset
     @if($bookmark->tags_count > 0)
     <ul>
       @foreach($bookmark->tags as $tag)

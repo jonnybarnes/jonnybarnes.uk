@@ -7,6 +7,7 @@ use Monolog\Logger;
 use Ramsey\Uuid\Uuid;
 use App\Jobs\ProcessImage;
 use App\Services\LikeService;
+use App\Services\BookmarkService;
 use Monolog\Handler\StreamHandler;
 use App\{Like, Media, Note, Place};
 use Intervention\Image\ImageManager;

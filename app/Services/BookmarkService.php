@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Tag;
 use App\Bookmark;
 use Illuminate\Http\Request;
 use App\Jobs\ProcessBookmark;
@@ -15,7 +16,7 @@ class BookmarkService
      *
      * @param  Request $request
      */
-    public function createLike(Request $request): Bookmark
+    public function createBookmark(Request $request): Bookmark
     {
         if ($request->header('Content-Type') == 'application/json') {
             //micropub request
@@ -25,14 +26,14 @@ class BookmarkService
             $categories = $request->input('properties.category');
         }
         if (
-            ($request->header('Content-Type') == 'x-www-url-formencoded')
+            ($request->header('Content-Type') == 'application/x-www-form-urlencoded')
             ||
-            ($request->header('Content-Type') == 'multipart/form-data')
+            (str_contains($request->header('Content-Type'), 'multipart/form-data'))
         ) {
             $url = normalize_url($request->input('bookmark-of'));
             $name = $request->input('name');
             $content = $request->input('content');
-            $categories = $request->input('category[]');
+            $categories = $request->input('category');
         }
 
         $bookmark = Bookmark::create([
@@ -41,13 +42,13 @@ class BookmarkService
             'content' => $content,
         ]);
 
-        foreach($categories as $category) {
+        foreach((array) $categories as $category) {
             $tag = Tag::firstOrCreate(['tag' => $category]);
             $bookmark->tags()->save($tag);
         }
 
         ProcessBookmark::dispatch($bookmark);
 
-        return $Bookmark;
+        return $bookmark;
     }
 }

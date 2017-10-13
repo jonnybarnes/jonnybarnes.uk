@@ -18,6 +18,7 @@ class CreateBookmarksTable extends Migration
             $table->string('url');
             $table->string('name')->nullable();
             $table->text('content')->nullable();
+            $table->uuid('screenshot')->nullable();
             $table->timestamps();
         });
     }
