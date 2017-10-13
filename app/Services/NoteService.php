@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\{Media, Note, Place};
-use App\Jobs\{SendWebMentions, SyndicateToFacebook, SyndicateToTwitter};
+use App\Jobs\{SendWebMentions, SyndicateNoteToFacebook, SyndicateNoteToTwitter};
 
 class NoteService
 {
