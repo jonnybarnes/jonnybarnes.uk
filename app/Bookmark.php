@@ -22,7 +22,7 @@ class Bookmark extends Model
     }
 
     /**
-     * The full url of a bookmark
+     * The full url of a bookmark.
      */
     public function getLongurlAttribute()
     {

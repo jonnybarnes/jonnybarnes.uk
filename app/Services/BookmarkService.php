@@ -44,7 +44,7 @@ class BookmarkService
             'content' => $content,
         ]);
 
-        foreach((array) $categories as $category) {
+        foreach ((array) $categories as $category) {
             $tag = Tag::firstOrCreate(['tag' => $category]);
             $bookmark->tags()->save($tag);
         }
