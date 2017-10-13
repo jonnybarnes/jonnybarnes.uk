@@ -2,27 +2,27 @@
 
 namespace App\Jobs;
 
-use App\Note;
+use App\Bookmark;
 use GuzzleHttp\Client;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class SyndicateToFacebook implements ShouldQueue
+class SyndicateBookmarkToTwitter implements ShouldQueue
 {
     use InteractsWithQueue, Queueable, SerializesModels;
 
-    protected $note;
+    protected $bookmark;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct(Note $note)
+    public function __construct(Bookmark $bookmark)
     {
-        $this->note = $note;
+        $this->bookmark = $bookmark;
     }
 
     /**
@@ -38,8 +38,8 @@ class SyndicateToFacebook implements ShouldQueue
             'https://brid.gy/publish/webmention',
             [
                 'form_params' => [
-                    'source' => $this->note->longurl,
-                    'target' => 'https://brid.gy/publish/facebook',
+                    'source' => $this->bookmark->longurl,
+                    'target' => 'https://brid.gy/publish/twitter',
                     'bridgy_omit_link' => 'maybe',
                 ],
             ]
@@ -47,8 +47,8 @@ class SyndicateToFacebook implements ShouldQueue
         //parse for syndication URL
         if ($response->getStatusCode() == 201) {
             $json = json_decode((string) $response->getBody());
-            $this->note->facebook_url = $json->url;
-            $this->note->save();
+            $this->bookmark->update(['syndicates->twitter' => $json->url]);
+            $this->bookmark->save();
         }
     }
 }

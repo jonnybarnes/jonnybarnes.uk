@@ -24,6 +24,14 @@ class Tag extends Model
     }
 
     /**
+     * The bookmarks that belong to the tag.
+     */
+    public function bookmarks()
+    {
+        return $this->belongsToMany('App\Bookmark');
+    }
+
+    /**
      * The attributes excluded from the model's JSON form.
      *
      * @var array

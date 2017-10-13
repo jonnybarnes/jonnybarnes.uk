@@ -44,7 +44,7 @@ class ProcessImage implements ShouldQueue
             return;
         }
         //create smaller versions if necessary
-        if ($image->width() >= 1000) {
+        if ($image->width() > 1000) {
             $filenameParts = explode('.', $this->filename);
             $extension = array_pop($filenameParts);
             // the following acheives this data flow

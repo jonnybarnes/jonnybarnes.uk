@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\IndieWebUser;
-use IndieAuth\Client as IndieClient;
-use GuzzleHttp\Client as GuzzleClient;
 use Illuminate\Http\{Request, Response};
 use GuzzleHttp\Exception\{ClientException, ServerException};
 
@@ -14,8 +12,8 @@ class MicropubClientController extends Controller
      * Inject the dependencies.
      */
     public function __construct(
-        IndieClient $indieClient,
-        GuzzleClient $guzzleClient
+        \IndieAuth\Client $indieClient,
+        \GuzzleHttp\Client $guzzleClient
     ) {
         $this->indieClient = $indieClient;
         $this->guzzleClient = $guzzleClient;

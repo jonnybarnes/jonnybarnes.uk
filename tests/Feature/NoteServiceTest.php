@@ -4,8 +4,8 @@ namespace Tests\Feature;
 
 use Tests\TestCase;
 use App\Services\NoteService;
-use App\Jobs\SyndicateToTwitter;
-use App\Jobs\SyndicateToFacebook;
+use App\Jobs\SyndicateNoteToTwitter;
+use App\Jobs\SyndicateNoteToFacebook;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
@@ -24,7 +24,7 @@ class NoteServiceTest extends TestCase
             'syndicate' => ['twitter'],
         ]);
 
-        Queue::assertPushed(SyndicateToTwitter::class);
+        Queue::assertPushed(SyndicateNoteToTwitter::class);
     }
 
     public function test_syndicate_to_facebook_job_is_sent()
@@ -38,7 +38,7 @@ class NoteServiceTest extends TestCase
             'syndicate' => ['facebook'],
         ]);
 
-        Queue::assertPushed(SyndicateToFacebook::class);
+        Queue::assertPushed(SyndicateNoteToFacebook::class);
     }
 
     public function test_syndicate_to_target_jobs_are_sent()
@@ -52,7 +52,7 @@ class NoteServiceTest extends TestCase
             'syndicate' => ['twitter', 'facebook'],
         ]);
 
-        Queue::assertPushed(SyndicateToTwitter::class);
-        Queue::assertPushed(SyndicateToFacebook::class);
+        Queue::assertPushed(SyndicateNoteToTwitter::class);
+        Queue::assertPushed(SyndicateNoteToFacebook::class);
     }
 }

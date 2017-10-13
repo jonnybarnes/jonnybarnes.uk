@@ -19,5 +19,6 @@ class DatabaseSeeder extends Seeder
         $this->call(WebMentionsTableSeeder::class);
         $this->call(IndieWebUserTableSeeder::class);
         $this->call(LikesTableSeeder::class);
+        $this->call(BookmarksTableSeeder::class);
     }
 }
