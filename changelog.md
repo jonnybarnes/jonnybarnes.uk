@@ -1,6 +1,6 @@
 # Changelog
 
-## Version {next}
+## Version 0.11 (2017-10-19)
   - No more built-in micropub client
 
 ## Version 0.10 (20017-10-13)
