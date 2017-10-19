@@ -1,5 +1,8 @@
 # Changelog
 
+## Version {next}
+  - No more built-in micropub client
+
 ## Version 0.10 (20017-10-13)
   - Bookmarks!
     - They can only be added via micropub
