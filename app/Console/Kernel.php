@@ -16,7 +16,6 @@ class Kernel extends ConsoleKernel
         Commands\SecurityCheck::class,
         Commands\ParseCachedWebMentions::class,
         Commands\ReDownloadWebMentions::class,
-        Commands\GenerateToken::class,
     ];
 
     /**

@@ -120,26 +120,6 @@ Route::group(['domain' => config('url.longurl')], function () {
         Route::get('/{bookmark}', 'BookmarksController@show');
     });
 
-    // Micropub Client
-    Route::group(['prefix' => 'micropub'], function () {
-        Route::get('/create', 'MicropubClientController@create')->name('micropub-client');
-        Route::post('/', 'MicropubClientController@store')->name('micropub-client-post');
-        Route::get('/config', 'MicropubClientController@config')->name('micropub-config');
-        Route::get('/get-new-token', 'MicropubClientController@getNewToken')->name('micropub-client-get-new-token');
-        Route::get('/get-new-token/callback', 'MicropubClientController@getNewTokenCallback')->name('micropub-client-get-new-token-callback');
-        Route::get('/query-endpoint', 'MicropubClientController@queryEndpoint')->name('micropub-query-action');
-        Route::post('/update-syntax', 'MicropubClientController@updateSyntax')->name('micropub-update-syntax');
-        Route::get('/places', 'MicropubClientController@nearbyPlaces');
-        Route::post('/places', 'MicropubClientController@newPlace');
-        Route::post('/media', 'MicropubClientController@processMedia')->name('process-media');
-        Route::get('/media/clearlinks', 'MicropubClientController@clearLinks');
-    });
-
-    // IndieAuth
-    Route::post('indieauth/start', 'IndieAuthController@start')->name('indieauth-start');
-    Route::get('indieauth/callback', 'IndieAuthController@callback')->name('indieauth-callback');
-    Route::get('logout', 'IndieAuthController@logout')->name('indieauth-logout');
-
     // Token Endpoint
     Route::post('api/token', 'TokenEndpointController@create');
 

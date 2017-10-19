@@ -24,8 +24,8 @@ class TokenEndpointTest extends TestCase
         $response = $this->post('/api/token', [
             'me' => config('app.url'),
             'code' => 'abc123',
-            'redirect_uri' => route('indieauth-callback'),
-            'client_id' => route('micropub-client'),
+            'redirect_uri' => config('app.url') . '/indieauth-callback',
+            'client_id' => config('app.url') . '/micropub-client',
             'state' => mt_rand(1000, 10000),
         ]);
         parse_str($response->content(), $output);
