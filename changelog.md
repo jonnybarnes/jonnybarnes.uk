@@ -1,5 +1,8 @@
 # Changelog
 
+## Version {next}
+  - Improve eloquent queries for rendering notes with contacts
+
 ## Version 0.11 (2017-10-19)
   - No more built-in micropub client
 
