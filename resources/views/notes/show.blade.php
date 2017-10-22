@@ -1,7 +1,7 @@
 @extends('master')
 
 @section('title')
-{{ strip_tags($note->note) }} « Notes «
+{{ strip_tags($note->getOriginal('note')) }} « Notes «
 @stop
 
 @section('content')
