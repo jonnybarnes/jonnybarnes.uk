@@ -15,8 +15,8 @@ class NotesTableSeeder extends Seeder
         sleep(1);
         $noteWithPlace = App\Note::create([
             'note' => 'Having a #beer at the local. 🍺',
-            'tweet_id' => '123456789',
         ]);
+        $noteWithPlace->tweet_id = '123456789';
         $place = App\Place::find(1);
         $noteWithPlace->place()->associate($place);
         $noteWithPlace->save();
@@ -43,15 +43,17 @@ class NotesTableSeeder extends Seeder
         }
         $noteWithCoords = App\Note::create([
             'note' => 'Note from somehwere',
-            'location' => '53.499,-2.379'
         ]);
+        $noteWithCoords->location = '53.499,-2.379';
+        $noteWithCoords->save();
         sleep(1);
         $noteSyndicated = App\Note::create([
             'note' => 'This note has all the syndication targets',
-            'tweet_id' => '123456',
-            'facebook_url' => 'https://www.facebook.com/post/12345789',
-            'swarm_url' => 'https://www.swarmapp.com/checking/123456789',
-            'instagram_url' => 'https://www.instagra.com/p/aWsEd123Jh',
         ]);
+        $noteSyndicated->tweet_id = '123456';
+        $noteSyndicated->facebook_url = 'https://www.facebook.com/post/12345789';
+        $noteSyndicated->swarm_url = 'https://www.swarmapp.com/checking/123456789';
+        $noteSyndicated->instagram_url = 'https://www.instagram.com/p/aWsEd123Jh';
+        $noteSyndicated->save();
     }
 }

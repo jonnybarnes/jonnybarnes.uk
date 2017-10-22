@@ -4,6 +4,7 @@ namespace App;
 
 use Cache;
 use Twitter;
+use Debugbar;
 use Normalizer;
 use GuzzleHttp\Client;
 use Laravel\Scout\Searchable;
@@ -16,7 +17,6 @@ use Illuminate\Database\Eloquent\Model;
 use Jonnybarnes\EmojiA11y\EmojiModifier;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Jonnybarnes\CommonmarkLinkify\LinkifyExtension;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class Note extends Model
 {
@@ -28,7 +28,15 @@ class Note extends Model
      *
      * @var string
      */
-    private const USERNAMES_REGEX = '/\[.*?\](*SKIP)(*F)|@(\w+)/';
+    private const USERNAMES_REGEX = '/@(\w+)/';
+
+    protected $contacts;
+
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+        $this->contacts = null;
+    }
 
     /**
      * The database table used by the model.
@@ -36,6 +44,24 @@ class Note extends Model
      * @var string
      */
     protected $table = 'notes';
+
+    /*
+     * Mass-assignment
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'note',
+        'in_reply_to',
+        'client_id',
+    ];
+
+    /**
+     * Hide the column used with Laravel Scout.
+     *
+     * @var array
+     */
+    protected $hidden = ['searchable'];
 
     /**
      * Define the relationship with tags.
@@ -88,27 +114,6 @@ class Note extends Model
     }
 
     /**
-     * We shall set a blacklist of non-modifiable model attributes.
-     *
-     * @var array
-     */
-    protected $guarded = ['id'];
-
-    /**
-     * Hide the column used with Laravel Scout.
-     *
-     * @var array
-     */
-    protected $hidden = ['searchable'];
-
-    /**
-     * The attributes that should be mutated to dates.
-     *
-     * @var array
-     */
-    protected $dates = ['deleted_at'];
-
-    /**
      * Set the attributes to be indexed for searching with Scout.
      *
      * @return array
@@ -141,9 +146,9 @@ class Note extends Model
     {
         $emoji = new EmojiModifier();
 
-        $html = $this->convertMarkdown($value);
-        $hcards = $this->makeHCards($html);
-        $hashtags = $this->autoLinkHashtag($hcards);
+        $hcards = $this->makeHCards($value);
+        $html = $this->convertMarkdown($hcards);
+        $hashtags = $this->autoLinkHashtag($html);
         $modified = $emoji->makeEmojiAccessible($hashtags);
 
         return $modified;
@@ -297,21 +302,16 @@ class Note extends Model
      */
     public function getTwitterContentAttribute()
     {
-        // find @mentions
-        preg_match_all(self::USERNAMES_REGEX, $this->getOriginal('note'), $matches);
-        if (count($matches[1]) === 0) {
+        if ($this->contacts === null) {
             return;
         }
 
-        // check if any @mentions have a contact associated with them
-        $count = 0;
-        foreach ($matches[1] as $match) {
-            $contact = Contact::where('nick', '=', mb_strtolower($match))->first();
-            if ($contact) {
-                $count++;
-            }
+        if (count($this->contacts) === 0) {
+            return;
         }
-        if ($count === 0) {
+
+        if (count(array_unique(array_values($this->contacts))) === 1
+            && array_unique(array_values($this->contacts))[0] === null) {
             return;
         }
 
@@ -319,12 +319,11 @@ class Note extends Model
         $swapped = preg_replace_callback(
             self::USERNAMES_REGEX,
             function ($matches) {
-                try {
-                    $contact = Contact::where('nick', '=', mb_strtolower($matches[1]))->firstOrFail();
-                } catch (ModelNotFoundException $e) {
-                    //assume its an actual twitter handle
+                if (is_null($this->contacts[$matches[1]])) {
                     return $matches[0];
                 }
+
+                $contact = $this->contacts[$matches[1]];
                 if ($contact->twitter) {
                     return '@' . $contact->twitter;
                 }
@@ -339,21 +338,12 @@ class Note extends Model
 
     public function getFacebookContentAttribute()
     {
-        // find @mentions
-        preg_match_all(self::USERNAMES_REGEX, $this->getOriginal('note'), $matches);
-        if (count($matches[1]) === 0) {
+        if (count($this->contacts) === 0) {
             return;
         }
 
-        // check if any @mentions have a contact associated with them
-        $count = 0;
-        foreach ($matches[1] as $match) {
-            $contact = Contact::where('nick', '=', mb_strtolower($match))->first();
-            if ($contact) {
-                $count++;
-            }
-        }
-        if ($count === 0) {
+        if (count(array_unique(array_values($this->contacts))) === 1
+            && array_unique(array_values($this->contacts))[0] === null) {
             return;
         }
 
@@ -361,12 +351,11 @@ class Note extends Model
         $swapped = preg_replace_callback(
             self::USERNAMES_REGEX,
             function ($matches) {
-                try {
-                    $contact = Contact::where('nick', '=', mb_strtolower($matches[1]))->firstOrFail();
-                } catch (ModelNotFoundException $e) {
-                    //assume its an actual twitter handle
+                if (is_null($this->contacts[$matches[1]])) {
                     return $matches[0];
                 }
+
+                $contact = $this->contacts[$matches[1]];
                 if ($contact->facebook) {
                     return '<a class="u-category h-card" href="https://facebook.com/'
                            . $contact->facebook . '">' . $contact->name . '</a>';
@@ -405,15 +394,20 @@ class Note extends Model
      */
     private function makeHCards($text)
     {
+        $this->getContacts();
+
+        if (count($this->contacts) === 0) {
+            return $text;
+        }
+
         $hcards = preg_replace_callback(
             self::USERNAMES_REGEX,
             function ($matches) {
-                try {
-                    $contact = Contact::where('nick', '=', mb_strtolower($matches[1]))->firstOrFail();
-                } catch (ModelNotFoundException $e) {
-                    //assume its an actual twitter handle
+                if (is_null($this->contacts[$matches[1]])) {
                     return '<a href="https://twitter.com/' . $matches[1] . '">' . $matches[0] . '</a>';
                 }
+
+                $contact = $this->contacts[$matches[1]]; // easier to read the following code
                 $host = parse_url($contact->homepage, PHP_URL_HOST);
                 $contact->photo = (file_exists(public_path() . '/assets/profile-images/' . $host . '/image')) ?
                     '/assets/profile-images/' . $host . '/image'
@@ -426,6 +420,28 @@ class Note extends Model
         );
 
         return $hcards;
+    }
+
+    public function getContacts()
+    {
+        if ($this->contacts === null) {
+            $this->setContacts();
+        }
+    }
+
+    public function setContacts()
+    {
+        $contacts = [];
+        if ($this->getOriginal('note')) {
+            preg_match_all(self::USERNAMES_REGEX, $this->getoriginal('note'), $matches);
+
+            foreach ($matches[1] as $match) {
+                Debugbar::info('query inside getContacts');
+                $contacts[$match] = Contact::where('nick', mb_strtolower($match))->first();
+            }
+        }
+
+        $this->contacts = $contacts;
     }
 
     /**
