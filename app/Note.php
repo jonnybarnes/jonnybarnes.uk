@@ -4,7 +4,6 @@ namespace App;
 
 use Cache;
 use Twitter;
-use Debugbar;
 use Normalizer;
 use GuzzleHttp\Client;
 use Laravel\Scout\Searchable;
@@ -28,7 +27,7 @@ class Note extends Model
      *
      * @var string
      */
-    private const USERNAMES_REGEX = '/@(\w+)/';
+    private const USERNAMES_REGEX = '/\[.*?\](*SKIP)(*F)|@(\w+)/';
 
     protected $contacts;
 
@@ -436,7 +435,6 @@ class Note extends Model
             preg_match_all(self::USERNAMES_REGEX, $this->getoriginal('note'), $matches);
 
             foreach ($matches[1] as $match) {
-                Debugbar::info('query inside getContacts');
                 $contacts[$match] = Contact::where('nick', mb_strtolower($match))->first();
             }
         }

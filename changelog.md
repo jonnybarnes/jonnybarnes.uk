@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 0.11.2 (2017-10-22)
+  - This hotfix removes reference to a de package not installed on production
+
 ## Version 0.11.1 (2017-10-22)
   - Improve eloquent queries for rendering notes with contacts
 
