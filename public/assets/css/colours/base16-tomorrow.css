@@ -1,0 +1,19 @@
+/* base16-tomorrow.css */
+:root {
+    --black: #ffffff; /* base00*/
+    --red: #c82829; /* base08 */
+    --green: #718c00; /* base0B */
+    --yellow: #eab700; /* base0A */
+    --blue: #4271ae; /* base0D */
+    --magenta: #8959a8; /* base0E */
+    --cyan: #3e999f; /* base0C */
+    --white: #4d4d4c; /* base05 */
+    --brblack: #8e908c; /* base03 */
+    --brred: #c82829; /* base08 */
+    --brgreen: #718c00; /* base0B */
+    --bryellow: #eab700; /* base0A */
+    --brblue: #4271ae; /* base0D */
+    --brmagenta: #8959a8; /* base0E */
+    --brcyan: #3e999f; /* base0C */
+    --brwhite: #1d1f21; /* base07 */
+}

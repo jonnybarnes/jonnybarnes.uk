@@ -1,0 +1,19 @@
+//main.scss
+
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    max-width: $body-width;
+    margin: 0 auto;
+    padding: 0 0.5rem;
+}
+
+.h-entry {
+    font-size: 2rem;
+}
+
+// add some padding to the top for pages that need it
+.top-space {
+    padding-top: 2rem;
+}

@@ -1,0 +1,19 @@
+/* base16-phd.css */
+:root {
+    --black: #061229; /* base00*/
+    --red: #d07346; /* base08 */
+    --green: #99bf52; /* base0B */
+    --yellow: #fbd461; /* base0A */
+    --blue: #5299bf; /* base0D */
+    --magenta: #9989cc; /* base0E */
+    --cyan: #72b9bf; /* base0C */
+    --white: #b8bbc2; /* base05 */
+    --brblack: #717885; /* base03 */
+    --brred: #d07346; /* base08 */
+    --brgreen: #99bf52; /* base0B */
+    --bryellow: #fbd461; /* base0A */
+    --brblue: #5299bf; /* base0D */
+    --brmagenta: #9989cc; /* base0E */
+    --brcyan: #72b9bf; /* base0C */
+    --brwhite: #ffffff; /* base07 */
+}

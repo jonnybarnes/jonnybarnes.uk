@@ -1,0 +1,19 @@
+/* base16-gruvbox-dark-pale.css */
+:root {
+    --black: #262626; /* base00*/
+    --red: #d75f5f; /* base08 */
+    --green: #afaf00; /* base0B */
+    --yellow: #ffaf00; /* base0A */
+    --blue: #83adad; /* base0D */
+    --magenta: #d485ad; /* base0E */
+    --cyan: #85ad85; /* base0C */
+    --white: #dab997; /* base05 */
+    --brblack: #8a8a8a; /* base03 */
+    --brred: #d75f5f; /* base08 */
+    --brgreen: #afaf00; /* base0B */
+    --bryellow: #ffaf00; /* base0A */
+    --brblue: #83adad; /* base0D */
+    --brmagenta: #d485ad; /* base0E */
+    --brcyan: #85ad85; /* base0C */
+    --brwhite: #ebdbb2; /* base07 */
+}

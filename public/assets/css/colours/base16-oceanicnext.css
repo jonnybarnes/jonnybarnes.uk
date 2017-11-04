@@ -1,0 +1,19 @@
+/* base16-oceanicnext.css */
+:root {
+    --black: #1B2B34; /* base00*/
+    --red: #EC5f67; /* base08 */
+    --green: #99C794; /* base0B */
+    --yellow: #FAC863; /* base0A */
+    --blue: #6699CC; /* base0D */
+    --magenta: #C594C5; /* base0E */
+    --cyan: #5FB3B3; /* base0C */
+    --white: #C0C5CE; /* base05 */
+    --brblack: #65737E; /* base03 */
+    --brred: #EC5f67; /* base08 */
+    --brgreen: #99C794; /* base0B */
+    --bryellow: #FAC863; /* base0A */
+    --brblue: #6699CC; /* base0D */
+    --brmagenta: #C594C5; /* base0E */
+    --brcyan: #5FB3B3; /* base0C */
+    --brwhite: #D8DEE9; /* base07 */
+}

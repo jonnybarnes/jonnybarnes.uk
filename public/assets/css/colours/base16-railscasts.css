@@ -1,0 +1,19 @@
+/* base16-railscasts.css */
+:root {
+    --black: #2b2b2b; /* base00*/
+    --red: #da4939; /* base08 */
+    --green: #a5c261; /* base0B */
+    --yellow: #ffc66d; /* base0A */
+    --blue: #6d9cbe; /* base0D */
+    --magenta: #b6b3eb; /* base0E */
+    --cyan: #519f50; /* base0C */
+    --white: #e6e1dc; /* base05 */
+    --brblack: #5a647e; /* base03 */
+    --brred: #da4939; /* base08 */
+    --brgreen: #a5c261; /* base0B */
+    --bryellow: #ffc66d; /* base0A */
+    --brblue: #6d9cbe; /* base0D */
+    --brmagenta: #b6b3eb; /* base0E */
+    --brcyan: #519f50; /* base0C */
+    --brwhite: #f9f7f3; /* base07 */
+}

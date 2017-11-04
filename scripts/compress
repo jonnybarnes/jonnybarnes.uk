@@ -4,20 +4,20 @@ echo "compressing app.css and prism files"
 zopfli --i100 ./public/assets/css/app.css
 zopfli --i100 ./public/assets/prism/prism.css
 zopfli --i100 ./public/assets/prism/prism.js
-bro --force --quality 11 --input ./public/assets/css/app.css --output ./public/assets/css/app.css.br
-bro --force --quality 11 --input ./public/assets/prism/prism.css --output ./public/assets/prism/prism.css.br
-bro --force --quality 11 --input ./public/assets/prism/prism.js --output ./public/assets/prism/prism.js.br
+brotli --force --quality=11 --output=./public/assets/css/app.css.br -- ./public/assets/css/app.css
+brotli --force --quality=11 --output=./public/assets/prism/prism.css.br -- ./public/assets/prism/prism.css
+brotli --force --quality=11 --output=./public/assets/prism/prism.js.br -- ./public/assets/prism/prism.js
 
 echo "compressing js assets"
 for file in ./public/assets/js/*.js
 do
     zopfli --i100 $file
-    bro --force --quality 11 --input $file --output $file.br
+    brotli --force --quality=11 --output=$file.br -- $file
 done
 
 echo "compressing frontend assets"
 for file in ./public/assets/frontend/*.css
 do
     zopfli --i100 $file
-    bro --force --quality 11 --input $file --output $file.br
+    brotli --force --quality=11 --output=$file.br -- $file
 done

@@ -1,0 +1,19 @@
+/* base16-harmonic-light.css */
+:root {
+    --black: #f7f9fb; /* base00*/
+    --red: #bf8b56; /* base08 */
+    --green: #56bf8b; /* base0B */
+    --yellow: #8bbf56; /* base0A */
+    --blue: #8b56bf; /* base0D */
+    --magenta: #bf568b; /* base0E */
+    --cyan: #568bbf; /* base0C */
+    --white: #405c79; /* base05 */
+    --brblack: #aabcce; /* base03 */
+    --brred: #bf8b56; /* base08 */
+    --brgreen: #56bf8b; /* base0B */
+    --bryellow: #8bbf56; /* base0A */
+    --brblue: #8b56bf; /* base0D */
+    --brmagenta: #bf568b; /* base0E */
+    --brcyan: #568bbf; /* base0C */
+    --brwhite: #0b1c2c; /* base07 */
+}

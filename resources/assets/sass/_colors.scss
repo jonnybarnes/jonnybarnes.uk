@@ -1,0 +1,16 @@
+//colors.scss
+
+body {
+    background-color: var(--brwhite);
+    color: var(--black);
+}
+
+#topheader {
+    background-color: var(--black);
+    color: var(--white);
+}
+
+a,
+a:visited {
+    color: var(--blue);
+}

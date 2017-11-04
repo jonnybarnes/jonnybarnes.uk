@@ -1,0 +1,19 @@
+/* base16-unikitty-light.css */
+:root {
+    --black: #ffffff; /* base00*/
+    --red: #d8137f; /* base08 */
+    --green: #17ad98; /* base0B */
+    --yellow: #dc8a0e; /* base0A */
+    --blue: #775dff; /* base0D */
+    --magenta: #aa17e6; /* base0E */
+    --cyan: #149bda; /* base0C */
+    --white: #6c696e; /* base05 */
+    --brblack: #a7a5a8; /* base03 */
+    --brred: #d8137f; /* base08 */
+    --brgreen: #17ad98; /* base0B */
+    --bryellow: #dc8a0e; /* base0A */
+    --brblue: #775dff; /* base0D */
+    --brmagenta: #aa17e6; /* base0E */
+    --brcyan: #149bda; /* base0C */
+    --brwhite: #322d34; /* base07 */
+}

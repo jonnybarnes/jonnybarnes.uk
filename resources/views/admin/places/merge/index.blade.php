@@ -1,14 +1,12 @@
 @extends('master')
 
-@section('title')
-Merge Places « Admin CP
-@stop
+@section('title')Merge Places « Admin CP « @stop
 
 @section('content')
-<p>We shall be merging {{ $first->name }}. It’s location is <code>Point({{ $first->location }})</code>.</p>
-<ul>
+            <p>We shall be merging {{ $first->name }}. It’s location is <code>Point({{ $first->location }})</code>.</p>
+            <ul>
 @foreach($places as $place)
-    <li><a href="/admin/places/{{ $first->id }}/merge/{{ $place->id }}">{{ $place->name }}</a></li>
+                <li><a href="/admin/places/{{ $first->id }}/merge/{{ $place->id }}">{{ $place->name }}</a></li>
 @endforeach
-</ul>
+            </ul>
 @stop

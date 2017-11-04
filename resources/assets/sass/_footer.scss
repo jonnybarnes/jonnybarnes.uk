@@ -1,0 +1,15 @@
+//footer.scss
+
+body > div.h-card {
+    max-width: $body-width;
+    margin: 0 auto;
+    font-size: 1.5rem;
+}
+
+footer {
+    max-width: $body-width;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}

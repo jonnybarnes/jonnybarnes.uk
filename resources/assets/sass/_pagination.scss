@@ -1,0 +1,9 @@
+//pagination.scss
+
+.pagination {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    font-size: 2rem;
+    list-style-type: none;
+}

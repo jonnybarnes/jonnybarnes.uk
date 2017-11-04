@@ -1,0 +1,19 @@
+/* base16-pico.css */
+:root {
+    --black: #000000; /* base00*/
+    --red: #ff004d; /* base08 */
+    --green: #00e756; /* base0B */
+    --yellow: #fff024; /* base0A */
+    --blue: #83769c; /* base0D */
+    --magenta: #ff77a8; /* base0E */
+    --cyan: #29adff; /* base0C */
+    --white: #5f574f; /* base05 */
+    --brblack: #008751; /* base03 */
+    --brred: #ff004d; /* base08 */
+    --brgreen: #00e756; /* base0B */
+    --bryellow: #fff024; /* base0A */
+    --brblue: #83769c; /* base0D */
+    --brmagenta: #ff77a8; /* base0E */
+    --brcyan: #29adff; /* base0C */
+    --brwhite: #fff1e8; /* base07 */
+}

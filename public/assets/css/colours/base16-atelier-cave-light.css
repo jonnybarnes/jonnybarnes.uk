@@ -1,0 +1,19 @@
+/* base16-atelier-cave-light.css */
+:root {
+    --black: #efecf4; /* base00*/
+    --red: #be4678; /* base08 */
+    --green: #2a9292; /* base0B */
+    --yellow: #a06e3b; /* base0A */
+    --blue: #576ddb; /* base0D */
+    --magenta: #955ae7; /* base0E */
+    --cyan: #398bc6; /* base0C */
+    --white: #585260; /* base05 */
+    --brblack: #7e7887; /* base03 */
+    --brred: #be4678; /* base08 */
+    --brgreen: #2a9292; /* base0B */
+    --bryellow: #a06e3b; /* base0A */
+    --brblue: #576ddb; /* base0D */
+    --brmagenta: #955ae7; /* base0E */
+    --brcyan: #398bc6; /* base0C */
+    --brwhite: #19171c; /* base07 */
+}

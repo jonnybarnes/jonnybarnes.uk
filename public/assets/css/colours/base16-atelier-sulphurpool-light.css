@@ -1,0 +1,19 @@
+/* base16-atelier-sulphurpool-light.css */
+:root {
+    --black: #f5f7ff; /* base00*/
+    --red: #c94922; /* base08 */
+    --green: #ac9739; /* base0B */
+    --yellow: #c08b30; /* base0A */
+    --blue: #3d8fd1; /* base0D */
+    --magenta: #6679cc; /* base0E */
+    --cyan: #22a2c9; /* base0C */
+    --white: #5e6687; /* base05 */
+    --brblack: #898ea4; /* base03 */
+    --brred: #c94922; /* base08 */
+    --brgreen: #ac9739; /* base0B */
+    --bryellow: #c08b30; /* base0A */
+    --brblue: #3d8fd1; /* base0D */
+    --brmagenta: #6679cc; /* base0E */
+    --brcyan: #22a2c9; /* base0C */
+    --brwhite: #202746; /* base07 */
+}

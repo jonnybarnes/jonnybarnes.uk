@@ -1,0 +1,19 @@
+/* base16-atelier-seaside-light.css */
+:root {
+    --black: #f4fbf4; /* base00*/
+    --red: #e6193c; /* base08 */
+    --green: #29a329; /* base0B */
+    --yellow: #98981b; /* base0A */
+    --blue: #3d62f5; /* base0D */
+    --magenta: #ad2bee; /* base0E */
+    --cyan: #1999b3; /* base0C */
+    --white: #5e6e5e; /* base05 */
+    --brblack: #809980; /* base03 */
+    --brred: #e6193c; /* base08 */
+    --brgreen: #29a329; /* base0B */
+    --bryellow: #98981b; /* base0A */
+    --brblue: #3d62f5; /* base0D */
+    --brmagenta: #ad2bee; /* base0E */
+    --brcyan: #1999b3; /* base0C */
+    --brwhite: #131513; /* base07 */
+}

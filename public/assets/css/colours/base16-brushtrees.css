@@ -1,0 +1,19 @@
+/* base16-brushtrees.css */
+:root {
+    --black: #E3EFEF; /* base00*/
+    --red: #b38686; /* base08 */
+    --green: #87b386; /* base0B */
+    --yellow: #aab386; /* base0A */
+    --blue: #868cb3; /* base0D */
+    --magenta: #b386b2; /* base0E */
+    --cyan: #86b3b3; /* base0C */
+    --white: #6D828E; /* base05 */
+    --brblack: #98AFB5; /* base03 */
+    --brred: #b38686; /* base08 */
+    --brgreen: #87b386; /* base0B */
+    --bryellow: #aab386; /* base0A */
+    --brblue: #868cb3; /* base0D */
+    --brmagenta: #b386b2; /* base0E */
+    --brcyan: #86b3b3; /* base0C */
+    --brwhite: #485867; /* base07 */
+}

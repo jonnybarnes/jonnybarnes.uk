@@ -1,0 +1,19 @@
+/* base16-darktooth.css */
+:root {
+    --black: #1D2021; /* base00*/
+    --red: #FB543F; /* base08 */
+    --green: #95C085; /* base0B */
+    --yellow: #FAC03B; /* base0A */
+    --blue: #0D6678; /* base0D */
+    --magenta: #8F4673; /* base0E */
+    --cyan: #8BA59B; /* base0C */
+    --white: #A89984; /* base05 */
+    --brblack: #665C54; /* base03 */
+    --brred: #FB543F; /* base08 */
+    --brgreen: #95C085; /* base0B */
+    --bryellow: #FAC03B; /* base0A */
+    --brblue: #0D6678; /* base0D */
+    --brmagenta: #8F4673; /* base0E */
+    --brcyan: #8BA59B; /* base0C */
+    --brwhite: #FDF4C1; /* base07 */
+}

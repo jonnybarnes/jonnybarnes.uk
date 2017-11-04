@@ -1,0 +1,19 @@
+/* base16-materia.css */
+:root {
+    --black: #263238; /* base00*/
+    --red: #EC5F67; /* base08 */
+    --green: #8BD649; /* base0B */
+    --yellow: #FFCC00; /* base0A */
+    --blue: #89DDFF; /* base0D */
+    --magenta: #82AAFF; /* base0E */
+    --cyan: #80CBC4; /* base0C */
+    --white: #CDD3DE; /* base05 */
+    --brblack: #707880; /* base03 */
+    --brred: #EC5F67; /* base08 */
+    --brgreen: #8BD649; /* base0B */
+    --bryellow: #FFCC00; /* base0A */
+    --brblue: #89DDFF; /* base0D */
+    --brmagenta: #82AAFF; /* base0E */
+    --brcyan: #80CBC4; /* base0C */
+    --brwhite: #FFFFFF; /* base07 */
+}

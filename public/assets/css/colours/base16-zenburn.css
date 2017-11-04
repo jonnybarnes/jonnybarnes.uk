@@ -1,0 +1,19 @@
+/* base16-zenburn.css */
+:root {
+    --black: #3f3f3f; /* base00*/
+    --red: #dca3a3; /* base08 */
+    --green: #5f7f5f; /* base0B */
+    --yellow: #e0cf9f; /* base0A */
+    --blue: #7cb8bb; /* base0D */
+    --magenta: #dc8cc3; /* base0E */
+    --cyan: #93e0e3; /* base0C */
+    --white: #dcdccc; /* base05 */
+    --brblack: #4f4f4f; /* base03 */
+    --brred: #dca3a3; /* base08 */
+    --brgreen: #5f7f5f; /* base0B */
+    --bryellow: #e0cf9f; /* base0A */
+    --brblue: #7cb8bb; /* base0D */
+    --brmagenta: #dc8cc3; /* base0E */
+    --brcyan: #93e0e3; /* base0C */
+    --brwhite: #ffffff; /* base07 */
+}

@@ -1,0 +1,19 @@
+/* base16-spacemacs.css */
+:root {
+    --black: #1f2022; /* base00*/
+    --red: #f2241f; /* base08 */
+    --green: #67b11d; /* base0B */
+    --yellow: #b1951d; /* base0A */
+    --blue: #4f97d7; /* base0D */
+    --magenta: #a31db1; /* base0E */
+    --cyan: #2d9574; /* base0C */
+    --white: #a3a3a3; /* base05 */
+    --brblack: #585858; /* base03 */
+    --brred: #f2241f; /* base08 */
+    --brgreen: #67b11d; /* base0B */
+    --bryellow: #b1951d; /* base0A */
+    --brblue: #4f97d7; /* base0D */
+    --brmagenta: #a31db1; /* base0E */
+    --brcyan: #2d9574; /* base0C */
+    --brwhite: #f8f8f8; /* base07 */
+}

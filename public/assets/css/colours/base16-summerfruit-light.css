@@ -1,0 +1,19 @@
+/* base16-summerfruit-light.css */
+:root {
+    --black: #FFFFFF; /* base00*/
+    --red: #FF0086; /* base08 */
+    --green: #00C918; /* base0B */
+    --yellow: #ABA800; /* base0A */
+    --blue: #3777E6; /* base0D */
+    --magenta: #AD00A1; /* base0E */
+    --cyan: #1FAAAA; /* base0C */
+    --white: #101010; /* base05 */
+    --brblack: #B0B0B0; /* base03 */
+    --brred: #FF0086; /* base08 */
+    --brgreen: #00C918; /* base0B */
+    --bryellow: #ABA800; /* base0A */
+    --brblue: #3777E6; /* base0D */
+    --brmagenta: #AD00A1; /* base0E */
+    --brcyan: #1FAAAA; /* base0C */
+    --brwhite: #202020; /* base07 */
+}

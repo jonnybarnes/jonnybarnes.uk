@@ -1,0 +1,19 @@
+/* base16-tube.css */
+:root {
+    --black: #231f20; /* base00*/
+    --red: #ee2e24; /* base08 */
+    --green: #00853e; /* base0B */
+    --yellow: #ffd204; /* base0A */
+    --blue: #009ddc; /* base0D */
+    --magenta: #98005d; /* base0E */
+    --cyan: #85cebc; /* base0C */
+    --white: #d9d8d8; /* base05 */
+    --brblack: #737171; /* base03 */
+    --brred: #ee2e24; /* base08 */
+    --brgreen: #00853e; /* base0B */
+    --bryellow: #ffd204; /* base0A */
+    --brblue: #009ddc; /* base0D */
+    --brmagenta: #98005d; /* base0E */
+    --brcyan: #85cebc; /* base0C */
+    --brwhite: #ffffff; /* base07 */
+}

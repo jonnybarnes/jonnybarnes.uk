@@ -1,0 +1,19 @@
+/* base16-ashes.css */
+:root {
+    --black: #1C2023; /* base00*/
+    --red: #C7AE95; /* base08 */
+    --green: #95C7AE; /* base0B */
+    --yellow: #AEC795; /* base0A */
+    --blue: #AE95C7; /* base0D */
+    --magenta: #C795AE; /* base0E */
+    --cyan: #95AEC7; /* base0C */
+    --white: #C7CCD1; /* base05 */
+    --brblack: #747C84; /* base03 */
+    --brred: #C7AE95; /* base08 */
+    --brgreen: #95C7AE; /* base0B */
+    --bryellow: #AEC795; /* base0A */
+    --brblue: #AE95C7; /* base0D */
+    --brmagenta: #C795AE; /* base0E */
+    --brcyan: #95AEC7; /* base0C */
+    --brwhite: #F3F4F5; /* base07 */
+}
