@@ -9,6 +9,11 @@
     font-size: 2rem;
 }
 
+.note img {
+    max-width: 100%;
+    max-height: 80vh;
+}
+
 .note-metadata {
     display: flex;
     flex-direction: row;

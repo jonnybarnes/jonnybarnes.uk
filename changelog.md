@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 0.12.2 (2017-11-07)
+  - Limit screen size of images in notes
+
 ## Version 0.12.1 (2017-11-07)
   - Change font
 
