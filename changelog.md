@@ -1,5 +1,8 @@
 # Changelog
 
+## Version {next}
+  - Pull in newer version of my linkify extension to fix errors
+
 ## Version 0.12.3 (2017-11-07)
   - Add a link to the `colours.js` so the colour scheme can be changed
 

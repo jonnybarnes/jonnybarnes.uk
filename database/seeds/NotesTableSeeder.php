@@ -55,5 +55,9 @@ class NotesTableSeeder extends Seeder
         $noteSyndicated->swarm_url = 'https://www.swarmapp.com/checking/123456789';
         $noteSyndicated->instagram_url = 'https://www.instagram.com/p/aWsEd123Jh';
         $noteSyndicated->save();
+        sleep(1);
+        $noteWithTextLinkandEmoji = App\Note::create([
+            'note' => 'I love https://duckduckgo.com 💕' // theres a two-heart emoji at the end of this
+        ]);
     }
 }
