@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "5fce6b7a8c2a845d98f3af68d3f3ed82",
+    "content-hash": "11f0c77f13203bac18baf4404014ec94",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.37.0",
+            "version": "3.37.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "24031a1ffbcd26dea0e55662198a3f5454e02cff"
+                "reference": "f3166fbdf14cea6898729dd945eaabdd211abe8f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/24031a1ffbcd26dea0e55662198a3f5454e02cff",
-                "reference": "24031a1ffbcd26dea0e55662198a3f5454e02cff",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/f3166fbdf14cea6898729dd945eaabdd211abe8f",
+                "reference": "f3166fbdf14cea6898729dd945eaabdd211abe8f",
                 "shasum": ""
             },
             "require": {
@@ -84,7 +84,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2017-11-07T00:13:20+00:00"
+            "time": "2017-11-07T20:32:15+00:00"
         },
         {
             "name": "barnabywalters/mf-cleaner",
@@ -1760,20 +1760,20 @@
         },
         {
             "name": "jonnybarnes/commonmark-linkify",
-            "version": "v0.2",
+            "version": "v0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jonnybarnes/commonmark-linkify.git",
-                "reference": "e41c51abdc2ccc9b71f719be0198cb78371574b4"
+                "reference": "6de548e2140cff0143b1ee166868275ec0a1174f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jonnybarnes/commonmark-linkify/zipball/e41c51abdc2ccc9b71f719be0198cb78371574b4",
-                "reference": "e41c51abdc2ccc9b71f719be0198cb78371574b4",
+                "url": "https://api.github.com/repos/jonnybarnes/commonmark-linkify/zipball/6de548e2140cff0143b1ee166868275ec0a1174f",
+                "reference": "6de548e2140cff0143b1ee166868275ec0a1174f",
                 "shasum": ""
             },
             "require": {
-                "league/commonmark": "^0.15.4",
+                "league/commonmark": "^0.16.0",
                 "php": "^7.0"
             },
             "require-dev": {
@@ -1801,7 +1801,7 @@
                 "commonmark",
                 "markdown"
             ],
-            "time": "2017-07-10T16:12:15+00:00"
+            "time": "2017-11-07T22:35:17+00:00"
         },
         {
             "name": "jonnybarnes/emoji-a11y",
@@ -1940,16 +1940,16 @@
         },
         {
             "name": "laravel/framework",
-            "version": "v5.5.19",
+            "version": "v5.5.20",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "c678100e84934ec85c9f8bc26bd0a60222682719"
+                "reference": "ce0019d22a83b1b240330ea4115ae27a4d75d79c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/c678100e84934ec85c9f8bc26bd0a60222682719",
-                "reference": "c678100e84934ec85c9f8bc26bd0a60222682719",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/ce0019d22a83b1b240330ea4115ae27a4d75d79c",
+                "reference": "ce0019d22a83b1b240330ea4115ae27a4d75d79c",
                 "shasum": ""
             },
             "require": {
@@ -2031,7 +2031,7 @@
                 "nexmo/client": "Required to use the Nexmo transport (~1.0).",
                 "pda/pheanstalk": "Required to use the beanstalk queue driver (~3.0).",
                 "predis/predis": "Required to use the redis cache and queue drivers (~1.0).",
-                "pusher/pusher-php-server": "Required to use the Pusher broadcast driver (~2.0).",
+                "pusher/pusher-php-server": "Required to use the Pusher broadcast driver (~3.0).",
                 "symfony/css-selector": "Required to use some of the crawler integration testing tools (~3.3).",
                 "symfony/dom-crawler": "Required to use most of the crawler integration testing tools (~3.3).",
                 "symfony/psr-http-message-bridge": "Required to psr7 bridging features (~1.0)."
@@ -2067,20 +2067,20 @@
                 "framework",
                 "laravel"
             ],
-            "time": "2017-10-25T19:10:45+00:00"
+            "time": "2017-11-07T14:24:50+00:00"
         },
         {
             "name": "laravel/horizon",
-            "version": "v1.0.6",
+            "version": "v1.0.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/horizon.git",
-                "reference": "0995e6a3c71838877afbfa7bd7e0f6d8c4c3bfa2"
+                "reference": "20ec777c3f007a4b026b93f63be6672b2fa3b43b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/horizon/zipball/0995e6a3c71838877afbfa7bd7e0f6d8c4c3bfa2",
-                "reference": "0995e6a3c71838877afbfa7bd7e0f6d8c4c3bfa2",
+                "url": "https://api.github.com/repos/laravel/horizon/zipball/20ec777c3f007a4b026b93f63be6672b2fa3b43b",
+                "reference": "20ec777c3f007a4b026b93f63be6672b2fa3b43b",
                 "shasum": ""
             },
             "require": {
@@ -2135,7 +2135,7 @@
                 "laravel",
                 "queue"
             ],
-            "time": "2017-11-02T19:10:36+00:00"
+            "time": "2017-11-04T18:13:57+00:00"
         },
         {
             "name": "laravel/scout",
@@ -2325,16 +2325,16 @@
         },
         {
             "name": "league/commonmark",
-            "version": "0.15.7",
+            "version": "0.16.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/commonmark.git",
-                "reference": "36d82f166e441dfa28643f8d01dd8bdd3a579adf"
+                "reference": "c0e41be0f80c51ad3170c9c713f74a0b8dec59ce"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/commonmark/zipball/36d82f166e441dfa28643f8d01dd8bdd3a579adf",
-                "reference": "36d82f166e441dfa28643f8d01dd8bdd3a579adf",
+                "url": "https://api.github.com/repos/thephpleague/commonmark/zipball/c0e41be0f80c51ad3170c9c713f74a0b8dec59ce",
+                "reference": "c0e41be0f80c51ad3170c9c713f74a0b8dec59ce",
                 "shasum": ""
             },
             "require": {
@@ -2350,7 +2350,7 @@
                 "jgm/commonmark": "0.28",
                 "michelf/php-markdown": "~1.4",
                 "mikehaertl/php-shellcommand": "~1.2.0",
-                "phpunit/phpunit": "~4.3|~5.0",
+                "phpunit/phpunit": "^4.8.35|~5.7",
                 "scrutinizer/ocular": "~1.1",
                 "symfony/finder": "~2.3|~3.0"
             },
@@ -2363,7 +2363,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "0.16-dev"
+                    "dev-master": "0.17-dev"
                 }
             },
             "autoload": {
@@ -2390,7 +2390,7 @@
                 "markdown",
                 "parser"
             ],
-            "time": "2017-10-26T15:41:07+00:00"
+            "time": "2017-10-31T00:49:55+00:00"
         },
         {
             "name": "league/flysystem",
