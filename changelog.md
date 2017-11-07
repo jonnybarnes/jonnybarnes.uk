@@ -1,6 +1,6 @@
 # Changelog
 
-## Version {next}
+## Version 0.12.3 (2017-11-07)
   - Add a link to the `colours.js` so the colour scheme can be changed
 
 ## Version 0.12.2 (2017-11-07)
