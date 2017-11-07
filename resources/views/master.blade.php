@@ -7,6 +7,7 @@
         <link rel="stylesheet" href="/assets/frontend/normalize.css">
         <link rel="stylesheet" id="colourScheme" href="/assets/css/colours/{{ session('css', 'base16-eighties.css') }}">
         <link rel="stylesheet" href="/assets/css/app.css">
+        <link rel="stylesheet" href="https://use.typekit.net/kmb3cdb.css">
         <link rel="alternate" type="application/rss+xml" title="Blog RSS Feed" href="/blog/feed.rss">
         <link rel="alternate" type="application/atom+xml" title="Blog Atom Feed" href="/blog/feed.atom">
         <link rel="alternate" type="application/json" title="Blog JSON Feed" href="/blog/feed.json">
