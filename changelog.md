@@ -1,6 +1,6 @@
 # Changelog
 
-## Version {next}
+## Version 0.12 (2017-11-07)
   - New style
     - Here we improve the sass code as well, better modularisation
     - Colour schemes are now selectable and stored in the session
