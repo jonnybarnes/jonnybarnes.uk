@@ -1,5 +1,8 @@
 # Changelog
 
+## Version {next}
+  - Change font
+
 ## Version 0.12 (2017-11-07)
   - New style
     - Here we improve the sass code as well, better modularisation
