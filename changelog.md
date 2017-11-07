@@ -4,6 +4,7 @@
   - New style
     - Here we improve the sass code as well, better modularisation
     - Colour schemes are now selectable and stored in the session
+    - Added a typekit font again
 
 ## Version 0.11.2 (2017-10-22)
   - This hotfix removes reference to a dev package not installed on production
