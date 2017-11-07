@@ -55,6 +55,7 @@ before_script:
   - php artisan migrate
   - php artisan db:seed
   - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9515 http://localhost:8000 &
+  - sleep 5
 
 script:
   - php vendor/bin/phpunit --coverage-text
