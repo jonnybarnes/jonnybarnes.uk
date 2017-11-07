@@ -1,0 +1,19 @@
+/* base16-google-light.css */
+:root {
+    --black: #ffffff; /* base00*/
+    --red: #CC342B; /* base08 */
+    --green: #198844; /* base0B */
+    --yellow: #FBA922; /* base0A */
+    --blue: #3971ED; /* base0D */
+    --magenta: #A36AC7; /* base0E */
+    --cyan: #3971ED; /* base0C */
+    --white: #373b41; /* base05 */
+    --brblack: #b4b7b4; /* base03 */
+    --brred: #CC342B; /* base08 */
+    --brgreen: #198844; /* base0B */
+    --bryellow: #FBA922; /* base0A */
+    --brblue: #3971ED; /* base0D */
+    --brmagenta: #A36AC7; /* base0E */
+    --brcyan: #3971ED; /* base0C */
+    --brwhite: #1d1f21; /* base07 */
+}

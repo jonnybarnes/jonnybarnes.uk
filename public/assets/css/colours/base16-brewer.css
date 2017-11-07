@@ -1,0 +1,19 @@
+/* base16-brewer.css */
+:root {
+    --black: #0c0d0e; /* base00*/
+    --red: #e31a1c; /* base08 */
+    --green: #31a354; /* base0B */
+    --yellow: #dca060; /* base0A */
+    --blue: #3182bd; /* base0D */
+    --magenta: #756bb1; /* base0E */
+    --cyan: #80b1d3; /* base0C */
+    --white: #b7b8b9; /* base05 */
+    --brblack: #737475; /* base03 */
+    --brred: #e31a1c; /* base08 */
+    --brgreen: #31a354; /* base0B */
+    --bryellow: #dca060; /* base0A */
+    --brblue: #3182bd; /* base0D */
+    --brmagenta: #756bb1; /* base0E */
+    --brcyan: #80b1d3; /* base0C */
+    --brwhite: #fcfdfe; /* base07 */
+}

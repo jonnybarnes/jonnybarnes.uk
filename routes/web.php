@@ -141,6 +141,8 @@ Route::group(['domain' => config('url.longurl')], function () {
     Route::get('places/{slug}', 'PlacesController@show');
 
     Route::get('search', 'SearchController@search');
+
+    Route::post('update-colour-scheme', 'SessionStoreController@saveColour');
 });
 
 //Short URL

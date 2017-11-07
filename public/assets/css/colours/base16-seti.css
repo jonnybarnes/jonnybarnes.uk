@@ -1,0 +1,19 @@
+/* base16-seti.css */
+:root {
+    --black: #151718; /* base00*/
+    --red: #Cd3f45; /* base08 */
+    --green: #9fca56; /* base0B */
+    --yellow: #e6cd69; /* base0A */
+    --blue: #55b5db; /* base0D */
+    --magenta: #a074c4; /* base0E */
+    --cyan: #55dbbe; /* base0C */
+    --white: #d6d6d6; /* base05 */
+    --brblack: #41535B; /* base03 */
+    --brred: #Cd3f45; /* base08 */
+    --brgreen: #9fca56; /* base0B */
+    --bryellow: #e6cd69; /* base0A */
+    --brblue: #55b5db; /* base0D */
+    --brmagenta: #a074c4; /* base0E */
+    --brcyan: #55dbbe; /* base0C */
+    --brwhite: #ffffff; /* base07 */
+}

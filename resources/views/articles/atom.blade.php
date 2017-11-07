@@ -5,7 +5,7 @@
     <id>{{ config('app.url')}}/blog</id>
     <updated>{{ $articles[0]->updated_at->toAtomString() }}</updated>
 
-    @foreach($articles as $article)
+@foreach($articles as $article)
     <entry>
         <title>{{ $article->title }}</title>
         <link href="{{ config('app.url') }}{{ $article->link }}" />
@@ -16,5 +16,5 @@
             <name>{{ config('app.display_name') }}</name>
         </author>
     </entry>
-    @endforeach
+@endforeach
 </feed>

@@ -1,0 +1,19 @@
+/* base16-github.css */
+:root {
+    --black: #ffffff; /* base00*/
+    --red: #ed6a43; /* base08 */
+    --green: #183691; /* base0B */
+    --yellow: #795da3; /* base0A */
+    --blue: #795da3; /* base0D */
+    --magenta: #a71d5d; /* base0E */
+    --cyan: #183691; /* base0C */
+    --white: #333333; /* base05 */
+    --brblack: #969896; /* base03 */
+    --brred: #ed6a43; /* base08 */
+    --brgreen: #183691; /* base0B */
+    --bryellow: #795da3; /* base0A */
+    --brblue: #795da3; /* base0D */
+    --brmagenta: #a71d5d; /* base0E */
+    --brcyan: #183691; /* base0C */
+    --brwhite: #ffffff; /* base07 */
+}

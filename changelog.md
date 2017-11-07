@@ -1,7 +1,13 @@
 # Changelog
 
+## Version 0.12 (2017-11-07)
+  - New style
+    - Here we improve the sass code as well, better modularisation
+    - Colour schemes are now selectable and stored in the session
+    - Added a typekit font again
+
 ## Version 0.11.2 (2017-10-22)
-  - This hotfix removes reference to a de package not installed on production
+  - This hotfix removes reference to a dev package not installed on production
 
 ## Version 0.11.1 (2017-10-22)
   - Improve eloquent queries for rendering notes with contacts

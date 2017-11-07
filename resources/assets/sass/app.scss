@@ -1,23 +1,33 @@
 // app.scss
 
-// https://css-tricks.com/box-sizing/#article-header-id-6
-// and https://css-tricks.com/rems-ems/
-html {
-    box-sizing: border-box;
-    font-size: 24px;
-}
+//variables used elsewhere
+@import "variables";
 
-*,
-*::before,
-*::after {
-    box-sizing: inherit;
-}
+//border-box
+@import "border-box";
 
-@import "layout";
-@import "styles";
-@import "pagination";
-@import "note-form";
-@import "mapbox";
-@import "contacts";
-@import "emoji";
+//base font styles
+@import "base-font";
+
+//layouts
+@import "header";
+@import "main";
+@import "notes";
+@import "contacts-page";
+@import "projects";
+@import "footer";
+
+//hide the custom bridgy posse content
 @import "bridgy-links";
+
+//style the emoji alt-text (a11y)
+@import "emoji";
+
+//style the mapbox maps
+@import "mapbox";
+
+//apply colors
+@import "colors";
+
+//apply styles
+@import "styles";

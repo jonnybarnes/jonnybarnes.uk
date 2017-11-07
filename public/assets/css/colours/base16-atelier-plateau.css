@@ -1,0 +1,19 @@
+/* base16-atelier-plateau.css */
+:root {
+    --black: #1b1818; /* base00*/
+    --red: #ca4949; /* base08 */
+    --green: #4b8b8b; /* base0B */
+    --yellow: #a06e3b; /* base0A */
+    --blue: #7272ca; /* base0D */
+    --magenta: #8464c4; /* base0E */
+    --cyan: #5485b6; /* base0C */
+    --white: #8a8585; /* base05 */
+    --brblack: #655d5d; /* base03 */
+    --brred: #ca4949; /* base08 */
+    --brgreen: #4b8b8b; /* base0B */
+    --bryellow: #a06e3b; /* base0A */
+    --brblue: #7272ca; /* base0D */
+    --brmagenta: #8464c4; /* base0E */
+    --brcyan: #5485b6; /* base0C */
+    --brwhite: #f4ecec; /* base07 */
+}

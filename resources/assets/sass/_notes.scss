@@ -1,0 +1,24 @@
+//notes.scss
+
+//the hovercard that is displayed in notes
+@import "hovercard";
+
+.note {
+    display: flex;
+    flex-direction: column;
+    font-size: 2rem;
+}
+
+.note-metadata {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.icon {
+    width: auto;
+    height: 1em;
+}
+
+//style the pagination links
+@import "pagination";

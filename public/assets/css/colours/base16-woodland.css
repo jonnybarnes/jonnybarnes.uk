@@ -1,0 +1,19 @@
+/* base16-woodland.css */
+:root {
+    --black: #231e18; /* base00*/
+    --red: #d35c5c; /* base08 */
+    --green: #b7ba53; /* base0B */
+    --yellow: #e0ac16; /* base0A */
+    --blue: #88a4d3; /* base0D */
+    --magenta: #bb90e2; /* base0E */
+    --cyan: #6eb958; /* base0C */
+    --white: #cabcb1; /* base05 */
+    --brblack: #9d8b70; /* base03 */
+    --brred: #d35c5c; /* base08 */
+    --brgreen: #b7ba53; /* base0B */
+    --bryellow: #e0ac16; /* base0A */
+    --brblue: #88a4d3; /* base0D */
+    --brmagenta: #bb90e2; /* base0E */
+    --brcyan: #6eb958; /* base0C */
+    --brwhite: #e4d4c8; /* base07 */
+}

@@ -1,0 +1,19 @@
+/* base16-bespin.css */
+:root {
+    --black: #28211c; /* base00*/
+    --red: #cf6a4c; /* base08 */
+    --green: #54be0d; /* base0B */
+    --yellow: #f9ee98; /* base0A */
+    --blue: #5ea6ea; /* base0D */
+    --magenta: #9b859d; /* base0E */
+    --cyan: #afc4db; /* base0C */
+    --white: #8a8986; /* base05 */
+    --brblack: #666666; /* base03 */
+    --brred: #cf6a4c; /* base08 */
+    --brgreen: #54be0d; /* base0B */
+    --bryellow: #f9ee98; /* base0A */
+    --brblue: #5ea6ea; /* base0D */
+    --brmagenta: #9b859d; /* base0E */
+    --brcyan: #afc4db; /* base0C */
+    --brwhite: #baae9e; /* base07 */
+}

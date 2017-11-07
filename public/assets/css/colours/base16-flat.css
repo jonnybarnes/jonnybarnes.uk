@@ -1,0 +1,19 @@
+/* base16-flat.css */
+:root {
+    --black: #2C3E50; /* base00*/
+    --red: #E74C3C; /* base08 */
+    --green: #2ECC71; /* base0B */
+    --yellow: #F1C40F; /* base0A */
+    --blue: #3498DB; /* base0D */
+    --magenta: #9B59B6; /* base0E */
+    --cyan: #1ABC9C; /* base0C */
+    --white: #e0e0e0; /* base05 */
+    --brblack: #95A5A6; /* base03 */
+    --brred: #E74C3C; /* base08 */
+    --brgreen: #2ECC71; /* base0B */
+    --bryellow: #F1C40F; /* base0A */
+    --brblue: #3498DB; /* base0D */
+    --brmagenta: #9B59B6; /* base0E */
+    --brcyan: #1ABC9C; /* base0C */
+    --brwhite: #ECF0F1; /* base07 */
+}

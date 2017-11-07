@@ -5,7 +5,7 @@
     <id>{{ config('app.url')}}/notes</id>
     <updated>{{ $notes[0]->updated_at->toAtomString() }}</updated>
 
-    @foreach($notes as $note)
+@foreach($notes as $note)
     <entry>
         <title>{{ strip_tags($note->note) }}</title>
         <link href="{{ $note->longurl }}" />
@@ -16,5 +16,5 @@
             <name>{{ config('app.display_name') }}</name>
         </author>
     </entry>
-    @endforeach
+@endforeach
 </feed>

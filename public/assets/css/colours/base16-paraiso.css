@@ -1,0 +1,19 @@
+/* base16-paraiso.css */
+:root {
+    --black: #2f1e2e; /* base00*/
+    --red: #ef6155; /* base08 */
+    --green: #48b685; /* base0B */
+    --yellow: #fec418; /* base0A */
+    --blue: #06b6ef; /* base0D */
+    --magenta: #815ba4; /* base0E */
+    --cyan: #5bc4bf; /* base0C */
+    --white: #a39e9b; /* base05 */
+    --brblack: #776e71; /* base03 */
+    --brred: #ef6155; /* base08 */
+    --brgreen: #48b685; /* base0B */
+    --bryellow: #fec418; /* base0A */
+    --brblue: #06b6ef; /* base0D */
+    --brmagenta: #815ba4; /* base0E */
+    --brcyan: #5bc4bf; /* base0C */
+    --brwhite: #e7e9db; /* base07 */
+}

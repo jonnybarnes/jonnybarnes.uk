@@ -1,0 +1,19 @@
+/* base16-atelier-forest-light.css */
+:root {
+    --black: #f1efee; /* base00*/
+    --red: #f22c40; /* base08 */
+    --green: #7b9726; /* base0B */
+    --yellow: #c38418; /* base0A */
+    --blue: #407ee7; /* base0D */
+    --magenta: #6666ea; /* base0E */
+    --cyan: #3d97b8; /* base0C */
+    --white: #68615e; /* base05 */
+    --brblack: #9c9491; /* base03 */
+    --brred: #f22c40; /* base08 */
+    --brgreen: #7b9726; /* base0B */
+    --bryellow: #c38418; /* base0A */
+    --brblue: #407ee7; /* base0D */
+    --brmagenta: #6666ea; /* base0E */
+    --brcyan: #3d97b8; /* base0C */
+    --brwhite: #1b1918; /* base07 */
+}

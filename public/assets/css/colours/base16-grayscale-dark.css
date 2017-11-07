@@ -1,0 +1,19 @@
+/* base16-grayscale-dark.css */
+:root {
+    --black: #101010; /* base00*/
+    --red: #7c7c7c; /* base08 */
+    --green: #8e8e8e; /* base0B */
+    --yellow: #a0a0a0; /* base0A */
+    --blue: #686868; /* base0D */
+    --magenta: #747474; /* base0E */
+    --cyan: #868686; /* base0C */
+    --white: #b9b9b9; /* base05 */
+    --brblack: #525252; /* base03 */
+    --brred: #7c7c7c; /* base08 */
+    --brgreen: #8e8e8e; /* base0B */
+    --bryellow: #a0a0a0; /* base0A */
+    --brblue: #686868; /* base0D */
+    --brmagenta: #747474; /* base0E */
+    --brcyan: #868686; /* base0C */
+    --brwhite: #f7f7f7; /* base07 */
+}

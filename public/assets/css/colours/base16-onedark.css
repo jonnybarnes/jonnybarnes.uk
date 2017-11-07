@@ -1,0 +1,19 @@
+/* base16-onedark.css */
+:root {
+    --black: #282c34; /* base00*/
+    --red: #e06c75; /* base08 */
+    --green: #98c379; /* base0B */
+    --yellow: #e5c07b; /* base0A */
+    --blue: #61afef; /* base0D */
+    --magenta: #c678dd; /* base0E */
+    --cyan: #56b6c2; /* base0C */
+    --white: #abb2bf; /* base05 */
+    --brblack: #545862; /* base03 */
+    --brred: #e06c75; /* base08 */
+    --brgreen: #98c379; /* base0B */
+    --bryellow: #e5c07b; /* base0A */
+    --brblue: #61afef; /* base0D */
+    --brmagenta: #c678dd; /* base0E */
+    --brcyan: #56b6c2; /* base0C */
+    --brwhite: #c8ccd4; /* base07 */
+}

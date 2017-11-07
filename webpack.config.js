@@ -9,7 +9,8 @@ const config = {
     maps: './maps.js',
     newnote: './newnote.js',
     piwik: './piwik.js',
-    places: './places.js'
+    places: './places.js',
+    colours: './colours.js'
   },
   output: {
     path: __dirname + '/public/assets/js',
