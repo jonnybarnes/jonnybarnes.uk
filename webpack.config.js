@@ -5,12 +5,11 @@ const config = {
   context: __dirname + '/resources/assets/es6',
   entry: {
     //app: './app.js',
+    colours: './colours.js',
     links: './links.js',
     maps: './maps.js',
-    newnote: './newnote.js',
     piwik: './piwik.js',
-    places: './places.js',
-    colours: './colours.js'
+    places: './places.js'
   },
   output: {
     path: __dirname + '/public/assets/js',
