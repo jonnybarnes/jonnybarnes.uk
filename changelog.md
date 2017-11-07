@@ -1,6 +1,6 @@
 # Changelog
 
-## Version {next}
+## Version 0.12.1 (2017-11-07)
   - Change font
 
 ## Version 0.12 (2017-11-07)
