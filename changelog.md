@@ -1,5 +1,8 @@
 # Changelog
 
+## Version {next}
+  - Fix style of tags on bookmarks page that had been visited
+
 ## Version 0.12.4 (2017-11-07)
   - Pull in newer version of my linkify extension to fix errors
 
