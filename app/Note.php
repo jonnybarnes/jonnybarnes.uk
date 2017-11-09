@@ -462,7 +462,7 @@ class Note extends Model
                 $name = str_replace('#', '', $name);
                 $replacements[$name] =
                   '<a rel="tag" class="p-category" href="/notes/tagged/'
-                    . Tag::normalizeTag($name)
+                    . Tag::normalize($name)
                     . '">#'
                     . $name
                     . '</a>';
