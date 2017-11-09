@@ -13,7 +13,8 @@
     list-style-type: none;
 }
 
-.tag {
+.tag,
+.tag:visited {
     background: var(--white);
     border-radius: 3px 0 0 3px;
     color: var(--black);

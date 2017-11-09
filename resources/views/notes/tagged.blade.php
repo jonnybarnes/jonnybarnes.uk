@@ -5,7 +5,7 @@
 @section('content')
             <h2>Notes tagged with <em>{{ $tag }}</em></h2>
 @foreach ($notes as $note)
-            <div>
+            <div class="note">
                 {!! $note->note !!}
                 <a href="/note/{{ $note->id }}">{{ $note->humandiff }}</a>
             </div>

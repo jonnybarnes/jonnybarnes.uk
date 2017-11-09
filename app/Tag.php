@@ -7,13 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class Tag extends Model
 {
     /**
-     * The database table used by the model.
-     *
-     * @var string
-     */
-    protected $table = 'tags';
-
-    /**
      * Define the relationship with tags.
      *
      * @var array
@@ -32,13 +25,6 @@ class Tag extends Model
     }
 
     /**
-     * The attributes excluded from the model's JSON form.
-     *
-     * @var array
-     */
-    protected $hidden = ['deleted'];
-
-    /**
      * We shall set a blacklist of non-modifiable model attributes.
      *
      * @var array
@@ -52,7 +38,7 @@ class Tag extends Model
      */
     public function setTagAttribute($value)
     {
-        $this->attributes['tag'] = $this->normalizeTag($value);
+        $this->attributes['tag'] = $this->normalize($value);
     }
 
     /**
@@ -61,7 +47,7 @@ class Tag extends Model
      *
      * @param  string
      */
-    public static function normalizeTag($tag)
+    public static function normalize($tag)
     {
         return mb_strtolower(
             preg_replace(
