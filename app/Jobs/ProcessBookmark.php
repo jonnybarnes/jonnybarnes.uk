@@ -3,14 +3,12 @@
 namespace App\Jobs;
 
 use App\Bookmark;
-use Ramsey\Uuid\Uuid;
-use GuzzleHttp\Client;
 use Illuminate\Bus\Queueable;
-use Spatie\Browsershot\Browsershot;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use App\Exceptions\InternetArchiveErrorSavingException;
 
 class ProcessBookmark implements ShouldQueue
 {
@@ -33,24 +31,18 @@ class ProcessBookmark implements ShouldQueue
      *
      * @return void
      */
-    public function handle(Browsershot $browsershot, Client $client)
+    public function handle()
     {
-        //save a local screenshot
-        $uuid = Uuid::uuid4();
-        $browsershot->url($this->bookmark->url)
-                    ->windowSize(960, 640)
-                    ->save(public_path() . '/assets/img/bookmarks/' . $uuid . '.png');
+        $uuid = (new BookmarkService())->saveScreenshot($this->bookmark->url);
         $this->bookmark->screenshot = $uuid;
 
-        //get an internet archive link
-        $response = $client->request('GET', 'https://web.archive.org/save/' . $this->bookmark->url);
-        if ($response->hasHeader('Content-Location')) {
-            if (starts_with($response->getHeader('Content-Location')[0], '/web')) {
-                $this->bookmark->archive = $response->getHeader('Content-Location')[0];
-            }
+        try {
+            $archiveLink = (new BookmarkService())->getArchiveLink($this->bookmark->url);
+        } catch (InternetArchiveErrorSavingException $e) {
+            $archiveLink = null;
         }
+        $this->bookmark->archive = $archiveLink;
 
-        //save
         $this->bookmark->save();
     }
 }

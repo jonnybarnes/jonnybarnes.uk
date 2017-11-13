@@ -29,7 +29,7 @@
         "predis/predis": "~1.0",
         "ramsey/uuid": "^3.5",
         "sensiolabs/security-checker": "^4.0",
-        "spatie/browsershot": "^2.4",
+        "spatie/browsershot": "~3.0",
         "thujohn/twitter": "~2.0"
     },
     "require-dev": {

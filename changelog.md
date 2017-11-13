@@ -1,5 +1,8 @@
 # Changelog
 
+## Version {next}
+  - Update Browsershot to v3, uses puppeteer to control Chrome
+
 ## Version 0.12.6.1 (2017-11-13)
   - `.1` fixes a typo
   - Fix issue with generating image links from images uploaded to `/api/media`
