@@ -81,7 +81,7 @@ class Media extends Model
         return $basename;
     }
 
-    public function getExtension($path);
+    public function getExtension($path)
     {
         $parts = explode('.', $path);
 
