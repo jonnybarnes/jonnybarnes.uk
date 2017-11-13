@@ -50,6 +50,7 @@ class Media extends Model
     public function getMediumurlAttribute()
     {
         $basename = $this->getBasename($this->path);
+        $extension = $this->getExtension($this->path);
 
         return config('filesystems.disks.s3.url') . '/' . $basename . '-medium.' . $extension;
     }
@@ -62,6 +63,7 @@ class Media extends Model
     public function getSmallurlAttribute()
     {
         $basename = $this->getBasename($this->path);
+        $extension = $this->getExtension($this->path);
 
         return config('filesystems.disks.s3.url') . '/' . $basename . '-small.' . $extension;
     }
@@ -69,11 +71,20 @@ class Media extends Model
     public function getBasename($path)
     {
         $filenameParts = explode('.', $path);
-        $extension = array_pop($filenameParts);
+
         // the following achieves this data flow
         // foo.bar.png => ['foo', 'bar', 'png'] => ['foo', 'bar'] => foo.bar
         $basename = ltrim(array_reduce($filenameParts, function ($carry, $item) {
             return $carry . '.' . $item;
         }, ''), '.');
+
+        return $basename;
+    }
+
+    public function getExtension($path);
+    {
+        $parts = explode('.', $path);
+
+        return array_pop($parts);
     }
 }
