@@ -1,6 +1,6 @@
 # Changelog
 
-## Version 0.12.6 (2017-11-13)
+## Version 0.12.6.1 (2017-11-13)
   - `.1` fixes a typo
   - Fix issue with generating image links from images uploaded to `/api/media`
 
