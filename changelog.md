@@ -1,5 +1,8 @@
 # Changelog
 
+## Version {next}
+  - Fix issue with generating image links from images uploaded to `/api/media`
+
 ## Version 0.12.5 (2017-11-09)
   - Fix style of tags on bookmarks page that had been visited
   - Fix style of notes listed on `/notes/tagged/tag`
