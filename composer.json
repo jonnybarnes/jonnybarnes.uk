@@ -40,6 +40,7 @@
         "jakub-onderka/php-parallel-lint": "^0.9.2",
         "laravel/dusk": "^2.0",
         "mockery/mockery": "0.9.*",
+        "nunomaduro/collision": "^1.1",
         "phpunit/phpunit": "~6.0",
         "sebastian/phpcpd": "^3.0"
     },
