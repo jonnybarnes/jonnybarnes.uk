@@ -14,6 +14,15 @@ class Bookmark extends Model
     protected $fillable = ['url', 'name', 'content'];
 
     /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'syndicates' => 'array',
+    ];
+
+    /**
      * The tags that belong to the bookmark.
      */
     public function tags()
