@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 0.13 (2017-11-17)
+  - Update Browsershot to v3, uses puppeteer to control Chrome
+  - Improve bookmarks syndication
+
 ## Version 0.12.6.1 (2017-11-13)
   - `.1` fixes a typo
   - Fix issue with generating image links from images uploaded to `/api/media`

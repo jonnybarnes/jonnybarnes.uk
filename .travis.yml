@@ -36,6 +36,10 @@ php:
   - 7.1
   - 7.2
 
+matrix:
+  allow_failures:
+    - php: 7.2
+
 before_install:
   - printf "\n" | pecl install imagick
   - cp .env.travis .env
@@ -49,6 +53,10 @@ install:
   - if [[ $setup = 'stable' ]]; then travis_retry composer update --no-interaction --prefer-dist --prefer-stable; fi
   - if [[ $setup = 'lowest' ]]; then travis_retry composer update --no-interaction --prefer-dist --prefer-lowest --prefer-stable; fi
   - travis/install-nginx.sh
+  - . $HOME/.nvm/nvm.sh
+  - nvm install stable
+  - nvm use stable
+  - npm i puppeteer
 
 before_script:
   - php artisan key:generate

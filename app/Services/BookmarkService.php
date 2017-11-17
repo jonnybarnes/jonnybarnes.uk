@@ -6,10 +6,14 @@ namespace App\Services;
 
 use App\Tag;
 use App\Bookmark;
+use Ramsey\Uuid\Uuid;
+use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use App\Jobs\ProcessBookmark;
+use Spatie\Browsershot\Browsershot;
 use App\Jobs\SyndicateBookmarkToTwitter;
 use App\Jobs\SyndicateBookmarkToFacebook;
+use App\Exceptions\InternetArchiveErrorSavingException;
 
 class BookmarkService
 {
@@ -81,5 +85,39 @@ class BookmarkService
         ProcessBookmark::dispatch($bookmark);
 
         return $bookmark;
+    }
+
+    public function saveScreenshot(string $url): string
+    {
+        $browsershot = new Browsershot();
+
+        $uuid = Uuid::uuid4();
+
+        $browsershot->url($url)
+                    ->setIncludePath('$PATH:/usr/local/bin')
+                    ->noSandbox()
+                    ->windowSize(960, 640)
+                    ->save(public_path() . '/assets/img/bookmarks/' . $uuid . '.png');
+
+        return $uuid->toString();
+    }
+
+    public function getArchiveLink(string $url): string
+    {
+        $client = new Client();
+
+        $response = $client->request('GET', 'https://web.archive.org/save/' . $url);
+        if ($response->hasHeader('Content-Location')) {
+            if (starts_with($response->getHeader('Content-Location')[0], '/web')) {
+                return $response->getHeader('Content-Location')[0];
+            }
+        }
+
+        if (starts_with(array_get($response->getHeader('Content-Location'), 0), '/web')) {
+            return $response->getHeader('Content-Location')[0];
+        }
+
+        //throw an exception to be caught
+        throw new InternetArchiveErrorSavingException;
     }
 }

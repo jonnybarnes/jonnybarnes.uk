@@ -28,4 +28,13 @@ class BookmarksTest extends TestCase
         Queue::assertPushed(ProcessBookmark::class);
         $this->assertDatabaseHas('bookmarks', ['url' => 'https://example.org/blog-post']);
     }
+
+    public function test_screenshot_of_google()
+    {
+        $url = 'https://www.google.co.uk';
+
+        $uuid = (new \App\Services\BookmarkService())->saveScreenshot($url);
+
+        $this->assertTrue(file_exists(public_path() . '/assets/img/bookmarks/' . $uuid . '.png'));
+    }
 }

@@ -29,7 +29,7 @@
         "predis/predis": "~1.0",
         "ramsey/uuid": "^3.5",
         "sensiolabs/security-checker": "^4.0",
-        "spatie/browsershot": "^2.4",
+        "spatie/browsershot": "~3.0",
         "thujohn/twitter": "~2.0"
     },
     "require-dev": {
@@ -40,6 +40,7 @@
         "jakub-onderka/php-parallel-lint": "^0.9.2",
         "laravel/dusk": "^2.0",
         "mockery/mockery": "0.9.*",
+        "nunomaduro/collision": "^1.1",
         "phpunit/phpunit": "~6.0",
         "sebastian/phpcpd": "^3.0"
     },

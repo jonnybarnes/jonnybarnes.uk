@@ -47,7 +47,9 @@ class SyndicateBookmarkToFacebook implements ShouldQueue
         //parse for syndication URL
         if ($response->getStatusCode() == 201) {
             $json = json_decode((string) $response->getBody());
-            $this->bookmark->update(['syndicates->facebook' => $json->url]);
+            $syndicates = $this->bookmark->syndicates;
+            $syndicates['facebook'] = $json->url;
+            $this->bookmark->syndicates = $syndicates;
             $this->bookmark->save();
         }
     }
