@@ -1,6 +1,6 @@
 # Changelog
 
-## Version {next}
+## Version 0.13 (2017-11-17)
   - Update Browsershot to v3, uses puppeteer to control Chrome
   - Improve bookmarks syndication
 
