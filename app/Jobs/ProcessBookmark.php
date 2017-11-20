@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Bookmark;
 use Illuminate\Bus\Queueable;
+use App\Services\BookmarkService;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
