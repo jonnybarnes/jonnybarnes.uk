@@ -31,8 +31,7 @@ class BookmarkService
             $content = $request->input('properties.content.0');
             $categories = $request->input('properties.category');
         }
-        if (
-            ($request->header('Content-Type') == 'application/x-www-form-urlencoded')
+        if (($request->header('Content-Type') == 'application/x-www-form-urlencoded')
             ||
             (str_contains($request->header('Content-Type'), 'multipart/form-data'))
         ) {

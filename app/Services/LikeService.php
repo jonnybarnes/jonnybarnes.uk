@@ -21,8 +21,7 @@ class LikeService
             //micropub request
             $url = normalize_url($request->input('properties.like-of.0'));
         }
-        if (
-            ($request->header('Content-Type') == 'x-www-url-formencoded')
+        if (($request->header('Content-Type') == 'x-www-url-formencoded')
             ||
             ($request->header('Content-Type') == 'multipart/form-data')
         ) {
