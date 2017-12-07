@@ -41,23 +41,25 @@ class ProcessWebMention implements ShouldQueue
      */
     public function handle(Parser $parser, Client $guzzle)
     {
-        $remoteContent = $this->getRemoteContent($this->source, $guzzle);
-        if ($remoteContent === null) {
+        try {
+            $response = $guzzle->request('GET', $this->source);
+        } catch (RequestException $e) {
             throw new RemoteContentNotFoundException;
         }
-        $microformats = Mf2\parse($remoteContent, $this->source);
+        $this->saveRemoteContent((string) $response->getBody(), $this->source);
+        $microformats = Mf2\parse((string) $response->getBody(), $this->source);
         $webmentions = WebMention::where('source', $this->source)->get();
         foreach ($webmentions as $webmention) {
-            //check webmention still references target
-            //we try each type of mention (reply/like/repost)
+            // check webmention still references target
+            // we try each type of mention (reply/like/repost)
             if ($webmention->type == 'in-reply-to') {
                 if ($parser->checkInReplyTo($microformats, $this->note->longurl) == false) {
-                    //it doesn't so delete
+                    // it doesn’t so delete
                     $webmention->delete();
 
                     return;
                 }
-                //webmenion is still a reply, so update content
+                // webmenion is still a reply, so update content
                 dispatch(new SaveProfileImage($microformats));
                 $webmention->mf2 = json_encode($microformats);
                 $webmention->save();
@@ -66,25 +68,25 @@ class ProcessWebMention implements ShouldQueue
             }
             if ($webmention->type == 'like-of') {
                 if ($parser->checkLikeOf($microformats, $note->longurl) == false) {
-                    //it doesn't so delete
+                    // it doesn’t so delete
                     $webmention->delete();
 
                     return;
-                } //note we don't need to do anything if it still is a like
+                } // note we don’t need to do anything if it still is a like
             }
             if ($webmention->type == 'repost-of') {
                 if ($parser->checkRepostOf($microformats, $note->longurl) == false) {
-                    //it doesn't so delete
+                    // it doesn’t so delete
                     $webmention->delete();
 
                     return;
-                } //again, we don't need to do anything if it still is a repost
+                } // again, we don’t need to do anything if it still is a repost
             }
-        }//foreach
+        }// foreach
 
-        //no wemention in db so create new one
+        // no webmention in the db so create new one
         $webmention = new WebMention();
-        $type = $parser->getMentionType($microformats); //throw error here?
+        $type = $parser->getMentionType($microformats); // throw error here?
         dispatch(new SaveProfileImage($microformats));
         $webmention->source = $this->source;
         $webmention->target = $this->note->longurl;
@@ -96,21 +98,23 @@ class ProcessWebMention implements ShouldQueue
     }
 
     /**
-     * Retreive the remote content from a URL, and caches the result.
+     * Save the HTML of a webmention for future use.
      *
+     * @param  string  $html
      * @param  string  $url
-     * @param  GuzzleHttp\client  $guzzle
      * @return string|null
      */
-    private function getRemoteContent($url, Client $guzzle)
+    private function saveRemoteContent($html, $url)
     {
-        try {
-            $response = $guzzle->request('GET', $url);
-        } catch (RequestException $e) {
-            return;
+        $filenameFromURL = str_replace(
+            ['https://', 'http://'],
+            ['https/', 'http/'],
+            $url
+        );
+        if (substr($url, -1) == '/') {
+            $filenameFromURL .= 'index.html';
         }
-        $html = (string) $response->getBody();
-        $path = storage_path() . '/HTML/' . $this->createFilenameFromURL($url);
+        $path = storage_path() . '/HTML/' . $filenameFromURL;
         $parts = explode('/', $path);
         $name = array_pop($parts);
         $dir = implode('/', $parts);
@@ -118,24 +122,5 @@ class ProcessWebMention implements ShouldQueue
             mkdir($dir, 0755, true);
         }
         file_put_contents("$dir/$name", $html);
-
-        return $html;
-    }
-
-    /**
-     * Create a file path from a URL. This is used when caching the HTML
-     * response.
-     *
-     * @param  string  The URL
-     * @return string  The path name
-     */
-    private function createFilenameFromURL($url)
-    {
-        $url = str_replace(['https://', 'http://'], ['https/', 'http/'], $url);
-        if (substr($url, -1) == '/') {
-            $url = $url . 'index.html';
-        }
-
-        return $url;
     }
 }

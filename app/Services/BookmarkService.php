@@ -13,7 +13,8 @@ use App\Jobs\ProcessBookmark;
 use Spatie\Browsershot\Browsershot;
 use App\Jobs\SyndicateBookmarkToTwitter;
 use App\Jobs\SyndicateBookmarkToFacebook;
-use App\Exceptions\InternetArchiveErrorSavingException;
+use GuzzleHttp\Exception\ClientException;
+use App\Exceptions\InternetArchiveException;
 
 class BookmarkService
 {
@@ -103,20 +104,20 @@ class BookmarkService
 
     public function getArchiveLink(string $url): string
     {
-        $client = new Client();
-
-        $response = $client->request('GET', 'https://web.archive.org/save/' . $url);
+        $client = resolve(Client::class);
+        try {
+            $response = $client->request('GET', 'https://web.archive.org/save/' . $url);
+        } catch (ClientException $e) {
+            //throw an exception to be caught
+            throw new InternetArchiveException;
+        }
         if ($response->hasHeader('Content-Location')) {
-            if (starts_with($response->getHeader('Content-Location')[0], '/web')) {
+            if (starts_with(array_get($response->getHeader('Content-Location'), 0), '/web')) {
                 return $response->getHeader('Content-Location')[0];
             }
         }
 
-        if (starts_with(array_get($response->getHeader('Content-Location'), 0), '/web')) {
-            return $response->getHeader('Content-Location')[0];
-        }
-
         //throw an exception to be caught
-        throw new InternetArchiveErrorSavingException;
+        throw new InternetArchiveException;
     }
 }

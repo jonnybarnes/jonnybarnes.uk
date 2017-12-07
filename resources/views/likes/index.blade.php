@@ -14,10 +14,12 @@
 @else
                             <span class="p-name">{{ $like->author_name }}</span>
 @endisset
-                        </span>:
+                        </span>
+@isset($like->content)
                         <blockquote class="e-content">
                             {!! $like->content !!}
                         </blockquote>
+@endisset
                     </div>
                 </div>
 @endforeach

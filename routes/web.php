@@ -150,7 +150,6 @@ Route::group(['domain' => config('url.shorturl')], function () {
     Route::get('/', 'ShortURLsController@baseURL');
     Route::get('@', 'ShortURLsController@twitter');
     Route::get('+', 'ShortURLsController@googlePlus');
-    Route::get('α', 'ShortURLsController@appNet');
 
     Route::get('{type}/{id}', 'ShortURLsController@expandType')->where(
         [
@@ -160,9 +159,4 @@ Route::group(['domain' => config('url.shorturl')], function () {
     );
 
     Route::get('h/{id}', 'ShortURLsController@redirect');
-    Route::get('{id}', 'ShortURLsController@oldRedirect')->where(
-        [
-            'id' => '[0-9A-HJ-NP-Z_a-km-z]{4}',
-        ]
-    );
 });

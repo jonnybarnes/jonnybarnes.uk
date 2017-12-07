@@ -12,7 +12,7 @@ class SwarmTest extends TestCase
 {
     use DatabaseTransactions, TestToken;
 
-    public function test_faked_ownyourswarm_request()
+    public function test_faked_ownyourswarm_request_with_foursquare()
     {
         $response = $this->json(
             'POST',
@@ -42,11 +42,81 @@ class SwarmTest extends TestCase
         $response
             ->assertStatus(201)
             ->assertJson(['response' => 'created']);
+        $this->assertDatabaseHas('notes', [
+            'swarm_url' => 'https://www.swarmapp.com/checkin/abc'
+        ]);
         $this->assertDatabaseHas('places', [
             'external_urls' => '{"foursquare": "https://foursquare.com/v/123456"}'
         ]);
-        $this->assertDatabaseHas('notes', [
-            'swarm_url' => 'https://www.swarmapp.com/checkin/abc'
+    }
+
+    // this request would actually come from another client than OwnYourSwarm
+    public function test_faked_ownyourswarm_request_with_osm()
+    {
+        $response = $this->json(
+            'POST',
+            'api/post',
+            [
+                'type' => ['h-entry'],
+                'properties' => [
+                    'published' => [\Carbon\Carbon::now()->toDateTimeString()],
+                    'content' => [[
+                        'value' => 'My first #checkin using Example Product',
+                        'html' => 'My first #checkin using <a href="http://example.org">Example Product</a>',
+                    ]],
+                    'checkin' => [[
+                        'type' => ['h-card'],
+                        'properties' => [
+                            'name' => ['Awesome Venue'],
+                            'url' => ['https://www.openstreetmap.org/way/123456'],
+                            'latitude' => ['1.23'],
+                            'longitude' => ['4.56'],
+                        ],
+                    ]],
+                ],
+            ],
+            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+        );
+        $response
+            ->assertStatus(201)
+            ->assertJson(['response' => 'created']);
+        $this->assertDatabaseHas('places', [
+            'external_urls' => '{"osm": "https://www.openstreetmap.org/way/123456"}'
+        ]);
+    }
+
+    // this request would actually come from another client than OwnYourSwarm
+    public function test_faked_ownyourswarm_request_without_known_external_url()
+    {
+        $response = $this->json(
+            'POST',
+            'api/post',
+            [
+                'type' => ['h-entry'],
+                'properties' => [
+                    'published' => [\Carbon\Carbon::now()->toDateTimeString()],
+                    'content' => [[
+                        'value' => 'My first #checkin using Example Product',
+                        'html' => 'My first #checkin using <a href="http://example.org">Example Product</a>',
+                    ]],
+                    'checkin' => [[
+                        'type' => ['h-card'],
+                        'properties' => [
+                            'name' => ['Awesome Venue'],
+                            'url' => ['https://www.example.org/way/123456'],
+                            'latitude' => ['1.23'],
+                            'longitude' => ['4.56'],
+                        ],
+                    ]],
+                ],
+            ],
+            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+        );
+        $response
+            ->assertStatus(201)
+            ->assertJson(['response' => 'created']);
+        $this->assertDatabaseHas('places', [
+            'external_urls' => '{"default": "https://www.example.org/way/123456"}'
         ]);
     }
 

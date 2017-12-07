@@ -21,12 +21,10 @@ class NoteObserver
         }
 
         $tags->transform(function ($tag) {
-            return Tag::firstOrCreate(['tag' => $tag]);
-        });
+            return Tag::firstOrCreate(['tag' => $tag])->id;
+        })->toArray();
 
-        $note->tags()->attach($tags->map(function ($tag) {
-            return $tag->id;
-        }));
+        $note->tags()->attach($tags);
     }
 
     /**
@@ -65,9 +63,6 @@ class NoteObserver
     public function getTagsFromNote($note)
     {
         preg_match_all('/#([^\s<>]+)\b/', $note, $tags);
-        if (array_get($tags, '1') === null) {
-            return [];
-        }
 
         return collect($tags[1])->map(function ($tag) {
             return Tag::normalize($tag);

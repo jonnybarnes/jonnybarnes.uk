@@ -46,16 +46,16 @@ class PlaceService
     public function createPlaceFromCheckin(array $checkin): Place
     {
         //check if the place exists if from swarm
-        if (array_key_exists('url', $checkin['properties'])) {
+        if (array_has($checkin, 'properties.url')) {
             $place = Place::whereExternalURL($checkin['properties']['url'][0])->get();
             if (count($place) === 1) {
                 return $place->first();
             }
         }
-        if (array_key_exists('name', $checkin['properties']) === false) {
+        if (array_has($checkin, 'properties.name') === false) {
             throw new \InvalidArgumentException('Missing required name');
         }
-        if (array_key_exists('latitude', $checkin['properties']) === false) {
+        if (array_has($checkin, 'properties.latitude') === false) {
             throw new \InvalidArgumentException('Missing required longitude/latitude');
         }
         $place = new Place();

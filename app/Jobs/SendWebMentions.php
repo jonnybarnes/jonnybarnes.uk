@@ -29,18 +29,18 @@ class SendWebMentions implements ShouldQueue
     /**
      * Execute the job.
      *
-     * @param  \GuzzleHttp\Client $guzzle
      * @return void
      */
-    public function handle(Client $guzzle)
+    public function handle()
     {
         //grab the URLs
         $urlsInReplyTo = explode(' ', $this->note->in_reply_to);
         $urlsNote = $this->getLinks($this->note->note);
         $urls = array_filter(array_merge($urlsInReplyTo, $urlsNote)); //filter out none URLs
         foreach ($urls as $url) {
-            $endpoint = $this->discoverWebmentionEndpoint($url, $guzzle);
-            if ($endpoint) {
+            $endpoint = $this->discoverWebmentionEndpoint($url);
+            if ($endpoint !== null) {
+                $guzzle = resolve(Client::class);
                 $guzzle->post($endpoint, [
                     'form_params' => [
                         'source' => $this->note->longurl,
@@ -55,21 +55,21 @@ class SendWebMentions implements ShouldQueue
      * Discover if a URL has a webmention endpoint.
      *
      * @param  string  The URL
-     * @param  \GuzzleHttp\Client $guzzle
      * @return string  The webmention endpoint URL
      */
-    public function discoverWebmentionEndpoint($url, $guzzle)
+    public function discoverWebmentionEndpoint($url)
     {
         //let’s not send webmentions to myself
         if (parse_url($url, PHP_URL_HOST) == config('app.longurl')) {
-            return false;
+            return;
         }
         if (starts_with($url, '/notes/tagged/')) {
-            return false;
+            return;
         }
 
         $endpoint = null;
 
+        $guzzle = resolve(Client::class);
         $response = $guzzle->get($url);
         //check HTTP Headers for webmention endpoint
         $links = \GuzzleHttp\Psr7\parse_header($response->getHeader('Link'));
@@ -92,8 +92,6 @@ class SendWebMentions implements ShouldQueue
         if ($endpoint) {
             return $this->resolveUri($endpoint, $url);
         }
-
-        return false;
     }
 
     /**

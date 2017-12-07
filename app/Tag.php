@@ -7,6 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 class Tag extends Model
 {
     /**
+     * We shall set a blacklist of non-modifiable model attributes.
+     *
+     * @var array
+     */
+    protected $guarded = ['id'];
+
+    /**
      * Define the relationship with tags.
      *
      * @var array
@@ -23,13 +30,6 @@ class Tag extends Model
     {
         return $this->belongsToMany('App\Bookmark');
     }
-
-    /**
-     * We shall set a blacklist of non-modifiable model attributes.
-     *
-     * @var array
-     */
-    protected $guarded = ['id'];
 
     /**
      * Normalize tags so they’re lowercase and fancy diatrics are removed.

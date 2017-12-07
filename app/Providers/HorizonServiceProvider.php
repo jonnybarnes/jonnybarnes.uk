@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use Laravel\Horizon\Horizon;
 use Illuminate\Support\ServiceProvider;
 
+/**
+ * @codeCoverageIgnore
+ */
 class HorizonServiceProvider extends ServiceProvider
 {
     /**

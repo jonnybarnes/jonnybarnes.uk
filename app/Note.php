@@ -146,9 +146,9 @@ class Note extends Model
         $emoji = new EmojiModifier();
 
         $hcards = $this->makeHCards($value);
-        $html = $this->convertMarkdown($hcards);
-        $hashtags = $this->autoLinkHashtag($html);
-        $modified = $emoji->makeEmojiAccessible($hashtags);
+        $hashtags = $this->autoLinkHashtag($hcards);
+        $html = $this->convertMarkdown($hashtags);
+        $modified = $emoji->makeEmojiAccessible($html);
 
         return $modified;
     }
@@ -223,9 +223,7 @@ class Note extends Model
     public function getLatitudeAttribute()
     {
         if ($this->place !== null) {
-            $lnglat = explode(' ', $this->place->location);
-
-            return $lnglat[1];
+            return $this->place->location->getLat();
         }
         if ($this->location !== null) {
             $pieces = explode(':', $this->location);
@@ -243,9 +241,7 @@ class Note extends Model
     public function getLongitudeAttribute()
     {
         if ($this->place !== null) {
-            $lnglat = explode(' ', $this->place->location);
-
-            return $lnglat[1];
+            return $this->place->location->getLng();
         }
         if ($this->location !== null) {
             $pieces = explode(':', $this->location);
@@ -281,12 +277,13 @@ class Note extends Model
         if (Cache::has($tweetId)) {
             return Cache::get($tweetId);
         }
+
         try {
             $oEmbed = Twitter::getOembed([
-                'id' => $tweetId,
+                'url' => $this->in_reply_to,
                 'dnt' => true,
                 'align' => 'center',
-                'maxwidth' => 550,
+                'maxwidth' => 512,
             ]);
         } catch (\Exception $e) {
             return;
@@ -408,10 +405,10 @@ class Note extends Model
 
                 $contact = $this->contacts[$matches[1]]; // easier to read the following code
                 $host = parse_url($contact->homepage, PHP_URL_HOST);
-                $contact->photo = (file_exists(public_path() . '/assets/profile-images/' . $host . '/image')) ?
-                    '/assets/profile-images/' . $host . '/image'
-                :
-                    '/assets/profile-images/default-image';
+                $contact->photo = '/assets/profile-images/default-image';
+                if (file_exists(public_path() . '/assets/profile-images/' . $host . '/image')) {
+                    $contact->photo = '/assets/profile-images/' . $host . '/image';
+                }
 
                 return trim(view('templates.mini-hcard', ['contact' => $contact])->render());
             },
@@ -450,31 +447,17 @@ class Note extends Model
      * @param  string  The note
      * @return string
      */
-    private function autoLinkHashtag($text)
+    public function autoLinkHashtag($text)
     {
-        // $replacements = ["#tag" => "<a rel="tag" href="/tags/tag">#tag</a>]
-        $replacements = [];
-        $matches = [];
-
-        if (preg_match_all('/(?<=^|\s)\#([a-zA-Z0-9\-\_]+)/i', $text, $matches, PREG_PATTERN_ORDER)) {
-            // Look up #tags, get Full name and URL
-            foreach ($matches[0] as $name) {
-                $name = str_replace('#', '', $name);
-                $replacements[$name] =
-                  '<a rel="tag" class="p-category" href="/notes/tagged/'
-                    . Tag::normalize($name)
-                    . '">#'
-                    . $name
-                    . '</a>';
-            }
-
-            // Replace #tags with valid microformat-enabled link
-            foreach ($replacements as $name => $replacement) {
-                $text = str_replace('#' . $name, $replacement, $text);
-            }
-        }
-
-        return $text;
+        return preg_replace_callback(
+            '/#([^\s]*)\b/',
+            function ($matches) {
+                return '<a rel="tag" class="p-category" href="/notes/tagged/'
+                . Tag::normalize($matches[1]) . '">#'
+                . Tag::normalize($matches[1]) . '</a>';
+            },
+            $text
+        );
     }
 
     private function convertMarkdown($text)
@@ -536,7 +519,7 @@ class Note extends Model
 
                 return $address;
             }
-            $adress = '<span class="p-country-name">' . $json->address->country . '</span>';
+            $address = '<span class="p-country-name">' . $json->address->country . '</span>';
             Cache::forever($latlng, $address);
 
             return $address;

@@ -2,7 +2,7 @@
 
 namespace App;
 
-use DB;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Cviebrock\EloquentSluggable\Sluggable;
@@ -79,15 +79,8 @@ class Place extends Model
 
     public function scopeWhereExternalURL(Builder $query, string $url)
     {
-        $type = $this->getType($url);
-        if ($type === null) {
-            // we haven’t set a type, therefore result must be empty set
-            // id can’t be null, so this will return empty set
-            return $query->whereNull('id');
-        }
-
         return $query->where('external_urls', '@>', json_encode([
-            $type => $url,
+            $this->getType($url) => $url,
         ]));
     }
 
@@ -131,12 +124,19 @@ class Place extends Model
         return config('app.shorturl') . '/places/' . $this->slug;
     }
 
+    /**
+     * This method is an alternative for `longurl`.
+     *
+     * @return string
+     */
+    public function getUriAttribute()
+    {
+        return $this->longurl;
+    }
+
     public function setExternalUrlsAttribute($url)
     {
         $type = $this->getType($url);
-        if ($type === null) {
-            throw new \Exception('Unkown external url type ' . $url);
-        }
         $already = [];
         if (array_key_exists('external_urls', $this->attributes)) {
             $already = json_decode($this->attributes['external_urls'], true);
@@ -155,6 +155,6 @@ class Place extends Model
             return 'osm';
         }
 
-        return null;
+        return 'default';
     }
 }

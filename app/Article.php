@@ -17,7 +17,7 @@ class Article extends Model
      *
      * @var array
      */
-    protected $dates = ['deleted_at'];
+    protected $dates = ['created_at', 'updated_at', 'deleted_at'];
 
     /**
      * The database table used by the model.
@@ -41,16 +41,6 @@ class Article extends Model
     }
 
     /**
-     * Define the relationship with webmentions.
-     *
-     * @var array
-     */
-    public function webmentions()
-    {
-        return $this->morphMany('App\WebMention', 'commentable');
-    }
-
-    /**
      * We shall set a blacklist of non-modifiable model attributes.
      *
      * @var array
@@ -66,7 +56,7 @@ class Article extends Model
     {
         $markdown = new CommonMarkConverter();
         $html = $markdown->convertToHtml($this->main);
-        //change <pre><code>[lang] ~> <pre><code data-language="lang">
+        // changes <pre><code>[lang] ~> <pre><code data-language="lang">
         $match = '/<pre><code>\[(.*)\]\n/';
         $replace = '<pre><code class="language-$1">';
         $text = preg_replace($match, $replace, $html);
@@ -130,20 +120,20 @@ class Article extends Model
      *
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeDate($query, $year = null, $month = null)
+    public function scopeDate($query, int $year = null, int $month = null)
     {
         if ($year == null) {
             return $query;
         }
         $start = $year . '-01-01 00:00:00';
         $end = ($year + 1) . '-01-01 00:00:00';
-        if (($month !== null) && ($month !== '12')) {
+        if (($month !== null) && ($month !== 12)) {
             $start = $year . '-' . $month . '-01 00:00:00';
             $end = $year . '-' . ($month + 1) . '-01 00:00:00';
         }
-        if ($month === '12') {
+        if ($month === 12) {
             $start = $year . '-12-01 00:00:00';
-            //$end as above
+            $end = ($year + 1) . '-01-01 00:00:00';
         }
 
         return $query->where([

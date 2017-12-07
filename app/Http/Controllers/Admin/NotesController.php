@@ -3,21 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Note;
-use Validator;
 use Illuminate\Http\Request;
 use App\Jobs\SendWebMentions;
-use App\Services\NoteService;
 use App\Http\Controllers\Controller;
 
 class NotesController extends Controller
 {
-    protected $noteService;
-
-    public function __construct(NoteService $noteService)
-    {
-        $this->noteService = $noteService;
-    }
-
     /**
      * List the notes that can be edited.
      *
@@ -51,30 +42,10 @@ class NotesController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make(
-            $request->all(),
-            ['photo' => 'photosize'],
-            ['photosize' => 'At least one uploaded file exceeds size limit of 5MB']
-        );
-        if ($validator->fails()) {
-            return redirect('/admin/notes/create')
-                ->withErrors($validator)
-                ->withInput();
-        }
-
-        $data = [];
-        $data['content'] = $request->input('content');
-        $data['in-reply-to'] = $request->input('in-reply-to');
-        $data['location'] = $request->input('location');
-        $data['syndicate'] = [];
-        if ($request->input('twitter')) {
-            $data['syndicate'][] = 'twitter';
-        }
-        if ($request->input('facebook')) {
-            $data['syndicate'][] = 'facebook';
-        }
-
-        $note = $this->noteService->createNote($data);
+        Note::create([
+            'in-reply-to' => $request->input('in-reply-to'),
+            'note' => $request->input('content'),
+        ]);
 
         return redirect('/admin/notes');
     }

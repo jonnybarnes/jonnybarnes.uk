@@ -15,7 +15,7 @@ class ArticlesController extends Controller
     public function index($year = null, $month = null)
     {
         $articles = Article::where('published', '1')
-                        ->date($year, $month)
+                        ->date((int) $year, (int) $month)
                         ->orderBy('updated_at', 'desc')
                         ->simplePaginate(5);
 
@@ -31,7 +31,7 @@ class ArticlesController extends Controller
     {
         $article = Article::where('titleurl', $slug)->firstOrFail();
         if ($article->updated_at->year != $year || $article->updated_at->month != $month) {
-            throw new \Exception;
+            return redirect('/blog/' . $article->updated_at->year . '/' . $article->updated_at->month .'/' . $slug);
         }
 
         return view('articles.show', compact('article'));

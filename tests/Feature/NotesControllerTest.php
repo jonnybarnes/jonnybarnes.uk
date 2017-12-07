@@ -30,6 +30,12 @@ class NotesControllerTest extends TestCase
         $response->assertViewHas('note');
     }
 
+    public function test_note_replying_to_tweet()
+    {
+        $response = $this->get('/notes/B');
+        $response->assertViewHas('note');
+    }
+
     /**
      * Test that `/note/{decID}` redirects to `/notes/{nb60id}`.
      *

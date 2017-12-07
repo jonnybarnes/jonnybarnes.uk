@@ -22,7 +22,6 @@ class ContactsTableSeeder extends Seeder
             'nick' => 'aaron',
             'name' => 'Aaron Parecki',
             'homepage' => 'https://aaronparecki.com',
-            'twitter' => 'aaronpk',
             'facebook' => '123456',
         ]);
     }

@@ -10,6 +10,20 @@ class ArticlesAdminTest extends TestCase
 {
     use DatabaseTransactions;
 
+    public function test_index_page()
+    {
+        $response = $this->withSession(['loggedin' => true])
+                         ->get('/admin/blog');
+        $response->assertSeeText('Select article to edit:');
+    }
+
+    public function test_create_page()
+    {
+        $response = $this->withSession(['loggedin' => true])
+                         ->get('/admin/blog/create');
+        $response->assertSeeText('Title (URL)');
+    }
+
     public function test_create_new_article()
     {
         $this->withSession(['loggedin' => true])
@@ -40,6 +54,38 @@ class ArticlesAdminTest extends TestCase
         $this->assertDatabaseHas('articles', [
             'title' => 'Uploaded Article',
             'main' => $text,
+        ]);
+    }
+
+    public function test_see_edit_form()
+    {
+        $response = $this->withSession(['loggedin' => true])
+                         ->get('/admin/blog/1/edit');
+        $response->assertSeeText('This is *my* new blog. It uses `Markdown`.');
+    }
+
+    public function test_edit_article()
+    {
+        $this->withSession(['loggedin' => true])
+             ->post('/admin/blog/1', [
+                 '_method' => 'PUT',
+                 'title' => 'My New Blog',
+                 'main' => 'This article has been edited',
+             ]);
+        $this->assertDatabaseHas('articles', [
+            'title' => 'My New Blog',
+            'main' => 'This article has been edited',
+        ]);
+    }
+
+    public function test_delete_article()
+    {
+        $this->withSession(['loggedin' => true])
+             ->post('/admin/blog/1', [
+                 '_method' => 'DELETE',
+             ]);
+        $this->assertSoftDeleted('articles', [
+            'title' => 'My New Blog',
         ]);
     }
 }

@@ -24,7 +24,7 @@ class Like extends Model
     public function getContentAttribute($value)
     {
         if ($value === null) {
-            return $this->url;
+            return null;
         }
 
         $mf2 = Mf2\parse($value, $this->url);

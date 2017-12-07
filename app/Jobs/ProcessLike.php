@@ -44,8 +44,8 @@ class ProcessLike implements ShouldQueue
         try {
             $author = $authorship->findAuthor($mf2);
             if (is_array($author)) {
-                $this->like->author_name = $author['name'];
-                $this->like->author_url = $author['url'];
+                $this->like->author_name = array_get($author, 'properties.name.0');
+                $this->like->author_url = array_get($author, 'properties.url.0');
             }
             if (is_string($author) && $author !== '') {
                 $this->like->author_name = $author;

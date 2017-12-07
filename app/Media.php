@@ -18,7 +18,7 @@ class Media extends Model
      *
      * @var array
      */
-    protected $fillable = ['path'];
+    protected $fillable = ['token', 'path', 'type', 'image_widths'];
 
     /**
      * Get the note that owns this media.
@@ -70,10 +70,10 @@ class Media extends Model
 
     public function getBasename($path)
     {
-        $filenameParts = explode('.', $path);
-
         // the following achieves this data flow
         // foo.bar.png => ['foo', 'bar', 'png'] => ['foo', 'bar'] => foo.bar
+        $filenameParts = explode('.', $path);
+        array_pop($filenameParts);
         $basename = ltrim(array_reduce($filenameParts, function ($carry, $item) {
             return $carry . '.' . $item;
         }, ''), '.');

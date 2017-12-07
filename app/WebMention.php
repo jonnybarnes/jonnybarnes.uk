@@ -20,6 +20,13 @@ class WebMention extends Model
     protected $table = 'webmentions';
 
     /**
+     * We shall set a blacklist of non-modifiable model attributes.
+     *
+     * @var array
+     */
+    protected $guarded = ['id'];
+
+    /**
      * Define the relationship.
      *
      * @var array
@@ -28,13 +35,6 @@ class WebMention extends Model
     {
         return $this->morphTo();
     }
-
-    /**
-     * We shall set a blacklist of non-modifiable model attributes.
-     *
-     * @var array
-     */
-    protected $guarded = ['id'];
 
     /**
      * Get the author of the webmention.
@@ -78,9 +78,9 @@ class WebMention extends Model
     }
 
     /**
-     * Get the filteres HTML of a reply.
+     * Get the filtered HTML of a reply.
      *
-     * @return strin|null
+     * @return string|null
      */
     public function getReplyAttribute()
     {
@@ -108,14 +108,10 @@ class WebMention extends Model
             if (Cache::has($url)) {
                 return Cache::get($url);
             }
-            $username = parse_url($url, PHP_URL_PATH);
-            try {
-                $info = Twitter::getUsers(['screen_name' => $username]);
-                $profile_image = $info->profile_image_url_https;
-                Cache::put($url, $profile_image, 10080); //1 week
-            } catch (Exception $e) {
-                return $url; //not sure here
-            }
+            $username = ltrim(parse_url($url, PHP_URL_PATH), '/');
+            $info = Twitter::getUsers(['screen_name' => $username]);
+            $profile_image = $info->profile_image_url_https;
+            Cache::put($url, $profile_image, 10080); //1 week
 
             return $profile_image;
         }

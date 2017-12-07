@@ -47,11 +47,7 @@ class PlacesController extends Controller
      */
     public function store(Request $request)
     {
-        $data = [];
-        $data['name'] = $request->name;
-        $data['description'] = $request->description;
-        $data['latitude'] = $request->latitude;
-        $data['longitude'] = $request->longitude;
+        $data = $request->only(['name', 'description', 'latitude', 'longitude']);
         $place = $this->placeService->createPlace($data);
 
         return redirect('/admin/places');
@@ -67,14 +63,7 @@ class PlacesController extends Controller
     {
         $place = Place::findOrFail($placeId);
 
-        return view('admin.places.edit', [
-            'id' => $placeId,
-            'name' => $place->name,
-            'description' => $place->description,
-            'latitude' => $place->latitude,
-            'longitude' => $place->longitude,
-            'icon' => $place->icon ?? 'marker',
-        ]);
+        return view('admin.places.edit', compact('place'));
     }
 
     /**
