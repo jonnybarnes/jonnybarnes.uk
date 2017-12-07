@@ -12,10 +12,6 @@
     z-index: 100;
 }
 
-.mini-h-card:hover .hovercard {
-    display: flex;
-}
-
 .hovercard {
     position: absolute;
     flex-direction: row;
@@ -30,6 +26,10 @@
     border-radius: 2px;
     box-shadow: 3px 3px 2px 1px hsla(190, 11%, 7%, 1);
     display: none;
+}
+
+.mini-h-card:hover .hovercard {
+    display: flex;
 }
 
 .mini-h-card .social-icon {
