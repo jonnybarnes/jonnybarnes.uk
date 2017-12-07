@@ -6,6 +6,7 @@ use Storage;
 use Monolog\Logger;
 use Ramsey\Uuid\Uuid;
 use App\Jobs\ProcessMedia;
+use App\Services\TokenService;
 use Illuminate\Http\UploadedFile;
 use Monolog\Handler\StreamHandler;
 use App\{Like, Media, Note, Place};
@@ -14,29 +15,22 @@ use Illuminate\Http\{Request, Response};
 use App\Exceptions\InvalidTokenException;
 use Phaza\LaravelPostgis\Geometries\Point;
 use Intervention\Image\Exception\NotReadableException;
-use App\Services\{NoteService, PlaceService, TokenService};
 use App\Services\Micropub\{HCardService, HEntryService, UpdateService};
 
 class MicropubController extends Controller
 {
     protected $tokenService;
-    protected $noteService;
-    protected $placeService;
     protected $hentryService;
     protected $hcardService;
     protected $updateService;
 
     public function __construct(
         TokenService $tokenService,
-        NoteService $noteService,
-        PlaceService $placeService,
         HEntryService $hentryService,
         HCardService $hcardService,
         UpdateService $updateService
     ) {
         $this->tokenService = $tokenService;
-        $this->noteService = $noteService;
-        $this->placeService = $placeService;
         $this->hentryService = $hentryService;
         $this->hcardService = $hcardService;
         $this->updateService = $updateService;
