@@ -6,7 +6,6 @@ namespace App\Services;
 
 use Illuminate\Http\Request;
 use App\{Media, Note, Place};
-use Illuminate\Support\Collection;
 use App\Jobs\{SendWebMentions, SyndicateNoteToFacebook, SyndicateNoteToTwitter};
 
 class NoteService
@@ -149,13 +148,12 @@ class NoteService
                     )
                 )
             )->first();
-        };
+        }
         if (array_get($request, 'properties.checkin')) {
             try {
                 $place = resolve(PlaceService::class)->createPlaceFromCheckin(
                     $request->input('properties.checkin.0')
                 );
-
             } catch (\InvalidArgumentException $e) {
                 return null;
             }
