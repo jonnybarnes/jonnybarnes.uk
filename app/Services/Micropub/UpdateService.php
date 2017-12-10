@@ -75,7 +75,7 @@ class UpdateService
                 }
                 if ($property == 'photo') {
                     foreach ($value as $photoURL) {
-                        if (start_with($photo, 'https://')) {
+                        if (starts_with($photoURL, 'https://')) {
                             $media = new Media();
                             $media->path = $photoURL;
                             $media->type = 'image';
@@ -91,5 +91,10 @@ class UpdateService
                 'response' => 'updated',
             ]);
         }
+
+        return response()->json([
+            'response' => 'error',
+            'error_description' => 'unsupported request',
+        ], 500);
     }
 }

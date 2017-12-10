@@ -2,14 +2,21 @@
 
 namespace Tests\Feature;
 
+use App\Media;
+use App\Place;
+use Carbon\Carbon;
 use Tests\TestCase;
 use Tests\TestToken;
 use Lcobucci\JWT\Builder;
 use App\Jobs\ProcessMedia;
+use App\Jobs\SendWebMentions;
 use Illuminate\Http\UploadedFile;
+use App\Jobs\SyndicateNoteToTwitter;
 use Lcobucci\JWT\Signer\Hmac\Sha256;
+use App\Jobs\SyndicateNoteToFacebook;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Storage;
+use Phaza\LaravelPostgis\Geometries\Point;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class MicropubControllerTest extends TestCase
@@ -124,7 +131,9 @@ class MicropubControllerTest extends TestCase
             '/api/post',
             [
                 'h' => 'entry',
-                'content' => $note
+                'content' => $note,
+                'published' => Carbon::now()->toW3CString(),
+                'location' => 'geo:1.23,4.56',
             ],
             [],
             [],
@@ -132,6 +141,60 @@ class MicropubControllerTest extends TestCase
         );
         $response->assertJson(['response' => 'created']);
         $this->assertDatabaseHas('notes', ['note' => $note]);
+    }
+
+    /**
+     * Test a valid micropub requests creates a new note and syndicates to Twitter.
+     *
+     * @return void
+     */
+    public function test_micropub_post_request_creates_new_note_sends_to_twitter()
+    {
+        Queue::fake();
+        $faker = \Faker\Factory::create();
+        $note = $faker->text;
+        $response = $this->call(
+            'POST',
+            '/api/post',
+            [
+                'h' => 'entry',
+                'content' => $note,
+                'mp-syndicate-to' => 'https://twitter.com/jonnybarnes'
+            ],
+            [],
+            [],
+            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+        );
+        $response->assertJson(['response' => 'created']);
+        $this->assertDatabaseHas('notes', ['note' => $note]);
+        Queue::assertPushed(SyndicateNoteToTwitter::class);
+    }
+
+    /**
+     * Test a valid micropub requests creates a new note and syndicates to Facebook.
+     *
+     * @return void
+     */
+    public function test_micropub_post_request_creates_new_note_sends_to_facebook()
+    {
+        Queue::fake();
+        $faker = \Faker\Factory::create();
+        $note = $faker->text;
+        $response = $this->call(
+            'POST',
+            '/api/post',
+            [
+                'h' => 'entry',
+                'content' => $note,
+                'mp-syndicate-to' => 'https://facebook.com/jonnybarnes'
+            ],
+            [],
+            [],
+            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+        );
+        $response->assertJson(['response' => 'created']);
+        $this->assertDatabaseHas('notes', ['note' => $note]);
+        Queue::assertPushed(SyndicateNoteToFacebook::class);
     }
 
     /**
@@ -189,6 +252,11 @@ class MicropubControllerTest extends TestCase
      */
     public function test_micropub_post_request_with_json_syntax_creates_new_note()
     {
+        Queue::fake();
+        Media::create([
+            'path' => 'test-photo.jpg',
+            'type' => 'image',
+        ]);
         $faker = \Faker\Factory::create();
         $note = $faker->text;
         $response = $this->json(
@@ -198,6 +266,12 @@ class MicropubControllerTest extends TestCase
                 'type' => ['h-entry'],
                 'properties' => [
                     'content' => [$note],
+                    'in-reply-to' => ['https://aaronpk.localhost'],
+                    'mp-syndicate-to' => [
+                        'https://twitter.com/jonnybarnes',
+                        'https://facebook.com/jonnybarnes',
+                    ],
+                    'photo' => [config('filesystems.disks.s3.url') . '/test-photo.jpg'],
                 ],
             ],
             ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
@@ -205,6 +279,112 @@ class MicropubControllerTest extends TestCase
         $response
             ->assertStatus(201)
             ->assertJson(['response' => 'created']);
+        Queue::assertPushed(SendWebMentions::class);
+        Queue::assertPushed(SyndicateNoteToTwitter::class);
+        Queue::assertPushed(SyndicateNoteToFacebook::class);
+    }
+
+    /**
+     * Test a valid micropub requests using JSON syntax creates a new note with
+     * existing self-created place.
+     *
+     * @return void
+     */
+    public function test_micropub_post_request_with_json_syntax_creates_new_note_with_existing_place_in_location()
+    {
+        $place = new Place();
+        $place->name = 'Test Place';
+        $place->location = new Point((float) 1.23, (float) 4.56);
+        $place->save();
+        $faker = \Faker\Factory::create();
+        $note = $faker->text;
+        $response = $this->json(
+            'POST',
+            '/api/post',
+            [
+                'type' => ['h-entry'],
+                'properties' => [
+                    'content' => [$note],
+                    'location' => [$place->longurl],
+                ],
+            ],
+            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+        );
+        $response
+            ->assertStatus(201)
+            ->assertJson(['response' => 'created']);
+    }
+
+    /**
+     * Test a valid micropub requests using JSON syntax creates a new note with
+     * a new place defined in the location block.
+     *
+     * @return void
+     */
+    public function test_micropub_post_request_with_json_syntax_creates_new_note_with_new_place_in_location()
+    {
+        $faker = \Faker\Factory::create();
+        $note = $faker->text;
+        $response = $this->json(
+            'POST',
+            '/api/post',
+            [
+                'type' => ['h-entry'],
+                'properties' => [
+                    'content' => [$note],
+                    'location' => [[
+                        'type' => ['h-card'],
+                        'properties' => [
+                            'name' => ['Awesome Venue'],
+                            'latitude' => ['1.23'],
+                            'longitude' => ['4.56'],
+                        ],
+                    ]],
+                ],
+            ],
+            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+        );
+        $response
+            ->assertStatus(201)
+            ->assertJson(['response' => 'created']);
+        $this->assertDatabaseHas('places', [
+            'name' => 'Awesome Venue',
+        ]);
+    }
+
+    /**
+     * Test a valid micropub requests using JSON syntax creates a new note without
+     * a new place defined in the location block if there is missing data.
+     *
+     * @return void
+     */
+    public function test_micropub_post_request_with_json_syntax_creates_new_note_without_new_place_in_location()
+    {
+        $faker = \Faker\Factory::create();
+        $note = $faker->text;
+        $response = $this->json(
+            'POST',
+            '/api/post',
+            [
+                'type' => ['h-entry'],
+                'properties' => [
+                    'content' => [$note],
+                    'location' => [[
+                        'type' => ['h-card'],
+                        'properties' => [
+                            'name' => ['Awesome Venue'],
+                        ],
+                    ]],
+                ],
+            ],
+            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+        );
+        $response
+            ->assertStatus(201)
+            ->assertJson(['response' => 'created']);
+        $this->assertDatabaseMissing('places', [
+            'name' => 'Awesome Venue',
+        ]);
     }
 
     /**
@@ -332,7 +512,10 @@ class MicropubControllerTest extends TestCase
                 'action' => 'update',
                 'url' => config('app.url') . '/notes/A',
                 'add' => [
-                    'syndication' => ['https://www.swarmapp.com/checkin/123'],
+                    'syndication' => [
+                        'https://www.swarmapp.com/checkin/123',
+                        'https://www.facebook.com/checkin/123',
+                    ],
                 ],
             ],
             ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
@@ -341,7 +524,113 @@ class MicropubControllerTest extends TestCase
             ->assertJson(['response' => 'updated'])
             ->assertStatus(200);
         $this->assertDatabaseHas('notes', [
-            'swarm_url' => 'https://www.swarmapp.com/checkin/123'
+            'swarm_url' => 'https://www.swarmapp.com/checkin/123',
+            'facebook_url' => 'https://www.facebook.com/checkin/123',
+        ]);
+    }
+
+    public function test_micropub_post_request_with_json_syntax_update_add_image_to_post()
+    {
+        $response = $this->json(
+            'POST',
+            '/api/post',
+            [
+                'action' => 'update',
+                'url' => config('app.url') . '/notes/A',
+                'add' => [
+                    'photo' => ['https://example.org/photo.jpg'],
+                ],
+            ],
+            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+        );
+        $response
+            ->assertJson(['response' => 'updated'])
+            ->assertStatus(200);
+        $this->assertDatabaseHas('media_endpoint', [
+            'path' => 'https://example.org/photo.jpg',
+        ]);
+    }
+
+    public function test_micropub_post_request_with_json_syntax_update_add_post_errors_for_non_note()
+    {
+        $response = $this->json(
+            'POST',
+            '/api/post',
+            [
+                'action' => 'update',
+                'url' => config('app.url') . '/blog/A',
+                'add' => [
+                    'syndication' => ['https://www.swarmapp.com/checkin/123'],
+                ],
+            ],
+            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+        );
+        $response
+            ->assertJson(['error' => 'invalid'])
+            ->assertStatus(500);
+    }
+
+    public function test_micropub_post_request_with_json_syntax_update_add_post_errors_for_note_not_found()
+    {
+        $response = $this->json(
+            'POST',
+            '/api/post',
+            [
+                'action' => 'update',
+                'url' => config('app.url') . '/notes/ZZZZ',
+                'add' => [
+                    'syndication' => ['https://www.swarmapp.com/checkin/123'],
+                ],
+            ],
+            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+        );
+        $response
+            ->assertJson(['error' => 'invalid_request'])
+            ->assertStatus(404);
+    }
+
+    public function test_micropub_post_request_with_json_syntax_update_add_post_errors_for_unsupported_request()
+    {
+        $response = $this->json(
+            'POST',
+            '/api/post',
+            [
+                'action' => 'update',
+                'url' => config('app.url') . '/notes/A',
+                'morph' => [ // or any other unsupported update type
+                    'syndication' => ['https://www.swarmapp.com/checkin/123'],
+                ],
+            ],
+            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+        );
+        $response
+            ->assertJson(['response' => 'error'])
+            ->assertStatus(500);
+    }
+
+    public function test_micropub_post_request_with_json_syntax_update_replace_post_syndication()
+    {
+        $response = $this->json(
+            'POST',
+            '/api/post',
+            [
+                'action' => 'update',
+                'url' => config('app.url') . '/notes/L',
+                'replace' => [
+                    'syndication' => [
+                        'https://www.swarmapp.com/checkin/the-id',
+                        'https://www.facebook.com/post/the-id',
+                    ],
+                ],
+            ],
+            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+        );
+        $response
+            ->assertJson(['response' => 'updated'])
+            ->assertStatus(200);
+        $this->assertDatabaseHas('notes', [
+            'swarm_url' => 'https://www.swarmapp.com/checkin/the-id',
+            'facebook_url' => 'https://www.facebook.com/post/the-id',
         ]);
     }
 

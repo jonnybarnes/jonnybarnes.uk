@@ -128,27 +128,35 @@ class NoteService
 
     private function getCheckin($request): ?Place
     {
-        if (starts_with(array_get($request, 'properties.location.0'), config('app.url'))) {
-            return Place::where('slug', basename(parse_url($data['location'], PHP_URL_PATH)))->first();
-        }
         if (array_get($request, 'properties.location.0.type.0') === 'h-card') {
             try {
                 $place = resolve(PlaceService::class)->createPlaceFromCheckin(
                     $request->input('properties.location.0')
                 );
-            } catch (\Exception $e) {
+            } catch (\InvalidArgumentException $e) {
                 return null;
             }
 
             return $place;
         }
+        if (starts_with(array_get($request, 'properties.location.0'), config('app.url'))) {
+            return Place::where(
+                'slug',
+                basename(
+                    parse_url(
+                        array_get($request, 'properties.location.0'),
+                        PHP_URL_PATH
+                    )
+                )
+            )->first();
+        };
         if (array_get($request, 'properties.checkin')) {
             try {
                 $place = resolve(PlaceService::class)->createPlaceFromCheckin(
                     $request->input('properties.checkin.0')
                 );
 
-            } catch (\Exception $e) {
+            } catch (\InvalidArgumentException $e) {
                 return null;
             }
 
@@ -205,13 +213,8 @@ class NoteService
     private function getMedia(Request $request): array
     {
         $media = [];
-        if ($request->has('photo')) {
-            $photos = $request->input('photo');
-        }
-        if ($request->has('properties.photo')) {
-            $photos = $request->input('properties.photo');
-        }
-        //add support for media uploaded as URLs
+        $photos = $request->input('photo') ?? $request->input('properties.photo');
+
         if (isset($photos)) {
             foreach ((array) $photos as $photo) {
                 // check the media was uploaded to my endpoint, and use path
