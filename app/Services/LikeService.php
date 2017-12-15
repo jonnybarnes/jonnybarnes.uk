@@ -25,7 +25,7 @@ class LikeService
             $url = normalize_url(array_get($request, 'like-of'));
         }
 
-        if (!isset($url)) {
+        if (! isset($url)) {
             throw new \Exception();
         }
 

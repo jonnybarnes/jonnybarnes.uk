@@ -40,7 +40,7 @@ class BookmarkService
             $categories = array_get($request, 'category');
         }
 
-        if (!isset($url)) {
+        if (! isset($url)) {
             throw new \Exception;
         }
 
