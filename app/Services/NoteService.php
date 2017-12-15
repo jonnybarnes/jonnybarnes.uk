@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use Illuminate\Http\Request;
 use App\{Media, Note, Place};
 use App\Jobs\{SendWebMentions, SyndicateNoteToFacebook, SyndicateNoteToTwitter};
 
@@ -13,16 +12,17 @@ class NoteService
     /**
      * Create a new note.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param  array $request
+     * @param  string $client
      * @return \App\Note $note
      */
-    public function createNote(Request $request): Note
+    public function createNote(array $request, string $client = null): Note
     {
         $note = Note::create(
             [
                 'note' => $this->getContent($request),
                 'in_reply_to' => $this->getInReplyTo($request),
-                'client_id' => $this->getClientId($request),
+                'client_id' => $client,
             ]
         );
 
@@ -63,14 +63,7 @@ class NoteService
         return $note;
     }
 
-    private function getClientId(Request $request): string
-    {
-        return resolve(TokenService::class)
-            ->validateToken($request->bearerToken())
-            ->getClaim('client_id');
-    }
-
-    private function getContent(Request $request): ?string
+    private function getContent(array $request): ?string
     {
         if (array_get($request, 'properties.content.0.html')) {
             return array_get($request, 'properties.content.0.html');
@@ -79,40 +72,35 @@ class NoteService
             return array_get($request, 'properties.content.0');
         }
 
-        return $request->input('content');
+        return array_get($request, 'content');
     }
 
-    private function getInReplyTo(Request $request): ?string
+    private function getInReplyTo(array $request): ?string
     {
         if (array_get($request, 'properties.in-reply-to.0')) {
             return array_get($request, 'properties.in-reply-to.0');
         }
 
-        return $request->input('in-reply-to');
+        return array_get($request, 'in-reply-to');
     }
 
-    private function getPublished(Request $request): ?string
+    private function getPublished(array $request): ?string
     {
         if (array_get($request, 'properties.published.0')) {
             return carbon(array_get($request, 'properties.published.0'))
                         ->toDateTimeString();
         }
-        if ($request->input('published')) {
-            return carbon($request->input('published'))->toDateTimeString();
+        if (array_get($request, 'published')) {
+            return carbon(array_get($request, 'published'))->toDateTimeString();
         }
 
         return null;
     }
 
-    private function getLocation(Request $request): ?string
+    private function getLocation(array $request): ?string
     {
-        if (is_string(array_get($request, 'properties.location.0'))) {
-            $location = array_get($request, 'properties.location.0');
-        }
-        if ($request->input('location')) {
-            $location = $request->input('location');
-        }
-        if (isset($location) && substr($location, 0, 4) == 'geo:') {
+        $location = array_get($request, 'properties.location.0') ?? array_get($request, 'location');
+        if (is_string($location) && substr($location, 0, 4) == 'geo:') {
             preg_match_all(
                 '/([0-9\.\-]+)/',
                 $location,
@@ -125,12 +113,12 @@ class NoteService
         return null;
     }
 
-    private function getCheckin($request): ?Place
+    private function getCheckin(array $request): ?Place
     {
         if (array_get($request, 'properties.location.0.type.0') === 'h-card') {
             try {
                 $place = resolve(PlaceService::class)->createPlaceFromCheckin(
-                    $request->input('properties.location.0')
+                    array_get($request, 'properties.location.0')
                 );
             } catch (\InvalidArgumentException $e) {
                 return null;
@@ -152,7 +140,7 @@ class NoteService
         if (array_get($request, 'properties.checkin')) {
             try {
                 $place = resolve(PlaceService::class)->createPlaceFromCheckin(
-                    $request->input('properties.checkin.0')
+                    array_get($request, 'properties.checkin.0')
                 );
             } catch (\InvalidArgumentException $e) {
                 return null;
@@ -164,7 +152,7 @@ class NoteService
         return null;
     }
 
-    private function getSwarmUrl(Request $request): ?string
+    private function getSwarmUrl(array $request): ?string
     {
         if (stristr(array_get($request, 'properties.syndication.0', ''), 'swarmapp')) {
             return array_get($request, 'properties.syndication.0');
@@ -173,17 +161,11 @@ class NoteService
         return null;
     }
 
-    private function getSyndicationTargets(Request $request): array
+    private function getSyndicationTargets(array $request): array
     {
         $syndication = [];
         $targets = array_pluck(config('syndication.targets'), 'uid', 'service.name');
-        $mpSyndicateTo = null;
-        if ($request->has('mp-syndicate-to')) {
-            $mpSyndicateTo = $request->input('mp-syndicate-to');
-        }
-        if ($request->has('properties.mp-syndicate-to')) {
-            $mpSyndicateTo = $request->input('properties.mp-syndicate-to');
-        }
+        $mpSyndicateTo = array_get($request, 'mp-syndicate-to') ?? array_get($request, 'properties.mp-syndicate-to');
         if (is_string($mpSyndicateTo)) {
             $service = array_search($mpSyndicateTo, $targets);
             if ($service == 'Twitter') {
@@ -208,10 +190,10 @@ class NoteService
         return $syndication;
     }
 
-    private function getMedia(Request $request): array
+    private function getMedia(array $request): array
     {
         $media = [];
-        $photos = $request->input('photo') ?? $request->input('properties.photo');
+        $photos = array_get($request, 'photo') ?? array_get($request, 'properties.photo');
 
         if (isset($photos)) {
             foreach ((array) $photos as $photo) {
@@ -232,7 +214,7 @@ class NoteService
         return $media;
     }
 
-    private function getInstagramUrl(Request $request): ?string
+    private function getInstagramUrl(array $request): ?string
     {
         if (starts_with(array_get($request, 'properties.syndication.0'), 'https://www.instagram.com')) {
             return array_get($request, 'properties.syndication.0');

@@ -21,25 +21,27 @@ class BookmarkService
     /**
      * Create a new Bookmark.
      *
-     * @param  Request $request
+     * @param  array $request
+     * @return Bookmark $bookmark
      */
-    public function createBookmark(Request $request): Bookmark
+    public function createBookmark(array $request): Bookmark
     {
-        if ($request->header('Content-Type') == 'application/json') {
+        if (array_get($request, 'properties.bookmark-of.0')) {
             //micropub request
-            $url = normalize_url($request->input('properties.bookmark-of.0'));
-            $name = $request->input('properties.name.0');
-            $content = $request->input('properties.content.0');
-            $categories = $request->input('properties.category');
+            $url = normalize_url(array_get($request, 'properties.bookmark-of.0'));
+            $name = array_get($request, 'properties.name.0');
+            $content = array_get($request, 'properties.content.0');
+            $categories = array_get($request, 'properties.category');
         }
-        if (($request->header('Content-Type') == 'application/x-www-form-urlencoded')
-            ||
-            (str_contains($request->header('Content-Type'), 'multipart/form-data'))
-        ) {
-            $url = normalize_url($request->input('bookmark-of'));
-            $name = $request->input('name');
-            $content = $request->input('content');
-            $categories = $request->input('category');
+        if (array_get($request, 'bookmark-of')) {
+            $url = normalize_url(array_get($request, 'bookmark-of'));
+            $name = array_get($request, 'name');
+            $content = array_get($request, 'content');
+            $categories = array_get($request, 'category');
+        }
+
+        if(!isset($url)) {
+            throw new \Exception;
         }
 
         $bookmark = Bookmark::create([
@@ -55,11 +57,11 @@ class BookmarkService
 
         $targets = array_pluck(config('syndication.targets'), 'uid', 'service.name');
         $mpSyndicateTo = null;
-        if ($request->has('mp-syndicate-to')) {
-            $mpSyndicateTo = $request->input('mp-syndicate-to');
+        if (array_get($request, 'mp-syndicate-to')) {
+            $mpSyndicateTo = array_get($request, 'mp-syndicate-to');
         }
-        if ($request->has('properties.mp-syndicate-to')) {
-            $mpSyndicateTo = $request->input('properties.mp-syndicate-to');
+        if (array_get($request, 'properties.mp-syndicate-to')) {
+            $mpSyndicateTo = array_get($request, 'properties.mp-syndicate-to');
         }
         if (is_string($mpSyndicateTo)) {
             $service = array_search($mpSyndicateTo, $targets);

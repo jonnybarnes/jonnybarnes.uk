@@ -19,7 +19,7 @@ class PlaceService
     {
         //obviously a place needs a lat/lng, but this could be sent in a geo-url
         //if no geo array key, we assume the array already has lat/lng values
-        if (array_key_exists('geo', $data)) {
+        if (array_key_exists('geo', $data) && $data['geo'] !== null) {
             preg_match_all(
                 '/([0-9\.\-]+)/',
                 $data['geo'],

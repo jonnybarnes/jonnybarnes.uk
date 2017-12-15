@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Storage;
 use Monolog\Logger;
 use Ramsey\Uuid\Uuid;
 use App\Jobs\ProcessMedia;
@@ -11,6 +10,7 @@ use Illuminate\Http\UploadedFile;
 use Monolog\Handler\StreamHandler;
 use App\{Like, Media, Note, Place};
 use Intervention\Image\ImageManager;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\{Request, Response};
 use App\Exceptions\InvalidTokenException;
 use Phaza\LaravelPostgis\Geometries\Point;
@@ -40,13 +40,12 @@ class MicropubController extends Controller
      * This function receives an API request, verifies the authenticity
      * then passes over the info to the relavent Service class.
      *
-     * @param  \Illuminate\Http\Request request
      * @return \Illuminate\Http\Response
      */
-    public function post(Request $request)
+    public function post()
     {
         try {
-            $tokenData = $this->tokenService->validateToken($request->bearerToken());
+            $tokenData = $this->tokenService->validateToken(request()->bearerToken());
         } catch (InvalidTokenException $e) {
             return $this->invalidTokenResponse();
         }
@@ -55,13 +54,13 @@ class MicropubController extends Controller
             return $this->tokenHasNoScopeResponse();
         }
 
-        $this->logMicropubRequest($request);
+        $this->logMicropubRequest(request()->all());
 
-        if (($request->input('h') == 'entry') || ($request->input('type.0') == 'h-entry')) {
+        if ((request()->input('h') == 'entry') || (request()->input('type.0') == 'h-entry')) {
             if (stristr($tokenData->getClaim('scope'), 'create') === false) {
                 return $this->insufficientScopeResponse();
             }
-            $location = $this->hentryService->process($request);
+            $location = $this->hentryService->process(request()->all(), $this->getCLientId());
 
             return response()->json([
                 'response' => 'created',
@@ -69,11 +68,11 @@ class MicropubController extends Controller
             ], 201)->header('Location', $location);
         }
 
-        if ($request->input('h') == 'card' || $request->input('type')[0] == 'h-card') {
+        if (request()->input('h') == 'card' || request()->input('type')[0] == 'h-card') {
             if (stristr($tokenData->getClaim('scope'), 'create') === false) {
                 return $this->insufficientScopeResponse();
             }
-            $location = $this->hcardService->process($request);
+            $location = $this->hcardService->process(request()->all());
 
             return response()->json([
                 'response' => 'created',
@@ -81,12 +80,12 @@ class MicropubController extends Controller
             ], 201)->header('Location', $location);
         }
 
-        if ($request->input('action') == 'update') {
+        if (request()->input('action') == 'update') {
             if (stristr($tokenData->getClaim('scope'), 'update') === false) {
                 return $this->returnInsufficientScopeResponse();
             }
 
-            return $this->updateService->process($request);
+            return $this->updateService->process(request()->all());
         }
     }
 
@@ -96,34 +95,33 @@ class MicropubController extends Controller
      * appropriately. Further if the request has the query parameter
      * synidicate-to we respond with the known syndication endpoints.
      *
-     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function get(Request $request)
+    public function get()
     {
         try {
-            $tokenData = $this->tokenService->validateToken($request->bearerToken());
+            $tokenData = $this->tokenService->validateToken(request()->bearerToken());
         } catch (InvalidTokenException $e) {
             return $this->invalidTokenResponse();
         }
 
-        if ($request->input('q') === 'syndicate-to') {
+        if (request()->input('q') === 'syndicate-to') {
             return response()->json([
                 'syndicate-to' => config('syndication.targets'),
             ]);
         }
 
-        if ($request->input('q') == 'config') {
+        if (request()->input('q') == 'config') {
             return response()->json([
                 'syndicate-to' => config('syndication.targets'),
                 'media-endpoint' => route('media-endpoint'),
             ]);
         }
 
-        if (substr($request->input('q'), 0, 4) === 'geo:') {
+        if (substr(request()->input('q'), 0, 4) === 'geo:') {
             preg_match_all(
                 '/([0-9\.\-]+)/',
-                $request->input('q'),
+                request()->input('q'),
                 $matches
             );
             $distance = (count($matches[0]) == 3) ? 100 * $matches[0][2] : 1000;
@@ -149,13 +147,12 @@ class MicropubController extends Controller
     /**
      * Process a media item posted to the media endpoint.
      *
-     * @param  Illuminate\Http\Request $request
      * @return Illuminate\Http\Response
      */
-    public function media(Request $request)
+    public function media()
     {
         try {
-            $tokenData = $this->tokenService->validateToken($request->bearerToken());
+            $tokenData = $this->tokenService->validateToken(request()->bearerToken());
         } catch (InvalidTokenException $e) {
             return $this->invalidTokenResponse();
         }
@@ -168,7 +165,7 @@ class MicropubController extends Controller
             return $this->insufficientScopeResponse();
         }
 
-        if (($request->hasFile('file') && $request->file('file')->isValid()) === false) {
+        if ((request()->hasFile('file') && request()->file('file')->isValid()) === false) {
             return response()->json([
                 'response' => 'error',
                 'error' => 'invalid_request',
@@ -176,13 +173,13 @@ class MicropubController extends Controller
             ], 400);
         }
 
-        $this->logMicropubRequest($request);
+        $this->logMicropubRequest(request()->all());
 
-        $filename = $this->saveFile($request->file('file'));
+        $filename = $this->saveFile(request()->file('file'));
 
         $manager = resolve(ImageManager::class);
         try {
-            $image = $manager->make($request->file('file'));
+            $image = $manager->make(request()->file('file'));
             $width = $image->width();
         } catch (NotReadableException $exception) {
             // not an image
@@ -190,9 +187,9 @@ class MicropubController extends Controller
         }
 
         $media = Media::create([
-            'token' => $request->bearerToken(),
+            'token' => request()->bearerToken(),
             'path' => 'media/' . $filename,
-            'type' => $this->getFileTypeFromMimeType($request->file('file')->getMimeType()),
+            'type' => $this->getFileTypeFromMimeType(request()->file('file')->getMimeType()),
             'image_widths' => $width,
         ]);
 
@@ -248,11 +245,18 @@ class MicropubController extends Controller
         return 'download';
     }
 
-    private function logMicropubRequest(Request $request)
+    private function getClientId(): string
+    {
+        return resolve(TokenService::class)
+            ->validateToken(request()->bearerToken())
+            ->getClaim('client_id');
+    }
+
+    private function logMicropubRequest(array $request)
     {
         $logger = new Logger('micropub');
         $logger->pushHandler(new StreamHandler(storage_path('logs/micropub.log')), Logger::DEBUG);
-        $logger->debug('MicropubLog', $request->all());
+        $logger->debug('MicropubLog', $request);
     }
 
     private function saveFile(UploadedFile $file)

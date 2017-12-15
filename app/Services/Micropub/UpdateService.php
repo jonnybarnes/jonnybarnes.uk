@@ -4,14 +4,13 @@ namespace App\Services\Micropub;
 
 use App\Note;
 use App\Media;
-use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class UpdateService
 {
-    public function process(Request $request)
+    public function process(array $request)
     {
-        $urlPath = parse_url($request->input('url'), PHP_URL_PATH);
+        $urlPath = parse_url(array_get($request, 'url'), PHP_URL_PATH);
 
         //is it a note we are updating?
         if (mb_substr($urlPath, 1, 5) !== 'notes') {
@@ -31,8 +30,8 @@ class UpdateService
         }
 
         //got the note, are we dealing with a “replace” request?
-        if ($request->has('replace')) {
-            foreach ($request->input('replace') as $property => $value) {
+        if (array_get($request, 'replace')) {
+            foreach (array_get($request, 'replace') as $property => $value) {
                 if ($property == 'content') {
                     $note->note = $value[0];
                 }
@@ -58,8 +57,8 @@ class UpdateService
         }
 
         //how about “add”
-        if ($request->has('add')) {
-            foreach ($request->input('add') as $property => $value) {
+        if (array_get($request, 'add')) {
+            foreach (array_get($request, 'add') as $property => $value) {
                 if ($property == 'syndication') {
                     foreach ($value as $syndicationURL) {
                         if (starts_with($syndicationURL, 'https://www.facebook.com')) {
