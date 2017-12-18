@@ -1,24 +1,24 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Unit\Jobs;
 
-use App\Bookmark;
+use App\Note;
 use Tests\TestCase;
 use GuzzleHttp\Client;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Handler\MockHandler;
-use App\Jobs\SyndicateBookmarkToFacebook;
+use App\Jobs\SyndicateNoteToTwitter;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
-class SyndicateBookmarkToFacebookJobTest extends TestCase
+class SyndicateNoteToTwitterJobTest extends TestCase
 {
     use DatabaseTransactions;
 
     public function test_the_job()
     {
         $json = json_encode([
-            'url' => 'https://facebook.com/123'
+            'url' => 'https://twitter.com/i/web/status/123'
         ]);
         $mock = new MockHandler([
             new Response(201, ['Content-Type' => 'application/json'], $json),
@@ -26,13 +26,13 @@ class SyndicateBookmarkToFacebookJobTest extends TestCase
         $handler = HandlerStack::create($mock);
         $client = new Client(['handler' => $handler]);
 
-        $bookmark = Bookmark::find(1);
-        $job = new SyndicateBookmarkToFacebook($bookmark);
+        $note = Note::find(1);
+        $job = new SyndicateNoteToTwitter($note);
         $job->handle($client);
 
-        $this->assertDatabaseHas('bookmarks', [
+        $this->assertDatabaseHas('notes', [
             'id' => 1,
-            'syndicates' => '{"facebook": "https://facebook.com/123"}',
+            'tweet_id' => '123',
         ]);
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Unit\Jobs;
 
 use Storage;
 use Tests\TestCase;
@@ -24,7 +24,7 @@ class ProcessMediaJobTest extends TestCase
     {
         Storage::fake('s3');
         $manager = app()->make(ImageManager::class);
-        Storage::disk('local')->put('aaron.png', file_get_contents(__DIR__.'/../aaron.png'));
+        Storage::disk('local')->put('aaron.png', file_get_contents(__DIR__.'/../../aaron.png'));
         $job = new ProcessMedia('aaron.png');
         $job->handle($manager);
 
@@ -34,7 +34,7 @@ class ProcessMediaJobTest extends TestCase
     public function test_large_images_have_smaller_files_created()
     {
         $manager = app()->make(ImageManager::class);
-        Storage::disk('local')->put('test-image.jpg', file_get_contents(__DIR__.'/../test-image.jpg'));
+        Storage::disk('local')->put('test-image.jpg', file_get_contents(__DIR__.'/../../test-image.jpg'));
         Storage::fake('s3');
         $job = new ProcessMedia('test-image.jpg');
         $job->handle($manager);

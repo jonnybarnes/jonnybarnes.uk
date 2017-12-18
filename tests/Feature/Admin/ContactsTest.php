@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Admin;
 
 use App\Contact;
 use Tests\TestCase;
@@ -11,7 +11,7 @@ use Illuminate\Http\UploadedFile;
 use GuzzleHttp\Handler\MockHandler;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
-class ContactsAdminTest extends TestCase
+class ContactsTest extends TestCase
 {
     use DatabaseTransactions;
 
@@ -83,7 +83,7 @@ class ContactsAdminTest extends TestCase
 
     public function test_edit_contact_with_uploaded_avatar()
     {
-        copy(__DIR__ . '/../aaron.png', sys_get_temp_dir() . '/tantek.png');
+        copy(__DIR__ . '/../../aaron.png', sys_get_temp_dir() . '/tantek.png');
         $path = sys_get_temp_dir() . '/tantek.png';
         $file = new UploadedFile($path, 'tantek.png', 'image/png', filesize($path), null, true);
         $this->withSession([
@@ -97,7 +97,7 @@ class ContactsAdminTest extends TestCase
             'avatar' => $file,
         ]);
         $this->assertFileEquals(
-            __DIR__ . '/../aaron.png',
+            __DIR__ . '/../../aaron.png',
             public_path() . '/assets/profile-images/tantek.com/image'
         );
     }
@@ -121,7 +121,7 @@ class ContactsAdminTest extends TestCase
     <img class="u-photo" src="http://tantek.com/tantek.png">
 </div>
 HTML;
-        $file = fopen(__DIR__ . '/../aaron.png', 'r');
+        $file = fopen(__DIR__ . '/../../aaron.png', 'r');
         $mock = new MockHandler([
             new Response(200, ['Content-Type' => 'text/html'], $html),
             new Response(200, ['Content-Type' => 'iamge/png'], $file),
@@ -135,7 +135,7 @@ HTML;
         ])->get('/admin/contacts/1/getavatar');
 
         $this->assertFileEquals(
-            __DIR__ . '/../aaron.png',
+            __DIR__ . '/../../aaron.png',
             public_path() . '/assets/profile-images/tantek.com/image'
         );
     }

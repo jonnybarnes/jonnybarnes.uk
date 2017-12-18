@@ -1,11 +1,11 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Admin;
 
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
-class ClientsAdminTest extends TestCase
+class ClientsTest extends TestCase
 {
     use DatabaseTransactions;
 

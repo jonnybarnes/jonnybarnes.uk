@@ -1,12 +1,12 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Admin;
 
 use Tests\TestCase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
-class ArticlesAdminTest extends TestCase
+class ArticlesTest extends TestCase
 {
     use DatabaseTransactions;
 

@@ -1,13 +1,13 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Admin;
 
 use Tests\TestCase;
 use App\Jobs\SendWebMentions;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
-class NotesAdminTest extends TestCase
+class NotesTest extends TestCase
 {
     use DatabaseTransactions;
 
