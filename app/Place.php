@@ -136,6 +136,9 @@ class Place extends Model
 
     public function setExternalUrlsAttribute($url)
     {
+        if ($url === null) {
+            return;
+        }
         $type = $this->getType($url);
         $already = [];
         if (array_key_exists('external_urls', $this->attributes)) {

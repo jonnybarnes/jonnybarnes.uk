@@ -6,26 +6,27 @@ namespace App\Services;
 
 use App\Like;
 use App\Jobs\ProcessLike;
-use Illuminate\Http\Request;
 
 class LikeService
 {
     /**
      * Create a new Like.
      *
-     * @param  Request $request
+     * @param  array $request
+     * @return Like $like
      */
-    public function createLike(Request $request): Like
+    public function createLike(array $request): Like
     {
-        if ($request->header('Content-Type') == 'application/json') {
+        if (array_get($request, 'properties.like-of.0')) {
             //micropub request
-            $url = normalize_url($request->input('properties.like-of.0'));
+            $url = normalize_url(array_get($request, 'properties.like-of.0'));
         }
-        if (($request->header('Content-Type') == 'application/x-www-form-urlencoded')
-            ||
-            ($request->header('Content-Type') == 'multipart/form-data')
-        ) {
-            $url = normalize_url($request->input('like-of'));
+        if (array_get($request, 'like-of')) {
+            $url = normalize_url(array_get($request, 'like-of'));
+        }
+
+        if (! isset($url)) {
+            throw new \Exception();
         }
 
         $like = Like::create(['url' => $url]);

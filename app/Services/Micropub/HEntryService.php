@@ -2,26 +2,25 @@
 
 namespace App\Services\Micropub;
 
-use Illuminate\Http\Request;
 use App\Services\{BookmarkService, LikeService, NoteService};
 
 class HEntryService
 {
-    public function process(Request $request)
+    public function process(array $request, string $client = null)
     {
-        if ($request->has('properties.like-of') || $request->has('like-of')) {
+        if (array_get($request, 'properties.like-of') || array_get($request, 'like-of')) {
             $like = resolve(LikeService::class)->createLike($request);
 
             return $like->longurl;
         }
 
-        if ($request->has('properties.bookmark-of') || $request->has('bookmark-of')) {
+        if (array_get($request, 'properties.bookmark-of') || array_get($request, 'bookmark-of')) {
             $bookmark = resolve(BookmarkService::class)->createBookmark($request);
 
             return $bookmark->longurl;
         }
 
-        $note = resolve(NoteService::class)->createNote($request);
+        $note = resolve(NoteService::class)->createNote($request, $client);
 
         return $note->longurl;
     }

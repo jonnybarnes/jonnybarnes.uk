@@ -153,4 +153,37 @@ class SwarmTest extends TestCase
             'swarm_url' => 'https://www.swarmapp.com/checkin/def'
         ]);
     }
+
+    public function test_faked_ownyourswarm_request_saves_just_post_when_error_in_checkin_data()
+    {
+        $response = $this->json(
+            'POST',
+            'api/post',
+            [
+                'type' => ['h-entry'],
+                'properties' => [
+                    'published' => [\Carbon\Carbon::now()->toDateTimeString()],
+                    'syndication' => ['https://www.swarmapp.com/checkin/abc'],
+                    'content' => [[
+                        'value' => 'My first #checkin using Example Product',
+                        'html' => 'My first #checkin using <a href="http://example.org">Example Product</a>',
+                    ]],
+                    'checkin' => [[
+                        'type' => ['h-card'],
+                        'properties' => [
+                            'name' => ['Awesome Venue'],
+                            'url' => ['https://foursquare.com/v/123456'],
+                        ],
+                    ]],
+                ],
+            ],
+            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+        );
+        $response
+            ->assertStatus(201)
+            ->assertJson(['response' => 'created']);
+        $this->assertDatabaseMissing('places', [
+            'name' => 'Awesome Venue',
+        ]);
+    }
 }

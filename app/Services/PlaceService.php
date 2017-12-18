@@ -19,7 +19,7 @@ class PlaceService
     {
         //obviously a place needs a lat/lng, but this could be sent in a geo-url
         //if no geo array key, we assume the array already has lat/lng values
-        if (array_key_exists('geo', $data)) {
+        if (array_key_exists('geo', $data) && $data['geo'] !== null) {
             preg_match_all(
                 '/([0-9\.\-]+)/',
                 $data['geo'],
@@ -47,7 +47,7 @@ class PlaceService
     {
         //check if the place exists if from swarm
         if (array_has($checkin, 'properties.url')) {
-            $place = Place::whereExternalURL($checkin['properties']['url'][0])->get();
+            $place = Place::whereExternalURL(array_get($checkin, 'properties.url.0'))->get();
             if (count($place) === 1) {
                 return $place->first();
             }
@@ -59,11 +59,11 @@ class PlaceService
             throw new \InvalidArgumentException('Missing required longitude/latitude');
         }
         $place = new Place();
-        $place->name = $checkin['properties']['name'][0];
-        $place->external_urls = $checkin['properties']['url'][0];
+        $place->name = array_get($checkin, 'properties.name.0');
+        $place->external_urls = array_get($checkin, 'properties.url.0');
         $place->location = new Point(
-            (float) $checkin['properties']['latitude'][0],
-            (float) $checkin['properties']['longitude'][0]
+            (float) array_get($checkin, 'properties.latitude.0'),
+            (float) array_get($checkin, 'properties.longitude.0')
         );
         $place->save();
 
