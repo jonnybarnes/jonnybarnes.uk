@@ -40,10 +40,6 @@ class BookmarkService
             $categories = array_get($request, 'category');
         }
 
-        if (! isset($url)) {
-            throw new \Exception;
-        }
-
         $bookmark = Bookmark::create([
             'url' => $url,
             'name' => $name,

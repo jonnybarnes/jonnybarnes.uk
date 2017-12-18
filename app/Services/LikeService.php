@@ -25,10 +25,6 @@ class LikeService
             $url = normalize_url(array_get($request, 'like-of'));
         }
 
-        if (! isset($url)) {
-            throw new \Exception();
-        }
-
         $like = Like::create(['url' => $url]);
         ProcessLike::dispatch($like);
 
