@@ -2,7 +2,7 @@
 
 namespace Tests\Unit;
 
-use App\Tag;
+use App\Models\Tag;
 use Tests\TestCase;
 
 class TagsTest extends TestCase

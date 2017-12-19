@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -27,6 +27,6 @@ class MicropubClient extends Model
      */
     public function notes()
     {
-        return $this->hasMany('App\Note', 'client_id', 'client_url');
+        return $this->hasMany('App\Models\Note', 'client_id', 'client_url');
     }
 }

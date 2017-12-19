@@ -2,10 +2,10 @@
 
 namespace Tests\Unit\Jobs;
 
-use App\Bookmark;
 use Tests\TestCase;
 use Ramsey\Uuid\Uuid;
 use GuzzleHttp\Client;
+use App\Models\Bookmark;
 use GuzzleHttp\HandlerStack;
 use App\Jobs\ProcessBookmark;
 use GuzzleHttp\Psr7\Response;

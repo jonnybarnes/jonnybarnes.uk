@@ -2,8 +2,8 @@
 
 namespace Tests\Unit;
 
-use App\WebMention;
 use Tests\TestCase;
+use App\Models\WebMention;
 use Thujohn\Twitter\Facades\Twitter;
 use Illuminate\Support\Facades\Cache;
 
@@ -12,7 +12,7 @@ class WebMentionTest extends TestCase
     public function test_commentable_method()
     {
         $webmention = WebMention::find(1);
-        $this->assertInstanceOf('App\Note', $webmention->commentable);
+        $this->assertInstanceOf('App\Models\Note', $webmention->commentable);
     }
     public function test_published_attribute_when_no_relavent_mf2()
     {

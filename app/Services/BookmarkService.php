@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use App\Tag;
-use App\Bookmark;
 use Ramsey\Uuid\Uuid;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use App\Jobs\ProcessBookmark;
+use App\Models\{Bookmark, Tag};
 use Spatie\Browsershot\Browsershot;
 use App\Jobs\SyndicateBookmarkToTwitter;
 use App\Jobs\SyndicateBookmarkToFacebook;

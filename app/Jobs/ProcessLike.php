@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Like;
+use App\Models\Like;
 use GuzzleHttp\Client;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;

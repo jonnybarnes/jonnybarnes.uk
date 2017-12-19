@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Cache;
 use Twitter;
@@ -69,7 +69,7 @@ class Note extends Model
      */
     public function tags()
     {
-        return $this->belongsToMany('App\Tag');
+        return $this->belongsToMany('App\Models\Tag');
     }
 
     /**
@@ -79,7 +79,7 @@ class Note extends Model
      */
     public function client()
     {
-        return $this->belongsTo('App\MicropubClient', 'client_id', 'client_url');
+        return $this->belongsTo('App\Models\MicropubClient', 'client_id', 'client_url');
     }
 
     /**
@@ -89,7 +89,7 @@ class Note extends Model
      */
     public function webmentions()
     {
-        return $this->morphMany('App\WebMention', 'commentable');
+        return $this->morphMany('App\Models\WebMention', 'commentable');
     }
 
     /**
@@ -99,7 +99,7 @@ class Note extends Model
      */
     public function place()
     {
-        return $this->belongsTo('App\Place');
+        return $this->belongsTo('App\Models\Place');
     }
 
     /**
@@ -109,7 +109,7 @@ class Note extends Model
      */
     public function media()
     {
-        return $this->hasMany('App\Media');
+        return $this->hasMany('App\Models\Media');
     }
 
     /**

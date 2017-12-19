@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -20,7 +20,7 @@ class Tag extends Model
      */
     public function notes()
     {
-        return $this->belongsToMany('App\Note');
+        return $this->belongsToMany('App\Models\Note');
     }
 
     /**
@@ -28,7 +28,7 @@ class Tag extends Model
      */
     public function bookmarks()
     {
-        return $this->belongsToMany('App\Bookmark');
+        return $this->belongsToMany('App\Models\Bookmark');
     }
 
     /**

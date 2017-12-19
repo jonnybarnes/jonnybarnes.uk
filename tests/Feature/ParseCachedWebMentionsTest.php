@@ -2,8 +2,8 @@
 
 namespace Tests\Feature;
 
-use App\WebMention;
 use Tests\TestCase;
+use App\Models\WebMention;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 

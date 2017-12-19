@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Bookmark;
+use App\Models\Bookmark;
 
 class BookmarksController extends Controller
 {

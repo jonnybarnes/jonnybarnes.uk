@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Note;
+use App\Models\Note;
 use Illuminate\Http\Request;
 use App\Jobs\SendWebMentions;
 use App\Http\Controllers\Controller;

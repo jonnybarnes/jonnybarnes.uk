@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -25,7 +25,7 @@ class Media extends Model
      */
     public function note()
     {
-        return $this->belongsTo('App\Note');
+        return $this->belongsTo('App\Models\Note');
     }
 
     /**

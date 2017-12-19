@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\MicropubClient;
 use Illuminate\Http\Request;
+use App\Models\MicropubClient;
 use App\Http\Controllers\Controller;
 
 class ClientsController extends Controller

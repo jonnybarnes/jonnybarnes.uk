@@ -2,7 +2,7 @@
 
 namespace App\Observers;
 
-use App\{Note, Tag};
+use App\Models\{Note, Tag};
 
 class NoteObserver
 {

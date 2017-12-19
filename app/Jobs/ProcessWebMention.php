@@ -4,8 +4,8 @@ namespace App\Jobs;
 
 use Mf2;
 use GuzzleHttp\Client;
-use App\{Note, WebMention};
 use Illuminate\Bus\Queueable;
+use App\Models\{Note, WebMention};
 use Jonnybarnes\WebmentionsParser\Parser;
 use GuzzleHttp\Exception\RequestException;
 use Illuminate\Contracts\Queue\ShouldQueue;

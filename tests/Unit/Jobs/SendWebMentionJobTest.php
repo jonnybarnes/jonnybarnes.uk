@@ -2,8 +2,8 @@
 
 namespace Tests\Unit\Jobs;
 
-use App\Note;
 use Tests\TestCase;
+use App\Models\Note;
 use GuzzleHttp\Client;
 use GuzzleHttp\HandlerStack;
 use App\Jobs\SendWebMentions;

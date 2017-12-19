@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Note;
+use App\Models\Note;
 
 class ActivityStreamsService
 {

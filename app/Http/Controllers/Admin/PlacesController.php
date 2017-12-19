@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Place;
+use App\Models\Place;
 use Illuminate\Http\Request;
 use App\Services\PlaceService;
 use App\Http\Controllers\Controller;

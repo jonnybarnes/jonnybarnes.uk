@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use App\Place;
+use App\Models\Place;
 use Phaza\LaravelPostgis\Geometries\Point;
 
 class PlaceService

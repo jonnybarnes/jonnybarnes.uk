@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Bookmark;
+use App\Models\Bookmark;
 use Illuminate\Bus\Queueable;
 use App\Services\BookmarkService;
 use Illuminate\Queue\SerializesModels;

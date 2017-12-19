@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Note;
+use App\Models\Note;
 use GuzzleHttp\Client;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;

@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
@@ -53,7 +53,7 @@ class Place extends Model
      */
     public function notes()
     {
-        return $this->hasMany('App\Note');
+        return $this->hasMany('App\Models\Note');
     }
 
     /**

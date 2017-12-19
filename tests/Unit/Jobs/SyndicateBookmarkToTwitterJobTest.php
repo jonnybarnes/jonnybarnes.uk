@@ -2,9 +2,9 @@
 
 namespace Tests\Unit\Jobs;
 
-use App\Bookmark;
 use Tests\TestCase;
 use GuzzleHttp\Client;
+use App\Models\Bookmark;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Handler\MockHandler;

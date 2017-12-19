@@ -2,8 +2,8 @@
 
 namespace App\Jobs;
 
-use App\MicropubClient;
 use Illuminate\Bus\Queueable;
+use App\Models\MicropubClient;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;

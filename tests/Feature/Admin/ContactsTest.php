@@ -2,9 +2,9 @@
 
 namespace Tests\Feature\Admin;
 
-use App\Contact;
 use Tests\TestCase;
 use GuzzleHttp\Client;
+use App\Models\Contact;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Http\UploadedFile;

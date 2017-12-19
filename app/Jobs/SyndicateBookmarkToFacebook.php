@@ -2,8 +2,8 @@
 
 namespace App\Jobs;
 
-use App\Bookmark;
 use GuzzleHttp\Client;
+use App\Models\Bookmark;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;

@@ -2,8 +2,8 @@
 
 namespace Tests\Unit;
 
-use App\Place;
 use Tests\TestCase;
+use App\Models\Place;
 use App\Services\PlaceService;
 use Phaza\LaravelPostgis\Geometries\Point;
 use Illuminate\Database\Eloquent\Collection;
@@ -62,7 +62,7 @@ class PlacesTest extends TestCase
                 'url' => ['https://www.openstreetmap.org/way/1234'],
             ]
         ]);
-        $this->assertInstanceOf('App\Place', $ret); // a place was returned
+        $this->assertInstanceOf('App\Models\Place', $ret); // a place was returned
         $this->assertEquals(2, count(Place::all())); // still 2 places
     }
 

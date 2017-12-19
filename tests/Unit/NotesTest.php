@@ -2,9 +2,8 @@
 
 namespace Tests\Unit;
 
-use App\Tag;
-use App\Note;
 use Tests\TestCase;
+use App\Models\{Note, Tag};
 use Thujohn\Twitter\Facades\Twitter;
 
 class NotesTest extends TestCase

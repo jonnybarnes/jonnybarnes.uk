@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use App\Like;
+use App\Models\Like;
 use App\Jobs\ProcessLike;
 
 class LikeService

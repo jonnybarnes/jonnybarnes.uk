@@ -2,8 +2,7 @@
 
 namespace App\Services\Micropub;
 
-use App\Note;
-use App\Media;
+use App\Models\{Media, Note};
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class UpdateService

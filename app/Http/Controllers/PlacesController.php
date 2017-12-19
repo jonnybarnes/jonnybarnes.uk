@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Place;
+use App\Models\Place;
 
 class PlacesController extends Controller
 {

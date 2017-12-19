@@ -2,8 +2,8 @@
 
 namespace Tests\Feature;
 
-use App\Note;
 use Tests\TestCase;
+use App\Models\Note;
 
 class NotesControllerTest extends TestCase
 {

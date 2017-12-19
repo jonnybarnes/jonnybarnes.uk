@@ -2,8 +2,8 @@
 
 namespace Tests\Unit;
 
-use App\Media;
 use Tests\TestCase;
+use App\Models\Media;
 
 class MediaTest extends TestCase
 {
@@ -11,6 +11,6 @@ class MediaTest extends TestCase
     {
         $media = Media::find(1);
         $note = $media->note;
-        $this->assertInstanceOf('App\Note', $note);
+        $this->assertInstanceOf('App\Models\Note', $note);
     }
 }

@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
+use App\Models\Place;
 
 class PlacesTest extends TestCase
 {
@@ -24,7 +25,7 @@ class PlacesTest extends TestCase
      */
     public function test_single_place()
     {
-        $place = \App\Place::where('slug', 'the-bridgewater-pub')->first();
+        $place = Place::where('slug', 'the-bridgewater-pub')->first();
         $response = $this->get('/places/the-bridgewater-pub');
         $response->assertViewHas('place', $place);
     }

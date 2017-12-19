@@ -2,8 +2,8 @@
 
 namespace Tests\Unit;
 
-use App\Like;
 use Tests\TestCase;
+use App\Models\Like;
 
 class LikesTest extends TestCase
 {

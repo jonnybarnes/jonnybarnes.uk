@@ -3,8 +3,8 @@
 namespace Tests\Feature;
 
 use Queue;
-use App\Like;
 use Tests\TestCase;
+use App\Models\Like;
 use Tests\TestToken;
 use GuzzleHttp\Client;
 use App\Jobs\ProcessLike;

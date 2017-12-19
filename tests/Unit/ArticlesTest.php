@@ -2,8 +2,8 @@
 
 namespace Tests\Unit;
 
-use App\Article;
 use Tests\TestCase;
+use App\Models\Article;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class ArticlesTest extends TestCase

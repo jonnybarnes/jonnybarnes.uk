@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Note;
-use App\Article;
+use App\Models\{Article, Note};
 
 class FeedsController extends Controller
 {

@@ -2,14 +2,13 @@
 
 namespace Tests\Feature;
 
-use App\Media;
-use App\Place;
 use Carbon\Carbon;
 use Tests\TestCase;
 use Tests\TestToken;
 use Lcobucci\JWT\Builder;
 use App\Jobs\ProcessMedia;
 use App\Jobs\SendWebMentions;
+use App\Models\{Media, Place};
 use Illuminate\Http\UploadedFile;
 use App\Jobs\SyndicateNoteToTwitter;
 use Lcobucci\JWT\Signer\Hmac\Sha256;
