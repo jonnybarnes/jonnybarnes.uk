@@ -1,6 +1,6 @@
 # Changelog
 
-## Version {next}
+## Version 0.14 (2017-12-22)
   - Tests
   - Refactor
   - More tests, seriously, code-coverage to now above 90%
