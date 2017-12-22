@@ -1,6 +1,6 @@
 <?php
 
-use App\Place;
+use App\Models\Place;
 use Illuminate\Database\Seeder;
 use Phaza\LaravelPostgis\Geometries\Point;
 
