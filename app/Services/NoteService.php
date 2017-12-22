@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use App\{Media, Note, Place};
+use App\Models\{Media, Note, Place};
 use App\Jobs\{SendWebMentions, SyndicateNoteToFacebook, SyndicateNoteToTwitter};
 
 class NoteService
@@ -12,91 +12,38 @@ class NoteService
     /**
      * Create a new note.
      *
-     * @param  array $data
+     * @param  array $request
+     * @param  string $client
      * @return \App\Note $note
      */
-    public function createNote(array $data): Note
+    public function createNote(array $request, string $client = null): Note
     {
-
-        //check the input
-        if (array_key_exists('content', $data) === false) {
-            $data['content'] = null;
-        }
-        if (array_key_exists('in-reply-to', $data) === false) {
-            $data['in-reply-to'] = null;
-        }
-        if (array_key_exists('client-id', $data) === false) {
-            $data['client-id'] = null;
-        }
         $note = Note::create(
             [
-                'note' => $data['content'],
-                'in_reply_to' => $data['in-reply-to'],
-                'client_id' => $data['client-id'],
+                'note' => $this->getContent($request),
+                'in_reply_to' => $this->getInReplyTo($request),
+                'client_id' => $client,
             ]
         );
 
-        if (array_key_exists('published', $data) && empty($data['published']) === false) {
-            $carbon = carbon($data['published']);
-            $note->created_at = $note->updated_at = $carbon->toDateTimeString();
+        if ($this->getPublished($request)) {
+            $note->created_at = $note->updated_at = $this->getPublished($request);
         }
 
-        if (array_key_exists('location', $data) && $data['location'] !== null && $data['location'] !== 'no-location') {
-            if (starts_with($data['location'], config('app.url'))) {
-                //uri of form http://host/places/slug, we want slug
-                //get the URL path, then take last part, we can hack with basename
-                //as path looks like file path.
-                $place = Place::where('slug', basename(parse_url($data['location'], PHP_URL_PATH)))->first();
-                $note->place()->associate($place);
-            }
-            if (substr($data['location'], 0, 4) == 'geo:') {
-                preg_match_all(
-                    '/([0-9\.\-]+)/',
-                    $data['location'],
-                    $matches
-                );
-                $note->location = $matches[0][0] . ', ' . $matches[0][1];
+        $note->location = $this->getLocation($request);
+
+        if ($this->getCheckin($request)) {
+            $note->place()->associate($this->getCheckin($request));
+            $note->swarm_url = $this->getSwarmUrl($request);
+            if ($note->note === null || $note->note == '') {
+                $note->note = 'I’ve just checked in with Swarm';
             }
         }
 
-        if (array_key_exists('checkin', $data) && $data['checkin'] !== null) {
-            $place = Place::where('slug', basename(parse_url($data['checkin'], PHP_URL_PATH)))->first();
-            if ($place !== null) {
-                $note->place()->associate($place);
-                $note->swarm_url = $data['swarm-url'];
-                if ($note->note === null || $note->note == '') {
-                    $note->note = 'I’ve just checked in with Swarm';
-                }
-            }
-        }
+        $note->instagram_url = $this->getInstagramUrl($request);
 
-        /* drop image support for now
-        //add images to media library
-        if ($request->hasFile('photo')) {
-            $files = $request->file('photo');
-            foreach ($files as $file) {
-                $note->addMedia($file)->toCollectionOnDisk('images', 's3');
-            }
-        }
-        */
-        //add support for media uploaded as URLs
-        if (array_key_exists('photo', $data)) {
-            foreach ($data['photo'] as $photo) {
-                // check the media was uploaded to my endpoint, and use path
-                if (starts_with($photo, config('filesystems.disks.s3.url'))) {
-                    $path = substr($photo, strlen(config('filesystems.disks.s3.url')));
-                    $media = Media::where('path', ltrim($path, '/'))->firstOrFail();
-                } else {
-                    $media = Media::firstOrNew(['path' => $photo]);
-                    // currently assuming this is a photo from Swarm or OwnYourGram
-                    $media->type = 'image';
-                    $media->save();
-                }
-                $note->media()->save($media);
-            }
-            if (array_key_exists('instagram-url', $data)) {
-                $note->instagram_url = $data['instagram-url'];
-            }
+        foreach ($this->getMedia($request) as $media) {
+            $note->media()->save($media);
         }
 
         $note->save();
@@ -104,13 +51,175 @@ class NoteService
         dispatch(new SendWebMentions($note));
 
         //syndication targets
-        if (in_array('twitter', $data['syndicate'])) {
-            dispatch(new SyndicateNoteToTwitter($note));
-        }
-        if (in_array('facebook', $data['syndicate'])) {
-            dispatch(new SyndicateNoteToFacebook($note));
+        if (count($this->getSyndicationTargets($request)) > 0) {
+            if (in_array('twitter', $this->getSyndicationTargets($request))) {
+                dispatch(new SyndicateNoteToTwitter($note));
+            }
+            if (in_array('facebook', $this->getSyndicationTargets($request))) {
+                dispatch(new SyndicateNoteToFacebook($note));
+            }
         }
 
         return $note;
+    }
+
+    private function getContent(array $request): ?string
+    {
+        if (array_get($request, 'properties.content.0.html')) {
+            return array_get($request, 'properties.content.0.html');
+        }
+        if (is_string(array_get($request, 'properties.content.0'))) {
+            return array_get($request, 'properties.content.0');
+        }
+
+        return array_get($request, 'content');
+    }
+
+    private function getInReplyTo(array $request): ?string
+    {
+        if (array_get($request, 'properties.in-reply-to.0')) {
+            return array_get($request, 'properties.in-reply-to.0');
+        }
+
+        return array_get($request, 'in-reply-to');
+    }
+
+    private function getPublished(array $request): ?string
+    {
+        if (array_get($request, 'properties.published.0')) {
+            return carbon(array_get($request, 'properties.published.0'))
+                        ->toDateTimeString();
+        }
+        if (array_get($request, 'published')) {
+            return carbon(array_get($request, 'published'))->toDateTimeString();
+        }
+
+        return null;
+    }
+
+    private function getLocation(array $request): ?string
+    {
+        $location = array_get($request, 'properties.location.0') ?? array_get($request, 'location');
+        if (is_string($location) && substr($location, 0, 4) == 'geo:') {
+            preg_match_all(
+                '/([0-9\.\-]+)/',
+                $location,
+                $matches
+            );
+
+            return $matches[0][0] . ', ' . $matches[0][1];
+        }
+
+        return null;
+    }
+
+    private function getCheckin(array $request): ?Place
+    {
+        if (array_get($request, 'properties.location.0.type.0') === 'h-card') {
+            try {
+                $place = resolve(PlaceService::class)->createPlaceFromCheckin(
+                    array_get($request, 'properties.location.0')
+                );
+            } catch (\InvalidArgumentException $e) {
+                return null;
+            }
+
+            return $place;
+        }
+        if (starts_with(array_get($request, 'properties.location.0'), config('app.url'))) {
+            return Place::where(
+                'slug',
+                basename(
+                    parse_url(
+                        array_get($request, 'properties.location.0'),
+                        PHP_URL_PATH
+                    )
+                )
+            )->first();
+        }
+        if (array_get($request, 'properties.checkin')) {
+            try {
+                $place = resolve(PlaceService::class)->createPlaceFromCheckin(
+                    array_get($request, 'properties.checkin.0')
+                );
+            } catch (\InvalidArgumentException $e) {
+                return null;
+            }
+
+            return $place;
+        }
+
+        return null;
+    }
+
+    private function getSwarmUrl(array $request): ?string
+    {
+        if (stristr(array_get($request, 'properties.syndication.0', ''), 'swarmapp')) {
+            return array_get($request, 'properties.syndication.0');
+        }
+
+        return null;
+    }
+
+    private function getSyndicationTargets(array $request): array
+    {
+        $syndication = [];
+        $targets = array_pluck(config('syndication.targets'), 'uid', 'service.name');
+        $mpSyndicateTo = array_get($request, 'mp-syndicate-to') ?? array_get($request, 'properties.mp-syndicate-to');
+        if (is_string($mpSyndicateTo)) {
+            $service = array_search($mpSyndicateTo, $targets);
+            if ($service == 'Twitter') {
+                $syndication[] = 'twitter';
+            }
+            if ($service == 'Facebook') {
+                $syndication[] = 'facebook';
+            }
+        }
+        if (is_array($mpSyndicateTo)) {
+            foreach ($mpSyndicateTo as $uid) {
+                $service = array_search($uid, $targets);
+                if ($service == 'Twitter') {
+                    $syndication[] = 'twitter';
+                }
+                if ($service == 'Facebook') {
+                    $syndication[] = 'facebook';
+                }
+            }
+        }
+
+        return $syndication;
+    }
+
+    private function getMedia(array $request): array
+    {
+        $media = [];
+        $photos = array_get($request, 'photo') ?? array_get($request, 'properties.photo');
+
+        if (isset($photos)) {
+            foreach ((array) $photos as $photo) {
+                // check the media was uploaded to my endpoint, and use path
+                if (starts_with($photo, config('filesystems.disks.s3.url'))) {
+                    $path = substr($photo, strlen(config('filesystems.disks.s3.url')));
+                    $media[] = Media::where('path', ltrim($path, '/'))->firstOrFail();
+                } else {
+                    $newMedia = Media::firstOrNew(['path' => $photo]);
+                    // currently assuming this is a photo from Swarm or OwnYourGram
+                    $newMedia->type = 'image';
+                    $newMedia->save();
+                    $media[] = $newMedia;
+                }
+            }
+        }
+
+        return $media;
+    }
+
+    private function getInstagramUrl(array $request): ?string
+    {
+        if (starts_with(array_get($request, 'properties.syndication.0'), 'https://www.instagram.com')) {
+            return array_get($request, 'properties.syndication.0');
+        }
+
+        return null;
     }
 }

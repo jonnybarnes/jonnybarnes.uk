@@ -31,7 +31,7 @@ class ActivityStreamTest extends TestCase
      */
     public function test_single_note_returns_as_data()
     {
-        $note = \App\Note::find(11);
+        $note = \App\Models\Note::find(11);
         $response = $this->get('/notes/B', ['Accept' => 'application/activity+json']);
         $response->assertHeader('Content-Type', 'application/activity+json');
         $response->assertJson([

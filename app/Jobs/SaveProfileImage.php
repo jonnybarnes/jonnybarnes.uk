@@ -44,7 +44,7 @@ class SaveProfileImage implements ShouldQueue
         //dont save pbs.twimg.com links
         if (parse_url($photo, PHP_URL_HOST) != 'pbs.twimg.com'
               && parse_url($photo, PHP_URL_HOST) != 'twitter.com') {
-            $client = new Client();
+            $client = resolve(Client::class);
             try {
                 $response = $client->get($photo);
                 $image = $response->getBody(true);

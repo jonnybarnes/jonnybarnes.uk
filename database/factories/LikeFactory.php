@@ -1,8 +1,9 @@
 <?php
 
+use App\Models\Like;
 use Faker\Generator as Faker;
 
-$factory->define(App\Like::class, function (Faker $faker) {
+$factory->define(Like::class, function (Faker $faker) {
     return [
         'url' => $faker->url,
         'author_name' => $faker->name,

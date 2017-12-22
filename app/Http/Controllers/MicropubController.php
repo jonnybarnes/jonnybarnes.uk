@@ -2,320 +2,96 @@
 
 namespace App\Http\Controllers;
 
-use Storage;
 use Monolog\Logger;
 use Ramsey\Uuid\Uuid;
-use App\Jobs\ProcessImage;
-use App\Services\LikeService;
-use App\Services\BookmarkService;
+use App\Jobs\ProcessMedia;
+use App\Services\TokenService;
+use Illuminate\Http\UploadedFile;
 use Monolog\Handler\StreamHandler;
-use App\{Like, Media, Note, Place};
 use Intervention\Image\ImageManager;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\{Request, Response};
 use App\Exceptions\InvalidTokenException;
+use App\Models\{Like, Media, Note, Place};
 use Phaza\LaravelPostgis\Geometries\Point;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Ramsey\Uuid\Exception\UnsatisfiedDependencyException;
-use App\Services\{NoteService, PlaceService, TokenService};
+use Intervention\Image\Exception\NotReadableException;
+use App\Services\Micropub\{HCardService, HEntryService, UpdateService};
 
 class MicropubController extends Controller
 {
-    /**
-     * The Token service container.
-     */
     protected $tokenService;
+    protected $hentryService;
+    protected $hcardService;
+    protected $updateService;
 
-    /**
-     * The Note service container.
-     */
-    protected $noteService;
-
-    /**
-     * The Place service container.
-     */
-    protected $placeService;
-
-    /**
-     * Inject the dependencies.
-     */
     public function __construct(
         TokenService $tokenService,
-        NoteService $noteService,
-        PlaceService $placeService
+        HEntryService $hentryService,
+        HCardService $hcardService,
+        UpdateService $updateService
     ) {
         $this->tokenService = $tokenService;
-        $this->noteService = $noteService;
-        $this->placeService = $placeService;
+        $this->hentryService = $hentryService;
+        $this->hcardService = $hcardService;
+        $this->updateService = $updateService;
     }
 
     /**
      * This function receives an API request, verifies the authenticity
      * then passes over the info to the relavent Service class.
      *
-     * @param  \Illuminate\Http\Request request
      * @return \Illuminate\Http\Response
      */
-    public function post(Request $request)
+    public function post()
     {
         try {
-            $tokenData = $this->tokenService->validateToken($request->bearerToken());
+            $tokenData = $this->tokenService->validateToken(request()->bearerToken());
         } catch (InvalidTokenException $e) {
-            return response()->json([
-                'response' => 'error',
-                'error' => 'invalid_token',
-                'error_description' => 'The provided token did not pass validation',
-            ], 400);
+            return $this->invalidTokenResponse();
         }
-        // Log the request
-        $logger = new Logger('micropub');
-        $logger->pushHandler(new StreamHandler(storage_path('logs/micropub.log')), Logger::DEBUG);
-        $logger->debug('MicropubLog', $request->all());
-        if ($tokenData->hasClaim('scope')) {
-            if (($request->input('h') == 'entry') || ($request->input('type.0') == 'h-entry')) {
-                if (stristr($tokenData->getClaim('scope'), 'create') === false) {
-                    return $this->returnInsufficientScopeResponse();
-                }
-                if ($request->has('properties.like-of') || $request->has('like-of')) {
-                    $like = (new LikeService())->createLike($request);
 
-                    return response()->json([
-                        'response' => 'created',
-                        'location' => config('app.url') . "/likes/$like->id",
-                    ], 201)->header('Location', config('app.url') . "/likes/$like->id");
-                }
-                if ($request->has('properties.bookmark-of') || $request->has('bookmark-of')) {
-                    $bookmark = (new BookmarkService())->createBookmark($request);
+        if ($tokenData->hasClaim('scope') === false) {
+            return $this->tokenHasNoScopeResponse();
+        }
 
-                    return response()->json([
-                        'response' => 'created',
-                        'location' => config('app.url') . "/bookmarks/$bookmark->id",
-                    ], 201)->header('Location', config('app.url') . "/bookmarks/$bookmark->id");
-                }
-                $data = [];
-                $data['client-id'] = $tokenData->getClaim('client_id');
-                if ($request->header('Content-Type') == 'application/json') {
-                    if (is_string($request->input('properties.content.0'))) {
-                        $data['content'] = $request->input('properties.content.0'); //plaintext content
-                    }
-                    if (is_array($request->input('properties.content.0'))
-                        && array_key_exists('html', $request->input('properties.content.0'))
-                    ) {
-                        $data['content'] = $request->input('properties.content.0.html');
-                    }
-                    $data['in-reply-to'] = $request->input('properties.in-reply-to.0');
-                    // check location is geo: string
-                    if (is_string($request->input('properties.location.0'))) {
-                        $data['location'] = $request->input('properties.location.0');
-                    }
-                    // check location is h-card
-                    if (is_array($request->input('properties.location.0'))) {
-                        if ($request->input('properties.location.0.type.0' === 'h-card')) {
-                            try {
-                                $place = $this->placeService->createPlaceFromCheckin(
-                                    $request->input('properties.location.0')
-                                );
-                                $data['checkin'] = $place->longurl;
-                            } catch (\Exception $e) {
-                                //
-                            }
-                        }
-                    }
-                    $data['published'] = $request->input('properties.published.0');
-                    //create checkin place
-                    if (array_key_exists('checkin', $request->input('properties'))) {
-                        $data['swarm-url'] = $request->input('properties.syndication.0');
-                        try {
-                            $place = $this->placeService->createPlaceFromCheckin(
-                                $request->input('properties.checkin.0')
-                            );
-                            $data['checkin'] = $place->longurl;
-                        } catch (\Exception $e) {
-                            $data['checkin'] = null;
-                            $data['swarm-url'] = null;
-                        }
-                    }
-                } else {
-                    $data['content'] = $request->input('content');
-                    $data['in-reply-to'] = $request->input('in-reply-to');
-                    $data['location'] = $request->input('location');
-                    $data['published'] = $request->input('published');
-                }
-                $data['syndicate'] = [];
-                $targets = array_pluck(config('syndication.targets'), 'uid', 'service.name');
-                $mpSyndicateTo = null;
-                if ($request->has('mp-syndicate-to')) {
-                    $mpSyndicateTo = $request->input('mp-syndicate-to');
-                }
-                if ($request->has('properties.mp-syndicate-to')) {
-                    $mpSyndicateTo = $request->input('properties.mp-syndicate-to');
-                }
-                if (is_string($mpSyndicateTo)) {
-                    $service = array_search($mpSyndicateTo, $targets);
-                    if ($service == 'Twitter') {
-                        $data['syndicate'][] = 'twitter';
-                    }
-                    if ($service == 'Facebook') {
-                        $data['syndicate'][] = 'facebook';
-                    }
-                }
-                if (is_array($mpSyndicateTo)) {
-                    foreach ($mpSyndicateTo as $uid) {
-                        $service = array_search($uid, $targets);
-                        if ($service == 'Twitter') {
-                            $data['syndicate'][] = 'twitter';
-                        }
-                        if ($service == 'Facebook') {
-                            $data['syndicate'][] = 'facebook';
-                        }
-                    }
-                }
-                $data['photo'] = [];
-                $photos = null;
-                if ($request->has('photo')) {
-                    $photos = $request->input('photo');
-                }
-                if ($request->has('properties.photo')) {
-                    $photos = $request->input('properties.photo');
-                }
-                if ($photos !== null) {
-                    foreach ($photos as $photo) {
-                        if (is_string($photo)) {
-                            //only supporting media URLs for now
-                            $data['photo'][] = $photo;
-                        }
-                    }
-                    if (starts_with($request->input('properties.syndication.0'), 'https://www.instagram.com')) {
-                        $data['instagram-url'] = $request->input('properties.syndication.0');
-                    }
-                }
-                try {
-                    $note = $this->noteService->createNote($data);
-                } catch (\Exception $exception) {
-                    return response()->json(['error' => true], 400);
-                }
+        $this->logMicropubRequest(request()->all());
 
-                return response()->json([
-                    'response' => 'created',
-                    'location' => $note->longurl,
-                ], 201)->header('Location', $note->longurl);
+        if ((request()->input('h') == 'entry') || (request()->input('type.0') == 'h-entry')) {
+            if (stristr($tokenData->getClaim('scope'), 'create') === false) {
+                return $this->insufficientScopeResponse();
             }
-            if ($request->input('h') == 'card' || $request->input('type')[0] == 'h-card') {
-                if (stristr($tokenData->getClaim('scope'), 'create') === false) {
-                    return $this->returnInsufficientScopeResponse();
-                }
-                $data = [];
-                if ($request->header('Content-Type') == 'application/json') {
-                    $data['name'] = $request->input('properties.name');
-                    $data['description'] = $request->input('properties.description') ?? null;
-                    if ($request->has('properties.geo')) {
-                        $data['geo'] = $request->input('properties.geo');
-                    }
-                } else {
-                    $data['name'] = $request->input('name');
-                    $data['description'] = $request->input('description');
-                    if ($request->has('geo')) {
-                        $data['geo'] = $request->input('geo');
-                    }
-                    if ($request->has('latitude')) {
-                        $data['latitude'] = $request->input('latitude');
-                        $data['longitude'] = $request->input('longitude');
-                    }
-                }
-                try {
-                    $place = $this->placeService->createPlace($data);
-                } catch (\Exception $exception) {
-                    return response()->json(['error' => true], 400);
-                }
+            $location = $this->hentryService->process(request()->all(), $this->getCLientId());
 
-                return response()->json([
-                    'response' => 'created',
-                    'location' => $place->longurl,
-                ], 201)->header('Location', $place->longurl);
+            return response()->json([
+                'response' => 'created',
+                'location' => $location,
+            ], 201)->header('Location', $location);
+        }
+
+        if (request()->input('h') == 'card' || request()->input('type')[0] == 'h-card') {
+            if (stristr($tokenData->getClaim('scope'), 'create') === false) {
+                return $this->insufficientScopeResponse();
             }
-            if ($request->input('action') == 'update') {
-                if (stristr($tokenData->getClaim('scope'), 'update') === false) {
-                    return $this->returnInsufficientScopeResponse();
-                }
-                $urlPath = parse_url($request->input('url'), PHP_URL_PATH);
-                //is it a note we are updating?
-                if (mb_substr($urlPath, 1, 5) === 'notes') {
-                    try {
-                        $note = Note::nb60(basename($urlPath))->firstOrFail();
-                    } catch (ModelNotFoundException $exception) {
-                        return response()->json([
-                            'error' => 'invalid_request',
-                            'error_description' => 'No known note with given ID',
-                        ]);
-                    }
-                    //got the note, are we dealing with a “replace” request?
-                    if ($request->has('replace')) {
-                        foreach ($request->input('replace') as $property => $value) {
-                            if ($property == 'content') {
-                                $note->note = $value[0];
-                            }
-                            if ($property == 'syndication') {
-                                foreach ($value as $syndicationURL) {
-                                    if (starts_with($syndicationURL, 'https://www.facebook.com')) {
-                                        $note->facebook_url = $syndicationURL;
-                                    }
-                                    if (starts_with($syndicationURL, 'https://www.swarmapp.com')) {
-                                        $note->swarm_url = $syndicationURL;
-                                    }
-                                    if (starts_with($syndicationURL, 'https://twitter.com')) {
-                                        $note->tweet_id = basename(parse_url($syndicationURL, PHP_URL_PATH));
-                                    }
-                                }
-                            }
-                        }
-                        $note->save();
+            $location = $this->hcardService->process(request()->all());
 
-                        return response()->json([
-                            'response' => 'updated',
-                        ]);
-                    }
-                    //how about “add”
-                    if ($request->has('add')) {
-                        foreach ($request->input('add') as $property => $value) {
-                            if ($property == 'syndication') {
-                                foreach ($value as $syndicationURL) {
-                                    if (starts_with($syndicationURL, 'https://www.facebook.com')) {
-                                        $note->facebook_url = $syndicationURL;
-                                    }
-                                    if (starts_with($syndicationURL, 'https://www.swarmapp.com')) {
-                                        $note->swarm_url = $syndicationURL;
-                                    }
-                                    if (starts_with($syndicationURL, 'https://twitter.com')) {
-                                        $note->tweet_id = basename(parse_url($syndicationURL, PHP_URL_PATH));
-                                    }
-                                }
-                            }
-                            if ($property == 'photo') {
-                                foreach ($value as $photoURL) {
-                                    if (start_with($photo, 'https://')) {
-                                        $media = new Media();
-                                        $media->path = $photoURL;
-                                        $media->type = 'image';
-                                        $media->save();
-                                        $note->media()->save($media);
-                                    }
-                                }
-                            }
-                        }
-                        $note->save();
+            return response()->json([
+                'response' => 'created',
+                'location' => $location,
+            ], 201)->header('Location', $location);
+        }
 
-                        return response()->json([
-                            'response' => 'updated',
-                        ]);
-                    }
-                }
+        if (request()->input('action') == 'update') {
+            if (stristr($tokenData->getClaim('scope'), 'update') === false) {
+                return $this->insufficientScopeResponse();
             }
+
+            return $this->updateService->process(request()->all());
         }
 
         return response()->json([
             'response' => 'error',
-            'error' => 'forbidden',
-            'error_description' => 'The token has no scopes',
-        ], 403);
+            'error_description' => 'unsupported_request_type',
+        ], 500);
     }
 
     /**
@@ -324,47 +100,37 @@ class MicropubController extends Controller
      * appropriately. Further if the request has the query parameter
      * synidicate-to we respond with the known syndication endpoints.
      *
-     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function get(Request $request)
+    public function get()
     {
         try {
-            $tokenData = $this->tokenService->validateToken($request->bearerToken());
+            $tokenData = $this->tokenService->validateToken(request()->bearerToken());
         } catch (InvalidTokenException $e) {
-            return response()->json([
-                'response' => 'error',
-                'error' => 'invalid_token',
-                'error_description' => 'The provided token did not pass validation',
-            ], 400);
+            return $this->invalidTokenResponse();
         }
-        //we have a valid token, is `syndicate-to` set?
-        if ($request->input('q') === 'syndicate-to') {
+
+        if (request()->input('q') === 'syndicate-to') {
             return response()->json([
                 'syndicate-to' => config('syndication.targets'),
             ]);
         }
 
-        //nope, how about a config query?
-        if ($request->input('q') == 'config') {
+        if (request()->input('q') == 'config') {
             return response()->json([
                 'syndicate-to' => config('syndication.targets'),
                 'media-endpoint' => route('media-endpoint'),
             ]);
         }
 
-        //nope, how about a geo URL?
-        if (substr($request->input('q'), 0, 4) === 'geo:') {
+        if (substr(request()->input('q'), 0, 4) === 'geo:') {
             preg_match_all(
                 '/([0-9\.\-]+)/',
-                $request->input('q'),
+                request()->input('q'),
                 $matches
             );
             $distance = (count($matches[0]) == 3) ? 100 * $matches[0][2] : 1000;
             $places = Place::near(new Point($matches[0][0], $matches[0][1]))->get();
-            foreach ($places as $place) {
-                $place->uri = config('app.url') . '/places/' . $place->slug;
-            }
 
             return response()->json([
                 'response' => 'places',
@@ -372,7 +138,7 @@ class MicropubController extends Controller
             ]);
         }
 
-        //nope, just return the token
+        // default response is just to return the token data
         return response()->json([
             'response' => 'token',
             'token' => [
@@ -386,77 +152,25 @@ class MicropubController extends Controller
     /**
      * Process a media item posted to the media endpoint.
      *
-     * @param  Illuminate\Http\Request $request
      * @return Illuminate\Http\Response
      */
-    public function media(Request $request)
+    public function media()
     {
         try {
-            $tokenData = $this->tokenService->validateToken($request->bearerToken());
+            $tokenData = $this->tokenService->validateToken(request()->bearerToken());
         } catch (InvalidTokenException $e) {
-            return response()->json([
-                'response' => 'error',
-                'error' => 'invalid_token',
-                'error_description' => 'The provided token did not pass validation',
-            ], 400);
+            return $this->invalidTokenResponse();
         }
 
-        $logger = new Logger('micropub');
-        $logger->pushHandler(new StreamHandler(storage_path('logs/micropub.log')), Logger::DEBUG);
-        $logger->debug('MicropubMediaLog', $request->all());
-        //check post scope
-        if ($tokenData->hasClaim('scope')) {
-            if (stristr($tokenData->getClaim('scope'), 'create') === false) {
-                return $this->returnInsufficientScopeResponse();
-            }
-            //check media valid
-            if ($request->hasFile('file') && $request->file('file')->isValid()) {
-                try {
-                    $filename = Uuid::uuid4() . '.' . $request->file('file')->extension();
-                } catch (UnsatisfiedDependencyException $e) {
-                    return response()->json([
-                        'response' => 'error',
-                        'error' => 'internal_server_error',
-                        'error_description' => 'A problem occured handling your request',
-                    ], 500);
-                }
+        if ($tokenData->hasClaim('scope') === false) {
+            return $this->tokenHasNoScopeResponse();
+        }
 
-                $size = $request->file('file')->getClientSize();
-                Storage::disk('local')->put($filename, $request->file('file')->openFile()->fread($size));
-                try {
-                    Storage::disk('s3')->put('media/' . $filename, $request->file('file')->openFile()->fread($size));
-                } catch (Exception $e) { // which exception?
-                    return response()->json([
-                        'response' => 'error',
-                        'error' => 'service_unavailable',
-                        'error_description' => 'Unable to save media to S3',
-                    ], 503);
-                }
+        if (stristr($tokenData->getClaim('scope'), 'create') === false) {
+            return $this->insufficientScopeResponse();
+        }
 
-                $manager = app()->make(ImageManager::class);
-                try {
-                    $image = $manager->make($request->file('file'));
-                    $width = $image->width();
-                } catch (\Intervention\Image\Exception\NotReadableException $exception) {
-                    // not an image
-                    $width = null;
-                }
-
-                $media = new Media();
-                $media->token = $request->bearerToken();
-                $media->path = 'media/' . $filename;
-                $media->type = $this->getFileTypeFromMimeType($request->file('file')->getMimeType());
-                $media->image_widths = $width;
-                $media->save();
-
-                dispatch(new ProcessImage($filename));
-
-                return response()->json([
-                    'response' => 'created',
-                    'location' => $media->url,
-                ], 201)->header('Location', $media->url);
-            }
-
+        if ((request()->hasFile('file') && request()->file('file')->isValid()) === false) {
             return response()->json([
                 'response' => 'error',
                 'error' => 'invalid_request',
@@ -464,11 +178,32 @@ class MicropubController extends Controller
             ], 400);
         }
 
+        $this->logMicropubRequest(request()->all());
+
+        $filename = $this->saveFile(request()->file('file'));
+
+        $manager = resolve(ImageManager::class);
+        try {
+            $image = $manager->make(request()->file('file'));
+            $width = $image->width();
+        } catch (NotReadableException $exception) {
+            // not an image
+            $width = null;
+        }
+
+        $media = Media::create([
+            'token' => request()->bearerToken(),
+            'path' => 'media/' . $filename,
+            'type' => $this->getFileTypeFromMimeType(request()->file('file')->getMimeType()),
+            'image_widths' => $width,
+        ]);
+
+        ProcessMedia::dispatch($filename);
+
         return response()->json([
-            'response' => 'error',
-            'error' => 'invalid_request',
-            'error_description' => 'The provided token has no scopes',
-        ], 400);
+            'response' => 'created',
+            'location' => $media->url,
+        ], 201)->header('Location', $media->url);
     }
 
     /**
@@ -495,6 +230,7 @@ class MicropubController extends Controller
         $videoMimeTypes = [
             'video/mp4',
             'video/mpeg',
+            'video/ogg',
             'video/quicktime',
             'video/webm',
         ];
@@ -515,12 +251,52 @@ class MicropubController extends Controller
         return 'download';
     }
 
-    private function returnInsufficientScopeResponse()
+    private function getClientId(): string
+    {
+        return resolve(TokenService::class)
+            ->validateToken(request()->bearerToken())
+            ->getClaim('client_id');
+    }
+
+    private function logMicropubRequest(array $request)
+    {
+        $logger = new Logger('micropub');
+        $logger->pushHandler(new StreamHandler(storage_path('logs/micropub.log')), Logger::DEBUG);
+        $logger->debug('MicropubLog', $request);
+    }
+
+    private function saveFile(UploadedFile $file)
+    {
+        $filename = Uuid::uuid4() . '.' . $file->extension();
+        Storage::disk('local')->put($filename, $file);
+
+        return $filename;
+    }
+
+    private function insufficientScopeResponse()
     {
         return response()->json([
             'response' => 'error',
             'error' => 'insufficient_scope',
             'error_description' => 'The token’s scope does not have the necessary requirements.',
         ], 401);
+    }
+
+    private function invalidTokenResponse()
+    {
+        return response()->json([
+            'response' => 'error',
+            'error' => 'invalid_token',
+            'error_description' => 'The provided token did not pass validation',
+        ], 400);
+    }
+
+    private function tokenHasNoScopeResponse()
+    {
+        return response()->json([
+            'response' => 'error',
+            'error' => 'invalid_request',
+            'error_description' => 'The provided token has no scopes',
+        ], 400);
     }
 }

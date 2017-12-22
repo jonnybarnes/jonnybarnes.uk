@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\MicropubClient;
 use Illuminate\Http\Request;
+use App\Models\MicropubClient;
 use App\Http\Controllers\Controller;
 
 class ClientsController extends Controller
@@ -86,9 +86,9 @@ class ClientsController extends Controller
      * @param  string The client id
      * @return redirect
      */
-    public function destroy($articleId)
+    public function destroy($clientId)
     {
-        MicropubClient::where('id', $articleId)->delete();
+        MicropubClient::where('id', $clientId)->delete();
 
         return redirect('/admin/clients');
     }

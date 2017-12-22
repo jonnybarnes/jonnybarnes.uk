@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Note;
+use App\Models\Note;
 use Illuminate\Http\Request;
 use App\Observers\NoteObserver;
 use Laravel\Dusk\DuskServiceProvider;

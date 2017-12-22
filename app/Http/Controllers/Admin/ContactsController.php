@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Contact;
 use GuzzleHttp\Client;
+use App\Models\Contact;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Filesystem\Filesystem;
@@ -83,16 +83,14 @@ class ContactsController extends Controller
         $contact->facebook = $request->input('facebook');
         $contact->save();
 
-        if ($request->hasFile('avatar')) {
-            if ($request->input('homepage') != '') {
-                $dir = parse_url($request->input('homepage'))['host'];
-                $destination = public_path() . '/assets/profile-images/' . $dir;
-                $filesystem = new Filesystem();
-                if ($filesystem->isDirectory($destination) === false) {
-                    $filesystem->makeDirectory($destination);
-                }
-                $request->file('avatar')->move($destination, 'image');
+        if ($request->hasFile('avatar') && ($request->input('homepage') != '')) {
+            $dir = parse_url($request->input('homepage'), PHP_URL_HOST);
+            $destination = public_path() . '/assets/profile-images/' . $dir;
+            $filesystem = new Filesystem();
+            if ($filesystem->isDirectory($destination) === false) {
+                $filesystem->makeDirectory($destination);
             }
+            $request->file('avatar')->move($destination, 'image');
         }
 
         return redirect('/admin/contacts');
@@ -123,37 +121,47 @@ class ContactsController extends Controller
      */
     public function getAvatar($contactId)
     {
+        // Initialising
+        $avatarURL = null;
+        $avatar = null;
         $contact = Contact::findOrFail($contactId);
-        $homepage = $contact->homepage;
-        if (($homepage !== null) && ($homepage !== '')) {
-            $client = new Client();
+        if (mb_strlen($contact->homepage !== null) !== 0) {
+            $client = resolve(Client::class);
             try {
-                $response = $client->get($homepage);
-                $html = (string) $response->getBody();
-                $mf2 = \Mf2\parse($html, $homepage);
+                $response = $client->get($contact->homepage);
             } catch (\GuzzleHttp\Exception\BadResponseException $e) {
-                return "Bad Response from $homepage";
+                return redirect('/admin/contacts/' . $contactId . '/edit')
+                    ->with('error', 'Bad resposne from contact’s homepage');
             }
-            $avatarURL = null; // Initialising
+            $mf2 = \Mf2\parse((string) $response->getBody(), $contact->homepage);
             foreach ($mf2['items'] as $microformat) {
-                if ($microformat['type'][0] == 'h-card') {
-                    $avatarURL = $microformat['properties']['photo'][0];
+                if (array_get($microformat, 'type.0') == 'h-card') {
+                    $avatarURL = array_get($microformat, 'properties.photo.0');
                     break;
                 }
             }
-            try {
-                $avatar = $client->get($avatarURL);
-            } catch (\GuzzleHttp\Exception\BadResponseException $e) {
-                return "Unable to get $avatarURL";
+            if ($avatarURL !== null) {
+                try {
+                    $avatar = $client->get($avatarURL);
+                } catch (\GuzzleHttp\Exception\BadResponseException $e) {
+                    return redirect('/admin/contacts/' . $contactId . '/edit')
+                        ->with('error', 'Unable to download avatar');
+                }
             }
-            $directory = public_path() . '/assets/profile-images/' . parse_url($homepage)['host'];
-            $filesystem = new Filesystem();
-            if ($filesystem->isDirectory($directory) === false) {
-                $filesystem->makeDirectory($directory);
-            }
-            $filesystem->put($directory . '/image', $avatar->getBody());
+            if ($avatar !== null) {
+                $directory = public_path() . '/assets/profile-images/' . parse_url($contact->homepage, PHP_URL_HOST);
+                $filesystem = new Filesystem();
+                if ($filesystem->isDirectory($directory) === false) {
+                    $filesystem->makeDirectory($directory);
+                }
+                $filesystem->put($directory . '/image', $avatar->getBody());
 
-            return view('admin.contacts.getavatarsuccess', ['homepage' => parse_url($homepage)['host']]);
+                return view('admin.contacts.getavatarsuccess', [
+                    'homepage' => parse_url($contact->homepage, PHP_URL_HOST),
+                ]);
+            }
         }
+
+        return redirect('/admin/contacts/' . $contactId . '/edit');
     }
 }

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Note;
+use App\Models\Note;
 use Illuminate\Http\Request;
 use Jonnybarnes\IndieWeb\Numbers;
 use App\Services\ActivityStreamsService;

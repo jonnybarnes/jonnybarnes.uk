@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Like;
+use App\Models\Like;
 
 class LikesController extends Controller
 {

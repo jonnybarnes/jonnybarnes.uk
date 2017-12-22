@@ -2,8 +2,8 @@
 
 namespace Tests\Feature;
 
-use App\Note;
 use Tests\TestCase;
+use App\Models\Note;
 
 class NotesControllerTest extends TestCase
 {
@@ -27,6 +27,12 @@ class NotesControllerTest extends TestCase
     public function test_specific_note()
     {
         $response = $this->get('/notes/D');
+        $response->assertViewHas('note');
+    }
+
+    public function test_note_replying_to_tweet()
+    {
+        $response = $this->get('/notes/B');
         $response->assertViewHas('note');
     }
 

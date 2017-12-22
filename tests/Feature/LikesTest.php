@@ -3,8 +3,8 @@
 namespace Tests\Feature;
 
 use Queue;
-use App\Like;
 use Tests\TestCase;
+use App\Models\Like;
 use Tests\TestToken;
 use GuzzleHttp\Client;
 use App\Jobs\ProcessLike;
@@ -32,7 +32,7 @@ class LikesTest extends TestCase
         $response->assertViewIs('likes.show');
     }
 
-    public function test_like_micropub_request()
+    public function test_like_micropub_json_request()
     {
         Queue::fake();
 
@@ -51,7 +51,24 @@ class LikesTest extends TestCase
         $this->assertDatabaseHas('likes', ['url' => 'https://example.org/blog-post']);
     }
 
-    public function test_process_like_job()
+    public function test_like_micropub_form_request()
+    {
+        Queue::fake();
+
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $this->getToken(),
+        ])->post('/api/post', [
+            'h' => 'entry',
+            'like-of' => 'https://example.org/blog-post',
+        ]);
+
+        $response->assertStatus(201);
+
+        Queue::assertPushed(ProcessLike::class);
+        $this->assertDatabaseHas('likes', ['url' => 'https://example.org/blog-post']);
+    }
+
+    public function test_process_like_job_with_simple_author()
     {
         $like = new Like();
         $like->url = 'http://example.org/note/id';
@@ -84,5 +101,76 @@ END;
         $job->handle($client, $authorship);
 
         $this->assertEquals('Fred Bloggs', Like::find($id)->author_name);
+    }
+
+    public function test_process_like_job_with_h_card()
+    {
+        $like = new Like();
+        $like->url = 'http://example.org/note/id';
+        $like->save();
+        $id = $like->id;
+
+        $job = new ProcessLike($like);
+
+        $content = <<<END
+<html>
+<body>
+    <div class="h-entry">
+        <div class="e-content">
+            A post that I like.
+        </div>
+        by
+        <div class="p-author h-card">
+            <span class="p-name">Fred Bloggs</span>
+            <a class="u-url" href="https://fredd.blog/gs"></a>
+        </div>
+    </div>
+</body>
+</html>
+END;
+        $mock = new MockHandler([
+            new Response(200, [], $content),
+            new Response(200, [], $content),
+        ]);
+        $handler = HandlerStack::create($mock);
+        $client = new Client(['handler' => $handler]);
+        $this->app->bind(Client::class, $client);
+        $authorship = new Authorship();
+
+        $job->handle($client, $authorship);
+
+        $this->assertEquals('Fred Bloggs', Like::find($id)->author_name);
+    }
+
+    public function test_process_like_job_without_mf2()
+    {
+        $like = new Like();
+        $like->url = 'http://example.org/note/id';
+        $like->save();
+        $id = $like->id;
+
+        $job = new ProcessLike($like);
+
+        $content = <<<END
+<html>
+<body>
+    <div>
+        I liked a post
+    </div>
+</body>
+</html>
+END;
+        $mock = new MockHandler([
+            new Response(200, [], $content),
+            new Response(200, [], $content),
+        ]);
+        $handler = HandlerStack::create($mock);
+        $client = new Client(['handler' => $handler]);
+        $this->app->bind(Client::class, $client);
+        $authorship = new Authorship();
+
+        $job->handle($client, $authorship);
+
+        $this->assertNull(Like::find($id)->author_name);
     }
 }

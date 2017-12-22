@@ -19,8 +19,7 @@
                 {{ method_field('DELETE') }}
                 <fieldset>
                     <legend>Delete Note</legend>
-                    <label for"delete" accesskey="d">Delete: </label><input type="checkbox" name="delete" id="delete" checked="checked">
-                    <label for="kludge"></label><input type="submit" value="Submit" id="kludge">
+                    <label for="kludge"></label><input type="submit" value="Delete" id="kludge">
                 </fieldset>
             </form>
 @stop

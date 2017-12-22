@@ -3,7 +3,9 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
+use Lcobucci\JWT\Builder;
 use App\Services\TokenService;
+use Lcobucci\JWT\Signer\Hmac\Sha256;
 
 class TokenServiceTest extends TestCase
 {
@@ -29,5 +31,30 @@ class TokenServiceTest extends TestCase
             'scope' => $valid->getClaim('scope')
         ];
         $this->assertSame($data, $validData);
+    }
+
+    /**
+     * @expectedException        App\Exceptions\InvalidTokenException
+     * @expectedExceptionMessage Token failed validation
+     */
+    public function test_token_with_different_singing_key_throws_exception()
+    {
+        $data = [
+            'me' => 'https://example.org',
+            'client_id' => 'https://quill.p3k.io',
+            'scope' => 'post'
+        ];
+        $signer = new Sha256();
+        $token = (new Builder())->set('me', $data['me'])
+            ->set('client_id', $data['client_id'])
+            ->set('scope', $data['scope'])
+            ->set('date_issued', time())
+            ->set('nonce', bin2hex(random_bytes(8)))
+            ->sign($signer, 'r4ndomk3y')
+            ->getToken();
+
+        $service = new TokenService();
+        $token = $service->validateToken($token);
+        dump($token);
     }
 }

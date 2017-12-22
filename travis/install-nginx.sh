@@ -7,7 +7,8 @@ DIR=$(realpath $(dirname "$0"))
 USER=$(whoami)
 PHP_VERSION=$(phpenv version-name)
 ROOT=$(realpath "$DIR/..")
-PORT=9000
+HTTP_PORT=8000
+PHP_PORT=9000
 SERVER="/tmp/php.sock"
 
 function tpl {
@@ -16,7 +17,8 @@ function tpl {
         -e "s|{USER}|$USER|g" \
         -e "s|{PHP_VERSION}|$PHP_VERSION|g" \
         -e "s|{ROOT}|$ROOT|g" \
-        -e "s|{PORT}|$PORT|g" \
+        -e "s|{HTTP_PORT}|$HTTP_PORT|g" \
+        -e "s|{PHP_PORT}|$PHP_PORT|g" \
         -e "s|{SERVER}|$SERVER|g" \
         < $1 > $2
 }
@@ -38,7 +40,8 @@ tpl "$DIR/php-fpm.tpl.conf" "$PHP_FPM_CONF"
 # Build the default nginx config files.
 tpl "$DIR/nginx.tpl.conf" "$DIR/nginx/nginx.conf"
 tpl "$DIR/fastcgi.tpl.conf" "$DIR/nginx/fastcgi.conf"
-tpl "$DIR/default-site.tpl.conf" "$DIR/nginx/sites-enabled/default-site.conf"
+tpl "$DIR/longurl.tpl.conf" "$DIR/nginx/sites-enabled/longurl.conf"
+tpl "$DIR/shorturl.tpl.conf" "$DIR/nginx/sites-enabled/shorturl.conf"
 
 # Start nginx.
 nginx -c "$DIR/nginx/nginx.conf"

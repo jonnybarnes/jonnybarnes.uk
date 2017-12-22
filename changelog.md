@@ -1,5 +1,10 @@
 # Changelog
 
+## Version 0.14 (2017-12-22)
+  - Tests
+  - Refactor
+  - More tests, seriously, code-coverage to now above 90%
+
 ## Version 0.13.1 (2017-11-20)
   - A small fix when adding a new bookmark
 

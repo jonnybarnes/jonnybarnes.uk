@@ -38,7 +38,7 @@ class TokenService
      * @param  string The token
      * @return mixed
      */
-    public function validateToken(string $bearerToken): ?Token
+    public function validateToken(string $bearerToken): Token
     {
         $signer = new Sha256();
         try {
@@ -47,7 +47,7 @@ class TokenService
             throw new InvalidTokenException('Token could not be parsed');
         }
         if (! $token->verify($signer, config('app.key'))) {
-            throw new InvalidTokenException('Token failed verification');
+            throw new InvalidTokenException('Token failed validation');
         }
 
         return $token;

@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<ruleset name="jonnybarnes.uk">
+    <description>Custom configuration for code running jonnybarnes.uk</description>
+    <file>./app/</file>
+    <rule ref="PSR2">
+        <exclude name="PSR2.Namespaces.UseDeclaration" />
+    </rule>
+</ruleset>

@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\WebMention;
+use App\Models\WebMention;
 use Illuminate\Console\Command;
 use Illuminate\FileSystem\FileSystem;
 

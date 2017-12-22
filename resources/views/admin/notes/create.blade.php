@@ -12,12 +12,7 @@
                 </ul>
             </div>
 @endif
-@include('templates.new-note-form', [
-  'micropub' => false,
-  'action' => '/admin/note',
-  'id' => 'newnote-admin'
-])
-            <form action="{{ $action }}" method="post" enctype="multipart/form-data" accept-charset="utf-8"@if($micropub) name="micropub"@endif>
+            <form action="/admin/notes" method="post" accept-charset="utf-8">
                 {{ csrf_field() }}
                 <fieldset>
                     <legend>New Note</legend>
@@ -27,7 +22,6 @@
                                name="in-reply-to"
                                id="in-reply-to"
                                placeholder="in-reply-to-1 in-reply-to-2 …"
-                               value="{{ old('in-reply-to') }}"
                         >
                     </div>
                     <div>
@@ -40,23 +34,7 @@
                         </textarea>
                     </div>
                     <div>
-                        <label for="photo" accesskey="p">Photo: </label>
-                        <input type="file"
-                               accept="image/*"
-                               value="Upload"
-                               name="photo[]"
-                               id="photo"
-                               multiple
-                        >
-                    </div>
                     <div>
-                        <label for="locate" accesskey="l"></label>
-                        <button type="button"
-                                name="locate"
-                                id="locate"
-                                value="Locate"
-                                disabled
-                        >Locate</button>
                         <button type="submit"
                                 name="submit"
                                 id="submit"
@@ -65,12 +43,4 @@
                     </div>
                 </fieldset>
             </form>
-@stop
-
-@section('scripts')
-@include('templates.mapbox-links')
-
-            <script src="/assets/js/newnote.js"></script>
-
-            <link rel="stylesheet" href="/assets/frontend/alertify.css">
 @stop

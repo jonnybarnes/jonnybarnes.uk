@@ -14,7 +14,7 @@
 @empty($bookmark->name)
                         {{ $bookmark->url }}
 @endempty
-                    </a> &nbsp; <a href="/bookmarks/{{ $bookmark->id }}">🔗</a>
+                    </a> &nbsp; <a href="{{ $bookmark->longurl }}">🔗</a>
 @isset($bookmark->content)
                     <p>{{ $bookmark->content }}</p>
 @endisset

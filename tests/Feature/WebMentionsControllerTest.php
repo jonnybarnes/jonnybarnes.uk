@@ -8,6 +8,12 @@ use Illuminate\Support\Facades\Queue;
 
 class WebMentionsControllerTest extends TestCase
 {
+    public function test_get_endpoint()
+    {
+        $response = $this->get('/webmention');
+        $response->assertViewIs('webmention-endpoint');
+    }
+
     /**
      * Test webmentions without source and target are rejected.
      *

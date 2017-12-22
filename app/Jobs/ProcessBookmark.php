@@ -2,14 +2,14 @@
 
 namespace App\Jobs;
 
-use App\Bookmark;
+use App\Models\Bookmark;
 use Illuminate\Bus\Queueable;
 use App\Services\BookmarkService;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use App\Exceptions\InternetArchiveErrorSavingException;
+use App\Exceptions\InternetArchiveException;
 
 class ProcessBookmark implements ShouldQueue
 {
@@ -34,12 +34,12 @@ class ProcessBookmark implements ShouldQueue
      */
     public function handle()
     {
-        $uuid = (new BookmarkService())->saveScreenshot($this->bookmark->url);
+        $uuid = (resolve(BookmarkService::class))->saveScreenshot($this->bookmark->url);
         $this->bookmark->screenshot = $uuid;
 
         try {
-            $archiveLink = (new BookmarkService())->getArchiveLink($this->bookmark->url);
-        } catch (InternetArchiveErrorSavingException $e) {
+            $archiveLink = (resolve(BookmarkService::class))->getArchiveLink($this->bookmark->url);
+        } catch (InternetArchiveException $e) {
             $archiveLink = null;
         }
         $this->bookmark->archive = $archiveLink;
