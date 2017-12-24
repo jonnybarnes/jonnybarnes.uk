@@ -35,9 +35,6 @@ class NoteService
         if ($this->getCheckin($request)) {
             $note->place()->associate($this->getCheckin($request));
             $note->swarm_url = $this->getSwarmUrl($request);
-            if ($note->note === null || $note->note == '') {
-                $note->note = 'I’ve just checked in with Swarm';
-            }
         }
 
         $note->instagram_url = $this->getInstagramUrl($request);
