@@ -64,10 +64,7 @@ before_script:
   #- sleep 5
 
 script:
-  - php vendor/bin/phpunit --coverage-clover build/logs/clover.xml
+  - php vendor/bin/phpunit --coverage-text
   - phpcs
   #- php artisan dusk
   - php vendor/bin/security-checker security:check --end-point=http://security.sensiolabs.org/check_lock
-
-after_success:
-  - travis_retry php vendor/bin/coveralls
