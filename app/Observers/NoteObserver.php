@@ -14,7 +14,7 @@ class NoteObserver
      */
     public function created(Note $note)
     {
-        $tags = $this->getTagsFromNote($note->getAttributes()['note']);
+        $tags = $this->getTagsFromNote($note->getAttributes()['note'] ?? null);
 
         if (count($tags) === 0) {
             return;

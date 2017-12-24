@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 0.15 (2017-12-24)
+  - Add simple checkins, i.e. checkins with no note content, for now add a default note for these
+
 ## Version 0.14 (2017-12-22)
   - Tests
   - Refactor

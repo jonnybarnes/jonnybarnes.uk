@@ -7,7 +7,7 @@
     "dependencies": {
         "alertify.js": "^1.0.12",
         "mapbox-gl": "^0.42.2",
-        "marked": "^0.3.7",
+        "marked": "^0.3.9",
         "normalize.css": "^7.0.0"
     },
     "devDependencies": {
@@ -21,7 +21,7 @@
         "babel-preset-latest": "^6.16.0",
         "babel-runtime": "^6.26.0",
         "dotenv-webpack": "^1.5.4",
-        "eslint": "^4.13.1",
+        "eslint": "^4.14.0",
         "eslint-config-standard": "^10.2.1",
         "eslint-plugin-import": "^2.8.0",
         "eslint-plugin-node": "^5.2.1",
@@ -35,7 +35,7 @@
         "source-list-map": "^2.0.0",
         "stylelint": "^8.4.0",
         "stylelint-config-standard": "^18.0.0",
-        "uglify-js": "^3.2.2",
+        "uglify-js": "^3.3.0",
         "webpack": "^3.10.0",
         "webpack-sources": "^1.1.0"
     },

@@ -84,6 +84,11 @@ class NotesTableSeeder extends Seeder
             'note' => 'I love https://duckduckgo.com 💕' // theres a two-heart emoji at the end of this
         ]);
         sleep(1);
+        $noteJustCheckin = new Note();
+        $place = Place::find(1);
+        $noteJustCheckin->place()->associate($place);
+        $noteJustCheckin->save();
+        sleep(1);
         $media = new Media();
         $media->path = 'media/f1bc8faa-1a8f-45b8-a9b1-57282fa73f87.jpg';
         $media->type = 'image';

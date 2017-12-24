@@ -143,12 +143,14 @@ class Note extends Model
      */
     public function getNoteAttribute($value)
     {
-        $emoji = new EmojiModifier();
+        if ($value === null && $this->place !== null) {
+            $value = '📍: <a href="' . $this->place->longurl . '">' . $this->place->name . '</a>';
+        }
 
         $hcards = $this->makeHCards($value);
         $hashtags = $this->autoLinkHashtag($hcards);
         $html = $this->convertMarkdown($hashtags);
-        $modified = $emoji->makeEmojiAccessible($html);
+        $modified = resolve(EmojiModifier::class)->makeEmojiAccessible($html);
 
         return $modified;
     }

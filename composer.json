@@ -42,7 +42,6 @@
         "laravel/dusk": "^2.0",
         "mockery/mockery": "0.9.*",
         "nunomaduro/collision": "^1.1",
-        "php-coveralls/php-coveralls": "^1.0",
         "phpunit/phpunit": "~6.0",
         "sebastian/phpcpd": "^3.0"
     },
