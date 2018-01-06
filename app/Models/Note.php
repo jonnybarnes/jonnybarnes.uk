@@ -132,7 +132,11 @@ class Note extends Model
      */
     public function setNoteAttribute($value)
     {
-        $this->attributes['note'] = normalizer_normalize($value, Normalizer::FORM_C);
+        $normalized = normalizer_normalize($value, Normalizer::FORM_C);
+        if ($normalized === '') { //we don’t want to save empty strings to the db
+            $normalized = null;
+        }
+        $this->attributes['note'] = $normalized;
     }
 
     /**
