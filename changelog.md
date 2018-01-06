@@ -1,5 +1,9 @@
 # Changelog
 
+## Version {next}
+  - Update dependencies and recompile frontend assets, fix tests
+  - Only normalise tags in the URL, not in the actual link text
+
 ## Version 0.15 (2017-12-24)
   - Add simple checkins, i.e. checkins with no note content, for now add a default note for these
 
