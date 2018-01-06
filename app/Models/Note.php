@@ -456,7 +456,7 @@ class Note extends Model
             function ($matches) {
                 return '<a rel="tag" class="p-category" href="/notes/tagged/'
                 . Tag::normalize($matches[1]) . '">#'
-                . Tag::normalize($matches[1]) . '</a>';
+                . $matches[1] . '</a>';
             },
             $text
         );
