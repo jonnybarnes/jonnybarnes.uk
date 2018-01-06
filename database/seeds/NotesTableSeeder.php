@@ -109,5 +109,9 @@ class NotesTableSeeder extends Seeder
         $mediaInstagram->type = 'image';
         $mediaInstagram->save();
         $noteFromInstagram->media()->save($mediaInstagram);
+        sleep(1);
+        $noteCapitalHashtag = Note::create([
+            'note' => 'A #TwoWord hashtag',
+        ]);
     }
 }

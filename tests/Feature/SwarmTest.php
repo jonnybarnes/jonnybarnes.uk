@@ -146,12 +146,14 @@ class SwarmTest extends TestCase
         $response
             ->assertStatus(201)
             ->assertJson(['response' => 'created']);
+        //dump($response->__get('headers')->get('location'));
         $this->assertDatabaseHas('places', [
             'external_urls' => '{"foursquare": "https://foursquare.com/v/654321"}'
         ]);
         $this->assertDatabaseHas('notes', [
             'swarm_url' => 'https://www.swarmapp.com/checkin/def'
         ]);
+        $this->get($response->__get('headers')->get('location'))->assertSee('round pushpin');
     }
 
     public function test_faked_ownyourswarm_request_saves_just_post_when_error_in_checkin_data()

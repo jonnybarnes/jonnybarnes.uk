@@ -132,7 +132,11 @@ class Note extends Model
      */
     public function setNoteAttribute($value)
     {
-        $this->attributes['note'] = normalizer_normalize($value, Normalizer::FORM_C);
+        $normalized = normalizer_normalize($value, Normalizer::FORM_C);
+        if ($normalized === '') { //we don’t want to save empty strings to the db
+            $normalized = null;
+        }
+        $this->attributes['note'] = $normalized;
     }
 
     /**
@@ -456,7 +460,7 @@ class Note extends Model
             function ($matches) {
                 return '<a rel="tag" class="p-category" href="/notes/tagged/'
                 . Tag::normalize($matches[1]) . '">#'
-                . Tag::normalize($matches[1]) . '</a>';
+                . $matches[1] . '</a>';
             },
             $text
         );

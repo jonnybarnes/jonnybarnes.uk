@@ -11,7 +11,7 @@ class MicropbClientsTest extends TestCase
 {
     public function test_notes_relationship()
     {
-        $client = MicropubClient::find(3);
+        $client = MicropubClient::find(1);
         $this->assertInstanceOf(Collection::class, $client->notes);
     }
 }

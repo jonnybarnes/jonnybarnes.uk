@@ -31,7 +31,10 @@ class ArticlesController extends Controller
     {
         $article = Article::where('titleurl', $slug)->firstOrFail();
         if ($article->updated_at->year != $year || $article->updated_at->month != $month) {
-            return redirect('/blog/' . $article->updated_at->year . '/' . $article->updated_at->month .'/' . $slug);
+            return redirect('/blog/'
+                            . $article->updated_at->year
+                            . '/' . $article->updated_at->format('m')
+                            .'/' . $slug);
         }
 
         return view('articles.show', compact('article'));
