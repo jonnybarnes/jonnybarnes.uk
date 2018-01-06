@@ -1,6 +1,6 @@
 # Changelog
 
-## Version {next}
+## Version 0.15.1 (2018-01-06)
   - Update dependencies and recompile frontend assets, fix tests
   - Only normalise tags in the URL, not in the actual link text
   - Make sure when a note has no content, null is saved to the db, not `''`
