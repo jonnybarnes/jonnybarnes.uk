@@ -12,7 +12,7 @@
     },
     "devDependencies": {
         "ajv": "^5.5.2",
-        "autoprefixer": "^7.2.3",
+        "autoprefixer": "^7.2.4",
         "babel-cli": "^6.26.0",
         "babel-core": "^6.26.0",
         "babel-loader": "^7.1.2",
@@ -35,7 +35,7 @@
         "source-list-map": "^2.0.0",
         "stylelint": "^8.4.0",
         "stylelint-config-standard": "^18.0.0",
-        "uglify-js": "^3.3.0",
+        "uglify-js": "^3.3.4",
         "webpack": "^3.10.0",
         "webpack-sources": "^1.1.0"
     },
