@@ -45,7 +45,8 @@ class MicropubController extends Controller
     public function post()
     {
         try {
-            $tokenData = $this->tokenService->validateToken(request()->bearerToken());
+            info(request()->input('access_token'));
+            $tokenData = $this->tokenService->validateToken(request()->input('access_token'));
         } catch (InvalidTokenException $e) {
             return $this->invalidTokenResponse();
         }
@@ -254,7 +255,7 @@ class MicropubController extends Controller
     private function getClientId(): string
     {
         return resolve(TokenService::class)
-            ->validateToken(request()->bearerToken())
+            ->validateToken(request()->input('access_token'))
             ->getClaim('client_id');
     }
 

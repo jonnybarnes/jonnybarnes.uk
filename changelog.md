@@ -1,5 +1,8 @@
 # Changelog
 
+## Version {next}
+  - Update micropub endpoint to support access tokens being sent in either acceptable form
+
 ## Version 0.15.1 (2018-01-06)
   - Update dependencies and recompile frontend assets, fix tests
   - Only normalise tags in the URL, not in the actual link text

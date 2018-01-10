@@ -875,4 +875,22 @@ class MicropubControllerTest extends TestCase
         $response->assertStatus(400);
         $response->assertJson(['error_description' => 'The uploaded file failed validation']);
     }
+
+    public function test_access_token_form_encoded()
+    {
+        $faker = \Faker\Factory::create();
+        $note = $faker->text;
+        $response = $this->call(
+            'POST',
+            '/api/post',
+            [
+                'h' => 'entry',
+                'content' => $note,
+                'published' => Carbon::now()->toW3CString(),
+                'access_token' => $this->getToken(),
+            ]
+        );
+        $response->assertJson(['response' => 'created']);
+        $this->assertDatabaseHas('notes', ['note' => $note]);
+    }
 }
