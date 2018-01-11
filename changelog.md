@@ -1,6 +1,6 @@
 # Changelog
 
-## Version {next}
+## Version 0.15.2 (2018-01-11)
   - Update micropub endpoint to support access tokens being sent in either acceptable form
   - Improve admin control panel forms
 
