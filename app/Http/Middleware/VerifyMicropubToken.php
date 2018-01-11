@@ -15,14 +15,20 @@ class VerifyMicropubToken
      */
     public function handle($request, Closure $next)
     {
-        if ($request->bearerToken() === null) {
-            return response()->json([
-                'response' => 'error',
-                'error' => 'unauthorized',
-                'error_description' => 'No access token was provided in the request',
-            ], 401);
+        if ($request->input('access_token')) {
+            return $next($request);
         }
 
-        return $next($request);
+        if ($request->bearerToken()) {
+            return $next($request->merge([
+                'access_token' => $request->bearerToken(),
+            ]));
+        }
+
+        return response()->json([
+            'response' => 'error',
+            'error' => 'unauthorized',
+            'error_description' => 'No access token was provided in the request',
+        ], 401);
     }
 }

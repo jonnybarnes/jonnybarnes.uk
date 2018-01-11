@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "20e0057bf4b93bb8b6f0b43b522dd4db",
+    "content-hash": "aa839c8457c44ea018fd9141b3ec553e",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.48.8",
+            "version": "3.48.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "40dc24b2152cb00a5a6b2f2fe1678b86b6f0ba57"
+                "reference": "4159562ee5c2b2d322cfcccd2401d90bfaceaf1d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/40dc24b2152cb00a5a6b2f2fe1678b86b6f0ba57",
-                "reference": "40dc24b2152cb00a5a6b2f2fe1678b86b6f0ba57",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/4159562ee5c2b2d322cfcccd2401d90bfaceaf1d",
+                "reference": "4159562ee5c2b2d322cfcccd2401d90bfaceaf1d",
                 "shasum": ""
             },
             "require": {
@@ -84,7 +84,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2018-01-05T22:21:07+00:00"
+            "time": "2018-01-09T22:01:13+00:00"
         },
         {
             "name": "barnabywalters/mf-cleaner",
@@ -811,20 +811,20 @@
         },
         {
             "name": "doctrine/inflector",
-            "version": "v1.2.0",
+            "version": "v1.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/inflector.git",
-                "reference": "e11d84c6e018beedd929cff5220969a3c6d1d462"
+                "reference": "5527a48b7313d15261292c149e55e26eae771b0a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/inflector/zipball/e11d84c6e018beedd929cff5220969a3c6d1d462",
-                "reference": "e11d84c6e018beedd929cff5220969a3c6d1d462",
+                "url": "https://api.github.com/repos/doctrine/inflector/zipball/5527a48b7313d15261292c149e55e26eae771b0a",
+                "reference": "5527a48b7313d15261292c149e55e26eae771b0a",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.0"
+                "php": "^7.1"
             },
             "require-dev": {
                 "phpunit/phpunit": "^6.2"
@@ -832,7 +832,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.2.x-dev"
+                    "dev-master": "1.3.x-dev"
                 }
             },
             "autoload": {
@@ -874,7 +874,7 @@
                 "singularize",
                 "string"
             ],
-            "time": "2017-07-22T12:18:28+00:00"
+            "time": "2018-01-09T20:05:19+00:00"
         },
         {
             "name": "doctrine/lexer",
@@ -1710,20 +1710,20 @@
         },
         {
             "name": "jonnybarnes/commonmark-linkify",
-            "version": "v0.3",
+            "version": "v0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jonnybarnes/commonmark-linkify.git",
-                "reference": "6de548e2140cff0143b1ee166868275ec0a1174f"
+                "reference": "fa5b1434dbd3639d2739e3b4f0aa5d14f322d60a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jonnybarnes/commonmark-linkify/zipball/6de548e2140cff0143b1ee166868275ec0a1174f",
-                "reference": "6de548e2140cff0143b1ee166868275ec0a1174f",
+                "url": "https://api.github.com/repos/jonnybarnes/commonmark-linkify/zipball/fa5b1434dbd3639d2739e3b4f0aa5d14f322d60a",
+                "reference": "fa5b1434dbd3639d2739e3b4f0aa5d14f322d60a",
                 "shasum": ""
             },
             "require": {
-                "league/commonmark": "^0.16.0",
+                "league/commonmark": "^0.17.0",
                 "php": "^7.0"
             },
             "require-dev": {
@@ -1745,13 +1745,14 @@
                     "email": "jonny@jonnybarnes.uk"
                 }
             ],
-            "description": "Turn plaintext urls into clickable links",
+            "description": "Turn plaintext URLs into click-able links",
             "homepage": "https://github.com/jonnybarnes/commonmark-linkify",
             "keywords": [
                 "commonmark",
+                "extension",
                 "markdown"
             ],
-            "time": "2017-11-07T22:35:17+00:00"
+            "time": "2018-01-11T10:38:16+00:00"
         },
         {
             "name": "jonnybarnes/emoji-a11y",
@@ -2278,34 +2279,34 @@
         },
         {
             "name": "league/commonmark",
-            "version": "0.16.0",
+            "version": "0.17.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/commonmark.git",
-                "reference": "c0e41be0f80c51ad3170c9c713f74a0b8dec59ce"
+                "reference": "3b4c2224524776a584de663c7a04bc8eb2e1544d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/commonmark/zipball/c0e41be0f80c51ad3170c9c713f74a0b8dec59ce",
-                "reference": "c0e41be0f80c51ad3170c9c713f74a0b8dec59ce",
+                "url": "https://api.github.com/repos/thephpleague/commonmark/zipball/3b4c2224524776a584de663c7a04bc8eb2e1544d",
+                "reference": "3b4c2224524776a584de663c7a04bc8eb2e1544d",
                 "shasum": ""
             },
             "require": {
                 "ext-mbstring": "*",
-                "php": ">=5.4.8"
+                "php": ">=5.6.5"
             },
             "replace": {
                 "colinodell/commonmark-php": "*"
             },
             "require-dev": {
                 "cebe/markdown": "~1.0",
+                "commonmark/commonmark.js": "0.28",
                 "erusev/parsedown": "~1.0",
-                "jgm/commonmark": "0.28",
                 "michelf/php-markdown": "~1.4",
                 "mikehaertl/php-shellcommand": "~1.2.0",
-                "phpunit/phpunit": "^4.8.35|~5.7",
+                "phpunit/phpunit": "~5.7|~6.5",
                 "scrutinizer/ocular": "~1.1",
-                "symfony/finder": "~2.3|~3.0"
+                "symfony/finder": "~3.0|~4.0"
             },
             "suggest": {
                 "league/commonmark-extras": "Library of useful extensions including smart punctuation"
@@ -2316,7 +2317,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "0.17-dev"
+                    "dev-master": "0.18-dev"
                 }
             },
             "autoload": {
@@ -2343,7 +2344,7 @@
                 "markdown",
                 "parser"
             ],
-            "time": "2017-10-31T00:49:55+00:00"
+            "time": "2017-12-30T22:08:48+00:00"
         },
         {
             "name": "league/flysystem",
@@ -3439,16 +3440,16 @@
         },
         {
             "name": "sensiolabs/security-checker",
-            "version": "v4.1.6",
+            "version": "v4.1.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sensiolabs/security-checker.git",
-                "reference": "387b6a3b723ba35588b33d5f8d14e28ed608bd30"
+                "reference": "d539ccba2b4dce515de04f16b7ed7ae5b9eeb434"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sensiolabs/security-checker/zipball/387b6a3b723ba35588b33d5f8d14e28ed608bd30",
-                "reference": "387b6a3b723ba35588b33d5f8d14e28ed608bd30",
+                "url": "https://api.github.com/repos/sensiolabs/security-checker/zipball/d539ccba2b4dce515de04f16b7ed7ae5b9eeb434",
+                "reference": "d539ccba2b4dce515de04f16b7ed7ae5b9eeb434",
                 "shasum": ""
             },
             "require": {
@@ -3480,7 +3481,7 @@
                 }
             ],
             "description": "A security checker for your composer.lock",
-            "time": "2017-10-29T18:48:08+00:00"
+            "time": "2018-01-11T05:54:03+00:00"
         },
         {
             "name": "spatie/browsershot",
@@ -4808,24 +4809,26 @@
         },
         {
             "name": "bmitch/churn-php",
-            "version": "0.2.0",
+            "version": "0.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bmitch/churn-php.git",
-                "reference": "0026a7db3bebb83dc9b1cd1941e1cb15629c1dc8"
+                "reference": "e6d1afab6117c107a1f7e164023cc38c748b4ca2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bmitch/churn-php/zipball/0026a7db3bebb83dc9b1cd1941e1cb15629c1dc8",
-                "reference": "0026a7db3bebb83dc9b1cd1941e1cb15629c1dc8",
+                "url": "https://api.github.com/repos/bmitch/churn-php/zipball/e6d1afab6117c107a1f7e164023cc38c748b4ca2",
+                "reference": "e6d1afab6117c107a1f7e164023cc38c748b4ca2",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.0",
+                "php-di/php-di": "^5.4",
                 "symfony/console": "^3.2",
                 "symfony/process": "^3.2",
                 "symfony/yaml": "^3.3",
-                "tightenco/collect": "^5.4"
+                "tightenco/collect": "^5.4",
+                "webmozart/assert": "^1.2"
             },
             "require-dev": {
                 "bmitch/codor": "^1.0",
@@ -4841,7 +4844,7 @@
                 "slevomat/coding-standard": "^2.0"
             },
             "bin": [
-                "churn"
+                "bin/churn"
             ],
             "type": "library",
             "autoload": {
@@ -4865,28 +4868,29 @@
                 "bmitch",
                 "churn-php"
             ],
-            "time": "2017-09-02T00:42:45+00:00"
+            "time": "2017-10-21T18:17:58+00:00"
         },
         {
             "name": "codedungeon/phpunit-result-printer",
-            "version": "0.3.0",
+            "version": "0.5.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mikeerickson/phpunit-pretty-result-printer.git",
-                "reference": "12e3728dae638101ff447b0f1ba02501f6e1ef45"
+                "reference": "2dcf5f220f1019ddb2a85995828f513205416e0d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mikeerickson/phpunit-pretty-result-printer/zipball/12e3728dae638101ff447b0f1ba02501f6e1ef45",
-                "reference": "12e3728dae638101ff447b0f1ba02501f6e1ef45",
+                "url": "https://api.github.com/repos/mikeerickson/phpunit-pretty-result-printer/zipball/2dcf5f220f1019ddb2a85995828f513205416e0d",
+                "reference": "2dcf5f220f1019ddb2a85995828f513205416e0d",
                 "shasum": ""
             },
             "require": {
                 "hassankhan/config": "^0.10.0",
-                "symfony/yaml": "^3.3"
+                "symfony/yaml": "^2.7|^3.0|^4.0"
             },
             "require-dev": {
-                "phpunit/phpunit": ">=5.2"
+                "phpunit/phpunit": ">=5.2",
+                "spatie/phpunit-watcher": "^1.3"
             },
             "type": "library",
             "autoload": {
@@ -4912,7 +4916,38 @@
                 "printer",
                 "result-printer"
             ],
-            "time": "2017-11-24T18:45:54+00:00"
+            "time": "2018-01-09T21:42:36+00:00"
+        },
+        {
+            "name": "container-interop/container-interop",
+            "version": "1.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/container-interop/container-interop.git",
+                "reference": "79cbf1341c22ec75643d841642dd5d6acd83bdb8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/container-interop/container-interop/zipball/79cbf1341c22ec75643d841642dd5d6acd83bdb8",
+                "reference": "79cbf1341c22ec75643d841642dd5d6acd83bdb8",
+                "shasum": ""
+            },
+            "require": {
+                "psr/container": "^1.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Interop\\Container\\": "src/Interop/Container/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Promoting the interoperability of container objects (DIC, SL, etc.)",
+            "homepage": "https://github.com/container-interop/container-interop",
+            "time": "2017-02-14T19:40:03+00:00"
         },
         {
             "name": "doctrine/instantiator",
@@ -5517,16 +5552,16 @@
         },
         {
             "name": "nunomaduro/collision",
-            "version": "v1.1.18",
+            "version": "v1.1.20",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nunomaduro/collision.git",
-                "reference": "b117d73eadcf7dd490faeaaa80ddde2bdb03bf1f"
+                "reference": "6db3dc2d9a357a85534292d7a4f00e731d3c81aa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nunomaduro/collision/zipball/b117d73eadcf7dd490faeaaa80ddde2bdb03bf1f",
-                "reference": "b117d73eadcf7dd490faeaaa80ddde2bdb03bf1f",
+                "url": "https://api.github.com/repos/nunomaduro/collision/zipball/6db3dc2d9a357a85534292d7a4f00e731d3c81aa",
+                "reference": "6db3dc2d9a357a85534292d7a4f00e731d3c81aa",
                 "shasum": ""
             },
             "require": {
@@ -5535,6 +5570,7 @@
                 "symfony/console": "~2.8|~3.3|~4.0"
             },
             "require-dev": {
+                "laravel/framework": "5.5.*",
                 "phpunit/phpunit": "~6.5"
             },
             "type": "library",
@@ -5573,7 +5609,7 @@
                 "php",
                 "symfony"
             ],
-            "time": "2017-12-22T21:57:56+00:00"
+            "time": "2018-01-10T22:08:37+00:00"
         },
         {
             "name": "phar-io/manifest",
@@ -5676,6 +5712,149 @@
             ],
             "description": "Library for handling version information and constraints",
             "time": "2017-03-05T17:38:23+00:00"
+        },
+        {
+            "name": "php-di/invoker",
+            "version": "1.3.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/PHP-DI/Invoker.git",
+                "reference": "1f4ca63b9abc66109e53b255e465d0ddb5c2e3f7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/PHP-DI/Invoker/zipball/1f4ca63b9abc66109e53b255e465d0ddb5c2e3f7",
+                "reference": "1f4ca63b9abc66109e53b255e465d0ddb5c2e3f7",
+                "shasum": ""
+            },
+            "require": {
+                "container-interop/container-interop": "~1.1"
+            },
+            "require-dev": {
+                "athletic/athletic": "~0.1.8",
+                "phpunit/phpunit": "~4.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Invoker\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Generic and extensible callable invoker",
+            "homepage": "https://github.com/PHP-DI/Invoker",
+            "keywords": [
+                "callable",
+                "dependency",
+                "dependency-injection",
+                "injection",
+                "invoke",
+                "invoker"
+            ],
+            "time": "2016-07-14T13:09:58+00:00"
+        },
+        {
+            "name": "php-di/php-di",
+            "version": "5.4.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/PHP-DI/PHP-DI.git",
+                "reference": "3f9255659595f3e289f473778bb6c51aa72abbbd"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/PHP-DI/PHP-DI/zipball/3f9255659595f3e289f473778bb6c51aa72abbbd",
+                "reference": "3f9255659595f3e289f473778bb6c51aa72abbbd",
+                "shasum": ""
+            },
+            "require": {
+                "container-interop/container-interop": "~1.2",
+                "php": ">=5.5.0",
+                "php-di/invoker": "^1.3.2",
+                "php-di/phpdoc-reader": "^2.0.1",
+                "psr/container": "~1.0"
+            },
+            "provide": {
+                "container-interop/container-interop-implementation": "^1.0",
+                "psr/container-implementation": "^1.0"
+            },
+            "replace": {
+                "mnapoli/php-di": "*"
+            },
+            "require-dev": {
+                "doctrine/annotations": "~1.2",
+                "doctrine/cache": "~1.4",
+                "mnapoli/phpunit-easymock": "~0.2.0",
+                "ocramius/proxy-manager": "~1.0|~2.0",
+                "phpbench/phpbench": "@dev",
+                "phpunit/phpunit": "~4.5"
+            },
+            "suggest": {
+                "doctrine/annotations": "Install it if you want to use annotations (version ~1.2)",
+                "doctrine/cache": "Install it if you want to use the cache (version ~1.4)",
+                "ocramius/proxy-manager": "Install it if you want to use lazy injection (version ~1.0 or ~2.0)"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "DI\\": "src/DI/"
+                },
+                "files": [
+                    "src/DI/functions.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "The dependency injection container for humans",
+            "homepage": "http://php-di.org/",
+            "keywords": [
+                "container",
+                "dependency injection",
+                "di"
+            ],
+            "time": "2017-12-03T08:20:27+00:00"
+        },
+        {
+            "name": "php-di/phpdoc-reader",
+            "version": "2.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/PHP-DI/PhpDocReader.git",
+                "reference": "83f5ead159defccfa8e7092e5b6c1c533b326d68"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/PHP-DI/PhpDocReader/zipball/83f5ead159defccfa8e7092e5b6c1c533b326d68",
+                "reference": "83f5ead159defccfa8e7092e5b6c1c533b326d68",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.6"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "PhpDocReader\\": "src/PhpDocReader"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "PhpDocReader parses @var and @param values in PHP docblocks (supports namespaced class names with the same resolution rules as PHP)",
+            "keywords": [
+                "phpdoc",
+                "reflection"
+            ],
+            "time": "2015-11-29T10:34:25+00:00"
         },
         {
             "name": "phpdocumentor/reflection-common",

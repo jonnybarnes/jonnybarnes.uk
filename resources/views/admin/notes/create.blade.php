@@ -12,35 +12,28 @@
                 </ul>
             </div>
 @endif
-            <form action="/admin/notes" method="post" accept-charset="utf-8">
+            <form action="/admin/notes" method="post" accept-charset="utf-8" class="admin-form form">
                 {{ csrf_field() }}
-                <fieldset>
-                    <legend>New Note</legend>
-                    <div>
-                        <label for="in-reply-to" accesskey="r">Reply-to: </label>
-                        <input type="text"
-                               name="in-reply-to"
-                               id="in-reply-to"
-                               placeholder="in-reply-to-1 in-reply-to-2 …"
-                        >
-                    </div>
-                    <div>
-                        <label for="content" accesskey="n">Note: </label>
-                        <textarea name="content"
-                                  id="content"
-                                  placeholder="Note"
-                                  autofocus="autofocus">
-                            {{ old('content') }}
-                        </textarea>
-                    </div>
-                    <div>
-                    <div>
-                        <button type="submit"
-                                name="submit"
-                                id="submit"
-                                value="Submit"
-                        >Submit</button>
-                    </div>
-                </fieldset>
+                <div>
+                    <label for="in-reply-to" accesskey="r">Reply-to: </label>
+                    <input type="text"
+                           name="in-reply-to"
+                           id="in-reply-to"
+                           placeholder="in-reply-to-1 in-reply-to-2 …"
+                    >
+                </div>
+                <div>
+                    <label for="content" accesskey="n">Note: </label>
+                    <textarea name="content"
+                              id="content"
+                              placeholder="Note"
+                              autofocus="autofocus"
+                    >{{ old('content') }}</textarea>
+                </div>
+                <div>
+                    <button type="submit"
+                            name="submit"
+                    >Submit</button>
+                </div>
             </form>
 @stop

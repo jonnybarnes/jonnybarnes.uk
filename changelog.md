@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 0.15.2 (2018-01-11)
+  - Update micropub endpoint to support access tokens being sent in either acceptable form
+  - Improve admin control panel forms
+
 ## Version 0.15.1 (2018-01-06)
   - Update dependencies and recompile frontend assets, fix tests
   - Only normalise tags in the URL, not in the actual link text
