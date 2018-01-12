@@ -56,7 +56,7 @@ class ProcessLike implements ShouldQueue
                         ],
                     ]
                 );
-            } catch(ClientException $exception) {
+            } catch (ClientException $exception) {
                 //no biggie
             }
 
