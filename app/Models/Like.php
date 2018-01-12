@@ -29,7 +29,13 @@ class Like extends Model
 
         $mf2 = Mf2\parse($value, $this->url);
 
-        return $this->filterHTML($mf2['items'][0]['properties']['content'][0]['html']);
+        if (array_get($mf2, 'items.0.properties.content.0.html')) {
+            return $this->filterHTML(
+                $mf2['items'][0]['properties']['content'][0]['html']
+            );
+        }
+
+        return $value;
     }
 
     public function filterHTML($html)

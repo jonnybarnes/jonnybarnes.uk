@@ -11,6 +11,9 @@
             <h2>Notes</h2>
             <p>You can either <a href="/admin/notes/create">create</a> new notes, or <a href="/admin/notes/">edit</a> them.<p>
 
+            <h2>Likes</h2>
+            <p>You can either <a href="/admin/likes/create">create</a> a new like, or <a href="/admin/likes/">edit</a> them.<p>
+
             <h2>Clients</h2>
             <p>You can either <a href="/admin/clients/create">create</a> new client names, or <a href="/admin/clients/">edit</a> them.</p>
 

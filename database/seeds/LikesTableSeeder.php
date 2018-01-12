@@ -14,6 +14,7 @@ class LikesTableSeeder extends Seeder
     public function run()
     {
         factory(Like::class, 10)->create();
+        sleep(1);
 
         $faker = new Generator();
         $faker->addProvider(new \Faker\Provider\en_US\Person($faker));
@@ -24,5 +25,8 @@ class LikesTableSeeder extends Seeder
             'author_url' => $faker->url,
             'author_name' => $faker->name,
         ]);
+        sleep(1);
+
+        Like::create(['url' => 'https://example.com']);
     }
 }
