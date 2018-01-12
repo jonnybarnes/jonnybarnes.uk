@@ -12,14 +12,6 @@ class HelpersTest extends TestCase
         $this->assertEquals(normalize_url(normalize_url($input)), normalize_url($input));
     }
 
-    /**
-     * @dataProvider urlProvider
-     */
-    public function test_normalize_url($input, $output)
-    {
-        $this->assertEquals($output, normalize_url($input));
-    }
-
     public function urlProvider()
     {
         return [
@@ -27,7 +19,20 @@ class HelpersTest extends TestCase
             ['https://example.org:443/', 'https://example.org'],
             ['http://www.foo.bar/index.php/', 'http://www.foo.bar'],
             ['https://example.org/?foo=bar&baz=true', 'https://example.org?baz=true&foo=bar'],
+            [
+                'http://example.org/?ref_src=twcamp^share|twsrc^ios|twgr^software.studioh.Indigenous.share-micropub',
+                'http://example.org',
+            ],
         ];
+    }
+
+    /**
+     * @dataProvider urlProvider
+     * @group temp
+     */
+    public function test_normalize_url($input, $output)
+    {
+        $this->assertEquals($output, normalize_url($input));
     }
 
     public function test_pretty_print_json()

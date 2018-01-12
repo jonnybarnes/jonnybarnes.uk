@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 0.15.3 (2018-01-12)
+  - Improve `likes`, including adding a new section in the admin cp
+  - Add the ability to POSSE the like of a Tweet
+
 ## Version 0.15.2 (2018-01-11)
   - Update micropub endpoint to support access tokens being sent in either acceptable form
   - Improve admin control panel forms

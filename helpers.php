@@ -126,19 +126,32 @@ if (! function_exists('normalize_url')) {
 
         // Sort GET params alphabetically, not because the RFC requires it but because it's cool!
         if (isset($url['query'])) {
-            if (preg_match('/&/', $url['query'])) {
-                $s = explode('&', $url['query']);
-                $url['query'] = '';
-                sort($s);
-                foreach ($s as $z) {
-                    $url['query'] .= "{$z}&";
+            $queries = explode('&', $url['query']);
+            $url['query'] = '';
+            sort($queries);
+            foreach ($queries as $query) {
+                //lets drop query params we don’t want
+                $key = stristr($query, '=', true);
+                if (queryKeyIsBanned($key) === false) {
+                    $url['query'] .= "{$query}&";
                 }
-                $url['query'] = preg_replace('/&\Z/', '', $url['query']);
             }
-            $newUrl .= "?{$url['query']}";
+            $url['query'] = preg_replace('/&\Z/', '', $url['query']);
+            if ($url['query'] !== '') {
+                $newUrl .= "?{$url['query']}";
+            }
         }
 
         return $newUrl;
+    }
+
+    function queryKeyIsBanned(string $key): bool
+    {
+        $bannedKeys = [
+            'ref_src',
+        ];
+
+        return in_array($key, $bannedKeys);
     }
 }
 

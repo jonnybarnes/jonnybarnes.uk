@@ -5,8 +5,10 @@ namespace App\Jobs;
 use App\Models\Like;
 use GuzzleHttp\Client;
 use Illuminate\Bus\Queueable;
+use Thujohn\Twitter\Facades\Twitter;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
+use GuzzleHttp\Exception\ClientException;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Jonnybarnes\WebmentionsParser\Authorship;
@@ -35,6 +37,32 @@ class ProcessLike implements ShouldQueue
      */
     public function handle(Client $client, Authorship $authorship)
     {
+        if ($this->isTweet($this->like->url)) {
+            $tweet = Twitter::getOembed(['url' => $this->like->url]);
+            $this->like->author_name = $tweet->author_name;
+            $this->like->author_url = $tweet->author_url;
+            $this->like->content = $tweet->html;
+            $this->like->save();
+
+            //POSSE like
+            try {
+                $response = $client->request(
+                    'POST',
+                    'https://brid.gy/publish/webmention',
+                    [
+                        'form_params' => [
+                            'source' => $this->like->url,
+                            'target' => 'https://brid.gy/publish/twitter',
+                        ],
+                    ]
+                );
+            } catch (ClientException $exception) {
+                //no biggie
+            }
+
+            return 0;
+        }
+
         $response = $client->request('GET', $this->like->url);
         $mf2 = \Mf2\parse((string) $response->getBody(), $this->like->url);
         if (array_has($mf2, 'items.0.properties.content')) {
@@ -51,9 +79,17 @@ class ProcessLike implements ShouldQueue
                 $this->like->author_name = $author;
             }
         } catch (AuthorshipParserException $exception) {
-            return;
+            return 1;
         }
 
         $this->like->save();
+    }
+
+    private function isTweet(string $url): bool
+    {
+        $host = parse_url($url, PHP_URL_HOST);
+        $parts = array_reverse(explode('.', $host));
+
+        return $parts[0] === 'com' && $parts[1] === 'twitter';
     }
 }

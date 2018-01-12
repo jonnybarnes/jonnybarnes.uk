@@ -85,6 +85,16 @@ Route::group(['domain' => config('url.longurl')], function () {
             Route::post('/merge', 'PlacesController@mergeStore');
             Route::delete('/{id}', 'PlacesController@destroy');
         });
+
+        //Likes
+        Route::group(['prefix' => 'likes'], function () {
+            Route::get('/', 'LikesController@index');
+            Route::get('/create', 'LikesController@create');
+            Route::post('/', 'LikesController@store');
+            Route::get('/{id}/edit', 'LikesController@edit');
+            Route::put('/{id}', 'LikesController@update');
+            Route::delete('/{id}', 'LikesController@destroy');
+        });
     });
 
     //Blog pages using ArticlesController
