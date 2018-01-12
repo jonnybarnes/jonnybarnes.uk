@@ -1,6 +1,6 @@
 # Changelog
 
-## Version {next}
+## Version 0.15.3 (2018-01-12)
   - Improve `likes`, including adding a new section in the admin cp
   - Add the ability to POSSE the like of a Tweet
 
