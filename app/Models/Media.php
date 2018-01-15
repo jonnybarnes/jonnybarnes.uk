@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Media extends Model
 {
@@ -22,8 +25,10 @@ class Media extends Model
 
     /**
      * Get the note that owns this media.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function note()
+    public function note(): BelongsTo
     {
         return $this->belongsTo('App\Models\Note');
     }
@@ -33,7 +38,7 @@ class Media extends Model
      *
      * @return string
      */
-    public function getUrlAttribute()
+    public function getUrlAttribute(): string
     {
         if (starts_with($this->path, 'https://')) {
             return $this->path;
@@ -47,7 +52,7 @@ class Media extends Model
      *
      * @return string
      */
-    public function getMediumurlAttribute()
+    public function getMediumurlAttribute(): string
     {
         $basename = $this->getBasename($this->path);
         $extension = $this->getExtension($this->path);
@@ -60,7 +65,7 @@ class Media extends Model
      *
      * @return string
      */
-    public function getSmallurlAttribute()
+    public function getSmallurlAttribute(): string
     {
         $basename = $this->getBasename($this->path);
         $extension = $this->getExtension($this->path);
@@ -68,7 +73,13 @@ class Media extends Model
         return config('filesystems.disks.s3.url') . '/' . $basename . '-small.' . $extension;
     }
 
-    public function getBasename($path)
+    /**
+     * Give the real part of a filename, i.e. strip the file extension.
+     *
+     * @param  string  $path
+     * @return string
+     */
+    public function getBasename(string $path): string
     {
         // the following achieves this data flow
         // foo.bar.png => ['foo', 'bar', 'png'] => ['foo', 'bar'] => foo.bar
@@ -81,7 +92,13 @@ class Media extends Model
         return $basename;
     }
 
-    public function getExtension($path)
+    /**
+     * Get the extension from a given filename.
+     *
+     * @param  string  $path
+     * @return string
+     */
+    public function getExtension(string $path): string
     {
         $parts = explode('.', $path);
 

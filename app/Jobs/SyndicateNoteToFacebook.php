@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Jobs;
 
 use App\Models\Note;
@@ -18,7 +20,7 @@ class SyndicateNoteToFacebook implements ShouldQueue
     /**
      * Create a new job instance.
      *
-     * @return void
+     * @param  \App\Models\Note  $note
      */
     public function __construct(Note $note)
     {
@@ -28,7 +30,7 @@ class SyndicateNoteToFacebook implements ShouldQueue
     /**
      * Execute the job.
      *
-     * @return void
+     * @param  \GuzzleHttp\Client  $guzzle
      */
     public function handle(Client $guzzle)
     {

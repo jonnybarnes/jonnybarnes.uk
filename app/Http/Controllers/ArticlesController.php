@@ -1,21 +1,27 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Models\Article;
+use Illuminate\View\View;
 use Jonnybarnes\IndieWeb\Numbers;
+use Illuminate\Http\RedirectResponse;
 
 class ArticlesController extends Controller
 {
     /**
      * Show all articles (with pagination).
      *
-     * @return \Illuminate\View\Factory view
+     * @param  int  $year
+     * @param  int  $month
+     * @return \Illuminate\View\View
      */
-    public function index($year = null, $month = null)
+    public function index(int $year = null, int $month = null): View
     {
         $articles = Article::where('published', '1')
-                        ->date((int) $year, (int) $month)
+                        ->date($year, $month)
                         ->orderBy('updated_at', 'desc')
                         ->simplePaginate(5);
 
@@ -25,9 +31,12 @@ class ArticlesController extends Controller
     /**
      * Show a single article.
      *
-     * @return \Illuminate\View\Factory view
+     * @param  int  $year
+     * @param  int  $month
+     * @param  string  $slug
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\View\View
      */
-    public function show($year, $month, $slug)
+    public function show(int $year, int $month, string $slug)
     {
         $article = Article::where('titleurl', $slug)->firstOrFail();
         if ($article->updated_at->year != $year || $article->updated_at->month != $month) {
@@ -44,12 +53,12 @@ class ArticlesController extends Controller
      * We only have the ID, work out post title, year and month
      * and redirect to it.
      *
-     * @return \Illuminte\Routing\RedirectResponse redirect
+     * @param  int  $idFromUrl
+     * @return \Illuminte\Http\RedirectResponse
      */
-    public function onlyIdInUrl($inURLId)
+    public function onlyIdInUrl(int $idFromUrl): RedirectResponse
     {
-        $numbers = new Numbers();
-        $realId = $numbers->b60tonum($inURLId);
+        $realId = resolve(Numbers::class)->b60tonum($idFromUrl);
         $article = Article::findOrFail($realId);
 
         return redirect($article->link);

@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 use Cviebrock\EloquentSluggable\Sluggable;
 use League\CommonMark\CommonMarkConverter;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -31,7 +34,7 @@ class Article extends Model
      *
      * @return array
      */
-    public function sluggable()
+    public function sluggable(): array
     {
         return [
             'titleurl' => [
@@ -52,7 +55,7 @@ class Article extends Model
      *
      * @return string
      */
-    public function getHtmlAttribute()
+    public function getHtmlAttribute(): string
     {
         $markdown = new CommonMarkConverter();
         $html = $markdown->convertToHtml($this->main);
@@ -70,7 +73,7 @@ class Article extends Model
      *
      * @return string
      */
-    public function getW3cTimeAttribute()
+    public function getW3cTimeAttribute(): string
     {
         return $this->updated_at->toW3CString();
     }
@@ -80,7 +83,7 @@ class Article extends Model
      *
      * @return string
      */
-    public function getTooltipTimeAttribute()
+    public function getTooltipTimeAttribute(): string
     {
         return $this->updated_at->toRFC850String();
     }
@@ -90,7 +93,7 @@ class Article extends Model
      *
      * @return string
      */
-    public function getHumanTimeAttribute()
+    public function getHumanTimeAttribute(): string
     {
         return $this->updated_at->diffForHumans();
     }
@@ -100,7 +103,7 @@ class Article extends Model
      *
      * @return string
      */
-    public function getPubdateAttribute()
+    public function getPubdateAttribute(): string
     {
         return $this->updated_at->toRSSString();
     }
@@ -110,7 +113,7 @@ class Article extends Model
      *
      * @return string
      */
-    public function getLinkAttribute()
+    public function getLinkAttribute(): string
     {
         return '/blog/' . $this->updated_at->year . '/' . $this->updated_at->format('m') . '/' . $this->titleurl;
     }
@@ -120,7 +123,7 @@ class Article extends Model
      *
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeDate($query, int $year = null, int $month = null)
+    public function scopeDate($query, int $year = null, int $month = null): Builder
     {
         if ($year == null) {
             return $query;

@@ -1,19 +1,23 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Admin;
 
+use Illuminate\View\View;
 use Illuminate\Http\Request;
 use App\Models\MicropubClient;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\RedirectResponse;
 
 class ClientsController extends Controller
 {
     /**
      * Show a list of known clients.
      *
-     * @return \Illuminate\View\Factory view
+     * @return \Illuminate\View\View
      */
-    public function index()
+    public function index(): View
     {
         $clients = MicropubClient::all();
 
@@ -23,9 +27,9 @@ class ClientsController extends Controller
     /**
      * Show form to add a client name.
      *
-     * @return \Illuminate\View\Factory view
+     * @return \Illuminate\View\View
      */
-    public function create()
+    public function create(): View
     {
         return view('admin.clients.create');
     }
@@ -33,14 +37,13 @@ class ClientsController extends Controller
     /**
      * Process the request to adda new client name.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\View\Factory view
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request)
+    public function store(): RedirectResponse
     {
         MicropubClient::create([
-            'client_url' => $request->input('client_url'),
-            'client_name' => $request->input('client_name'),
+            'client_url' => request()->input('client_url'),
+            'client_name' => request()->input('client_name'),
         ]);
 
         return redirect('/admin/clients');
@@ -49,10 +52,10 @@ class ClientsController extends Controller
     /**
      * Show a form to edit a client name.
      *
-     * @param  string The client id
-     * @return \Illuminate\View\Factory view
+     * @param  int  $clientId
+     * @return \Illuminate\View\View
      */
-    public function edit($clientId)
+    public function edit(int $clientId): View
     {
         $client = MicropubClient::findOrFail($clientId);
 
@@ -66,15 +69,14 @@ class ClientsController extends Controller
     /**
      * Process the request to edit a client name.
      *
-     * @param  string  The client id
-     * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\View\Factory view
+     * @param  int  $clientId
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function update($clientId, Request $request)
+    public function update(int $clientId): RedirectResponse
     {
         $client = MicropubClient::findOrFail($clientId);
-        $client->client_url = $request->input('client_url');
-        $client->client_name = $request->input('client_name');
+        $client->client_url = request()->input('client_url');
+        $client->client_name = request()->input('client_name');
         $client->save();
 
         return redirect('/admin/clients');
@@ -83,10 +85,10 @@ class ClientsController extends Controller
     /**
      * Process a request to delete a client.
      *
-     * @param  string The client id
-     * @return redirect
+     * @param  int  $clientId
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function destroy($clientId)
+    public function destroy(int $clientId): RedirectResponse
     {
         MicropubClient::where('id', $clientId)->delete();
 

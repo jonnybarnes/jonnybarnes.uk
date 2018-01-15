@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Illuminate\Support\Facades\DB;
@@ -36,7 +38,7 @@ class Place extends Model
      *
      * @return array
      */
-    public function sluggable()
+    public function sluggable(): array
     {
         return [
             'slug' => [
@@ -49,7 +51,7 @@ class Place extends Model
     /**
      * Define the relationship with Notes.
      *
-     * @var array
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function notes()
     {
@@ -59,12 +61,12 @@ class Place extends Model
     /**
      * Select places near a given location.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder $query
-     * @param  Point $point
-     * @param  int Distance
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  \Phaza\LaravelPostgis\Geometries\Point  $point
+     * @param  int  $distance
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeNear(Builder $query, Point $point, $distance = 1000)
+    public function scopeNear(Builder $query, Point $point, $distance = 1000): Builder
     {
         $field = DB::raw(
             sprintf(
@@ -77,7 +79,14 @@ class Place extends Model
         return $query->where($field, '<=', $distance)->orderBy($field);
     }
 
-    public function scopeWhereExternalURL(Builder $query, string $url)
+    /**
+     * Select places based on a URL.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  string  $url
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeWhereExternalURL(Builder $query, string $url): Builder
     {
         return $query->where('external_urls', '@>', json_encode([
             $this->getType($url) => $url,
@@ -87,21 +96,21 @@ class Place extends Model
     /**
      * Get the latitude from the `location` property.
      *
-     * @return string latitude
+     * @return float
      */
-    public function getLatitudeAttribute()
+    public function getLatitudeAttribute(): float
     {
-        return explode(' ', $this->location)[1];
+        return $this->location->getLat();
     }
 
     /**
      * Get the longitude from the `location` property.
      *
-     * @return string longitude
+     * @return float
      */
-    public function getLongitudeAttribute()
+    public function getLongitudeAttribute(): float
     {
-        return explode(' ', $this->location)[0];
+        return $this->location->getLng();
     }
 
     /**
@@ -109,7 +118,7 @@ class Place extends Model
      *
      * @return string
      */
-    public function getLongurlAttribute()
+    public function getLongurlAttribute(): string
     {
         return config('app.url') . '/places/' . $this->slug;
     }
@@ -119,7 +128,7 @@ class Place extends Model
      *
      * @return string
      */
-    public function getShorturlAttribute()
+    public function getShorturlAttribute(): string
     {
         return config('app.shorturl') . '/places/' . $this->slug;
     }
@@ -129,12 +138,17 @@ class Place extends Model
      *
      * @return string
      */
-    public function getUriAttribute()
+    public function getUriAttribute(): string
     {
         return $this->longurl;
     }
 
-    public function setExternalUrlsAttribute($url)
+    /**
+     * Dealing with a jsonb column, so we check input first.
+     *
+     * @param  string|null  $url
+     */
+    public function setExternalUrlsAttribute(?string $url)
     {
         if ($url === null) {
             return;
@@ -148,7 +162,13 @@ class Place extends Model
         $this->attributes['external_urls'] = json_encode($already);
     }
 
-    private function getType(string $url): ?string
+    /**
+     * Given a URL, see if it is one of our known types.
+     *
+     * @param  string  $url
+     * @return string
+     */
+    private function getType(string $url): string
     {
         $host = parse_url($url, PHP_URL_HOST);
         if (ends_with($host, 'foursquare.com') === true) {

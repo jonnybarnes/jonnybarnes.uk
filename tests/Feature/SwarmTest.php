@@ -146,7 +146,6 @@ class SwarmTest extends TestCase
         $response
             ->assertStatus(201)
             ->assertJson(['response' => 'created']);
-        //dump($response->__get('headers')->get('location'));
         $this->assertDatabaseHas('places', [
             'external_urls' => '{"foursquare": "https://foursquare.com/v/654321"}'
         ]);

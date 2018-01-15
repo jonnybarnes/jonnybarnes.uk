@@ -1,19 +1,23 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Article;
+use Illuminate\View\View;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\RedirectResponse;
 
 class ArticlesController extends Controller
 {
     /**
      * List the articles that can be edited.
      *
-     * @return \Illuminate\View\Factory view
+     * @return \Illuminate\View\View
      */
-    public function index()
+    public function index(): View
     {
         $posts = Article::select('id', 'title', 'published')->orderBy('id', 'desc')->get();
 
@@ -23,9 +27,9 @@ class ArticlesController extends Controller
     /**
      * Show the new article form.
      *
-     * @return \Illuminate\View\Factory view
+     * @return \Illuminate\View\View
      */
-    public function create()
+    public function create(): View
     {
         $message = session('message');
 
@@ -35,23 +39,22 @@ class ArticlesController extends Controller
     /**
      * Process an incoming request for a new article and save it.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\View\Factory view
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request)
+    public function store(): RedirectResponse
     {
         //if a `.md` is attached use that for the main content.
-        if ($request->hasFile('article')) {
-            $file = $request->file('article')->openFile();
+        if (request()->hasFile('article')) {
+            $file = request()->file('article')->openFile();
             $content = $file->fread($file->getSize());
         }
-        $main = $content ?? $request->input('main');
+        $main = $content ?? request()->input('main');
         $article = Article::create(
             [
-                'url' => $request->input('url'),
-                'title' => $request->input('title'),
+                'url' => request()->input('url'),
+                'title' => request()->input('title'),
                 'main' => $main,
-                'published' => $request->input('published') ?? 0,
+                'published' => request()->input('published') ?? 0,
             ]
         );
 
@@ -61,10 +64,10 @@ class ArticlesController extends Controller
     /**
      * Show the edit form for an existing article.
      *
-     * @param  string  The article id
-     * @return \Illuminate\View\Factory view
+     * @param  int  $articleId
+     * @return \Illuminate\View\View
      */
-    public function edit($articleId)
+    public function edit(int $articleId): View
     {
         $post = Article::select(
             'title',
@@ -79,17 +82,16 @@ class ArticlesController extends Controller
     /**
      * Process an incoming request to edit an article.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  string
-     * @return \Illuminate|View\Factory view
+     * @param  int  $articleId
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, $articleId)
+    public function update(int $articleId): RedirectResponse
     {
         $article = Article::find($articleId);
-        $article->title = $request->input('title');
-        $article->url = $request->input('url');
-        $article->main = $request->input('main');
-        $article->published = $request->input('published') ?? 0;
+        $article->title = request()->input('title');
+        $article->url = request()->input('url');
+        $article->main = request()->input('main');
+        $article->published = request()->input('published') ?? 0;
         $article->save();
 
         return redirect('/admin/blog');
@@ -98,10 +100,10 @@ class ArticlesController extends Controller
     /**
      * Process a request to delete an aricle.
      *
-     * @param  string The article id
-     * @return \Illuminate\View\Factory view
+     * @param  int  $articleId
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function destroy($articleId)
+    public function destroy(int $articleId): RedirectResponse
     {
         Article::where('id', $articleId)->delete();
 

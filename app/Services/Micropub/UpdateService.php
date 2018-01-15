@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services\Micropub;
 
 use App\Models\{Media, Note};
@@ -7,6 +9,12 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class UpdateService
 {
+    /**
+     * Process a micropub request to update an entry.
+     *
+     * @param  array  $request Data from request()->all()
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function process(array $request)
     {
         $urlPath = parse_url(array_get($request, 'url'), PHP_URL_PATH);

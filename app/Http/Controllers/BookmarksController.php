@@ -1,19 +1,33 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Models\Bookmark;
+use Illuminate\View\View;
 
 class BookmarksController extends Controller
 {
-    public function index()
+    /**
+     * Show the most recent bookmarks.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function index(): View
     {
         $bookmarks = Bookmark::latest()->with('tags')->withCount('tags')->paginate(10);
 
         return view('bookmarks.index', compact('bookmarks'));
     }
 
-    public function show(Bookmark $bookmark)
+    /**
+     * Show a single bookmark.
+     *
+     * @param  \App\Models\Bookmark  $bookmark
+     * @return \Illuminate\View\View
+     */
+    public function show(Bookmark $bookmark): View
     {
         $bookmark->loadMissing('tags');
 

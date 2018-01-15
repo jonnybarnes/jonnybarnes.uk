@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Models\Contact;
+use Illuminate\View\View;
 use Illuminate\Filesystem\Filesystem;
 
 class ContactsController extends Controller
@@ -10,9 +13,9 @@ class ContactsController extends Controller
     /**
      * Show all the contacts.
      *
-     * @return \Illuminate\View\Factory view
+     * @return \Illuminate\View\View
      */
-    public function index()
+    public function index(): View
     {
         $filesystem = new Filesystem();
         $contacts = Contact::all();
@@ -31,9 +34,12 @@ class ContactsController extends Controller
     /**
      * Show a single contact.
      *
-     * @return \Illuminate\View\Factory view
+     * @todo Use implicit model binding.
+     *
+     * @param  string  $nick The nickname associated with contact
+     * @return \Illuminate\View\View
      */
-    public function show($nick)
+    public function show(string $nick): View
     {
         $filesystem = new Filesystem();
         $contact = Contact::where('nick', '=', $nick)->firstOrFail();

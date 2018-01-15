@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
@@ -14,9 +16,9 @@ class Tag extends Model
     protected $guarded = ['id'];
 
     /**
-     * Define the relationship with tags.
+     * Define the relationship with notes.
      *
-     * @var array
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function notes()
     {
@@ -25,6 +27,8 @@ class Tag extends Model
 
     /**
      * The bookmarks that belong to the tag.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function bookmarks()
     {
@@ -32,11 +36,11 @@ class Tag extends Model
     }
 
     /**
-     * Normalize tags so they’re lowercase and fancy diatrics are removed.
+     * When creating a Tag model instance, invoke the nomralize method on the tag.
      *
-     * @param  string
+     * @param  string  $value
      */
-    public function setTagAttribute($value)
+    public function setTagAttribute(string $value)
     {
         $this->attributes['tag'] = $this->normalize($value);
     }
@@ -45,9 +49,10 @@ class Tag extends Model
      * This method actually normalizes a tag. That means lowercase-ing and
      * removing fancy diatric characters.
      *
-     * @param  string
+     * @param  string  $tag
+     * @return string
      */
-    public static function normalize($tag)
+    public static function normalize(string $tag): string
     {
         return mb_strtolower(
             preg_replace(

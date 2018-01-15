@@ -1,6 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
+
+use Illuminate\Http\RedirectResponse;
 
 class ShortURLsController extends Controller
 {
@@ -16,9 +20,9 @@ class ShortURLsController extends Controller
     /**
      * Redirect from '/' to the long url.
      *
-     * @return \Illuminate\Routing\RedirectResponse redirect
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function baseURL()
+    public function baseURL(): RedirectResponse
     {
         return redirect(config('app.url'));
     }
@@ -26,9 +30,9 @@ class ShortURLsController extends Controller
     /**
      * Redirect from '/@' to a twitter profile.
      *
-     * @return \Illuminate\Routing\RedirectResponse redirect
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function twitter()
+    public function twitter(): RedirectResponse
     {
         return redirect('https://twitter.com/jonnybarnes');
     }
@@ -36,9 +40,9 @@ class ShortURLsController extends Controller
     /**
      * Redirect from '/+' to a Google+ profile.
      *
-     * @return \Illuminate\Routing\RedirectResponse redirect
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function googlePlus()
+    public function googlePlus(): RedirectResponse
     {
         return redirect('https://plus.google.com/u/0/117317270900655269082/about');
     }
@@ -49,9 +53,9 @@ class ShortURLsController extends Controller
      *
      * @param  string  Post type
      * @param  string  Post ID
-     * @return \Illuminate\Routing\Redirector redirect
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function expandType($type, $postId)
+    public function expandType(string $type, string $postId): RedirectResponse
     {
         if ($type == 't') {
             $type = 'notes';

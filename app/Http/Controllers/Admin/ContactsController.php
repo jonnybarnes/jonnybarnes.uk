@@ -1,21 +1,25 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Admin;
 
 use GuzzleHttp\Client;
 use App\Models\Contact;
+use Illuminate\View\View;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Http\RedirectResponse;
 
 class ContactsController extends Controller
 {
     /**
      * List the currect contacts that can be edited.
      *
-     * @return \Illuminate\View\Factory view
+     * @return \Illuminate\View\View
      */
-    public function index()
+    public function index(): View
     {
         $contacts = Contact::all();
 
@@ -25,9 +29,9 @@ class ContactsController extends Controller
     /**
      * Display the form to add a new contact.
      *
-     * @return \Illuminate\View\Factory view
+     * @return \Illuminate\View\View
      */
-    public function create()
+    public function create(): View
     {
         return view('admin.contacts.create');
     }
@@ -35,17 +39,16 @@ class ContactsController extends Controller
     /**
      * Process the request to add a new contact.
      *
-     * @param  \Illuminate\Http|request $request
-     * @return \Illuminate\View\Factory view
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request)
+    public function store(): RedirectResponse
     {
         $contact = new Contact();
-        $contact->name = $request->input('name');
-        $contact->nick = $request->input('nick');
-        $contact->homepage = $request->input('homepage');
-        $contact->twitter = $request->input('twitter');
-        $contact->facebook = $request->input('facebook');
+        $contact->name = request()->input('name');
+        $contact->nick = request()->input('nick');
+        $contact->homepage = request()->input('homepage');
+        $contact->twitter = request()->input('twitter');
+        $contact->facebook = request()->input('facebook');
         $contact->save();
 
         return redirect('/admin/contacts');
@@ -54,10 +57,10 @@ class ContactsController extends Controller
     /**
      * Show the form to edit an existing contact.
      *
-     * @param  string  The contact id
-     * @return \Illuminate\View\Factory view
+     * @param  int  $contactId
+     * @return \Illuminate\View\View
      */
-    public function edit($contactId)
+    public function edit(int $contactId): View
     {
         $contact = Contact::findOrFail($contactId);
 
@@ -69,28 +72,27 @@ class ContactsController extends Controller
      *
      * @todo   Allow saving profile pictures for people without homepages
      *
-     * @param  string  The contact id
-     * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\View\Factory view
+     * @param  int  $contactId
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function update($contactId, Request $request)
+    public function update(int $contactId): RedirectResponse
     {
         $contact = Contact::findOrFail($contactId);
-        $contact->name = $request->input('name');
-        $contact->nick = $request->input('nick');
-        $contact->homepage = $request->input('homepage');
-        $contact->twitter = $request->input('twitter');
-        $contact->facebook = $request->input('facebook');
+        $contact->name = request()->input('name');
+        $contact->nick = request()->input('nick');
+        $contact->homepage = request()->input('homepage');
+        $contact->twitter = request()->input('twitter');
+        $contact->facebook = request()->input('facebook');
         $contact->save();
 
-        if ($request->hasFile('avatar') && ($request->input('homepage') != '')) {
-            $dir = parse_url($request->input('homepage'), PHP_URL_HOST);
+        if (request()->hasFile('avatar') && (request()->input('homepage') != '')) {
+            $dir = parse_url(request()->input('homepage'), PHP_URL_HOST);
             $destination = public_path() . '/assets/profile-images/' . $dir;
             $filesystem = new Filesystem();
             if ($filesystem->isDirectory($destination) === false) {
                 $filesystem->makeDirectory($destination);
             }
-            $request->file('avatar')->move($destination, 'image');
+            request()->file('avatar')->move($destination, 'image');
         }
 
         return redirect('/admin/contacts');
@@ -99,10 +101,10 @@ class ContactsController extends Controller
     /**
      * Process the request to delete a contact.
      *
-     * @param  string  The contact id
-     * @return \Illuminate\View\Factory view
+     * @param  int  $contactId
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function destroy($contactId)
+    public function destroy(int $contactId): RedirectResponse
     {
         $contact = Contact::findOrFail($contactId);
         $contact->delete();
@@ -116,16 +118,16 @@ class ContactsController extends Controller
      * This method attempts to find the microformat marked-up profile image
      * from a given homepage and save it accordingly
      *
-     * @param  string  The contact id
-     * @return \Illuminate\View\Factory view
+     * @param  int  $contactId
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\View\View
      */
-    public function getAvatar($contactId)
+    public function getAvatar(int $contactId)
     {
         // Initialising
         $avatarURL = null;
         $avatar = null;
         $contact = Contact::findOrFail($contactId);
-        if (mb_strlen($contact->homepage !== null) !== 0) {
+        if ($contact->homepage !== null && mb_strlen($contact->homepage) !== 0) {
             $client = resolve(Client::class);
             try {
                 $response = $client->get($contact->homepage);

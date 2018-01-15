@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Mf2;
@@ -11,17 +13,33 @@ class Like extends Model
 {
     protected $fillable = ['url'];
 
-    public function setUrlAttribute($value)
+    /**
+     * Normalize the URL of a Like.
+     *
+     * @param  string  $value The provided URL
+     */
+    public function setUrlAttribute(string $value)
     {
         $this->attributes['url'] = normalize_url($value);
     }
 
-    public function setAuthorUrlAttribute($value)
+    /**
+     * Normalize the URL of the author of the like.
+     *
+     * @param  string  $value The author’s url
+     */
+    public function setAuthorUrlAttribute(?string $value)
     {
         $this->attributes['author_url'] = normalize_url($value);
     }
 
-    public function getContentAttribute($value)
+    /**
+     * If the content contains HTML, filter it.
+     *
+     * @param  string  $value The content of the like
+     * @return string|null
+     */
+    public function getContentAttribute(?string $value): ?string
     {
         if ($value === null) {
             return null;
@@ -38,7 +56,13 @@ class Like extends Model
         return $value;
     }
 
-    public function filterHTML($html)
+    /**
+     * Filter some HTML with HTMLPurifier.
+     *
+     * @param  string  $html
+     * @return string
+     */
+    private function filterHTML(string $html): string
     {
         $config = HTMLPurifier_Config::createDefault();
         $config->set('Cache.SerializerPath', storage_path() . '/HTMLPurifier');

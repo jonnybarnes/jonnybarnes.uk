@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Jobs;
 
 use App\Models\Bookmark;
@@ -20,7 +22,7 @@ class ProcessBookmark implements ShouldQueue
     /**
      * Create a new job instance.
      *
-     * @return void
+     * @param  \App\Models\Bookmark  $bookmark
      */
     public function __construct(Bookmark $bookmark)
     {

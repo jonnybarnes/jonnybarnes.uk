@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands;
 
 use App\Models\WebMention;
@@ -61,7 +63,7 @@ class ParseCachedWebMentions extends Command
      * @param  string
      * @return string
      */
-    private function URLFromFilename($filepath)
+    private function URLFromFilename(string $filepath): string
     {
         $dir = mb_substr($filepath, mb_strlen(storage_path() . '/HTML/'));
         $url = str_replace(['http/', 'https/'], ['http://', 'https://'], $dir);

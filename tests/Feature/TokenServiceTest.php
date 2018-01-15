@@ -55,6 +55,5 @@ class TokenServiceTest extends TestCase
 
         $service = new TokenService();
         $token = $service->validateToken($token);
-        dump($token);
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Jobs;
 
 use Illuminate\Bus\Queueable;
@@ -20,7 +22,7 @@ class ProcessMedia implements ShouldQueue
     /**
      * Create a new job instance.
      *
-     * @return void
+     * @param  string  $filename
      */
     public function __construct(string $filename)
     {
@@ -30,7 +32,7 @@ class ProcessMedia implements ShouldQueue
     /**
      * Execute the job.
      *
-     * @return void
+     * @param  \Intervention\Image\ImageManager  $manager
      */
     public function handle(ImageManager $manager)
     {

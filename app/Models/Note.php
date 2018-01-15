@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Cache;
@@ -14,6 +16,7 @@ use League\CommonMark\Environment;
 use League\CommonMark\HtmlRenderer;
 use Illuminate\Database\Eloquent\Model;
 use Jonnybarnes\EmojiA11y\EmojiModifier;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Jonnybarnes\CommonmarkLinkify\LinkifyExtension;
 
@@ -29,8 +32,16 @@ class Note extends Model
      */
     private const USERNAMES_REGEX = '/\[.*?\](*SKIP)(*F)|@(\w+)/';
 
+    /**
+     * This variable is used to keep track of contacts in a note.
+     */
     protected $contacts;
 
+    /**
+     * Set our contacts variable to null.
+     *
+     * @param  array  $attributes
+     */
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
@@ -65,7 +76,7 @@ class Note extends Model
     /**
      * Define the relationship with tags.
      *
-     * @var array
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function tags()
     {
@@ -75,7 +86,7 @@ class Note extends Model
     /**
      * Define the relationship with clients.
      *
-     * @var array?
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function client()
     {
@@ -85,7 +96,7 @@ class Note extends Model
     /**
      * Define the relationship with webmentions.
      *
-     * @var array
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
      */
     public function webmentions()
     {
@@ -93,9 +104,9 @@ class Note extends Model
     }
 
     /**
-     * Definte the relationship with places.
+     * Define the relationship with places.
      *
-     * @var array
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function place()
     {
@@ -105,7 +116,7 @@ class Note extends Model
     /**
      * Define the relationship with media.
      *
-     * @return void
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function media()
     {
@@ -117,7 +128,7 @@ class Note extends Model
      *
      * @return array
      */
-    public function toSearchableArray()
+    public function toSearchableArray(): array
     {
         return [
             'note' => $this->note,
@@ -127,28 +138,34 @@ class Note extends Model
     /**
      * Normalize the note to Unicode FORM C.
      *
-     * @param  string  $value
-     * @return string
+     * @param  string|null  $value
      */
-    public function setNoteAttribute($value)
+    public function setNoteAttribute(?string $value)
     {
-        $normalized = normalizer_normalize($value, Normalizer::FORM_C);
-        if ($normalized === '') { //we don’t want to save empty strings to the db
-            $normalized = null;
+        if ($value !== null) {
+            $normalized = normalizer_normalize($value, Normalizer::FORM_C);
+            if ($normalized === '') { //we don’t want to save empty strings to the db
+                $normalized = null;
+            }
+            $this->attributes['note'] = $normalized;
         }
-        $this->attributes['note'] = $normalized;
     }
 
     /**
      * Pre-process notes for web-view.
      *
-     * @param  string
-     * @return string
+     * @param  string|null  $value
+     * @return string|null
      */
-    public function getNoteAttribute($value)
+    public function getNoteAttribute(?string $value): ?string
     {
         if ($value === null && $this->place !== null) {
             $value = '📍: <a href="' . $this->place->longurl . '">' . $this->place->name . '</a>';
+        }
+
+        // if $value is still null, just return null
+        if ($value === null) {
+            return null;
         }
 
         $hcards = $this->makeHCards($value);
@@ -164,11 +181,10 @@ class Note extends Model
      *
      * @return string
      */
-    public function getNb60idAttribute()
+    public function getNb60idAttribute(): string
     {
-        $numbers = new Numbers();
-
-        return $numbers->numto60($this->id);
+        // we cast to string because sometimes the nb60id is an “int”
+        return (string) resolve(Numbers::class)->numto60($this->id);
     }
 
     /**
@@ -176,7 +192,7 @@ class Note extends Model
      *
      * @return string
      */
-    public function getLongurlAttribute()
+    public function getLongurlAttribute(): string
     {
         return config('app.url') . '/notes/' . $this->nb60id;
     }
@@ -186,7 +202,7 @@ class Note extends Model
      *
      * @return string
      */
-    public function getShorturlAttribute()
+    public function getShorturlAttribute(): string
     {
         return config('app.shorturl') . '/notes/' . $this->nb60id;
     }
@@ -196,7 +212,7 @@ class Note extends Model
      *
      * @return string
      */
-    public function getIso8601Attribute()
+    public function getIso8601Attribute(): string
     {
         return $this->updated_at->toISO8601String();
     }
@@ -206,7 +222,7 @@ class Note extends Model
      *
      * @return string
      */
-    public function getHumandiffAttribute()
+    public function getHumandiffAttribute(): string
     {
         return $this->updated_at->diffForHumans();
     }
@@ -216,7 +232,7 @@ class Note extends Model
      *
      * @return string
      */
-    public function getPubdateAttribute()
+    public function getPubdateAttribute(): string
     {
         return $this->updated_at->toRSSString();
     }
@@ -224,9 +240,9 @@ class Note extends Model
     /**
      * Get the latitude value.
      *
-     * @return string|null
+     * @return float|null
      */
-    public function getLatitudeAttribute()
+    public function getLatitudeAttribute(): ?float
     {
         if ($this->place !== null) {
             return $this->place->location->getLat();
@@ -235,16 +251,18 @@ class Note extends Model
             $pieces = explode(':', $this->location);
             $latlng = explode(',', $pieces[0]);
 
-            return trim($latlng[0]);
+            return (float) trim($latlng[0]);
         }
+
+        return null;
     }
 
     /**
      * Get the longitude value.
      *
-     * @return string|null
+     * @return float|null
      */
-    public function getLongitudeAttribute()
+    public function getLongitudeAttribute(): ?float
     {
         if ($this->place !== null) {
             return $this->place->location->getLng();
@@ -253,8 +271,10 @@ class Note extends Model
             $pieces = explode(':', $this->location);
             $latlng = explode(',', $pieces[0]);
 
-            return trim($latlng[1]);
+            return (float) trim($latlng[1]);
         }
+
+        return null;
     }
 
     /**
@@ -263,7 +283,7 @@ class Note extends Model
      *
      * @return string|null
      */
-    public function getAddressAttribute()
+    public function getAddressAttribute(): ?string
     {
         if ($this->place !== null) {
             return $this->place->name;
@@ -271,12 +291,19 @@ class Note extends Model
         if ($this->location !== null) {
             return $this->reverseGeoCode((float) $this->latitude, (float) $this->longitude);
         }
+
+        return null;
     }
 
-    public function getTwitterAttribute()
+    /**
+     * Get the OEmbed html for a tweet the note is a reply to.
+     *
+     * @return object|null
+     */
+    public function getTwitterAttribute(): ?object
     {
         if ($this->in_reply_to == null || mb_substr($this->in_reply_to, 0, 20, 'UTF-8') !== 'https://twitter.com/') {
-            return;
+            return null;
         }
 
         $tweetId = basename($this->in_reply_to);
@@ -292,7 +319,7 @@ class Note extends Model
                 'maxwidth' => 512,
             ]);
         } catch (\Exception $e) {
-            return;
+            return null;
         }
         Cache::put($tweetId, $oEmbed, ($oEmbed->cache_age / 60));
 
@@ -301,20 +328,24 @@ class Note extends Model
 
     /**
      * Show a specific form of the note for twitter.
+     *
+     * That is we swap the contacts names for their known Twitter handles.
+     *
+     * @return string|null
      */
-    public function getTwitterContentAttribute()
+    public function getTwitterContentAttribute(): ?string
     {
         if ($this->contacts === null) {
-            return;
+            return null;
         }
 
         if (count($this->contacts) === 0) {
-            return;
+            return null;
         }
 
         if (count(array_unique(array_values($this->contacts))) === 1
             && array_unique(array_values($this->contacts))[0] === null) {
-            return;
+            return null;
         }
 
         // swap in twitter usernames
@@ -338,15 +369,22 @@ class Note extends Model
         return $this->convertMarkdown($swapped);
     }
 
-    public function getFacebookContentAttribute()
+    /**
+     * Show a specific form of the note for facebook.
+     *
+     * That is we swap the contacts names for their known Facebook usernames.
+     *
+     * @return string|null
+     */
+    public function getFacebookContentAttribute(): ?string
     {
         if (count($this->contacts) === 0) {
-            return;
+            return null;
         }
 
         if (count(array_unique(array_values($this->contacts))) === 1
             && array_unique(array_values($this->contacts))[0] === null) {
-            return;
+            return null;
         }
 
         // swap in facebook usernames
@@ -374,27 +412,27 @@ class Note extends Model
     /**
      * Scope a query to select a note via a NewBase60 id.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param string $nb60id
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  string  $nb60id
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeNb60($query, $nb60id)
+    public function scopeNb60(Builder $query, string $nb60id): Builder
     {
-        $numbers = new Numbers();
-
-        return $query->where('id', $numbers->b60tonum($nb60id));
+        return $query->where('id', resolve(Numbers::class)->b60tonum($nb60id));
     }
 
     /**
+     * Swap contact’s nicks for a full  mf2 h-card.
+     *
      * Take note that this method does two things, given @username (NOT [@username](URL)!)
      * we try to create a fancy hcard from our contact info. If this is not possible
      * due to lack of contact info, we assume @username is a twitter handle and link it
      * as such.
      *
-     * @param  string  The note’s text
+     * @param  string  $text
      * @return string
      */
-    private function makeHCards($text)
+    private function makeHCards(string $text): string
     {
         $this->getContacts();
 
@@ -424,6 +462,9 @@ class Note extends Model
         return $hcards;
     }
 
+    /**
+     * Get the value of the `contacts` property.
+     */
     public function getContacts()
     {
         if ($this->contacts === null) {
@@ -431,6 +472,9 @@ class Note extends Model
         }
     }
 
+    /**
+     * Process the note and save the contacts to the `contacts` property.
+     */
     public function setContacts()
     {
         $contacts = [];
@@ -446,14 +490,16 @@ class Note extends Model
     }
 
     /**
+     * Turn text hashtags to full HTML links.
+     *
      * Given a string and section, finds all hashtags matching
      * `#[\-_a-zA-Z0-9]+` and wraps them in an `a` element with
      * `rel=tag` set and a `href` of 'section/tagged/' + tagname without the #.
      *
-     * @param  string  The note
+     * @param  string  $note
      * @return string
      */
-    public function autoLinkHashtag($text)
+    public function autoLinkHashtag(string $note): string
     {
         return preg_replace_callback(
             '/#([^\s]*)\b/',
@@ -462,25 +508,31 @@ class Note extends Model
                 . Tag::normalize($matches[1]) . '">#'
                 . $matches[1] . '</a>';
             },
-            $text
+            $note
         );
     }
 
-    private function convertMarkdown($text)
+    /**
+     * Pass a note through the commonmark library.
+     *
+     * @param  string  $note
+     * @return string
+     */
+    private function convertMarkdown(string $note): string
     {
         $environment = Environment::createCommonMarkEnvironment();
         $environment->addExtension(new LinkifyExtension());
         $converter = new Converter(new DocParser($environment), new HtmlRenderer($environment));
 
-        return $converter->convertToHtml($text);
+        return $converter->convertToHtml($note);
     }
 
     /**
      * Do a reverse geocode lookup of a `lat,lng` value.
      *
-     * @param  float  The latitude
-     * @param  float  The longitude
-     * @return string The location HTML
+     * @param  float  $latitude
+     * @param  float  $longitude
+     * @return string
      */
     public function reverseGeoCode(float $latitude, float $longitude): string
     {
@@ -498,7 +550,7 @@ class Note extends Model
                 ],
                 'headers' => ['User-Agent' => 'jonnybarnes.uk via Guzzle, email jonny@jonnybarnes.uk'],
             ]);
-            $json = json_decode($response->getBody());
+            $json = json_decode((string) $response->getBody());
             if (isset($json->address->town)) {
                 $address = '<span class="p-locality">'
                     . $json->address->town

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Jobs;
 
 use Mf2;
@@ -22,9 +24,8 @@ class ProcessWebMention implements ShouldQueue
     /**
      * Create a new job instance.
      *
-     * @param  \App\Note $note
-     * @param  string $source
-     * @return void
+     * @param  \App\Note  $note
+     * @param  string  $source
      */
     public function __construct(Note $note, $source)
     {
@@ -37,7 +38,6 @@ class ProcessWebMention implements ShouldQueue
      *
      * @param  \Jonnybarnes\WebmentionsParser\Parser  $parser
      * @param  \GuzzleHttp\Client  $guzzle
-     * @return void
      */
     public function handle(Parser $parser, Client $guzzle)
     {
@@ -102,7 +102,6 @@ class ProcessWebMention implements ShouldQueue
      *
      * @param  string  $html
      * @param  string  $url
-     * @return string|null
      */
     private function saveRemoteContent($html, $url)
     {

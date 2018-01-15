@@ -887,7 +887,7 @@ class MicropubControllerTest extends TestCase
                 'h' => 'entry',
                 'content' => $note,
                 'published' => Carbon::now()->toW3CString(),
-                'access_token' => $this->getToken(),
+                'access_token' => (string) $this->getToken(),
             ]
         );
         $response->assertJson(['response' => 'created']);
