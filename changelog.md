@@ -1,5 +1,8 @@
 # Changelog
 
+## Version {next}
+  - Formally bump PHP requirement to 7.2
+
 ## Version 0.15.4
   - Improve code-base by liberal use of `strict_types`
   - Added some basic CSS text styling
