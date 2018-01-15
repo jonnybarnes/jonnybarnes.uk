@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Jobs;
 
 use GuzzleHttp\Client;
@@ -20,9 +22,9 @@ class SaveProfileImage implements ShouldQueue
     /**
      * Create a new job instance.
      *
-     * @return void
+     * @param  array  $microformats
      */
-    public function __construct($microformats)
+    public function __construct(array $microformats)
     {
         $this->microformats = $microformats;
     }
@@ -30,7 +32,7 @@ class SaveProfileImage implements ShouldQueue
     /**
      * Execute the job.
      *
-     * @return void
+     * @param  \Jonnybarnes\WebmentionsParser\Authorship  $authorship
      */
     public function handle(Authorship $authorship)
     {

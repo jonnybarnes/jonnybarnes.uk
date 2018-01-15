@@ -12,6 +12,11 @@ use Illuminate\Http\RedirectResponse;
 
 class LikesController extends Controller
 {
+    /**
+     * List the likes that can be edited.
+     *
+     * @return \Illuminate\View\View
+     */
     public function index(): View
     {
         $likes = Like::all();
@@ -19,11 +24,21 @@ class LikesController extends Controller
         return view('admin.likes.index', compact('likes'));
     }
 
+    /**
+     * Show the form to make a new like.
+     *
+     * @return \Illuminate\View\View
+     */
     public function create(): View
     {
         return view('admin.likes.create');
     }
 
+    /**
+     * Process a request to make a new like.
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function store(): RedirectResponse
     {
         $like = Like::create([
@@ -34,6 +49,12 @@ class LikesController extends Controller
         return redirect('/admin/likes');
     }
 
+    /**
+     * Display the form to edit a specific like.
+     *
+     * @param  int  $likeId
+     * @return \Illuminate\View\View
+     */
     public function edit(int $likeId): View
     {
         $like = Like::findOrFail($likeId);
@@ -44,6 +65,12 @@ class LikesController extends Controller
         ]);
     }
 
+    /**
+     * Process a request to edit a like.
+     *
+     * @param  int  $likeId
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function update(int $likeId): RedirectResponse
     {
         $like = Like::findOrFail($likeId);
@@ -54,6 +81,12 @@ class LikesController extends Controller
         return redirect('/admin/likes');
     }
 
+    /**
+     * Process the request to delete a like.
+     *
+     * @param  int  $likeId
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function destroy(int $likeId): RedirectResponse
     {
         Like::where('id', $likeId)->delete();

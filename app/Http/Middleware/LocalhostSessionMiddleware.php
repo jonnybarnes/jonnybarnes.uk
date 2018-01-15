@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Middleware;
 
 use Closure;
+use Illuminate\Http\Request;
 
 class LocalhostSessionMiddleware
 {
@@ -15,7 +18,7 @@ class LocalhostSessionMiddleware
      * @param  \Closure  $next
      * @return mixed
      */
-    public function handle($request, Closure $next)
+    public function handle(Request $request, Closure $next)
     {
         if (config('app.env') !== 'production') {
             session(['me' => config('app.url')]);

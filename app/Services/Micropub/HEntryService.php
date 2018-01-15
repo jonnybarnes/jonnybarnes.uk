@@ -1,12 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services\Micropub;
 
 use App\Services\{BookmarkService, LikeService, NoteService};
 
 class HEntryService
 {
-    public function process(array $request, string $client = null)
+    /**
+     * Create the relavent model from some h-entry data.
+     *
+     * @param  array  $request Data from request()->all()
+     * @param  string|null  $client The micropub client that made the request
+     * @return string|null
+     */
+    public function process(array $request, ?string $client = null): ?string
     {
         if (array_get($request, 'properties.like-of') || array_get($request, 'like-of')) {
             $like = resolve(LikeService::class)->createLike($request);

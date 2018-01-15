@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Observers;
 
 use App\Models\{Note, Tag};
+use Illuminate\Support\Collection;
 
 class NoteObserver
 {
@@ -10,11 +13,14 @@ class NoteObserver
      * Listen to the Note created event.
      *
      * @param  \App\Note  $note
-     * @return void
      */
     public function created(Note $note)
     {
-        $tags = $this->getTagsFromNote($note->getAttributes()['note'] ?? null);
+        $text = array_get($note->getAttributes(), 'note');
+        if ($text === null) {
+            return;
+        }
+        $tags = $this->getTagsFromNote($text);
 
         if (count($tags) === 0) {
             return;
@@ -31,11 +37,15 @@ class NoteObserver
      * Listen to the Note updated event.
      *
      * @param  \App\Note  $Note
-     * @return void
      */
     public function updated(Note $note)
     {
-        $tags = $this->getTagsFromNote($note->getAttributes()['note']);
+        $text = array_get($note->getAttributes(), 'note');
+        if ($text === null) {
+            return;
+        }
+
+        $tags = $this->getTagsFromNote($text);
         if (count($tags) === 0) {
             return;
         }
@@ -53,14 +63,19 @@ class NoteObserver
      * Listen to the Note deleting event.
      *
      * @param  \App\Note  $note
-     * @return void
      */
     public function deleting(Note $note)
     {
         $note->tags()->detach();
     }
 
-    public function getTagsFromNote($note)
+    /**
+     * Retrieve the tags from a note’s text, tag for form #tag.
+     *
+     * @param  string  $note
+     * @return \Illuminate\Support\Collection
+     */
+    private function getTagsFromNote(string $note): Collection
     {
         preg_match_all('/#([^\s<>]+)\b/', $note, $tags);
 

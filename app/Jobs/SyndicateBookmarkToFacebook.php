@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Jobs;
 
 use GuzzleHttp\Client;
@@ -19,7 +21,7 @@ class SyndicateBookmarkToFacebook implements ShouldQueue
     /**
      * Create a new job instance.
      *
-     * @return void
+     * @param  \App\Models\Bookmark  $bookmark
      */
     public function __construct(Bookmark $bookmark)
     {
@@ -29,7 +31,7 @@ class SyndicateBookmarkToFacebook implements ShouldQueue
     /**
      * Execute the job.
      *
-     * @return void
+     * @param  \GuzzleHttp\Client  $guzzle
      */
     public function handle(Client $guzzle)
     {

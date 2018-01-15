@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Jobs;
 
 use App\Models\Note;
@@ -18,8 +20,7 @@ class SendWebMentions implements ShouldQueue
     /**
      * Create the job instance, inject dependencies.
      *
-     * @param  Note $note
-     * @return void
+     * @param  Note  $note
      */
     public function __construct(Note $note)
     {
@@ -34,7 +35,9 @@ class SendWebMentions implements ShouldQueue
     public function handle()
     {
         //grab the URLs
-        $urlsInReplyTo = explode(' ', $this->note->in_reply_to);
+        $inReplyTo = $this->note->in_reply_to ?? '';
+        // above so explode doesn’t complain about null being passed in
+        $urlsInReplyTo = explode(' ', $inReplyTo);
         $urlsNote = $this->getLinks($this->note->note);
         $urls = array_filter(array_merge($urlsInReplyTo, $urlsNote)); //filter out none URLs
         foreach ($urls as $url) {
@@ -54,10 +57,10 @@ class SendWebMentions implements ShouldQueue
     /**
      * Discover if a URL has a webmention endpoint.
      *
-     * @param  string  The URL
-     * @return string  The webmention endpoint URL
+     * @param  string  $url
+     * @return string|null
      */
-    public function discoverWebmentionEndpoint($url)
+    public function discoverWebmentionEndpoint(string $url)
     {
         //let’s not send webmentions to myself
         if (parse_url($url, PHP_URL_HOST) == config('app.longurl')) {
@@ -97,8 +100,8 @@ class SendWebMentions implements ShouldQueue
     /**
      * Get the URLs from a note.
      *
-     * @param  string $html
-     * @return array  $urls
+     * @param  string  $html
+     * @return array $urls
      */
     public function getLinks($html)
     {
@@ -119,8 +122,8 @@ class SendWebMentions implements ShouldQueue
     /**
      * Resolve a URI if necessary.
      *
-     * @param  string $url
-     * @param  string $base
+     * @param  string  $url
+     * @param  string  $base The base of the URL
      * @return string
      */
     public function resolveUri(string $url, string $base): string

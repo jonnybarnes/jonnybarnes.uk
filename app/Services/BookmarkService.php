@@ -20,7 +20,7 @@ class BookmarkService
     /**
      * Create a new Bookmark.
      *
-     * @param  array $request
+     * @param  array  $request Data from request()->all()
      * @return Bookmark $bookmark
      */
     public function createBookmark(array $request): Bookmark
@@ -84,6 +84,12 @@ class BookmarkService
         return $bookmark;
     }
 
+    /**
+     * Given a URL, use browsershot to save an image of the page.
+     *
+     * @param  string  $url
+     * @return string  The uuid for the screenshot
+     */
     public function saveScreenshot(string $url): string
     {
         $browsershot = new Browsershot();
@@ -99,6 +105,12 @@ class BookmarkService
         return $uuid->toString();
     }
 
+    /**
+     * Given a URL, attempt to save it to the Internet Archive.
+     *
+     * @param  string  $url
+     * @return string
+     */
     public function getArchiveLink(string $url): string
     {
         $client = resolve(Client::class);

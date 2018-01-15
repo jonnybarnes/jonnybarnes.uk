@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Cache;
@@ -29,7 +31,7 @@ class WebMention extends Model
     /**
      * Define the relationship.
      *
-     * @var array
+     * @return \Illuminate\Database\Eloquent\Relations\MorphTo
      */
     public function commentable()
     {
@@ -41,7 +43,7 @@ class WebMention extends Model
      *
      * @return array
      */
-    public function getAuthorAttribute()
+    public function getAuthorAttribute(): array
     {
         $authorship = new Authorship();
         $hCard = $authorship->findAuthor(json_decode($this->mf2, true));
@@ -57,11 +59,12 @@ class WebMention extends Model
     /**
      * Get the published value for the webmention.
      *
-     * @return string
+     * @return string|null
      */
-    public function getPublishedAttribute()
+    public function getPublishedAttribute(): ?string
     {
-        $microformats = json_decode($this->mf2, true);
+        $mf2 = $this->mf2 ?? '';
+        $microformats = json_decode($mf2, true);
         if (isset($microformats['items'][0]['properties']['published'][0])) {
             try {
                 $published = carbon()->parse(
@@ -82,12 +85,17 @@ class WebMention extends Model
      *
      * @return string|null
      */
-    public function getReplyAttribute()
+    public function getReplyAttribute(): ?string
     {
+        if ($this->mf2 === null) {
+            return null;
+        }
         $microformats = json_decode($this->mf2, true);
         if (isset($microformats['items'][0]['properties']['content'][0]['html'])) {
             return $this->filterHTML($microformats['items'][0]['properties']['content'][0]['html']);
         }
+
+        return null;
     }
 
     /**
@@ -126,10 +134,10 @@ class WebMention extends Model
     /**
      * Filter the HTML in a reply webmention.
      *
-     * @param  string  The reply HTML
-     * @return string  The filtered HTML
+     * @param  string  $html
+     * @return string
      */
-    private function filterHTML($html)
+    private function filterHTML(string $html): string
     {
         $config = HTMLPurifier_Config::createDefault();
         $config->set('Cache.SerializerPath', storage_path() . '/HTMLPurifier');

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
@@ -24,6 +26,8 @@ class Bookmark extends Model
 
     /**
      * The tags that belong to the bookmark.
+     *
+     * @return  \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function tags()
     {
@@ -32,8 +36,10 @@ class Bookmark extends Model
 
     /**
      * The full url of a bookmark.
+     *
+     * @return string
      */
-    public function getLongurlAttribute()
+    public function getLongurlAttribute(): string
     {
         return config('app.url') . '/bookmarks/' . $this->id;
     }

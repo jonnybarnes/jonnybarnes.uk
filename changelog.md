@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 0.15.4
+  - Improve code-base by liberal use of `strict_types`
+  - Added some basic CSS text styling
+
 ## Version 0.15.3 (2018-01-12)
   - Improve `likes`, including adding a new section in the admin cp
   - Add the ability to POSSE the like of a Tweet

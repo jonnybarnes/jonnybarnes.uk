@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Response;
 use App\Models\{Article, Note};
 
 class FeedsController extends Controller
@@ -11,7 +14,7 @@ class FeedsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function blogRss()
+    public function blogRss(): Response
     {
         $articles = Article::where('published', '1')->latest('updated_at')->take(20)->get();
         $buildDate = $articles->first()->updated_at->toRssString();
@@ -26,7 +29,7 @@ class FeedsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function blogAtom()
+    public function blogAtom(): Response
     {
         $articles = Article::where('published', '1')->latest('updated_at')->take(20)->get();
 
@@ -40,7 +43,7 @@ class FeedsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function notesRss()
+    public function notesRss(): Response
     {
         $notes = Note::latest()->take(20)->get();
         $buildDate = $notes->first()->updated_at->toRssString();
@@ -55,7 +58,7 @@ class FeedsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function notesAtom()
+    public function notesAtom(): Response
     {
         $notes = Note::latest()->take(20)->get();
 
@@ -64,10 +67,12 @@ class FeedsController extends Controller
                     ->header('Content-Type', 'application/atom+xml; charset=utf-8');
     }
 
+    /** @todo sort out return type for json responses */
+
     /**
      * Returns the blog JSON feed.
      *
-     * @return \Illuminate\Http\response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function blogJson()
     {
@@ -100,7 +105,7 @@ class FeedsController extends Controller
     /**
      * Returns the notes JSON feed.
      *
-     * @return \Illuminate\Http\response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function notesJson()
     {

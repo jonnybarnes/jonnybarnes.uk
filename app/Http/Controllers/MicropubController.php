@@ -1,11 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use Monolog\Logger;
 use Ramsey\Uuid\Uuid;
 use App\Jobs\ProcessMedia;
 use App\Services\TokenService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\UploadedFile;
 use Monolog\Handler\StreamHandler;
 use Intervention\Image\ImageManager;
@@ -40,12 +43,11 @@ class MicropubController extends Controller
      * This function receives an API request, verifies the authenticity
      * then passes over the info to the relavent Service class.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function post()
+    public function post(): JsonResponse
     {
         try {
-            info(request()->input('access_token'));
             $tokenData = $this->tokenService->validateToken(request()->input('access_token'));
         } catch (InvalidTokenException $e) {
             return $this->invalidTokenResponse();
@@ -96,14 +98,16 @@ class MicropubController extends Controller
     }
 
     /**
+     * Respond to a GET request to the micropub endpoint.
+     *
      * A GET request has been made to `api/post` with an accompanying
      * token, here we check wether the token is valid and respond
      * appropriately. Further if the request has the query parameter
      * synidicate-to we respond with the known syndication endpoints.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function get()
+    public function get(): JsonResponse
     {
         try {
             $tokenData = $this->tokenService->validateToken(request()->bearerToken());
@@ -124,7 +128,7 @@ class MicropubController extends Controller
             ]);
         }
 
-        if (substr(request()->input('q'), 0, 4) === 'geo:') {
+        if (request()->has('q') && substr(request()->input('q'), 0, 4) === 'geo:') {
             preg_match_all(
                 '/([0-9\.\-]+)/',
                 request()->input('q'),
@@ -153,9 +157,9 @@ class MicropubController extends Controller
     /**
      * Process a media item posted to the media endpoint.
      *
-     * @return Illuminate\Http\Response
+     * @return Illuminate\Http\JsonResponse
      */
-    public function media()
+    public function media(): JsonResponse
     {
         try {
             $tokenData = $this->tokenService->validateToken(request()->bearerToken());
@@ -210,10 +214,10 @@ class MicropubController extends Controller
     /**
      * Get the file type from the mimetype of the uploaded file.
      *
-     * @param  string The mimetype
-     * @return string The type
+     * @param  string  $mimetype
+     * @return string
      */
-    private function getFileTypeFromMimeType($mimetype)
+    private function getFileTypeFromMimeType(string $mimetype): string
     {
         //try known images
         $imageMimeTypes = [
@@ -252,6 +256,11 @@ class MicropubController extends Controller
         return 'download';
     }
 
+    /**
+     * Determine the client id from the access token sent with the request.
+     *
+     * @return string
+     */
     private function getClientId(): string
     {
         return resolve(TokenService::class)
@@ -259,6 +268,11 @@ class MicropubController extends Controller
             ->getClaim('client_id');
     }
 
+    /**
+     * Save the details of the micropub request to a log file.
+     *
+     * @param  array  $request This is the info from request()->all()
+     */
     private function logMicropubRequest(array $request)
     {
         $logger = new Logger('micropub');
@@ -266,7 +280,13 @@ class MicropubController extends Controller
         $logger->debug('MicropubLog', $request);
     }
 
-    private function saveFile(UploadedFile $file)
+    /**
+     * Save an uploaded file to the local disk.
+     *
+     * @param  \Illuminate\Http\UploadedFele  $file
+     * @return string $filename
+     */
+    private function saveFile(UploadedFile $file): string
     {
         $filename = Uuid::uuid4() . '.' . $file->extension();
         Storage::disk('local')->put($filename, $file);
@@ -274,6 +294,11 @@ class MicropubController extends Controller
         return $filename;
     }
 
+    /**
+     * Generate a response to be returned when the token has insufficient scope.
+     *
+     * @return \Illuminate\Http\JsonRepsonse
+     */
     private function insufficientScopeResponse()
     {
         return response()->json([
@@ -283,6 +308,11 @@ class MicropubController extends Controller
         ], 401);
     }
 
+    /**
+     * Generate a response to be returned when the token is invalid.
+     *
+     * @return \Illuminate\Http\JsonRepsonse
+     */
     private function invalidTokenResponse()
     {
         return response()->json([
@@ -292,6 +322,11 @@ class MicropubController extends Controller
         ], 400);
     }
 
+    /**
+     * Generate a response to be returned when the token has no scope.
+     *
+     * @return \Illuminate\Http\JsonRepsonse
+     */
     private function tokenHasNoScopeResponse()
     {
         return response()->json([

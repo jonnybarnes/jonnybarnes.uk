@@ -1,12 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services\Micropub;
 
 use App\Services\PlaceService;
 
 class HCardService
 {
-    public function process(array $request)
+    /**
+     * Create a Place from h-card data, return the URL.
+     *
+     * @param  array  $request Data from request()->all()
+     * @return string
+     */
+    public function process(array $request): string
     {
         $data = [];
         if (array_get($request, 'properties.name')) {

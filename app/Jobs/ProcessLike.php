@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Jobs;
 
 use App\Models\Like;
@@ -23,7 +25,7 @@ class ProcessLike implements ShouldQueue
     /**
      * Create a new job instance.
      *
-     * @return void
+     * @param  \App\Models\Like  $like
      */
     public function __construct(Like $like)
     {
@@ -33,9 +35,11 @@ class ProcessLike implements ShouldQueue
     /**
      * Execute the job.
      *
-     * @return void
+     * @param  \GuzzleHttp\Client  $client
+     * @param  \Jonnybarnes\WebmentionsParser\Authorship  $authorship
+     * @return int
      */
-    public function handle(Client $client, Authorship $authorship)
+    public function handle(Client $client, Authorship $authorship): int
     {
         if ($this->isTweet($this->like->url)) {
             $tweet = Twitter::getOembed(['url' => $this->like->url]);
@@ -83,8 +87,16 @@ class ProcessLike implements ShouldQueue
         }
 
         $this->like->save();
+
+        return 0;
     }
 
+    /**
+     * Determine if a given URL is that of a Tweet.
+     *
+     * @param  string  $url
+     * @return bool
+     */
     private function isTweet(string $url): bool
     {
         $host = parse_url($url, PHP_URL_HOST);

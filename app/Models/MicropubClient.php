@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class MicropubClient extends Model
 {
@@ -23,9 +26,9 @@ class MicropubClient extends Model
     /**
      * Define the relationship with notes.
      *
-     * @return void
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function notes()
+    public function notes(): HasMany
     {
         return $this->hasMany('App\Models\Note', 'client_id', 'client_url');
     }

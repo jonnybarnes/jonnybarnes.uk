@@ -1,12 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
+use Illuminate\View\View;
 use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
 
 class AuthController extends Controller
 {
-    public function showLogin()
+    /**
+     * Show the login form.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function showLogin(): View
     {
         return view('login');
     }
@@ -15,14 +24,13 @@ class AuthController extends Controller
      * Log in a user, set a sesion variable, check credentials against
      * the .env file.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Routing\RedirectResponse redirect
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function login(Request $request)
+    public function login(): RedirectResponse
     {
-        if ($request->input('username') === config('admin.user')
+        if (request()->input('username') === config('admin.user')
             &&
-            $request->input('password') === config('admin.pass')
+            request()->input('password') === config('admin.pass')
         ) {
             session(['loggedin' => true]);
 

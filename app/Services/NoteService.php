@@ -12,11 +12,11 @@ class NoteService
     /**
      * Create a new note.
      *
-     * @param  array $request
-     * @param  string $client
-     * @return \App\Note $note
+     * @param  array  $request Data from request()->all()
+     * @param  string  $client
+     * @return \App\Note
      */
-    public function createNote(array $request, string $client = null): Note
+    public function createNote(array $request, ?string $client = null): Note
     {
         $note = Note::create(
             [
@@ -60,6 +60,12 @@ class NoteService
         return $note;
     }
 
+    /**
+     * Get the content from the request to create a new note.
+     *
+     * @param  array  $request Data from request()->all()
+     * @return string|null
+     */
     private function getContent(array $request): ?string
     {
         if (array_get($request, 'properties.content.0.html')) {
@@ -72,6 +78,12 @@ class NoteService
         return array_get($request, 'content');
     }
 
+    /**
+     * Get the in-reply-to from the request to create a new note.
+     *
+     * @param  array  $request Data from request()->all()
+     * @return string|null
+     */
     private function getInReplyTo(array $request): ?string
     {
         if (array_get($request, 'properties.in-reply-to.0')) {
@@ -81,6 +93,12 @@ class NoteService
         return array_get($request, 'in-reply-to');
     }
 
+    /**
+     * Get the published time from the request to create a new note.
+     *
+     * @param  array  $request Data from request()->all()
+     * @return string|null
+     */
     private function getPublished(array $request): ?string
     {
         if (array_get($request, 'properties.published.0')) {
@@ -94,6 +112,12 @@ class NoteService
         return null;
     }
 
+    /**
+     * Get the location data from the request to create a new note.
+     *
+     * @param  array  $request Data from request()->all()
+     * @return string|null
+     */
     private function getLocation(array $request): ?string
     {
         $location = array_get($request, 'properties.location.0') ?? array_get($request, 'location');
@@ -110,6 +134,12 @@ class NoteService
         return null;
     }
 
+    /**
+     * Get the checkin data from the request to create a new note. This will be a Place.
+     *
+     * @param  array  $request Data from request()->all()
+     * @return \App\Models\Place|null
+     */
     private function getCheckin(array $request): ?Place
     {
         if (array_get($request, 'properties.location.0.type.0') === 'h-card') {
@@ -149,6 +179,12 @@ class NoteService
         return null;
     }
 
+    /**
+     * Get the Swarm URL from the syndication data in the request to create a new note.
+     *
+     * @param  array  $request Data from request()->all()
+     * @return string|null
+     */
     private function getSwarmUrl(array $request): ?string
     {
         if (stristr(array_get($request, 'properties.syndication.0', ''), 'swarmapp')) {
@@ -158,6 +194,12 @@ class NoteService
         return null;
     }
 
+    /**
+     * Get the syndication targets from the request to create a new note.
+     *
+     * @param  array  $request Data from request()->all()
+     * @return array
+     */
     private function getSyndicationTargets(array $request): array
     {
         $syndication = [];
@@ -187,6 +229,12 @@ class NoteService
         return $syndication;
     }
 
+    /**
+     * Get the media URLs from the request to create a new note.
+     *
+     * @param  array  $request Data from request()->all()
+     * @return array
+     */
     private function getMedia(array $request): array
     {
         $media = [];
@@ -211,6 +259,12 @@ class NoteService
         return $media;
     }
 
+    /**
+     * Get the Instagram photo URL from the request to create a new note.
+     *
+     * @param  array  $request Data from request()->all()
+     * @return string|null
+     */
     private function getInstagramUrl(array $request): ?string
     {
         if (starts_with(array_get($request, 'properties.syndication.0'), 'https://www.instagram.com')) {

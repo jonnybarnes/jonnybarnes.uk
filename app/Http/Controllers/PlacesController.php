@@ -1,17 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Models\Place;
+use Illuminate\View\View;
 
 class PlacesController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Show all the places.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\View\View
      */
-    public function index()
+    public function index(): View
     {
         $places = Place::all();
 
@@ -19,12 +22,12 @@ class PlacesController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Show a specific place.
      *
      * @param  string  $slug
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\View\View
      */
-    public function show($slug)
+    public function show(string $slug): View
     {
         $place = Place::where('slug', '=', $slug)->firstOrFail();
 

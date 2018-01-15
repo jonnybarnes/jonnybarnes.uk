@@ -34,7 +34,6 @@ env:
     - setup=basic
 
 php:
-  - 7.1
   - 7.2
 
 before_install:

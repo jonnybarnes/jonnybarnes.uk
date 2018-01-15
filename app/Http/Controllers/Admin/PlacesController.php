@@ -1,11 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Place;
+use Illuminate\View\View;
 use Illuminate\Http\Request;
 use App\Services\PlaceService;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\RedirectResponse;
 use Phaza\LaravelPostgis\Geometries\Point;
 
 class PlacesController extends Controller
@@ -20,9 +24,9 @@ class PlacesController extends Controller
     /**
      * List the places that can be edited.
      *
-     * @return \Illuminate\View\Factory view
+     * @return \Illuminate\View\View
      */
-    public function index()
+    public function index(): View
     {
         $places = Place::all();
 
@@ -32,9 +36,9 @@ class PlacesController extends Controller
     /**
      * Show the form to make a new place.
      *
-     * @return \Illuminate\View\Factory view
+     * @return \Illuminate\View\View
      */
-    public function create()
+    public function create(): View
     {
         return view('admin.places.create');
     }
@@ -42,12 +46,11 @@ class PlacesController extends Controller
     /**
      * Process a request to make a new place.
      *
-     * @param  Illuminate\Http\Request $request
-     * @return Illuminate\View\Factory view
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request)
+    public function store(): RedirectResponse
     {
-        $data = $request->only(['name', 'description', 'latitude', 'longitude']);
+        $data = request()->only(['name', 'description', 'latitude', 'longitude']);
         $place = $this->placeService->createPlace($data);
 
         return redirect('/admin/places');
@@ -56,10 +59,10 @@ class PlacesController extends Controller
     /**
      * Display the form to edit a specific place.
      *
-     * @param  string The place id
-     * @return \Illuminate\View\Factory view
+     * @param  int  $placeId
+     * @return \Illuminate\View\View
      */
-    public function edit($placeId)
+    public function edit(int $placeId): View
     {
         $place = Place::findOrFail($placeId);
 
@@ -69,17 +72,19 @@ class PlacesController extends Controller
     /**
      * Process a request to edit a place.
      *
-     * @param string The place id
-     * @param Illuminate\Http\Request $request
-     * @return Illuminate\View\Factory view
+     * @param  int  $placeId
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function update($placeId, Request $request)
+    public function update(int $placeId): RedirectResponse
     {
         $place = Place::findOrFail($placeId);
-        $place->name = $request->name;
-        $place->description = $request->description;
-        $place->location = new Point((float) $request->latitude, (float) $request->longitude);
-        $place->icon = $request->icon;
+        $place->name = request()->input('name');
+        $place->description = request()->input('description');
+        $place->location = new Point(
+            (float) request()->input('latitude'),
+            (float) request()->input('longitude')
+        );
+        $place->icon = request()->input('icon');
         $place->save();
 
         return redirect('/admin/places');
@@ -88,10 +93,10 @@ class PlacesController extends Controller
     /**
      * List the places we can merge with the current place.
      *
-     * @param string Place id
-     * @return Illuminate\View\Factory view
+     * @param  int  $placeId
+     * @return \Illuminate\View\View
      */
-    public function mergeIndex($placeId)
+    public function mergeIndex(int $placeId): View
     {
         $first = Place::find($placeId);
         $results = Place::near(new Point($first->latitude, $first->longitude))->get();
@@ -105,27 +110,39 @@ class PlacesController extends Controller
         return view('admin.places.merge.index', compact('first', 'places'));
     }
 
-    public function mergeEdit($place1_id, $place2_id)
+    /**
+     * Show a form for merging two specific places.
+     *
+     * @param  int  $placeId1
+     * @param  int  $placeId2
+     * @return \Illuminate\View\View
+     */
+    public function mergeEdit(int $placeId1, int $placeId2): View
     {
-        $place1 = Place::find($place1_id);
-        $place2 = Place::find($place2_id);
+        $place1 = Place::find($placeId1);
+        $place2 = Place::find($placeId2);
 
         return view('admin.places.merge.edit', compact('place1', 'place2'));
     }
 
-    public function mergeStore(Request $request)
+    /**
+     * Process the request to merge two places.
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function mergeStore(): RedirectResponse
     {
-        $place1 = Place::find($request->input('place1'));
-        $place2 = Place::find($request->input('place2'));
+        $place1 = Place::find(request()->input('place1'));
+        $place2 = Place::find(request()->input('place2'));
 
-        if ($request->input('delete') === '1') {
+        if (request()->input('delete') === '1') {
             foreach ($place1->notes as $note) {
                 $note->place()->dissociate();
                 $note->place()->associate($place2->id);
             }
             $place1->delete();
         }
-        if ($request->input('delete') === '2') {
+        if (request()->input('delete') === '2') {
             foreach ($place2->notes as $note) {
                 $note->place()->dissociate();
                 $note->place()->associate($place1->id);

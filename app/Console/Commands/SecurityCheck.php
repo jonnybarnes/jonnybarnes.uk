@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
@@ -49,7 +51,7 @@ class SecurityCheck extends Command
      *
      * @return mixed
      */
-    public function handle()
+    public function handle(): int
     {
         $alerts = $this->securityChecker->check(base_path() . '/composer.lock');
         if (count($alerts) === 0) {

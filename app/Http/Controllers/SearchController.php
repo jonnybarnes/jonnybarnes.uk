@@ -1,15 +1,22 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Models\Note;
-use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class SearchController extends Controller
 {
-    public function search(Request $request)
+    /**
+     * Display search results.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function search(): View
     {
-        $notes = Note::search($request->terms)->paginate(10);
+        $notes = Note::search(request()->input('terms'))->paginate(10);
 
         return view('search', compact('notes'));
     }

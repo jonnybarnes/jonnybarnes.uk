@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Jobs;
 
 use Illuminate\Bus\Queueable;
@@ -18,7 +20,7 @@ class AddClientToDatabase implements ShouldQueue
     /**
      * Create a new job instance.
      *
-     * @return void
+     * @param  string  $client_id
      */
     public function __construct(string $client_id)
     {
