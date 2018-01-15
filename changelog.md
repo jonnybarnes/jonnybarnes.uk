@@ -1,6 +1,6 @@
 # Changelog
 
-## Version {next}
+## Version 0.15.4
   - Improve code-base by liberal use of `strict_types`
   - Added some basic CSS text styling
 
