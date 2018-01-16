@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "aa839c8457c44ea018fd9141b3ec553e",
+    "content-hash": "6f9305c5336836a048624c615b8ea28a",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.48.13",
+            "version": "3.48.14",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "e083a4dae6f460df1d02dcd827cf547592f5dc29"
+                "reference": "22f5faa06b5ca1a9f375ba02f5164b64fd4f37f5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/e083a4dae6f460df1d02dcd827cf547592f5dc29",
-                "reference": "e083a4dae6f460df1d02dcd827cf547592f5dc29",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/22f5faa06b5ca1a9f375ba02f5164b64fd4f37f5",
+                "reference": "22f5faa06b5ca1a9f375ba02f5164b64fd4f37f5",
                 "shasum": ""
             },
             "require": {
@@ -84,7 +84,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2018-01-12T21:20:32+00:00"
+            "time": "2018-01-15T23:32:14+00:00"
         },
         {
             "name": "barnabywalters/mf-cleaner",
@@ -7308,7 +7308,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=7.1.0"
+        "php": ">=7.2.0"
     },
     "platform-dev": []
 }

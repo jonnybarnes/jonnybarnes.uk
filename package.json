@@ -5,6 +5,7 @@
     "repository": "https://github.com/jonnybarnes/jonnybarnes.uk",
     "license": "CC0-1.0",
     "dependencies": {
+        "a11y.css": "^4.3.0",
         "alertify.js": "^1.0.12",
         "mapbox-gl": "^0.42.2",
         "marked": "^0.3.12",
@@ -41,7 +42,7 @@
     },
     "scripts": {
         "compress": "scripts/compress",
-        "copy-dist": "cp ./node_modules/mapbox-gl/dist/mapbox-gl.css ./public/assets/frontend/ && cp ./node_modules/alertify.js/dist/css/alertify.css ./public/assets/frontend/ && cp ./node_modules/normalize.css/normalize.css ./public/assets/frontend/",
+        "copy-dist": "cp ./node_modules/mapbox-gl/dist/mapbox-gl.css ./public/assets/frontend/ && cp ./node_modules/alertify.js/dist/css/alertify.css ./public/assets/frontend/ && cp ./node_modules/normalize.css/normalize.css ./public/assets/frontend/ && cp -r ./node_modules/a11y.css/css ./public/assets/frontend/a11y.css",
         "lint:es6": "eslint resources/assets/es6/*.js",
         "lint:sass": "stylelint --syntax=scss resources/assets/sass/**/*.scss",
         "make": "npm run make:css && npm run make:js",

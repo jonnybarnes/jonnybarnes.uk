@@ -56,10 +56,12 @@
             </form>
             @include('templates.colour-scheme')
             <p>The code for <code>{{ config('app.longurl') }}</code> can be found on <a href="https://github.com/jonnybarnes/jonnybarnes.uk">GitHub</a>.</p>
+            <p><label for="a11y.css"><code>a11y.css</code></label>: <input type="checkbox" name="a11y.css" id="a11y.css"></p>
             <p>Built with love: <a href="/colophon">Colophon</a></p>
             <p><a href="https://indieweb.org"><img src="/assets/img/iwc.png" alt="Indie Web Camp logo" class="iwc-logo"></a></p>
         </footer>
         <script src="/assets/js/colours.js" async defer></script>
+        <script src="/assets/js/a11y.js" async defer></script>
         @if (config('app.piwik') === true)
         <!-- Piwik -->
         <script src="https://analytics.jmb.lv/piwik.js" async defer></script>

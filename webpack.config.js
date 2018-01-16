@@ -4,7 +4,7 @@ const Dotenv = require('dotenv-webpack');
 const config = {
   context: __dirname + '/resources/assets/es6',
   entry: {
-    //app: './app.js',
+    a11y: './a11y.js',
     colours: './colours.js',
     links: './links.js',
     maps: './maps.js',
