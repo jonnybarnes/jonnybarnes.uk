@@ -45,14 +45,15 @@
 @section('bio')
 @show
 
-        @section('scripts')
         <!--scripts go here when needed-->
         <script src="/assets/js/colours.js" async defer></script>
+        <script src="/assets/js/a11y.js" async defer></script>
+        @section('scripts')
         @show
 
         <footer>
             <form action="search" method="get">
-                <input type="text" name="terms"><button type="submit">Search</button>
+                <input type="text" name="terms" title="Search"><button type="submit">Search</button>
             </form>
             @include('templates.colour-scheme')
             <p>The code for <code>{{ config('app.longurl') }}</code> can be found on <a href="https://github.com/jonnybarnes/jonnybarnes.uk">GitHub</a>.</p>
@@ -60,8 +61,6 @@
             <p>Built with love: <a href="/colophon">Colophon</a></p>
             <p><a href="https://indieweb.org"><img src="/assets/img/iwc.png" alt="Indie Web Camp logo" class="iwc-logo"></a></p>
         </footer>
-        <script src="/assets/js/colours.js" async defer></script>
-        <script src="/assets/js/a11y.js" async defer></script>
         @if (config('app.piwik') === true)
         <!-- Piwik -->
         <script src="https://analytics.jmb.lv/piwik.js" async defer></script>

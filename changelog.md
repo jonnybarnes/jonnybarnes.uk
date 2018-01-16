@@ -3,6 +3,7 @@
 ## Version {next}
   - Formally bump PHP requirement to 7.2
   - Add [a11y.css](https://github.com/ffoodd/a11y.css)
+  - Make some a11y improvements
 
 ## Version 0.15.4
   - Improve code-base by liberal use of `strict_types`
