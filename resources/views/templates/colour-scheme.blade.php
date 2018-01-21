@@ -1,4 +1,4 @@
-<form id="colourSchemeForm">
+<form id="colourSchemeForm" action="/update-colour-scheme">
     {{ csrf_field() }}
     <select id="colourSchemeSelect" name="css">
         <option value="base16-3024.css">base16-3024.css</option>

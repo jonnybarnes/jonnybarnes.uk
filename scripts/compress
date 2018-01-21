@@ -18,6 +18,15 @@ done
 echo "compressing frontend assets"
 for file in ./public/assets/frontend/*.css
 do
-    zopfli --i100 $file
-    brotli --force --quality=11 --output=$file.br -- $file
+    if [[ -f $file ]]; then
+        zopfli --i100 $file
+        brotli --force --quality=11 --output=$file.br -- $file
+    fi
+done
+for file in ./public/assets/frontend/a11y.css/*.css
+do
+    if [[ -f $file ]]; then
+        zopfli --i100 $file
+        brotli --force --quality=11 --output=$file.br -- $file
+    fi
 done

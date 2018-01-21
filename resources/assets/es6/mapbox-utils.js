@@ -11,6 +11,7 @@ const titlecase = (string) => {
 };
 
 const addMapTypeOption = (map, menu, option, checked = false) => {
+    let div = document.createElement('div');
     let input = document.createElement('input');
     input.setAttribute('id', option);
     input.setAttribute('type', 'radio');
@@ -41,12 +42,17 @@ const addMapTypeOption = (map, menu, option, checked = false) => {
     let label = document.createElement('label');
     label.setAttribute('for', option);
     label.appendChild(document.createTextNode(titlecase(option)));
-    menu.appendChild(input);
-    menu.appendChild(label);
+    div.appendChild(input);
+    div.appendChild(label);
+    menu.appendChild(div);
 };
 
 const makeMapMenu = (map) => {
-    let mapMenu = document.createElement('div');
+    let mapMenu = document.createElement('fieldset');
+    let legend = document.createElement('legend');
+    let title = document.createTextNode('Map Style');
+    legend.appendChild(title);
+    mapMenu.appendChild(legend);
     mapMenu.classList.add('map-menu');
     addMapTypeOption(map, mapMenu, 'streets', true);
     addMapTypeOption(map, mapMenu, 'satellite-streets');
