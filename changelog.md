@@ -1,6 +1,6 @@
 # Changelog
 
-## Version {next}
+## Version 0.15.6 (2018-01-27)
   - Fix uploading files sent to the media endpoint to S3
 
 ## Version 0.15.5 (2018-01-21)
