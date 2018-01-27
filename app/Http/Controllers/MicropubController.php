@@ -110,7 +110,7 @@ class MicropubController extends Controller
     public function get(): JsonResponse
     {
         try {
-            $tokenData = $this->tokenService->validateToken(request()->bearerToken());
+            $tokenData = $this->tokenService->validateToken(request()->input('access_token'));
         } catch (InvalidTokenException $e) {
             return $this->invalidTokenResponse();
         }
@@ -162,7 +162,7 @@ class MicropubController extends Controller
     public function media(): JsonResponse
     {
         try {
-            $tokenData = $this->tokenService->validateToken(request()->bearerToken());
+            $tokenData = $this->tokenService->validateToken(request()->input('access_token'));
         } catch (InvalidTokenException $e) {
             return $this->invalidTokenResponse();
         }
@@ -289,7 +289,7 @@ class MicropubController extends Controller
     private function saveFile(UploadedFile $file): string
     {
         $filename = Uuid::uuid4() . '.' . $file->extension();
-        Storage::disk('local')->put($filename, $file);
+        Storage::disk('local')->putFileAs('', $file, $filename);
 
         return $filename;
     }
