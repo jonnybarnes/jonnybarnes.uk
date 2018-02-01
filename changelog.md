@@ -1,6 +1,6 @@
 # Changelog
 
-## Version {next}
+## Version 0.15.7 (2018-02-01)
   - Send tokens as a json response
 
 ## Version 0.15.6 (2018-01-27)
