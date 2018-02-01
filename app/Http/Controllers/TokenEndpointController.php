@@ -68,12 +68,12 @@ class TokenEndpointController extends Controller
             }
 
             return response()->json([
-                'error' => 'There was an error verifying the authorisation code.'
+                'error' => 'There was an error verifying the authorisation code.',
             ], 401);
         }
 
         return response()->json([
-            'error' => 'Can’t determine the authorisation endpoint.'
+            'error' => 'Can’t determine the authorisation endpoint.',
         ], 400);
     }
 }
