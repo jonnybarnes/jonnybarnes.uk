@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use IndieAuth\Client;
-use Illuminate\Http\Response;
 use App\Services\TokenService;
+use Illuminate\Http\JsonResponse;
 
 class TokenEndpointController extends Controller
 {
@@ -37,9 +37,9 @@ class TokenEndpointController extends Controller
     /**
      * If the user has auth’d via the IndieAuth protocol, issue a valid token.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function create(): Response
+    public function create(): JsonResponse
     {
         $authorizationEndpoint = $this->client->discoverAuthorizationEndpoint(normalize_url(request()->input('me')));
         if ($authorizationEndpoint) {
@@ -58,21 +58,22 @@ class TokenEndpointController extends Controller
                     'scope' => $scope,
                 ];
                 $token = $this->tokenService->getNewToken($tokenData);
-                $content = http_build_query([
+                $content = [
                     'me' => request()->input('me'),
                     'scope' => $scope,
                     'access_token' => $token,
-                ]);
+                ];
 
-                return response($content)->header(
-                    'Content-Type',
-                    'application/x-www-form-urlencoded'
-                );
+                return response()->json($content);
             }
 
-            return response('There was an error verifying the authorisation code.', 400);
+            return response()->json([
+                'error' => 'There was an error verifying the authorisation code.',
+            ], 401);
         }
 
-        return response('Can’t determine the authorisation endpoint.', 400);
+        return response()->json([
+            'error' => 'Can’t determine the authorisation endpoint.',
+        ], 400);
     }
 }

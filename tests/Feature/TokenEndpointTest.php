@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use Mockery;
 use Tests\TestCase;
 use IndieAuth\Client;
+use Illuminate\Http\JsonResponse;
 
 class TokenEndpointTest extends TestCase
 {
@@ -28,9 +29,10 @@ class TokenEndpointTest extends TestCase
             'client_id' => config('app.url') . '/micropub-client',
             'state' => mt_rand(1000, 10000),
         ]);
-        parse_str($response->content(), $output);
-        $this->assertEquals(config('app.url'), $output['me']);
-        $this->assertTrue(array_key_exists('access_token', $output));
+        $response->assertJson([
+            'me' => config('app.url'),
+            'scope' => 'create update',
+        ]);
     }
 
     public function test_token_endpoint_returns_error_when_auth_endpoint_lacks_me_data()
@@ -52,8 +54,10 @@ class TokenEndpointTest extends TestCase
             'client_id' => config('app.url') . '/micropub-client',
             'state' => mt_rand(1000, 10000),
         ]);
-        $response->assertStatus(400);
-        $response->assertSeeText('There was an error verifying the authorisation code.');
+        $response->assertStatus(401);
+        $response->assertJson([
+            'error' => 'There was an error verifying the authorisation code.'
+        ]);
     }
 
     public function test_token_endpoint_returns_error_when_no_auth_endpoint_found()
@@ -72,6 +76,8 @@ class TokenEndpointTest extends TestCase
             'state' => mt_rand(1000, 10000),
         ]);
         $response->assertStatus(400);
-        $response->assertSeeText('Can’t determine the authorisation endpoint.');
+        $response->assertJson([
+            'error' => 'Can’t determine the authorisation endpoint.']
+        );
     }
 }
