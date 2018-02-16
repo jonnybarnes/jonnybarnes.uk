@@ -1,6 +1,6 @@
 # Changelog
 
-## Version {next}
+## Version 0.16 (2018-02-16)
   - Update Laravel to 5.6
   - Fix issue with creating alternative Facebook content when no contacts
 
