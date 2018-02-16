@@ -94,10 +94,9 @@ class NotesTableSeeder extends Seeder
         $media->type = 'image';
         $media->image_widths = '3648';
         $media->save();
-        $noteWithImage = Note::create([
-            'note' => 'A lovely waterfall',
-        ]);
-        $noteWithImage->media()->save($media);
+        $noteWithOnlyImage = new Note();
+        $noteWithOnlyImage->save();
+        $noteWithOnlyImage->media()->save($media);
         sleep(1);
         $noteFromInstagram = Note::create([
             'note' => 'Lovely #wedding #weddingfavour',

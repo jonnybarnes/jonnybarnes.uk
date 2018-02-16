@@ -370,7 +370,7 @@ class Note extends Model
     }
 
     /**
-     * Show a specific form of the note for facebook.
+     * Show a specific form of the note for Facebook.
      *
      * That is we swap the contacts names for their known Facebook usernames.
      *
@@ -378,6 +378,10 @@ class Note extends Model
      */
     public function getFacebookContentAttribute(): ?string
     {
+        if ($this->contacts === null) {
+            return null;
+        }
+
         if (count($this->contacts) === 0) {
             return null;
         }
