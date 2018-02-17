@@ -1,6 +1,6 @@
 # Changelog
 
-## Version {next}
+## Version 0.16.1 (2018-02-17)
   - Fix issue where OwnYourSwarm requests inlude h-adr block for location
 
 ## Version 0.16 (2018-02-16)
