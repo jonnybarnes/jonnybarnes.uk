@@ -187,4 +187,45 @@ class SwarmTest extends TestCase
             'name' => 'Awesome Venue',
         ]);
     }
+
+    public function test_ownyourswarm_request_with_hadr_location()
+    {
+        $response = $this->json(
+            'POST',
+            'api/post',
+            [
+                'type' => ['h-entry'],
+                'properties' => [
+                    'published' => [\Carbon\Carbon::now()->toDateTimeString()],
+                    'syndication' => ['https://www.swarmapp.com/checkin/abc'],
+                    'content' => [[
+                        'value' => 'My first #checkin using Example Product',
+                        'html' => 'My first #checkin using <a href="http://example.org">Example Product</a>',
+                    ]],
+                    'location' => [[
+                        'type' => ['h-adr'],
+                        'properties' => [
+                            'latitude' => ['1.23'],
+                            'longitude' => ['4.56'],
+                            'street-address' => ['Awesome Street'],
+                        ],
+                    ]],
+                    'checkin' => [[
+                        'type' => ['h-card'],
+                        'properties' => [
+                            'name' => ['Awesome Venue'],
+                            'url' => ['https://foursquare.com/v/123456'],
+                        ],
+                    ]],
+                ],
+            ],
+            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+        );
+        $response
+            ->assertStatus(201)
+            ->assertJson(['response' => 'created']);
+        $this->assertDatabaseMissing('places', [
+            'name' => 'Awesome Venue',
+        ]);
+    }
 }
