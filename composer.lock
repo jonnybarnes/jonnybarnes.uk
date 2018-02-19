@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "29bd1c9eb818792be63df2236acbc433",
+    "content-hash": "aed3eb2290fa82e4a26de954e94f2230",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -5499,26 +5499,27 @@
         },
         {
             "name": "nunomaduro/collision",
-            "version": "v1.1.22",
+            "version": "v2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nunomaduro/collision.git",
-                "reference": "236609bd5a067587f600bc55c5d683b840798b22"
+                "reference": "4e310ef9384f53ee8dda8736afb3cbaf320753a0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nunomaduro/collision/zipball/236609bd5a067587f600bc55c5d683b840798b22",
-                "reference": "236609bd5a067587f600bc55c5d683b840798b22",
+                "url": "https://api.github.com/repos/nunomaduro/collision/zipball/4e310ef9384f53ee8dda8736afb3cbaf320753a0",
+                "reference": "4e310ef9384f53ee8dda8736afb3cbaf320753a0",
                 "shasum": ""
             },
             "require": {
                 "filp/whoops": "^2.1.4",
+                "jakub-onderka/php-console-highlighter": "0.3.*",
                 "php": "^7.1",
                 "symfony/console": "~2.8|~3.3|~4.0"
             },
             "require-dev": {
-                "laravel/framework": "5.5.*",
-                "phpunit/phpunit": "~6.5"
+                "laravel/framework": "5.6.*",
+                "phpunit/phpunit": "~7.0"
             },
             "type": "library",
             "extra": {
@@ -5556,7 +5557,7 @@
                 "php",
                 "symfony"
             ],
-            "time": "2018-02-07T10:42:20+00:00"
+            "time": "2018-02-18T12:29:27+00:00"
         },
         {
             "name": "phar-io/manifest",
@@ -5814,16 +5815,16 @@
         },
         {
             "name": "phpspec/prophecy",
-            "version": "1.7.4",
+            "version": "1.7.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpspec/prophecy.git",
-                "reference": "9f901e29c93dae4aa77c0bb161df4276f9c9a1be"
+                "reference": "dfd6be44111a7c41c2e884a336cc4f461b3b2401"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpspec/prophecy/zipball/9f901e29c93dae4aa77c0bb161df4276f9c9a1be",
-                "reference": "9f901e29c93dae4aa77c0bb161df4276f9c9a1be",
+                "url": "https://api.github.com/repos/phpspec/prophecy/zipball/dfd6be44111a7c41c2e884a336cc4f461b3b2401",
+                "reference": "dfd6be44111a7c41c2e884a336cc4f461b3b2401",
                 "shasum": ""
             },
             "require": {
@@ -5873,7 +5874,7 @@
                 "spy",
                 "stub"
             ],
-            "time": "2018-02-11T18:49:29+00:00"
+            "time": "2018-02-19T10:16:54+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
