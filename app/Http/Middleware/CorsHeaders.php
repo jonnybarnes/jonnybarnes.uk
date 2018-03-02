@@ -19,7 +19,10 @@ class CorsHeaders
         if ($request->path() === 'api/media') {
             $response->header('Access-Control-Allow-Origin', '*');
             $response->header('Access-Control-Allow-Methods', 'OPTIONS, POST');
-            $response->header('Access-Control-Allow-Headers', 'Authorization, Content-Type, DNT, X-CSRF-TOKEN, X-REQUESTED-WITH');
+            $response->header(
+                'Access-Control-Allow-Headers',
+                'Authorization, Content-Type, DNT, X-CSRF-TOKEN, X-REQUESTED-WITH'
+            );
             $response->header('Access-Control-Allow-Credentials', 'true');
         }
 
