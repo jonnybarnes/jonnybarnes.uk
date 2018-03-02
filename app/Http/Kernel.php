@@ -62,5 +62,6 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'micropub.token' => \App\Http\Middleware\VerifyMicropubToken::class,
         'myauth' => \App\Http\Middleware\MyAuthMiddleware::class,
+        'cors' => \App\Http\Middleware\CorsHeaders::class,
     ];
 }
