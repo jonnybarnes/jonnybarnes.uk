@@ -59,9 +59,8 @@ child-src 'self' blob:; \
 upgrade-insecure-requests; \
 block-all-mixed-content; \
 report-to csp-endpoint; \
-report-uri https://jonnybarnes.report-uri.io/r/default/csp/enforce;"
-            ))
-            ->header(
+report-uri https://jonnybarnes.report-uri.io/r/default/csp/enforce;")
+            )->header(
                 'Report-To',
                 '{' .
                     "'url': 'https://jonnybarnes.report-uri.io/r/default/csp/enforce', " .
