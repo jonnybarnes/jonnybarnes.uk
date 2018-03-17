@@ -115,7 +115,7 @@ HTML;
         $this->assertDatabaseHas('webmentions', [
             'source' => $source,
             'type' => 'in-reply-to',
-            'mf2' => '{"rels": [], "items": [{"type": ["h-entry"], "properties": {"name": ["In reply to a note \\n    Updated reply"], "content": [{"html": "Updated reply", "value": "Updated reply"}], "in-reply-to": ["' . config('app.url') . '/notes/E"]}}]}',
+            'mf2' => '{"rels": [], "items": [{"type": ["h-entry"], "properties": {"content": [{"html": "Updated reply", "value": "Updated reply"}], "in-reply-to": ["' . config('app.url') . '/notes/E"]}}], "rel-urls": []}',
         ]);
     }
 }
