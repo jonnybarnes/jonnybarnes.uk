@@ -21,7 +21,7 @@ class CSPHeader
         return $next($request)
             ->header(
                 'Content-Security-Policy',
-                str_replace("\\\n", "", "default-src 'self'; \
+                str_replace("\\\n", '', "default-src 'self'; \
 script-src 'self' 'unsafe-inline' 'unsafe-eval' \
 https://api.mapbox.com \
 https://analytics.jmb.lv \
