@@ -1,6 +1,6 @@
 # Changelog
 
-## Version {next}
+## Version 0.16.2 (2018-04-07)
   - Add CORS headers as necessary in the Laravel app (as oppose to using nginx)
   - Add CSP headers
 
