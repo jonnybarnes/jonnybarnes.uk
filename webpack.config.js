@@ -12,17 +12,22 @@ const config = {
     places: './places.js'
   },
   output: {
-    path: __dirname + '/public/assets/js',
-    filename: '[name].js'
+    filename: '[name].js',
+    path: __dirname + '/public/assets/js'
   },
   devtool: 'source-map',
   module: {
-    noParse: [/(mapbox-gl)\.js$/],
-    loaders: [
+    noParse: [/mapbox-gl\.js$/],
+    rules: [
       {
         test: /\.js$/,
-        exclude: __dirname + '/node_modules/',
-        loader: 'babel-loader'
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['@babel/preset-env'],
+          }
+        }
       }
     ]
   },

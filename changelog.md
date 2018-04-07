@@ -1,7 +1,11 @@
 # Changelog
 
+## Version 0.16.2 (2018-04-07)
+  - Add CORS headers as necessary in the Laravel app (as oppose to using nginx)
+  - Add CSP headers
+
 ## Version 0.16.1 (2018-02-17)
-  - Fix issue where OwnYourSwarm requests inlude h-adr block for location
+  - Fix issue where OwnYourSwarm requests include h-adr block for location
 
 ## Version 0.16 (2018-02-16)
   - Update Laravel to 5.6

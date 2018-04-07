@@ -212,6 +212,16 @@ class MicropubController extends Controller
     }
 
     /**
+     * Return the relavent CORS headers to a pre-flight OPTIONS request.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function mediaOptionsResponse(): Response
+    {
+        return response('OK', 200);
+    }
+
+    /**
      * Get the file type from the mimetype of the uploaded file.
      *
      * @param  string  $mimetype

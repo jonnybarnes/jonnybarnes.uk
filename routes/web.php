@@ -136,7 +136,8 @@ Route::group(['domain' => config('url.longurl')], function () {
     // Micropub Endpoints
     Route::get('api/post', 'MicropubController@get')->middleware('micropub.token');
     Route::post('api/post', 'MicropubController@post')->middleware('micropub.token');
-    Route::post('api/media', 'MicropubController@media')->middleware('micropub.token')->name('media-endpoint');
+    Route::post('api/media', 'MicropubController@media')->middleware('micropub.token', 'cors')->name('media-endpoint');
+    Route::options('/api/media', 'MicropubController@mediaOptionsResponse')->middleware('cors');
 
     //webmention
     Route::get('webmention', 'WebMentionsController@get');

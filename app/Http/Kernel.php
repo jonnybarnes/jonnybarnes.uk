@@ -38,6 +38,7 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\LinkHeadersMiddleware::class,
             \App\Http\Middleware\LocalhostSessionMiddleware::class,
             \App\Http\Middleware\ActivityStreamLinks::class,
+            \App\Http\Middleware\CSPHeader::class,
         ],
 
         'api' => [
@@ -62,5 +63,6 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'micropub.token' => \App\Http\Middleware\VerifyMicropubToken::class,
         'myauth' => \App\Http\Middleware\MyAuthMiddleware::class,
+        'cors' => \App\Http\Middleware\CorsHeaders::class,
     ];
 }
