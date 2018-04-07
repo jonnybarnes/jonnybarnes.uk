@@ -13,7 +13,7 @@ class PlaceService
      * Create a place.
      *
      * @param  array $data
-     * @return \App\Place
+     * @return \App\Models\Place
      */
     public function createPlace(array $data): Place
     {

@@ -72,7 +72,7 @@ class FeedsController extends Controller
     /**
      * Returns the blog JSON feed.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return array
      */
     public function blogJson()
     {
@@ -105,7 +105,7 @@ class FeedsController extends Controller
     /**
      * Returns the notes JSON feed.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return array
      */
     public function notesJson()
     {

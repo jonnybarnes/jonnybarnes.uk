@@ -37,9 +37,10 @@ class ParseCachedWebMentions extends Command
     /**
      * Execute the console command.
      *
-     * @return mixed
+     * @param  \Illuminate\Filesystem\Filesystem $filesystem
+     * @return void
      */
-    public function handle(FileSystem $filesystem)
+    public function handle(Filesystem $filesystem)
     {
         $HTMLfiles = $filesystem->allFiles(storage_path() . '/HTML');
         foreach ($HTMLfiles as $file) {

@@ -36,7 +36,7 @@ class TokenService
      * Check the token signature is valid.
      *
      * @param  string The token
-     * @return mixed
+     * @return \Lcobucci\JWT\Token
      */
     public function validateToken(string $bearerToken): Token
     {

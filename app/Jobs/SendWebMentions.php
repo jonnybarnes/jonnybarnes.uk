@@ -20,7 +20,7 @@ class SendWebMentions implements ShouldQueue
     /**
      * Create the job instance, inject dependencies.
      *
-     * @param  Note  $note
+     * @param  \App\Models\Note  $note
      */
     public function __construct(Note $note)
     {
@@ -60,14 +60,14 @@ class SendWebMentions implements ShouldQueue
      * @param  string  $url
      * @return string|null
      */
-    public function discoverWebmentionEndpoint(string $url)
+    public function discoverWebmentionEndpoint(string $url): ?string
     {
         //let’s not send webmentions to myself
         if (parse_url($url, PHP_URL_HOST) == config('app.longurl')) {
-            return;
+            return null;
         }
         if (starts_with($url, '/notes/tagged/')) {
-            return;
+            return null;
         }
 
         $endpoint = null;
@@ -87,14 +87,18 @@ class SendWebMentions implements ShouldQueue
 
         $mf2 = new \Mf2\Parser($html, $url);
         $rels = $mf2->parseRelsAndAlternates();
-        if (array_key_exists('webmention', $rels[0])) {
-            $endpoint = $rels[0]['webmention'][0];
-        } elseif (array_key_exists('http://webmention.org/', $rels[0])) {
-            $endpoint = $rels[0]['http://webmention.org/'][0];
+        if (is_array($rels) && array_key_exists('0', $rels)) {
+            if (array_key_exists('webmention', $rels[0])) {
+                $endpoint = $rels[0]['webmention'][0];
+            } elseif (array_key_exists('http://webmention.org/', $rels[0])) {
+                $endpoint = $rels[0]['http://webmention.org/'][0];
+            }
         }
         if ($endpoint) {
             return $this->resolveUri($endpoint, $url);
         }
+
+        return null;
     }
 
     /**
@@ -103,7 +107,7 @@ class SendWebMentions implements ShouldQueue
      * @param  string  $html
      * @return array $urls
      */
-    public function getLinks($html)
+    public function getLinks(string $html): array
     {
         if ($html == '' || is_null($html)) {
             return [];

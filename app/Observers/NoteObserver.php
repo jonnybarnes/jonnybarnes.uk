@@ -12,7 +12,7 @@ class NoteObserver
     /**
      * Listen to the Note created event.
      *
-     * @param  \App\Note  $note
+     * @param  \App\Models\Note  $note
      */
     public function created(Note $note)
     {
@@ -36,7 +36,7 @@ class NoteObserver
     /**
      * Listen to the Note updated event.
      *
-     * @param  \App\Note  $Note
+     * @param  \App\Models\Note  $Note
      */
     public function updated(Note $note)
     {
@@ -62,7 +62,7 @@ class NoteObserver
     /**
      * Listen to the Note deleting event.
      *
-     * @param  \App\Note  $note
+     * @param  \App\Models\Note  $note
      */
     public function deleting(Note $note)
     {

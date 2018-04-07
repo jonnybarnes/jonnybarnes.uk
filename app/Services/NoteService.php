@@ -14,7 +14,7 @@ class NoteService
      *
      * @param  array  $request Data from request()->all()
      * @param  string  $client
-     * @return \App\Note
+     * @return \App\Models\Note
      */
     public function createNote(array $request, ?string $client = null): Note
     {

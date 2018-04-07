@@ -6,20 +6,18 @@ namespace App\Http\Controllers\Admin;
 
 use GuzzleHttp\Client;
 use App\Models\Contact;
-use Illuminate\View\View;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Filesystem\Filesystem;
-use Illuminate\Http\RedirectResponse;
 
 class ContactsController extends Controller
 {
     /**
      * List the currect contacts that can be edited.
      *
-     * @return \Illuminate\View\View
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
      */
-    public function index(): View
+    public function index()
     {
         $contacts = Contact::all();
 
@@ -29,9 +27,9 @@ class ContactsController extends Controller
     /**
      * Display the form to add a new contact.
      *
-     * @return \Illuminate\View\View
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
      */
-    public function create(): View
+    public function create()
     {
         return view('admin.contacts.create');
     }
@@ -39,9 +37,9 @@ class ContactsController extends Controller
     /**
      * Process the request to add a new contact.
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return \Illuminate\Routing\Redirector|\Illuminate\Http\RedirectResponse
      */
-    public function store(): RedirectResponse
+    public function store()
     {
         $contact = new Contact();
         $contact->name = request()->input('name');
@@ -58,9 +56,9 @@ class ContactsController extends Controller
      * Show the form to edit an existing contact.
      *
      * @param  int  $contactId
-     * @return \Illuminate\View\View
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
      */
-    public function edit(int $contactId): View
+    public function edit(int $contactId)
     {
         $contact = Contact::findOrFail($contactId);
 
@@ -73,9 +71,9 @@ class ContactsController extends Controller
      * @todo   Allow saving profile pictures for people without homepages
      *
      * @param  int  $contactId
-     * @return \Illuminate\Http\RedirectResponse
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
      */
-    public function update(int $contactId): RedirectResponse
+    public function update(int $contactId)
     {
         $contact = Contact::findOrFail($contactId);
         $contact->name = request()->input('name');
@@ -102,9 +100,9 @@ class ContactsController extends Controller
      * Process the request to delete a contact.
      *
      * @param  int  $contactId
-     * @return \Illuminate\Http\RedirectResponse
+     * @return \Illuminate\Routing\Redirector|\Illuminate\Http\RedirectResponse
      */
-    public function destroy(int $contactId): RedirectResponse
+    public function destroy(int $contactId)
     {
         $contact = Contact::findOrFail($contactId);
         $contact->delete();
@@ -119,7 +117,7 @@ class ContactsController extends Controller
      * from a given homepage and save it accordingly
      *
      * @param  int  $contactId
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\View\View
+     * @return \Illuminate\Routing\Redirector|\Illuminate\Http\RedirectResponse|\Illuminate\View\View|\Illuminate\Contracts\View\Factory'
      */
     public function getAvatar(int $contactId)
     {

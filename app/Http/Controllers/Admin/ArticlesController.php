@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Article;
-use Illuminate\View\View;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
@@ -15,9 +14,9 @@ class ArticlesController extends Controller
     /**
      * List the articles that can be edited.
      *
-     * @return \Illuminate\View\View
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
      */
-    public function index(): View
+    public function index()
     {
         $posts = Article::select('id', 'title', 'published')->orderBy('id', 'desc')->get();
 
@@ -27,9 +26,9 @@ class ArticlesController extends Controller
     /**
      * Show the new article form.
      *
-     * @return \Illuminate\View\View
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
      */
-    public function create(): View
+    public function create()
     {
         $message = session('message');
 
@@ -65,9 +64,9 @@ class ArticlesController extends Controller
      * Show the edit form for an existing article.
      *
      * @param  int  $articleId
-     * @return \Illuminate\View\View
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
      */
-    public function edit(int $articleId): View
+    public function edit(int $articleId)
     {
         $post = Article::select(
             'title',
@@ -101,9 +100,9 @@ class ArticlesController extends Controller
      * Process a request to delete an aricle.
      *
      * @param  int  $articleId
-     * @return \Illuminate\Http\RedirectResponse
+     * @return \Illuminate\Routing\Redirector|\Illuminate\Http\RedirectResponse
      */
-    public function destroy(int $articleId): RedirectResponse
+    public function destroy(int $articleId)
     {
         Article::where('id', $articleId)->delete();
 

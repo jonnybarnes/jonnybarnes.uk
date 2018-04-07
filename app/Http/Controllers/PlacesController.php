@@ -5,16 +5,15 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Models\Place;
-use Illuminate\View\View;
 
 class PlacesController extends Controller
 {
     /**
      * Show all the places.
      *
-     * @return \Illuminate\View\View
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
      */
-    public function index(): View
+    public function index()
     {
         $places = Place::all();
 
@@ -25,9 +24,9 @@ class PlacesController extends Controller
      * Show a specific place.
      *
      * @param  string  $slug
-     * @return \Illuminate\View\View
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
      */
-    public function show(string $slug): View
+    public function show(string $slug)
     {
         $place = Place::where('slug', '=', $slug)->firstOrFail();
 

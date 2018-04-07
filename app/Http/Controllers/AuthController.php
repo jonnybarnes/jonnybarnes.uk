@@ -4,18 +4,16 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use Illuminate\View\View;
 use Illuminate\Http\Request;
-use Illuminate\Http\RedirectResponse;
 
 class AuthController extends Controller
 {
     /**
      * Show the login form.
      *
-     * @return \Illuminate\View\View
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
      */
-    public function showLogin(): View
+    public function showLogin()
     {
         return view('login');
     }
@@ -26,7 +24,7 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function login(): RedirectResponse
+    public function login()
     {
         if (request()->input('username') === config('admin.user')
             &&

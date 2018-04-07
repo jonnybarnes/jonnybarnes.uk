@@ -56,9 +56,9 @@ class NotesController extends Controller
      * Redirect /note/{decID} to /notes/{nb60id}.
      *
      * @param  int  $decId The decimal id of the note
-     * @return \Illuminate\Http\RedirectResponse
+     * @return \Illuminate\Routing\Redirector|\Illuminate\Http\RedirectResponse
      */
-    public function redirect(int $decId): RedirectResponse
+    public function redirect(int $decId)
     {
         return redirect(config('app.url') . '/notes/' . (new Numbers())->numto60($decId));
     }
@@ -67,9 +67,9 @@ class NotesController extends Controller
      * Show all notes tagged with {tag}.
      *
      * @param  string  $tag
-     * @return \Illuminate\View\View
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
      */
-    public function tagged(string $tag): View
+    public function tagged(string $tag)
     {
         $notes = Note::whereHas('tags', function ($query) use ($tag) {
             $query->where('tag', $tag);

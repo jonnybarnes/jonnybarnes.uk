@@ -24,10 +24,10 @@ class ProcessWebMention implements ShouldQueue
     /**
      * Create a new job instance.
      *
-     * @param  \App\Note  $note
+     * @param  \App\Models\Note  $note
      * @param  string  $source
      */
-    public function __construct(Note $note, $source)
+    public function __construct(Note $note, string $source)
     {
         $this->note = $note;
         $this->source = $source;
@@ -67,7 +67,7 @@ class ProcessWebMention implements ShouldQueue
                 return;
             }
             if ($webmention->type == 'like-of') {
-                if ($parser->checkLikeOf($microformats, $note->longurl) == false) {
+                if ($parser->checkLikeOf($microformats, $this->note->longurl) == false) {
                     // it doesn’t so delete
                     $webmention->delete();
 
@@ -75,7 +75,7 @@ class ProcessWebMention implements ShouldQueue
                 } // note we don’t need to do anything if it still is a like
             }
             if ($webmention->type == 'repost-of') {
-                if ($parser->checkRepostOf($microformats, $note->longurl) == false) {
+                if ($parser->checkRepostOf($microformats, $this->note->longurl) == false) {
                     // it doesn’t so delete
                     $webmention->delete();
 
@@ -103,7 +103,7 @@ class ProcessWebMention implements ShouldQueue
      * @param  string  $html
      * @param  string  $url
      */
-    private function saveRemoteContent($html, $url)
+    private function saveRemoteContent(string $html, string $url)
     {
         $filenameFromURL = str_replace(
             ['https://', 'http://'],

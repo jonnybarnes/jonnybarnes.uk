@@ -6,7 +6,7 @@ namespace App\Jobs;
 
 use GuzzleHttp\Client;
 use Illuminate\Bus\Queueable;
-use Illuminate\FileSystem\FileSystem;
+use Illuminate\Filesystem\Filesystem;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -43,7 +43,7 @@ class DownloadWebMention implements ShouldQueue
         //4XX and 5XX responses should get Guzzle to throw an exception,
         //Laravel should catch and retry these automatically.
         if ($response->getStatusCode() == '200') {
-            $filesystem = new FileSystem();
+            $filesystem = new Filesystem();
             $filename = storage_path('HTML') . '/' . $this->createFilenameFromURL($this->source);
             //backup file first
             $filenameBackup = $filename . '.' . date('Y-m-d') . '.backup';

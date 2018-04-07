@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\View\View;
 use App\Http\Controllers\Controller;
 
 class HomeController extends Controller
@@ -12,9 +11,9 @@ class HomeController extends Controller
     /**
      * Show the homepage of the admin CP.
      *
-     * @return \Illuminate\View\View
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
      */
-    public function welcome(): View
+    public function welcome()
     {
         return view('admin.welcome', ['name' => config('admin.user')]);
     }

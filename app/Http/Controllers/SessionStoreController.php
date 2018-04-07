@@ -9,7 +9,7 @@ class SessionStoreController extends Controller
     /**
      * Save the selected colour scheme in the session.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return array
      */
     public function saveColour()
     {

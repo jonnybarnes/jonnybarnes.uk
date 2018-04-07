@@ -5,9 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Models\Article;
-use Illuminate\View\View;
 use Jonnybarnes\IndieWeb\Numbers;
-use Illuminate\Http\RedirectResponse;
 
 class ArticlesController extends Controller
 {
@@ -16,9 +14,9 @@ class ArticlesController extends Controller
      *
      * @param  int  $year
      * @param  int  $month
-     * @return \Illuminate\View\View
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
      */
-    public function index(int $year = null, int $month = null): View
+    public function index(int $year = null, int $month = null)
     {
         $articles = Article::where('published', '1')
                         ->date($year, $month)
@@ -34,7 +32,7 @@ class ArticlesController extends Controller
      * @param  int  $year
      * @param  int  $month
      * @param  string  $slug
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\View\View
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory|\Illuminate\Routing\Redirector|\Illuminate\Http\RedirectResponse
      */
     public function show(int $year, int $month, string $slug)
     {
@@ -54,9 +52,9 @@ class ArticlesController extends Controller
      * and redirect to it.
      *
      * @param  int  $idFromUrl
-     * @return \Illuminte\Http\RedirectResponse
+     * @return \Illuminate\Routing\Redirector|\Illuminate\Http\RedirectResponse
      */
-    public function onlyIdInUrl(int $idFromUrl): RedirectResponse
+    public function onlyIdInUrl(int $idFromUrl)
     {
         $realId = resolve(Numbers::class)->b60tonum($idFromUrl);
         $article = Article::findOrFail($realId);

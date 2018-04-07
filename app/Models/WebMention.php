@@ -107,10 +107,10 @@ class WebMention extends Model
     public function createPhotoLink(string $url): string
     {
         $url = normalize_url($url);
-        $host = parse_url($url, PHP_URL_HOST);
+        $host = parse_url((string) $url, PHP_URL_HOST);
         if ($host == 'pbs.twimg.com') {
             //make sure we use HTTPS, we know twitter supports it
-            return str_replace('http://', 'https://', $url);
+            return str_replace('http://', 'https://', (string) $url);
         }
         if ($host == 'twitter.com') {
             if (Cache::has($url)) {

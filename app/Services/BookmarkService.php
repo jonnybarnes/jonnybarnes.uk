@@ -25,6 +25,7 @@ class BookmarkService
      */
     public function createBookmark(array $request): Bookmark
     {
+        $url = null;
         if (array_get($request, 'properties.bookmark-of.0')) {
             //micropub request
             $url = normalize_url(array_get($request, 'properties.bookmark-of.0'));
@@ -39,11 +40,20 @@ class BookmarkService
             $categories = array_get($request, 'category');
         }
 
+        if ($url === null) {
+            // we need a URL to bookmark
+            throw new \InvalidArgumentException('We need at least a URL');
+        }
+
         $bookmark = Bookmark::create([
             'url' => $url,
             'name' => $name,
             'content' => $content,
         ]);
+
+        if (! isset($categories)) {
+            $categories = [];
+        }
 
         foreach ((array) $categories as $category) {
             $tag = Tag::firstOrCreate(['tag' => $category]);

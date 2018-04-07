@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Models\Note;
-use Illuminate\View\View;
+
 use Illuminate\Http\Response;
 use App\Jobs\ProcessWebMention;
 use Jonnybarnes\IndieWeb\Numbers;
@@ -19,9 +19,9 @@ class WebMentionsController extends Controller
      * This is probably someone looking for information about what
      * webmentions are, or about my particular implementation.
      *
-     * @return \Illuminate\View\View
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
      */
-    public function get(): View
+    public function get()
     {
         return view('webmention-endpoint');
     }
@@ -29,7 +29,7 @@ class WebMentionsController extends Controller
     /**
      * Receive and process a webmention.
      *
-     * @return \Illuminate\Http\Respone
+     * @return \Illuminate\Http\Response
      */
     public function receive(): Response
     {

@@ -5,16 +5,15 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Models\Like;
-use Illuminate\View\View;
 
 class LikesController extends Controller
 {
     /**
      * Show the latest likes.
      *
-     * @return \Illuminate\View\View
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
      */
-    public function index(): View
+    public function index()
     {
         $likes = Like::latest()->paginate(20);
 
@@ -25,9 +24,9 @@ class LikesController extends Controller
      * Show a single like.
      *
      * @param  \App\Models\Like  $like
-     * @return \Illuminate\View\View
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
      */
-    public function show(Like $like): View
+    public function show(Like $like)
     {
         return view('likes.show', compact('like'));
     }

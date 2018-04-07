@@ -5,11 +5,9 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Place;
-use Illuminate\View\View;
 use Illuminate\Http\Request;
 use App\Services\PlaceService;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\RedirectResponse;
 use Phaza\LaravelPostgis\Geometries\Point;
 
 class PlacesController extends Controller
@@ -24,9 +22,9 @@ class PlacesController extends Controller
     /**
      * List the places that can be edited.
      *
-     * @return \Illuminate\View\View
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
      */
-    public function index(): View
+    public function index()
     {
         $places = Place::all();
 
@@ -36,9 +34,9 @@ class PlacesController extends Controller
     /**
      * Show the form to make a new place.
      *
-     * @return \Illuminate\View\View
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
      */
-    public function create(): View
+    public function create()
     {
         return view('admin.places.create');
     }
@@ -46,9 +44,9 @@ class PlacesController extends Controller
     /**
      * Process a request to make a new place.
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return \Illuminate\Routing\Redirector|\Illuminate\Http\RedirectResponse
      */
-    public function store(): RedirectResponse
+    public function store()
     {
         $data = request()->only(['name', 'description', 'latitude', 'longitude']);
         $place = $this->placeService->createPlace($data);
@@ -60,9 +58,9 @@ class PlacesController extends Controller
      * Display the form to edit a specific place.
      *
      * @param  int  $placeId
-     * @return \Illuminate\View\View
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
      */
-    public function edit(int $placeId): View
+    public function edit(int $placeId)
     {
         $place = Place::findOrFail($placeId);
 
@@ -73,9 +71,9 @@ class PlacesController extends Controller
      * Process a request to edit a place.
      *
      * @param  int  $placeId
-     * @return \Illuminate\Http\RedirectResponse
+     * @return \Illuminate\Routing\Redirector|\Illuminate\Http\RedirectResponse
      */
-    public function update(int $placeId): RedirectResponse
+    public function update(int $placeId)
     {
         $place = Place::findOrFail($placeId);
         $place->name = request()->input('name');
@@ -94,9 +92,9 @@ class PlacesController extends Controller
      * List the places we can merge with the current place.
      *
      * @param  int  $placeId
-     * @return \Illuminate\View\View
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
      */
-    public function mergeIndex(int $placeId): View
+    public function mergeIndex(int $placeId)
     {
         $first = Place::find($placeId);
         $results = Place::near(new Point($first->latitude, $first->longitude))->get();
@@ -115,9 +113,9 @@ class PlacesController extends Controller
      *
      * @param  int  $placeId1
      * @param  int  $placeId2
-     * @return \Illuminate\View\View
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
      */
-    public function mergeEdit(int $placeId1, int $placeId2): View
+    public function mergeEdit(int $placeId1, int $placeId2)
     {
         $place1 = Place::find($placeId1);
         $place2 = Place::find($placeId2);
@@ -128,9 +126,9 @@ class PlacesController extends Controller
     /**
      * Process the request to merge two places.
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return \Illuminate\Routing\Redirector|\Illuminate\Http\RedirectResponse
      */
-    public function mergeStore(): RedirectResponse
+    public function mergeStore()
     {
         $place1 = Place::find(request()->input('place1'));
         $place2 = Place::find(request()->input('place2'));

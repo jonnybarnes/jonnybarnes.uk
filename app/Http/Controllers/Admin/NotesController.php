@@ -5,20 +5,18 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Note;
-use Illuminate\View\View;
 use Illuminate\Http\Request;
 use App\Jobs\SendWebMentions;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\RedirectResponse;
 
 class NotesController extends Controller
 {
     /**
      * List the notes that can be edited.
      *
-     * @return \Illuminate\View\View
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
      */
-    public function index(): View
+    public function index()
     {
         $notes = Note::select('id', 'note')->orderBy('id', 'desc')->get();
         foreach ($notes as $note) {
@@ -31,9 +29,9 @@ class NotesController extends Controller
     /**
      * Show the form to make a new note.
      *
-     * @return \Illuminate\View\View
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
      */
-    public function create(): View
+    public function create()
     {
         return view('admin.notes.create');
     }
@@ -41,9 +39,9 @@ class NotesController extends Controller
     /**
      * Process a request to make a new note.
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return \Illuminate\Routing\Redirector|\Illuminate\Http\RedirectResponse
      */
-    public function store(): RedirectResponse
+    public function store()
     {
         Note::create([
             'in-reply-to' => request()->input('in-reply-to'),
@@ -57,9 +55,9 @@ class NotesController extends Controller
      * Display the form to edit a specific note.
      *
      * @param  int  $noteId
-     * @return \Illuminate\View\View
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
      */
-    public function edit(int $noteId): View
+    public function edit(int $noteId)
     {
         $note = Note::find($noteId);
         $note->originalNote = $note->getOriginal('note');
@@ -72,9 +70,9 @@ class NotesController extends Controller
      * from the admin CP.
      *
      * @param  int  $noteId
-     * @return \Illuminate\Http\RedirectResponse
+     * @return \Illuminate\Routing\Redirector|\Illuminate\Http\RedirectResponse
      */
-    public function update(int $noteId): RedirectResponse
+    public function update(int $noteId)
     {
         //update note data
         $note = Note::findOrFail($noteId);
@@ -93,9 +91,9 @@ class NotesController extends Controller
      * Delete the note.
      *
      * @param  int  $noteId
-     * @return \Illuminate\Http\RedirectResponse
+     * @return \Illuminate\Routing\Redirector|\Illuminate\Http\RedirectResponse
      */
-    public function destroy(int $noteId): RedirectResponse
+    public function destroy(int $noteId)
     {
         $note = Note::findOrFail($noteId);
         $note->delete();
