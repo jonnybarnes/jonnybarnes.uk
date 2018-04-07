@@ -8,7 +8,6 @@ use App\Models\Note;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
 use Jonnybarnes\IndieWeb\Numbers;
-use Illuminate\Http\RedirectResponse;
 use App\Services\ActivityStreamsService;
 
 // Need to sort out Twitter and webmentions!
