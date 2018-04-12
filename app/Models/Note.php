@@ -191,7 +191,7 @@ class Note extends Model
             if ($media->type == 'image') {
                 $note .= '<img src="' . $media->url . '" alt="">';
             }
-            if ($media->type == 'audio' ){
+            if ($media->type == 'audio') {
                 $note .= '<audio src="' . $media->url . '">';
             }
             if ($media->type == 'video') {
