@@ -177,6 +177,37 @@ class Note extends Model
     }
 
     /**
+     * Provide the content_html for JSON feed.
+     *
+     * In particular we want to include media links such as images.
+     *
+     * @return string
+     */
+    public function getContentAttribute(): string
+    {
+        $note = $this->note;
+
+        foreach ($this->media as $media) {
+            if ($media->type == 'image') {
+                $note .= '<img src="' . $media->url . '" alt="">';
+            }
+            if ($media->type == 'audio') {
+                $note .= '<audio src="' . $media->url . '">';
+            }
+            if ($media->type == 'video') {
+                $note .= '<video src="' . $media->url . '">';
+            }
+        }
+
+        if ($note === null) {
+            // when would $note still be blank?
+            $note = 'A blank note';
+        }
+
+        return $note;
+    }
+
+    /**
      * Generate the NewBase60 ID from primary ID.
      *
      * @return string

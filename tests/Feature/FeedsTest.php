@@ -71,4 +71,28 @@ class FeedsTest extends TestCase
         $response = $this->get('/notes/feed.json');
         $response->assertHeader('Content-Type', 'application/json');
     }
+
+    /**
+     * Each JSON feed item must have one of `content_text` or `content_html`,
+     * and whichever one they have can’t be `null`.
+     *
+     * @return void
+     */
+    public function test_json_feed_has_one_content_attribute_and_it_isnt_null()
+    {
+        $response = $this->get('/notes/feed.json');
+        $data = json_decode($response->content());
+        foreach ($data->items as $item) {
+            $this->assertTrue(
+                property_exists($item, 'content_text') ||
+                property_exists($item, 'content_html')
+            );
+            if (property_exists($item, 'content_text')) {
+                $this->assertNotNull($item->content_text);
+            }
+            if (property_exists($item, 'content_html')) {
+                $this->assertNotNull($item->content_html);
+            }
+        }
+    }
 }
