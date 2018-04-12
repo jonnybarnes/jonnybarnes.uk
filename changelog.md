@@ -1,6 +1,6 @@
 # Changelog
 
-## Version {next}
+## Version 0.16.3 (2018-04-12)
   - Improve JSON feed conformance
 
 ## Version 0.16.2 (2018-04-07)
