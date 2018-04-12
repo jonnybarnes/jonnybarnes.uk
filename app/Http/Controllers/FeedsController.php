@@ -121,9 +121,8 @@ class FeedsController extends Controller
         foreach ($notes as $key => $note) {
             $data['items'][$key] = [
                 'id' => $note->longurl,
-                'title' => $note->getOriginal('note'),
                 'url' => $note->longurl,
-                'content_html' => $note->note,
+                'content_html' => $note->content,
                 'date_published' => $note->created_at->tz('UTC')->toRfc3339String(),
                 'date_modified' => $note->updated_at->tz('UTC')->toRfc3339String(),
                 'author' => [
