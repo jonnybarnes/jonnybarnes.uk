@@ -47,7 +47,8 @@ p.typekit.net; \
 font-src 'self' \
 https://fonts.gstatic.com \
 use.typekit.net \
-fonts.typekit.net; \
+fonts.typekit.net \
+data:; \
 connect-src 'self' \
 https://api.mapbox.com \
 https://*.tiles.mapbox.com \
@@ -55,7 +56,6 @@ performance.typekit.net \
 data: blob:; \
 worker-src 'self' blob:; \
 frame-src 'self' https://www.youtube.com blob:; \
-child-src 'self' blob:; \
 upgrade-insecure-requests; \
 block-all-mixed-content; \
 report-to csp-endpoint; \

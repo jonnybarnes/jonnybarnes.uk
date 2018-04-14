@@ -1,5 +1,8 @@
 # Changelog
 
+## Version {next}
+  - Improve CSP headers
+
 ## Version 0.16.3 (2018-04-12)
   - Improve JSON feed conformance
 
