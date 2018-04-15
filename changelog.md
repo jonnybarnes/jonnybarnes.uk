@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 0.16.4
+  - Improve CSP headers
+  - Fix the map style menu in mapbox maps
+
 ## Version 0.16.3 (2018-04-12)
   - Improve JSON feed conformance
 
