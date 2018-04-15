@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 0.16.5
+  - Hotfix: adding a new note meant some tests were running against the wrong note
+
 ## Version 0.16.4
   - Improve CSP headers
   - Fix the map style menu in mapbox maps
