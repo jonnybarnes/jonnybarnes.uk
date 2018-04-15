@@ -5,17 +5,24 @@ import selectPlaceInForm from './select-place';
 
 mapboxgl.accessToken = 'pk.eyJ1Ijoiam9ubnliYXJuZXMiLCJhIjoiY2l2cDhjYW04MDAwcjJ0cG1uZnhqcm82ayJ9.qA2zeVA-nsoMh9IFrd5KQw';
 
-//define some functions to be used in the default function.
+// Define some functions to be used in the default function.
 const titlecase = (string) => {
     return string.split('-').map(([first,...rest]) => first.toUpperCase() + rest.join('').toLowerCase()).join(' ');
+};
+
+// Get the ID for the map, i.e. get the u-url of the containing note.
+const getId = (map) => {
+    let href = map._container.parentNode.querySelector('.u-url').getAttribute('href');
+    return href.substr(href.lastIndexOf('/') + 1);
 };
 
 const addMapTypeOption = (map, menu, option, checked = false) => {
     let div = document.createElement('div');
     let input = document.createElement('input');
-    input.setAttribute('id', option);
+    let id = option + getId(map);
+    input.setAttribute('id', id);
     input.setAttribute('type', 'radio');
-    input.setAttribute('name', 'toggle');
+    input.setAttribute('name', 'map' + getId(map));
     input.setAttribute('value', option);
     if (checked == true) {
         input.setAttribute('checked', 'checked');
@@ -40,7 +47,7 @@ const addMapTypeOption = (map, menu, option, checked = false) => {
         });
     });
     let label = document.createElement('label');
-    label.setAttribute('for', option);
+    label.setAttribute('for', option + getId(map));
     label.appendChild(document.createTextNode(titlecase(option)));
     div.appendChild(input);
     div.appendChild(label);
@@ -59,7 +66,7 @@ const makeMapMenu = (map) => {
     return mapMenu;
 };
 
-//the main function
+// The main function.
 export default function addMap(div, position = null, places = null) {
     let data;
     let dataLatitude = div.dataset.latitude;

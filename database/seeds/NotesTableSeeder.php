@@ -27,6 +27,13 @@ class NotesTableSeeder extends Seeder
         $noteWithPlace->place()->associate($place);
         $noteWithPlace->save();
         sleep(1);
+        $noteWithPlaceTwo = Note::create([
+            'note' => 'It’s really good',
+        ]);
+        $place = Place::find(1);
+        $noteWithPlaceTwo->place()->associate($place);
+        $noteWithPlaceTwo->save();
+        sleep(1);
         $noteWithContact = Note::create([
             'note' => 'Hi @tantek'
         ]);
