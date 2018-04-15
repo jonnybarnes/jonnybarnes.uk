@@ -29,7 +29,7 @@ class NotesTest extends TestCase
     public function test_default_image_used_in_makehcards_method()
     {
         $expected = '<p>Hi <span class="u-category h-card mini-h-card"><a class="u-url p-name" href="http://tantek.com">Tantek Çelik</a><span class="hovercard"> <a class="u-url" href="https://twitter.com/t"><img class="social-icon" src="/assets/img/social-icons/twitter.svg"> t</a><img class="u-photo" alt="" src="/assets/profile-images/default-image"></span></span></p>' . PHP_EOL;
-        $note = Note::find(13);
+        $note = Note::find(14);
         $this->assertEquals($expected, $note->note);
     }
 
@@ -41,7 +41,7 @@ class NotesTest extends TestCase
     public function test_specific_profile_image_used_in_makehcards_method()
     {
         $expected = '<p>Hi <span class="u-category h-card mini-h-card"><a class="u-url p-name" href="https://aaronparecki.com">Aaron Parecki</a><span class="hovercard"><a class="u-url" href="https://www.facebook.com/123456"><img class="social-icon" src="/assets/img/social-icons/facebook.svg"> Facebook</a> <img class="u-photo" alt="" src="/assets/profile-images/aaronparecki.com/image"></span></span></p>' . PHP_EOL;
-        $note = Note::find(14);
+        $note = Note::find(15);
         $this->assertEquals($expected, $note->note);
     }
 
@@ -53,7 +53,7 @@ class NotesTest extends TestCase
     public function test_twitter_link_created_when_no_contact_found()
     {
         $expected = '<p>Hi <a href="https://twitter.com/bob">@bob</a></p>' . PHP_EOL;
-        $note = Note::find(15);
+        $note = Note::find(16);
         $this->assertEquals($expected, $note->note);
     }
 
