@@ -1,6 +1,6 @@
 # Changelog
 
-## Version {next}
+## Version 0.16.4
   - Improve CSP headers
   - Fix the map style menu in mapbox maps
 
