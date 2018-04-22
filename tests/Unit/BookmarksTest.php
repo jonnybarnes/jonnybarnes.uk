@@ -11,6 +11,9 @@ use GuzzleHttp\Handler\MockHandler;
 
 class BookmarksTest extends TestCase
 {
+    /**
+     * @group puppeteer
+     */
     public function test_screenshot_of_google()
     {
         $uuid = (new BookmarkService())->saveScreenshot('https://www.google.co.uk');

@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 0.16.6
+  - Improve micropub media endpoint by inlining the initial upload to S3 so the returned URL will never 404
+
 ## Version 0.16.5
   - Hotfix: adding a new note meant some tests were running against the wrong note
 

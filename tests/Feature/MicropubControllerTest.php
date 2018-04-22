@@ -770,7 +770,8 @@ class MicropubControllerTest extends TestCase
     public function test_media_endpoint_upload_a_file()
     {
         Queue::fake();
-        Storage::fake('local');
+        Storage::fake('s3');
+        $file = __DIR__ . '/../aaron.png';
 
         $response = $this->call(
             'POST',
@@ -778,7 +779,14 @@ class MicropubControllerTest extends TestCase
             [],
             [],
             [
-                'file' => UploadedFile::fake()->image('scrot.png', 1920, 1080)->size(250),
+                'file' => new UploadedFile(
+                    $file,
+                    'aaron.png',
+                    'image/png',
+                    filesize(__DIR__ . '/../aaron.png'),
+                    null,
+                    true
+                ),
             ],
             ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
         );
@@ -787,12 +795,14 @@ class MicropubControllerTest extends TestCase
         $filename = substr($path, 7);
         Queue::assertPushed(ProcessMedia::class);
         Storage::disk('local')->assertExists($filename);
+        // now remove file
+        unlink(storage_path('app/') . $filename);
     }
 
     public function test_media_endpoint_upload_an_audio_file()
     {
         Queue::fake();
-        Storage::fake('local');
+        Storage::fake('s3');
         $file = __DIR__ . '/../audio.mp3';
 
         $response = $this->call(
@@ -810,12 +820,14 @@ class MicropubControllerTest extends TestCase
         $filename = substr($path, 7);
         Queue::assertPushed(ProcessMedia::class);
         Storage::disk('local')->assertExists($filename);
+        // now remove file
+        unlink(storage_path('app/') . $filename);
     }
 
     public function test_media_endpoint_upload_a_video_file()
     {
         Queue::fake();
-        Storage::fake('local');
+        Storage::fake('s3');
         $file = __DIR__ . '/../video.ogv';
 
         $response = $this->call(
@@ -833,12 +845,14 @@ class MicropubControllerTest extends TestCase
         $filename = substr($path, 7);
         Queue::assertPushed(ProcessMedia::class);
         Storage::disk('local')->assertExists($filename);
+        // now remove file
+        unlink(storage_path('app/') . $filename);
     }
 
     public function test_media_endpoint_upload_a_document_file()
     {
         Queue::fake();
-        Storage::fake('local');
+        Storage::fake('s3');
 
         $response = $this->call(
             'POST',
@@ -855,6 +869,8 @@ class MicropubControllerTest extends TestCase
         $filename = substr($path, 7);
         Queue::assertPushed(ProcessMedia::class);
         Storage::disk('local')->assertExists($filename);
+        // now remove file
+        unlink(storage_path('app/') . $filename);
     }
 
     public function test_media_endpoint_upload_an_invalid_file_return_error()

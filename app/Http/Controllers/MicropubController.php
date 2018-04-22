@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 
 use Monolog\Logger;
 use Ramsey\Uuid\Uuid;
+use Illuminate\Http\File;
 use App\Jobs\ProcessMedia;
 use App\Services\TokenService;
 use Illuminate\Http\JsonResponse;
@@ -202,6 +203,13 @@ class MicropubController extends Controller
             'type' => $this->getFileTypeFromMimeType(request()->file('file')->getMimeType()),
             'image_widths' => $width,
         ]);
+
+        // put the file on S3 initially, the ProcessMedia job may edit this
+        Storage::disk('s3')->putFileAs(
+            'media',
+            new File(storage_path('app') . '/' . $filename),
+            $filename
+        );
 
         ProcessMedia::dispatch($filename);
 
