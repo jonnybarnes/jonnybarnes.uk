@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Jobs;
 
-use Illuminate\Http\File;
 use Illuminate\Bus\Queueable;
 use Intervention\Image\ImageManager;
 use Illuminate\Queue\SerializesModels;
@@ -37,11 +36,6 @@ class ProcessMedia implements ShouldQueue
      */
     public function handle(ImageManager $manager)
     {
-        Storage::disk('s3')->putFileAs(
-            'media',
-            new File(storage_path('app') . '/' . $this->filename),
-            $this->filename
-        );
         //open file
         try {
             $image = $manager->make(storage_path('app') . '/' . $this->filename);
