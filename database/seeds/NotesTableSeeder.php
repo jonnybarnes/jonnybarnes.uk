@@ -105,17 +105,6 @@ class NotesTableSeeder extends Seeder
         $noteWithOnlyImage->save();
         $noteWithOnlyImage->media()->save($media);
         sleep(1);
-        $noteFromInstagram = Note::create([
-            'note' => 'Lovely #wedding #weddingfavour',
-        ]);
-        $noteFromInstagram->instagram_url = 'https://www.instagram.com/p/Bbo22MHhE_0';
-        $noteFromInstagram->save();
-        $mediaInstagram = new Media();
-        $mediaInstagram->path = 'https://scontent-lhr3-1.cdninstagram.com/t51.2885-15/e35/23734479_149605352435937_400133507076063232_n.jpg';
-        $mediaInstagram->type = 'image';
-        $mediaInstagram->save();
-        $noteFromInstagram->media()->save($mediaInstagram);
-        sleep(1);
         $noteCapitalHashtag = Note::create([
             'note' => 'A #TwoWord hashtag',
         ]);

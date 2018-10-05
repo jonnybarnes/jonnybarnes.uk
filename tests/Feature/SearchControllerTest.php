@@ -9,7 +9,7 @@ class SearchControllerTest extends TestCase
 {
     public function test_search()
     {
-        $response = $this->get('/search?terms=wedding');
-        $response->assertSee('#weddingfavour');
+        $response = $this->get('/search?terms=love');
+        $response->assertSee('duckduckgo.com');
     }
 }
