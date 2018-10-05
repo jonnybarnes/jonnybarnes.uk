@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 0.17
+  - Update the underlying Laravel framework to release 5.7
+
 ## Version 0.16.6
   - Improve micropub media endpoint by inlining the initial upload to S3 so the returned URL will never 404
 
