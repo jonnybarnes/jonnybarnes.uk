@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 0.17.1 (2018-10-12)
+  - Remove settinga and code for syndicatong to Facebook (issue#88)
+
 ## Version 0.17
   - Update the underlying Laravel framework to release 5.7
 
