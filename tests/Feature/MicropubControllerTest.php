@@ -12,7 +12,6 @@ use App\Models\{Media, Place};
 use Illuminate\Http\UploadedFile;
 use App\Jobs\SyndicateNoteToTwitter;
 use Lcobucci\JWT\Signer\Hmac\Sha256;
-use App\Jobs\SyndicateNoteToFacebook;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Storage;
 use Phaza\LaravelPostgis\Geometries\Point;
@@ -170,33 +169,6 @@ class MicropubControllerTest extends TestCase
     }
 
     /**
-     * Test a valid micropub requests creates a new note and syndicates to Facebook.
-     *
-     * @return void
-     */
-    public function test_micropub_post_request_creates_new_note_sends_to_facebook()
-    {
-        Queue::fake();
-        $faker = \Faker\Factory::create();
-        $note = $faker->text;
-        $response = $this->call(
-            'POST',
-            '/api/post',
-            [
-                'h' => 'entry',
-                'content' => $note,
-                'mp-syndicate-to' => 'https://facebook.com/jonnybarnes'
-            ],
-            [],
-            [],
-            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
-        );
-        $response->assertJson(['response' => 'created']);
-        $this->assertDatabaseHas('notes', ['note' => $note]);
-        Queue::assertPushed(SyndicateNoteToFacebook::class);
-    }
-
-    /**
      * Test a valid micropub requests creates a new place.
      *
      * @return void
@@ -320,7 +292,6 @@ class MicropubControllerTest extends TestCase
                     'in-reply-to' => ['https://aaronpk.localhost'],
                     'mp-syndicate-to' => [
                         'https://twitter.com/jonnybarnes',
-                        'https://facebook.com/jonnybarnes',
                     ],
                     'photo' => [config('filesystems.disks.s3.url') . '/test-photo.jpg'],
                 ],
@@ -332,7 +303,6 @@ class MicropubControllerTest extends TestCase
             ->assertJson(['response' => 'created']);
         Queue::assertPushed(SendWebMentions::class);
         Queue::assertPushed(SyndicateNoteToTwitter::class);
-        Queue::assertPushed(SyndicateNoteToFacebook::class);
     }
 
     /**

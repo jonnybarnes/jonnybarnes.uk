@@ -401,50 +401,6 @@ class Note extends Model
     }
 
     /**
-     * Show a specific form of the note for Facebook.
-     *
-     * That is we swap the contacts names for their known Facebook usernames.
-     *
-     * @return string|null
-     */
-    public function getFacebookContentAttribute(): ?string
-    {
-        if ($this->contacts === null) {
-            return null;
-        }
-
-        if (count($this->contacts) === 0) {
-            return null;
-        }
-
-        if (count(array_unique(array_values($this->contacts))) === 1
-            && array_unique(array_values($this->contacts))[0] === null) {
-            return null;
-        }
-
-        // swap in facebook usernames
-        $swapped = preg_replace_callback(
-            self::USERNAMES_REGEX,
-            function ($matches) {
-                if (is_null($this->contacts[$matches[1]])) {
-                    return $matches[0];
-                }
-
-                $contact = $this->contacts[$matches[1]];
-                if ($contact->facebook) {
-                    return '<a class="u-category h-card" href="https://facebook.com/'
-                           . $contact->facebook . '">' . $contact->name . '</a>';
-                }
-
-                return $contact->name;
-            },
-            $this->getOriginal('note')
-        );
-
-        return $this->convertMarkdown($swapped);
-    }
-
-    /**
      * Scope a query to select a note via a NewBase60 id.
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $query

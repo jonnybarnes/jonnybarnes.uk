@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Models\{Media, Note, Place};
-use App\Jobs\{SendWebMentions, SyndicateNoteToFacebook, SyndicateNoteToTwitter};
+use App\Jobs\{SendWebMentions, SyndicateNoteToTwitter};
 
 class NoteService
 {
@@ -51,9 +51,6 @@ class NoteService
         if (count($this->getSyndicationTargets($request)) > 0) {
             if (in_array('twitter', $this->getSyndicationTargets($request))) {
                 dispatch(new SyndicateNoteToTwitter($note));
-            }
-            if (in_array('facebook', $this->getSyndicationTargets($request))) {
-                dispatch(new SyndicateNoteToFacebook($note));
             }
         }
 
@@ -211,18 +208,12 @@ class NoteService
             if ($service == 'Twitter') {
                 $syndication[] = 'twitter';
             }
-            if ($service == 'Facebook') {
-                $syndication[] = 'facebook';
-            }
         }
         if (is_array($mpSyndicateTo)) {
             foreach ($mpSyndicateTo as $uid) {
                 $service = array_search($uid, $targets);
                 if ($service == 'Twitter') {
                     $syndication[] = 'twitter';
-                }
-                if ($service == 'Facebook') {
-                    $syndication[] = 'facebook';
                 }
             }
         }
