@@ -39,9 +39,8 @@
                 </p>
 @endforeach
 @endif
-                <!-- these empty tags are for https://brid.gy’s publishing service -->
+                <!-- this empty tags are for https://brid.gy’s publishing service -->
                 <a href="https://brid.gy/publish/twitter"></a>
-                <a href="https://brid.gy/publish/facebook"></a>
             </div>
 @stop
 
