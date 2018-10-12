@@ -7,7 +7,6 @@ use Tests\TestToken;
 use App\Jobs\ProcessBookmark;
 use Illuminate\Support\Facades\Queue;
 use App\Jobs\SyndicateBookmarkToTwitter;
-use App\Jobs\SyndicateBookmarkToFacebook;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class BookmarksTest extends TestCase
@@ -37,7 +36,6 @@ class BookmarksTest extends TestCase
             'bookmark-of' => 'https://example.org/blog-post',
             'mp-syndicate-to' => [
                 'https://twitter.com/jonnybarnes',
-                'https://facebook.com/jonnybarnes',
             ],
         ]);
 
@@ -45,7 +43,6 @@ class BookmarksTest extends TestCase
 
         Queue::assertPushed(ProcessBookmark::class);
         Queue::assertPushed(SyndicateBookmarkToTwitter::class);
-        Queue::assertPushed(SyndicateBookmarkToFacebook::class);
         $this->assertDatabaseHas('bookmarks', ['url' => 'https://example.org/blog-post']);
     }
 
@@ -61,7 +58,6 @@ class BookmarksTest extends TestCase
                 'bookmark-of' => ['https://example.org/blog-post'],
                 'mp-syndicate-to' => [
                     'https://twitter.com/jonnybarnes',
-                    'https://facebook.com/jonnybarnes',
                 ],
             ],
         ]);
@@ -70,7 +66,6 @@ class BookmarksTest extends TestCase
 
         Queue::assertPushed(ProcessBookmark::class);
         Queue::assertPushed(SyndicateBookmarkToTwitter::class);
-        Queue::assertPushed(SyndicateBookmarkToFacebook::class);
         $this->assertDatabaseHas('bookmarks', ['url' => 'https://example.org/blog-post']);
     }
 
@@ -90,25 +85,6 @@ class BookmarksTest extends TestCase
 
         Queue::assertPushed(ProcessBookmark::class);
         Queue::assertPushed(SyndicateBookmarkToTwitter::class);
-        $this->assertDatabaseHas('bookmarks', ['url' => 'https://example.org/blog-post']);
-    }
-
-    public function test_single_facebook_syndication_target_causes_job_dispatch_http_post_syntax()
-    {
-        Queue::fake();
-
-        $response = $this->withHeaders([
-            'Authorization' => 'Bearer ' . $this->getToken(),
-        ])->post('/api/post', [
-            'h' => 'entry',
-            'bookmark-of' => 'https://example.org/blog-post',
-            'mp-syndicate-to' => 'https://facebook.com/jonnybarnes',
-        ]);
-
-        $response->assertJson(['response' => 'created']);
-
-        Queue::assertPushed(ProcessBookmark::class);
-        Queue::assertPushed(SyndicateBookmarkToFacebook::class);
         $this->assertDatabaseHas('bookmarks', ['url' => 'https://example.org/blog-post']);
     }
 

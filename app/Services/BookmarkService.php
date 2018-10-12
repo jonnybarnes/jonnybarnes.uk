@@ -11,7 +11,6 @@ use App\Jobs\ProcessBookmark;
 use App\Models\{Bookmark, Tag};
 use Spatie\Browsershot\Browsershot;
 use App\Jobs\SyndicateBookmarkToTwitter;
-use App\Jobs\SyndicateBookmarkToFacebook;
 use GuzzleHttp\Exception\ClientException;
 use App\Exceptions\InternetArchiveException;
 
@@ -63,18 +62,12 @@ class BookmarkService
             if ($service == 'Twitter') {
                 SyndicateBookmarkToTwitter::dispatch($bookmark);
             }
-            if ($service == 'Facebook') {
-                SyndicateBookmarkToFacebook::dispatch($bookmark);
-            }
         }
         if (is_array($mpSyndicateTo)) {
             foreach ($mpSyndicateTo as $uid) {
                 $service = array_search($uid, $targets);
                 if ($service == 'Twitter') {
                     SyndicateBookmarkToTwitter::dispatch($bookmark);
-                }
-                if ($service == 'Facebook') {
-                    SyndicateBookmarkToFacebook::dispatch($bookmark);
                 }
             }
         }
