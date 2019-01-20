@@ -173,4 +173,50 @@ END;
 
         $this->assertNull(Like::find($id)->author_name);
     }
+
+    public function test_process_like_that_is_tweet()
+    {
+        $like = new Like();
+        $like->url = 'https://twitter.com/jonnybarnes/status/1050823255123251200';
+        $like->save();
+        $id = $like->id;
+
+        $job = new ProcessLike($like);
+
+        $mock = new MockHandler([
+            new Response(201, [], json_encode([
+                'url' => 'https://twitter.com/likes/id',
+            ])),
+        ]);
+        $handler = HandlerStack::create($mock);
+        $client = new Client(['handler' => $handler]);
+        $this->app->bind(Client::class, $client);
+        $authorship = new Authorship();
+
+        $job->handle($client, $authorship);
+
+        $this->assertEquals('Jonny Barnes', Like::find($id)->author_name);
+    }
+
+    public function test_process_like_that_is_tweet_with_oembed_error()
+    {
+        $like = new Like();
+        $like->url = 'https://twitter.com/jonnybarnes/status/1050823255123251200';
+        $like->save();
+        $id = $like->id;
+
+        $job = new ProcessLike($like);
+
+        $mock = new MockHandler([
+            new Response(500),
+        ]);
+        $handler = HandlerStack::create($mock);
+        $client = new Client(['handler' => $handler]);
+        $this->app->bind(Client::class, $client);
+        $authorship = new Authorship();
+
+        $job->handle($client, $authorship);
+
+        $this->assertEquals('Jonny Barnes', Like::find($id)->author_name);
+    }
 }

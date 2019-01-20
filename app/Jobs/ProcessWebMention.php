@@ -67,7 +67,7 @@ class ProcessWebMention implements ShouldQueue
                 return;
             }
             if ($webmention->type == 'like-of') {
-                if ($parser->checkLikeOf($microformats, $note->longurl) == false) {
+                if ($parser->checkLikeOf($microformats, $this->note->longurl) == false) {
                     // it doesn’t so delete
                     $webmention->delete();
 
@@ -75,7 +75,7 @@ class ProcessWebMention implements ShouldQueue
                 } // note we don’t need to do anything if it still is a like
             }
             if ($webmention->type == 'repost-of') {
-                if ($parser->checkRepostOf($microformats, $note->longurl) == false) {
+                if ($parser->checkRepostOf($microformats, $this->note->longurl) == false) {
                     // it doesn’t so delete
                     $webmention->delete();
 

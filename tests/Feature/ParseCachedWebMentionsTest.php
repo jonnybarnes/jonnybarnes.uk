@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use Tests\TestCase;
 use App\Models\WebMention;
+use Illuminate\FileSystem\FileSystem;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
@@ -44,13 +45,13 @@ class ParseCachedWebMentionsTest extends TestCase
 
     public function tearDown()
     {
-        unlink(storage_path('HTML') . '/https/aaronpk.localhost/reply/1');
-        rmdir(storage_path('HTML') . '/https/aaronpk.localhost/reply');
-        rmdir(storage_path('HTML') . '/https/aaronpk.localhost');
-        rmdir(storage_path('HTML') . '/https');
-        unlink(storage_path('HTML') . '/http/tantek.com/index.html');
-        rmdir(storage_path('HTML') . '/http/tantek.com');
-        rmdir(storage_path('HTML') . '/http');
+        $fs = new FileSystem();
+        if ($fs->exists(storage_path() . '/HTML/https')) {
+            $fs->deleteDirectory(storage_path() . '/HTML/https');
+        }
+        if ($fs->exists(storage_path() . '/HTML/http')) {
+            $fs->deleteDirectory(storage_path() . '/HTML/http');
+        }
 
         parent::tearDown();
     }

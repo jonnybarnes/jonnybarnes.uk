@@ -10,7 +10,7 @@ use Illuminate\Bus\Queueable;
 use Thujohn\Twitter\Facades\Twitter;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
-use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\RequestException;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Jonnybarnes\WebmentionsParser\Authorship;
@@ -60,7 +60,7 @@ class ProcessLike implements ShouldQueue
                         ],
                     ]
                 );
-            } catch (ClientException $exception) {
+            } catch (RequestException $exception) {
                 //no biggie
             }
 

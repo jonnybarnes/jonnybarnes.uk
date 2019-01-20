@@ -13,4 +13,5 @@ yarn-error.log
 /public/files
 /public/keybase.txt
 /coverage
+/public/coverage
 /LegacyTests

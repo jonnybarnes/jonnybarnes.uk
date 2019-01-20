@@ -35,6 +35,7 @@ env:
 
 php:
   - 7.2
+  - 7.3
 
 before_install:
   - printf "\n" | pecl install imagick
@@ -43,7 +44,7 @@ before_install:
   - psql -U travis -c 'create database travis_ci_test'
   - psql -U travis -d travis_ci_test -c 'create extension postgis'
   - travis_retry composer self-update --preview
-  - pear install pear/PHP_CodeSniffer && phpenv rehash
+  - curl -OL https://squizlabs.github.io/PHP_CodeSniffer/phpcs.phar
 
 install:
   - if [[ $setup = 'basic' ]];  then travis_retry composer install --no-interaction --prefer-dist; fi
@@ -63,7 +64,7 @@ before_script:
   #- sleep 5
 
 script:
-  - php vendor/bin/phpunit --coverage-text
-  - phpcs
+  - php vendor/bin/phpunit
+  - php phpcs.phar
   #- php artisan dusk
   - php vendor/bin/security-checker security:check --end-point=http://security.sensiolabs.org/check_lock
