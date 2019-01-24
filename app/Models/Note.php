@@ -9,17 +9,19 @@ use Twitter;
 use Normalizer;
 use GuzzleHttp\Client;
 use Laravel\Scout\Searchable;
-use League\CommonMark\Converter;
-use League\CommonMark\DocParser;
 use Jonnybarnes\IndieWeb\Numbers;
 use League\CommonMark\Environment;
-use League\CommonMark\HtmlRenderer;
 use Illuminate\Database\Eloquent\Model;
 use Jonnybarnes\EmojiA11y\EmojiModifier;
 use Illuminate\Database\Eloquent\Builder;
+use League\CommonMark\CommonMarkConverter;
 use App\Exceptions\TwitterContentException;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use League\CommonMark\Block\Element\FencedCode;
+use League\CommonMark\Block\Element\IndentedCode;
 use Jonnybarnes\CommonmarkLinkify\LinkifyExtension;
+use Spatie\CommonMarkHighlighter\FencedCodeRenderer;
+use Spatie\CommonMarkHighlighter\IndentedCodeRenderer;
 
 class Note extends Model
 {
@@ -513,7 +515,9 @@ class Note extends Model
     {
         $environment = Environment::createCommonMarkEnvironment();
         $environment->addExtension(new LinkifyExtension());
-        $converter = new Converter(new DocParser($environment), new HtmlRenderer($environment));
+        $environment->addBlockRenderer(FencedCode::class, new FencedCodeRenderer());
+        $environment->addBlockRenderer(IndentedCode::class, new IndentedCodeRenderer());
+        $converter = new CommonMarkConverter([], $environment);
 
         return $converter->convertToHtml($note);
     }

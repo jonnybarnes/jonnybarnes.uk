@@ -4,11 +4,16 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use League\CommonMark\Environment;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Cviebrock\EloquentSluggable\Sluggable;
 use League\CommonMark\CommonMarkConverter;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use League\CommonMark\Block\Element\FencedCode;
+use League\CommonMark\Block\Element\IndentedCode;
+use Spatie\CommonMarkHighlighter\FencedCodeRenderer;
+use Spatie\CommonMarkHighlighter\IndentedCodeRenderer;
 
 class Article extends Model
 {
@@ -57,15 +62,12 @@ class Article extends Model
      */
     public function getHtmlAttribute(): string
     {
-        $markdown = new CommonMarkConverter();
-        $html = $markdown->convertToHtml($this->main);
-        // changes <pre><code>[lang] ~> <pre><code data-language="lang">
-        $match = '/<pre><code>\[(.*)\]\n/';
-        $replace = '<pre><code class="language-$1">';
-        $text = preg_replace($match, $replace, $html);
-        $default = preg_replace('/<pre><code>/', '<pre><code class="language-markdown">', $text);
+        $environment = Environment::createCommonMarkEnvironment();
+        $environment->addBlockRenderer(FencedCode::class, new FencedCodeRenderer());
+        $environment->addBlockRenderer(IndentedCode::class, new IndentedCodeRenderer());
+        $commonMarkConverter = new CommonMarkConverter([], $environment);
 
-        return $default;
+        return $commonMarkConverter->convertToHtml($this->main);
     }
 
     /**

@@ -17,6 +17,5 @@
 @stop
 
 @section('scripts')
-            <script src="/assets/prism/prism.js"></script>
-            <link rel="stylesheet" href="/assets/prism/prism.css">
+            <link rel="stylesheet" href="/assets/highlight/zenburn.css">
 @stop

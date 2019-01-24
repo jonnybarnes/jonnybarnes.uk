@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "20507240812c8f4034c9b81c6860f088",
+    "content-hash": "e64d4d2f1552ebf50112a6122f6ee690",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -3814,6 +3814,65 @@
             "time": "2018-07-19T23:38:55+00:00"
         },
         {
+            "name": "scrivo/highlight.php",
+            "version": "v9.13.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/scrivo/highlight.php.git",
+                "reference": "93834559fa181b6f34a3f639eaab5f9a9856ec99"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/scrivo/highlight.php/zipball/93834559fa181b6f34a3f639eaab5f9a9856ec99",
+                "reference": "93834559fa181b6f34a3f639eaab5f9a9856ec99",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "ext-mbstring": "*"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.8|^5.7",
+                "symfony/finder": "^2.8"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Highlight\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Geert Bergman",
+                    "homepage": "http://www.scrivo.org/",
+                    "role": "Project Author"
+                },
+                {
+                    "name": "Vladimir Jimenez",
+                    "homepage": "https://allejo.io",
+                    "role": "Contributor"
+                },
+                {
+                    "name": "Martin Folkers",
+                    "homepage": "https://twobrain.io",
+                    "role": "Contributor"
+                }
+            ],
+            "description": "Server side syntax highlighter that supports 185 languages. It's a PHP port of highlight.js",
+            "keywords": [
+                "code",
+                "highlight",
+                "highlight.js",
+                "highlight.php",
+                "syntax"
+            ],
+            "time": "2019-01-15T05:54:20+00:00"
+        },
+        {
             "name": "sensiolabs/security-checker",
             "version": "v5.0.3",
             "source": {
@@ -3914,6 +3973,56 @@
                 "webpage"
             ],
             "time": "2019-01-10T09:13:44+00:00"
+        },
+        {
+            "name": "spatie/commonmark-highlighter",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/spatie/commonmark-highlighter.git",
+                "reference": "cab33e2d2a87011a4f44db71ceed2a89f692f930"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/spatie/commonmark-highlighter/zipball/cab33e2d2a87011a4f44db71ceed2a89f692f930",
+                "reference": "cab33e2d2a87011a4f44db71ceed2a89f692f930",
+                "shasum": ""
+            },
+            "require": {
+                "league/commonmark": "^0.18.0",
+                "php": "^7.1",
+                "scrivo/highlight.php": "v9.13.1.1"
+            },
+            "require-dev": {
+                "larapack/dd": "^1.0",
+                "phpunit/phpunit": "^7.0",
+                "spatie/phpunit-snapshot-assertions": "^1.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Spatie\\CommonMarkHighlighter\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Sebastian De Deyne",
+                    "email": "sebastian@spatie.be",
+                    "homepage": "https://spatie.be",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Highlight your markdown code blocks with league/commonmark",
+            "homepage": "https://github.com/spatie/commonmark-highlighter",
+            "keywords": [
+                "commonmark-highlighter",
+                "spatie"
+            ],
+            "time": "2019-01-16T15:37:34+00:00"
         },
         {
             "name": "spatie/image",

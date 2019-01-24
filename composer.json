@@ -30,6 +30,7 @@
         "ramsey/uuid": "^3.5",
         "sensiolabs/security-checker": "^5.0",
         "spatie/browsershot": "~3.0",
+        "spatie/commonmark-highlighter": "^1.0",
         "thujohn/twitter": "~2.0"
     },
     "require-dev": {

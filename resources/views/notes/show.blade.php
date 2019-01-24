@@ -45,11 +45,8 @@
 @stop
 
 @section('scripts')
-
+            <link rel="stylesheet" href="/assets/highlight/zenburn.css">
             <script defer src="/assets/js/links.js"></script>
             <link rel="stylesheet" href="/assets/frontend/mapbox-gl.css">
             <script defer src="/assets/js/maps.js"></script>
-
-            <script src="/assets/prism/prism.js"></script>
-            <link rel="stylesheet" href="/assets/prism/prism.css">
 @stop
