@@ -7,7 +7,6 @@
     "require": {
         "php": ">=7.2.0",
         "cviebrock/eloquent-sluggable": "~4.3",
-        "ezyang/htmlpurifier": "~4.6",
         "fideloper/proxy": "~4.0",
         "guzzlehttp/guzzle": "~6.0",
         "indieauth/client": "~0.1",
@@ -31,6 +30,7 @@
         "sensiolabs/security-checker": "^5.0",
         "spatie/browsershot": "~3.0",
         "spatie/commonmark-highlighter": "^1.0",
+        "tgalopin/html-sanitizer": "^1.1",
         "thujohn/twitter": "~2.0"
     },
     "require-dev": {

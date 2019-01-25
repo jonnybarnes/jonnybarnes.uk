@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace App\Models;
 
 use Mf2;
-use HTMLPurifier;
-use HTMLPurifier_Config;
+use App\Traits\FilterHtml;
 use Illuminate\Database\Eloquent\Model;
 
 class Like extends Model
 {
+    use FilterHtml;
+
     protected $fillable = ['url'];
 
     /**
@@ -48,27 +49,11 @@ class Like extends Model
         $mf2 = Mf2\parse($value, $this->url);
 
         if (array_get($mf2, 'items.0.properties.content.0.html')) {
-            return $this->filterHTML(
+            return $this->filterHtml(
                 $mf2['items'][0]['properties']['content'][0]['html']
             );
         }
 
         return $value;
-    }
-
-    /**
-     * Filter some HTML with HTMLPurifier.
-     *
-     * @param  string  $html
-     * @return string
-     */
-    private function filterHTML(string $html): string
-    {
-        $config = HTMLPurifier_Config::createDefault();
-        $config->set('Cache.SerializerPath', storage_path() . '/HTMLPurifier');
-        $config->set('HTML.TargetBlank', true);
-        $purifier = new HTMLPurifier($config);
-
-        return $purifier->purify($html);
     }
 }

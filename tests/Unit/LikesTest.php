@@ -39,6 +39,7 @@ class LikesTest extends TestCase
 HTML;
         $htmlFiltered = <<<HTML
 <p>Hello</p>
+        <img />
 HTML;
         $like = new Like();
         $like->url = 'https://example.org/post/123';
