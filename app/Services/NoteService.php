@@ -139,18 +139,7 @@ class NoteService
      */
     private function getCheckin(array $request): ?Place
     {
-        $location = array_get($request, 'properties.location.0');
-        if (array_get($location, 'type.0') === 'h-card') {
-            try {
-                $place = resolve(PlaceService::class)->createPlaceFromCheckin(
-                    $location
-                );
-            } catch (\InvalidArgumentException $e) {
-                return null;
-            }
-
-            return $place;
-        }
+        $location = array_get($request, 'location');
         if (is_string($location) && starts_with($location, config('app.url'))) {
             return Place::where(
                 'slug',
@@ -162,10 +151,21 @@ class NoteService
                 )
             )->first();
         }
-        if (array_get($request, 'properties.checkin')) {
+        if (array_get($request, 'checkin')) {
             try {
                 $place = resolve(PlaceService::class)->createPlaceFromCheckin(
-                    array_get($request, 'properties.checkin.0')
+                    array_get($request, 'checkin')
+                );
+            } catch (\InvalidArgumentException $e) {
+                return null;
+            }
+
+            return $place;
+        }
+        if (array_get($location, 'type.0') === 'h-card') {
+            try {
+                $place = resolve(PlaceService::class)->createPlaceFromCheckin(
+                    $location
                 );
             } catch (\InvalidArgumentException $e) {
                 return null;
