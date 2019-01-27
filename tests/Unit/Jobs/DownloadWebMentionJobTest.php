@@ -8,13 +8,17 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
 use App\Jobs\DownloadWebMention;
 use GuzzleHttp\Handler\MockHandler;
+use Illuminate\FileSystem\FileSystem;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class DownloadWebMentionJobTest extends TestCase
 {
     public function tearDown()
     {
-        $this->delTree(storage_path('HTML/https'));
+        $fs = new FileSystem();
+        if ($fs->exists(storage_path() . '/HTML/https')) {
+            $fs->deleteDirectory(storage_path() . '/HTML/https');
+        }
         parent::tearDown();
     }
 
@@ -99,14 +103,5 @@ HTML;
         $job->handle($client);
 
         $this->assertFileExists(storage_path('HTML/https/example.org/reply-one/index.html'));
-    }
-
-    private function delTree($dir) {
-        $files = array_diff(scandir($dir), array('.','..'));
-        foreach ($files as $file) {
-            (is_dir("$dir/$file")) ? $this->delTree("$dir/$file") : unlink("$dir/$file");
-        }
-
-        return rmdir($dir);
     }
 }

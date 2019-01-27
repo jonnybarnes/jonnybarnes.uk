@@ -6,14 +6,15 @@ namespace App\Models;
 
 use Cache;
 use Twitter;
-use HTMLPurifier;
-use HTMLPurifier_Config;
+use App\Traits\FilterHtml;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Database\Eloquent\Model;
 use Jonnybarnes\WebmentionsParser\Authorship;
 
 class WebMention extends Model
 {
+    use FilterHtml;
+
     /**
      * The database table used by the model.
      *
@@ -92,7 +93,7 @@ class WebMention extends Model
         }
         $microformats = json_decode($this->mf2, true);
         if (isset($microformats['items'][0]['properties']['content'][0]['html'])) {
-            return $this->filterHTML($microformats['items'][0]['properties']['content'][0]['html']);
+            return $this->filterHtml($microformats['items'][0]['properties']['content'][0]['html']);
         }
 
         return null;
@@ -129,21 +130,5 @@ class WebMention extends Model
         }
 
         return $url;
-    }
-
-    /**
-     * Filter the HTML in a reply webmention.
-     *
-     * @param  string  $html
-     * @return string
-     */
-    private function filterHTML(string $html): string
-    {
-        $config = HTMLPurifier_Config::createDefault();
-        $config->set('Cache.SerializerPath', storage_path() . '/HTMLPurifier');
-        $config->set('HTML.TargetBlank', true);
-        $purifier = new HTMLPurifier($config);
-
-        return $purifier->purify($html);
     }
 }

@@ -39,18 +39,14 @@
                 </p>
 @endforeach
 @endif
-                <!-- these empty tags are for https://brid.gy’s publishing service -->
+                <!-- this empty tags are for https://brid.gy’s publishing service -->
                 <a href="https://brid.gy/publish/twitter"></a>
-                <a href="https://brid.gy/publish/facebook"></a>
             </div>
 @stop
 
 @section('scripts')
-
+            <link rel="stylesheet" href="/assets/highlight/zenburn.css">
             <script defer src="/assets/js/links.js"></script>
             <link rel="stylesheet" href="/assets/frontend/mapbox-gl.css">
             <script defer src="/assets/js/maps.js"></script>
-
-            <script src="/assets/prism/prism.js"></script>
-            <link rel="stylesheet" href="/assets/prism/prism.css">
 @stop

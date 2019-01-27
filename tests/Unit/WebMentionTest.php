@@ -118,4 +118,11 @@ class WebMentionTest extends TestCase
         $webmention = new WebMention();
         $this->assertNull($webmention->reply);
     }
+
+    public function test_get_reply_attribute_with_mf2_without_html_returns_null()
+    {
+        $webmention = new WebMention();
+        $webmention->mf2 = json_encode(['no_html' => 'found_here']);
+        $this->assertNull($webmention->reply);
+    }
 }

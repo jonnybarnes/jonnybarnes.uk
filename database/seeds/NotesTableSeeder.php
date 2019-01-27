@@ -108,5 +108,16 @@ class NotesTableSeeder extends Seeder
         $noteCapitalHashtag = Note::create([
             'note' => 'A #TwoWord hashtag',
         ]);
+        sleep(1);
+        $noteWithCodeContent = <<<EOF
+A note with some code:
+```php
+<?php
+
+echo 'Hello World';
+EOF;
+        $noteWithCode = Note::create([
+            'note' => $noteWithCodeContent,
+        ]);
     }
 }

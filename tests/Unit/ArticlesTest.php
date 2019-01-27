@@ -58,7 +58,7 @@ class ArticlesTest extends TestCase
     public function test_date_scope()
     {
         $yearAndMonth = Article::date(date('Y'), date('m'))->get();
-        $this->assertTrue(count($yearAndMonth) === 1);
+        $this->assertTrue(count($yearAndMonth) === 2);
 
         $monthDecember = Article::date(date('Y') - 1, 12)->get();
         $this->assertTrue(count($monthDecember) === 0);
@@ -67,6 +67,6 @@ class ArticlesTest extends TestCase
         $this->assertTrue(count($monthNotDecember) === 0);
 
         $emptyScope = Article::date()->get();
-        $this->assertTrue(count($emptyScope) === 1);
+        $this->assertTrue(count($emptyScope) === 2);
     }
 }

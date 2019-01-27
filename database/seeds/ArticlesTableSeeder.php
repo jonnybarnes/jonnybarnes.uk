@@ -17,5 +17,30 @@ class ArticlesTableSeeder extends Seeder
             'main' => 'This is *my* new blog. It uses `Markdown`.',
             'published' => 1,
         ]);
+
+        $articleWithCode = <<<EOF
+I wrote some code.
+
+I liked writing this:
+
+```php
+<?php
+
+declare(strict_types=1);
+
+class Foo
+{
+    public function __construct()
+    {
+        echo 'Foo class constructed';
+    }
+}
+```
+EOF;
+        Article::create([
+            'title' => 'Some code I did',
+            'main' => $articleWithCode,
+            'published' => 1,
+        ]);
     }
 }

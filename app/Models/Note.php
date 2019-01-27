@@ -9,16 +9,19 @@ use Twitter;
 use Normalizer;
 use GuzzleHttp\Client;
 use Laravel\Scout\Searchable;
-use League\CommonMark\Converter;
-use League\CommonMark\DocParser;
 use Jonnybarnes\IndieWeb\Numbers;
 use League\CommonMark\Environment;
-use League\CommonMark\HtmlRenderer;
 use Illuminate\Database\Eloquent\Model;
 use Jonnybarnes\EmojiA11y\EmojiModifier;
 use Illuminate\Database\Eloquent\Builder;
+use League\CommonMark\CommonMarkConverter;
+use App\Exceptions\TwitterContentException;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use League\CommonMark\Block\Element\FencedCode;
+use League\CommonMark\Block\Element\IndentedCode;
 use Jonnybarnes\CommonmarkLinkify\LinkifyExtension;
+use Spatie\CommonMarkHighlighter\FencedCodeRenderer;
+use Spatie\CommonMarkHighlighter\IndentedCodeRenderer;
 
 class Note extends Model
 {
@@ -362,21 +365,20 @@ class Note extends Model
      *
      * That is we swap the contacts names for their known Twitter handles.
      *
-     * @return string|null
+     * @return string
      */
-    public function getTwitterContentAttribute(): ?string
+    public function getTwitterContentAttribute(): string
     {
-        if ($this->contacts === null) {
-            return null;
+        // check for contacts
+        if ($this->contacts === null || count($this->contacts) === 0) {
+            throw new TwitterContentException('There are no contacts for this note');
         }
 
-        if (count($this->contacts) === 0) {
-            return null;
-        }
-
+        // here we check the matched contact from the note corresponds to a contact
+        // in the database
         if (count(array_unique(array_values($this->contacts))) === 1
             && array_unique(array_values($this->contacts))[0] === null) {
-            return null;
+            throw new TwitterContentException('The matched contact is not in the database');
         }
 
         // swap in twitter usernames
@@ -513,7 +515,9 @@ class Note extends Model
     {
         $environment = Environment::createCommonMarkEnvironment();
         $environment->addExtension(new LinkifyExtension());
-        $converter = new Converter(new DocParser($environment), new HtmlRenderer($environment));
+        $environment->addBlockRenderer(FencedCode::class, new FencedCodeRenderer());
+        $environment->addBlockRenderer(IndentedCode::class, new IndentedCodeRenderer());
+        $converter = new CommonMarkConverter([], $environment);
 
         return $converter->convertToHtml($note);
     }
@@ -530,7 +534,7 @@ class Note extends Model
         $latlng = $latitude . ',' . $longitude;
 
         return Cache::get($latlng, function () use ($latlng, $latitude, $longitude) {
-            $guzzle = new Client();
+            $guzzle = resolve(Client::class);
             $response = $guzzle->request('GET', 'https://nominatim.openstreetmap.org/reverse', [
                 'query' => [
                     'format' => 'json',
@@ -542,9 +546,13 @@ class Note extends Model
                 'headers' => ['User-Agent' => 'jonnybarnes.uk via Guzzle, email jonny@jonnybarnes.uk'],
             ]);
             $json = json_decode((string) $response->getBody());
-            if (isset($json->address->town)) {
+            if (isset($json->address->suburb)) {
+                $locality = $json->address->suburb;
+                if (isset($json->address->city)) {
+                    $locality .= ', ' . $json->address->city;
+                }
                 $address = '<span class="p-locality">'
-                    . $json->address->town
+                    . $locality
                     . '</span>, <span class="p-country-name">'
                     . $json->address->country
                     . '</span>';
@@ -553,7 +561,11 @@ class Note extends Model
                 return $address;
             }
             if (isset($json->address->city)) {
-                $address = $json->address->city . ', ' . $json->address->country;
+                $address = '<span class="p-locality">'
+                    . $json->address->city
+                    . '</span>, <span class="p-country-name">'
+                    . $json->address->country
+                    . '</span>';
                 Cache::forever($latlng, $address);
 
                 return $address;

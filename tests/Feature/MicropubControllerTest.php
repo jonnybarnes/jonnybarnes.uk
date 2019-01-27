@@ -353,14 +353,14 @@ class MicropubControllerTest extends TestCase
                 'type' => ['h-entry'],
                 'properties' => [
                     'content' => [$note],
-                    'location' => [[
-                        'type' => ['h-card'],
-                        'properties' => [
-                            'name' => ['Awesome Venue'],
-                            'latitude' => ['1.23'],
-                            'longitude' => ['4.56'],
-                        ],
-                    ]],
+                ],
+                'location' => [
+                    'type' => ['h-card'],
+                    'properties' => [
+                        'name' => ['Awesome Venue'],
+                        'latitude' => ['1.23'],
+                        'longitude' => ['4.56'],
+                    ],
                 ],
             ],
             ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]

@@ -13,4 +13,13 @@ class MediaTest extends TestCase
         $note = $media->note;
         $this->assertInstanceOf('App\Models\Note', $note);
     }
+
+    public function test_media_absolute_url_returned_unmodified()
+    {
+        $absoluteUrl = 'https://instagram-cdn.com/image/uuid';
+        $media = new Media();
+        $media->path = $absoluteUrl;
+
+        $this->assertEquals($absoluteUrl, $media->url);
+    }
 }

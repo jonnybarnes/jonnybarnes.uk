@@ -1,12 +1,8 @@
 #!/usr/bin/env zsh
 
-echo "compressing app.css and prism files"
+echo "compressing app.css"
 zopfli --i100 ./public/assets/css/app.css
-zopfli --i100 ./public/assets/prism/prism.css
-zopfli --i100 ./public/assets/prism/prism.js
 brotli --force --quality=11 --output=./public/assets/css/app.css.br -- ./public/assets/css/app.css
-brotli --force --quality=11 --output=./public/assets/prism/prism.css.br -- ./public/assets/prism/prism.css
-brotli --force --quality=11 --output=./public/assets/prism/prism.js.br -- ./public/assets/prism/prism.js
 
 echo "compressing js assets"
 for file in ./public/assets/js/*.js
@@ -24,6 +20,15 @@ do
     fi
 done
 for file in ./public/assets/frontend/a11y.css/*.css
+do
+    if [[ -f $file ]]; then
+        zopfli --i100 $file
+        brotli --force --quality=11 --output=$file.br -- $file
+    fi
+done
+
+echo "compressing highlight styles"
+for file in ./public/assets/highlight/*.css
 do
     if [[ -f $file ]]; then
         zopfli --i100 $file
