@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Services\Micropub;
 
 use App\Models\{Media, Note};
+use Illuminate\Support\{Arr, Str};
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class UpdateService
@@ -17,7 +18,7 @@ class UpdateService
      */
     public function process(array $request)
     {
-        $urlPath = parse_url(array_get($request, 'url'), PHP_URL_PATH);
+        $urlPath = parse_url(Arr::get($request, 'url'), PHP_URL_PATH);
 
         //is it a note we are updating?
         if (mb_substr($urlPath, 1, 5) !== 'notes') {
@@ -37,20 +38,20 @@ class UpdateService
         }
 
         //got the note, are we dealing with a “replace” request?
-        if (array_get($request, 'replace')) {
-            foreach (array_get($request, 'replace') as $property => $value) {
+        if (Arr::get($request, 'replace')) {
+            foreach (Arr::get($request, 'replace') as $property => $value) {
                 if ($property == 'content') {
                     $note->note = $value[0];
                 }
                 if ($property == 'syndication') {
                     foreach ($value as $syndicationURL) {
-                        if (starts_with($syndicationURL, 'https://www.facebook.com')) {
+                        if (Str::startsWith($syndicationURL, 'https://www.facebook.com')) {
                             $note->facebook_url = $syndicationURL;
                         }
-                        if (starts_with($syndicationURL, 'https://www.swarmapp.com')) {
+                        if (Str::startsWith($syndicationURL, 'https://www.swarmapp.com')) {
                             $note->swarm_url = $syndicationURL;
                         }
-                        if (starts_with($syndicationURL, 'https://twitter.com')) {
+                        if (Str::startsWith($syndicationURL, 'https://twitter.com')) {
                             $note->tweet_id = basename(parse_url($syndicationURL, PHP_URL_PATH));
                         }
                     }
@@ -64,24 +65,24 @@ class UpdateService
         }
 
         //how about “add”
-        if (array_get($request, 'add')) {
-            foreach (array_get($request, 'add') as $property => $value) {
+        if (Arr::get($request, 'add')) {
+            foreach (Arr::get($request, 'add') as $property => $value) {
                 if ($property == 'syndication') {
                     foreach ($value as $syndicationURL) {
-                        if (starts_with($syndicationURL, 'https://www.facebook.com')) {
+                        if (Str::startsWith($syndicationURL, 'https://www.facebook.com')) {
                             $note->facebook_url = $syndicationURL;
                         }
-                        if (starts_with($syndicationURL, 'https://www.swarmapp.com')) {
+                        if (Str::startsWith($syndicationURL, 'https://www.swarmapp.com')) {
                             $note->swarm_url = $syndicationURL;
                         }
-                        if (starts_with($syndicationURL, 'https://twitter.com')) {
+                        if (Str::startsWith($syndicationURL, 'https://twitter.com')) {
                             $note->tweet_id = basename(parse_url($syndicationURL, PHP_URL_PATH));
                         }
                     }
                 }
                 if ($property == 'photo') {
                     foreach ($value as $photoURL) {
-                        if (starts_with($photoURL, 'https://')) {
+                        if (Str::startsWith($photoURL, 'https://')) {
                             $media = new Media();
                             $media->path = $photoURL;
                             $media->type = 'image';

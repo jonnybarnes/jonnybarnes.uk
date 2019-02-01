@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -40,7 +41,7 @@ class Media extends Model
      */
     public function getUrlAttribute(): string
     {
-        if (starts_with($this->path, 'https://')) {
+        if (Str::startsWith($this->path, 'https://')) {
             return $this->path;
         }
 

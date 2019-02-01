@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Observers;
 
 use App\Models\{Note, Tag};
-use Illuminate\Support\Collection;
+use Illuminate\Support\{Arr, Collection};
 
 class NoteObserver
 {
@@ -40,7 +40,7 @@ class NoteObserver
      */
     public function updated(Note $note)
     {
-        $text = array_get($note->getAttributes(), 'note');
+        $text = Arr::get($note->getAttributes(), 'note');
         if ($text === null) {
             return;
         }

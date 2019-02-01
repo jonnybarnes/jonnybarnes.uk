@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use Illuminate\Support\{Arr, Str};
 use App\Models\{Media, Note, Place};
 use App\Jobs\{SendWebMentions, SyndicateNoteToTwitter};
 
@@ -65,14 +66,14 @@ class NoteService
      */
     private function getContent(array $request): ?string
     {
-        if (array_get($request, 'properties.content.0.html')) {
-            return array_get($request, 'properties.content.0.html');
+        if (Arr::get($request, 'properties.content.0.html')) {
+            return Arr::get($request, 'properties.content.0.html');
         }
-        if (is_string(array_get($request, 'properties.content.0'))) {
-            return array_get($request, 'properties.content.0');
+        if (is_string(Arr::get($request, 'properties.content.0'))) {
+            return Arr::get($request, 'properties.content.0');
         }
 
-        return array_get($request, 'content');
+        return Arr::get($request, 'content');
     }
 
     /**
@@ -83,11 +84,11 @@ class NoteService
      */
     private function getInReplyTo(array $request): ?string
     {
-        if (array_get($request, 'properties.in-reply-to.0')) {
-            return array_get($request, 'properties.in-reply-to.0');
+        if (Arr::get($request, 'properties.in-reply-to.0')) {
+            return Arr::get($request, 'properties.in-reply-to.0');
         }
 
-        return array_get($request, 'in-reply-to');
+        return Arr::get($request, 'in-reply-to');
     }
 
     /**
@@ -98,12 +99,12 @@ class NoteService
      */
     private function getPublished(array $request): ?string
     {
-        if (array_get($request, 'properties.published.0')) {
-            return carbon(array_get($request, 'properties.published.0'))
+        if (Arr::get($request, 'properties.published.0')) {
+            return carbon(Arr::get($request, 'properties.published.0'))
                         ->toDateTimeString();
         }
-        if (array_get($request, 'published')) {
-            return carbon(array_get($request, 'published'))->toDateTimeString();
+        if (Arr::get($request, 'published')) {
+            return carbon(Arr::get($request, 'published'))->toDateTimeString();
         }
 
         return null;
@@ -117,7 +118,7 @@ class NoteService
      */
     private function getLocation(array $request): ?string
     {
-        $location = array_get($request, 'properties.location.0') ?? array_get($request, 'location');
+        $location = Arr::get($request, 'properties.location.0') ?? Arr::get($request, 'location');
         if (is_string($location) && substr($location, 0, 4) == 'geo:') {
             preg_match_all(
                 '/([0-9\.\-]+)/',
@@ -139,8 +140,8 @@ class NoteService
      */
     private function getCheckin(array $request): ?Place
     {
-        $location = array_get($request, 'location');
-        if (is_string($location) && starts_with($location, config('app.url'))) {
+        $location = Arr::get($request, 'location');
+        if (is_string($location) && Str::startsWith($location, config('app.url'))) {
             return Place::where(
                 'slug',
                 basename(
@@ -151,10 +152,10 @@ class NoteService
                 )
             )->first();
         }
-        if (array_get($request, 'checkin')) {
+        if (Arr::get($request, 'checkin')) {
             try {
                 $place = resolve(PlaceService::class)->createPlaceFromCheckin(
-                    array_get($request, 'checkin')
+                    Arr::get($request, 'checkin')
                 );
             } catch (\InvalidArgumentException $e) {
                 return null;
@@ -162,7 +163,7 @@ class NoteService
 
             return $place;
         }
-        if (array_get($location, 'type.0') === 'h-card') {
+        if (Arr::get($location, 'type.0') === 'h-card') {
             try {
                 $place = resolve(PlaceService::class)->createPlaceFromCheckin(
                     $location
@@ -185,8 +186,8 @@ class NoteService
      */
     private function getSwarmUrl(array $request): ?string
     {
-        if (stristr(array_get($request, 'properties.syndication.0', ''), 'swarmapp')) {
-            return array_get($request, 'properties.syndication.0');
+        if (stristr(Arr::get($request, 'properties.syndication.0', ''), 'swarmapp')) {
+            return Arr::get($request, 'properties.syndication.0');
         }
 
         return null;
@@ -201,8 +202,8 @@ class NoteService
     private function getSyndicationTargets(array $request): array
     {
         $syndication = [];
-        $targets = array_pluck(config('syndication.targets'), 'uid', 'service.name');
-        $mpSyndicateTo = array_get($request, 'mp-syndicate-to') ?? array_get($request, 'properties.mp-syndicate-to');
+        $targets = Arr::pluck(config('syndication.targets'), 'uid', 'service.name');
+        $mpSyndicateTo = Arr::get($request, 'mp-syndicate-to') ?? Arr::get($request, 'properties.mp-syndicate-to');
         if (is_string($mpSyndicateTo)) {
             $service = array_search($mpSyndicateTo, $targets);
             if ($service == 'Twitter') {
@@ -230,12 +231,12 @@ class NoteService
     private function getMedia(array $request): array
     {
         $media = [];
-        $photos = array_get($request, 'photo') ?? array_get($request, 'properties.photo');
+        $photos = Arr::get($request, 'photo') ?? Arr::get($request, 'properties.photo');
 
         if (isset($photos)) {
             foreach ((array) $photos as $photo) {
                 // check the media was uploaded to my endpoint, and use path
-                if (starts_with($photo, config('filesystems.disks.s3.url'))) {
+                if (Str::startsWith($photo, config('filesystems.disks.s3.url'))) {
                     $path = substr($photo, strlen(config('filesystems.disks.s3.url')));
                     $media[] = Media::where('path', ltrim($path, '/'))->firstOrFail();
                 } else {
@@ -259,8 +260,8 @@ class NoteService
      */
     private function getInstagramUrl(array $request): ?string
     {
-        if (starts_with(array_get($request, 'properties.syndication.0'), 'https://www.instagram.com')) {
-            return array_get($request, 'properties.syndication.0');
+        if (Str::startsWith(Arr::get($request, 'properties.syndication.0'), 'https://www.instagram.com')) {
+            return Arr::get($request, 'properties.syndication.0');
         }
 
         return null;

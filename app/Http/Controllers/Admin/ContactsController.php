@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Admin;
 use GuzzleHttp\Client;
 use App\Models\Contact;
 use Illuminate\View\View;
+use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Filesystem\Filesystem;
@@ -137,8 +138,8 @@ class ContactsController extends Controller
             }
             $mf2 = \Mf2\parse((string) $response->getBody(), $contact->homepage);
             foreach ($mf2['items'] as $microformat) {
-                if (array_get($microformat, 'type.0') == 'h-card') {
-                    $avatarURL = array_get($microformat, 'properties.photo.0');
+                if (Arr::get($microformat, 'type.0') == 'h-card') {
+                    $avatarURL = Arr::get($microformat, 'properties.photo.0');
                     break;
                 }
             }

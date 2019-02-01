@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services\Micropub;
 
+use Illuminate\Support\Arr;
 use App\Services\{BookmarkService, LikeService, NoteService};
 
 class HEntryService
@@ -17,13 +18,13 @@ class HEntryService
      */
     public function process(array $request, ?string $client = null): ?string
     {
-        if (array_get($request, 'properties.like-of') || array_get($request, 'like-of')) {
+        if (Arr::get($request, 'properties.like-of') || Arr::get($request, 'like-of')) {
             $like = resolve(LikeService::class)->createLike($request);
 
             return $like->longurl;
         }
 
-        if (array_get($request, 'properties.bookmark-of') || array_get($request, 'bookmark-of')) {
+        if (Arr::get($request, 'properties.bookmark-of') || Arr::get($request, 'bookmark-of')) {
             $bookmark = resolve(BookmarkService::class)->createBookmark($request);
 
             return $bookmark->longurl;

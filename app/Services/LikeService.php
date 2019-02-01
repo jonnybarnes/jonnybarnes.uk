@@ -6,6 +6,7 @@ namespace App\Services;
 
 use App\Models\Like;
 use App\Jobs\ProcessLike;
+use Illuminate\Support\Arr;
 
 class LikeService
 {
@@ -17,12 +18,12 @@ class LikeService
      */
     public function createLike(array $request): Like
     {
-        if (array_get($request, 'properties.like-of.0')) {
+        if (Arr::get($request, 'properties.like-of.0')) {
             //micropub request
-            $url = normalize_url(array_get($request, 'properties.like-of.0'));
+            $url = normalize_url(Arr::get($request, 'properties.like-of.0'));
         }
-        if (array_get($request, 'like-of')) {
-            $url = normalize_url(array_get($request, 'like-of'));
+        if (Arr::get($request, 'like-of')) {
+            $url = normalize_url(Arr::get($request, 'like-of'));
         }
 
         $like = Like::create(['url' => $url]);

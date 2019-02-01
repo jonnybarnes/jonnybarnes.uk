@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
@@ -171,10 +172,10 @@ class Place extends Model
     private function getType(string $url): string
     {
         $host = parse_url($url, PHP_URL_HOST);
-        if (ends_with($host, 'foursquare.com') === true) {
+        if (Str::endsWith($host, 'foursquare.com') === true) {
             return 'foursquare';
         }
-        if (ends_with($host, 'openstreetmap.org') === true) {
+        if (Str::endsWith($host, 'openstreetmap.org') === true) {
             return 'osm';
         }
 

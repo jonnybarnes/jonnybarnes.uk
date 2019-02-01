@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services\Micropub;
 
+use Illuminate\Support\Arr;
 use App\Services\PlaceService;
 
 class HCardService
@@ -17,16 +18,16 @@ class HCardService
     public function process(array $request): string
     {
         $data = [];
-        if (array_get($request, 'properties.name')) {
-            $data['name'] = array_get($request, 'properties.name');
-            $data['description'] = array_get($request, 'properties.description');
-            $data['geo'] = array_get($request, 'properties.geo');
+        if (Arr::get($request, 'properties.name')) {
+            $data['name'] = Arr::get($request, 'properties.name');
+            $data['description'] = Arr::get($request, 'properties.description');
+            $data['geo'] = Arr::get($request, 'properties.geo');
         } else {
-            $data['name'] = array_get($request, 'name');
-            $data['description'] = array_get($request, 'description');
-            $data['geo'] = array_get($request, 'geo');
-            $data['latitude'] = array_get($request, 'latitude');
-            $data['longitude'] = array_get($request, 'longitude');
+            $data['name'] = Arr::get($request, 'name');
+            $data['description'] = Arr::get($request, 'description');
+            $data['geo'] = Arr::get($request, 'geo');
+            $data['latitude'] = Arr::get($request, 'latitude');
+            $data['longitude'] = Arr::get($request, 'longitude');
         }
         $place = resolve(PlaceService::class)->createPlace($data);
 

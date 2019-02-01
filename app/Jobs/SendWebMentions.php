@@ -6,6 +6,7 @@ namespace App\Jobs;
 
 use App\Models\Note;
 use GuzzleHttp\Client;
+use Illuminate\Support\Str;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
@@ -66,7 +67,7 @@ class SendWebMentions implements ShouldQueue
         if (parse_url($url, PHP_URL_HOST) == config('app.longurl')) {
             return;
         }
-        if (starts_with($url, '/notes/tagged/')) {
+        if (Str::startsWith($url, '/notes/tagged/')) {
             return;
         }
 
