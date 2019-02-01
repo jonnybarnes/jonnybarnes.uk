@@ -56,6 +56,7 @@ performance.typekit.net \
 data: blob:; \
 worker-src 'self' blob:; \
 frame-src 'self' https://www.youtube.com blob:; \
+child-src blob:; \
 upgrade-insecure-requests; \
 block-all-mixed-content; \
 report-to csp-endpoint; \

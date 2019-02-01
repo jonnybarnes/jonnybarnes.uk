@@ -9,6 +9,7 @@ use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use App\Jobs\ProcessBookmark;
 use App\Models\{Bookmark, Tag};
+use Illuminate\Support\{Arr, Str};
 use Spatie\Browsershot\Browsershot;
 use App\Jobs\SyndicateBookmarkToTwitter;
 use GuzzleHttp\Exception\ClientException;
@@ -24,18 +25,18 @@ class BookmarkService
      */
     public function createBookmark(array $request): Bookmark
     {
-        if (array_get($request, 'properties.bookmark-of.0')) {
+        if (Arr::get($request, 'properties.bookmark-of.0')) {
             //micropub request
-            $url = normalize_url(array_get($request, 'properties.bookmark-of.0'));
-            $name = array_get($request, 'properties.name.0');
-            $content = array_get($request, 'properties.content.0');
-            $categories = array_get($request, 'properties.category');
+            $url = normalize_url(Arr::get($request, 'properties.bookmark-of.0'));
+            $name = Arr::get($request, 'properties.name.0');
+            $content = Arr::get($request, 'properties.content.0');
+            $categories = Arr::get($request, 'properties.category');
         }
-        if (array_get($request, 'bookmark-of')) {
-            $url = normalize_url(array_get($request, 'bookmark-of'));
-            $name = array_get($request, 'name');
-            $content = array_get($request, 'content');
-            $categories = array_get($request, 'category');
+        if (Arr::get($request, 'bookmark-of')) {
+            $url = normalize_url(Arr::get($request, 'bookmark-of'));
+            $name = Arr::get($request, 'name');
+            $content = Arr::get($request, 'content');
+            $categories = Arr::get($request, 'category');
         }
 
         $bookmark = Bookmark::create([
@@ -49,13 +50,13 @@ class BookmarkService
             $bookmark->tags()->save($tag);
         }
 
-        $targets = array_pluck(config('syndication.targets'), 'uid', 'service.name');
+        $targets = Arr::pluck(config('syndication.targets'), 'uid', 'service.name');
         $mpSyndicateTo = null;
-        if (array_get($request, 'mp-syndicate-to')) {
-            $mpSyndicateTo = array_get($request, 'mp-syndicate-to');
+        if (Arr::get($request, 'mp-syndicate-to')) {
+            $mpSyndicateTo = Arr::get($request, 'mp-syndicate-to');
         }
-        if (array_get($request, 'properties.mp-syndicate-to')) {
-            $mpSyndicateTo = array_get($request, 'properties.mp-syndicate-to');
+        if (Arr::get($request, 'properties.mp-syndicate-to')) {
+            $mpSyndicateTo = Arr::get($request, 'properties.mp-syndicate-to');
         }
         if (is_string($mpSyndicateTo)) {
             $service = array_search($mpSyndicateTo, $targets);
@@ -114,7 +115,7 @@ class BookmarkService
             throw new InternetArchiveException;
         }
         if ($response->hasHeader('Content-Location')) {
-            if (starts_with(array_get($response->getHeader('Content-Location'), 0), '/web')) {
+            if (Str::startsWith(Arr::get($response->getHeader('Content-Location'), 0), '/web')) {
                 return $response->getHeader('Content-Location')[0];
             }
         }

@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\Note;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Observers\NoteObserver;
 use Laravel\Dusk\DuskServiceProvider;
@@ -21,7 +22,7 @@ class AppServiceProvider extends ServiceProvider
 
         // Request AS macro
         Request::macro('wantsActivityStream', function () {
-            return str_contains(mb_strtolower($this->header('Accept')), 'application/activity+json');
+            return Str::contains(mb_strtolower($this->header('Accept')), 'application/activity+json');
         });
 
         // configure Intervention/Image

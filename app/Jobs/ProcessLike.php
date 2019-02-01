@@ -6,6 +6,7 @@ namespace App\Jobs;
 
 use App\Models\Like;
 use GuzzleHttp\Client;
+use Illuminate\Support\Arr;
 use Illuminate\Bus\Queueable;
 use Thujohn\Twitter\Facades\Twitter;
 use Illuminate\Queue\SerializesModels;
@@ -69,15 +70,15 @@ class ProcessLike implements ShouldQueue
 
         $response = $client->request('GET', $this->like->url);
         $mf2 = \Mf2\parse((string) $response->getBody(), $this->like->url);
-        if (array_has($mf2, 'items.0.properties.content')) {
+        if (Arr::has($mf2, 'items.0.properties.content')) {
             $this->like->content = $mf2['items'][0]['properties']['content'][0]['html'];
         }
 
         try {
             $author = $authorship->findAuthor($mf2);
             if (is_array($author)) {
-                $this->like->author_name = array_get($author, 'properties.name.0');
-                $this->like->author_url = array_get($author, 'properties.url.0');
+                $this->like->author_name = Arr::get($author, 'properties.name.0');
+                $this->like->author_url = Arr::get($author, 'properties.url.0');
             }
             if (is_string($author) && $author !== '') {
                 $this->like->author_name = $author;

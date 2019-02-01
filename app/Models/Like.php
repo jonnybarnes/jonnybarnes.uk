@@ -6,6 +6,7 @@ namespace App\Models;
 
 use Mf2;
 use App\Traits\FilterHtml;
+use Illuminate\Support\Arr;
 use Illuminate\Database\Eloquent\Model;
 
 class Like extends Model
@@ -48,7 +49,7 @@ class Like extends Model
 
         $mf2 = Mf2\parse($value, $this->url);
 
-        if (array_get($mf2, 'items.0.properties.content.0.html')) {
+        if (Arr::get($mf2, 'items.0.properties.content.0.html')) {
             return $this->filterHtml(
                 $mf2['items'][0]['properties']['content'][0]['html']
             );

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Models\Place;
+use Illuminate\Support\Arr;
 use Phaza\LaravelPostgis\Geometries\Point;
 
 class PlaceService
@@ -46,24 +47,24 @@ class PlaceService
     public function createPlaceFromCheckin(array $checkin): Place
     {
         //check if the place exists if from swarm
-        if (array_has($checkin, 'properties.url')) {
-            $place = Place::whereExternalURL(array_get($checkin, 'properties.url.0'))->get();
+        if (Arr::has($checkin, 'properties.url')) {
+            $place = Place::whereExternalURL(Arr::get($checkin, 'properties.url.0'))->get();
             if (count($place) === 1) {
                 return $place->first();
             }
         }
-        if (array_has($checkin, 'properties.name') === false) {
+        if (Arr::has($checkin, 'properties.name') === false) {
             throw new \InvalidArgumentException('Missing required name');
         }
-        if (array_has($checkin, 'properties.latitude') === false) {
+        if (Arr::has($checkin, 'properties.latitude') === false) {
             throw new \InvalidArgumentException('Missing required longitude/latitude');
         }
         $place = new Place();
-        $place->name = array_get($checkin, 'properties.name.0');
-        $place->external_urls = array_get($checkin, 'properties.url.0');
+        $place->name = Arr::get($checkin, 'properties.name.0');
+        $place->external_urls = Arr::get($checkin, 'properties.url.0');
         $place->location = new Point(
-            (float) array_get($checkin, 'properties.latitude.0'),
-            (float) array_get($checkin, 'properties.longitude.0')
+            (float) Arr::get($checkin, 'properties.latitude.0'),
+            (float) Arr::get($checkin, 'properties.longitude.0')
         );
         $place->save();
 
