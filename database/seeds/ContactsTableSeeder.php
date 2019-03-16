@@ -2,6 +2,7 @@
 
 use App\Models\Contact;
 use Illuminate\Database\Seeder;
+use Illuminate\FileSystem\FileSystem;
 
 class ContactsTableSeeder extends Seeder
 {
@@ -24,5 +25,13 @@ class ContactsTableSeeder extends Seeder
             'homepage' => 'https://aaronparecki.com',
             'facebook' => '123456',
         ]);
+        $fs = new FileSystem();
+        if (!$fs->exists(public_path('assets/profile-images/aaronparecki.com'))) {
+            $fs->makeDirectory(public_path('assets/profile-images/aaronparecki.com'));
+        }
+        $fs->copy(
+            base_path('tests/aaron.png'),
+            public_path('assets/profile-images/aaronparecki.com/image')
+        );
     }
 }

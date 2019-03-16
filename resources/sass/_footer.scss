@@ -1,15 +1,22 @@
-//footer.scss
-
-body > div.h-card {
-    max-width: $body-width;
-    margin: 0 auto;
-    font-size: 1.5rem;
-}
+// footer.scss
 
 footer {
-    max-width: $body-width;
-    margin: 0 auto;
     display: flex;
     flex-direction: column;
     align-items: center;
+    background-color: var(--white);
+    color: var(--black);
+
+    a {
+        color: var(--blue);
+        text-decoration: none;
+    }
+
+    form:first-child {
+        margin-bottom: 1rem;
+    }
+
+    p {
+        margin-bottom: 0;
+    }
 }

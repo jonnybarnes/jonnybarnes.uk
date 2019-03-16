@@ -7,7 +7,7 @@
         <link rel="stylesheet" href="/assets/frontend/normalize.css">
         <link rel="stylesheet" id="colourScheme" href="/assets/css/colours/{{ session('css', 'base16-eighties.css') }}">
         <link rel="stylesheet" href="/assets/css/app.css">
-        <link rel="stylesheet" href="https://use.typekit.net/kmb3cdb.css">
+        <link rel="stylesheet" href="https://use.typekit.net/csl8adl.css">
         <link rel="alternate" type="application/rss+xml" title="Blog RSS Feed" href="/blog/feed.rss">
         <link rel="alternate" type="application/atom+xml" title="Blog Atom Feed" href="/blog/feed.atom">
         <link rel="alternate" type="application/json" title="Blog JSON Feed" href="/blog/feed.json">
@@ -41,9 +41,9 @@
 
         <main>
 @yield('content')
-        </main>
 @section('bio')
 @show
+        </main>
 
         <!--scripts go here when needed-->
         <script src="/assets/js/colours.js" async defer></script>
@@ -59,7 +59,7 @@
             <p>The code for <code>{{ config('app.longurl') }}</code> can be found on <a href="https://github.com/jonnybarnes/jonnybarnes.uk">GitHub</a>.</p>
             <p><label for="a11y.css"><code>a11y.css</code></label>: <input type="checkbox" name="a11y.css" id="a11y.css"></p>
             <p>Built with love: <a href="/colophon">Colophon</a></p>
-            <p><a href="https://indieweb.org"><img src="/assets/img/iwc.png" alt="Indie Web Camp logo" class="iwc-logo"></a></p>
+            <p><a href="https://indieweb.org"><img src="/assets/img/iwc.svg" alt="Indie Web Camp logo"></a></p>
         </footer>
         @if (config('app.piwik') === true)
         <!-- Piwik -->

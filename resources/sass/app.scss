@@ -1,37 +1,18 @@
 // app.scss
 
-//variables used elsewhere
-@import "variables";
-
-//border-box
-@import "border-box";
-
-//base font styles
-@import "base-font";
-
-//layouts
-@import "header";
+// General styles
+@import "base";
+@import "site-header";
 @import "main";
 @import "articles";
 @import "notes";
-@import "contacts-page";
-@import "projects";
 @import "footer";
-@import "admin-form";
-@import "form";
-@import "likes";
 
-//hide the custom bridgy posse content
-@import "bridgy-links";
-
-//style the emoji alt-text (a11y)
-@import "emoji";
-
-//style the mapbox maps
+// Mapbox styles
 @import "mapbox";
 
-//apply colors
-@import "colors";
+// The syndication links at the end of notes
+@import "syndication";
 
-//apply styles
-@import "styles";
+// Accessible emoji
+@import "emoji";
