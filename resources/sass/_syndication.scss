@@ -1,0 +1,16 @@
+//syndication.scss
+
+.note-metadata {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    .social-links {
+        flex-direction: row;
+
+        svg {
+            height: 1em;
+            width: auto;
+        }
+    }
+}

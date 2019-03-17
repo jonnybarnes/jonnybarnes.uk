@@ -8,6 +8,7 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
 use App\Services\BookmarkService;
 use GuzzleHttp\Handler\MockHandler;
+use App\Exceptions\InternetArchiveException;
 
 class BookmarksTest extends TestCase
 {
@@ -32,11 +33,10 @@ class BookmarksTest extends TestCase
         $this->assertEquals('/web/1234/example.org', $url);
     }
 
-    /**
-     * @expectedException App\Exceptions\InternetArchiveException
-     */
     public function test_archive_link_method_archive_site_error_exception()
     {
+        $this->expectException(InternetArchiveException::class);
+
         $mock = new MockHandler([
             new Response(403),
         ]);
@@ -46,11 +46,10 @@ class BookmarksTest extends TestCase
         $url = (new BookmarkService())->getArchiveLink('https://example.org');
     }
 
-    /**
-     * @expectedException App\Exceptions\InternetArchiveException
-     */
     public function test_archive_link_method_archive_site_no_location_exception()
     {
+        $this->expectException(InternetArchiveException::class);
+
         $mock = new MockHandler([
             new Response(200),
         ]);

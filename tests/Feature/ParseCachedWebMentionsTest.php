@@ -12,7 +12,7 @@ class ParseCachedWebMentionsTest extends TestCase
 {
     use DatabaseTransactions;
 
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -43,7 +43,7 @@ class ParseCachedWebMentionsTest extends TestCase
         $this->assertTrue($webmentionTantek->updated_at->gt($webmentionTantek->created_at));
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         $fs = new FileSystem();
         if ($fs->exists(storage_path() . '/HTML/https')) {

@@ -13,7 +13,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class DownloadWebMentionJobTest extends TestCase
 {
-    public function tearDown()
+    protected function tearDown(): void
     {
         $fs = new FileSystem();
         if ($fs->exists(storage_path() . '/HTML/https')) {

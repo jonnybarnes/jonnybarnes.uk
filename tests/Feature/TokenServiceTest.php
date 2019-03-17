@@ -6,6 +6,7 @@ use Tests\TestCase;
 use Lcobucci\JWT\Builder;
 use App\Services\TokenService;
 use Lcobucci\JWT\Signer\Hmac\Sha256;
+use App\Exceptions\InvalidTokenException;
 
 class TokenServiceTest extends TestCase
 {
@@ -33,12 +34,11 @@ class TokenServiceTest extends TestCase
         $this->assertSame($data, $validData);
     }
 
-    /**
-     * @expectedException        App\Exceptions\InvalidTokenException
-     * @expectedExceptionMessage Token failed validation
-     */
-    public function test_token_with_different_singing_key_throws_exception()
+    public function test_token_with_different_signing_key_throws_exception()
     {
+        $this->expectException(InvalidTokenException::class);
+        $this->expectExceptionMessage('Token failed validation');
+
         $data = [
             'me' => 'https://example.org',
             'client_id' => 'https://quill.p3k.io',

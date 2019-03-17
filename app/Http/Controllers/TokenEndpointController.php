@@ -48,7 +48,8 @@ class TokenEndpointController extends Controller
                 request()->input('code'),
                 request()->input('me'),
                 request()->input('redirect_uri'),
-                request()->input('client_id')
+                request()->input('client_id'),
+                null // code_verifier
             );
             if (array_key_exists('me', $auth)) {
                 $scope = $auth['scope'] ?? '';

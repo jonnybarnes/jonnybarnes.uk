@@ -15,7 +15,7 @@ class ContactsTest extends TestCase
 {
     use DatabaseTransactions;
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         if (file_exists(public_path() . '/assets/profile-images/tantek.com/image')) {
             unlink(public_path() . '/assets/profile-images/tantek.com/image');

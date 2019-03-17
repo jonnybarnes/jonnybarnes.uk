@@ -66,22 +66,20 @@ class PlacesTest extends TestCase
         $this->assertEquals(2, count(Place::all())); // still 2 places
     }
 
-    /**
-     * @expectedException        InvalidArgumentException
-     * @expectedExceptionMessage Missing required name
-     */
     public function test_service_requires_name()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Missing required name');
+
         $service = new PlaceService();
         $service->createPlaceFromCheckin(['foo' => 'bar']);
     }
 
-    /**
-     * @expectedException        InvalidArgumentException
-     * @expectedExceptionMessage Missing required longitude/latitude
-     */
     public function test_service_requires_latitude()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Missing required longitude/latitude');
+
         $service = new PlaceService();
         $service->createPlaceFromCheckin(['properties' => ['name' => 'bar']]);
     }

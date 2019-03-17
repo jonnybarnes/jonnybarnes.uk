@@ -14,7 +14,7 @@ use Jonnybarnes\WebmentionsParser\Exceptions\AuthorshipParserException;
 
 class SaveProfileImageJobTest extends TestCase
 {
-    public function tearDown()
+    protected function tearDown(): void
     {
         if (file_exists(public_path() . '/assets/profile-images/example.org/image')) {
             unlink(public_path() . '/assets/profile-images/example.org/image');

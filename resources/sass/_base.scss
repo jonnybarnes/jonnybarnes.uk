@@ -1,0 +1,22 @@
+// _base.scss
+
+// Fonts
+html {
+    font-family: montserrat, sans-serif;
+    font-weight: 300;
+    font-style: normal;
+    font-size: 20px;
+}
+
+h1 {
+    font-family: bebas-neue, sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+code {
+    font-family: "Operator Mono", monospace;
+}
+
+// Variables
+$mainWidth: 40rem;

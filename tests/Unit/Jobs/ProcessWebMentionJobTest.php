@@ -14,13 +14,14 @@ use GuzzleHttp\Handler\MockHandler;
 use Illuminate\FileSystem\FileSystem;
 use Illuminate\Support\Facades\Queue;
 use Jonnybarnes\WebmentionsParser\Parser;
+use App\Exceptions\RemoteContentNotFoundException;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class ProcessWebMentionJobTest extends TestCase
 {
     use DatabaseTransactions;
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         $fs = new FileSystem();
         if ($fs->exists(storage_path() . '/HTML/https')) {
@@ -29,11 +30,10 @@ class ProcessWebMentionJobTest extends TestCase
         parent::tearDown();
     }
 
-    /**
-     * @expectedException \App\Exceptions\RemoteContentNotFoundException
-     */
     public function test_for_exception_from_failure_to_get_webmention()
     {
+        $this->expectException(RemoteContentNotFoundException::class);
+
         $parser = new Parser();
         $mock = new MockHandler([
             new Response(404),

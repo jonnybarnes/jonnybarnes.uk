@@ -1,9 +1,10 @@
-//pagination.scss
+// pagination.scss
 
 .pagination {
     display: flex;
     flex-direction: row;
-    justify-content: space-evenly;
-    font-size: 2rem;
+    align-items: center;
+    justify-content: space-around;
     list-style-type: none;
+    width: $mainWidth;
 }
