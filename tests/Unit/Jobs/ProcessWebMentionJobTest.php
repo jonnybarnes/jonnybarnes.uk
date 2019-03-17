@@ -20,7 +20,7 @@ class ProcessWebMentionJobTest extends TestCase
 {
     use DatabaseTransactions;
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         $fs = new FileSystem();
         if ($fs->exists(storage_path() . '/HTML/https')) {

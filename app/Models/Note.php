@@ -355,7 +355,7 @@ class Note extends Model
         } catch (\Exception $e) {
             return null;
         }
-        Cache::put($tweetId, $oEmbed, ($oEmbed->cache_age / 60));
+        Cache::put($tweetId, $oEmbed, ($oEmbed->cache_age));
 
         return $oEmbed;
     }
