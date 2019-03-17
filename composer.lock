@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2337f94b0e6c7d9f3589283c1204c053",
+    "content-hash": "bdc34ba06abc541ce11bcc51b6034c24",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -1596,52 +1596,6 @@
             "time": "2015-09-27T15:35:21+00:00"
         },
         {
-            "name": "jonnybarnes/commonmark-linkify",
-            "version": "v0.5.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/jonnybarnes/commonmark-linkify.git",
-                "reference": "e27103f5e0e9e84eb17344a361845241e27512e0"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/jonnybarnes/commonmark-linkify/zipball/e27103f5e0e9e84eb17344a361845241e27512e0",
-                "reference": "e27103f5e0e9e84eb17344a361845241e27512e0",
-                "shasum": ""
-            },
-            "require": {
-                "league/commonmark": "^0.18.0",
-                "php": "^7.1"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "~7.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Jonnybarnes\\CommonmarkLinkify\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "CC0-1.0"
-            ],
-            "authors": [
-                {
-                    "name": "Jonny Barnes",
-                    "email": "jonny@jonnybarnes.uk"
-                }
-            ],
-            "description": "Turn plaintext URLs into click-able links",
-            "homepage": "https://github.com/jonnybarnes/commonmark-linkify",
-            "keywords": [
-                "commonmark",
-                "extension",
-                "markdown"
-            ],
-            "time": "2019-02-17T10:48:03+00:00"
-        },
-        {
             "name": "jonnybarnes/emoji-a11y",
             "version": "v0.3",
             "source": {
@@ -2245,6 +2199,63 @@
                 "parser"
             ],
             "time": "2019-03-17T01:41:59+00:00"
+        },
+        {
+            "name": "league/commonmark-ext-autolink",
+            "version": "v0.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/thephpleague/commonmark-ext-autolink.git",
+                "reference": "585875f1531bbe6efd77ab480ee61ef2957137b3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/thephpleague/commonmark-ext-autolink/zipball/585875f1531bbe6efd77ab480ee61ef2957137b3",
+                "reference": "585875f1531bbe6efd77ab480ee61ef2957137b3",
+                "shasum": ""
+            },
+            "require": {
+                "league/commonmark": "^0.18.2",
+                "php": "^5.6||^7.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^5.7.27"
+            },
+            "type": "commonmark-extension",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "0.3-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "League\\CommonMark\\Ext\\Autolink\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Colin O'Dell",
+                    "email": "colinodell@gmail.com",
+                    "homepage": "https://www.colinodell.com",
+                    "role": "Lead Developer"
+                }
+            ],
+            "description": "Extension for league/commonmark which autolinks URLs, emails, and @-mentions",
+            "homepage": "https://github.com/thephpleague/commonmark-ext-autolink",
+            "keywords": [
+                "autolink",
+                "commonmark",
+                "extension",
+                "gfm",
+                "github",
+                "markdown",
+                "twitter"
+            ],
+            "time": "2019-03-17T03:06:54+00:00"
         },
         {
             "name": "league/flysystem",
