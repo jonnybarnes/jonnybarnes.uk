@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use Illuminate\View\View;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
 
 class AuthController extends Controller
@@ -13,28 +13,29 @@ class AuthController extends Controller
     /**
      * Show the login form.
      *
-     * @return \Illuminate\View\View
+     * @return \Illuminate\View\View|\Illuminate\Http\RedirectResponse
      */
-    public function showLogin(): View
+    public function showLogin()
     {
+        if (Auth::check()) {
+            return redirect('/');
+        }
+
         return view('login');
     }
 
     /**
-     * Log in a user, set a sesion variable, check credentials against
+     * Log in a user, set a session variable, check credentials against
      * the .env file.
      *
      * @return \Illuminate\Http\RedirectResponse
      */
     public function login(): RedirectResponse
     {
-        if (request()->input('username') === config('admin.user')
-            &&
-            request()->input('password') === config('admin.pass')
-        ) {
-            session(['loggedin' => true]);
+        $credentials = request()->only('name', 'password');
 
-            return redirect()->intended('admin');
+        if (Auth::attempt($credentials, true)) {
+            return redirect()->intended('/');
         }
 
         return redirect()->route('login');
