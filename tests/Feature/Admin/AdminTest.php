@@ -18,15 +18,6 @@ class AdminTest extends TestCase
         $response->assertViewIs('login');
     }
 
-    public function test_attempt_login_with_good_credentials()
-    {
-        $response = $this->post('/login', [
-            'username' => config('admin.user'),
-            'password' => config('admin.pass'),
-        ]);
-        $response->assertRedirect('/admin');
-    }
-
     public function test_attempt_login_with_bad_credentials()
     {
         $response = $this->post('/login', [
