@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Str;
 use Faker\Generator as Faker;
 
 /*
@@ -12,12 +13,12 @@ use Faker\Generator as Faker;
 | model instances for testing / seeding your application's database.
 |
 */
-$factory->define(App\User::class, function (Faker $faker) {
+$factory->define(App\Models\User::class, function (Faker $faker) {
     static $password;
+
     return [
-        'name' => $faker->name,
-        'email' => $faker->unique()->safeEmail,
+        'name' => mb_strtolower($faker->firstName),
         'password' => $password ?: $password = bcrypt('secret'),
-        'remember_token' => str_random(10),
+        'remember_token' => Str::random(10),
     ];
 });

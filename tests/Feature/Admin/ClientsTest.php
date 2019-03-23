@@ -3,6 +3,7 @@
 namespace Tests\Feature\Admin;
 
 use Tests\TestCase;
+use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class ClientsTest extends TestCase
@@ -11,21 +12,27 @@ class ClientsTest extends TestCase
 
     public function test_index_page()
     {
-        $response = $this->withSession(['loggedin' => true])
+        $user = factory(User::class)->create();
+
+        $response = $this->actingAs($user)
                          ->get('/admin/clients');
         $response->assertSeeText('Clients');
     }
 
     public function test_create_page()
     {
-        $response = $this->withSession(['loggedin' => true])
+        $user = factory(User::class)->create();
+
+        $response = $this->actingAs($user)
                          ->get('/admin/clients/create');
         $response->assertSeeText('New Client');
     }
 
     public function test_create_new_client()
     {
-        $this->withSession(['loggedin' => true])
+        $user = factory(User::class)->create();
+
+        $this->actingAs($user)
              ->post('/admin/clients', [
                  'client_name' => 'Micropublish',
                  'client_url' => 'https://micropublish.net'
@@ -38,14 +45,18 @@ class ClientsTest extends TestCase
 
     public function test_see_edit_form()
     {
-        $response = $this->withSession(['loggedin' => true])
+        $user = factory(User::class)->create();
+
+        $response = $this->actingAs($user)
                          ->get('/admin/clients/1/edit');
         $response->assertSee('https://jbl5.dev/notes/new');
     }
 
     public function test_edit_client()
     {
-        $this->withSession(['loggedin' => true])
+        $user = factory(User::class)->create();
+
+        $this->actingAs($user)
              ->post('/admin/clients/1', [
                  '_method' => 'PUT',
                  'client_url' => 'https://jbl5.dev/notes/new',
@@ -59,7 +70,9 @@ class ClientsTest extends TestCase
 
     public function test_delete_client()
     {
-        $this->withSession(['loggedin' => true])
+        $user = factory(User::class)->create();
+
+        $this->actingAs($user)
              ->post('/admin/clients/1', [
                  '_method' => 'DELETE',
              ]);

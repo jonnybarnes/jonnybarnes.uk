@@ -2,11 +2,11 @@
 
 namespace Tests\Feature\Admin;
 
+use App\Models\User;
 use Tests\TestCase;
 use App\Models\Like;
 use App\Jobs\ProcessLike;
 use Illuminate\Support\Facades\Queue;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class LikesTest extends TestCase
@@ -15,14 +15,18 @@ class LikesTest extends TestCase
 
     public function test_index_page()
     {
-        $response = $this->withSession(['loggedin' => true])
+        $user = factory(User::class)->create();
+
+        $response = $this->actingAs($user)
                          ->get('/admin/likes');
         $response->assertSeeText('Likes');
     }
 
     public function test_create_page()
     {
-        $response = $this->withSession(['loggedin' => true])
+        $user = factory(User::class)->create();
+
+        $response = $this->actingAs($user)
                          ->get('/admin/likes/create');
         $response->assertSeeText('New Like');
     }
@@ -30,7 +34,9 @@ class LikesTest extends TestCase
     public function test_create_new_like()
     {
         Queue::fake();
-        $this->withSession(['loggedin' => true])
+        $user = factory(User::class)->create();
+
+        $this->actingAs($user)
              ->post('/admin/likes', [
                  'like_url' => 'https://example.com'
              ]);
@@ -42,7 +48,9 @@ class LikesTest extends TestCase
 
     public function test_see_edit_form()
     {
-        $response = $this->withSession(['loggedin' => true])
+        $user = factory(User::class)->create();
+
+        $response = $this->actingAs($user)
                          ->get('/admin/likes/1/edit');
         $response->assertSee('Edit Like');
     }
@@ -50,7 +58,9 @@ class LikesTest extends TestCase
     public function test_edit_like()
     {
         Queue::fake();
-        $this->withSession(['loggedin' => true])
+        $user = factory(User::class)->create();
+
+        $this->actingAs($user)
              ->post('/admin/likes/1', [
                  '_method' => 'PUT',
                  'like_url' => 'https://example.com',
@@ -65,7 +75,9 @@ class LikesTest extends TestCase
     {
         $like = Like::find(1);
         $url = $like->url;
-        $this->withSession(['loggedin' => true])
+        $user = factory(User::class)->create();
+
+        $this->actingAs($user)
              ->post('/admin/likes/1', [
                  '_method' => 'DELETE',
              ]);

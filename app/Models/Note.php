@@ -19,8 +19,8 @@ use App\Exceptions\TwitterContentException;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use League\CommonMark\Block\Element\FencedCode;
 use League\CommonMark\Block\Element\IndentedCode;
-use Jonnybarnes\CommonmarkLinkify\LinkifyExtension;
 use Spatie\CommonMarkHighlighter\FencedCodeRenderer;
+use League\CommonMark\Ext\Autolink\AutolinkExtension;
 use Spatie\CommonMarkHighlighter\IndentedCodeRenderer;
 
 class Note extends Model
@@ -514,7 +514,7 @@ class Note extends Model
     private function convertMarkdown(string $note): string
     {
         $environment = Environment::createCommonMarkEnvironment();
-        $environment->addExtension(new LinkifyExtension());
+        $environment->addExtension(new AutolinkExtension());
         $environment->addBlockRenderer(FencedCode::class, new FencedCodeRenderer());
         $environment->addBlockRenderer(IndentedCode::class, new IndentedCodeRenderer());
         $converter = new CommonMarkConverter([], $environment);
