@@ -3,6 +3,7 @@
 namespace Tests\Feature\Admin;
 
 use Tests\TestCase;
+use App\Models\User;
 use GuzzleHttp\Client;
 use App\Models\Contact;
 use GuzzleHttp\HandlerStack;
@@ -26,25 +27,25 @@ class ContactsTest extends TestCase
 
     public function test_index_page()
     {
-        $response = $this->withSession([
-            'loggedin' => true
-        ])->get('/admin/contacts');
+        $user = factory(User::class)->create();
+
+        $response = $this->actingAs($user)->get('/admin/contacts');
         $response->assertViewIs('admin.contacts.index');
     }
 
     public function test_create_page()
     {
-        $response = $this->withSession([
-            'loggedin' => true
-        ])->get('/admin/contacts/create');
+        $user = factory(User::class)->create();
+
+        $response = $this->actingAs($user)->get('/admin/contacts/create');
         $response->assertViewIs('admin.contacts.create');
     }
 
     public function test_create_new_contact()
     {
-        $this->withSession([
-            'loggedin' => true
-        ])->post('/admin/contacts', [
+        $user = factory(User::class)->create();
+
+        $this->actingAs($user)->post('/admin/contacts', [
             'name' => 'Fred Bloggs',
             'nick' => 'fred',
             'homepage' => 'https://fred.blog/gs',
@@ -58,17 +59,17 @@ class ContactsTest extends TestCase
 
     public function test_see_edit_form()
     {
-        $response = $this->withSession([
-            'loggedin' => true
-        ])->get('/admin/contacts/1/edit');
+        $user = factory(User::class)->create();
+
+        $response = $this->actingAs($user)->get('/admin/contacts/1/edit');
         $response->assertViewIs('admin.contacts.edit');
     }
 
     public function test_update_contact_no_uploaded_avatar()
     {
-        $this->withSession([
-            'loggedin' => true
-        ])->post('/admin/contacts/1', [
+        $user = factory(User::class)->create();
+
+        $this->actingAs($user)->post('/admin/contacts/1', [
             '_method' => 'PUT',
             'name' => 'Tantek Celik',
             'nick' => 'tantek',
@@ -86,9 +87,9 @@ class ContactsTest extends TestCase
         copy(__DIR__ . '/../../aaron.png', sys_get_temp_dir() . '/tantek.png');
         $path = sys_get_temp_dir() . '/tantek.png';
         $file = new UploadedFile($path, 'tantek.png', 'image/png', filesize($path), null, true);
-        $this->withSession([
-            'loggedin' => true
-        ])->post('/admin/contacts/1', [
+        $user = factory(User::class)->create();
+
+        $this->actingAs($user)->post('/admin/contacts/1', [
             '_method' => 'PUT',
             'name' => 'Tantek Celik',
             'nick' => 'tantek',
@@ -104,9 +105,9 @@ class ContactsTest extends TestCase
 
     public function test_delete_contact()
     {
-        $this->withSession([
-            'loggedin' => true
-        ])->post('/admin/contacts/1', [
+        $user = factory(User::class)->create();
+
+        $this->actingAs($user)->post('/admin/contacts/1', [
             '_method' => 'DELETE',
         ]);
         $this->assertDatabaseMissing('contacts', [
@@ -129,10 +130,9 @@ HTML;
         $handler = HandlerStack::create($mock);
         $client = new Client(['handler' => $handler]);
         $this->app->instance(Client::class, $client);
+        $user = factory(User::class)->create();
 
-        $response = $this->withSession([
-            'loggedin' => true,
-        ])->get('/admin/contacts/1/getavatar');
+        $this->actingAs($user)->get('/admin/contacts/1/getavatar');
 
         $this->assertFileEquals(
             __DIR__ . '/../../aaron.png',
@@ -148,10 +148,9 @@ HTML;
         $handler = HandlerStack::create($mock);
         $client = new Client(['handler' => $handler]);
         $this->app->instance(Client::class, $client);
+        $user = factory(User::class)->create();
 
-        $response = $this->withSession([
-            'loggedin' => true,
-        ])->get('/admin/contacts/1/getavatar');
+        $response = $this->actingAs($user)->get('/admin/contacts/1/getavatar');
 
         $response->assertRedirect('/admin/contacts/1/edit');
     }
@@ -170,10 +169,9 @@ HTML;
         $handler = HandlerStack::create($mock);
         $client = new Client(['handler' => $handler]);
         $this->app->instance(Client::class, $client);
+        $user = factory(User::class)->create();
 
-        $response = $this->withSession([
-            'loggedin' => true,
-        ])->get('/admin/contacts/1/getavatar');
+        $response = $this->actingAs($user)->get('/admin/contacts/1/getavatar');
 
         $response->assertRedirect('/admin/contacts/1/edit');
     }
@@ -184,10 +182,9 @@ HTML;
             'nick' => 'fred',
             'name' => 'Fred Bloggs',
         ]);
+        $user = factory(User::class)->create();
 
-        $response = $this->withSession([
-            'loggedin' => true,
-        ])->get('/admin/contacts/' . $contact->id . '/getavatar');
+        $response = $this->actingAs($user)->get('/admin/contacts/' . $contact->id . '/getavatar');
 
         $response->assertRedirect('/admin/contacts/' . $contact->id . '/edit');
     }
