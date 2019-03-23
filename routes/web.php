@@ -14,17 +14,21 @@
 Route::group(['domain' => config('url.longurl')], function () {
     Route::get('/', 'NotesController@index');
 
-    //Static project page
+    // Static project page
     Route::view('projects', 'projects');
 
-    //Static colophon page
+    // Static colophon page
     Route::view('colophon', 'colophon');
 
-    //The login routes to get authe'd for admin
+    // The login routes to get auth'd for admin
     Route::get('login', 'AuthController@showLogin')->name('login');
     Route::post('login', 'AuthController@login');
 
-    //Admin pages grouped for filter
+    // And the logout routes
+    Route::get('logout', 'AuthController@showLogout')->name('logout');
+    Route::post('logout', 'AuthController@logout');
+
+    // Admin pages grouped for filter
     Route::group([
         'middleware' => 'myauth',
         'namespace' => 'Admin',
@@ -42,7 +46,7 @@ Route::group(['domain' => config('url.longurl')], function () {
             Route::delete('/{id}', 'ArticlesController@destroy');
         });
 
-        //Notes
+        // Notes
         Route::group(['prefix' => 'notes'], function () {
             Route::get('/', 'NotesController@index');
             Route::get('/create', 'NotesController@create');
@@ -52,7 +56,7 @@ Route::group(['domain' => config('url.longurl')], function () {
             Route::delete('/{id}', 'NotesController@destroy');
         });
 
-        //Micropub Clients
+        // Micropub Clients
         Route::group(['prefix' => 'clients'], function () {
             Route::get('/', 'ClientsController@index');
             Route::get('/create', 'ClientsController@create');
@@ -62,7 +66,7 @@ Route::group(['domain' => config('url.longurl')], function () {
             Route::delete('/{id}', 'ClientsController@destroy');
         });
 
-        //Contacts
+        // Contacts
         Route::group(['prefix' => 'contacts'], function () {
             Route::get('/', 'ContactsController@index');
             Route::get('/create', 'ContactsController@create');
@@ -73,7 +77,7 @@ Route::group(['domain' => config('url.longurl')], function () {
             Route::get('/{id}/getavatar', 'ContactsController@getAvatar');
         });
 
-        //Places
+        // Places
         Route::group(['prefix' => 'places'], function () {
             Route::get('/', 'PlacesController@index');
             Route::get('/create', 'PlacesController@create');
@@ -86,7 +90,7 @@ Route::group(['domain' => config('url.longurl')], function () {
             Route::delete('/{id}', 'PlacesController@destroy');
         });
 
-        //Likes
+        // Likes
         Route::group(['prefix' => 'likes'], function () {
             Route::get('/', 'LikesController@index');
             Route::get('/create', 'LikesController@create');
@@ -97,7 +101,7 @@ Route::group(['domain' => config('url.longurl')], function () {
         });
     });
 
-    //Blog pages using ArticlesController
+    // Blog pages using ArticlesController
     Route::group(['prefix' => 'blog'], function () {
         Route::get('/feed.rss', 'FeedsController@blogRss');
         Route::get('/feed.atom', 'FeedsController@blogAtom');
@@ -107,7 +111,7 @@ Route::group(['domain' => config('url.longurl')], function () {
         Route::get('/{year}/{month}/{slug}', 'ArticlesController@show');
     });
 
-    //Notes pages using NotesController
+    // Notes pages using NotesController
     Route::group(['prefix' => 'notes'], function () {
         Route::get('/', 'NotesController@index');
         Route::get('/feed.rss', 'FeedsController@notesRss');
@@ -139,15 +143,15 @@ Route::group(['domain' => config('url.longurl')], function () {
     Route::post('api/media', 'MicropubController@media')->middleware('micropub.token', 'cors')->name('media-endpoint');
     Route::options('/api/media', 'MicropubController@mediaOptionsResponse')->middleware('cors');
 
-    //webmention
+    // Webmention
     Route::get('webmention', 'WebMentionsController@get');
     Route::post('webmention', 'WebMentionsController@receive');
 
-    //Contacts
+    // Contacts
     Route::get('contacts', 'ContactsController@index');
     Route::get('contacts/{nick}', 'ContactsController@show');
 
-    //Places
+    // Places
     Route::get('places', 'PlacesController@index');
     Route::get('places/{slug}', 'PlacesController@show');
 
@@ -156,7 +160,7 @@ Route::group(['domain' => config('url.longurl')], function () {
     Route::post('update-colour-scheme', 'SessionStoreController@saveColour');
 });
 
-//Short URL
+// Short URL
 Route::group(['domain' => config('url.shorturl')], function () {
     Route::get('/', 'ShortURLsController@baseURL');
     Route::get('@', 'ShortURLsController@twitter');
