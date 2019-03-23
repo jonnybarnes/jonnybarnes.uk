@@ -6,6 +6,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class MyAuthMiddleware
 {
@@ -18,7 +19,7 @@ class MyAuthMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        if ($request->session()->has('loggedin') !== true) {
+        if (Auth::check($request->user()) == false) {
             //they’re not logged in, so send them to login form
             return redirect()->route('login');
         }
