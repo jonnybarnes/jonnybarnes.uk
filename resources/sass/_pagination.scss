@@ -8,3 +8,9 @@
     list-style-type: none;
     width: $mainWidth;
 }
+
+@media screen and (max-width: $mainWidth) {
+    .pagination {
+        width: 95vw;
+    }
+}
