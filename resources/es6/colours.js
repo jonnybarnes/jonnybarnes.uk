@@ -5,15 +5,14 @@ let link = document.querySelector('#colourScheme');
 let css = link.getAttribute('href').split('/').pop();
 
 // update selected item in colour scheme list
-document.getElementById('colourSchemeSelect').value = css;
+document.querySelector('#colourSchemeSelect [value="' + css + '"]').selected = true;
 
 // fix form
 let form = document.getElementById('colourSchemeForm');
-let btn = form.childNodes[5];
-btn.addEventListener('click', function (e) {
-    e.preventDefault();
+let btn = form.querySelector('button');
+btn.addEventListener('click', function (event) {
+    event.preventDefault();
     let newCss = document.getElementById('colourSchemeSelect').value;
-    let link = document.querySelector('#colourScheme');
     let css = link.getAttribute('href');
     let parts = css.split('/');
     parts.pop();
