@@ -3,3 +3,9 @@
 .personal-bio {
     width: $mainWidth;
 }
+
+@media screen and (max-width: $mainWidth) {
+    .personal-bio {
+        width: 95vw;
+    }
+}

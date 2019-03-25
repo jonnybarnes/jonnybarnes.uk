@@ -20,3 +20,19 @@ footer {
         margin-bottom: 0;
     }
 }
+
+@media screen and (max-width: $mainWidth) {
+    footer {
+        img {
+            width: 95%;
+        }
+
+        form {
+            width: 95vw;
+        }
+
+        select {
+            width: 90vw;
+        }
+    }
+}
