@@ -61,10 +61,22 @@
             <p>Built with love: <a href="/colophon">Colophon</a></p>
             <p><a href="https://indieweb.org"><img src="/assets/img/iwc.svg" alt="Indie Web Camp logo"></a></p>
         </footer>
-        @if (config('app.piwik') === true)
-        <!-- Piwik -->
-        <script src="https://analytics.jmb.lv/piwik.js" async defer></script>
-        <script src="/assets/js/piwik.js"></script>
+        @if(config('fathom.id'))
+            <!-- Fathom - simple website analytics - https://github.com/usefathom/fathom -->
+            <script>
+                (function(f, a, t, h, o, m){
+                    a[h]=a[h]||function(){
+                        (a[h].q=a[h].q||[]).push(arguments)
+                    };
+                    o=f.createElement('script'),
+                        m=f.getElementsByTagName('script')[0];
+                    o.async=1; o.src=t; o.id='fathom-script';
+                    m.parentNode.insertBefore(o,m)
+                })(document, window, '//fathom.jonnybarnes.uk/tracker.js', 'fathom');
+                fathom('set', 'siteId', '{{ config('fathom.id') }}');
+                fathom('trackPageview');
+            </script>
+            <!-- / Fathom -->
         @endif
     </body>
 </html>

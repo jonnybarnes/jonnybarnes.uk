@@ -25,6 +25,7 @@ class CSPHeader
 script-src 'self' 'unsafe-inline' 'unsafe-eval' \
 https://api.mapbox.com \
 https://analytics.jmb.lv \
+https://fathom.jonnybarnes.uk \
 blob:; \
 style-src 'self' 'unsafe-inline' \
 https://api.mapbox.com \
