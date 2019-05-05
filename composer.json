@@ -1,7 +1,7 @@
 {
     "name": "jonnybarnes/jonnybarnes.uk",
     "type": "project",
-    "description": "The code for jonnybanres.uk, based on Laravel 5.4",
+    "description": "The code for jonnybanres.uk, based on Laravel 5.8",
     "keywords": [
         "framework",
         "laravel",
@@ -89,6 +89,9 @@
         ],
         "post-create-project-cmd": [
             "@php artisan key:generate --ansi"
+        ],
+        "test": [
+            "vendor/bin/phpunit --stop-on-failure"
         ]
     }
 }
