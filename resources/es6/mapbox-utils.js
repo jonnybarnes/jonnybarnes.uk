@@ -1,8 +1,15 @@
 //mapbox-utils.js
-import mapboxgl from 'mapbox-gl/dist/mapbox-gl.js';
 import parseLocation from './parse-location';
 import selectPlaceInForm from './select-place';
 
+/*
+ * For specific lines on this file I have disabled the `no-undef`
+ * rule in ESLint. This is for the mapboxgl object which is defined
+ * in the mapbox-gl.js file that we pull in from their CDN before
+ * this script gets run.
+ */
+
+// eslint-disable-next-line no-undef
 mapboxgl.accessToken = 'pk.eyJ1Ijoiam9ubnliYXJuZXMiLCJhIjoiY2l2cDhjYW04MDAwcjJ0cG1uZnhqcm82ayJ9.qA2zeVA-nsoMh9IFrd5KQw';
 
 // Define some functions to be used in the default function.
@@ -130,6 +137,7 @@ export default function addMap(div, position = null, places = null) {
         dataLongitude = position.coords.longitude;
         dataLatitude = position.coords.latitude;
     }
+    // eslint-disable-next-line no-undef
     let map = new mapboxgl.Map({
         container: div,
         style: 'mapbox://styles/mapbox/streets-v9',
@@ -139,6 +147,7 @@ export default function addMap(div, position = null, places = null) {
     if (position == null) {
         map.scrollZoom.disable();
     }
+    // eslint-disable-next-line no-undef
     map.addControl(new mapboxgl.NavigationControl());
     div.appendChild(makeMapMenu(map));
     map.on('load', function () {
@@ -171,6 +180,7 @@ export default function addMap(div, position = null, places = null) {
         });
     }
     if (data.features && data.features.length > 1) {
+        // eslint-disable-next-line no-undef
         let bounds = new mapboxgl.LngLatBounds();
         for (let feature of data.features) {
             bounds.extend(feature.geometry.coordinates);

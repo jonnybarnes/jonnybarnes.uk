@@ -17,18 +17,19 @@ class CSPHeader
     {
         // headers have to be single-line strings,
         // so we concat multiple lines
-        //return $next($request);
         return $next($request)
             ->header(
                 'Content-Security-Policy',
                 str_replace("\\\n", '', "default-src 'self'; \
 script-src 'self' 'unsafe-inline' 'unsafe-eval' \
 https://api.mapbox.com \
+https://api.tiles.mapbox.com \
 https://analytics.jmb.lv \
 https://fathom.jonnybarnes.uk \
 blob:; \
 style-src 'self' 'unsafe-inline' \
 https://api.mapbox.com \
+https://api.tiles.mapbox.com \
 https://fonts.googleapis.com \
 use.typekit.net \
 p.typekit.net; \
@@ -53,6 +54,7 @@ data:; \
 connect-src 'self' \
 https://api.mapbox.com \
 https://*.tiles.mapbox.com \
+https://events.mapbox.com \
 performance.typekit.net \
 data: blob:; \
 worker-src 'self' blob:; \
