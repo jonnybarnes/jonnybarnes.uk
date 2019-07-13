@@ -2,9 +2,8 @@ const webpack = require('webpack');
 const Dotenv = require('dotenv-webpack');
 
 const config = {
-  context: __dirname + '/resources/es6',
+  context: __dirname + '/resources/es6-orig',
   entry: {
-    a11y: './a11y.js',
     colours: './colours.js',
     links: './links.js',
     maps: './maps.js',

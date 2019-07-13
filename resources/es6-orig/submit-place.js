@@ -1,7 +1,5 @@
 //submit-place.js
 
-import alertify from 'alertify.js';
-
 export default function submitNewPlace(map) {
     //create the form data to send
     let formData = new FormData();
@@ -65,7 +63,6 @@ export default function submitNewPlace(map) {
         selectElement.appendChild(newlyCreatedPlaceOption);
         document.querySelector('select [value="' + placeJson.uri + '"]').selected = true;
     }).catch(function (placeError) {
-        alertify.reset();
-        alertify.error(placeError);
+        console.error(placeError);
     });
 }
