@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Exception;
 use App\Models\Like;
 use App\Models\Note;
 use App\Models\Article;
