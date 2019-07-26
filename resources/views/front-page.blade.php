@@ -11,10 +11,10 @@
         @foreach ($items as $item)
             @switch($item)
                 @case($item instanceof \App\Models\Note)
-                    <p>This is a note</p>
+                    @include('templates.note', ['note' => $item])
                     @break
                 @case($item instanceof \App\Models\Article)
-                    <p>This is an article</p>
+                    @include('templates.article', ['article' => $item])
                     @break
                 @case($item instanceof \App\Models\Like)
                     <p>This is a like</p>
