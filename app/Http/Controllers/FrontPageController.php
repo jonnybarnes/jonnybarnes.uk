@@ -28,8 +28,6 @@ class FrontPageController extends Controller
             ->sortByDesc('updated_at')
             ->chunk(10);
 
-        $totalNumPages = $allItems->count();
-
         $page = $allItems->get($pageNumber - 1);
 
         if (is_null($page)) {
