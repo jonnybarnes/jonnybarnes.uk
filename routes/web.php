@@ -12,7 +12,7 @@
 */
 
 Route::group(['domain' => config('url.longurl')], function () {
-    Route::get('/', 'NotesController@index');
+    Route::get('/', 'FrontPageController@index');
 
     // Static project page
     Route::view('projects', 'projects');

@@ -1,0 +1,1 @@
+{"version":3,"sources":["webpack:///./resources/sass/app.scss"],"names":[],"mappings":"AAAA;EACI,qCAAqC","file":"app.css","sourcesContent":["body {\n    font-family: \"Comic Sans MS\", cursive;\n}\n"],"sourceRoot":""}

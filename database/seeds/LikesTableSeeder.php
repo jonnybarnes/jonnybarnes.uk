@@ -2,7 +2,9 @@
 
 use App\Models\Like;
 use Faker\Generator;
+use Illuminate\Support\Carbon;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class LikesTableSeeder extends Seeder
 {
@@ -13,20 +15,40 @@ class LikesTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(Like::class, 10)->create();
-        sleep(1);
+        factory(Like::class, 10)->create()->each(function ($like) {
+            $now = Carbon::now()->subDays(rand(5, 15));
+            DB::table('likes')
+                ->where('id', $like->id)
+                ->update([
+                    'created_at' => $now->toDateTimeString(),
+                    'updated_at' => $now->toDateTimeString(),
+                ]);
+        });
 
+        $now = Carbon::now()->subDays(rand(3, 6));
         $faker = new Generator();
         $faker->addProvider(new \Faker\Provider\en_US\Person($faker));
         $faker->addProvider(new \Faker\Provider\Lorem($faker));
         $faker->addProvider(new \Faker\Provider\Internet($faker));
-        Like::create([
+        $likeFromAuthor = Like::create([
             'url' => $faker->url,
             'author_url' => $faker->url,
             'author_name' => $faker->name,
         ]);
-        sleep(1);
+        DB::table('likes')
+            ->where('id', $likeFromAuthor->id)
+            ->update([
+                'created_at' => $now->toDateTimeString(),
+                'updated_at' => $now->toDateTimeString(),
+            ]);
 
-        Like::create(['url' => 'https://example.com']);
+        $now = Carbon::now()->subHours(rand(3, 6));
+        $likeJustUrl = Like::create(['url' => 'https://example.com']);
+        DB::table('likes')
+            ->where('id', $likeJustUrl->id)
+            ->update([
+                'created_at' => $now->toDateTimeString(),
+                'updated_at' => $now->toDateTimeString(),
+            ]);
     }
 }
