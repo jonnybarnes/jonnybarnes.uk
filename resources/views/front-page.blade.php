@@ -17,7 +17,7 @@
                     @include('templates.article', ['article' => $item])
                     @break
                 @case($item instanceof \App\Models\Like)
-                    <p>This is a like</p>
+                    @include('templates.like', ['like' => $item])
                     @break
                 @case($item instanceof \App\Models\Bookmark)
                     <p>This is a bookmark</p>
