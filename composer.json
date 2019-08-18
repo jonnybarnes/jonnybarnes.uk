@@ -1,7 +1,7 @@
 {
     "name": "jonnybarnes/jonnybarnes.uk",
     "type": "project",
-    "description": "The code for jonnybanres.uk, based on Laravel 5.8",
+    "description": "The code for jonnybarnes.uk, based on Laravel 5.8",
     "keywords": [
         "framework",
         "laravel",
@@ -39,8 +39,8 @@
         "thujohn/twitter": "~2.0"
     },
     "require-dev": {
-        "beyondcode/laravel-dump-server": "^1.0",
         "barryvdh/laravel-debugbar": "~3.0",
+        "beyondcode/laravel-dump-server": "^1.0",
         "codedungeon/phpunit-result-printer": "^0.26.0",
         "filp/whoops": "~2.0",
         "fzaninotto/faker": "~1.4",
