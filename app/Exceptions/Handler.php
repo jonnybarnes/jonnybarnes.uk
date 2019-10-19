@@ -37,8 +37,9 @@ class Handler extends ExceptionHandler
      *
      * This is a great spot to send exceptions to Sentry, Bugsnag, etc.
      *
-     * @param  \Exception  $exception
+     * @param \Exception $exception
      * @return void
+     * @throws Exception
      */
     public function report(Exception $exception)
     {
@@ -56,7 +57,7 @@ class Handler extends ExceptionHandler
                         'fallback' => 'There was an exception.',
                         'pretext' => 'There was an exception.',
                         'color' => '#d00000',
-                        'author_name' => App::environment(),
+                        'author_name' => app()->environment(),
                         'author_link' => config('app.url'),
                         'fields' => [[
                             'title' => get_class($exception) ?? 'Unkown Exception',

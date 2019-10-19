@@ -11,6 +11,8 @@
 |
 */
 
+use Illuminate\Support\Facades\Route;
+
 Route::group(['domain' => config('url.longurl')], function () {
     Route::get('/', 'FrontPageController@index');
 

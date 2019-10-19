@@ -10,7 +10,8 @@
     "license": "CC0-1.0",
     "require": {
         "php": ">=7.2.0",
-        "cviebrock/eloquent-sluggable": "~4.3",
+        "ext-json": "*",
+        "cviebrock/eloquent-sluggable": "~6.0",
         "fideloper/proxy": "~4.0",
         "guzzlehttp/guzzle": "~6.0",
         "indieauth/client": "~0.1",
@@ -18,7 +19,7 @@
         "jonnybarnes/emoji-a11y": "^0.3",
         "jonnybarnes/indieweb": "dev-master",
         "jonnybarnes/webmentions-parser": "0.4.*",
-        "laravel/framework": "5.8.*",
+        "laravel/framework": "^6.0",
         "laravel/horizon": "^3.0",
         "laravel/scout": "^7.0",
         "laravel/telescope": "^2.0",
@@ -28,15 +29,14 @@
         "league/commonmark-ext-autolink": "^1.0",
         "league/flysystem-aws-s3-v3": "^1.0",
         "mf2/mf2": "~0.3",
-        "phaza/laravel-postgis": "~3.1",
-        "pmatseykanets/laravel-scout-postgres": "~5.0",
+        "phaza/laravel-postgis": "~4.0",
+        "pmatseykanets/laravel-scout-postgres": "~6.0",
         "predis/predis": "~1.0",
         "ramsey/uuid": "^3.5",
         "sensiolabs/security-checker": "^6.0",
         "spatie/browsershot": "~3.0",
         "spatie/commonmark-highlighter": "^2.0",
-        "tgalopin/html-sanitizer": "^1.1",
-        "thujohn/twitter": "~2.0"
+        "tgalopin/html-sanitizer": "^1.1"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "~3.0",
