@@ -3,20 +3,22 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Illuminate\Http\Request;
 
 class CSPHeader
 {
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
+     * @param Request $request
+     * @param Closure $next
      * @return mixed
      */
     public function handle($request, Closure $next)
     {
         // headers have to be single-line strings,
         // so we concat multiple lines
+        // phpcs:disable
         return $next($request)
             ->header(
                 'Content-Security-Policy',
@@ -65,12 +67,13 @@ block-all-mixed-content; \
 report-to csp-endpoint; \
 report-uri https://jonnybarnes.report-uri.io/r/default/csp/enforce;")
             )->header(
-            'Report-To',
-            '{' .
-                    "'url': 'https://jonnybarnes.report-uri.io/r/default/csp/enforce', " .
-                    "'group': 'csp-endpoint'," .
-                    "'max-age': 10886400" .
-            '}'
-        );
+                'Report-To',
+                '{' .
+                        "'url': 'https://jonnybarnes.report-uri.io/r/default/csp/enforce', " .
+                        "'group': 'csp-endpoint'," .
+                        "'max-age': 10886400" .
+                '}'
+            );
+        // phpcs:enable
     }
 }

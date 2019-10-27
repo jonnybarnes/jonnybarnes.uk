@@ -7,7 +7,6 @@ namespace App\Jobs;
 use App\Models\Note;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Uri;
-use function GuzzleHttp\Psr7\uri_for;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
@@ -137,13 +136,13 @@ class SendWebMentions implements ShouldQueue
      */
     public function resolveUri(string $url, string $base): string
     {
-        $endpoint = uri_for($url);
+        $endpoint = \GuzzleHttp\Psr7\uri_for($url);
         if ($endpoint->getScheme() != '') {
             return (string) $endpoint;
         }
 
         return (string) Uri::resolve(
-            uri_for($base),
+            \GuzzleHttp\Psr7\uri_for($base),
             $endpoint
         );
     }
