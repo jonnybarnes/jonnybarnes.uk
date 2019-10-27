@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Models\Article;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Jonnybarnes\IndieWeb\Numbers;
-use Illuminate\Http\RedirectResponse;
 
 class ArticlesController extends Controller
 {

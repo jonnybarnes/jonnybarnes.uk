@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Admin;
 
-use GuzzleHttp\Client;
-use App\Models\Contact;
-use Illuminate\View\View;
-use Illuminate\Support\Arr;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Contact;
+use GuzzleHttp\Client;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
+use Illuminate\View\View;
 
 class ContactsController extends Controller
 {

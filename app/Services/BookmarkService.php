@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use Ramsey\Uuid\Uuid;
-use GuzzleHttp\Client;
-use Illuminate\Http\Request;
-use App\Jobs\ProcessBookmark;
-use App\Models\{Bookmark, Tag};
-use Illuminate\Support\{Arr, Str};
-use Spatie\Browsershot\Browsershot;
-use App\Jobs\SyndicateBookmarkToTwitter;
-use GuzzleHttp\Exception\ClientException;
 use App\Exceptions\InternetArchiveException;
+use App\Jobs\ProcessBookmark;
+use App\Jobs\SyndicateBookmarkToTwitter;
+use App\Models\{Bookmark, Tag};
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ClientException;
+use Illuminate\Http\Request;
+use Illuminate\Support\{Arr, Str};
+use Ramsey\Uuid\Uuid;
+use Spatie\Browsershot\Browsershot;
 
 class BookmarkService
 {

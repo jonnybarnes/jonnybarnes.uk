@@ -4,9 +4,9 @@ namespace App\Exceptions;
 
 use App;
 use Exception;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Session\TokenMismatchException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Session\TokenMismatchException;
+use Illuminate\Support\Facades\Route;
 
 /**
  * @codeCoverageIgnore

@@ -4,22 +4,22 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use Monolog\Logger;
-use Ramsey\Uuid\Uuid;
-use Illuminate\Http\File;
+use App\Exceptions\InvalidTokenException;
 use App\Jobs\ProcessMedia;
+use App\Models\{Like, Media, Note, Place};
+use App\Services\Micropub\{HCardService, HEntryService, UpdateService};
 use App\Services\TokenService;
+use Illuminate\Http\File;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\UploadedFile;
-use Monolog\Handler\StreamHandler;
-use Intervention\Image\ImageManager;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\{Request, Response};
-use App\Exceptions\InvalidTokenException;
-use App\Models\{Like, Media, Note, Place};
-use Phaza\LaravelPostgis\Geometries\Point;
+use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Exception\NotReadableException;
-use App\Services\Micropub\{HCardService, HEntryService, UpdateService};
+use Intervention\Image\ImageManager;
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
+use Phaza\LaravelPostgis\Geometries\Point;
+use Ramsey\Uuid\Uuid;
 
 class MicropubController extends Controller
 {
