@@ -106,10 +106,10 @@ class SendWebMentions implements ShouldQueue
     /**
      * Get the URLs from a note.
      *
-     * @param string $html
+     * @param string|null $html
      * @return array
      */
-    public function getLinks(string $html): array
+    public function getLinks(?string $html): array
     {
         if ($html == '' || is_null($html)) {
             return [];
