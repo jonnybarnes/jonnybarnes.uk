@@ -194,6 +194,17 @@ END;
         $client = new Client(['handler' => $handler]);
         $this->app->bind(Client::class, $client);
 
+        $info = new stdClass();
+        $info->author_name = 'Jonny Barnes';
+        $info->author_url = 'https://twitter.com/jonnybarnes';
+        $info->html = '<div>HTML of the tweet embed</div>';
+        $codebirdMock = $this->getMockBuilder(Codebird::class)
+            ->addMethods(['statuses_oembed'])
+            ->getMock();
+        $codebirdMock->method('statuses_oembed')
+            ->willReturn($info);
+        $this->app->instance(Codebird::class, $codebirdMock);
+
         $authorship = new Authorship();
 
         $job->handle($client, $authorship);
