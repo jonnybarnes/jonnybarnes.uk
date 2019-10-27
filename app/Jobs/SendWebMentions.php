@@ -7,13 +7,12 @@ namespace App\Jobs;
 use App\Models\Note;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Uri;
+use function GuzzleHttp\Psr7\uri_for;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Str;
-
-use function GuzzleHttp\Psr7\uri_for;
 
 class SendWebMentions implements ShouldQueue
 {

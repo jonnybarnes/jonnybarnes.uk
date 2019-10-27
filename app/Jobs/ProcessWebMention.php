@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace App\Jobs;
 
 use App\Exceptions\RemoteContentNotFoundException;
-use GuzzleHttp\Exception\GuzzleException;
-use Jonnybarnes\WebmentionsParser\Exceptions\InvalidMentionException;
 use App\Models\{Note, WebMention};
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\{InteractsWithQueue, SerializesModels};
+use Jonnybarnes\WebmentionsParser\Exceptions\InvalidMentionException;
 use Jonnybarnes\WebmentionsParser\Parser;
 use Mf2;
 
