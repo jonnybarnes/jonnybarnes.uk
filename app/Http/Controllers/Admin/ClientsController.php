@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\View\View;
-use Illuminate\Http\Request;
-use App\Models\MicropubClient;
 use App\Http\Controllers\Controller;
+use App\Models\MicropubClient;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class ClientsController extends Controller
 {

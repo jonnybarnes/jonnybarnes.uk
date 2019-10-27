@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use App\Models\Like;
 use App\Jobs\ProcessLike;
+use App\Models\Like;
 use Illuminate\Support\Arr;
 
 class LikeService

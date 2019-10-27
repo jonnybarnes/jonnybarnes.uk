@@ -6,11 +6,11 @@ namespace App\Jobs;
 
 use App\Models\Note;
 use GuzzleHttp\Client;
-use Illuminate\Support\Str;
 use Illuminate\Bus\Queueable;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Str;
 
 class SendWebMentions implements ShouldQueue
 {

@@ -3,12 +3,12 @@
 namespace App\Providers;
 
 use App\Models\Note;
-use Codebird\Codebird;
-use Illuminate\Support\Str;
-use Illuminate\Http\Request;
 use App\Observers\NoteObserver;
-use Laravel\Dusk\DuskServiceProvider;
+use Codebird\Codebird;
+use Illuminate\Http\Request;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Str;
+use Laravel\Dusk\DuskServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {

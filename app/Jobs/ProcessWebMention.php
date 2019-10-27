@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace App\Jobs;
 
-use Mf2;
-use GuzzleHttp\Client;
-use Illuminate\Bus\Queueable;
-use App\Models\{Note, WebMention};
-use Jonnybarnes\WebmentionsParser\Parser;
-use GuzzleHttp\Exception\RequestException;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use App\Exceptions\RemoteContentNotFoundException;
+use App\Models\{Note, WebMention};
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
+use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\{InteractsWithQueue, SerializesModels};
+use Jonnybarnes\WebmentionsParser\Parser;
+use Mf2;
 
 class ProcessWebMention implements ShouldQueue
 {

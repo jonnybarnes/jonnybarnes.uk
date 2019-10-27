@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Models\Note;
-use Illuminate\View\View;
-use Illuminate\Http\Request;
-use Jonnybarnes\IndieWeb\Numbers;
-use Illuminate\Http\RedirectResponse;
 use App\Services\ActivityStreamsService;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
+use Jonnybarnes\IndieWeb\Numbers;
 
 // Need to sort out Twitter and webmentions!
 

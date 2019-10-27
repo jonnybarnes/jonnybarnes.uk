@@ -4,30 +4,30 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Exceptions\TwitterContentException;
 use Cache;
 use Codebird\Codebird;
 use Exception;
+use GuzzleHttp\Client;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
-use Twitter;
-use Normalizer;
-use GuzzleHttp\Client;
-use Laravel\Scout\Searchable;
-use Jonnybarnes\IndieWeb\Numbers;
-use League\CommonMark\Environment;
-use Illuminate\Database\Eloquent\Model;
-use Jonnybarnes\EmojiA11y\EmojiModifier;
-use Illuminate\Database\Eloquent\Builder;
-use League\CommonMark\CommonMarkConverter;
-use App\Exceptions\TwitterContentException;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Jonnybarnes\EmojiA11y\EmojiModifier;
+use Jonnybarnes\IndieWeb\Numbers;
+use Laravel\Scout\Searchable;
 use League\CommonMark\Block\Element\FencedCode;
 use League\CommonMark\Block\Element\IndentedCode;
-use Spatie\CommonMarkHighlighter\FencedCodeRenderer;
+use League\CommonMark\CommonMarkConverter;
+use League\CommonMark\Environment;
 use League\CommonMark\Ext\Autolink\AutolinkExtension;
+use Normalizer;
+use Spatie\CommonMarkHighlighter\FencedCodeRenderer;
 use Spatie\CommonMarkHighlighter\IndentedCodeRenderer;
+use Twitter;
 
 class Note extends Model
 {

@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Like;
-use App\Models\Note;
 use App\Models\Article;
 use App\Models\Bookmark;
+use App\Models\Like;
+use App\Models\Note;
 use App\Services\ActivityStreamsService;
 
 class FrontPageController extends Controller
