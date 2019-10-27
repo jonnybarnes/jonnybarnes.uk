@@ -6,6 +6,7 @@ namespace App\Jobs;
 
 use App\Models\Bookmark;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -14,14 +15,18 @@ use Illuminate\Queue\SerializesModels;
 
 class SyndicateBookmarkToTwitter implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
+    /** @var Bookmark */
     protected $bookmark;
 
     /**
      * Create a new job instance.
      *
-     * @param  \App\Models\Bookmark  $bookmark
+     * @param Bookmark $bookmark
      */
     public function __construct(Bookmark $bookmark)
     {
@@ -31,7 +36,8 @@ class SyndicateBookmarkToTwitter implements ShouldQueue
     /**
      * Execute the job.
      *
-     * @param  \GuzzleHttp\Client  $guzzle
+     * @param Client $guzzle
+     * @throws GuzzleException
      */
     public function handle(Client $guzzle)
     {

@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Jobs;
 
 use App\Exceptions\RemoteContentNotFoundException;
+use GuzzleHttp\Exception\GuzzleException;
+use Jonnybarnes\WebmentionsParser\Exceptions\InvalidMentionException;
 use App\Models\{Note, WebMention};
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
@@ -16,18 +18,23 @@ use Mf2;
 
 class ProcessWebMention implements ShouldQueue
 {
-    use InteractsWithQueue, Queueable, SerializesModels;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
+    /** @var Note */
     protected $note;
+
+    /** @var string */
     protected $source;
 
     /**
      * Create a new job instance.
      *
-     * @param  \App\Note  $note
-     * @param  string  $source
+     * @param Note $note
+     * @param string $source
      */
-    public function __construct(Note $note, $source)
+    public function __construct(Note $note, string $source)
     {
         $this->note = $note;
         $this->source = $source;
@@ -36,15 +43,18 @@ class ProcessWebMention implements ShouldQueue
     /**
      * Execute the job.
      *
-     * @param  \Jonnybarnes\WebmentionsParser\Parser  $parser
-     * @param  \GuzzleHttp\Client  $guzzle
+     * @param Parser $parser
+     * @param Client $guzzle
+     * @throws RemoteContentNotFoundException
+     * @throws GuzzleException
+     * @throws InvalidMentionException
      */
     public function handle(Parser $parser, Client $guzzle)
     {
         try {
             $response = $guzzle->request('GET', $this->source);
         } catch (RequestException $e) {
-            throw new RemoteContentNotFoundException;
+            throw new RemoteContentNotFoundException();
         }
         $this->saveRemoteContent((string) $response->getBody(), $this->source);
         $microformats = Mf2\parse((string) $response->getBody(), $this->source);
@@ -59,7 +69,7 @@ class ProcessWebMention implements ShouldQueue
 
                     return;
                 }
-                // webmenion is still a reply, so update content
+                // webmention is still a reply, so update content
                 dispatch(new SaveProfileImage($microformats));
                 $webmention->mf2 = json_encode($microformats);
                 $webmention->save();
@@ -91,7 +101,7 @@ class ProcessWebMention implements ShouldQueue
         $webmention->source = $this->source;
         $webmention->target = $this->note->longurl;
         $webmention->commentable_id = $this->note->id;
-        $webmention->commentable_type = 'App\Note';
+        $webmention->commentable_type = 'App\Model\Note';
         $webmention->type = $type;
         $webmention->mf2 = json_encode($microformats);
         $webmention->save();

@@ -65,12 +65,12 @@ block-all-mixed-content; \
 report-to csp-endpoint; \
 report-uri https://jonnybarnes.report-uri.io/r/default/csp/enforce;")
             )->header(
-                'Report-To',
-                '{' .
+            'Report-To',
+            '{' .
                     "'url': 'https://jonnybarnes.report-uri.io/r/default/csp/enforce', " .
                     "'group': 'csp-endpoint'," .
                     "'max-age': 10886400" .
-                '}'
-            );
+            '}'
+        );
     }
 }

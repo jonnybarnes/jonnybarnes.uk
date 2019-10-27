@@ -6,22 +6,28 @@ namespace App\Jobs;
 
 use App\Models\Note;
 use GuzzleHttp\Client;
+use GuzzleHttp\Psr7\Uri;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Str;
 
+use function GuzzleHttp\Psr7\uri_for;
+
 class SendWebMentions implements ShouldQueue
 {
-    use InteractsWithQueue, Queueable, SerializesModels;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
+    /** @var Note */
     protected $note;
 
     /**
      * Create the job instance, inject dependencies.
      *
-     * @param  Note  $note
+     * @param Note $note
      */
     public function __construct(Note $note)
     {
@@ -58,7 +64,7 @@ class SendWebMentions implements ShouldQueue
     /**
      * Discover if a URL has a webmention endpoint.
      *
-     * @param  string  $url
+     * @param string $url
      * @return string|null
      */
     public function discoverWebmentionEndpoint(string $url)
@@ -101,14 +107,15 @@ class SendWebMentions implements ShouldQueue
     /**
      * Get the URLs from a note.
      *
-     * @param  string  $html
-     * @return array $urls
+     * @param string $html
+     * @return array
      */
-    public function getLinks($html)
+    public function getLinks(string $html): array
     {
         if ($html == '' || is_null($html)) {
             return [];
         }
+
         $urls = [];
         $dom = new \DOMDocument();
         $dom->loadHTML($html);
@@ -123,19 +130,21 @@ class SendWebMentions implements ShouldQueue
     /**
      * Resolve a URI if necessary.
      *
-     * @param  string  $url
-     * @param  string  $base The base of the URL
+     * @todo Update deprecated resolve method
+     *
+     * @param string $url
+     * @param string $base The base of the URL
      * @return string
      */
     public function resolveUri(string $url, string $base): string
     {
-        $endpoint = \GuzzleHttp\Psr7\uri_for($url);
+        $endpoint = uri_for($url);
         if ($endpoint->getScheme() != '') {
             return (string) $endpoint;
         }
 
-        return (string) \GuzzleHttp\Psr7\Uri::resolve(
-            \GuzzleHttp\Psr7\uri_for($base),
+        return (string) Uri::resolve(
+            uri_for($base),
             $endpoint
         );
     }

@@ -387,8 +387,10 @@ class Note extends Model
 
         // here we check the matched contact from the note corresponds to a contact
         // in the database
-        if (count(array_unique(array_values($this->contacts))) === 1
-            && array_unique(array_values($this->contacts))[0] === null) {
+        if (
+            count(array_unique(array_values($this->contacts))) === 1
+            && array_unique(array_values($this->contacts))[0] === null
+        ) {
             throw new TwitterContentException('The matched contact is not in the database');
         }
 

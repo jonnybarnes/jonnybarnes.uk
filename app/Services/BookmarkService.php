@@ -10,18 +10,18 @@ use App\Jobs\SyndicateBookmarkToTwitter;
 use App\Models\{Bookmark, Tag};
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
-use Illuminate\Http\Request;
 use Illuminate\Support\{Arr, Str};
 use Ramsey\Uuid\Uuid;
 use Spatie\Browsershot\Browsershot;
+use Spatie\Browsershot\Exceptions\CouldNotTakeBrowsershot;
 
 class BookmarkService
 {
     /**
      * Create a new Bookmark.
      *
-     * @param  array  $request Data from request()->all()
-     * @return Bookmark $bookmark
+     * @param array $request Data from request()->all()
+     * @return Bookmark
      */
     public function createBookmark(array $request): Bookmark
     {
@@ -81,8 +81,9 @@ class BookmarkService
     /**
      * Given a URL, use browsershot to save an image of the page.
      *
-     * @param  string  $url
+     * @param string $url
      * @return string  The uuid for the screenshot
+     * @throws CouldNotTakeBrowsershot
      */
     public function saveScreenshot(string $url): string
     {
@@ -102,8 +103,9 @@ class BookmarkService
     /**
      * Given a URL, attempt to save it to the Internet Archive.
      *
-     * @param  string  $url
+     * @param string $url
      * @return string
+     * @throws InternetArchiveException
      */
     public function getArchiveLink(string $url): string
     {
@@ -112,7 +114,7 @@ class BookmarkService
             $response = $client->request('GET', 'https://web.archive.org/save/' . $url);
         } catch (ClientException $e) {
             //throw an exception to be caught
-            throw new InternetArchiveException;
+            throw new InternetArchiveException();
         }
         if ($response->hasHeader('Content-Location')) {
             if (Str::startsWith(Arr::get($response->getHeader('Content-Location'), 0), '/web')) {
@@ -121,6 +123,6 @@ class BookmarkService
         }
 
         //throw an exception to be caught
-        throw new InternetArchiveException;
+        throw new InternetArchiveException();
     }
 }

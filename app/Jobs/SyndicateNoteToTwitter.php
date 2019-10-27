@@ -6,6 +6,7 @@ namespace App\Jobs;
 
 use App\Models\Note;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
@@ -13,14 +14,17 @@ use Illuminate\Queue\SerializesModels;
 
 class SyndicateNoteToTwitter implements ShouldQueue
 {
-    use InteractsWithQueue, Queueable, SerializesModels;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
+    /** @var Note */
     protected $note;
 
     /**
      * Create a new job instance.
      *
-     * @param  \App\Models\Note  $note
+     * @param Note $note
      */
     public function __construct(Note $note)
     {
@@ -30,7 +34,8 @@ class SyndicateNoteToTwitter implements ShouldQueue
     /**
      * Execute the job.
      *
-     * @param  \GuzzleHttp\Client  $guzzle
+     * @param Client $guzzle
+     * @throws GuzzleException
      */
     public function handle(Client $guzzle)
     {

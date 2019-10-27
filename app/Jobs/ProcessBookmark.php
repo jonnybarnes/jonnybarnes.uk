@@ -15,14 +15,18 @@ use Illuminate\Queue\SerializesModels;
 
 class ProcessBookmark implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
+    /** @var Bookmark */
     protected $bookmark;
 
     /**
      * Create a new job instance.
      *
-     * @param  \App\Models\Bookmark  $bookmark
+     * @param Bookmark $bookmark
      */
     public function __construct(Bookmark $bookmark)
     {

@@ -15,14 +15,17 @@ use Jonnybarnes\WebmentionsParser\Exceptions\AuthorshipParserException;
 
 class SaveProfileImage implements ShouldQueue
 {
-    use InteractsWithQueue, Queueable, SerializesModels;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
+    /** @var array */
     protected $microformats;
 
     /**
      * Create a new job instance.
      *
-     * @param  array  $microformats
+     * @param array $microformats
      */
     public function __construct(array $microformats)
     {
@@ -32,7 +35,7 @@ class SaveProfileImage implements ShouldQueue
     /**
      * Execute the job.
      *
-     * @param  \Jonnybarnes\WebmentionsParser\Authorship  $authorship
+     * @param Authorship $authorship
      */
     public function handle(Authorship $authorship)
     {
@@ -44,14 +47,16 @@ class SaveProfileImage implements ShouldQueue
         $photo = $author['properties']['photo'][0];
         $home = $author['properties']['url'][0];
         //dont save pbs.twimg.com links
-        if (parse_url($photo, PHP_URL_HOST) != 'pbs.twimg.com'
-              && parse_url($photo, PHP_URL_HOST) != 'twitter.com') {
+        if (
+            parse_url($photo, PHP_URL_HOST) != 'pbs.twimg.com'
+            && parse_url($photo, PHP_URL_HOST) != 'twitter.com'
+        ) {
             $client = resolve(Client::class);
             try {
                 $response = $client->get($photo);
                 $image = $response->getBody(true);
             } catch (RequestException $e) {
-                // we are openning and reading the default image so that
+                // we are opening and reading the default image so that
                 $default = public_path() . '/assets/profile-images/default-image';
                 $handle = fopen($default, 'rb');
                 $image = fread($handle, filesize($default));

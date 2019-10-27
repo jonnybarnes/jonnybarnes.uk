@@ -12,6 +12,7 @@
         "php": "^7.2",
         "ext-intl": "*",
         "ext-json": "*",
+        "ext-dom": "*",
         "cviebrock/eloquent-sluggable": "~6.0",
         "fideloper/proxy": "~4.0",
         "guzzlehttp/guzzle": "~6.0",

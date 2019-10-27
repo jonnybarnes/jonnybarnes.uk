@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace App\Jobs;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\FileSystem\FileSystem;
 use Illuminate\Queue\InteractsWithQueue;
@@ -13,19 +15,21 @@ use Illuminate\Queue\SerializesModels;
 
 class DownloadWebMention implements ShouldQueue
 {
-    use InteractsWithQueue, Queueable, SerializesModels;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     /**
      * The webmention source URL.
      *
-     * @var
+     * @var string
      */
     protected $source;
 
     /**
      * Create a new job instance.
      *
-     * @param  string  $source
+     * @param string $source
      */
     public function __construct(string $source)
     {
@@ -35,7 +39,9 @@ class DownloadWebMention implements ShouldQueue
     /**
      * Execute the job.
      *
-     * @param  \GuzzleHttp\Client  $guzzle
+     * @param Client $guzzle
+     * @throws GuzzleException
+     * @throws FileNotFoundException
      */
     public function handle(Client $guzzle)
     {
@@ -73,13 +79,12 @@ class DownloadWebMention implements ShouldQueue
     }
 
     /**
-     * Create a file path from a URL. This is used when caching the HTML
-     * response.
+     * Create a file path from a URL. This is used when caching the HTML response.
      *
-     * @param  string  The URL
-     * @return string  The path name
+     * @param string $url
+     * @return string The path name
      */
-    private function createFilenameFromURL($url)
+    private function createFilenameFromURL(string $url)
     {
         $filepath = str_replace(['https://', 'http://'], ['https/', 'http/'], $url);
         if (substr($filepath, -1) == '/') {

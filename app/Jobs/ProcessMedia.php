@@ -15,14 +15,18 @@ use Intervention\Image\ImageManager;
 
 class ProcessMedia implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
+    /** @var string */
     protected $filename;
 
     /**
      * Create a new job instance.
      *
-     * @param  string  $filename
+     * @param string $filename
      */
     public function __construct(string $filename)
     {
@@ -32,7 +36,7 @@ class ProcessMedia implements ShouldQueue
     /**
      * Execute the job.
      *
-     * @param  \Intervention\Image\ImageManager  $manager
+     * @param ImageManager $manager
      */
     public function handle(ImageManager $manager)
     {
@@ -49,7 +53,7 @@ class ProcessMedia implements ShouldQueue
         if ($image->width() > 1000) {
             $filenameParts = explode('.', $this->filename);
             $extension = array_pop($filenameParts);
-            // the following acheives this data flow
+            // the following achieves this data flow
             // foo.bar.png => ['foo', 'bar', 'png'] => ['foo', 'bar'] => foo.bar
             $basename = ltrim(array_reduce($filenameParts, function ($carry, $item) {
                 return $carry . '.' . $item;
@@ -57,7 +61,7 @@ class ProcessMedia implements ShouldQueue
             $medium = $image->resize(1000, null, function ($constraint) {
                 $constraint->aspectRatio();
             });
-            Storage::disk('s3')->put('media/'. $basename . '-medium.' . $extension, (string) $medium->encode());
+            Storage::disk('s3')->put('media/' . $basename . '-medium.' . $extension, (string) $medium->encode());
             $small = $image->resize(500, null, function ($constraint) {
                 $constraint->aspectRatio();
             });
