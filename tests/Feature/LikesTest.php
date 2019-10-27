@@ -2,7 +2,9 @@
 
 namespace Tests\Feature;
 
+use Codebird\Codebird;
 use Queue;
+use stdClass;
 use Tests\TestCase;
 use App\Models\Like;
 use Tests\TestToken;
@@ -191,6 +193,7 @@ END;
         $handler = HandlerStack::create($mock);
         $client = new Client(['handler' => $handler]);
         $this->app->bind(Client::class, $client);
+
         $authorship = new Authorship();
 
         $job->handle($client, $authorship);

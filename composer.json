@@ -9,7 +9,8 @@
     ],
     "license": "CC0-1.0",
     "require": {
-        "php": ">=7.2.0",
+        "php": "^7.2",
+        "ext-intl": "*",
         "ext-json": "*",
         "cviebrock/eloquent-sluggable": "~6.0",
         "fideloper/proxy": "~4.0",
@@ -19,6 +20,7 @@
         "jonnybarnes/emoji-a11y": "^0.3",
         "jonnybarnes/indieweb": "dev-master",
         "jonnybarnes/webmentions-parser": "0.4.*",
+        "jublonet/codebird-php": "4.0.0-beta.1",
         "laravel/framework": "^6.0",
         "laravel/horizon": "^3.0",
         "laravel/scout": "^7.0",
@@ -39,16 +41,14 @@
         "tgalopin/html-sanitizer": "^1.1"
     },
     "require-dev": {
-        "barryvdh/laravel-debugbar": "~3.0",
+        "barryvdh/laravel-debugbar": "^3.0",
         "beyondcode/laravel-dump-server": "^1.0",
-        "codedungeon/phpunit-result-printer": "^0.26.0",
-        "filp/whoops": "~2.0",
-        "fzaninotto/faker": "~1.4",
+        "facade/ignition": "^1.4",
+        "fzaninotto/faker": "^1.4",
         "laravel/dusk": "^5.0",
-        "mockery/mockery": "~1.0",
+        "mockery/mockery": "^1.0",
         "nunomaduro/collision": "^3.0",
-        "phpunit/phpunit": "~8.0",
-        "symfony/thanks": "~1.0"
+        "phpunit/phpunit": "^8.0"
     },
     "config": {
         "optimize-autoloader": true,

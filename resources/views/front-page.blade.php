@@ -20,7 +20,7 @@
                     @include('templates.like', ['like' => $item])
                     @break
                 @case($item instanceof \App\Models\Bookmark)
-                    <p>This is a bookmark</p>
+                    @include('templates.bookmark', ['bookmark' => $item])
                     @break
             @endswitch
         @endforeach

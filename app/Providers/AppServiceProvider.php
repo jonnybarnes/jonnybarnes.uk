@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\Note;
+use Codebird\Codebird;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Observers\NoteObserver;
@@ -28,6 +29,23 @@ class AppServiceProvider extends ServiceProvider
         // configure Intervention/Image
         $this->app->bind('Intervention\Image\ImageManager', function () {
             return new \Intervention\Image\ImageManager(['driver' => config('image.driver')]);
+        });
+
+        // Bind the Codebird client
+        $this->app->bind('Codebird\Codebird', function () {
+            Codebird::setConsumerKey(
+                env('TWITTER_CONSUMER_KEY'),
+                env('TWITTER_CONSUMER_SECRET')
+            );
+
+            $cb = Codebird::getInstance();
+
+            $cb->setToken(
+                env('TWITTER_ACCESS_TOKEN'),
+                env('TWITTER_ACCESS_TOKEN_SECRET')
+            );
+
+            return $cb;
         });
     }
 

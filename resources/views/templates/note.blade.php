@@ -28,7 +28,7 @@ try {
 @if($note->replies_count > 0) @include('templates.replies-icon'): {{ $note->replies_count }}@endif
 
                             </div>
-                            <div class="social-links">
+                            <div class="syndication-links">
 @if(
     $note->tweet_id ||
     $note->facebook_url ||

@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use Cache;
-use Twitter;
 use App\Traits\FilterHtml;
+use Codebird\Codebird;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
 use Jonnybarnes\WebmentionsParser\Authorship;
+use Jonnybarnes\WebmentionsParser\Exceptions\AuthorshipParserException;
 
 class WebMention extends Model
 {
@@ -32,7 +34,7 @@ class WebMention extends Model
     /**
      * Define the relationship.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphTo
+     * @return MorphTo
      */
     public function commentable()
     {
@@ -43,12 +45,14 @@ class WebMention extends Model
      * Get the author of the webmention.
      *
      * @return array
+     * @throws AuthorshipParserException
      */
     public function getAuthorAttribute(): array
     {
         $authorship = new Authorship();
         $hCard = $authorship->findAuthor(json_decode($this->mf2, true));
-        if (array_key_exists('properties', $hCard) &&
+        if (
+            array_key_exists('properties', $hCard) &&
             array_key_exists('photo', $hCard['properties'])
         ) {
             $hCard['properties']['photo'][0] = $this->createPhotoLink($hCard['properties']['photo'][0]);
@@ -118,7 +122,8 @@ class WebMention extends Model
                 return Cache::get($url);
             }
             $username = ltrim(parse_url($url, PHP_URL_PATH), '/');
-            $info = Twitter::getUsers(['screen_name' => $username]);
+            $codebird = resolve(Codebird::class);
+            $info = $codebird->users_show(['screen_name' => $username]);
             $profile_image = $info->profile_image_url_https;
             Cache::put($url, $profile_image, 10080); //1 week
 

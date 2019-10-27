@@ -4,10 +4,10 @@
         <meta charset="UTF-8">
         <title>@if (App::environment() == 'local'){!! "[testing] -"!!}@endif @yield('title'){{ config('app.display_name') }}</title>
         <meta name="viewport" content="width=device-width">
+        <link rel="stylesheet" href="https://use.typekit.net/csl8adl.css">
         <link rel="stylesheet" href="/assets/frontend/normalize.css">
         <link rel="stylesheet" href="/assets/app.css">
         <link rel="stylesheet" href="/assets/highlight/zenburn.css">
-        <link rel="stylesheet" href="https://use.typekit.net/csl8adl.css">
         <link rel="alternate" type="application/rss+xml" title="Blog RSS Feed" href="/blog/feed.rss">
         <link rel="alternate" type="application/atom+xml" title="Blog Atom Feed" href="/blog/feed.atom">
         <link rel="alternate" type="application/json" title="Blog JSON Feed" href="/blog/feed.json">
@@ -24,7 +24,7 @@
         <link rel="pgpkey" href="/assets/jonnybarnes-public-key-ecc.asc">
     </head>
     <body>
-        <header id="topheader">
+        <header id="top-header">
             <a rel="author" href="/">
                 <h1>{{ config('app.display_name') }}</h1>
             </a>

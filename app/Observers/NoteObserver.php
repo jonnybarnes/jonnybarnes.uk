@@ -12,11 +12,11 @@ class NoteObserver
     /**
      * Listen to the Note created event.
      *
-     * @param  \App\Note  $note
+     * @param Note $note
      */
     public function created(Note $note)
     {
-        $text = array_get($note->getAttributes(), 'note');
+        $text = Arr::get($note->getAttributes(), 'note');
         if ($text === null) {
             return;
         }
@@ -36,7 +36,7 @@ class NoteObserver
     /**
      * Listen to the Note updated event.
      *
-     * @param  \App\Note  $Note
+     * @param Note $note
      */
     public function updated(Note $note)
     {
@@ -62,7 +62,7 @@ class NoteObserver
     /**
      * Listen to the Note deleting event.
      *
-     * @param  \App\Note  $note
+     * @param Note $note
      */
     public function deleting(Note $note)
     {
@@ -72,8 +72,8 @@ class NoteObserver
     /**
      * Retrieve the tags from a note’s text, tag for form #tag.
      *
-     * @param  string  $note
-     * @return \Illuminate\Support\Collection
+     * @param string $note
+     * @return Collection
      */
     private function getTagsFromNote(string $note): Collection
     {

@@ -8,7 +8,6 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
 use App\Models\{Media, Note, Tag};
 use GuzzleHttp\Handler\MockHandler;
-use Thujohn\Twitter\Facades\Twitter;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class NotesTest extends TestCase
@@ -24,7 +23,7 @@ class NotesTest extends TestCase
     public function test_get_note_attribute_method()
     {
         $expected = '<p>Having a <a rel="tag" class="p-category" href="/notes/tagged/beer">#beer</a> at the local. <span role="img" aria-label="beer mug">🍺</span></p>' . PHP_EOL;
-        $note = Note::find(12);
+        $note = Note::find(2);
         $this->assertEquals($expected, $note->note);
     }
 
@@ -36,7 +35,7 @@ class NotesTest extends TestCase
     public function test_default_image_used_in_makehcards_method()
     {
         $expected = '<p>Hi <span class="u-category h-card mini-h-card"><a class="u-url p-name" href="http://tantek.com">Tantek Çelik</a><span class="hovercard"> <a class="u-url" href="https://twitter.com/t"><img class="social-icon" src="/assets/img/social-icons/twitter.svg"> t</a><img class="u-photo" alt="" src="/assets/profile-images/default-image"></span></span></p>' . PHP_EOL;
-        $note = Note::find(14);
+        $note = Note::find(4);
         $this->assertEquals($expected, $note->note);
     }
 
@@ -48,7 +47,7 @@ class NotesTest extends TestCase
     public function test_specific_profile_image_used_in_makehcards_method()
     {
         $expected = '<p>Hi <span class="u-category h-card mini-h-card"><a class="u-url p-name" href="https://aaronparecki.com">Aaron Parecki</a><span class="hovercard"><a class="u-url" href="https://www.facebook.com/123456"><img class="social-icon" src="/assets/img/social-icons/facebook.svg"> Facebook</a> <img class="u-photo" alt="" src="/assets/profile-images/aaronparecki.com/image"></span></span></p>' . PHP_EOL;
-        $note = Note::find(15);
+        $note = Note::find(5);
         $this->assertEquals($expected, $note->note);
     }
 
@@ -60,7 +59,7 @@ class NotesTest extends TestCase
     public function test_twitter_link_created_when_no_contact_found()
     {
         $expected = '<p>Hi <a href="https://twitter.com/bob">@bob</a></p>' . PHP_EOL;
-        $note = Note::find(16);
+        $note = Note::find(6);
         $this->assertEquals($expected, $note->note);
     }
 
@@ -72,7 +71,7 @@ class NotesTest extends TestCase
 
     public function test_latlng_of_associated_place()
     {
-        $note = Note::find(12); // should be having beer at bridgewater note
+        $note = Note::find(2); // should be having beer at bridgewater note
         $this->assertEquals('53.4983', $note->latitude);
         $this->assertEquals('-2.3805', $note->longitude);
     }
@@ -86,7 +85,7 @@ class NotesTest extends TestCase
 
     public function test_address_attribute_for_places()
     {
-        $note = Note::find(12);
+        $note = Note::find(2);
         $this->assertEquals('The Bridgewater Pub', $note->address);
     }
 
@@ -280,12 +279,8 @@ JSON;
     /** @test */
     public function twitter_content_is_null_when_oembed_error_occurs()
     {
-        Twitter::shouldReceive('getOembed')
-            ->once()
-            ->andThrow('Exception');
-
         $note = new Note();
-        $note->in_reply_to = 'https://twitter.com/foo';
+        $note->in_reply_to = 'https://twitter.com/search';
 
         $this->assertNull($note->twitter);
     }

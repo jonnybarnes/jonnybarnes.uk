@@ -5,6 +5,12 @@ declare(strict_types=1);
 namespace App\Models;
 
 use Cache;
+use Codebird\Codebird;
+use Exception;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Twitter;
 use Normalizer;
 use GuzzleHttp\Client;
@@ -29,7 +35,7 @@ class Note extends Model
     use SoftDeletes;
 
     /**
-     * The reges for matching lone usernames.
+     * The regex for matching lone usernames.
      *
      * @var string
      */
@@ -79,7 +85,7 @@ class Note extends Model
     /**
      * Define the relationship with tags.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return BelongsToMany
      */
     public function tags()
     {
@@ -89,7 +95,7 @@ class Note extends Model
     /**
      * Define the relationship with clients.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function client()
     {
@@ -99,7 +105,7 @@ class Note extends Model
     /**
      * Define the relationship with webmentions.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     * @return MorphMany
      */
     public function webmentions()
     {
@@ -109,7 +115,7 @@ class Note extends Model
     /**
      * Define the relationship with places.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function place()
     {
@@ -119,7 +125,7 @@ class Note extends Model
     /**
      * Define the relationship with media.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     public function media()
     {
@@ -346,13 +352,18 @@ class Note extends Model
         }
 
         try {
-            $oEmbed = Twitter::getOembed([
+            $codebird = resolve(Codebird::class);
+            $oEmbed = $codebird->statuses_oembed([
                 'url' => $this->in_reply_to,
                 'dnt' => true,
                 'align' => 'center',
                 'maxwidth' => 512,
             ]);
-        } catch (\Exception $e) {
+
+            if ($oEmbed->httpstatus >= 400) {
+                throw new Exception();
+            }
+        } catch (Exception $e) {
             return null;
         }
         Cache::put($tweetId, $oEmbed, ($oEmbed->cache_age));

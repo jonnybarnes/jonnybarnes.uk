@@ -676,7 +676,7 @@ class MicropubControllerTest extends TestCase
             '/api/post',
             [
                 'action' => 'update',
-                'url' => config('app.url') . '/notes/L',
+                'url' => config('app.url') . '/notes/B',
                 'replace' => [
                     'syndication' => [
                         'https://www.swarmapp.com/checkin/the-id',

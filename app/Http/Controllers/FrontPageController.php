@@ -6,6 +6,7 @@ use App\Models\Like;
 use App\Models\Note;
 use App\Models\Article;
 use App\Models\Bookmark;
+use App\Services\ActivityStreamsService;
 
 class FrontPageController extends Controller
 {
@@ -14,6 +15,10 @@ class FrontPageController extends Controller
      */
     public function index()
     {
+        if (request()->wantsActivityStream()) {
+            return (new ActivityStreamsService())->siteOwnerResponse();
+        }
+
         $pageNumber = request()->query('page') ?? 1;
 
         $notes = Note::latest()->get();
