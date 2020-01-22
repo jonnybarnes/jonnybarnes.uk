@@ -54,6 +54,14 @@ body {
             }
         }
     }
+
+    > .e-content {
+        > .naked-link {
+            .u-photo {
+                margin: 2rem 0;
+            }
+        }
+    }
 }
 
 .personal-bio {
