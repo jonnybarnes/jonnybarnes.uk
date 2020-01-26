@@ -5,8 +5,5 @@ disabled:
   - simplified_null_return
   - single_import_per_statement
 
-enabled:
-  - alpha_ordered_imports
-
 finder:
   path: app/
