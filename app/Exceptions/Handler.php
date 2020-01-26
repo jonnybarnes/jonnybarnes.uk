@@ -43,6 +43,8 @@ class Handler extends ExceptionHandler
      */
     public function report(Exception $exception)
     {
+        parent::report($exception);
+
         $guzzle = new \GuzzleHttp\Client([
             'headers' => [
                 'Content-Type' => 'application/json',
@@ -68,8 +70,6 @@ class Handler extends ExceptionHandler
                 ]),
             ]
         );
-
-        parent::report($exception);
     }
 
     /**
