@@ -1,41 +1,37 @@
-const webpack = require('webpack');
-const Dotenv = require('dotenv-webpack');
+const path = require('path');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
-const config = {
-  context: __dirname + '/resources/es6',
-  entry: {
-    a11y: './a11y.js',
-    colours: './colours.js',
-    links: './links.js',
-    maps: './maps.js',
-    piwik: './piwik.js',
-    places: './places.js'
-  },
-  output: {
-    filename: '[name].js',
-    path: __dirname + '/public/assets/js'
-  },
-  devtool: 'source-map',
-  module: {
-    noParse: [/mapbox-gl\.js$/],
-    rules: [
-      {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: ['@babel/preset-env'],
-          }
-        }
-      }
+module.exports = {
+    mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
+    devtool: 'source-map',
+    entry: [
+        './resources/sass/app.scss'
+    ],
+    output: {
+        path: path.resolve('./public/assets'),
+    },
+    module: {
+        rules: [{
+            test: /\.scss$/,
+            use: [{
+                loader: MiniCssExtractPlugin.loader, options: {
+                    sourceMap: true
+                }
+            }, {
+                loader: 'css-loader', options: {
+                    sourceMap: true
+                }
+            }, {
+                loader: 'sass-loader', options: {
+                    sourceMap: true,
+                }
+            }]
+        }]
+    },
+    plugins: [
+        new MiniCssExtractPlugin({
+            filename: 'app.css',
+            chunkFilename: 'app.css',
+        }),
     ]
-  },
-  plugins: [
-    new Dotenv({
-      path: './.env'
-    })
-  ]
 };
-
-module.exports = config;

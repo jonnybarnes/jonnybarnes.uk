@@ -2,6 +2,7 @@
 
 namespace Tests\Unit;
 
+use Codebird\Codebird;
 use Tests\TestCase;
 use App\Models\WebMention;
 use Thujohn\Twitter\Facades\Twitter;
@@ -94,18 +95,21 @@ class WebMentionTest extends TestCase
 
     public function test_create_photo_link_with_noncached_twitter_url()
     {
+        $info = new \stdClass();
+        $info->profile_image_url_https = 'https://pbs.twimg.com/static_profile_link.jpg';
+        $codebirdMock = $this->getMockBuilder(Codebird::class)
+            ->addMethods(['users_show'])
+            ->getMock();
+        $codebirdMock->method('users_show')
+            ->willReturn($info);
+        $this->app->instance(Codebird::class, $codebirdMock);
+
         Cache::shouldReceive('has')
                     ->once()
                     ->andReturn(false);
         Cache::shouldReceive('put')
                     ->once()
                     ->andReturn(true);
-        $info = new \stdClass();
-        $info->profile_image_url_https = 'https://pbs.twimg.com/static_profile_link.jpg';
-        Twitter::shouldReceive('getUsers')
-                    ->once()
-                    ->with(['screen_name' => 'example'])
-                    ->andReturn($info);
 
         $webmention = new WebMention();
         $twitterURL = 'https://twitter.com/example';

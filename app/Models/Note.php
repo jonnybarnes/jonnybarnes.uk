@@ -4,24 +4,29 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use Cache;
-use Twitter;
-use Normalizer;
-use GuzzleHttp\Client;
-use Laravel\Scout\Searchable;
-use Jonnybarnes\IndieWeb\Numbers;
-use League\CommonMark\Environment;
-use Illuminate\Database\Eloquent\Model;
-use Jonnybarnes\EmojiA11y\EmojiModifier;
-use Illuminate\Database\Eloquent\Builder;
-use League\CommonMark\CommonMarkConverter;
 use App\Exceptions\TwitterContentException;
+use Cache;
+use Codebird\Codebird;
+use Exception;
+use GuzzleHttp\Client;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Jonnybarnes\IndieWeb\Numbers;
+use Laravel\Scout\Searchable;
 use League\CommonMark\Block\Element\FencedCode;
 use League\CommonMark\Block\Element\IndentedCode;
-use Spatie\CommonMarkHighlighter\FencedCodeRenderer;
+use League\CommonMark\CommonMarkConverter;
+use League\CommonMark\Environment;
 use League\CommonMark\Ext\Autolink\AutolinkExtension;
+use Normalizer;
+use Spatie\CommonMarkHighlighter\FencedCodeRenderer;
 use Spatie\CommonMarkHighlighter\IndentedCodeRenderer;
+use Twitter;
 
 class Note extends Model
 {
@@ -29,7 +34,7 @@ class Note extends Model
     use SoftDeletes;
 
     /**
-     * The reges for matching lone usernames.
+     * The regex for matching lone usernames.
      *
      * @var string
      */
@@ -79,7 +84,7 @@ class Note extends Model
     /**
      * Define the relationship with tags.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return BelongsToMany
      */
     public function tags()
     {
@@ -89,7 +94,7 @@ class Note extends Model
     /**
      * Define the relationship with clients.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function client()
     {
@@ -99,7 +104,7 @@ class Note extends Model
     /**
      * Define the relationship with webmentions.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     * @return MorphMany
      */
     public function webmentions()
     {
@@ -109,7 +114,7 @@ class Note extends Model
     /**
      * Define the relationship with places.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function place()
     {
@@ -119,7 +124,7 @@ class Note extends Model
     /**
      * Define the relationship with media.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     public function media()
     {
@@ -174,9 +179,8 @@ class Note extends Model
         $hcards = $this->makeHCards($value);
         $hashtags = $this->autoLinkHashtag($hcards);
         $html = $this->convertMarkdown($hashtags);
-        $modified = resolve(EmojiModifier::class)->makeEmojiAccessible($html);
 
-        return $modified;
+        return $html;
     }
 
     /**
@@ -346,13 +350,18 @@ class Note extends Model
         }
 
         try {
-            $oEmbed = Twitter::getOembed([
+            $codebird = resolve(Codebird::class);
+            $oEmbed = $codebird->statuses_oembed([
                 'url' => $this->in_reply_to,
                 'dnt' => true,
                 'align' => 'center',
                 'maxwidth' => 512,
             ]);
-        } catch (\Exception $e) {
+
+            if ($oEmbed->httpstatus >= 400) {
+                throw new Exception();
+            }
+        } catch (Exception $e) {
             return null;
         }
         Cache::put($tweetId, $oEmbed, ($oEmbed->cache_age));
@@ -376,8 +385,10 @@ class Note extends Model
 
         // here we check the matched contact from the note corresponds to a contact
         // in the database
-        if (count(array_unique(array_values($this->contacts))) === 1
-            && array_unique(array_values($this->contacts))[0] === null) {
+        if (
+            count(array_unique(array_values($this->contacts))) === 1
+            && array_unique(array_values($this->contacts))[0] === null
+        ) {
             throw new TwitterContentException('The matched contact is not in the database');
         }
 

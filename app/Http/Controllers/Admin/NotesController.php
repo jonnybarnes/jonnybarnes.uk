@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Note;
-use Illuminate\View\View;
-use Illuminate\Http\Request;
-use App\Jobs\SendWebMentions;
 use App\Http\Controllers\Controller;
+use App\Jobs\SendWebMentions;
+use App\Models\Note;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class NotesController extends Controller
 {

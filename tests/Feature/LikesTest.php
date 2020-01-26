@@ -2,7 +2,9 @@
 
 namespace Tests\Feature;
 
+use Codebird\Codebird;
 use Queue;
+use stdClass;
 use Tests\TestCase;
 use App\Models\Like;
 use Tests\TestToken;
@@ -191,28 +193,18 @@ END;
         $handler = HandlerStack::create($mock);
         $client = new Client(['handler' => $handler]);
         $this->app->bind(Client::class, $client);
-        $authorship = new Authorship();
 
-        $job->handle($client, $authorship);
+        $info = new stdClass();
+        $info->author_name = 'Jonny Barnes';
+        $info->author_url = 'https://twitter.com/jonnybarnes';
+        $info->html = '<div>HTML of the tweet embed</div>';
+        $codebirdMock = $this->getMockBuilder(Codebird::class)
+            ->addMethods(['statuses_oembed'])
+            ->getMock();
+        $codebirdMock->method('statuses_oembed')
+            ->willReturn($info);
+        $this->app->instance(Codebird::class, $codebirdMock);
 
-        $this->assertEquals('Jonny Barnes', Like::find($id)->author_name);
-    }
-
-    public function test_process_like_that_is_tweet_with_oembed_error()
-    {
-        $like = new Like();
-        $like->url = 'https://twitter.com/jonnybarnes/status/1050823255123251200';
-        $like->save();
-        $id = $like->id;
-
-        $job = new ProcessLike($like);
-
-        $mock = new MockHandler([
-            new Response(500),
-        ]);
-        $handler = HandlerStack::create($mock);
-        $client = new Client(['handler' => $handler]);
-        $this->app->bind(Client::class, $client);
         $authorship = new Authorship();
 
         $job->handle($client, $authorship);

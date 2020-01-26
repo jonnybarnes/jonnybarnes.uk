@@ -10,4 +10,3 @@
     crossorigin="anonymous"
     defer
 ></script>
-<script defer src="/assets/js/maps.js"></script>

@@ -4,9 +4,11 @@ namespace App\Exceptions;
 
 use App;
 use Exception;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Session\TokenMismatchException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Session\TokenMismatchException;
+use Illuminate\Support\Facades\Route;
 
 /**
  * @codeCoverageIgnore
@@ -37,11 +39,14 @@ class Handler extends ExceptionHandler
      *
      * This is a great spot to send exceptions to Sentry, Bugsnag, etc.
      *
-     * @param  \Exception  $exception
+     * @param Exception $exception
      * @return void
+     * @throws Exception
      */
     public function report(Exception $exception)
     {
+        parent::report($exception);
+
         $guzzle = new \GuzzleHttp\Client([
             'headers' => [
                 'Content-Type' => 'application/json',
@@ -56,7 +61,7 @@ class Handler extends ExceptionHandler
                         'fallback' => 'There was an exception.',
                         'pretext' => 'There was an exception.',
                         'color' => '#d00000',
-                        'author_name' => App::environment(),
+                        'author_name' => app()->environment(),
                         'author_link' => config('app.url'),
                         'fields' => [[
                             'title' => get_class($exception) ?? 'Unkown Exception',
@@ -67,16 +72,15 @@ class Handler extends ExceptionHandler
                 ]),
             ]
         );
-
-        parent::report($exception);
     }
 
     /**
      * Render an exception into an HTTP response.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Exception  $exception
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param Exception $exception
+     * @return Response
+     * @throws Exception
      */
     public function render($request, Exception $exception)
     {

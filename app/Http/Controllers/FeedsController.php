@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Response;
 use App\Models\{Article, Note};
+use Illuminate\Http\Response;
 
 class FeedsController extends Controller
 {

@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Services\Micropub;
 
 use App\Models\{Media, Note};
-use Illuminate\Support\{Arr, Str};
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\{Arr, Str};
 
 class UpdateService
 {

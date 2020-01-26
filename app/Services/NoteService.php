@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use Illuminate\Support\{Arr, Str};
-use App\Models\{Media, Note, Place};
 use App\Jobs\{SendWebMentions, SyndicateNoteToTwitter};
+use App\Models\{Media, Note, Place};
+use Illuminate\Support\{Arr, Str};
 
 class NoteService
 {

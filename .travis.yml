@@ -1,10 +1,7 @@
 language: php
 
 sudo: false
-dist: trusty
-
-cache:
-  - apt
+dist: bionic
 
 addons:
   hosts:
@@ -14,8 +11,7 @@ addons:
   apt:
     packages:
       - nginx-full
-      - realpath
-      - postgresql-9.6-postgis-2.3
+      - postgresql-9.6-postgis-2.4
       - imagemagick
       #- google-chrome-stable
   artifacts:
@@ -34,8 +30,8 @@ env:
     - setup=basic
 
 php:
-  - 7.2
   - 7.3
+  - 7.4.2
 
 before_install:
   - printf "\n" | pecl install imagick

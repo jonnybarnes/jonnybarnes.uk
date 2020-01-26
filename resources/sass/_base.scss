@@ -1,22 +1,13 @@
-// _base.scss
-
-// Fonts
-html {
-    font-family: montserrat, sans-serif;
-    font-weight: 300;
-    font-style: normal;
-    font-size: 20px;
+body {
+    font-family: var(--font-stack-body);
+    font-size: 2rem;
 }
 
-h1 {
-    font-family: bebas-neue, sans-serif;
-    font-weight: 400;
-    font-style: normal;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: var(--font-stack-headings);
 }
-
-code {
-    font-family: "Operator Mono", monospace;
-}
-
-// Variables
-$mainWidth: 40rem;

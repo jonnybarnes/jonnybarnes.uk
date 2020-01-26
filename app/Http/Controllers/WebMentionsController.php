@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Models\Note;
-use Illuminate\View\View;
-use Illuminate\Http\Response;
 use App\Jobs\ProcessWebMention;
-use Jonnybarnes\IndieWeb\Numbers;
+use App\Models\Note;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\Response;
+use Illuminate\View\View;
+use Jonnybarnes\IndieWeb\Numbers;
 
 class WebMentionsController extends Controller
 {
