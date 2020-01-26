@@ -5,13 +5,11 @@ namespace Tests\Feature;
 use Carbon\Carbon;
 use Tests\TestCase;
 use Tests\TestToken;
-use Lcobucci\JWT\Builder;
 use App\Jobs\ProcessMedia;
 use App\Jobs\SendWebMentions;
 use App\Models\{Media, Place};
 use Illuminate\Http\UploadedFile;
 use App\Jobs\SyndicateNoteToTwitter;
-use Lcobucci\JWT\Signer\Hmac\Sha256;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Storage;
 use Phaza\LaravelPostgis\Geometries\Point;
@@ -42,7 +40,7 @@ class MicropubControllerTest extends TestCase
      */
     public function test_micropub_get_request_without_valid_token_returns_400_response()
     {
-        $response = $this->call('GET', '/api/post', [], [], [], ['HTTP_Authorization' => 'Bearer abc123']);
+        $response = $this->get('/api/post', ['HTTP_Authorization' => 'Bearer abc123']);
         $response->assertStatus(400);
         $response->assertJsonFragment(['error_description' => 'The provided token did not pass validation']);
     }
@@ -55,7 +53,7 @@ class MicropubControllerTest extends TestCase
      */
     public function test_micropub_get_request_with_valid_token_returns_200_response()
     {
-        $response = $this->call('GET', '/api/post', [], [], [], ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]);
+        $response = $this->get('/api/post', ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]);
         $response->assertStatus(200);
         $response->assertJsonFragment(['response' => 'token']);
     }
@@ -67,7 +65,7 @@ class MicropubControllerTest extends TestCase
      */
     public function test_micropub_get_request_for_syndication_targets()
     {
-        $response = $this->call('GET', '/api/post', ['q' => 'syndicate-to'], [], [], ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]);
+        $response = $this->get('/api/post?q=syndicate-to', ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]);
         $response->assertJsonFragment(['uid' => 'https://twitter.com/jonnybarnes']);
     }
 
@@ -78,7 +76,7 @@ class MicropubControllerTest extends TestCase
      */
     public function test_micropub_get_request_for_nearby_places()
     {
-        $response = $this->call('GET', '/api/post', ['q' => 'geo:53.5,-2.38'], [], [], ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]);
+        $response = $this->get('/api/post?q=geo:53.5,-2.38', ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]);
         $response->assertJson(['places' => [['slug' =>'the-bridgewater-pub']]]);
     }
 
@@ -89,7 +87,7 @@ class MicropubControllerTest extends TestCase
      */
     public function test_micropub_get_request_for_nearby_places_with_uncertainty_parameter()
     {
-        $response = $this->call('GET', '/api/post', ['q' => 'geo:53.5,-2.38;u=35'], [], [], ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]);
+        $response = $this->get('/api/post?q=geo:53.5,-2.38', ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]);
         $response->assertJson(['places' => [['slug' => 'the-bridgewater-pub']]]);
     }
 
@@ -100,7 +98,7 @@ class MicropubControllerTest extends TestCase
      */
     public function test_micropub_get_request_for_nearby_places_where_non_exist()
     {
-        $response = $this->call('GET', '/api/post', ['q' => 'geo:1.23,4.56'], [], [], ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]);
+        $response = $this->get('/api/post?q=geo:1.23,4.56', ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]);
         $response->assertJson(['places' => []]);
     }
 
@@ -111,7 +109,7 @@ class MicropubControllerTest extends TestCase
      */
     public function test_micropub_get_request_for_config()
     {
-        $response = $this->call('GET', '/api/post', ['q' => 'config'], [], [], ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]);
+        $response = $this->get('/api/post?q=config', ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]);
         $response->assertJsonFragment(['uid' => 'https://twitter.com/jonnybarnes']);
     }
 
@@ -148,16 +146,13 @@ class MicropubControllerTest extends TestCase
         Queue::fake();
         $faker = \Faker\Factory::create();
         $note = $faker->text;
-        $response = $this->call(
-            'POST',
+        $response = $this->post(
             '/api/post',
             [
                 'h' => 'entry',
                 'content' => $note,
                 'mp-syndicate-to' => 'https://twitter.com/jonnybarnes'
             ],
-            [],
-            [],
             ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
         );
         $response->assertJson(['response' => 'created']);
@@ -172,16 +167,13 @@ class MicropubControllerTest extends TestCase
      */
     public function test_micropub_post_request_creates_new_place()
     {
-        $response = $this->call(
-            'POST',
+        $response = $this->post(
             '/api/post',
             [
                 'h' => 'card',
                 'name' => 'The Barton Arms',
                 'geo' => 'geo:53.4974,-2.3768'
             ],
-            [],
-            [],
             ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
         );
         $response->assertJson(['response' => 'created']);
@@ -196,8 +188,7 @@ class MicropubControllerTest extends TestCase
      */
     public function test_micropub_post_request_creates_new_place_with_latlng()
     {
-        $response = $this->call(
-            'POST',
+        $response = $this->post(
             '/api/post',
             [
                 'h' => 'card',
@@ -205,8 +196,6 @@ class MicropubControllerTest extends TestCase
                 'latitude' => '53.4974',
                 'longitude' => '-2.3768',
             ],
-            [],
-            [],
             ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
         );
         $response->assertJson(['response' => 'created']);
@@ -215,15 +204,12 @@ class MicropubControllerTest extends TestCase
 
     public function test_micropub_post_request_with_invalid_token_returns_expected_error_response()
     {
-        $response = $this->call(
-            'POST',
+        $response = $this->post(
             '/api/post',
             [
                 'h' => 'entry',
                 'content' => 'A random note',
             ],
-            [],
-            [],
             ['HTTP_Authorization' => 'Bearer ' . $this->getInvalidToken()]
         );
         $response->assertStatus(400);
@@ -232,15 +218,12 @@ class MicropubControllerTest extends TestCase
 
     public function test_micropub_post_request_with_scopeless_token_returns_expected_error_response()
     {
-        $response = $this->call(
-            'POST',
+        $response = $this->post(
             '/api/post',
             [
                 'h' => 'entry',
                 'content' => 'A random note',
             ],
-            [],
-            [],
             ['HTTP_Authorization' => 'Bearer ' . $this->getTokenWithNoScope()]
         );
         $response->assertStatus(400);
@@ -249,16 +232,13 @@ class MicropubControllerTest extends TestCase
 
     public function test_micropub_post_request_for_place_without_create_scope_errors()
     {
-        $response = $this->call(
-            'POST',
+        $response = $this->post(
             '/api/post',
             [
                 'h' => 'card',
                 'name' => 'The Barton Arms',
                 'geo' => 'geo:53.4974,-2.3768'
             ],
-            [],
-            [],
             ['HTTP_Authorization' => 'Bearer ' . $this->getTokenWithIncorrectScope()]
         );
         $response->assertStatus(401);
@@ -279,8 +259,7 @@ class MicropubControllerTest extends TestCase
         ]);
         $faker = \Faker\Factory::create();
         $note = $faker->text;
-        $response = $this->json(
-            'POST',
+        $response = $this->postJson(
             '/api/post',
             [
                 'type' => ['h-entry'],
@@ -316,8 +295,7 @@ class MicropubControllerTest extends TestCase
         $place->save();
         $faker = \Faker\Factory::create();
         $note = $faker->text;
-        $response = $this->json(
-            'POST',
+        $response = $this->postJson(
             '/api/post',
             [
                 'type' => ['h-entry'],
@@ -343,8 +321,7 @@ class MicropubControllerTest extends TestCase
     {
         $faker = \Faker\Factory::create();
         $note = $faker->text;
-        $response = $this->json(
-            'POST',
+        $response = $this->postJson(
             '/api/post',
             [
                 'type' => ['h-entry'],
@@ -380,8 +357,7 @@ class MicropubControllerTest extends TestCase
     {
         $faker = \Faker\Factory::create();
         $note = $faker->text;
-        $response = $this->json(
-            'POST',
+        $response = $this->postJson(
             '/api/post',
             [
                 'type' => ['h-entry'],
@@ -415,8 +391,7 @@ class MicropubControllerTest extends TestCase
     {
         $faker = \Faker\Factory::create();
         $note = $faker->text;
-        $response = $this->json(
-            'POST',
+        $response = $this->postJson(
             '/api/post',
             [
                 'type' => ['h-entry'],
@@ -443,8 +418,7 @@ class MicropubControllerTest extends TestCase
     {
         $faker = \Faker\Factory::create();
         $note = $faker->text;
-        $response = $this->json(
-            'POST',
+        $response = $this->postJson(
             '/api/post',
             [
                 'type' => ['h-entry'],
@@ -464,8 +438,7 @@ class MicropubControllerTest extends TestCase
 
     public function test_micropub_post_request_with_json_syntax_for_unsupported_type_returns_error()
     {
-        $response = $this->json(
-            'POST',
+        $response = $this->postJson(
             '/api/post',
             [
                 'type' => ['h-unsopported'], // a request type I don’t support
@@ -486,8 +459,7 @@ class MicropubControllerTest extends TestCase
     public function test_micropub_post_request_with_json_syntax_creates_new_place()
     {
         $faker = \Faker\Factory::create();
-        $response = $this->json(
-            'POST',
+        $response = $this->postJson(
             '/api/post',
             [
                 'type' => ['h-card'],
@@ -506,8 +478,7 @@ class MicropubControllerTest extends TestCase
     public function test_micropub_post_request_with_json_syntax_and_uncertainty_parameter_creates_new_place()
     {
         $faker = \Faker\Factory::create();
-        $response = $this->json(
-            'POST',
+        $response = $this->postJson(
             '/api/post',
             [
                 'type' => ['h-card'],
@@ -525,8 +496,7 @@ class MicropubControllerTest extends TestCase
 
     public function test_micropub_post_request_with_json_syntax_update_replace_post()
     {
-        $response = $this->json(
-            'POST',
+        $response = $this->postJson(
             '/api/post',
             [
                 'action' => 'update',
@@ -544,8 +514,7 @@ class MicropubControllerTest extends TestCase
 
     public function test_micropub_post_request_with_json_syntax_update_add_post()
     {
-        $response = $this->json(
-            'POST',
+        $response = $this->postJson(
             '/api/post',
             [
                 'action' => 'update',
@@ -570,8 +539,7 @@ class MicropubControllerTest extends TestCase
 
     public function test_micropub_post_request_with_json_syntax_update_add_image_to_post()
     {
-        $response = $this->json(
-            'POST',
+        $response = $this->postJson(
             '/api/post',
             [
                 'action' => 'update',
@@ -592,8 +560,7 @@ class MicropubControllerTest extends TestCase
 
     public function test_micropub_post_request_with_json_syntax_update_add_post_errors_for_non_note()
     {
-        $response = $this->json(
-            'POST',
+        $response = $this->postJson(
             '/api/post',
             [
                 'action' => 'update',
@@ -611,8 +578,7 @@ class MicropubControllerTest extends TestCase
 
     public function test_micropub_post_request_with_json_syntax_update_add_post_errors_for_note_not_found()
     {
-        $response = $this->json(
-            'POST',
+        $response = $this->postJson(
             '/api/post',
             [
                 'action' => 'update',
@@ -630,8 +596,7 @@ class MicropubControllerTest extends TestCase
 
     public function test_micropub_post_request_with_json_syntax_update_add_post_errors_for_unsupported_request()
     {
-        $response = $this->json(
-            'POST',
+        $response = $this->postJson(
             '/api/post',
             [
                 'action' => 'update',
@@ -649,8 +614,7 @@ class MicropubControllerTest extends TestCase
 
     public function test_micropub_post_request_with_json_syntax_update_errors_for_insufficient_scope()
     {
-        $response = $this->json(
-            'POST',
+        $response = $this->postJson(
             '/api/post',
             [
                 'action' => 'update',
@@ -668,8 +632,7 @@ class MicropubControllerTest extends TestCase
 
     public function test_micropub_post_request_with_json_syntax_update_replace_post_syndication()
     {
-        $response = $this->json(
-            'POST',
+        $response = $this->postJson(
             '/api/post',
             [
                 'action' => 'update',
@@ -694,11 +657,8 @@ class MicropubControllerTest extends TestCase
 
     public function test_media_endpoint_request_with_invalid_token_return_400_response()
     {
-        $response = $this->call(
-            'POST',
+        $response = $this->post(
             '/api/media',
-            [],
-            [],
             [],
             ['HTTP_Authorization' => 'Bearer abc123']
         );
@@ -708,11 +668,8 @@ class MicropubControllerTest extends TestCase
 
     public function test_media_endpoint_request_with_token_with_no_scope_returns_400_response()
     {
-        $response = $this->call(
-            'POST',
+        $response = $this->post(
             '/api/media',
-            [],
-            [],
             [],
             ['HTTP_Authorization' => 'Bearer ' . $this->getTokenWithNoScope()]
         );
@@ -722,11 +679,8 @@ class MicropubControllerTest extends TestCase
 
     public function test_media_endpoint_request_with_insufficient_token_scopes_returns_401_response()
     {
-        $response = $this->call(
-            'POST',
+        $response = $this->post(
             '/api/media',
-            [],
-            [],
             [],
             ['HTTP_Authorization' => 'Bearer ' . $this->getTokenWithIncorrectScope()]
         );
@@ -740,11 +694,8 @@ class MicropubControllerTest extends TestCase
         Storage::fake('s3');
         $file = __DIR__ . '/../aaron.png';
 
-        $response = $this->call(
-            'POST',
+        $response = $this->post(
             '/api/media',
-            [],
-            [],
             [
                 'file' => new UploadedFile(
                     $file,
@@ -772,11 +723,8 @@ class MicropubControllerTest extends TestCase
         Storage::fake('s3');
         $file = __DIR__ . '/../audio.mp3';
 
-        $response = $this->call(
-            'POST',
+        $response = $this->post(
             '/api/media',
-            [],
-            [],
             [
                 'file' => new UploadedFile($file, 'audio.mp3', 'audio/mpeg', filesize($file), null, true),
             ],
@@ -797,11 +745,8 @@ class MicropubControllerTest extends TestCase
         Storage::fake('s3');
         $file = __DIR__ . '/../video.ogv';
 
-        $response = $this->call(
-            'POST',
+        $response = $this->post(
             '/api/media',
-            [],
-            [],
             [
                 'file' => new UploadedFile($file, 'video.ogv', 'video/ogg', filesize($file), null, true),
             ],
@@ -821,11 +766,8 @@ class MicropubControllerTest extends TestCase
         Queue::fake();
         Storage::fake('s3');
 
-        $response = $this->call(
-            'POST',
+        $response = $this->post(
             '/api/media',
-            [],
-            [],
             [
                 'file' => UploadedFile::fake()->create('document.pdf', 100),
             ],
@@ -845,11 +787,8 @@ class MicropubControllerTest extends TestCase
         Queue::fake();
         Storage::fake('local');
 
-        $response = $this->call(
-            'POST',
+        $response = $this->post(
             '/api/media',
-            [],
-            [],
             [
                 'file' => new UploadedFile(__DIR__ . '/../aaron.png', 'aaron.png', 'image/png', UPLOAD_ERR_INI_SIZE, true),
             ],
@@ -863,8 +802,7 @@ class MicropubControllerTest extends TestCase
     {
         $faker = \Faker\Factory::create();
         $note = $faker->text;
-        $response = $this->call(
-            'POST',
+        $response = $this->post(
             '/api/post',
             [
                 'h' => 'entry',
