@@ -124,8 +124,7 @@ class MicropubControllerTest extends TestCase
     {
         $faker = \Faker\Factory::create();
         $note = $faker->text;
-        $response = $this->call(
-            'POST',
+        $response = $this->post(
             '/api/post',
             [
                 'h' => 'entry',
@@ -133,8 +132,6 @@ class MicropubControllerTest extends TestCase
                 'published' => Carbon::now()->toW3CString(),
                 'location' => 'geo:1.23,4.56',
             ],
-            [],
-            [],
             ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
         );
         $response->assertJson(['response' => 'created']);
