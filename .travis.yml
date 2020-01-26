@@ -38,6 +38,7 @@ php:
   - 7.4
 
 before_install:
+  - phpenv config-add < echo "extension=zip"
   - printf "\n" | pecl install imagick
   - cp .env.travis .env
   - echo 'error_log = "/tmp/php.error.log"' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
