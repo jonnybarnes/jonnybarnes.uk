@@ -72,7 +72,7 @@ class MicropubController extends Controller
             ], 201)->header('Location', $location);
         }
 
-        if (request()->input('h') == 'card' || request()->input('type')[0] == 'h-card') {
+        if (request()->input('h') == 'card' || request()->input('type.0') == 'h-card') {
             if (stristr($tokenData->getClaim('scope'), 'create') === false) {
                 return $this->insufficientScopeResponse();
             }
