@@ -52,6 +52,8 @@ body {
     .note .note-metadata .syndication-links svg {
       height: 1em;
       width: 1em; }
+  .note > .e-content > .naked-link .u-photo {
+    margin: 2rem 0; }
 
 .personal-bio {
   padding: 0 2rem; }
