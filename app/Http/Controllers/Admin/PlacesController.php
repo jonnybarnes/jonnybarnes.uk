@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Place;
-use Illuminate\View\View;
-use Illuminate\Http\Request;
-use App\Services\PlaceService;
 use App\Http\Controllers\Controller;
+use App\Models\Place;
+use App\Services\PlaceService;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
 use Phaza\LaravelPostgis\Geometries\Point;
 
 class PlacesController extends Controller

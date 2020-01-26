@@ -4,6 +4,6 @@
 
 @section('content')
 @foreach($contacts as $contact)
-            @include('templates.contact', ['contact' => $contact, 'image' => $contact->image])
+    @include('templates.contact', ['contact' => $contact, 'image' => $contact->image])
 @endforeach
 @stop

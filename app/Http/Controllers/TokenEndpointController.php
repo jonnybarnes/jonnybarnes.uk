@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use IndieAuth\Client;
 use App\Services\TokenService;
 use Illuminate\Http\JsonResponse;
+use IndieAuth\Client;
 
 class TokenEndpointController extends Controller
 {

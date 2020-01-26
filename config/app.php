@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => 'jonnybarnes.uk',
+    'name' => env('APP_NAME', 'Laravel'),
 
     /*
     |--------------------------------------------------------------------------
@@ -100,7 +100,7 @@ return [
     |
     */
 
-    'timezone' => env('APP_TIMEZONE', 'UTC'),
+    'timezone' => 'UTC',
 
     /*
     |--------------------------------------------------------------------------
@@ -113,7 +113,7 @@ return [
     |
     */
 
-    'locale' => env('APP_LANG', 'en'),
+    'locale' => 'en',
 
     /*
     |--------------------------------------------------------------------------
@@ -202,14 +202,9 @@ return [
         App\Providers\AuthServiceProvider::class,
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
-        App\Providers\TelescopeServiceProvider::class,
-        App\Providers\HorizonServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-
-        /*
-         * Thujohn’s Twitter API client
-         */
-        Thujohn\Twitter\TwitterServiceProvider::class,
+        App\Providers\HorizonServiceProvider::class,
+        App\Providers\TelescopeServiceProvider::class,
 
     ],
 
@@ -260,8 +255,6 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-
-        'Twitter'   => Thujohn\Twitter\Facades\Twitter::class,
 
     ],
 

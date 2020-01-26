@@ -58,13 +58,10 @@ class ArticlesTest extends TestCase
     public function test_date_scope()
     {
         $yearAndMonth = Article::date(date('Y'), date('m'))->get();
-        $this->assertTrue(count($yearAndMonth) === 2);
+        $this->assertTrue(count($yearAndMonth) === 1);
 
-        $monthDecember = Article::date(date('Y') - 1, 12)->get();
-        $this->assertTrue(count($monthDecember) === 0);
-
-        $monthNotDecember = Article::date(date('Y') - 1, 1)->get();
-        $this->assertTrue(count($monthNotDecember) === 0);
+        $priorYear = Article::date(date('Y') - 1, 1)->get();
+        $this->assertTrue(count($priorYear) === 0);
 
         $emptyScope = Article::date()->get();
         $this->assertTrue(count($emptyScope) === 2);

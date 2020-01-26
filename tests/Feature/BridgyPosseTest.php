@@ -8,7 +8,7 @@ class BridgyPosseTest extends TestCase
 {
     public function test_bridgy_twitter_content()
     {
-        $response = $this->get('/notes/E');
+        $response = $this->get('/notes/4');
 
         $html = $response->content();
         $this->assertTrue(is_string(mb_stristr($html, 'p-bridgy-twitter-content')));
