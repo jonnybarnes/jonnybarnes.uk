@@ -14,7 +14,7 @@ addons:
   apt:
     packages:
       - nginx-full
-      - postgresql-9.6-postgis-2.3
+      - postgresql-9.6-postgis-2.4
       - imagemagick
       #- google-chrome-stable
   artifacts:
