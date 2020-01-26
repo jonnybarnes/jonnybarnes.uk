@@ -22,7 +22,7 @@ class NotesTest extends TestCase
      */
     public function test_get_note_attribute_method()
     {
-        $expected = '<p>Having a <a rel="tag" class="p-category" href="/notes/tagged/beer">#beer</a> at the local. <span role="img" aria-label="beer mug">🍺</span></p>' . PHP_EOL;
+        $expected = '<p>Having a <a rel="tag" class="p-category" href="/notes/tagged/beer">#beer</a> at the local. 🍺</p>' . PHP_EOL;
         $note = Note::find(2);
         $this->assertEquals($expected, $note->note);
     }
