@@ -16,7 +16,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Jonnybarnes\EmojiA11y\EmojiModifier;
 use Jonnybarnes\IndieWeb\Numbers;
 use Laravel\Scout\Searchable;
 use League\CommonMark\Block\Element\FencedCode;
@@ -180,9 +179,8 @@ class Note extends Model
         $hcards = $this->makeHCards($value);
         $hashtags = $this->autoLinkHashtag($hcards);
         $html = $this->convertMarkdown($hashtags);
-        $modified = resolve(EmojiModifier::class)->makeEmojiAccessible($html);
 
-        return $modified;
+        return $html;
     }
 
     /**
