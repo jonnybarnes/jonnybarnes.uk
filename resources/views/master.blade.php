@@ -4,7 +4,6 @@
         <meta charset="UTF-8">
         <title>@if (App::environment() == 'local'){!! "[testing] -"!!}@endif @yield('title'){{ config('app.display_name') }}</title>
         <meta name="viewport" content="width=device-width">
-        <link rel="stylesheet" href="https://use.typekit.net/csl8adl.css">
         <link rel="stylesheet" href="/assets/frontend/normalize.css">
         <link rel="stylesheet" href="/assets/app.css">
         <link rel="stylesheet" href="/assets/highlight/zenburn.css">
