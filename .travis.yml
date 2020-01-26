@@ -63,7 +63,7 @@ before_script:
   #- sleep 5
 
 script:
-  - php vendor/bin/phpunit --stop-on-failure --filter test_micropub_post_request_creates_new_note
+  - php vendor/bin/phpunit --stop-on-failure
   - php phpcs.phar
   #- php artisan dusk
   - php vendor/bin/security-checker security:check
