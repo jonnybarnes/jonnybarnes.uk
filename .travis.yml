@@ -14,7 +14,6 @@ addons:
   apt:
     packages:
       - nginx-full
-      - realpath
       - postgresql-9.6-postgis-2.3
       - imagemagick
       #- google-chrome-stable
