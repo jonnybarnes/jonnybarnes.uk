@@ -3,9 +3,6 @@ language: php
 sudo: false
 dist: bionic
 
-cache:
-  - apt
-
 addons:
   hosts:
     - jmb.localhost
