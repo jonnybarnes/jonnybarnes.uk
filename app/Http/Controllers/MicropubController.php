@@ -6,11 +6,11 @@ namespace App\Http\Controllers;
 
 use App\Exceptions\InvalidTokenException;
 use App\Jobs\ProcessMedia;
-use Exception;
-use Illuminate\Contracts\Container\BindingResolutionException;
 use App\Models\{Media, Place};
 use App\Services\Micropub\{HCardService, HEntryService, UpdateService};
 use App\Services\TokenService;
+use Exception;
+use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Http\{File, JsonResponse, Response, UploadedFile};
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Exception\NotReadableException;

@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Models;
 
 use Cviebrock\EloquentSluggable\Sluggable;
-use Illuminate\Database\Eloquent\{Builder, Model};
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\{Builder, Model};
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Phaza\LaravelPostgis\Eloquent\PostgisTrait;
