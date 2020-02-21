@@ -16,6 +16,7 @@ body {
     nav {
         display: flex;
         justify-content: center;
+        flex-wrap: wrap;
 
         a {
             margin: 0 0.5rem;
@@ -28,6 +29,10 @@ body {
     flex-direction: column;
     margin: auto;
 
+    img {
+        max-width: 100%;
+    }
+
     @media screen and (min-width: 700px) {
         max-width: 700px;
 
@@ -35,6 +40,11 @@ body {
         > .h-entry {
             padding: 0 1rem;
         }
+    }
+
+    @media screen and (max-width: 699px) {
+        margin-left: 5px;
+        margin-right: 5px;
     }
 }
 
@@ -73,4 +83,13 @@ footer {
     flex-direction: column;
     align-items: center;
     margin-top: 1.5rem;
+
+    .iwc-logo {
+        max-width: 100%;
+    }
+
+    @media screen and (max-width: 699px) {
+        margin-left: 5px;
+        margin-right: 5px;
+    }
 }
