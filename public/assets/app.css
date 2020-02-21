@@ -32,22 +32,25 @@ body {
     #top-header nav a {
       margin: 0 0.5rem; }
 
-.h-feed {
+@media screen and (max-width: 699px) {
+  main {
+    margin-left: 5px;
+    margin-right: 5px; } }
+
+main .h-feed {
   display: flex;
   flex-direction: column;
   margin: auto; }
-  .h-feed img {
+  main .h-feed img {
     max-width: 100%; }
   @media screen and (min-width: 700px) {
-    .h-feed {
+    main .h-feed {
       max-width: 700px; }
-      .h-feed > .note,
-      .h-feed > .h-entry {
+      main .h-feed > .note,
+      main .h-feed > .h-entry {
         padding: 0 1rem; } }
-  @media screen and (max-width: 699px) {
-    .h-feed {
-      margin-left: 5px;
-      margin-right: 5px; } }
+  main .h-feed .h-entry:first-child > .bookmark-link {
+    padding-top: 2rem; }
 
 .note {
   display: flex;

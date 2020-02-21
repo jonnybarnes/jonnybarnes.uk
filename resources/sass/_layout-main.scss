@@ -24,27 +24,35 @@ body {
     }
 }
 
-.h-feed {
-    display: flex;
-    flex-direction: column;
-    margin: auto;
-
-    img {
-        max-width: 100%;
-    }
-
-    @media screen and (min-width: 700px) {
-        max-width: 700px;
-
-        > .note,
-        > .h-entry {
-            padding: 0 1rem;
-        }
-    }
-
+main {
     @media screen and (max-width: 699px) {
         margin-left: 5px;
         margin-right: 5px;
+    }
+
+    .h-feed {
+        display: flex;
+        flex-direction: column;
+        margin: auto;
+
+        img {
+            max-width: 100%;
+        }
+
+        @media screen and (min-width: 700px) {
+            max-width: 700px;
+
+            > .note,
+            > .h-entry {
+                padding: 0 1rem;
+            }
+        }
+
+        .h-entry:first-child {
+            > .bookmark-link {
+                padding-top: 2rem;
+            }
+        }
     }
 }
 
