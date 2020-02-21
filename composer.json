@@ -44,7 +44,7 @@
         "barryvdh/laravel-debugbar": "^3.0",
         "beyondcode/laravel-dump-server": "^1.0",
         "facade/ignition": "^1.4",
-        "fzaninotto/faker": "^1.4",
+        "fzaninotto/faker": "^1.9.1",
         "laravel/dusk": "^5.0",
         "mockery/mockery": "^1.0",
         "nunomaduro/collision": "^3.0",
