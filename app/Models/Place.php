@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Models;
 
 use Cviebrock\EloquentSluggable\Sluggable;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\{Builder, Model};
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Phaza\LaravelPostgis\Eloquent\PostgisTrait;
@@ -52,7 +52,7 @@ class Place extends Model
     /**
      * Define the relationship with Notes.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     public function notes()
     {
@@ -62,12 +62,12 @@ class Place extends Model
     /**
      * Select places near a given location.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @param  \Phaza\LaravelPostgis\Geometries\Point  $point
-     * @param  int  $distance
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @param Builder $query
+     * @param Point $point
+     * @param int $distance
+     * @return Builder
      */
-    public function scopeNear(Builder $query, Point $point, $distance = 1000): Builder
+    public function scopeNear(Builder $query, Point $point, int $distance = 1000): Builder
     {
         $field = DB::raw(
             sprintf(
@@ -83,9 +83,9 @@ class Place extends Model
     /**
      * Select places based on a URL.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @param  string  $url
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @param Builder $query
+     * @param string $url
+     * @return Builder
      */
     public function scopeWhereExternalURL(Builder $query, string $url): Builder
     {

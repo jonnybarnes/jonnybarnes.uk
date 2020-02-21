@@ -6,13 +6,12 @@ namespace App\Http\Controllers;
 
 use App\Exceptions\InvalidTokenException;
 use App\Jobs\ProcessMedia;
-use App\Models\{Like, Media, Note, Place};
+use Exception;
+use Illuminate\Contracts\Container\BindingResolutionException;
+use App\Models\{Media, Place};
 use App\Services\Micropub\{HCardService, HEntryService, UpdateService};
 use App\Services\TokenService;
-use Illuminate\Http\File;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\UploadedFile;
-use Illuminate\Http\{Request, Response};
+use Illuminate\Http\{File, JsonResponse, Response, UploadedFile};
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Exception\NotReadableException;
 use Intervention\Image\ImageManager;
@@ -42,9 +41,9 @@ class MicropubController extends Controller
 
     /**
      * This function receives an API request, verifies the authenticity
-     * then passes over the info to the relavent Service class.
+     * then passes over the info to the relevant Service class.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function post(): JsonResponse
     {
@@ -102,11 +101,11 @@ class MicropubController extends Controller
      * Respond to a GET request to the micropub endpoint.
      *
      * A GET request has been made to `api/post` with an accompanying
-     * token, here we check wether the token is valid and respond
+     * token, here we check whether the token is valid and respond
      * appropriately. Further if the request has the query parameter
-     * synidicate-to we respond with the known syndication endpoints.
+     * syndicate-to we respond with the known syndication endpoints.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function get(): JsonResponse
     {
@@ -131,7 +130,7 @@ class MicropubController extends Controller
 
         if (request()->has('q') && substr(request()->input('q'), 0, 4) === 'geo:') {
             preg_match_all(
-                '/([0-9\.\-]+)/',
+                '/([0-9.\-]+)/',
                 request()->input('q'),
                 $matches
             );
@@ -158,7 +157,9 @@ class MicropubController extends Controller
     /**
      * Process a media item posted to the media endpoint.
      *
-     * @return Illuminate\Http\JsonResponse
+     * @return JsonResponse
+     * @throws BindingResolutionException
+     * @throws Exception
      */
     public function media(): JsonResponse
     {
@@ -220,9 +221,9 @@ class MicropubController extends Controller
     }
 
     /**
-     * Return the relavent CORS headers to a pre-flight OPTIONS request.
+     * Return the relevant CORS headers to a pre-flight OPTIONS request.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function mediaOptionsResponse(): Response
     {
@@ -230,12 +231,12 @@ class MicropubController extends Controller
     }
 
     /**
-     * Get the file type from the mimetype of the uploaded file.
+     * Get the file type from the mime-type of the uploaded file.
      *
-     * @param  string  $mimetype
+     * @param string $mimeType
      * @return string
      */
-    private function getFileTypeFromMimeType(string $mimetype): string
+    private function getFileTypeFromMimeType(string $mimeType): string
     {
         //try known images
         $imageMimeTypes = [
@@ -246,7 +247,7 @@ class MicropubController extends Controller
             'image/tiff',
             'image/webp',
         ];
-        if (in_array($mimetype, $imageMimeTypes)) {
+        if (in_array($mimeType, $imageMimeTypes)) {
             return 'image';
         }
         //try known video
@@ -257,7 +258,7 @@ class MicropubController extends Controller
             'video/quicktime',
             'video/webm',
         ];
-        if (in_array($mimetype, $videoMimeTypes)) {
+        if (in_array($mimeType, $videoMimeTypes)) {
             return 'video';
         }
         //try known audio types
@@ -267,7 +268,7 @@ class MicropubController extends Controller
             'audio/ogg',
             'audio/x-m4a',
         ];
-        if (in_array($mimetype, $audioMimeTypes)) {
+        if (in_array($mimeType, $audioMimeTypes)) {
             return 'audio';
         }
 
@@ -289,7 +290,7 @@ class MicropubController extends Controller
     /**
      * Save the details of the micropub request to a log file.
      *
-     * @param  array  $request This is the info from request()->all()
+     * @param array $request This is the info from request()->all()
      */
     private function logMicropubRequest(array $request)
     {
@@ -301,12 +302,13 @@ class MicropubController extends Controller
     /**
      * Save an uploaded file to the local disk.
      *
-     * @param  \Illuminate\Http\UploadedFele  $file
-     * @return string $filename
+     * @param UploadedFile $file
+     * @return string
+     * @throws Exception
      */
     private function saveFile(UploadedFile $file): string
     {
-        $filename = Uuid::uuid4() . '.' . $file->extension();
+        $filename = Uuid::uuid4()->toString() . '.' . $file->extension();
         Storage::disk('local')->putFileAs('', $file, $filename);
 
         return $filename;
@@ -315,9 +317,9 @@ class MicropubController extends Controller
     /**
      * Generate a response to be returned when the token has insufficient scope.
      *
-     * @return \Illuminate\Http\JsonRepsonse
+     * @return JsonResponse
      */
-    private function insufficientScopeResponse()
+    private function insufficientScopeResponse(): JsonResponse
     {
         return response()->json([
             'response' => 'error',
@@ -329,9 +331,9 @@ class MicropubController extends Controller
     /**
      * Generate a response to be returned when the token is invalid.
      *
-     * @return \Illuminate\Http\JsonRepsonse
+     * @return JsonResponse
      */
-    private function invalidTokenResponse()
+    private function invalidTokenResponse(): JsonResponse
     {
         return response()->json([
             'response' => 'error',
@@ -343,9 +345,9 @@ class MicropubController extends Controller
     /**
      * Generate a response to be returned when the token has no scope.
      *
-     * @return \Illuminate\Http\JsonRepsonse
+     * @return JsonResponse
      */
-    private function tokenHasNoScopeResponse()
+    private function tokenHasNoScopeResponse(): JsonResponse
     {
         return response()->json([
             'response' => 'error',
