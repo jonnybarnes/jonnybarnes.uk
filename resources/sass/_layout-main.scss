@@ -9,8 +9,8 @@ body {
     justify-content: center;
 
     h1 {
-        display: flex;
-        justify-content: center;
+        width: 100%;
+        text-align: center;
     }
 
     nav {
@@ -83,6 +83,12 @@ footer {
     flex-direction: column;
     align-items: center;
     margin-top: 1.5rem;
+
+    input {
+        @media screen and (max-width: 699px) {
+            max-width: 95vw;
+        }
+    }
 
     .iwc-logo {
         max-width: 100%;

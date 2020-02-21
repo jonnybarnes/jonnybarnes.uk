@@ -24,9 +24,9 @@
     </head>
     <body>
         <header id="top-header">
-            <a rel="author" href="/">
-                <h1>{{ config('app.display_name') }}</h1>
-            </a>
+            <h1>
+                <a rel="author" href="/">{{ config('app.display_name') }}</a>
+            </h1>
             <nav>
                 <a href="/">All</a>
                 <a href="/notes">Notes</a>
