@@ -5,28 +5,19 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Exceptions\TwitterContentException;
-use Cache;
 use Codebird\Codebird;
 use Exception;
 use GuzzleHttp\Client;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\{BelongsTo, BelongsToMany, HasMany, MorphMany};
+use Illuminate\Database\Eloquent\{Builder, Model, SoftDeletes};
+use Illuminate\Support\Facades\Cache;
 use Jonnybarnes\IndieWeb\Numbers;
 use Laravel\Scout\Searchable;
-use League\CommonMark\Block\Element\FencedCode;
-use League\CommonMark\Block\Element\IndentedCode;
-use League\CommonMark\CommonMarkConverter;
-use League\CommonMark\Environment;
+use League\CommonMark\Block\Element\{FencedCode, IndentedCode};
 use League\CommonMark\Ext\Autolink\AutolinkExtension;
+use League\CommonMark\{CommonMarkConverter, Environment};
 use Normalizer;
-use Spatie\CommonMarkHighlighter\FencedCodeRenderer;
-use Spatie\CommonMarkHighlighter\IndentedCodeRenderer;
-use Twitter;
+use Spatie\CommonMarkHighlighter\{FencedCodeRenderer, IndentedCodeRenderer};
 
 class Note extends Model
 {
@@ -146,7 +137,7 @@ class Note extends Model
     /**
      * Normalize the note to Unicode FORM C.
      *
-     * @param  string|null  $value
+     * @param string|null $value
      */
     public function setNoteAttribute(?string $value)
     {
@@ -162,7 +153,7 @@ class Note extends Model
     /**
      * Pre-process notes for web-view.
      *
-     * @param  string|null  $value
+     * @param string|null $value
      * @return string|null
      */
     public function getNoteAttribute(?string $value): ?string
@@ -178,9 +169,8 @@ class Note extends Model
 
         $hcards = $this->makeHCards($value);
         $hashtags = $this->autoLinkHashtag($hcards);
-        $html = $this->convertMarkdown($hashtags);
 
-        return $html;
+        return $this->convertMarkdown($hashtags);
     }
 
     /**
@@ -266,7 +256,7 @@ class Note extends Model
     }
 
     /**
-     * Get the pubdate value for RSS feeds.
+     * Get the publish date value for RSS feeds.
      *
      * @return string
      */
@@ -307,9 +297,9 @@ class Note extends Model
         }
         if ($this->location !== null) {
             $pieces = explode(':', $this->location);
-            $latlng = explode(',', $pieces[0]);
+            $latLng = explode(',', $pieces[0]);
 
-            return (float) trim($latlng[1]);
+            return (float) trim($latLng[1]);
         }
 
         return null;
@@ -375,6 +365,7 @@ class Note extends Model
      * That is we swap the contacts names for their known Twitter handles.
      *
      * @return string
+     * @throws TwitterContentException
      */
     public function getTwitterContentAttribute(): string
     {
@@ -416,9 +407,9 @@ class Note extends Model
     /**
      * Scope a query to select a note via a NewBase60 id.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @param  string  $nb60id
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @param Builder $query
+     * @param string $nb60id
+     * @return Builder
      */
     public function scopeNb60(Builder $query, string $nb60id): Builder
     {
@@ -433,7 +424,7 @@ class Note extends Model
      * due to lack of contact info, we assume @username is a twitter handle and link it
      * as such.
      *
-     * @param  string  $text
+     * @param string $text
      * @return string
      */
     private function makeHCards(string $text): string
@@ -444,7 +435,7 @@ class Note extends Model
             return $text;
         }
 
-        $hcards = preg_replace_callback(
+        return preg_replace_callback(
             self::USERNAMES_REGEX,
             function ($matches) {
                 if (is_null($this->contacts[$matches[1]])) {
@@ -462,24 +453,28 @@ class Note extends Model
             },
             $text
         );
-
-        return $hcards;
     }
 
     /**
      * Get the value of the `contacts` property.
+     *
+     * @return array
      */
-    public function getContacts()
+    public function getContacts(): array
     {
         if ($this->contacts === null) {
             $this->setContacts();
         }
+
+        return $this->contacts;
     }
 
     /**
      * Process the note and save the contacts to the `contacts` property.
+     *
+     * @return void
      */
-    public function setContacts()
+    public function setContacts(): void
     {
         $contacts = [];
         if ($this->getOriginal('note')) {
@@ -500,7 +495,7 @@ class Note extends Model
      * `#[\-_a-zA-Z0-9]+` and wraps them in an `a` element with
      * `rel=tag` set and a `href` of 'section/tagged/' + tagname without the #.
      *
-     * @param  string  $note
+     * @param string $note
      * @return string
      */
     public function autoLinkHashtag(string $note): string
@@ -519,7 +514,7 @@ class Note extends Model
     /**
      * Pass a note through the commonmark library.
      *
-     * @param  string  $note
+     * @param string $note
      * @return string
      */
     private function convertMarkdown(string $note): string
@@ -536,15 +531,15 @@ class Note extends Model
     /**
      * Do a reverse geocode lookup of a `lat,lng` value.
      *
-     * @param  float  $latitude
-     * @param  float  $longitude
+     * @param float $latitude
+     * @param float $longitude
      * @return string
      */
     public function reverseGeoCode(float $latitude, float $longitude): string
     {
-        $latlng = $latitude . ',' . $longitude;
+        $latLng = $latitude . ',' . $longitude;
 
-        return Cache::get($latlng, function () use ($latlng, $latitude, $longitude) {
+        return Cache::get($latLng, function () use ($latLng, $latitude, $longitude) {
             $guzzle = resolve(Client::class);
             $response = $guzzle->request('GET', 'https://nominatim.openstreetmap.org/reverse', [
                 'query' => [
@@ -567,7 +562,7 @@ class Note extends Model
                     . '</span>, <span class="p-country-name">'
                     . $json->address->country
                     . '</span>';
-                Cache::forever($latlng, $address);
+                Cache::forever($latLng, $address);
 
                 return $address;
             }
@@ -577,7 +572,7 @@ class Note extends Model
                     . '</span>, <span class="p-country-name">'
                     . $json->address->country
                     . '</span>';
-                Cache::forever($latlng, $address);
+                Cache::forever($latLng, $address);
 
                 return $address;
             }
@@ -587,12 +582,12 @@ class Note extends Model
                     . '</span>, <span class="p-country-name">'
                     . $json->address->country
                     . '</span>';
-                Cache::forever($latlng, $address);
+                Cache::forever($latLng, $address);
 
                 return $address;
             }
             $address = '<span class="p-country-name">' . $json->address->country . '</span>';
-            Cache::forever($latlng, $address);
+            Cache::forever($latLng, $address);
 
             return $address;
         });
