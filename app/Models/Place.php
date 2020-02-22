@@ -12,6 +12,8 @@ use Illuminate\Support\Str;
 use Phaza\LaravelPostgis\Eloquent\PostgisTrait;
 use Phaza\LaravelPostgis\Geometries\Point;
 
+// phpcs:disable Generic.Files.LineLength.TooLong
+
 /**
  * App\Models\Place.
  *
@@ -54,6 +56,7 @@ use Phaza\LaravelPostgis\Geometries\Point;
  */
 class Place extends Model
 {
+    // phpcs:enable Generic.Files.LineLength.TooLong
     use Sluggable;
     use PostgisTrait;
 
