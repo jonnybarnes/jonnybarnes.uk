@@ -7,6 +7,8 @@ namespace App\Models;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
+// phpcs:disable Generic.Files.LineLength.TooLong
+
 /**
  * App\Models\User.
  *
@@ -31,6 +33,7 @@ use Illuminate\Notifications\Notifiable;
  */
 class User extends Authenticatable
 {
+    // phpcs:enable Generic.Files.LineLength.TooLong
     use Notifiable;
 
     /**
