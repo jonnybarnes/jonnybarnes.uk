@@ -9,6 +9,28 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Mf2;
 
+/**
+ * App\Models\Like.
+ *
+ * @property int $id
+ * @property string $url
+ * @property string|null $author_name
+ * @property string|null $author_url
+ * @property string|null $content
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Like newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Like newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Like query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Like whereAuthorName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Like whereAuthorUrl($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Like whereContent($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Like whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Like whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Like whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Like whereUrl($value)
+ * @mixin \Eloquent
+ */
 class Like extends Model
 {
     use FilterHtml;
@@ -28,7 +50,7 @@ class Like extends Model
     /**
      * Normalize the URL of the author of the like.
      *
-     * @param  string  $value The author’s url
+     * @param string|null $value The author’s url
      */
     public function setAuthorUrlAttribute(?string $value)
     {
@@ -38,7 +60,7 @@ class Like extends Model
     /**
      * If the content contains HTML, filter it.
      *
-     * @param  string  $value The content of the like
+     * @param string|null $value The content of the like
      * @return string|null
      */
     public function getContentAttribute(?string $value): ?string
