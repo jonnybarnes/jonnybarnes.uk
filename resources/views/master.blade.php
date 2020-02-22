@@ -24,9 +24,9 @@
     </head>
     <body>
         <header id="top-header">
-            <a rel="author" href="/">
-                <h1>{{ config('app.display_name') }}</h1>
-            </a>
+            <h1>
+                <a rel="author" href="/">{{ config('app.display_name') }}</a>
+            </h1>
             <nav>
                 <a href="/">All</a>
                 <a href="/notes">Notes</a>
@@ -48,9 +48,8 @@
             <form action="search" method="get">
                 <input type="text" name="terms" title="Search"><button type="submit">Search</button>
             </form>
-            <p>The code for <code>{{ config('app.longurl') }}</code> can be found on <a href="https://github.com/jonnybarnes/jonnybarnes.uk">GitHub</a>.</p>
             <p>Built with love: <a href="/colophon">Colophon</a></p>
-            <p><a href="https://indieweb.org"><img src="/assets/img/iwc.svg" alt="Indie Web Camp logo"></a></p>
+            <a href="https://indieweb.org"><img src="/assets/img/iwc.svg" alt="Indie Web Camp logo" class="iwc-logo"></a>
         </footer>
 
         <!--scripts go here when needed-->

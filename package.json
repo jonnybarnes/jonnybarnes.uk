@@ -6,28 +6,30 @@
     "license": "CC0-1.0",
     "dependencies": {
         "normalize.css": "^8.0.1",
-        "puppeteer": "^2.0.0"
+        "puppeteer": "^2.1.1",
+        "stylelint-a11y": "^1.2.3"
     },
     "devDependencies": {
         "css-loader": "^3.4.2",
-        "husky": "^4.2.1",
-        "lint-staged": "^10.0.2",
+        "husky": "^4.2.3",
+        "lint-staged": "^10.0.7",
         "mini-css-extract-plugin": "^0.9.0",
         "node-sass": "^4.13.1",
         "pre-commit": "^1.1.3",
         "sass-loader": "^8.0.2",
         "style-loader": "^1.1.3",
-        "stylelint": "^13.0.0",
-        "stylelint-config-standard": "^19.0.0",
-        "webpack": "^4.41.5",
-        "webpack-cli": "^3.3.10"
+        "stylelint": "^13.2.0",
+        "stylelint-config-standard": "^20.0.0",
+        "webpack": "^4.41.6",
+        "webpack-cli": "^3.3.11"
     },
     "scripts": {
         "compress": "scripts/compress",
         "copy-dist": "cp ./node_modules/normalize.css/normalize.css ./public/assets/frontend/",
         "lint:es6": "eslint resources/es/*.js",
         "lint:sass": "stylelint --syntax=scss resources/sass/**/*.scss",
-        "make": "npm run make:css && npm run make:js",
+        "make-orig": "npm run make:css && npm run make:js",
+        "make": "npm run lint:sass && npm run webpack",
         "make:css": "npm run lint:sass && npm run sass && npm run postcss",
         "make:js": "npm run lint:es6 && npm run webpack && npm run uglifyjs",
         "webpack": "webpack"

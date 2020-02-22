@@ -3,18 +3,20 @@
 @section('title')Bookmarks « @stop
 
 @section('content')
-    <div class="h-feed top-space">
+    <div class="h-feed">
         @foreach($bookmarks as $bookmark)
             <div class="h-entry">
-                <a class="u-bookmark-of<?php if ($bookmark->name !== null) { echo ' h-cite'; } ?>" href="{{ $bookmark->url }}">
-                    @isset($bookmark->name)
-                        {{ $bookmark->name }}
-                    @endisset
+                <div class="bookmark-link">
+                    <a class="u-bookmark-of<?php if ($bookmark->name !== null) { echo ' h-cite'; } ?>" href="{{ $bookmark->url }}">
+                        @isset($bookmark->name)
+                            {{ $bookmark->name }}
+                        @endisset
 
-                    @empty($bookmark->name)
-                        {{ $bookmark->url }}
-                    @endempty
-                </a> &nbsp; <a href="{{ $bookmark->longurl }}">🔗</a>
+                        @empty($bookmark->name)
+                            {{ $bookmark->url }}
+                        @endempty
+                    </a> &nbsp; <a href="{{ $bookmark->longurl }}">🔗</a>
+                </div>
                 @isset($bookmark->content)
                     <p>{{ $bookmark->content }}</p>
                 @endisset

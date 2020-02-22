@@ -23,24 +23,34 @@ body {
   flex-direction: column;
   justify-content: center; }
   #top-header h1 {
-    display: flex;
-    justify-content: center; }
+    width: 100%;
+    text-align: center; }
   #top-header nav {
     display: flex;
-    justify-content: center; }
+    justify-content: center;
+    flex-wrap: wrap; }
     #top-header nav a {
       margin: 0 0.5rem; }
 
-.h-feed {
+@media screen and (max-width: 699px) {
+  main {
+    margin-left: 5px;
+    margin-right: 5px; } }
+
+main .h-feed {
   display: flex;
   flex-direction: column;
   margin: auto; }
+  main .h-feed img {
+    max-width: 100%; }
   @media screen and (min-width: 700px) {
-    .h-feed {
+    main .h-feed {
       max-width: 700px; }
-      .h-feed > .note,
-      .h-feed > .h-entry {
+      main .h-feed > .note,
+      main .h-feed > .h-entry {
         padding: 0 1rem; } }
+  main .h-feed .h-entry:first-child > .bookmark-link {
+    padding-top: 2rem; }
 
 .note {
   display: flex;
@@ -63,6 +73,15 @@ footer {
   flex-direction: column;
   align-items: center;
   margin-top: 1.5rem; }
+  @media screen and (max-width: 699px) {
+    footer input {
+      max-width: 95vw; } }
+  footer .iwc-logo {
+    max-width: 100%; }
+  @media screen and (max-width: 699px) {
+    footer {
+      margin-left: 5px;
+      margin-right: 5px; } }
 
 .post-info a {
   text-decoration: none; }
