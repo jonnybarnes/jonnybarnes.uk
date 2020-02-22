@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Str;
 
 /**
- * App\Models\Media
+ * App\Models\Media.
  *
  * @property int $id
  * @property string|null $token

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
- * App\Models\Bookmark
+ * App\Models\Bookmark.
  *
  * @property int $id
  * @property string $url

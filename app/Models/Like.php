@@ -10,7 +10,7 @@ use Illuminate\Support\Arr;
 use Mf2;
 
 /**
- * App\Models\Like
+ * App\Models\Like.
  *
  * @property int $id
  * @property string $url

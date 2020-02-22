@@ -7,7 +7,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * App\Models\Contact
+ * App\Models\Contact.
  *
  * @property int $id
  * @property string $nick

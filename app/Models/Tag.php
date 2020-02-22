@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
- * App\Models\Tag
+ * App\Models\Tag.
  *
  * @property int $id
  * @property string $tag

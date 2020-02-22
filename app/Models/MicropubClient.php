@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * App\Models\MicropubClient
+ * App\Models\MicropubClient.
  *
  * @property int $id
  * @property string $client_url

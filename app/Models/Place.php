@@ -13,7 +13,7 @@ use Phaza\LaravelPostgis\Eloquent\PostgisTrait;
 use Phaza\LaravelPostgis\Geometries\Point;
 
 /**
- * App\Models\Place
+ * App\Models\Place.
  *
  * @property int $id
  * @property string $name
