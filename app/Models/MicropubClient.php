@@ -7,6 +7,26 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * App\Models\MicropubClient
+ *
+ * @property int $id
+ * @property string $client_url
+ * @property string $client_name
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Note[] $notes
+ * @property-read int|null $notes_count
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\MicropubClient newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\MicropubClient newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\MicropubClient query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\MicropubClient whereClientName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\MicropubClient whereClientUrl($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\MicropubClient whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\MicropubClient whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\MicropubClient whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
 class MicropubClient extends Model
 {
     /**
@@ -26,7 +46,7 @@ class MicropubClient extends Model
     /**
      * Define the relationship with notes.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     public function notes(): HasMany
     {

@@ -19,6 +19,71 @@ use League\CommonMark\{CommonMarkConverter, Environment};
 use Normalizer;
 use Spatie\CommonMarkHighlighter\{FencedCodeRenderer, IndentedCodeRenderer};
 
+/**
+ * App\Models\Note
+ *
+ * @property int $id
+ * @property string|null $note
+ * @property string|null $in_reply_to
+ * @property string $shorturl
+ * @property string|null $location
+ * @property int|null $photo
+ * @property string|null $tweet_id
+ * @property string|null $client_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property int|null $place_id
+ * @property string|null $facebook_url
+ * @property string|null $searchable
+ * @property string|null $swarm_url
+ * @property string|null $instagram_url
+ * @property-read \App\Models\MicropubClient|null $client
+ * @property-read string|null $address
+ * @property-read string $content
+ * @property-read string $humandiff
+ * @property-read string $iso8601
+ * @property-read float|null $latitude
+ * @property-read float|null $longitude
+ * @property-read string $longurl
+ * @property-read string $nb60id
+ * @property-read string $pubdate
+ * @property-read object|null $twitter
+ * @property-read string $twitter_content
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Media[] $media
+ * @property-read int|null $media_count
+ * @property-read \App\Models\Place|null $place
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Tag[] $tags
+ * @property-read int|null $tags_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\WebMention[] $webmentions
+ * @property-read int|null $webmentions_count
+ * @method static bool|null forceDelete()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Note nb60($nb60id)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Note newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Note newQuery()
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Note onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Note query()
+ * @method static bool|null restore()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Note whereClientId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Note whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Note whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Note whereFacebookUrl($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Note whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Note whereInReplyTo($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Note whereInstagramUrl($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Note whereLocation($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Note whereNote($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Note wherePhoto($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Note wherePlaceId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Note whereSearchable($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Note whereShorturl($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Note whereSwarmUrl($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Note whereTweetId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Note whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Note withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Note withoutTrashed()
+ * @mixin \Eloquent
+ */
 class Note extends Model
 {
     use Searchable;
@@ -54,8 +119,8 @@ class Note extends Model
      */
     protected $table = 'notes';
 
-    /*
-     * Mass-assignment
+    /**
+     * Mass-assignment.
      *
      * @var array
      */
@@ -277,9 +342,9 @@ class Note extends Model
         }
         if ($this->location !== null) {
             $pieces = explode(':', $this->location);
-            $latlng = explode(',', $pieces[0]);
+            $latLng = explode(',', $pieces[0]);
 
-            return (float) trim($latlng[0]);
+            return (float) trim($latLng[0]);
         }
 
         return null;
