@@ -26,18 +26,7 @@
         @endforeach
     </div>
 
-    <div class="paginator">
-        @if($prevLink)
-            <a href="{{ $prevLink }}">Prev</a>
-        @else
-            <a href="" class="disabled">Prev</a>
-        @endif
-        @if($nextLink)
-            <a href="{{ $nextLink }}">Next</a>
-        @else
-            <a href="" class="disabled">Next</a>
-        @endif
-    </div>
+    {{ $items->links() }}
 
     @include('templates.bio')
 @stop
