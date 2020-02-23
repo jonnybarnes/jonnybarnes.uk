@@ -30,17 +30,23 @@ class FrontPageController extends Controller
             ->merge($articles)
             ->merge($bookmarks)
             ->merge($likes)
-            ->sortByDesc('updated_at')
-            ->chunk(10);
+            ->sortByDesc('updated_at');
 
-        $page = $allItems->get($pageNumber - 1);
+        $lastPage = intval(floor($allItems->count() / 10)) + 1;
 
-        if (is_null($page)) {
+        $items = $allItems->forPage($pageNumber, 10);
+
+        if ($items->count() === 0) {
             abort(404);
         }
 
+        $prevLink = ($pageNumber > 1) ? '/?page=' . ($pageNumber - 1) : null;
+        $nextLink = ($pageNumber < $lastPage) ? '/?page=' . ($pageNumber + 1) : null;
+
         return view('front-page', [
-            'items' => $page,
+            'items' => $items,
+            'prevLink' => $prevLink,
+            'nextLink' => $nextLink,
         ]);
     }
 }
