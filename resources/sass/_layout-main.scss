@@ -82,6 +82,14 @@ main {
     }
 }
 
+.pagination {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    width: 90vw;
+    list-style-type: none;
+}
+
 .personal-bio {
     padding: 0 2rem;
 }

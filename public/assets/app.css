@@ -65,6 +65,13 @@ main .h-feed {
   .note > .e-content > .naked-link .u-photo {
     margin: 2rem 0; }
 
+.pagination {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  width: 90vw;
+  list-style-type: none; }
+
 .personal-bio {
   padding: 0 2rem; }
 

@@ -26,5 +26,7 @@
         @endforeach
     </div>
 
+    {{ $items->links() }}
+
     @include('templates.bio')
 @stop
