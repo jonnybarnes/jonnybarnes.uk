@@ -14,8 +14,6 @@ class NotesTableSeeder extends Seeder
      */
     public function run()
     {
-        //factory(Note::class, 10)->create();
-
         $now = Carbon::now()->subDays(rand(2, 5));
         $noteTwitterReply = Note::create([
             'note' => 'What does this even mean?',
@@ -196,6 +194,16 @@ EOF;
         ]);
         DB::table('notes')
             ->where('id', $noteWithCode->id)
+            ->update(['updated_at' => $now->toDateTimeString()]);
+
+        $now = Carbon::now();
+        $noteWithLongUrl = Note::create([
+            'note' => 'Best site: https://example.org/posts/some-really-long-slug-that-is-too-wide-on-mobile',
+            'created_at' => $now,
+            'client_id' => 'https://beta.indigenous.abode.pub/ios/'
+        ]);
+        DB::table('notes')
+            ->where('id', $noteWithLongUrl->id)
             ->update(['updated_at' => $now->toDateTimeString()]);
     }
 }

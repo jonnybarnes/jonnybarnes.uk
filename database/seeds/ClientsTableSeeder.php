@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Carbon;
 
 class ClientsTableSeeder extends Seeder
 {
@@ -16,6 +17,13 @@ class ClientsTableSeeder extends Seeder
             'client_name' => 'JBL5',
             'created_at' => '2016-01-12 16:03:00',
             'updated_at' => '2016-01-12 16:03:00',
+        ]);
+
+        DB::table('clients')->insert([
+            'client_url' => 'https://beta.indigenous.abode.pub/ios/',
+            'client_name' => 'https://beta.indigenous.abode.pub/ios/',
+            'created_at' => Carbon::now()->toDateTimeString(),
+            'updated_at' => Carbon::now()->toDateTimeString(),
         ]);
     }
 }
