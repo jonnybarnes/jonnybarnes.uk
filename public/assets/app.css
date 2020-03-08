@@ -59,6 +59,8 @@ main .h-feed {
     display: flex;
     flex-direction: row;
     justify-content: space-between; }
+    .note .note-metadata .client {
+      word-break: break-all; }
     .note .note-metadata .syndication-links svg {
       height: 1em;
       width: 1em; }

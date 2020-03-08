@@ -65,6 +65,10 @@ main {
         flex-direction: row;
         justify-content: space-between;
 
+        .client {
+            word-break: break-all;
+        }
+
         .syndication-links {
             svg {
                 height: 1em;
