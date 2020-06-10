@@ -30,8 +30,7 @@ env:
     - setup=basic
 
 php:
-  - 7.3
-  - 7.4.2
+  - 7.4
 
 before_install:
   - printf "\n" | pecl install imagick
