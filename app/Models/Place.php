@@ -9,8 +9,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\{Builder, Model};
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-use Phaza\LaravelPostgis\Eloquent\PostgisTrait;
-use Phaza\LaravelPostgis\Geometries\Point;
+use MStaack\LaravelPostgis\Eloquent\PostgisTrait;
+use MStaack\LaravelPostgis\Geometries\Point;
 
 // phpcs:disable Generic.Files.LineLength.TooLong
 
@@ -36,10 +36,10 @@ use Phaza\LaravelPostgis\Geometries\Point;
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Note[] $notes
  * @property-read int|null $notes_count
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Place findSimilarSlugs($attribute, $config, $slug)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Place near(\Phaza\LaravelPostgis\Geometries\Point $point, $distance = 1000)
- * @method static \Phaza\LaravelPostgis\Eloquent\Builder|\App\Models\Place newModelQuery()
- * @method static \Phaza\LaravelPostgis\Eloquent\Builder|\App\Models\Place newQuery()
- * @method static \Phaza\LaravelPostgis\Eloquent\Builder|\App\Models\Place query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Place near(\MStaack\LaravelPostgis\Geometries\Point $point, $distance = 1000)
+ * @method static \MStaack\LaravelPostgis\Eloquent\Builder|\App\Models\Place newModelQuery()
+ * @method static \MStaack\LaravelPostgis\Eloquent\Builder|\App\Models\Place newQuery()
+ * @method static \MStaack\LaravelPostgis\Eloquent\Builder|\App\Models\Place query()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Place whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Place whereDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Place whereExternalURL($url)

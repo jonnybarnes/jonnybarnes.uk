@@ -542,8 +542,8 @@ class Note extends Model
     public function setContacts(): void
     {
         $contacts = [];
-        if ($this->getOriginal('note')) {
-            preg_match_all(self::USERNAMES_REGEX, $this->getoriginal('note'), $matches);
+        if ($this->getRawOriginal('note')) {
+            preg_match_all(self::USERNAMES_REGEX, $this->getRawOriginal('note'), $matches);
 
             foreach ($matches[1] as $match) {
                 $contacts[$match] = Contact::where('nick', mb_strtolower($match))->first();
