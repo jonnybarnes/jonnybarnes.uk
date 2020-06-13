@@ -9,8 +9,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\{Builder, Model};
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-use Phaza\LaravelPostgis\Eloquent\PostgisTrait;
-use Phaza\LaravelPostgis\Geometries\Point;
+use MStaack\LaravelPostgis\Eloquent\PostgisTrait;
+use MStaack\LaravelPostgis\Geometries\Point;
 
 // phpcs:disable Generic.Files.LineLength.TooLong
 

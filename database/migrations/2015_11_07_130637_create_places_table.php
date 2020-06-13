@@ -1,6 +1,6 @@
 <?php
 
-use Phaza\LaravelPostgis\Schema\Blueprint;
+use MStaack\LaravelPostgis\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
 class CreatePlacesTable extends Migration
