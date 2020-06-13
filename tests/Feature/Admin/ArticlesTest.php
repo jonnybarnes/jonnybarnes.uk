@@ -51,7 +51,7 @@ class ArticlesTest extends TestCase
             fclose($fh);
         }
         $path = sys_get_temp_dir() . '/article.md';
-        $file = new UploadedFile($path, 'article.md', 'text/plain', filesize($path), null, true);
+        $file = new UploadedFile($path, 'article.md', 'text/plain', null, true);
 
         $this->actingAs($user)
              ->post('/admin/blog', [

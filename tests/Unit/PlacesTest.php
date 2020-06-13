@@ -5,7 +5,7 @@ namespace Tests\Unit;
 use Tests\TestCase;
 use App\Models\Place;
 use App\Services\PlaceService;
-use Phaza\LaravelPostgis\Geometries\Point;
+use MStaack\LaravelPostgis\Geometries\Point;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 

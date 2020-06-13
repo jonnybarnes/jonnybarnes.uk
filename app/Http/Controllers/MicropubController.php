@@ -17,7 +17,7 @@ use Intervention\Image\Exception\NotReadableException;
 use Intervention\Image\ImageManager;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
-use Phaza\LaravelPostgis\Geometries\Point;
+use MStaack\LaravelPostgis\Geometries\Point;
 use Ramsey\Uuid\Uuid;
 
 class MicropubController extends Controller

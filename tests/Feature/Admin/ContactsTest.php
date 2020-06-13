@@ -86,7 +86,7 @@ class ContactsTest extends TestCase
     {
         copy(__DIR__ . '/../../aaron.png', sys_get_temp_dir() . '/tantek.png');
         $path = sys_get_temp_dir() . '/tantek.png';
-        $file = new UploadedFile($path, 'tantek.png', 'image/png', filesize($path), null, true);
+        $file = new UploadedFile($path, 'tantek.png', 'image/png', null, true);
         $user = factory(User::class)->create();
 
         $this->actingAs($user)->post('/admin/contacts/1', [
