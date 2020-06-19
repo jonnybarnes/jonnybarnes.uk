@@ -2,7 +2,7 @@
 
 use App\Models\Place;
 use Illuminate\Database\Seeder;
-use Phaza\LaravelPostgis\Geometries\Point;
+use MStaack\LaravelPostgis\Geometries\Point;
 
 class PlacesTableSeeder extends Seeder
 {

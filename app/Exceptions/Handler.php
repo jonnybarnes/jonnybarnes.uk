@@ -2,13 +2,13 @@
 
 namespace App\Exceptions;
 
-use App;
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Session\TokenMismatchException;
 use Illuminate\Support\Facades\Route;
+use Throwable;
 
 /**
  * @codeCoverageIgnore
@@ -39,13 +39,13 @@ class Handler extends ExceptionHandler
      *
      * This is a great spot to send exceptions to Sentry, Bugsnag, etc.
      *
-     * @param Exception $exception
+     * @param Throwable $throwable
      * @return void
      * @throws Exception
      */
-    public function report(Exception $exception)
+    public function report(Throwable $throwable)
     {
-        parent::report($exception);
+        parent::report($throwable);
 
         $guzzle = new \GuzzleHttp\Client([
             'headers' => [
@@ -64,8 +64,8 @@ class Handler extends ExceptionHandler
                         'author_name' => app()->environment(),
                         'author_link' => config('app.url'),
                         'fields' => [[
-                            'title' => get_class($exception) ?? 'Unkown Exception',
-                            'value' => $exception->getMessage() ?? '',
+                            'title' => get_class($this) ?? 'Unknown Exception',
+                            'value' => $throwable->getMessage() ?? '',
                         ]],
                         'ts' => time(),
                     ]],
@@ -78,16 +78,16 @@ class Handler extends ExceptionHandler
      * Render an exception into an HTTP response.
      *
      * @param Request $request
-     * @param Exception $exception
+     * @param Throwable $throwable
      * @return Response
-     * @throws Exception
+     * @throws Throwable
      */
-    public function render($request, Exception $exception)
+    public function render($request, Throwable $throwable)
     {
-        if ($exception instanceof TokenMismatchException) {
+        if ($throwable instanceof TokenMismatchException) {
             Route::getRoutes()->match($request);
         }
 
-        return parent::render($request, $exception);
+        return parent::render($request, $throwable);
     }
 }

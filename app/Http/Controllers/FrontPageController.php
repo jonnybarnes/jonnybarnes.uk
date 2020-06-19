@@ -26,21 +26,15 @@ class FrontPageController extends Controller
         $bookmarks = Bookmark::latest()->get();
         $likes = Like::latest()->get();
 
-        $allItems = collect($notes)
+        $items = collect($notes)
             ->merge($articles)
             ->merge($bookmarks)
             ->merge($likes)
             ->sortByDesc('updated_at')
-            ->chunk(10);
-
-        $page = $allItems->get($pageNumber - 1);
-
-        if (is_null($page)) {
-            abort(404);
-        }
+            ->paginate(10);
 
         return view('front-page', [
-            'items' => $page,
+            'items' => $items,
         ]);
     }
 }

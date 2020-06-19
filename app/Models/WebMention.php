@@ -13,6 +13,42 @@ use Illuminate\Support\Facades\Cache;
 use Jonnybarnes\WebmentionsParser\Authorship;
 use Jonnybarnes\WebmentionsParser\Exceptions\AuthorshipParserException;
 
+/**
+ * App\Models\WebMention.
+ *
+ * @property int $id
+ * @property string $source
+ * @property string $target
+ * @property int|null $commentable_id
+ * @property string|null $commentable_type
+ * @property string|null $type
+ * @property string|null $content
+ * @property int $verified
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $deleted_at
+ * @property mixed|null $mf2
+ * @property-read \App\Models\WebMention|null $commentable
+ * @property-read array $author
+ * @property-read string|null $published
+ * @property-read string|null $reply
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\WebMention newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\WebMention newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\WebMention query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\WebMention whereCommentableId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\WebMention whereCommentableType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\WebMention whereContent($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\WebMention whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\WebMention whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\WebMention whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\WebMention whereMf2($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\WebMention whereSource($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\WebMention whereTarget($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\WebMention whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\WebMention whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\WebMention whereVerified($value)
+ * @mixin \Eloquent
+ */
 class WebMention extends Model
 {
     use FilterHtml;
@@ -106,7 +142,7 @@ class WebMention extends Model
     /**
      * Create the photo link.
      *
-     * @param  string
+     * @param string $url
      * @return string
      */
     public function createPhotoLink(string $url): string

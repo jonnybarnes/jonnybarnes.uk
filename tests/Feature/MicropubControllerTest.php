@@ -12,7 +12,7 @@ use Illuminate\Http\UploadedFile;
 use App\Jobs\SyndicateNoteToTwitter;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Storage;
-use Phaza\LaravelPostgis\Geometries\Point;
+use MStaack\LaravelPostgis\Geometries\Point;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class MicropubControllerTest extends TestCase
@@ -697,14 +697,7 @@ class MicropubControllerTest extends TestCase
         $response = $this->post(
             '/api/media',
             [
-                'file' => new UploadedFile(
-                    $file,
-                    'aaron.png',
-                    'image/png',
-                    filesize(__DIR__ . '/../aaron.png'),
-                    null,
-                    true
-                ),
+                'file' => new UploadedFile($file, 'aaron.png', 'image/png', null, true),
             ],
             ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
         );
@@ -726,7 +719,7 @@ class MicropubControllerTest extends TestCase
         $response = $this->post(
             '/api/media',
             [
-                'file' => new UploadedFile($file, 'audio.mp3', 'audio/mpeg', filesize($file), null, true),
+                'file' => new UploadedFile($file, 'audio.mp3', 'audio/mpeg', null, true),
             ],
             ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
         );
@@ -748,7 +741,7 @@ class MicropubControllerTest extends TestCase
         $response = $this->post(
             '/api/media',
             [
-                'file' => new UploadedFile($file, 'video.ogv', 'video/ogg', filesize($file), null, true),
+                'file' => new UploadedFile($file, 'video.ogv', 'video/ogg', null, true),
             ],
             ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
         );
@@ -790,7 +783,13 @@ class MicropubControllerTest extends TestCase
         $response = $this->post(
             '/api/media',
             [
-                'file' => new UploadedFile(__DIR__ . '/../aaron.png', 'aaron.png', 'image/png', UPLOAD_ERR_INI_SIZE, true),
+                'file' => new UploadedFile(
+                    __DIR__ . '/../aaron.png',
+                    'aaron.png',
+                    'image/png',
+                    UPLOAD_ERR_INI_SIZE,
+                    true
+                ),
             ],
             ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
         );
