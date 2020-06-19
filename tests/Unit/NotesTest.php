@@ -284,4 +284,16 @@ JSON;
 
         $this->assertNull($note->twitter);
     }
+
+    public function test_markdown_gets_converted()
+    {
+        $note = Note::create([
+            'note' => 'The best search engine? https://duckduckgo.com',
+        ]);
+
+        $this->assertSame(
+            '<p>The best search engine? <a href="https://duckduckgo.com">https://duckduckgo.com</a></p>' . PHP_EOL,
+            $note->note
+        );
+    }
 }
