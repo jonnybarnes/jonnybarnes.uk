@@ -9,7 +9,6 @@ use GuzzleHttp\Psr7\Response;
 use App\Jobs\DownloadWebMention;
 use GuzzleHttp\Handler\MockHandler;
 use Illuminate\FileSystem\FileSystem;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class DownloadWebMentionJobTest extends TestCase
 {
@@ -24,7 +23,7 @@ class DownloadWebMentionJobTest extends TestCase
 
     public function test_the_job_saves_html()
     {
-        $this->assertFileNotExists(storage_path('HTML/https'));
+        $this->assertFileDoesNotExist(storage_path('HTML/https'));
         $source = 'https://example.org/reply/1';
         $html = <<<HTML
 <div class="h-entry">
@@ -46,12 +45,12 @@ HTML;
 
         $job->handle($client);
 
-        $this->assertFileNotExists(storage_path('HTML/https/example.org/reply') . '/1.' . date('Y-m-d') . '.backup');
+        $this->assertFileDoesNotExist(storage_path('HTML/https/example.org/reply') . '/1.' . date('Y-m-d') . '.backup');
     }
 
     public function test_the_job_saves_html_and_backup()
     {
-        $this->assertFileNotExists(storage_path('HTML/https'));
+        $this->assertFileDoesNotExist(storage_path('HTML/https'));
         $source = 'https://example.org/reply/1';
         $html = <<<HTML
 <div class="h-entry">
@@ -85,7 +84,7 @@ HTML;
 
     public function test_an_index_html_file()
     {
-        $this->assertFileNotExists(storage_path('HTML/https'));
+        $this->assertFileDoesNotExist(storage_path('HTML/https'));
         $source = 'https://example.org/reply-one/';
         $html = <<<HTML
 <div class="h-entry">
