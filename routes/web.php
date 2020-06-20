@@ -108,6 +108,7 @@ Route::group(['domain' => config('url.longurl')], function () {
         Route::get('/feed.rss', 'FeedsController@blogRss');
         Route::get('/feed.atom', 'FeedsController@blogAtom');
         Route::get('/feed.json', 'FeedsController@blogJson');
+        Route::get('/feed.jf2', 'Feedscontroller@blogJf2');
         Route::get('/s/{id}', 'ArticlesController@onlyIdInURL');
         Route::get('/{year?}/{month?}', 'ArticlesController@index');
         Route::get('/{year}/{month}/{slug}', 'ArticlesController@show');
@@ -119,6 +120,7 @@ Route::group(['domain' => config('url.longurl')], function () {
         Route::get('/feed.rss', 'FeedsController@notesRss');
         Route::get('/feed.atom', 'FeedsController@notesAtom');
         Route::get('/feed.json', 'FeedsController@notesJson');
+        Route::get('/feed.jf2', 'FeedsController@notesJf2');
         Route::get('/{id}', 'NotesController@show');
         Route::get('/tagged/{tag}', 'NotesController@tagged');
     });
