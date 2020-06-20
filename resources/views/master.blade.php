@@ -10,9 +10,11 @@
         <link rel="alternate" type="application/rss+xml" title="Blog RSS Feed" href="/blog/feed.rss">
         <link rel="alternate" type="application/atom+xml" title="Blog Atom Feed" href="/blog/feed.atom">
         <link rel="alternate" type="application/json" title="Blog JSON Feed" href="/blog/feed.json">
+        <link rel="alternate" type="application/jf2feed+json" title="Blog JF2 Feed" href="/blog/feed.jf2">
         <link rel="alternate" type="application/rss+xml" title="Notes RSS Feed" href="/notes/feed.rss">
         <link rel="alternate" type="application/atom+xml" title="Notes Atom Feed" href="/notes/feed.atom">
         <link rel="alternate" type="application/json" title="Notes JSON Feed" href="/notes/feed.json">
+        <link rel="alternate" type="application/jf2feed+json" title="Notes JF2 Feed" href="/blog/feed.jf2">
         <link rel="openid.server" href="https://indieauth.com/openid">
         <link rel="openid.delegate" href="{{ config('app.url') }}">
         <link rel="authorization_endpoint" href="https://indieauth.com/auth">

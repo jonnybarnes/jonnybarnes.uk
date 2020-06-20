@@ -39,6 +39,27 @@ class FeedsTest extends TestCase
         $response->assertHeader('Content-Type', 'application/atom+xml; charset=utf-8');
     }
 
+    /** @test */
+    public function blog_jf2_feed()
+    {
+        $response = $this->get('/blog/feed.jf2');
+        $response->assertHeader('Content-Type', 'application/jf2feed+json');
+        $response->assertJson([
+            'type' => 'feed',
+            'name' => 'Blog feed for ' . config('app.name'),
+            'url' => url('/blog'),
+            'author' => [
+                'type' => 'card',
+                'name' => config('user.displayname'),
+                'url' => config('app.longurl'),
+            ],
+            'children' => [[
+                'type' => 'entry',
+                'post-type' => 'article',
+            ]]
+        ]);
+    }
+
     /**
      * Test the notes RSS feed.
      *
@@ -70,6 +91,27 @@ class FeedsTest extends TestCase
     {
         $response = $this->get('/notes/feed.json');
         $response->assertHeader('Content-Type', 'application/json');
+    }
+
+    /** @test */
+    public function notes_jf2_feed()
+    {
+        $response = $this->get('/notes/feed.jf2');
+        $response->assertHeader('Content-Type', 'application/jf2feed+json');
+        $response->assertJson([
+            'type' => 'feed',
+            'name' => 'Notes feed for ' . config('app.name'),
+            'url' => url('/notes'),
+            'author' => [
+                'type' => 'card',
+                'name' => config('user.displayname'),
+                'url' => config('app.longurl'),
+            ],
+            'children' => [[
+                'type' => 'entry',
+                'post-type' => 'note',
+            ]]
+        ]);
     }
 
     /**
