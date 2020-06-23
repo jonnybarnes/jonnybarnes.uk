@@ -52,38 +52,23 @@ body {
   display: flex;
   flex-direction: column; }
 
-#top-header {
-  display: flex;
-  flex-direction: column;
-  justify-content: center; }
-  #top-header h1 {
-    width: 100%;
-    text-align: center; }
-  #top-header nav {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap; }
-    #top-header nav a {
-      margin: 0 0.5rem; }
-
-@media screen and (max-width: 699px) {
-  main {
-    margin-left: 5px;
-    margin-right: 5px; } }
-
-main .h-feed {
+main {
   display: flex;
   flex-direction: column;
   margin: auto; }
-  main .h-feed img {
+  @media screen and (max-width: 699px) {
+    main {
+      margin-left: 5px;
+      margin-right: 5px; } }
+  main img {
     max-width: 100%; }
   @media screen and (min-width: 700px) {
-    main .h-feed {
+    main {
       max-width: 700px; }
-      main .h-feed > .note,
-      main .h-feed > .h-entry {
+      main > .note,
+      main > .h-entry {
         padding: 0 1rem; } }
-  main .h-feed .h-entry:first-child > .bookmark-link {
+  main .h-entry:first-child > .bookmark-link {
     padding-top: 2rem; }
 
 .note {
@@ -100,6 +85,12 @@ main .h-feed {
       width: 1em; }
   .note > .e-content > .naked-link .u-photo {
     margin: 2rem 0; }
+
+article header > h1 {
+  margin-bottom: 0; }
+
+article header .post-info {
+  font-size: 1.4rem; }
 
 .pagination {
   display: flex;
@@ -125,6 +116,20 @@ footer {
     footer {
       margin-left: 5px;
       margin-right: 5px; } }
+
+#top-header {
+  display: flex;
+  flex-direction: column;
+  justify-content: center; }
+  #top-header h1 {
+    width: 100%;
+    text-align: center; }
+  #top-header nav {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap; }
+    #top-header nav a {
+      margin: 0 0.5rem; }
 
 .post-info a {
   text-decoration: none; }
