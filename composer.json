@@ -28,7 +28,6 @@
         "laravel/tinker": "^2.0",
         "lcobucci/jwt": "^3.1",
         "league/commonmark": "^1.0",
-        "league/commonmark-ext-autolink": "^1.0",
         "league/flysystem-aws-s3-v3": "^1.0",
         "mf2/mf2": "~0.3",
         "mstaack/laravel-postgis": "~5.0",

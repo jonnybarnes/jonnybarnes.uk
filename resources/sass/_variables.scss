@@ -1,4 +1,20 @@
 :root {
-    --font-stack-body: montserrat, sans-serif;
-    --font-stack-headings: bebas-neue, sans-serif;
+    /* fonts */
+    --font-stack-body: "Whitney SSm A", "Whitney SSm B", sans-serif;
+    --font-stack-headings: "Quarto A", "Quarto B", serif;
+    --font-stack-monospace: "Operator Mono SSm A", "Operator Mono SSm B", monospace;
+
+    /* colours */
+    --color-background: #004643;
+    --color-headline: #fffffe;
+    --color-paragraph: #abd1c6;
+    --color-button: #f9bc60;
+    --color-button-text: #001e1d;
+
+    /* colours - illustrations */
+    --color-stroke: #001e1d;
+    --color-main: #e8e4e6;
+    --color-highlight: #f9bc60;
+    --color-secondary: #abd1c6;
+    --color-tertiary: #e16162;
 }

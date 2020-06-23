@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Models\{Article, Note};
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 
 class FeedsController extends Controller
@@ -12,7 +13,7 @@ class FeedsController extends Controller
     /**
      * Returns the blog RSS feed.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function blogRss(): Response
     {
@@ -27,7 +28,7 @@ class FeedsController extends Controller
     /**
      * Returns the blog Atom feed.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function blogAtom(): Response
     {
@@ -41,7 +42,7 @@ class FeedsController extends Controller
     /**
      * Returns the notes RSS feed.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function notesRss(): Response
     {
@@ -56,7 +57,7 @@ class FeedsController extends Controller
     /**
      * Returns the notes Atom feed.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function notesAtom(): Response
     {
@@ -132,5 +133,81 @@ class FeedsController extends Controller
         }
 
         return $data;
+    }
+
+    /**
+     * Returns the blog JF2 feed.
+     *
+     * @return JsonResponse
+     */
+    public function blogJf2(): JsonResponse
+    {
+        $articles = Article::where('published', '1')->latest('updated_at')->take(20)->get();
+        $items = [];
+        foreach ($articles as $article) {
+            $items[] = [
+                'type' => 'entry',
+                'published' => $article->created_at,
+                'uid' => config('app.url') . $article->link,
+                'url' => config('app.url') . $article->link,
+                'content' => [
+                    'text' => $article->main,
+                    'html' => $article->html,
+                ],
+                'post-type' => 'article',
+            ];
+        }
+
+        return response()->json([
+            'type' => 'feed',
+            'name' => 'Blog feed for ' . config('app.name'),
+            'url' => url('/blog'),
+            'author' => [
+                'type' => 'card',
+                'name' => config('user.displayname'),
+                'url' => config('app.longurl'),
+            ],
+            'children' => $items,
+        ], 200, [
+            'Content-Type' => 'application/jf2feed+json',
+        ]);
+    }
+
+    /**
+     * Returns the notes JF2 feed.
+     *
+     * @return JsonResponse
+     */
+    public function notesJf2(): JsonResponse
+    {
+        $notes = Note::latest()->take(20)->get();
+        $items = [];
+        foreach ($notes as $note) {
+            $items[] = [
+                'type' => 'entry',
+                'published' => $note->created_at,
+                'uid' => $note->longurl,
+                'url' => $note->longurl,
+                'content' => [
+                    'text' => $note->getRawOriginal('note'),
+                    'html' => $note->note,
+                ],
+                'post-type' => 'note',
+            ];
+        }
+
+        return response()->json([
+            'type' => 'feed',
+            'name' => 'Notes feed for ' . config('app.name'),
+            'url' => url('/notes'),
+            'author' => [
+                'type' => 'card',
+                'name' => config('user.displayname'),
+                'url' => config('app.longurl'),
+            ],
+            'children' => $items,
+        ], 200, [
+            'Content-Type' => 'application/jf2feed+json',
+        ]);
     }
 }

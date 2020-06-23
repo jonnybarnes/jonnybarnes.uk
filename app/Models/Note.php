@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Cache;
 use Jonnybarnes\IndieWeb\Numbers;
 use Laravel\Scout\Searchable;
 use League\CommonMark\Block\Element\{FencedCode, IndentedCode};
-use League\CommonMark\Ext\Autolink\AutolinkExtension;
+use League\CommonMark\Extension\Autolink\AutolinkExtension;
 use League\CommonMark\{CommonMarkConverter, Environment};
 use Normalizer;
 use Spatie\CommonMarkHighlighter\{FencedCodeRenderer, IndentedCodeRenderer};
