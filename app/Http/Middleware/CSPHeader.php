@@ -32,9 +32,7 @@ blob:; \
 style-src 'self' 'unsafe-inline' \
 https://api.mapbox.com \
 https://api.tiles.mapbox.com \
-https://fonts.googleapis.com \
-use.typekit.net \
-p.typekit.net; \
+cloud.typography.com; \
 img-src 'self' data: blob: \
 https://pbs.twimg.com \
 https://api.mapbox.com \
