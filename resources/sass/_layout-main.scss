@@ -78,8 +78,9 @@ article {
 .pagination {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
     justify-content: space-evenly;
-    width: 90vw;
+    max-width: 90vw;
     list-style-type: none;
 }
 
