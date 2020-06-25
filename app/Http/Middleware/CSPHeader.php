@@ -30,11 +30,11 @@ class CSPHeader
                 "connect-src 'self' https://api.mapbox.com https://*.tiles.mapbox.com https://events.mapbox.com data: blob:; " .
                 "worker-src 'self' blob:; " .
                 "frame-src 'self' https://www.youtube.com blob:; " .
-                "child-src blob:; " .
-                "upgrade-insecure-requests; " .
-                "block-all-mixed-content; " .
-                "report-to csp-endpoint; " .
-                "report-uri https://jonnybarnes.report-uri.io/r/default/csp/enforce;"
+                'child-src blob:; ' .
+                'upgrade-insecure-requests; ' .
+                'block-all-mixed-content; ' .
+                'report-to csp-endpoint; ' .
+                'report-uri https://jonnybarnes.report-uri.io/r/default/csp/enforce;'
             )->header(
                 'Report-To',
                 '{' .
