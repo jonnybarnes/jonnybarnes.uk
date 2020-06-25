@@ -5,7 +5,7 @@
         <title>@if (App::environment() == 'local'){!! "[testing] -"!!}@endif @yield('title'){{ config('app.display_name') }}</title>
         <meta name="viewport" content="width=device-width">
         <link rel="stylesheet" href="/assets/frontend/normalize.css">
-        <link rel="stylesheet" href="https://cloud.typography.com/6554898/6676412/css/fonts.css">
+        @if (!empty(config('app.font_link')))<link rel="stylesheet" href="{{ config('app.font_link') }}">@endif
         <link rel="stylesheet" href="/assets/app.css">
         <link rel="stylesheet" href="/assets/highlight/zenburn.css">
         <link rel="alternate" type="application/rss+xml" title="Blog RSS Feed" href="/blog/feed.rss">
