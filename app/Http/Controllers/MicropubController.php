@@ -5,20 +5,14 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Exceptions\InvalidTokenException;
-use App\Jobs\ProcessMedia;
-use App\Models\{Media, Place};
+use App\Http\Responses\MicropubResponses;
+use App\Models\Place;
 use App\Services\Micropub\{HCardService, HEntryService, UpdateService};
 use App\Services\TokenService;
-use Exception;
-use Illuminate\Contracts\Container\BindingResolutionException;
-use Illuminate\Http\{File, JsonResponse, Response, UploadedFile};
-use Illuminate\Support\Facades\Storage;
-use Intervention\Image\Exception\NotReadableException;
-use Intervention\Image\ImageManager;
+use Illuminate\Http\JsonResponse;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use MStaack\LaravelPostgis\Geometries\Point;
-use Ramsey\Uuid\Uuid;
 
 class MicropubController extends Controller
 {
@@ -44,24 +38,31 @@ class MicropubController extends Controller
      * then passes over the info to the relevant Service class.
      *
      * @return JsonResponse
+     * @throws InvalidTokenException
      */
     public function post(): JsonResponse
     {
         try {
             $tokenData = $this->tokenService->validateToken(request()->input('access_token'));
         } catch (InvalidTokenException $e) {
-            return $this->invalidTokenResponse();
+            $micropubResponses = new MicropubResponses();
+
+            return $micropubResponses->invalidTokenResponse();
         }
 
         if ($tokenData->hasClaim('scope') === false) {
-            return $this->tokenHasNoScopeResponse();
+            $micropubResponses = new MicropubResponses();
+
+            return $micropubResponses->tokenHasNoScopeResponse();
         }
 
         $this->logMicropubRequest(request()->all());
 
         if ((request()->input('h') == 'entry') || (request()->input('type.0') == 'h-entry')) {
             if (stristr($tokenData->getClaim('scope'), 'create') === false) {
-                return $this->insufficientScopeResponse();
+                $micropubResponses = new MicropubResponses();
+
+                return $micropubResponses->insufficientScopeResponse();
             }
             $location = $this->hentryService->process(request()->all(), $this->getCLientId());
 
@@ -73,7 +74,9 @@ class MicropubController extends Controller
 
         if (request()->input('h') == 'card' || request()->input('type.0') == 'h-card') {
             if (stristr($tokenData->getClaim('scope'), 'create') === false) {
-                return $this->insufficientScopeResponse();
+                $micropubResponses = new MicropubResponses();
+
+                return $micropubResponses->insufficientScopeResponse();
             }
             $location = $this->hcardService->process(request()->all());
 
@@ -85,7 +88,9 @@ class MicropubController extends Controller
 
         if (request()->input('action') == 'update') {
             if (stristr($tokenData->getClaim('scope'), 'update') === false) {
-                return $this->insufficientScopeResponse();
+                $micropubResponses = new MicropubResponses();
+
+                return $micropubResponses->insufficientScopeResponse();
             }
 
             return $this->updateService->process(request()->all());
@@ -112,7 +117,9 @@ class MicropubController extends Controller
         try {
             $tokenData = $this->tokenService->validateToken(request()->input('access_token'));
         } catch (InvalidTokenException $e) {
-            return $this->invalidTokenResponse();
+            $micropubResponses = new MicropubResponses();
+
+            return $micropubResponses->invalidTokenResponse();
         }
 
         if (request()->input('q') === 'syndicate-to') {
@@ -155,130 +162,10 @@ class MicropubController extends Controller
     }
 
     /**
-     * Process a media item posted to the media endpoint.
-     *
-     * @return JsonResponse
-     * @throws BindingResolutionException
-     * @throws Exception
-     */
-    public function media(): JsonResponse
-    {
-        try {
-            $tokenData = $this->tokenService->validateToken(request()->input('access_token'));
-        } catch (InvalidTokenException $e) {
-            return $this->invalidTokenResponse();
-        }
-
-        if ($tokenData->hasClaim('scope') === false) {
-            return $this->tokenHasNoScopeResponse();
-        }
-
-        if (stristr($tokenData->getClaim('scope'), 'create') === false) {
-            return $this->insufficientScopeResponse();
-        }
-
-        if ((request()->hasFile('file') && request()->file('file')->isValid()) === false) {
-            return response()->json([
-                'response' => 'error',
-                'error' => 'invalid_request',
-                'error_description' => 'The uploaded file failed validation',
-            ], 400);
-        }
-
-        $this->logMicropubRequest(request()->all());
-
-        $filename = $this->saveFile(request()->file('file'));
-
-        $manager = resolve(ImageManager::class);
-        try {
-            $image = $manager->make(request()->file('file'));
-            $width = $image->width();
-        } catch (NotReadableException $exception) {
-            // not an image
-            $width = null;
-        }
-
-        $media = Media::create([
-            'token' => request()->bearerToken(),
-            'path' => 'media/' . $filename,
-            'type' => $this->getFileTypeFromMimeType(request()->file('file')->getMimeType()),
-            'image_widths' => $width,
-        ]);
-
-        // put the file on S3 initially, the ProcessMedia job may edit this
-        Storage::disk('s3')->putFileAs(
-            'media',
-            new File(storage_path('app') . '/' . $filename),
-            $filename
-        );
-
-        ProcessMedia::dispatch($filename);
-
-        return response()->json([
-            'response' => 'created',
-            'location' => $media->url,
-        ], 201)->header('Location', $media->url);
-    }
-
-    /**
-     * Return the relevant CORS headers to a pre-flight OPTIONS request.
-     *
-     * @return Response
-     */
-    public function mediaOptionsResponse(): Response
-    {
-        return response('OK', 200);
-    }
-
-    /**
-     * Get the file type from the mime-type of the uploaded file.
-     *
-     * @param string $mimeType
-     * @return string
-     */
-    private function getFileTypeFromMimeType(string $mimeType): string
-    {
-        //try known images
-        $imageMimeTypes = [
-            'image/gif',
-            'image/jpeg',
-            'image/png',
-            'image/svg+xml',
-            'image/tiff',
-            'image/webp',
-        ];
-        if (in_array($mimeType, $imageMimeTypes)) {
-            return 'image';
-        }
-        //try known video
-        $videoMimeTypes = [
-            'video/mp4',
-            'video/mpeg',
-            'video/ogg',
-            'video/quicktime',
-            'video/webm',
-        ];
-        if (in_array($mimeType, $videoMimeTypes)) {
-            return 'video';
-        }
-        //try known audio types
-        $audioMimeTypes = [
-            'audio/midi',
-            'audio/mpeg',
-            'audio/ogg',
-            'audio/x-m4a',
-        ];
-        if (in_array($mimeType, $audioMimeTypes)) {
-            return 'audio';
-        }
-
-        return 'download';
-    }
-
-    /**
      * Determine the client id from the access token sent with the request.
      *
      * @return string
+     * @throws InvalidTokenException
      */
     private function getClientId(): string
     {
@@ -295,64 +182,7 @@ class MicropubController extends Controller
     private function logMicropubRequest(array $request)
     {
         $logger = new Logger('micropub');
-        $logger->pushHandler(new StreamHandler(storage_path('logs/micropub.log')), Logger::DEBUG);
+        $logger->pushHandler(new StreamHandler(storage_path('logs/micropub.log')));
         $logger->debug('MicropubLog', $request);
-    }
-
-    /**
-     * Save an uploaded file to the local disk.
-     *
-     * @param UploadedFile $file
-     * @return string
-     * @throws Exception
-     */
-    private function saveFile(UploadedFile $file): string
-    {
-        $filename = Uuid::uuid4()->toString() . '.' . $file->extension();
-        Storage::disk('local')->putFileAs('', $file, $filename);
-
-        return $filename;
-    }
-
-    /**
-     * Generate a response to be returned when the token has insufficient scope.
-     *
-     * @return JsonResponse
-     */
-    private function insufficientScopeResponse(): JsonResponse
-    {
-        return response()->json([
-            'response' => 'error',
-            'error' => 'insufficient_scope',
-            'error_description' => 'The token’s scope does not have the necessary requirements.',
-        ], 401);
-    }
-
-    /**
-     * Generate a response to be returned when the token is invalid.
-     *
-     * @return JsonResponse
-     */
-    private function invalidTokenResponse(): JsonResponse
-    {
-        return response()->json([
-            'response' => 'error',
-            'error' => 'invalid_token',
-            'error_description' => 'The provided token did not pass validation',
-        ], 400);
-    }
-
-    /**
-     * Generate a response to be returned when the token has no scope.
-     *
-     * @return JsonResponse
-     */
-    private function tokenHasNoScopeResponse(): JsonResponse
-    {
-        return response()->json([
-            'response' => 'error',
-            'error' => 'invalid_request',
-            'error_description' => 'The provided token has no scopes',
-        ], 400);
     }
 }
