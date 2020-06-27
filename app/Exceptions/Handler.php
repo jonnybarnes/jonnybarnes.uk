@@ -3,11 +3,13 @@
 namespace App\Exceptions;
 
 use Exception;
+use GuzzleHttp\Client;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Session\TokenMismatchException;
 use Illuminate\Support\Facades\Route;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 
 /**
@@ -21,7 +23,7 @@ class Handler extends ExceptionHandler
      * @var array
      */
     protected $dontReport = [
-        \Symfony\Component\HttpKernel\Exception\HttpException::class,
+        \Symfony\Component\HttpKernel\Exception\NotFoundHttpException::class,
     ];
 
     /**
@@ -47,14 +49,18 @@ class Handler extends ExceptionHandler
     {
         parent::report($throwable);
 
-        $guzzle = new \GuzzleHttp\Client([
+        if ($throwable instanceof NotFoundHttpException) {
+            return;
+        }
+
+        $guzzle = new Client([
             'headers' => [
                 'Content-Type' => 'application/json',
             ],
         ]);
 
         $guzzle->post(
-            env('SLACK_WEBHOOK_URL'),
+            config('logging.slack'),
             [
                 'body' => json_encode([
                     'attachments' => [[
@@ -64,8 +70,8 @@ class Handler extends ExceptionHandler
                         'author_name' => app()->environment(),
                         'author_link' => config('app.url'),
                         'fields' => [[
-                            'title' => get_class($this) ?? 'Unknown Exception',
-                            'value' => $throwable->getMessage() ?? '',
+                            'title' => get_class($throwable) ?? 'Unknown Exception',
+                            'value' => $throwable->getTraceAsString() ?? '',
                         ]],
                         'ts' => time(),
                     ]],
