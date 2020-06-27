@@ -97,4 +97,6 @@ return [
         ],
     ],
 
+    'slack' => env('LOG_SLACK_WEBHOOK_URL'),
+
 ];
