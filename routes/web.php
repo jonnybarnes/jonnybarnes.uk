@@ -144,8 +144,11 @@ Route::group(['domain' => config('url.longurl')], function () {
     // Micropub Endpoints
     Route::get('api/post', 'MicropubController@get')->middleware('micropub.token');
     Route::post('api/post', 'MicropubController@post')->middleware('micropub.token');
-    Route::post('api/media', 'MicropubController@media')->middleware('micropub.token', 'cors')->name('media-endpoint');
-    Route::options('/api/media', 'MicropubController@mediaOptionsResponse')->middleware('cors');
+    Route::get('api/media', 'MicropubMediaController@getHandler')->middleware('micropub.token');
+    Route::post('api/media', 'MicropubMediaController@media')
+        ->middleware('micropub.token', 'cors')
+        ->name('media-endpoint');
+    Route::options('/api/media', 'MicropubMediaController@mediaOptionsResponse')->middleware('cors');
 
     // Webmention
     Route::get('webmention', 'WebMentionsController@get');
