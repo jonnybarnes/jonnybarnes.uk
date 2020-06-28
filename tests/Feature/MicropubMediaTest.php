@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Jobs\ProcessMedia;
+use App\Models\Media;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Queue;
@@ -14,6 +15,21 @@ class MicropubMediaTest extends TestCase
 {
     use DatabaseTransactions;
     use TestToken;
+
+    /** @test */
+    public function emptyResponseForLastUploadWhenNoneFound()
+    {
+        // Make sure there’s no media
+        Media::all()->each(function ($media) {
+            $media->delete();
+        });
+
+        $response = $this->get(
+            '/api/media?q=last',
+            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+        );
+        $response->assertStatus(404);
+    }
 
     /** @test */
     public function clientCanListLastUpload()

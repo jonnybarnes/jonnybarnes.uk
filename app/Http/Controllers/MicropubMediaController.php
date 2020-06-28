@@ -11,10 +11,12 @@ use App\Models\Media;
 use App\Services\TokenService;
 use Exception;
 use Illuminate\Contracts\Container\BindingResolutionException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\File;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Intervention\Image\Exception\NotReadableException;
@@ -53,7 +55,11 @@ class MicropubMediaController extends Controller
         }
 
         if (request()->input('q') === 'last') {
-            $media = Media::latest()->firstOrFail();
+            try {
+                $media = Media::latest()->whereDate('created_at', '>=', Carbon::now()->subMinutes(30))->firstOrFail();
+            } catch (ModelNotFoundException $exception) {
+                return response()->json([], 404);
+            }
 
             return response()->json(['url' => $media->url]);
         }
