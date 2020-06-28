@@ -58,7 +58,7 @@ class MicropubMediaController extends Controller
             try {
                 $media = Media::latest()->whereDate('created_at', '>=', Carbon::now()->subMinutes(30))->firstOrFail();
             } catch (ModelNotFoundException $exception) {
-                return response()->json([], 404);
+                return response()->json(['url' => null]);
             }
 
             return response()->json(['url' => $media->url]);

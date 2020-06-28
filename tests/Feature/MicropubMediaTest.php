@@ -28,7 +28,8 @@ class MicropubMediaTest extends TestCase
             '/api/media?q=last',
             ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
         );
-        $response->assertStatus(404);
+        $response->assertStatus(200);
+        $response->assertJson(['url' => null]);
     }
 
     /** @test */
