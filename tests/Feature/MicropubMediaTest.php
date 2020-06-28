@@ -16,6 +16,16 @@ class MicropubMediaTest extends TestCase
     use TestToken;
 
     /** @test */
+    public function emptyResponseForLastUploadWhenNoneFound()
+    {
+        $response = $this->get(
+            '/api/media?q=last',
+            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+        );
+        $response->assertStatus(404);
+    }
+
+    /** @test */
     public function clientCanListLastUpload()
     {
         Queue::fake();
