@@ -1,6 +1,6 @@
 language: php
 
-sudo: false
+os: linux
 dist: bionic
 
 addons:
@@ -15,7 +15,7 @@ addons:
       - imagemagick
       #- google-chrome-stable
   artifacts:
-    s3_region: "eu-west-1"
+    region: "eu-west-1"
     paths:
       - $(ls tests/Browser/screenshots/*.png | tr "\n" ":")
       - $(ls tests/Browser/console/*.log | tr "\n" ":")
@@ -30,7 +30,7 @@ env:
     - setup=basic
 
 php:
-  - 7.4
+  - 7.4.7
 
 before_install:
   - printf "\n" | pecl install imagick
@@ -38,7 +38,7 @@ before_install:
   - echo 'error_log = "/tmp/php.error.log"' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
   - psql -U travis -c 'create database travis_ci_test'
   - psql -U travis -d travis_ci_test -c 'create extension postgis'
-  - travis_retry composer self-update --preview
+  - travis_retry composer self-update --snapshot
   - curl -OL https://squizlabs.github.io/PHP_CodeSniffer/phpcs.phar
 
 install:
