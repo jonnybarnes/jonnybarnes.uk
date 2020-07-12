@@ -1,6 +1,6 @@
 language: php
 
-sudo: false
+os: linux
 dist: bionic
 
 addons:
@@ -15,7 +15,7 @@ addons:
       - imagemagick
       #- google-chrome-stable
   artifacts:
-    s3_region: "eu-west-1"
+    region: "eu-west-1"
     paths:
       - $(ls tests/Browser/screenshots/*.png | tr "\n" ":")
       - $(ls tests/Browser/console/*.log | tr "\n" ":")
@@ -30,7 +30,7 @@ env:
     - setup=basic
 
 php:
-  - 7.4
+  - 7.4.7
 
 before_install:
   - printf "\n" | pecl install imagick
