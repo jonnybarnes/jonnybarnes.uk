@@ -38,13 +38,13 @@ before_install:
   - echo 'error_log = "/tmp/php.error.log"' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
   - psql -U travis -c 'create database travis_ci_test'
   - psql -U travis -d travis_ci_test -c 'create extension postgis'
-  - travis_retry composer self-update --preview
+  - travis_retry composer self-update --stable
   - curl -OL https://squizlabs.github.io/PHP_CodeSniffer/phpcs.phar
 
 install:
-  - if [[ $setup = 'basic' ]];  then travis_retry composer install --no-interaction --prefer-dist --with-all-dependencies; fi
-  - if [[ $setup = 'stable' ]]; then travis_retry composer update --no-interaction --prefer-dist --prefer-stable --with-all-dependencies; fi
-  - if [[ $setup = 'lowest' ]]; then travis_retry composer update --no-interaction --prefer-dist --prefer-lowest --prefer-stable --with-all-dependencies; fi
+  - if [[ $setup = 'basic' ]];  then travis_retry composer install --no-interaction --prefer-dist; fi
+  - if [[ $setup = 'stable' ]]; then travis_retry composer update --no-interaction --prefer-dist --prefer-stable; fi
+  - if [[ $setup = 'lowest' ]]; then travis_retry composer update --no-interaction --prefer-dist --prefer-lowest --prefer-stable; fi
   - travis/install-nginx.sh
   - . $HOME/.nvm/nvm.sh
   - nvm install stable
