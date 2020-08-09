@@ -29,4 +29,11 @@ class PlacesTest extends TestCase
         $response = $this->get('/places/the-bridgewater-pub');
         $response->assertViewHas('place', $place);
     }
+
+    /** @test */
+    public function unknownPlaceGives404()
+    {
+        $response = $this->get('/places/unknown');
+        $response->assertNotFound();
+    }
 }

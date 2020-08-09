@@ -30,4 +30,18 @@ class ArticlesTest extends TestCase
         $response = $this->get('/blog/s/2');
         $response->assertRedirect('/blog/' . date('Y') . '/' . date('m') . '/some-code-i-did');
     }
+
+    /** @test  */
+    public function unknownSlugGives404()
+    {
+        $response = $this->get('/blog/' . date('Y') . '/' . date('m') . '/unknown-slug');
+        $response->assertNotFound();
+    }
+
+    /** @test */
+    public function unknownArticleIdGives404()
+    {
+        $response = $this->get('/blog/s/22');
+        $response->assertNotFound();
+    }
 }

@@ -7,19 +7,21 @@ use App\Models\Bookmark;
 use App\Models\Like;
 use App\Models\Note;
 use App\Services\ActivityStreamsService;
+use Illuminate\Http\Response;
+use Illuminate\View\View;
 
 class FrontPageController extends Controller
 {
     /**
      * Show all the recent activity.
+     *
+     * @return Response|View
      */
     public function index()
     {
         if (request()->wantsActivityStream()) {
             return (new ActivityStreamsService())->siteOwnerResponse();
         }
-
-        $pageNumber = request()->query('page') ?? 1;
 
         $notes = Note::latest()->get();
         $articles = Article::latest()->get();

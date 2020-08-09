@@ -16,10 +16,10 @@ use MStaack\LaravelPostgis\Geometries\Point;
 
 class MicropubController extends Controller
 {
-    protected $tokenService;
-    protected $hentryService;
-    protected $hcardService;
-    protected $updateService;
+    protected TokenService $tokenService;
+    protected HEntryService $hentryService;
+    protected HCardService $hcardService;
+    protected UpdateService $updateService;
 
     public function __construct(
         TokenService $tokenService,

@@ -12,7 +12,7 @@ class BookmarksController extends Controller
     /**
      * Show the most recent bookmarks.
      *
-     * @return \Illuminate\View\View
+     * @return View
      */
     public function index(): View
     {
@@ -24,8 +24,8 @@ class BookmarksController extends Controller
     /**
      * Show a single bookmark.
      *
-     * @param  \App\Models\Bookmark  $bookmark
-     * @return \Illuminate\View\View
+     * @param Bookmark $bookmark
+     * @return View
      */
     public function show(Bookmark $bookmark): View
     {
