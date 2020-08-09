@@ -211,4 +211,11 @@ END;
 
         $this->assertEquals('Jonny Barnes', Like::find($id)->author_name);
     }
+
+    /** @test */
+    public function unknownLikeGives404()
+    {
+        $response = $this->get('/likes/202');
+        $response->assertNotFound();
+    }
 }

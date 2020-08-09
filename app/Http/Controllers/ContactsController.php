@@ -13,7 +13,7 @@ class ContactsController extends Controller
     /**
      * Show all the contacts.
      *
-     * @return \Illuminate\View\View
+     * @return View
      */
     public function index(): View
     {
@@ -34,17 +34,15 @@ class ContactsController extends Controller
     /**
      * Show a single contact.
      *
-     * @todo Use implicit model binding.
-     *
-     * @param  string  $nick The nickname associated with contact
-     * @return \Illuminate\View\View
+     * @param Contact $contact
+     * @return View
      */
-    public function show(string $nick): View
+    public function show(Contact $contact): View
     {
-        $filesystem = new Filesystem();
-        $contact = Contact::where('nick', '=', $nick)->firstOrFail();
         $contact->homepageHost = parse_url($contact->homepage, PHP_URL_HOST);
         $file = public_path() . '/assets/profile-images/' . $contact->homepageHost . '/image';
+
+        $filesystem = new Filesystem();
         $image = ($filesystem->exists($file)) ?
             '/assets/profile-images/' . $contact->homepageHost . '/image'
         :

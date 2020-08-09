@@ -156,11 +156,11 @@ Route::group(['domain' => config('url.longurl')], function () {
 
     // Contacts
     Route::get('contacts', 'ContactsController@index');
-    Route::get('contacts/{nick}', 'ContactsController@show');
+    Route::get('contacts/{contact:nick}', 'ContactsController@show');
 
     // Places
     Route::get('places', 'PlacesController@index');
-    Route::get('places/{slug}', 'PlacesController@show');
+    Route::get('places/{place}', 'PlacesController@show');
 
     Route::get('search', 'SearchController@search');
 

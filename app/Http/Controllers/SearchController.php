@@ -12,7 +12,7 @@ class SearchController extends Controller
     /**
      * Display search results.
      *
-     * @return \Illuminate\View\View
+     * @return View
      */
     public function search(): View
     {
