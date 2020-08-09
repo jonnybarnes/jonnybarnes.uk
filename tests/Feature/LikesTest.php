@@ -97,7 +97,9 @@ END;
         ]);
         $handler = HandlerStack::create($mock);
         $client = new Client(['handler' => $handler]);
-        $this->app->bind(Client::class, $client);
+        $this->app->bind(Client::class, function () use ($client) {
+            return $client;
+        });
         $authorship = new Authorship();
 
         $job->handle($client, $authorship);
@@ -136,7 +138,9 @@ END;
         ]);
         $handler = HandlerStack::create($mock);
         $client = new Client(['handler' => $handler]);
-        $this->app->bind(Client::class, $client);
+        $this->app->bind(Client::class, function () use ($client) {
+            return $client;
+        });
         $authorship = new Authorship();
 
         $job->handle($client, $authorship);
@@ -168,7 +172,9 @@ END;
         ]);
         $handler = HandlerStack::create($mock);
         $client = new Client(['handler' => $handler]);
-        $this->app->bind(Client::class, $client);
+        $this->app->bind(Client::class, function () use ($client) {
+            return $client;
+        });
         $authorship = new Authorship();
 
         $job->handle($client, $authorship);
@@ -192,7 +198,9 @@ END;
         ]);
         $handler = HandlerStack::create($mock);
         $client = new Client(['handler' => $handler]);
-        $this->app->bind(Client::class, $client);
+        $this->app->bind(Client::class, function () use ($client) {
+            return $client;
+        });
 
         $info = new stdClass();
         $info->author_name = 'Jonny Barnes';
