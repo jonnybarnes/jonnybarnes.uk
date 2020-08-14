@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Models\Article;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Jonnybarnes\IndieWeb\Numbers;
@@ -14,8 +15,8 @@ class ArticlesController extends Controller
     /**
      * Show all articles (with pagination).
      *
-     * @param int $year
-     * @param int $month
+     * @param int|null $year
+     * @param int|null $month
      * @return View
      */
     public function index(int $year = null, int $month = null): View
@@ -38,7 +39,12 @@ class ArticlesController extends Controller
      */
     public function show(int $year, int $month, string $slug)
     {
-        $article = Article::where('titleurl', $slug)->firstOrFail();
+        try {
+            $article = Article::where('titleurl', $slug)->firstOrFail();
+        } catch (ModelNotFoundException $exception) {
+            abort(404);
+        }
+
         if ($article->updated_at->year != $year || $article->updated_at->month != $month) {
             return redirect('/blog/'
                             . $article->updated_at->year
@@ -59,7 +65,11 @@ class ArticlesController extends Controller
     public function onlyIdInUrl(int $idFromUrl): RedirectResponse
     {
         $realId = resolve(Numbers::class)->b60tonum($idFromUrl);
-        $article = Article::findOrFail($realId);
+        try {
+            $article = Article::findOrFail($realId);
+        } catch (ModelNotFoundException $exception) {
+            abort(404);
+        }
 
         return redirect($article->link);
     }

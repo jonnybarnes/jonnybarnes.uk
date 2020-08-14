@@ -12,7 +12,7 @@ class PlacesController extends Controller
     /**
      * Show all the places.
      *
-     * @return \Illuminate\View\View
+     * @return View
      */
     public function index(): View
     {
@@ -24,13 +24,11 @@ class PlacesController extends Controller
     /**
      * Show a specific place.
      *
-     * @param  string  $slug
-     * @return \Illuminate\View\View
+     * @param Place $place
+     * @return View
      */
-    public function show(string $slug): View
+    public function show(Place $place): View
     {
-        $place = Place::where('slug', '=', $slug)->firstOrFail();
-
         return view('singleplace', ['place' => $place]);
     }
 }

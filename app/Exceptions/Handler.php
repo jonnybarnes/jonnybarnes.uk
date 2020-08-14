@@ -4,6 +4,7 @@ namespace App\Exceptions;
 
 use Exception;
 use GuzzleHttp\Client;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -23,7 +24,8 @@ class Handler extends ExceptionHandler
      * @var array
      */
     protected $dontReport = [
-        \Symfony\Component\HttpKernel\Exception\NotFoundHttpException::class,
+        NotFoundHttpException::class,
+        ModelNotFoundException::class,
     ];
 
     /**
@@ -49,35 +51,33 @@ class Handler extends ExceptionHandler
     {
         parent::report($throwable);
 
-        if ($throwable instanceof NotFoundHttpException) {
-            return;
-        }
+        if ($this->shouldReport($throwable)) {
+            $guzzle = new Client([
+                'headers' => [
+                    'Content-Type' => 'application/json',
+                ],
+            ]);
 
-        $guzzle = new Client([
-            'headers' => [
-                'Content-Type' => 'application/json',
-            ],
-        ]);
-
-        $guzzle->post(
-            config('logging.slack'),
-            [
-                'body' => json_encode([
-                    'attachments' => [[
-                        'fallback' => 'There was an exception.',
-                        'pretext' => 'There was an exception.',
-                        'color' => '#d00000',
-                        'author_name' => app()->environment(),
-                        'author_link' => config('app.url'),
-                        'fields' => [[
-                            'title' => get_class($throwable) ?? 'Unknown Exception',
-                            'value' => $throwable->getTraceAsString() ?? '',
+            $guzzle->post(
+                config('logging.slack'),
+                [
+                    'body' => json_encode([
+                        'attachments' => [[
+                            'fallback' => 'There was an exception.',
+                            'pretext' => 'There was an exception.',
+                            'color' => '#d00000',
+                            'author_name' => app()->environment(),
+                            'author_link' => config('app.url'),
+                            'fields' => [[
+                                'title' => get_class($throwable) ?? 'Unknown Exception',
+                                'value' => $throwable->getTraceAsString() ?? '',
+                            ]],
+                            'ts' => time(),
                         ]],
-                        'ts' => time(),
-                    ]],
-                ]),
-            ]
-        );
+                    ]),
+                ]
+            );
+        }
     }
 
     /**

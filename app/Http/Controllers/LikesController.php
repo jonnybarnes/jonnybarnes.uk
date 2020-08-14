@@ -12,7 +12,7 @@ class LikesController extends Controller
     /**
      * Show the latest likes.
      *
-     * @return \Illuminate\View\View
+     * @return View
      */
     public function index(): View
     {
@@ -24,8 +24,8 @@ class LikesController extends Controller
     /**
      * Show a single like.
      *
-     * @param  \App\Models\Like  $like
-     * @return \Illuminate\View\View
+     * @param Like $like
+     * @return View
      */
     public function show(Like $like): View
     {

@@ -6,7 +6,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Note;
 use App\Services\ActivityStreamsService;
-use Illuminate\Contracts\View\Factory as ViewFactory;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
@@ -20,7 +20,7 @@ class NotesController extends Controller
     /**
      * Show all the notes. This is also the homepage.
      *
-     * @return ViewFactory|View|Response
+     * @return View|Response
      */
     public function index()
     {
@@ -45,7 +45,11 @@ class NotesController extends Controller
      */
     public function show(string $urlId)
     {
-        $note = Note::nb60($urlId)->with('webmentions')->firstOrFail();
+        try {
+            $note = Note::nb60($urlId)->with('webmentions')->firstOrFail();
+        } catch (ModelNotFoundException $exception) {
+            abort(404);
+        }
 
         if (request()->wantsActivityStream()) {
             return (new ActivityStreamsService())->singleNoteResponse($note);

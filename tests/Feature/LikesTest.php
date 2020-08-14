@@ -97,7 +97,9 @@ END;
         ]);
         $handler = HandlerStack::create($mock);
         $client = new Client(['handler' => $handler]);
-        $this->app->bind(Client::class, $client);
+        $this->app->bind(Client::class, function () use ($client) {
+            return $client;
+        });
         $authorship = new Authorship();
 
         $job->handle($client, $authorship);
@@ -136,7 +138,9 @@ END;
         ]);
         $handler = HandlerStack::create($mock);
         $client = new Client(['handler' => $handler]);
-        $this->app->bind(Client::class, $client);
+        $this->app->bind(Client::class, function () use ($client) {
+            return $client;
+        });
         $authorship = new Authorship();
 
         $job->handle($client, $authorship);
@@ -168,7 +172,9 @@ END;
         ]);
         $handler = HandlerStack::create($mock);
         $client = new Client(['handler' => $handler]);
-        $this->app->bind(Client::class, $client);
+        $this->app->bind(Client::class, function () use ($client) {
+            return $client;
+        });
         $authorship = new Authorship();
 
         $job->handle($client, $authorship);
@@ -192,7 +198,9 @@ END;
         ]);
         $handler = HandlerStack::create($mock);
         $client = new Client(['handler' => $handler]);
-        $this->app->bind(Client::class, $client);
+        $this->app->bind(Client::class, function () use ($client) {
+            return $client;
+        });
 
         $info = new stdClass();
         $info->author_name = 'Jonny Barnes';
@@ -210,5 +218,12 @@ END;
         $job->handle($client, $authorship);
 
         $this->assertEquals('Jonny Barnes', Like::find($id)->author_name);
+    }
+
+    /** @test */
+    public function unknownLikeGives404()
+    {
+        $response = $this->get('/likes/202');
+        $response->assertNotFound();
     }
 }

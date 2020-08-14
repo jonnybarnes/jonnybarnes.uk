@@ -73,9 +73,9 @@ class FeedsController extends Controller
     /**
      * Returns the blog JSON feed.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return array
      */
-    public function blogJson()
+    public function blogJson(): array
     {
         $articles = Article::where('published', '1')->latest('updated_at')->take(20)->get();
         $data = [
@@ -106,7 +106,7 @@ class FeedsController extends Controller
     /**
      * Returns the notes JSON feed.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return array
      */
     public function notesJson()
     {
