@@ -61,6 +61,79 @@ class MicropubMediaTest extends TestCase
     }
 
     /** @test */
+    public function clientCanSourceUploads()
+    {
+        Queue::fake();
+        Storage::fake('s3');
+        $file = __DIR__ . '/../aaron.png';
+
+        $response = $this->post(
+            '/api/media',
+            [
+                'file' => new UploadedFile($file, 'aaron.png', 'image/png', null, true),
+            ],
+            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+        );
+
+        $path = parse_url($response->getData()->location, PHP_URL_PATH);
+        $filename = substr($path, 7);
+
+        $sourceUploadResponse = $this->get(
+            '/api/media?q=source',
+            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+        );
+        $sourceUploadResponse->assertJson(['items' => [[
+            'url' => $response->getData()->location,
+        ]]]);
+
+        // now remove file
+        unlink(storage_path('app/') . $filename);
+    }
+
+    /** @test */
+    public function clientCanSourceUploadsWithLimit()
+    {
+        Queue::fake();
+        Storage::fake('s3');
+        $file = __DIR__ . '/../aaron.png';
+
+        $response = $this->post(
+            '/api/media',
+            [
+                'file' => new UploadedFile($file, 'aaron.png', 'image/png', null, true),
+            ],
+            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+        );
+
+        $path = parse_url($response->getData()->location, PHP_URL_PATH);
+        $filename = substr($path, 7);
+
+        $sourceUploadResponse = $this->get(
+            '/api/media?q=source&limit=1',
+            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+        );
+        $sourceUploadResponse->assertJson(['items' => [[
+            'url' => $response->getData()->location,
+        ]]]);
+        // And given our limit of 1 there should only be one result
+        $this->assertCount(1, json_decode($sourceUploadResponse->getContent(), true)['items']);
+
+        // now remove file
+        unlink(storage_path('app/') . $filename);
+    }
+
+    /** @test */
+    public function errorResponseForUnknownQValue()
+    {
+        $response = $this->get(
+            '/api/media?q=unknown',
+            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+        );
+        $response->assertStatus(400);
+        $response->assertJson(['error' => 'invalid_request']);
+    }
+
+    /** @test */
     public function optionsRequestReturnsCorsResponse()
     {
         $response = $this->options('/api/media');

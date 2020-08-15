@@ -63,6 +63,30 @@ class MicropubMediaController extends Controller
 
             return response()->json(['url' => $media->url]);
         }
+
+        if (request()->input('q') === 'source') {
+            $limit = request()->input('limit', 10);
+            $offset = request()->input('offset', 0);
+
+            $media = Media::latest()->offset($offset)->limit($limit)->get();
+
+            $media->transform(function ($mediaItem) {
+                return [
+                    'url' => $mediaItem->url,
+                ];
+            });
+
+            return response()->json(['items' => $media]);
+        }
+
+        if (request()->has('q')) {
+            return response()->json([
+                'error' => 'invalid_request',
+                'error_description' => 'This server does not know how to handle this q parameter (' . request()->input('q') . ')',
+            ], 400);
+        }
+
+        return response()->json(['status' => 'OK']);
     }
 
     /**
