@@ -58,6 +58,9 @@ class Handler extends ExceptionHandler
                 ],
             ]);
 
+            $exceptionName = get_class($throwable) ?? 'Unknown Exception';
+            $title = $exceptionName . ': ' . $throwable->getMessage();
+
             $guzzle->post(
                 config('logging.slack'),
                 [
@@ -69,8 +72,8 @@ class Handler extends ExceptionHandler
                             'author_name' => app()->environment(),
                             'author_link' => config('app.url'),
                             'fields' => [[
-                                'title' => get_class($throwable) ?? 'Unknown Exception',
-                                'value' => $throwable->getTraceAsString() ?? '',
+                                'title' => $title,
+                                'value' => request()->method() . ' ' . request()->fullUrl(),
                             ]],
                             'ts' => time(),
                         ]],
