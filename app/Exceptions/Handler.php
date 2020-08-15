@@ -59,7 +59,7 @@ class Handler extends ExceptionHandler
             ]);
 
             $exceptionName = get_class($throwable) ?? 'Unknown Exception';
-            $title = $exceptionName .': ' . $throwable->getMessage();
+            $title = $exceptionName . ': ' . $throwable->getMessage();
 
             $guzzle->post(
                 config('logging.slack'),
