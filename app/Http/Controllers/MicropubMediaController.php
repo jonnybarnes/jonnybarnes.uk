@@ -82,7 +82,10 @@ class MicropubMediaController extends Controller
         if (request()->has('q')) {
             return response()->json([
                 'error' => 'invalid_request',
-                'error_description' => 'This server does not know how to handle this q parameter (' . request()->input('q') . ')',
+                'error_description' => sprintf(
+                    'This server does not know how to handle this q parameter (%s)',
+                    request()->input('q')
+                ),
             ], 400);
         }
 
