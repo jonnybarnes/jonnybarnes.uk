@@ -22,7 +22,7 @@ Route::group(['domain' => config('url.longurl')], function () {
     // Static colophon page
     Route::view('colophon', 'colophon');
 
-    // The login routes to get auth'd for admin
+    // The login routes to get auth’d for admin
     Route::get('login', 'AuthController@showLogin')->name('login');
     Route::post('login', 'AuthController@login');
 
