@@ -6,9 +6,12 @@ namespace App\Models;
 
 use App\Traits\FilterHtml;
 use Codebird\Codebird;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Jonnybarnes\WebmentionsParser\Authorship;
 use Jonnybarnes\WebmentionsParser\Exceptions\AuthorshipParserException;
@@ -24,30 +27,30 @@ use Jonnybarnes\WebmentionsParser\Exceptions\AuthorshipParserException;
  * @property string|null $type
  * @property string|null $content
  * @property int $verified
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  * @property string|null $deleted_at
  * @property mixed|null $mf2
- * @property-read \App\Models\WebMention|null $commentable
+ * @property-read WebMention|null $commentable
  * @property-read array $author
  * @property-read string|null $published
  * @property-read string|null $reply
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\WebMention newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\WebMention newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\WebMention query()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\WebMention whereCommentableId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\WebMention whereCommentableType($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\WebMention whereContent($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\WebMention whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\WebMention whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\WebMention whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\WebMention whereMf2($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\WebMention whereSource($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\WebMention whereTarget($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\WebMention whereType($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\WebMention whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\WebMention whereVerified($value)
- * @mixin \Eloquent
+ * @method static Builder|WebMention newModelQuery()
+ * @method static Builder|WebMention newQuery()
+ * @method static Builder|WebMention query()
+ * @method static Builder|WebMention whereCommentableId($value)
+ * @method static Builder|WebMention whereCommentableType($value)
+ * @method static Builder|WebMention whereContent($value)
+ * @method static Builder|WebMention whereCreatedAt($value)
+ * @method static Builder|WebMention whereDeletedAt($value)
+ * @method static Builder|WebMention whereId($value)
+ * @method static Builder|WebMention whereMf2($value)
+ * @method static Builder|WebMention whereSource($value)
+ * @method static Builder|WebMention whereTarget($value)
+ * @method static Builder|WebMention whereType($value)
+ * @method static Builder|WebMention whereUpdatedAt($value)
+ * @method static Builder|WebMention whereVerified($value)
+ * @mixin Eloquent
  */
 class WebMention extends Model
 {

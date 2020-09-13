@@ -4,28 +4,32 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Carbon;
 
 /**
  * App\Models\Tag.
  *
  * @property int $id
  * @property string $tag
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Bookmark[] $bookmarks
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read Collection|Bookmark[] $bookmarks
  * @property-read int|null $bookmarks_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Note[] $notes
+ * @property-read Collection|Note[] $notes
  * @property-read int|null $notes_count
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Tag newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Tag newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Tag query()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Tag whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Tag whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Tag whereTag($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Tag whereUpdatedAt($value)
- * @mixin \Eloquent
+ * @method static Builder|Tag newModelQuery()
+ * @method static Builder|Tag newQuery()
+ * @method static Builder|Tag query()
+ * @method static Builder|Tag whereCreatedAt($value)
+ * @method static Builder|Tag whereId($value)
+ * @method static Builder|Tag whereTag($value)
+ * @method static Builder|Tag whereUpdatedAt($value)
+ * @mixin Eloquent
  */
 class Tag extends Model
 {

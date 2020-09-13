@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace App\Models;
 
 use Cviebrock\EloquentSluggable\Sluggable;
+use Eloquent;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\{Builder, Model};
+use Illuminate\Database\Eloquent\{Builder, Collection, Model};
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use MStaack\LaravelPostgis\Eloquent\PostgisTrait;
 use MStaack\LaravelPostgis\Geometries\Point;
-
-// phpcs:disable Generic.Files.LineLength.TooLong
 
 /**
  * App\Models\Place.
@@ -21,10 +21,10 @@ use MStaack\LaravelPostgis\Geometries\Point;
  * @property string $name
  * @property string $slug
  * @property string|null $description
- * @property string $location
- * @property string|null $polygon
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property Point $location
+ * @property mixed|null $polygon
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  * @property string|null $icon
  * @property string|null $foursquare
  * @property mixed|null $external_urls
@@ -33,30 +33,29 @@ use MStaack\LaravelPostgis\Geometries\Point;
  * @property-read string $longurl
  * @property-read string $shorturl
  * @property-read string $uri
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Note[] $notes
+ * @property-read Collection|Note[] $notes
  * @property-read int|null $notes_count
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Place findSimilarSlugs($attribute, $config, $slug)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Place near(\MStaack\LaravelPostgis\Geometries\Point $point, $distance = 1000)
- * @method static \MStaack\LaravelPostgis\Eloquent\Builder|\App\Models\Place newModelQuery()
- * @method static \MStaack\LaravelPostgis\Eloquent\Builder|\App\Models\Place newQuery()
- * @method static \MStaack\LaravelPostgis\Eloquent\Builder|\App\Models\Place query()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Place whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Place whereDescription($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Place whereExternalURL($url)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Place whereExternalUrls($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Place whereFoursquare($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Place whereIcon($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Place whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Place whereLocation($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Place whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Place wherePolygon($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Place whereSlug($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Place whereUpdatedAt($value)
- * @mixin \Eloquent
+ * @method static Builder|Place findSimilarSlugs($attribute, $config, $slug)
+ * @method static Builder|Place near(Point $point, $distance = 1000)
+ * @method static \MStaack\LaravelPostgis\Eloquent\Builder|Place newModelQuery()
+ * @method static \MStaack\LaravelPostgis\Eloquent\Builder|Place newQuery()
+ * @method static \MStaack\LaravelPostgis\Eloquent\Builder|Place query()
+ * @method static Builder|Place whereCreatedAt($value)
+ * @method static Builder|Place whereDescription($value)
+ * @method static Builder|Place whereExternalURL($url)
+ * @method static Builder|Place whereExternalUrls($value)
+ * @method static Builder|Place whereFoursquare($value)
+ * @method static Builder|Place whereIcon($value)
+ * @method static Builder|Place whereId($value)
+ * @method static Builder|Place whereLocation($value)
+ * @method static Builder|Place whereName($value)
+ * @method static Builder|Place wherePolygon($value)
+ * @method static Builder|Place whereSlug($value)
+ * @method static Builder|Place whereUpdatedAt($value)
+ * @mixin Eloquent
  */
 class Place extends Model
 {
-    // phpcs:enable Generic.Files.LineLength.TooLong
     use Sluggable;
     use PostgisTrait;
 
