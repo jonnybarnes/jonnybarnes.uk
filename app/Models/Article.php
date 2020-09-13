@@ -18,7 +18,7 @@ use Spatie\CommonMarkHighlighter\FencedCodeRenderer;
 use Spatie\CommonMarkHighlighter\IndentedCodeRenderer;
 
 /**
- * App\Models\Article
+ * App\Models\Article.
  *
  * @property int $id
  * @property string $titleurl

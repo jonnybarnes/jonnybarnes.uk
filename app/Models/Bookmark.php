@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Carbon;
 
 /**
- * App\Models\Bookmark
+ * App\Models\Bookmark.
  *
  * @property int $id
  * @property string $url

@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
 /**
- * App\Models\Contact
+ * App\Models\Contact.
  *
  * @property int $id
  * @property string $nick

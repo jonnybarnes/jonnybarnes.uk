@@ -15,7 +15,7 @@ use MStaack\LaravelPostgis\Eloquent\PostgisTrait;
 use MStaack\LaravelPostgis\Geometries\Point;
 
 /**
- * App\Models\Place
+ * App\Models\Place.
  *
  * @property int $id
  * @property string $name

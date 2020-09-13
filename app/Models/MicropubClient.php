@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 
 /**
- * App\Models\MicropubClient
+ * App\Models\MicropubClient.
  *
  * @property int $id
  * @property string $client_url
