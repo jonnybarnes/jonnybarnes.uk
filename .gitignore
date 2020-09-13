@@ -9,6 +9,8 @@ npm-debug.log
 yarn-error.log
 /.idea
 /lsp
+.phpstorm.meta.php
+_ide_helper.php
 # Custom paths in /public
 /public/coverage
 /public/hot

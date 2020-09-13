@@ -5,8 +5,11 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Traits\FilterHtml;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Carbon;
 use Mf2;
 
 /**
@@ -17,19 +20,19 @@ use Mf2;
  * @property string|null $author_name
  * @property string|null $author_url
  * @property string|null $content
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Like newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Like newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Like query()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Like whereAuthorName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Like whereAuthorUrl($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Like whereContent($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Like whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Like whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Like whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Like whereUrl($value)
- * @mixin \Eloquent
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @method static Builder|Like newModelQuery()
+ * @method static Builder|Like newQuery()
+ * @method static Builder|Like query()
+ * @method static Builder|Like whereAuthorName($value)
+ * @method static Builder|Like whereAuthorUrl($value)
+ * @method static Builder|Like whereContent($value)
+ * @method static Builder|Like whereCreatedAt($value)
+ * @method static Builder|Like whereId($value)
+ * @method static Builder|Like whereUpdatedAt($value)
+ * @method static Builder|Like whereUrl($value)
+ * @mixin Eloquent
  */
 class Like extends Model
 {

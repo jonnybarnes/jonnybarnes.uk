@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace App\Models;
 
 use Cviebrock\EloquentSluggable\Sluggable;
+use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
 use League\CommonMark\Block\Element\FencedCode;
 use League\CommonMark\Block\Element\IndentedCode;
 use League\CommonMark\CommonMarkConverter;
@@ -24,35 +26,35 @@ use Spatie\CommonMarkHighlighter\IndentedCodeRenderer;
  * @property string $title
  * @property string $main
  * @property int $published
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property Carbon|null $deleted_at
  * @property-read string $html
  * @property-read string $human_time
  * @property-read string $link
  * @property-read string $pubdate
  * @property-read string $tooltip_time
  * @property-read string $w3c_time
- * @method static Builder|\App\Models\Article date($year = null, $month = null)
- * @method static Builder|\App\Models\Article findSimilarSlugs($attribute, $config, $slug)
+ * @method static Builder|Article date($year = null, $month = null)
+ * @method static Builder|Article findSimilarSlugs($attribute, $config, $slug)
  * @method static bool|null forceDelete()
- * @method static Builder|\App\Models\Article newModelQuery()
- * @method static Builder|\App\Models\Article newQuery()
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Article onlyTrashed()
- * @method static Builder|\App\Models\Article query()
+ * @method static Builder|Article newModelQuery()
+ * @method static Builder|Article newQuery()
+ * @method static \Illuminate\Database\Query\Builder|Article onlyTrashed()
+ * @method static Builder|Article query()
  * @method static bool|null restore()
- * @method static Builder|\App\Models\Article whereCreatedAt($value)
- * @method static Builder|\App\Models\Article whereDeletedAt($value)
- * @method static Builder|\App\Models\Article whereId($value)
- * @method static Builder|\App\Models\Article whereMain($value)
- * @method static Builder|\App\Models\Article wherePublished($value)
- * @method static Builder|\App\Models\Article whereTitle($value)
- * @method static Builder|\App\Models\Article whereTitleurl($value)
- * @method static Builder|\App\Models\Article whereUpdatedAt($value)
- * @method static Builder|\App\Models\Article whereUrl($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Article withTrashed()
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Article withoutTrashed()
- * @mixin \Eloquent
+ * @method static Builder|Article whereCreatedAt($value)
+ * @method static Builder|Article whereDeletedAt($value)
+ * @method static Builder|Article whereId($value)
+ * @method static Builder|Article whereMain($value)
+ * @method static Builder|Article wherePublished($value)
+ * @method static Builder|Article whereTitle($value)
+ * @method static Builder|Article whereTitleurl($value)
+ * @method static Builder|Article whereUpdatedAt($value)
+ * @method static Builder|Article whereUrl($value)
+ * @method static \Illuminate\Database\Query\Builder|Article withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Article withoutTrashed()
+ * @mixin Eloquent
  */
 class Article extends Model
 {

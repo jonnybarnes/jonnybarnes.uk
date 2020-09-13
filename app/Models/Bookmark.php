@@ -4,8 +4,12 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Carbon;
 
 /**
  * App\Models\Bookmark.
@@ -17,24 +21,24 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property string|null $screenshot
  * @property string|null $archive
  * @property array|null $syndicates
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  * @property-read string $longurl
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Tag[] $tags
+ * @property-read Collection|Tag[] $tags
  * @property-read int|null $tags_count
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Bookmark newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Bookmark newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Bookmark query()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Bookmark whereArchive($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Bookmark whereContent($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Bookmark whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Bookmark whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Bookmark whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Bookmark whereScreenshot($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Bookmark whereSyndicates($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Bookmark whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Bookmark whereUrl($value)
- * @mixin \Eloquent
+ * @method static Builder|Bookmark newModelQuery()
+ * @method static Builder|Bookmark newQuery()
+ * @method static Builder|Bookmark query()
+ * @method static Builder|Bookmark whereArchive($value)
+ * @method static Builder|Bookmark whereContent($value)
+ * @method static Builder|Bookmark whereCreatedAt($value)
+ * @method static Builder|Bookmark whereId($value)
+ * @method static Builder|Bookmark whereName($value)
+ * @method static Builder|Bookmark whereScreenshot($value)
+ * @method static Builder|Bookmark whereSyndicates($value)
+ * @method static Builder|Bookmark whereUpdatedAt($value)
+ * @method static Builder|Bookmark whereUrl($value)
+ * @mixin Eloquent
  */
 class Bookmark extends Model
 {

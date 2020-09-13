@@ -6,10 +6,12 @@ namespace App\Models;
 
 use App\Exceptions\TwitterContentException;
 use Codebird\Codebird;
+use Eloquent;
 use Exception;
 use GuzzleHttp\Client;
 use Illuminate\Database\Eloquent\Relations\{BelongsTo, BelongsToMany, HasMany, MorphMany};
-use Illuminate\Database\Eloquent\{Builder, Model, SoftDeletes};
+use Illuminate\Database\Eloquent\{Builder, Collection, Model, SoftDeletes};
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Jonnybarnes\IndieWeb\Numbers;
 use Laravel\Scout\Searchable;
@@ -30,15 +32,15 @@ use Spatie\CommonMarkHighlighter\{FencedCodeRenderer, IndentedCodeRenderer};
  * @property int|null $photo
  * @property string|null $tweet_id
  * @property string|null $client_id
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property Carbon|null $deleted_at
  * @property int|null $place_id
  * @property string|null $facebook_url
  * @property string|null $searchable
  * @property string|null $swarm_url
  * @property string|null $instagram_url
- * @property-read \App\Models\MicropubClient|null $client
+ * @property-read MicropubClient|null $client
  * @property-read string|null $address
  * @property-read string $content
  * @property-read string $humandiff
@@ -50,39 +52,39 @@ use Spatie\CommonMarkHighlighter\{FencedCodeRenderer, IndentedCodeRenderer};
  * @property-read string $pubdate
  * @property-read object|null $twitter
  * @property-read string $twitter_content
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Media[] $media
+ * @property-read Collection|Media[] $media
  * @property-read int|null $media_count
- * @property-read \App\Models\Place|null $place
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Tag[] $tags
+ * @property-read Place|null $place
+ * @property-read Collection|Tag[] $tags
  * @property-read int|null $tags_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\WebMention[] $webmentions
+ * @property-read Collection|WebMention[] $webmentions
  * @property-read int|null $webmentions_count
  * @method static bool|null forceDelete()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Note nb60($nb60id)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Note newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Note newQuery()
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Note onlyTrashed()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Note query()
+ * @method static Builder|Note nb60($nb60id)
+ * @method static Builder|Note newModelQuery()
+ * @method static Builder|Note newQuery()
+ * @method static \Illuminate\Database\Query\Builder|Note onlyTrashed()
+ * @method static Builder|Note query()
  * @method static bool|null restore()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Note whereClientId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Note whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Note whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Note whereFacebookUrl($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Note whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Note whereInReplyTo($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Note whereInstagramUrl($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Note whereLocation($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Note whereNote($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Note wherePhoto($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Note wherePlaceId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Note whereSearchable($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Note whereShorturl($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Note whereSwarmUrl($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Note whereTweetId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Note whereUpdatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Note withTrashed()
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Note withoutTrashed()
- * @mixin \Eloquent
+ * @method static Builder|Note whereClientId($value)
+ * @method static Builder|Note whereCreatedAt($value)
+ * @method static Builder|Note whereDeletedAt($value)
+ * @method static Builder|Note whereFacebookUrl($value)
+ * @method static Builder|Note whereId($value)
+ * @method static Builder|Note whereInReplyTo($value)
+ * @method static Builder|Note whereInstagramUrl($value)
+ * @method static Builder|Note whereLocation($value)
+ * @method static Builder|Note whereNote($value)
+ * @method static Builder|Note wherePhoto($value)
+ * @method static Builder|Note wherePlaceId($value)
+ * @method static Builder|Note whereSearchable($value)
+ * @method static Builder|Note whereShorturl($value)
+ * @method static Builder|Note whereSwarmUrl($value)
+ * @method static Builder|Note whereTweetId($value)
+ * @method static Builder|Note whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|Note withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Note withoutTrashed()
+ * @mixin Eloquent
  */
 class Note extends Model
 {
