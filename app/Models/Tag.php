@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Carbon;
 
 /**
- * App\Models\Tag.
+ * App\Models\Tag
  *
  * @property int $id
  * @property string $tag

@@ -13,7 +13,7 @@ use Illuminate\Support\Carbon;
 use Mf2;
 
 /**
- * App\Models\Like.
+ * App\Models\Like
  *
  * @property int $id
  * @property string $url

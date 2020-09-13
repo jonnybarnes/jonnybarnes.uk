@@ -13,7 +13,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
 
 /**
- * App\Models\User.
+ * App\Models\User
  *
  * @property int $id
  * @property string $name

@@ -22,7 +22,7 @@ use Normalizer;
 use Spatie\CommonMarkHighlighter\{FencedCodeRenderer, IndentedCodeRenderer};
 
 /**
- * App\Models\Note.
+ * App\Models\Note
  *
  * @property int $id
  * @property string|null $note

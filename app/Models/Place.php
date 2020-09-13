@@ -15,14 +15,14 @@ use MStaack\LaravelPostgis\Eloquent\PostgisTrait;
 use MStaack\LaravelPostgis\Geometries\Point;
 
 /**
- * App\Models\Place.
+ * App\Models\Place
  *
  * @property int $id
  * @property string $name
  * @property string $slug
  * @property string|null $description
  * @property Point $location
- * @property string|null $polygon
+ * @property mixed|null $polygon
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property string|null $icon

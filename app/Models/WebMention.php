@@ -17,7 +17,7 @@ use Jonnybarnes\WebmentionsParser\Authorship;
 use Jonnybarnes\WebmentionsParser\Exceptions\AuthorshipParserException;
 
 /**
- * App\Models\WebMention.
+ * App\Models\WebMention
  *
  * @property int $id
  * @property string $source
