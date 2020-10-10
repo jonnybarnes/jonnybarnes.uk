@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 
 /**
@@ -16,25 +19,25 @@ use Illuminate\Support\Str;
  * @property string $path
  * @property string $type
  * @property int|null $note_id
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  * @property string|null $image_widths
  * @property-read string $mediumurl
  * @property-read string $smallurl
  * @property-read string $url
- * @property-read \App\Models\Note|null $note
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Media newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Media newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Media query()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Media whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Media whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Media whereImageWidths($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Media whereNoteId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Media wherePath($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Media whereToken($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Media whereType($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Media whereUpdatedAt($value)
- * @mixin \Eloquent
+ * @property-read Note|null $note
+ * @method static Builder|Media newModelQuery()
+ * @method static Builder|Media newQuery()
+ * @method static Builder|Media query()
+ * @method static Builder|Media whereCreatedAt($value)
+ * @method static Builder|Media whereId($value)
+ * @method static Builder|Media whereImageWidths($value)
+ * @method static Builder|Media whereNoteId($value)
+ * @method static Builder|Media wherePath($value)
+ * @method static Builder|Media whereToken($value)
+ * @method static Builder|Media whereType($value)
+ * @method static Builder|Media whereUpdatedAt($value)
+ * @mixin Eloquent
  */
 class Media extends Model
 {
