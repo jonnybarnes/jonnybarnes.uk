@@ -64,7 +64,8 @@ class ArticlesController extends Controller
      */
     public function onlyIdInUrl(int $idFromUrl): RedirectResponse
     {
-        $realId = resolve(Numbers::class)->b60tonum($idFromUrl);
+        $realId = resolve(Numbers::class)->b60tonum((string) $idFromUrl);
+
         try {
             $article = Article::findOrFail($realId);
         } catch (ModelNotFoundException $exception) {
