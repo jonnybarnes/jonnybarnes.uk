@@ -48,7 +48,7 @@ class MigratePlaceDataFromPostgis extends Command
             )
         "));
 
-        if (!$locationColumn->exists) {
+        if (! $locationColumn->exists) {
             $this->info('There is no Postgis location data in the table. Exiting.');
 
             return 0;
@@ -63,7 +63,7 @@ class MigratePlaceDataFromPostgis extends Command
             )
         "));
 
-        if (!$latitudeColumn->exists) {
+        if (! $latitudeColumn->exists) {
             $this->error('Latitude and longitude columns have not been created yet');
 
             return 1;
