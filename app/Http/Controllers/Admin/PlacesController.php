@@ -80,10 +80,8 @@ class PlacesController extends Controller
         $place = Place::findOrFail($placeId);
         $place->name = request()->input('name');
         $place->description = request()->input('description');
-        $place->location = new Point(
-            (float) request()->input('latitude'),
-            (float) request()->input('longitude')
-        );
+        $place->latitude = request()->input('latitude');
+        $place->longitude = request()->input('longitude');
         $place->icon = request()->input('icon');
         $place->save();
 
@@ -99,7 +97,7 @@ class PlacesController extends Controller
     public function mergeIndex(int $placeId): View
     {
         $first = Place::find($placeId);
-        $results = Place::near(new Point($first->latitude, $first->longitude))->get();
+        $results = Place::near((object) ['latitude' => $first->latitude, 'longitude' =>$first->longitude])->get();
         $places = [];
         foreach ($results as $place) {
             if ($place->slug !== $first->slug) {

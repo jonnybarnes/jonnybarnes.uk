@@ -142,7 +142,10 @@ class MicropubController extends Controller
                 $matches
             );
             $distance = (count($matches[0]) == 3) ? 100 * $matches[0][2] : 1000;
-            $places = Place::near(new Point($matches[0][0], $matches[0][1]))->get();
+            $places = Place::near(
+                (object) ['latitude' => $matches[0][0], 'longitude' => $matches[0][1]],
+                $distance
+            )->get();
 
             return response()->json([
                 'response' => 'places',
