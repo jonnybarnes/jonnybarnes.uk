@@ -12,7 +12,6 @@ use App\Services\TokenService;
 use Illuminate\Http\JsonResponse;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
-use MStaack\LaravelPostgis\Geometries\Point;
 
 class MicropubController extends Controller
 {

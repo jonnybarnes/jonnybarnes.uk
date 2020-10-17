@@ -12,7 +12,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 
 /**
- * App\Models\Place
+ * App\Models\Place.
  *
  * @property int $id
  * @property string $name
@@ -121,6 +121,7 @@ class Place extends Model
                      - radians($location->longitude))
                      + sin(radians($location->latitude))
                      * sin(radians(places.latitude))))";
+
         return $query
             ->select() //pick the columns you want here.
             ->selectRaw("{$haversine} AS distance")

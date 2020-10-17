@@ -8,13 +8,11 @@ use App\Http\Controllers\Controller;
 use App\Models\Place;
 use App\Services\PlaceService;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
-use MStaack\LaravelPostgis\Geometries\Point;
 
 class PlacesController extends Controller
 {
-    protected $placeService;
+    protected PlaceService $placeService;
 
     public function __construct(PlaceService $placeService)
     {
@@ -24,7 +22,7 @@ class PlacesController extends Controller
     /**
      * List the places that can be edited.
      *
-     * @return \Illuminate\View\View
+     * @return View
      */
     public function index(): View
     {
@@ -36,7 +34,7 @@ class PlacesController extends Controller
     /**
      * Show the form to make a new place.
      *
-     * @return \Illuminate\View\View
+     * @return View
      */
     public function create(): View
     {
@@ -46,7 +44,7 @@ class PlacesController extends Controller
     /**
      * Process a request to make a new place.
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function store(): RedirectResponse
     {
@@ -60,7 +58,7 @@ class PlacesController extends Controller
      * Display the form to edit a specific place.
      *
      * @param  int  $placeId
-     * @return \Illuminate\View\View
+     * @return View
      */
     public function edit(int $placeId): View
     {
@@ -73,7 +71,7 @@ class PlacesController extends Controller
      * Process a request to edit a place.
      *
      * @param  int  $placeId
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function update(int $placeId): RedirectResponse
     {
@@ -92,7 +90,7 @@ class PlacesController extends Controller
      * List the places we can merge with the current place.
      *
      * @param  int  $placeId
-     * @return \Illuminate\View\View
+     * @return View
      */
     public function mergeIndex(int $placeId): View
     {
@@ -113,7 +111,7 @@ class PlacesController extends Controller
      *
      * @param  int  $placeId1
      * @param  int  $placeId2
-     * @return \Illuminate\View\View
+     * @return View
      */
     public function mergeEdit(int $placeId1, int $placeId2): View
     {
@@ -126,7 +124,7 @@ class PlacesController extends Controller
     /**
      * Process the request to merge two places.
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function mergeStore(): RedirectResponse
     {
