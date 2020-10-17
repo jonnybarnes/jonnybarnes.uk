@@ -1,7 +1,6 @@
 name: Run Tests
 
 on:
-  push:
   pull_request:
 
 jobs:
@@ -35,7 +34,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '7.4'
-          tools: pecl
+          tools: pecl, phpcs
           extensions: imagick
       - name: Copy .env
         run: php -r "file_exists('.env') || copy('.env.github', '.env');"
@@ -51,3 +50,5 @@ jobs:
           php artisan db:seed
       - name: Execute tests (Unit and Feature tests) via PHPUnit
         run: vendor/bin/phpunit
+      - name: Run phpcs
+        run: phpcs
