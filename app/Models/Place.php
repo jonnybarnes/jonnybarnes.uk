@@ -9,10 +9,7 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\{Builder, Collection, Model};
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-use MStaack\LaravelPostgis\Eloquent\PostgisTrait;
-use MStaack\LaravelPostgis\Geometries\Point;
 
 /**
  * App\Models\Place.
@@ -21,25 +18,23 @@ use MStaack\LaravelPostgis\Geometries\Point;
  * @property string $name
  * @property string $slug
  * @property string|null $description
- * @property Point $location
- * @property mixed|null $polygon
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property string|null $icon
  * @property string|null $foursquare
  * @property mixed|null $external_urls
- * @property-read float $latitude
- * @property-read float $longitude
+ * @property float|null $latitude
+ * @property float|null $longitude
  * @property-read string $longurl
  * @property-read string $shorturl
  * @property-read string $uri
- * @property-read Collection|Note[] $notes
+ * @property-read Collection|\App\Models\Note[] $notes
  * @property-read int|null $notes_count
  * @method static Builder|Place findSimilarSlugs($attribute, $config, $slug)
- * @method static Builder|Place near(Point $point, $distance = 1000)
- * @method static \MStaack\LaravelPostgis\Eloquent\Builder|Place newModelQuery()
- * @method static \MStaack\LaravelPostgis\Eloquent\Builder|Place newQuery()
- * @method static \MStaack\LaravelPostgis\Eloquent\Builder|Place query()
+ * @method static Builder|Place near($location, $distance = 1000)
+ * @method static Builder|Place newModelQuery()
+ * @method static Builder|Place newQuery()
+ * @method static Builder|Place query()
  * @method static Builder|Place whereCreatedAt($value)
  * @method static Builder|Place whereDescription($value)
  * @method static Builder|Place whereExternalURL($url)
@@ -47,9 +42,9 @@ use MStaack\LaravelPostgis\Geometries\Point;
  * @method static Builder|Place whereFoursquare($value)
  * @method static Builder|Place whereIcon($value)
  * @method static Builder|Place whereId($value)
- * @method static Builder|Place whereLocation($value)
+ * @method static Builder|Place whereLatitude($value)
+ * @method static Builder|Place whereLongitude($value)
  * @method static Builder|Place whereName($value)
- * @method static Builder|Place wherePolygon($value)
  * @method static Builder|Place whereSlug($value)
  * @method static Builder|Place whereUpdatedAt($value)
  * @mixin Eloquent
@@ -57,7 +52,6 @@ use MStaack\LaravelPostgis\Geometries\Point;
 class Place extends Model
 {
     use Sluggable;
-    use PostgisTrait;
 
     /**
      * Get the route key for the model.
@@ -77,13 +71,13 @@ class Place extends Model
     protected $fillable = ['name', 'slug'];
 
     /**
-     * The attributes that are Postgis geometry objects.
+     * The attributes that should be cast.
      *
      * @var array
      */
-    protected $postgisFields = [
-        'location',
-        'polygon',
+    protected $casts = [
+        'latitude' => 'float',
+        'longitude' => 'float',
     ];
 
     /**
@@ -115,21 +109,23 @@ class Place extends Model
      * Select places near a given location.
      *
      * @param Builder $query
-     * @param Point $point
+     * @param object $location
      * @param int $distance
      * @return Builder
      */
-    public function scopeNear(Builder $query, Point $point, int $distance = 1000): Builder
+    public function scopeNear(Builder $query, object $location, int $distance = 1000): Builder
     {
-        $field = DB::raw(
-            sprintf(
-                "ST_Distance(%s.location, ST_GeogFromText('%s'))",
-                $this->getTable(),
-                $point->toWKT()
-            )
-        );
+        $haversine = "(6371 * acos(cos(radians($location->latitude))
+                     * cos(radians(places.latitude))
+                     * cos(radians(places.longitude)
+                     - radians($location->longitude))
+                     + sin(radians($location->latitude))
+                     * sin(radians(places.latitude))))";
 
-        return $query->where($field, '<=', $distance)->orderBy($field);
+        return $query
+            ->select() //pick the columns you want here.
+            ->selectRaw("{$haversine} AS distance")
+            ->whereRaw("{$haversine} < ?", [$distance]);
     }
 
     /**
@@ -144,26 +140,6 @@ class Place extends Model
         return $query->where('external_urls', '@>', json_encode([
             $this->getType($url) => $url,
         ]));
-    }
-
-    /**
-     * Get the latitude from the `location` property.
-     *
-     * @return float
-     */
-    public function getLatitudeAttribute(): float
-    {
-        return $this->location->getLat();
-    }
-
-    /**
-     * Get the longitude from the `location` property.
-     *
-     * @return float
-     */
-    public function getLongitudeAttribute(): float
-    {
-        return $this->location->getLng();
     }
 
     /**

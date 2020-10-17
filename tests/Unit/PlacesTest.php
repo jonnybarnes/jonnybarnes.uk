@@ -26,7 +26,7 @@ class PlacesTest extends TestCase
      */
     public function test_near_method()
     {
-        $nearby = Place::near(new Point(53.5, -2.38), 1000)->get();
+        $nearby = Place::near((object) ['latitude' => 53.5, 'longitude' => -2.38], 1000)->get();
         $this->assertEquals('the-bridgewater-pub', $nearby[0]->slug);
     }
 
@@ -53,7 +53,8 @@ class PlacesTest extends TestCase
     {
         $place = new Place();
         $place->name = 'Temp Place';
-        $place->location = new Point(37.422009, -122.084047);
+        $place->latitude = 37.422009;
+        $place->longitude = -122.084047;
         $place->external_urls = 'https://www.openstreetmap.org/way/1234';
         $place->save();
         $service = new PlaceService();

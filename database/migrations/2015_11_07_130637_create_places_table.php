@@ -1,6 +1,6 @@
 <?php
 
-use MStaack\LaravelPostgis\Schema\Blueprint;
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
 class CreatePlacesTable extends Migration
@@ -17,8 +17,8 @@ class CreatePlacesTable extends Migration
             $table->string('name');
             $table->string('slug')->unique();
             $table->text('description')->nullable();
-            $table->point('location');
-            $table->polygon('polygon')->nullable();
+            $table->text('location');
+            $table->text('polygon')->nullable();
             $table->timestamps();
         });
     }

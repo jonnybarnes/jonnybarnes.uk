@@ -2,7 +2,6 @@
 
 use App\Models\Place;
 use Illuminate\Database\Seeder;
-use MStaack\LaravelPostgis\Geometries\Point;
 
 class PlacesTableSeeder extends Seeder
 {
@@ -16,7 +15,8 @@ class PlacesTableSeeder extends Seeder
         $place = new Place();
         $place->name = 'The Bridgewater Pub';
         $place->description = 'A lovely local pub with a decent selection of cask ales';
-        $place->location = new Point('53.4983', '-2.3805');
+        $place->latitude = 53.4983;
+        $place->longitude = -2.3805;
         $place->external_urls = 'https://foursquare.com/v/123435/the-bridgewater-pub';
         $place->external_urls = 'https://www.openstreetmap.org/way/987654';
         $place->save();
