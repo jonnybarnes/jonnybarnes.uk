@@ -38,16 +38,6 @@ class ShortURLsController extends Controller
     }
 
     /**
-     * Redirect from '/+' to a Google+ profile.
-     *
-     * @return RedirectResponse
-     */
-    public function googlePlus(): RedirectResponse
-    {
-        return redirect('https://plus.google.com/u/0/117317270900655269082/about');
-    }
-
-    /**
      * Redirect a short url of this site out to a long one based on post type.
      * Further redirects may happen.
      *

@@ -1,5 +1,7 @@
 <?php
 
+namespace Database\Seeders;
+
 use Illuminate\Support\Carbon;
 use App\Models\{Bookmark, Tag};
 use Illuminate\Database\Seeder;
@@ -14,6 +16,7 @@ class BookmarksTableSeeder extends Seeder
      */
     public function run()
     {
+        Bookmark::factory(10)->create();
         factory(Bookmark::class, 10)->create()->each(function ($bookmark) {
             $bookmark->tags()->save(factory(Tag::class)->make());
 

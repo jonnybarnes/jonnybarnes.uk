@@ -1,12 +1,35 @@
 <?php
 
-use App\Models\Bookmark;
-use Faker\Generator as Faker;
+namespace Database\Factories;
 
-$factory->define(Bookmark::class, function (Faker $faker) {
-    return [
-        'url' => $faker->url,
-        'name' => $faker->sentence,
-        'content' => $faker->text,
-    ];
-});
+use App\Models\Bookmark;
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Carbon;
+
+class BookmarkFactory extends Factory
+{
+    /**
+     * The name of the factory's corresponding model.
+     *
+     * @var string
+     */
+    protected $model = Bookmark::class;
+
+    /**
+     * Define the model's default state.
+     *
+     * @return array
+     */
+    public function definition()
+    {
+        $now = Carbon::now()->subDays(rand(5, 15));
+
+        return [
+            'url' => $this->faker->url,
+            'name' => $this->faker->sentence,
+            'content' => $this->faker->text,
+            'created_at' => $now->toDateTimeString(),
+            'updated_at' => $now->toDateTimeString(),
+        ];
+    }
+}

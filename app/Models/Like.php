@@ -7,6 +7,7 @@ namespace App\Models;
 use App\Traits\FilterHtml;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
@@ -37,6 +38,7 @@ use Mf2;
 class Like extends Model
 {
     use FilterHtml;
+    use HasFactory;
 
     protected $fillable = ['url'];
 
