@@ -48,8 +48,14 @@ class PlacesController extends Controller
      */
     public function store(): RedirectResponse
     {
-        $data = request()->only(['name', 'description', 'latitude', 'longitude']);
-        $place = $this->placeService->createPlace($data);
+        $this->placeService->createPlace(
+            request()->only([
+                'name',
+                'description',
+                'latitude',
+                'longitude'
+            ])
+        );
 
         return redirect('/admin/places');
     }
@@ -95,7 +101,7 @@ class PlacesController extends Controller
     public function mergeIndex(int $placeId): View
     {
         $first = Place::find($placeId);
-        $results = Place::near((object) ['latitude' => $first->latitude, 'longitude' =>$first->longitude])->get();
+        $results = Place::near((object) ['latitude' => $first->latitude, 'longitude' => $first->longitude])->get();
         $places = [];
         foreach ($results as $place) {
             if ($place->slug !== $first->slug) {
