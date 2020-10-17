@@ -8,7 +8,17 @@ jobs:
   phpunit:
     runs-on: ubuntu-latest
 
-    name: PHPUnit
+    name: PHPUnit test suite
+
+    services:
+      postgres:
+        image: postgres:12
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: jbuktest
+        ports:
+          - 5432:5432
 
     steps:
       - uses: actions/checkout@v2
@@ -22,15 +32,7 @@ jobs:
         run: chmod -R 777 storage bootstrap/cache
       - name: Setup test database
         run: |
-          mkdir -p database
-          touch database/database.sqlite
           php artisan migrate
           php artisan db:seed
       - name: Execute tests (Unit and Feature tests) via PHPUnit
-        env:
-          DB_CONNECTION: sqlite
-          DB_DATABASE: database/database.sqlite
-          CACHE_DRIVER: array
-          SESSION_DRIVER: array
-          QUEUE_DRIVER: sync
         run: vendor/bin/phpunit
