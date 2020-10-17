@@ -30,7 +30,7 @@ jobs:
       - name: Install npm dependencies
         run: npm install
       - name: Install ImageMagick
-        run: apt install imagemagick
+        run: sudo apt install imagemagick
       - name: Setup PHP with pecl extension
         uses: shivammathur/setup-php@v2
         with:
