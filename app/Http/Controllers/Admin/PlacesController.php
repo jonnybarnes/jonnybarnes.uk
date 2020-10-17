@@ -53,7 +53,7 @@ class PlacesController extends Controller
                 'name',
                 'description',
                 'latitude',
-                'longitude'
+                'longitude',
             ])
         );
 
