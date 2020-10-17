@@ -6,7 +6,6 @@ namespace App\Services;
 
 use App\Models\Place;
 use Illuminate\Support\Arr;
-use MStaack\LaravelPostgis\Geometries\Point;
 
 class PlaceService
 {
