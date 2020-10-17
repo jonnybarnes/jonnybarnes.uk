@@ -30,7 +30,6 @@
         "league/commonmark": "^1.0",
         "league/flysystem-aws-s3-v3": "^1.0",
         "mf2/mf2": "~0.3",
-        "mstaack/laravel-postgis": "~5.0",
         "pmatseykanets/laravel-scout-postgres": "^7.0",
         "predis/predis": "~1.0",
         "ramsey/uuid": "^3.5",

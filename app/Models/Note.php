@@ -340,7 +340,7 @@ class Note extends Model
     public function getLatitudeAttribute(): ?float
     {
         if ($this->place !== null) {
-            return $this->place->location->getLat();
+            return $this->place->latitude;
         }
         if ($this->location !== null) {
             $pieces = explode(':', $this->location);
@@ -360,7 +360,7 @@ class Note extends Model
     public function getLongitudeAttribute(): ?float
     {
         if ($this->place !== null) {
-            return $this->place->location->getLng();
+            return $this->place->longitude;
         }
         if ($this->location !== null) {
             $pieces = explode(':', $this->location);

@@ -291,7 +291,8 @@ class MicropubControllerTest extends TestCase
     {
         $place = new Place();
         $place->name = 'Test Place';
-        $place->location = new Point((float) 1.23, (float) 4.56);
+        $place->latitude = 1.23;
+        $place->longitude = 4.56;
         $place->save();
         $faker = \Faker\Factory::create();
         $note = $faker->text;
