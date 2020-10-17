@@ -6,7 +6,7 @@ on:
 
 jobs:
   phpunit:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
 
     name: PHPUnit test suite
 
@@ -29,6 +29,14 @@ jobs:
           key: ${{ runner.os }}-${{ hashFiles('**/package.json') }}
       - name: Install npm dependencies
         run: npm install
+      - name: Install ImageMagick
+        run: apt install imagemagick
+      - name: Setup PHP with pecl extension
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.4'
+          tools: pecl
+          extensions: imagick
       - name: Copy .env
         run: php -r "file_exists('.env') || copy('.env.github', '.env');"
       - name: Install dependencies
