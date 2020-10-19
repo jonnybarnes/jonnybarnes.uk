@@ -12,7 +12,7 @@ class ClientsTest extends TestCase
 
     public function test_index_page()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->make();
 
         $response = $this->actingAs($user)
                          ->get('/admin/clients');
@@ -21,7 +21,7 @@ class ClientsTest extends TestCase
 
     public function test_create_page()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->make();
 
         $response = $this->actingAs($user)
                          ->get('/admin/clients/create');
@@ -30,7 +30,7 @@ class ClientsTest extends TestCase
 
     public function test_create_new_client()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->make();
 
         $this->actingAs($user)
              ->post('/admin/clients', [
@@ -45,7 +45,7 @@ class ClientsTest extends TestCase
 
     public function test_see_edit_form()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->make();
 
         $response = $this->actingAs($user)
                          ->get('/admin/clients/1/edit');
@@ -54,7 +54,7 @@ class ClientsTest extends TestCase
 
     public function test_edit_client()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->make();
 
         $this->actingAs($user)
              ->post('/admin/clients/1', [
@@ -70,7 +70,7 @@ class ClientsTest extends TestCase
 
     public function test_delete_client()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->make();
 
         $this->actingAs($user)
              ->post('/admin/clients/1', [

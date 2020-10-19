@@ -7,7 +7,7 @@ namespace App\Models;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\{Builder, Collection, Model};
+use Illuminate\Database\Eloquent\{Builder, Collection, Factories\HasFactory, Model};
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 
@@ -51,6 +51,7 @@ use Illuminate\Support\Str;
  */
 class Place extends Model
 {
+    use HasFactory;
     use Sluggable;
 
     /**

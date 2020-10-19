@@ -64,7 +64,7 @@ class PlacesTest extends TestCase
             ]
         ]);
         $this->assertInstanceOf('App\Models\Place', $ret); // a place was returned
-        $this->assertEquals(2, count(Place::all())); // still 2 places
+        $this->assertEquals(12, count(Place::all())); // still 2 places
     }
 
     public function test_service_requires_name()

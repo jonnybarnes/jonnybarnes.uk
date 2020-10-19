@@ -10,7 +10,7 @@ use Eloquent;
 use Exception;
 use GuzzleHttp\Client;
 use Illuminate\Database\Eloquent\Relations\{BelongsTo, BelongsToMany, HasMany, MorphMany};
-use Illuminate\Database\Eloquent\{Builder, Collection, Model, SoftDeletes};
+use Illuminate\Database\Eloquent\{Builder, Collection, Factories\HasFactory, Model, SoftDeletes};
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Jonnybarnes\IndieWeb\Numbers;
@@ -88,6 +88,7 @@ use Spatie\CommonMarkHighlighter\{FencedCodeRenderer, IndentedCodeRenderer};
  */
 class Note extends Model
 {
+    use HasFactory;
     use Searchable;
     use SoftDeletes;
 

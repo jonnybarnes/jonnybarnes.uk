@@ -14,7 +14,7 @@ class NotesTest extends TestCase
 
     public function test_index_page()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->make();
 
         $response = $this->actingAs($user)->get('/admin/notes');
         $response->assertViewIs('admin.notes.index');
@@ -22,7 +22,7 @@ class NotesTest extends TestCase
 
     public function test_create_page()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->make();
 
         $response = $this->actingAs($user)->get('/admin/notes/create');
         $response->assertViewIs('admin.notes.create');
@@ -30,7 +30,7 @@ class NotesTest extends TestCase
 
     public function test_create_a_new_note()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->make();
 
         $this->actingAs($user)->post('/admin/notes', [
             'content' => 'A new test note',
@@ -42,7 +42,7 @@ class NotesTest extends TestCase
 
     public function test_edit_page()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->make();
 
         $response = $this->actingAs($user)->get('/admin/notes/1/edit');
         $response->assertViewIs('admin.notes.edit');
@@ -51,7 +51,7 @@ class NotesTest extends TestCase
     public function test_edit_a_note()
     {
         Queue::fake();
-        $user = factory(User::class)->create();
+        $user = User::factory()->make();
 
         $this->actingAs($user)->post('/admin/notes/1', [
             '_method' => 'PUT',
@@ -67,7 +67,7 @@ class NotesTest extends TestCase
 
     public function test_delete_note()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->make();
 
         $this->actingAs($user)->post('/admin/notes/1', [
             '_method' => 'DELETE',

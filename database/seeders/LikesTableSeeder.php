@@ -1,5 +1,7 @@
 <?php
 
+namespace Database\Seeders;
+
 use App\Models\Like;
 use Faker\Generator;
 use Illuminate\Support\Carbon;
@@ -15,15 +17,7 @@ class LikesTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(Like::class, 10)->create()->each(function ($like) {
-            $now = Carbon::now()->subDays(rand(5, 15));
-            DB::table('likes')
-                ->where('id', $like->id)
-                ->update([
-                    'created_at' => $now->toDateTimeString(),
-                    'updated_at' => $now->toDateTimeString(),
-                ]);
-        });
+        Like::factory(10)->create();
 
         $now = Carbon::now()->subDays(rand(3, 6));
         $faker = new Generator();

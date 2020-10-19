@@ -2,18 +2,17 @@
 
 namespace Database\Factories;
 
-use App\Models\Note;
+use App\Models\MicropubClient;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Carbon;
 
-class NoteFactory extends Factory
+class MicropubClientFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = Note::class;
+    protected $model = MicropubClient::class;
 
     /**
      * Define the model's default state.
@@ -22,12 +21,9 @@ class NoteFactory extends Factory
      */
     public function definition()
     {
-        $now = Carbon::now()->subDays(rand(5, 15));
-
         return [
-            'note' => $this->faker->paragraph,
-            'created_at' => $now,
-            'updated_at' => $now,
+            'client_url' => $this->faker->url,
+            'client_name' => $this->faker->company,
         ];
     }
 }
