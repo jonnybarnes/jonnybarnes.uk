@@ -15,7 +15,7 @@ class LikesTest extends TestCase
 
     public function test_index_page()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->make();
 
         $response = $this->actingAs($user)
                          ->get('/admin/likes');
@@ -24,7 +24,7 @@ class LikesTest extends TestCase
 
     public function test_create_page()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->make();
 
         $response = $this->actingAs($user)
                          ->get('/admin/likes/create');
@@ -34,7 +34,7 @@ class LikesTest extends TestCase
     public function test_create_new_like()
     {
         Queue::fake();
-        $user = factory(User::class)->create();
+        $user = User::factory()->make();
 
         $this->actingAs($user)
              ->post('/admin/likes', [
@@ -48,7 +48,7 @@ class LikesTest extends TestCase
 
     public function test_see_edit_form()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->make();
 
         $response = $this->actingAs($user)
                          ->get('/admin/likes/1/edit');
@@ -58,7 +58,7 @@ class LikesTest extends TestCase
     public function test_edit_like()
     {
         Queue::fake();
-        $user = factory(User::class)->create();
+        $user = User::factory()->make();
 
         $this->actingAs($user)
              ->post('/admin/likes/1', [
@@ -75,7 +75,7 @@ class LikesTest extends TestCase
     {
         $like = Like::find(1);
         $url = $like->url;
-        $user = factory(User::class)->create();
+        $user = User::factory()->make();
 
         $this->actingAs($user)
              ->post('/admin/likes/1', [

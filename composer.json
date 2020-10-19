@@ -15,6 +15,7 @@
         "ext-dom": "*",
         "cviebrock/eloquent-sluggable": "^8.0",
         "fideloper/proxy": "~4.0",
+        "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
         "indieauth/client": "~0.1",
         "intervention/image": "^2.4",
