@@ -19,12 +19,6 @@ class ShortURLsControllerTest extends TestCase
         $response->assertRedirect('https://twitter.com/jonnybarnes');
     }
 
-    public function test_short_domain_slashplus_redirects_to_googleplus()
-    {
-        $response = $this->get('http://' . config('app.shorturl') . '/+');
-        $response->assertRedirect('https://plus.google.com/u/0/117317270900655269082/about');
-    }
-
     public function test_short_domain_slasht_redirects_to_long_domain_slash_notes()
     {
         $response = $this->get('http://' . config('app.shorturl') . '/t/E');

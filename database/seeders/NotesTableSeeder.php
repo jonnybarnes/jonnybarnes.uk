@@ -1,9 +1,12 @@
 <?php
 
+namespace Database\Seeders;
+
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use App\Models\{Media, Note, Place};
+use SplFileInfo;
 
 class NotesTableSeeder extends Seeder
 {
@@ -205,5 +208,7 @@ EOF;
         DB::table('notes')
             ->where('id', $noteWithLongUrl->id)
             ->update(['updated_at' => $now->toDateTimeString()]);
+
+        Note::factory(10)->create();
     }
 }

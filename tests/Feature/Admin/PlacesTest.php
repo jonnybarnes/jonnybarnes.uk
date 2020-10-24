@@ -12,7 +12,7 @@ class PlacesTest extends TestCase
 
     public function test_index_page()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->make();
 
         $response = $this->actingAs($user)->get('/admin/places');
         $response->assertViewIs('admin.places.index');
@@ -20,7 +20,7 @@ class PlacesTest extends TestCase
 
     public function test_create_page()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->make();
 
         $response = $this->actingAs($user)->get('/admin/places/create');
         $response->assertViewIs('admin.places.create');
@@ -28,7 +28,7 @@ class PlacesTest extends TestCase
 
     public function test_create_new_place()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->make();
 
         $this->actingAs($user)->post('/admin/places', [
             'name' => 'Test Place',
@@ -44,7 +44,7 @@ class PlacesTest extends TestCase
 
     public function test_edit_page()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->make();
 
         $response = $this->actingAs($user)->get('/admin/places/1/edit');
         $response->assertViewIs('admin.places.edit');
@@ -52,7 +52,7 @@ class PlacesTest extends TestCase
 
     public function test_updating_a_place()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->make();
 
         $this->actingAs($user)->post('/admin/places/1', [
             '_method' => 'PUT',

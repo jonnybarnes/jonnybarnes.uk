@@ -2,18 +2,17 @@
 
 namespace Database\Factories;
 
-use App\Models\Note;
+use App\Models\Place;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Carbon;
 
-class NoteFactory extends Factory
+class PlaceFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = Note::class;
+    protected $model = Place::class;
 
     /**
      * Define the model's default state.
@@ -22,12 +21,12 @@ class NoteFactory extends Factory
      */
     public function definition()
     {
-        $now = Carbon::now()->subDays(rand(5, 15));
-
         return [
-            'note' => $this->faker->paragraph,
-            'created_at' => $now,
-            'updated_at' => $now,
+            'name' => $this->faker->company,
+            'description' => $this->faker->sentence,
+            'latitude' => $this->faker->latitude,
+            'longitude' => $this->faker->longitude,
+            'external_urls' => $this->faker->url,
         ];
     }
 }

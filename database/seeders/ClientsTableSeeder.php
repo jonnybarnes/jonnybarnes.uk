@@ -1,7 +1,11 @@
 <?php
 
+namespace Database\Seeders;
+
+use App\Models\MicropubClient;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class ClientsTableSeeder extends Seeder
 {
@@ -25,5 +29,7 @@ class ClientsTableSeeder extends Seeder
             'created_at' => Carbon::now()->toDateTimeString(),
             'updated_at' => Carbon::now()->toDateTimeString(),
         ]);
+
+        MicropubClient::factory(5)->create();
     }
 }

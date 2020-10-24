@@ -12,7 +12,7 @@ class AdminHomeControllerTest extends TestCase
 
     public function test_admin_homepage()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->make();
 
         $response = $this->actingAs($user)
                          ->get('/admin');

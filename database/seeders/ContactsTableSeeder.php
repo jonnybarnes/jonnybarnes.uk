@@ -1,5 +1,7 @@
 <?php
 
+namespace Database\Seeders;
+
 use App\Models\Contact;
 use Illuminate\Database\Seeder;
 use Illuminate\FileSystem\FileSystem;
