@@ -3,8 +3,8 @@
 declare(strict_types=1);
 
 /*
-helpers.php
-*/
+ * helpers.php
+ */
 
 // sourced from https://github.com/flattr/normalize-url/blob/master/normalize_url.php
 if (! function_exists('normalize_url')) {
@@ -20,7 +20,8 @@ if (! function_exists('normalize_url')) {
         if (isset($url['scheme'])) {
             $url['scheme'] = strtolower($url['scheme']);
             // Strip scheme default ports
-            if (isset($defaultSchemes[$url['scheme']]) &&
+            if (
+                isset($defaultSchemes[$url['scheme']]) &&
                 isset($url['port']) &&
                 $defaultSchemes[$url['scheme']] == $url['port']
             ) {
@@ -101,8 +102,10 @@ if (! function_exists('normalize_url')) {
             while (! empty($url['path'])) {
                 if (preg_match('!^(\.\./|\./)!x', $url['path'])) {
                     $url['path'] = preg_replace('!^(\.\./|\./)!x', '', $url['path']);
-                } elseif (preg_match('!^(/\./)!x', $url['path'], $matches)
-                          || preg_match('!^(/\.)$!x', $url['path'], $matches)) {
+                } elseif (
+                    preg_match('!^(/\./)!x', $url['path'], $matches)
+                    || preg_match('!^(/\.)$!x', $url['path'], $matches)
+                ) {
                     $url['path'] = preg_replace('!^' . $matches[1] . '!', '/', $url['path']);
                 } elseif (preg_match('!^(/\.\./|/\.\.)!x', $url['path'], $matches)) {
                     $url['path'] = preg_replace('!^' . preg_quote($matches[1], '!') . '!x', '/', $url['path']);
@@ -112,7 +115,12 @@ if (! function_exists('normalize_url')) {
                 } else {
                     if (preg_match('!(/*[^/]*)!x', $url['path'], $matches)) {
                         $first_path_segment = $matches[1];
-                        $url['path'] = preg_replace('/^' . preg_quote($first_path_segment, '/') . '/', '', $url['path'], 1);
+                        $url['path'] = preg_replace(
+                            '/^' . preg_quote($first_path_segment, '/') . '/',
+                            '',
+                            $url['path'],
+                            1
+                        );
                         $new_path .= $first_path_segment;
                     }
                 }
@@ -209,9 +217,9 @@ if (! function_exists('prettyPrintJson')) {
                 $in_escape = true;
             }
             if ($new_line_level !== null) {
-                $result .= "\n".str_repeat("\t", $new_line_level);
+                $result .= "\n" . str_repeat("\t", $new_line_level);
             }
-            $result .= $char.$post;
+            $result .= $char . $post;
         }
 
         return str_replace("\t", '    ', $result);
@@ -220,7 +228,8 @@ if (! function_exists('prettyPrintJson')) {
 
 // sourced from https://twitter.com/jrubsc/status/907776591320764416/photo/1
 if (! function_exists('carbon')) {
-    function carbon(...$args) {
+    function carbon(...$args)
+    {
         return new Carbon\Carbon(...$args);
     }
 }

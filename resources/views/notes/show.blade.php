@@ -9,9 +9,17 @@
     return ($webmention->type == 'in-reply-to');
 }) as $reply)
                 <div class="u-comment h-cite">
-                    <a class="u-author h-card mini-h-card" href="{{ $reply['author']['properties']['url'][0] }}">
-                        @if (array_key_exists('photo', $reply['author']['properties']))<img src="{{ $reply['author']['properties']['photo'][0] }}" alt="" class="photo u-photo logo">@endif <span class="fn">{{ $reply['author']['properties']['name'][0] }}</span>
-                    </a> said at <a class="dt-published u-url" href="{{ $reply['source'] }}">{{ $reply['published'] }}</a>
+                    @if ($reply['author'])
+                        <a class="u-author h-card mini-h-card" href="{{ $reply['author']['properties']['url'][0] }}">
+                            @if (array_key_exists('photo', $reply['author']['properties']))
+                                <img src="{{ $reply['author']['properties']['photo'][0] }}" alt="" class="photo u-photo logo">
+                            @endif
+                            <span class="fn">{{ $reply['author']['properties']['name'][0] }}</span>
+                        </a>
+                    @else
+                        Unknown author
+                    @endif
+                    said at <a class="dt-published u-url" href="{{ $reply['source'] }}">{{ $reply['published'] }}</a>
                     <div class="e-content p-name">
                         {!! $reply['reply'] !!}
                     </div>
