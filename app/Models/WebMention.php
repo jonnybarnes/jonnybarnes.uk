@@ -90,6 +90,11 @@ class WebMention extends Model
     {
         $authorship = new Authorship();
         $hCard = $authorship->findAuthor(json_decode($this->mf2, true));
+
+        if ($hCard === false) {
+            return [];
+        }
+
         if (
             array_key_exists('properties', $hCard) &&
             array_key_exists('photo', $hCard['properties'])
