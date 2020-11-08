@@ -14,20 +14,7 @@ module.exports = {
         rules: [{
             test: /\.css$/,
             exclude: /node_modules/,
-            use: [
-                {
-                    loader: MiniCssExtractPlugin.loader,
-                    options: {
-                        sourceMap: true
-                    }
-                },
-                {
-                    loader: 'css-loader',
-                    options: {
-                        sourceMap: true
-                    }
-                }
-            ]
+            use: [MiniCssExtractPlugin.loader, 'css-loader']
         }]
     },
     plugins: [
