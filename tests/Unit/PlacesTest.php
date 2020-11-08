@@ -5,7 +5,7 @@ namespace Tests\Unit;
 use Tests\TestCase;
 use App\Models\Place;
 use App\Services\PlaceService;
-use Phaza\LaravelPostgis\Geometries\Point;
+use MStaack\LaravelPostgis\Geometries\Point;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
@@ -26,7 +26,7 @@ class PlacesTest extends TestCase
      */
     public function test_near_method()
     {
-        $nearby = Place::near(new Point(53.5, -2.38), 1000)->get();
+        $nearby = Place::near((object) ['latitude' => 53.5, 'longitude' => -2.38], 1000)->get();
         $this->assertEquals('the-bridgewater-pub', $nearby[0]->slug);
     }
 
@@ -53,7 +53,8 @@ class PlacesTest extends TestCase
     {
         $place = new Place();
         $place->name = 'Temp Place';
-        $place->location = new Point(37.422009, -122.084047);
+        $place->latitude = 37.422009;
+        $place->longitude = -122.084047;
         $place->external_urls = 'https://www.openstreetmap.org/way/1234';
         $place->save();
         $service = new PlaceService();
@@ -63,7 +64,7 @@ class PlacesTest extends TestCase
             ]
         ]);
         $this->assertInstanceOf('App\Models\Place', $ret); // a place was returned
-        $this->assertEquals(2, count(Place::all())); // still 2 places
+        $this->assertEquals(12, count(Place::all())); // still 2 places
     }
 
     public function test_service_requires_name()

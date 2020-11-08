@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Console\Commands;
 
+use App\Jobs\DownloadWebMention;
 use App\Models\WebMention;
 use Illuminate\Console\Command;
-use App\Jobs\DownloadWebMention;
 
 class ReDownloadWebMentions extends Command
 {

@@ -13,6 +13,4 @@
 
 @section('scripts')
 @include('templates.mapbox-links')
-
-            <script src="/assets/js/maps.js"></script>
 @stop

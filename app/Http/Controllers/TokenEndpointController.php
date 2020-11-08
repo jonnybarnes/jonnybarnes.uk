@@ -4,27 +4,27 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use IndieAuth\Client;
 use App\Services\TokenService;
 use Illuminate\Http\JsonResponse;
+use IndieAuth\Client;
 
 class TokenEndpointController extends Controller
 {
     /**
      * The IndieAuth Client.
      */
-    protected $client;
+    protected Client $client;
 
     /**
      * The Token handling service.
      */
-    protected $tokenService;
+    protected TokenService $tokenService;
 
     /**
      * Inject the dependencies.
      *
-     * @param  \IndieAuth\Client  $client
-     * @param  \App\Services\TokenService  $tokenService
+     * @param Client $client
+     * @param TokenService $tokenService
      */
     public function __construct(
         Client $client,
@@ -37,7 +37,7 @@ class TokenEndpointController extends Controller
     /**
      * If the user has auth’d via the IndieAuth protocol, issue a valid token.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function create(): JsonResponse
     {

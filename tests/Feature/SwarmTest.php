@@ -152,7 +152,7 @@ class SwarmTest extends TestCase
         $this->assertDatabaseHas('notes', [
             'swarm_url' => 'https://www.swarmapp.com/checkin/def'
         ]);
-        $this->get($response->__get('headers')->get('location'))->assertSee('round pushpin');
+        $this->get($response->__get('headers')->get('location'))->assertSee('📍');
     }
 
     public function test_faked_ownyourswarm_request_saves_just_post_when_error_in_checkin_data()

@@ -4,15 +4,16 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
 
 class AuthController extends Controller
 {
     /**
      * Show the login form.
      *
-     * @return \Illuminate\View\View|\Illuminate\Http\RedirectResponse
+     * @return View|RedirectResponse
      */
     public function showLogin()
     {
@@ -27,7 +28,7 @@ class AuthController extends Controller
      * Log in a user, set a session variable, check credentials against
      * the .env file.
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function login(): RedirectResponse
     {
@@ -43,7 +44,7 @@ class AuthController extends Controller
     /**
      * Show the form to logout a user.
      *
-     * @return \Illuminate\View\View|\Illuminate\Http\RedirectResponse
+     * @return View|RedirectResponse
      */
     public function showLogout()
     {
@@ -58,7 +59,7 @@ class AuthController extends Controller
     /**
      * Log the user out from their current session.
      *
-     * @return \Illuminate\Http\RedirectResponse;
+     * @return RedirectResponse;
      */
     public function logout(): RedirectResponse
     {

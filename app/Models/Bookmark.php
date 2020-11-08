@@ -4,10 +4,47 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Carbon;
 
+/**
+ * App\Models\Bookmark.
+ *
+ * @property int $id
+ * @property string $url
+ * @property string|null $name
+ * @property string|null $content
+ * @property string|null $screenshot
+ * @property string|null $archive
+ * @property array|null $syndicates
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read string $longurl
+ * @property-read Collection|Tag[] $tags
+ * @property-read int|null $tags_count
+ * @method static Builder|Bookmark newModelQuery()
+ * @method static Builder|Bookmark newQuery()
+ * @method static Builder|Bookmark query()
+ * @method static Builder|Bookmark whereArchive($value)
+ * @method static Builder|Bookmark whereContent($value)
+ * @method static Builder|Bookmark whereCreatedAt($value)
+ * @method static Builder|Bookmark whereId($value)
+ * @method static Builder|Bookmark whereName($value)
+ * @method static Builder|Bookmark whereScreenshot($value)
+ * @method static Builder|Bookmark whereSyndicates($value)
+ * @method static Builder|Bookmark whereUpdatedAt($value)
+ * @method static Builder|Bookmark whereUrl($value)
+ * @mixin Eloquent
+ */
 class Bookmark extends Model
 {
+    use HasFactory;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -27,7 +64,7 @@ class Bookmark extends Model
     /**
      * The tags that belong to the bookmark.
      *
-     * @return  \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return  BelongsToMany
      */
     public function tags()
     {

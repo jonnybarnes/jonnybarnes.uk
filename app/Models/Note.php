@@ -4,32 +4,96 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use Cache;
-use Twitter;
-use Normalizer;
-use GuzzleHttp\Client;
-use Laravel\Scout\Searchable;
-use Jonnybarnes\IndieWeb\Numbers;
-use League\CommonMark\Environment;
-use Illuminate\Database\Eloquent\Model;
-use Jonnybarnes\EmojiA11y\EmojiModifier;
-use Illuminate\Database\Eloquent\Builder;
-use League\CommonMark\CommonMarkConverter;
 use App\Exceptions\TwitterContentException;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use League\CommonMark\Block\Element\FencedCode;
-use League\CommonMark\Block\Element\IndentedCode;
-use Spatie\CommonMarkHighlighter\FencedCodeRenderer;
-use League\CommonMark\Ext\Autolink\AutolinkExtension;
-use Spatie\CommonMarkHighlighter\IndentedCodeRenderer;
+use Codebird\Codebird;
+use Eloquent;
+use Exception;
+use GuzzleHttp\Client;
+use Illuminate\Database\Eloquent\Relations\{BelongsTo, BelongsToMany, HasMany, MorphMany};
+use Illuminate\Database\Eloquent\{Builder, Collection, Factories\HasFactory, Model, SoftDeletes};
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Cache;
+use Jonnybarnes\IndieWeb\Numbers;
+use Laravel\Scout\Searchable;
+use League\CommonMark\Block\Element\{FencedCode, IndentedCode};
+use League\CommonMark\Extension\Autolink\AutolinkExtension;
+use League\CommonMark\{CommonMarkConverter, Environment};
+use Normalizer;
+use Spatie\CommonMarkHighlighter\{FencedCodeRenderer, IndentedCodeRenderer};
 
+/**
+ * App\Models\Note.
+ *
+ * @property int $id
+ * @property string|null $note
+ * @property string|null $in_reply_to
+ * @property string $shorturl
+ * @property string|null $location
+ * @property int|null $photo
+ * @property string|null $tweet_id
+ * @property string|null $client_id
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property Carbon|null $deleted_at
+ * @property int|null $place_id
+ * @property string|null $facebook_url
+ * @property string|null $searchable
+ * @property string|null $swarm_url
+ * @property string|null $instagram_url
+ * @property-read MicropubClient|null $client
+ * @property-read string|null $address
+ * @property-read string $content
+ * @property-read string $humandiff
+ * @property-read string $iso8601
+ * @property-read float|null $latitude
+ * @property-read float|null $longitude
+ * @property-read string $longurl
+ * @property-read string $nb60id
+ * @property-read string $pubdate
+ * @property-read object|null $twitter
+ * @property-read string $twitter_content
+ * @property-read Collection|Media[] $media
+ * @property-read int|null $media_count
+ * @property-read Place|null $place
+ * @property-read Collection|Tag[] $tags
+ * @property-read int|null $tags_count
+ * @property-read Collection|WebMention[] $webmentions
+ * @property-read int|null $webmentions_count
+ * @method static bool|null forceDelete()
+ * @method static Builder|Note nb60($nb60id)
+ * @method static Builder|Note newModelQuery()
+ * @method static Builder|Note newQuery()
+ * @method static \Illuminate\Database\Query\Builder|Note onlyTrashed()
+ * @method static Builder|Note query()
+ * @method static bool|null restore()
+ * @method static Builder|Note whereClientId($value)
+ * @method static Builder|Note whereCreatedAt($value)
+ * @method static Builder|Note whereDeletedAt($value)
+ * @method static Builder|Note whereFacebookUrl($value)
+ * @method static Builder|Note whereId($value)
+ * @method static Builder|Note whereInReplyTo($value)
+ * @method static Builder|Note whereInstagramUrl($value)
+ * @method static Builder|Note whereLocation($value)
+ * @method static Builder|Note whereNote($value)
+ * @method static Builder|Note wherePhoto($value)
+ * @method static Builder|Note wherePlaceId($value)
+ * @method static Builder|Note whereSearchable($value)
+ * @method static Builder|Note whereShorturl($value)
+ * @method static Builder|Note whereSwarmUrl($value)
+ * @method static Builder|Note whereTweetId($value)
+ * @method static Builder|Note whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|Note withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Note withoutTrashed()
+ * @mixin Eloquent
+ */
 class Note extends Model
 {
+    use HasFactory;
     use Searchable;
     use SoftDeletes;
 
     /**
-     * The reges for matching lone usernames.
+     * The regex for matching lone usernames.
      *
      * @var string
      */
@@ -58,8 +122,8 @@ class Note extends Model
      */
     protected $table = 'notes';
 
-    /*
-     * Mass-assignment
+    /**
+     * Mass-assignment.
      *
      * @var array
      */
@@ -79,7 +143,7 @@ class Note extends Model
     /**
      * Define the relationship with tags.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return BelongsToMany
      */
     public function tags()
     {
@@ -89,7 +153,7 @@ class Note extends Model
     /**
      * Define the relationship with clients.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function client()
     {
@@ -99,7 +163,7 @@ class Note extends Model
     /**
      * Define the relationship with webmentions.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     * @return MorphMany
      */
     public function webmentions()
     {
@@ -109,7 +173,7 @@ class Note extends Model
     /**
      * Define the relationship with places.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function place()
     {
@@ -119,7 +183,7 @@ class Note extends Model
     /**
      * Define the relationship with media.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     public function media()
     {
@@ -141,7 +205,7 @@ class Note extends Model
     /**
      * Normalize the note to Unicode FORM C.
      *
-     * @param  string|null  $value
+     * @param string|null $value
      */
     public function setNoteAttribute(?string $value)
     {
@@ -157,7 +221,7 @@ class Note extends Model
     /**
      * Pre-process notes for web-view.
      *
-     * @param  string|null  $value
+     * @param string|null $value
      * @return string|null
      */
     public function getNoteAttribute(?string $value): ?string
@@ -173,10 +237,8 @@ class Note extends Model
 
         $hcards = $this->makeHCards($value);
         $hashtags = $this->autoLinkHashtag($hcards);
-        $html = $this->convertMarkdown($hashtags);
-        $modified = resolve(EmojiModifier::class)->makeEmojiAccessible($html);
 
-        return $modified;
+        return $this->convertMarkdown($hashtags);
     }
 
     /**
@@ -262,7 +324,7 @@ class Note extends Model
     }
 
     /**
-     * Get the pubdate value for RSS feeds.
+     * Get the publish date value for RSS feeds.
      *
      * @return string
      */
@@ -279,13 +341,13 @@ class Note extends Model
     public function getLatitudeAttribute(): ?float
     {
         if ($this->place !== null) {
-            return $this->place->location->getLat();
+            return $this->place->latitude;
         }
         if ($this->location !== null) {
             $pieces = explode(':', $this->location);
-            $latlng = explode(',', $pieces[0]);
+            $latLng = explode(',', $pieces[0]);
 
-            return (float) trim($latlng[0]);
+            return (float) trim($latLng[0]);
         }
 
         return null;
@@ -299,13 +361,13 @@ class Note extends Model
     public function getLongitudeAttribute(): ?float
     {
         if ($this->place !== null) {
-            return $this->place->location->getLng();
+            return $this->place->longitude;
         }
         if ($this->location !== null) {
             $pieces = explode(':', $this->location);
-            $latlng = explode(',', $pieces[0]);
+            $latLng = explode(',', $pieces[0]);
 
-            return (float) trim($latlng[1]);
+            return (float) trim($latLng[1]);
         }
 
         return null;
@@ -346,13 +408,18 @@ class Note extends Model
         }
 
         try {
-            $oEmbed = Twitter::getOembed([
+            $codebird = resolve(Codebird::class);
+            $oEmbed = $codebird->statuses_oembed([
                 'url' => $this->in_reply_to,
                 'dnt' => true,
                 'align' => 'center',
                 'maxwidth' => 512,
             ]);
-        } catch (\Exception $e) {
+
+            if ($oEmbed->httpstatus >= 400) {
+                throw new Exception();
+            }
+        } catch (Exception $e) {
             return null;
         }
         Cache::put($tweetId, $oEmbed, ($oEmbed->cache_age));
@@ -366,6 +433,7 @@ class Note extends Model
      * That is we swap the contacts names for their known Twitter handles.
      *
      * @return string
+     * @throws TwitterContentException
      */
     public function getTwitterContentAttribute(): string
     {
@@ -376,8 +444,10 @@ class Note extends Model
 
         // here we check the matched contact from the note corresponds to a contact
         // in the database
-        if (count(array_unique(array_values($this->contacts))) === 1
-            && array_unique(array_values($this->contacts))[0] === null) {
+        if (
+            count(array_unique(array_values($this->contacts))) === 1
+            && array_unique(array_values($this->contacts))[0] === null
+        ) {
             throw new TwitterContentException('The matched contact is not in the database');
         }
 
@@ -405,9 +475,9 @@ class Note extends Model
     /**
      * Scope a query to select a note via a NewBase60 id.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @param  string  $nb60id
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @param Builder $query
+     * @param string $nb60id
+     * @return Builder
      */
     public function scopeNb60(Builder $query, string $nb60id): Builder
     {
@@ -422,7 +492,7 @@ class Note extends Model
      * due to lack of contact info, we assume @username is a twitter handle and link it
      * as such.
      *
-     * @param  string  $text
+     * @param string $text
      * @return string
      */
     private function makeHCards(string $text): string
@@ -433,7 +503,7 @@ class Note extends Model
             return $text;
         }
 
-        $hcards = preg_replace_callback(
+        return preg_replace_callback(
             self::USERNAMES_REGEX,
             function ($matches) {
                 if (is_null($this->contacts[$matches[1]])) {
@@ -451,28 +521,32 @@ class Note extends Model
             },
             $text
         );
-
-        return $hcards;
     }
 
     /**
      * Get the value of the `contacts` property.
+     *
+     * @return array
      */
-    public function getContacts()
+    public function getContacts(): array
     {
         if ($this->contacts === null) {
             $this->setContacts();
         }
+
+        return $this->contacts;
     }
 
     /**
      * Process the note and save the contacts to the `contacts` property.
+     *
+     * @return void
      */
-    public function setContacts()
+    public function setContacts(): void
     {
         $contacts = [];
-        if ($this->getOriginal('note')) {
-            preg_match_all(self::USERNAMES_REGEX, $this->getoriginal('note'), $matches);
+        if ($this->getRawOriginal('note')) {
+            preg_match_all(self::USERNAMES_REGEX, $this->getRawOriginal('note'), $matches);
 
             foreach ($matches[1] as $match) {
                 $contacts[$match] = Contact::where('nick', mb_strtolower($match))->first();
@@ -489,7 +563,7 @@ class Note extends Model
      * `#[\-_a-zA-Z0-9]+` and wraps them in an `a` element with
      * `rel=tag` set and a `href` of 'section/tagged/' + tagname without the #.
      *
-     * @param  string  $note
+     * @param string $note
      * @return string
      */
     public function autoLinkHashtag(string $note): string
@@ -508,7 +582,7 @@ class Note extends Model
     /**
      * Pass a note through the commonmark library.
      *
-     * @param  string  $note
+     * @param string $note
      * @return string
      */
     private function convertMarkdown(string $note): string
@@ -525,15 +599,15 @@ class Note extends Model
     /**
      * Do a reverse geocode lookup of a `lat,lng` value.
      *
-     * @param  float  $latitude
-     * @param  float  $longitude
+     * @param float $latitude
+     * @param float $longitude
      * @return string
      */
     public function reverseGeoCode(float $latitude, float $longitude): string
     {
-        $latlng = $latitude . ',' . $longitude;
+        $latLng = $latitude . ',' . $longitude;
 
-        return Cache::get($latlng, function () use ($latlng, $latitude, $longitude) {
+        return Cache::get($latLng, function () use ($latLng, $latitude, $longitude) {
             $guzzle = resolve(Client::class);
             $response = $guzzle->request('GET', 'https://nominatim.openstreetmap.org/reverse', [
                 'query' => [
@@ -556,7 +630,7 @@ class Note extends Model
                     . '</span>, <span class="p-country-name">'
                     . $json->address->country
                     . '</span>';
-                Cache::forever($latlng, $address);
+                Cache::forever($latLng, $address);
 
                 return $address;
             }
@@ -566,7 +640,7 @@ class Note extends Model
                     . '</span>, <span class="p-country-name">'
                     . $json->address->country
                     . '</span>';
-                Cache::forever($latlng, $address);
+                Cache::forever($latLng, $address);
 
                 return $address;
             }
@@ -576,12 +650,12 @@ class Note extends Model
                     . '</span>, <span class="p-country-name">'
                     . $json->address->country
                     . '</span>';
-                Cache::forever($latlng, $address);
+                Cache::forever($latLng, $address);
 
                 return $address;
             }
             $address = '<span class="p-country-name">' . $json->address->country . '</span>';
-            Cache::forever($latlng, $address);
+            Cache::forever($latLng, $address);
 
             return $address;
         });

@@ -5,24 +5,27 @@ declare(strict_types=1);
 namespace App\Jobs;
 
 use GuzzleHttp\Client;
-use Illuminate\Bus\Queueable;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Queue\InteractsWithQueue;
 use GuzzleHttp\Exception\RequestException;
+use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Arr;
 use Jonnybarnes\WebmentionsParser\Authorship;
 use Jonnybarnes\WebmentionsParser\Exceptions\AuthorshipParserException;
 
 class SaveProfileImage implements ShouldQueue
 {
-    use InteractsWithQueue, Queueable, SerializesModels;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
-    protected $microformats;
+    protected array $microformats;
 
     /**
      * Create a new job instance.
      *
-     * @param  array  $microformats
+     * @param array $microformats
      */
     public function __construct(array $microformats)
     {
@@ -32,7 +35,7 @@ class SaveProfileImage implements ShouldQueue
     /**
      * Execute the job.
      *
-     * @param  \Jonnybarnes\WebmentionsParser\Authorship  $authorship
+     * @param Authorship $authorship
      */
     public function handle(Authorship $authorship)
     {
@@ -41,17 +44,20 @@ class SaveProfileImage implements ShouldQueue
         } catch (AuthorshipParserException $e) {
             return;
         }
-        $photo = $author['properties']['photo'][0];
-        $home = $author['properties']['url'][0];
+        $photo = Arr::get($author, 'properties.photo.0');
+        $home = Arr::get($author, 'properties.url.0');
         //dont save pbs.twimg.com links
-        if (parse_url($photo, PHP_URL_HOST) != 'pbs.twimg.com'
-              && parse_url($photo, PHP_URL_HOST) != 'twitter.com') {
+        if (
+            $photo
+            && parse_url($photo, PHP_URL_HOST) != 'pbs.twimg.com'
+            && parse_url($photo, PHP_URL_HOST) != 'twitter.com'
+        ) {
             $client = resolve(Client::class);
             try {
                 $response = $client->get($photo);
-                $image = $response->getBody(true);
+                $image = $response->getBody();
             } catch (RequestException $e) {
-                // we are openning and reading the default image so that
+                // we are opening and reading the default image so that
                 $default = public_path() . '/assets/profile-images/default-image';
                 $handle = fopen($default, 'rb');
                 $image = fread($handle, filesize($default));

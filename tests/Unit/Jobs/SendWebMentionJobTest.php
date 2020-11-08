@@ -96,6 +96,7 @@ class SendWebMentionJobTest extends TestCase
 
         $note = new Note();
         $note->note = 'Hi [Aaron](https://aaronparecki.com)';
+        $note->save();
         $job = new SendWebMentions($note);
         $this->assertNull($job->handle());
     }

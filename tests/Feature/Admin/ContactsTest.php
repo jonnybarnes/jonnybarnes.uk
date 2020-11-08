@@ -27,7 +27,7 @@ class ContactsTest extends TestCase
 
     public function test_index_page()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->make();
 
         $response = $this->actingAs($user)->get('/admin/contacts');
         $response->assertViewIs('admin.contacts.index');
@@ -35,7 +35,7 @@ class ContactsTest extends TestCase
 
     public function test_create_page()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->make();
 
         $response = $this->actingAs($user)->get('/admin/contacts/create');
         $response->assertViewIs('admin.contacts.create');
@@ -43,7 +43,7 @@ class ContactsTest extends TestCase
 
     public function test_create_new_contact()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->make();
 
         $this->actingAs($user)->post('/admin/contacts', [
             'name' => 'Fred Bloggs',
@@ -59,7 +59,7 @@ class ContactsTest extends TestCase
 
     public function test_see_edit_form()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->make();
 
         $response = $this->actingAs($user)->get('/admin/contacts/1/edit');
         $response->assertViewIs('admin.contacts.edit');
@@ -67,7 +67,7 @@ class ContactsTest extends TestCase
 
     public function test_update_contact_no_uploaded_avatar()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->make();
 
         $this->actingAs($user)->post('/admin/contacts/1', [
             '_method' => 'PUT',
@@ -86,8 +86,8 @@ class ContactsTest extends TestCase
     {
         copy(__DIR__ . '/../../aaron.png', sys_get_temp_dir() . '/tantek.png');
         $path = sys_get_temp_dir() . '/tantek.png';
-        $file = new UploadedFile($path, 'tantek.png', 'image/png', filesize($path), null, true);
-        $user = factory(User::class)->create();
+        $file = new UploadedFile($path, 'tantek.png', 'image/png', null, true);
+        $user = User::factory()->make();
 
         $this->actingAs($user)->post('/admin/contacts/1', [
             '_method' => 'PUT',
@@ -105,7 +105,7 @@ class ContactsTest extends TestCase
 
     public function test_delete_contact()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->make();
 
         $this->actingAs($user)->post('/admin/contacts/1', [
             '_method' => 'DELETE',
@@ -130,7 +130,7 @@ HTML;
         $handler = HandlerStack::create($mock);
         $client = new Client(['handler' => $handler]);
         $this->app->instance(Client::class, $client);
-        $user = factory(User::class)->create();
+        $user = User::factory()->make();
 
         $this->actingAs($user)->get('/admin/contacts/1/getavatar');
 
@@ -148,7 +148,7 @@ HTML;
         $handler = HandlerStack::create($mock);
         $client = new Client(['handler' => $handler]);
         $this->app->instance(Client::class, $client);
-        $user = factory(User::class)->create();
+        $user = User::factory()->make();
 
         $response = $this->actingAs($user)->get('/admin/contacts/1/getavatar');
 
@@ -169,7 +169,7 @@ HTML;
         $handler = HandlerStack::create($mock);
         $client = new Client(['handler' => $handler]);
         $this->app->instance(Client::class, $client);
-        $user = factory(User::class)->create();
+        $user = User::factory()->make();
 
         $response = $this->actingAs($user)->get('/admin/contacts/1/getavatar');
 
@@ -182,7 +182,7 @@ HTML;
             'nick' => 'fred',
             'name' => 'Fred Bloggs',
         ]);
-        $user = factory(User::class)->create();
+        $user = User::factory()->make();
 
         $response = $this->actingAs($user)->get('/admin/contacts/' . $contact->id . '/getavatar');
 

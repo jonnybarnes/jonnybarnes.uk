@@ -4,17 +4,58 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use League\CommonMark\Environment;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Builder;
 use Cviebrock\EloquentSluggable\Sluggable;
-use League\CommonMark\CommonMarkConverter;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
 use League\CommonMark\Block\Element\FencedCode;
 use League\CommonMark\Block\Element\IndentedCode;
+use League\CommonMark\CommonMarkConverter;
+use League\CommonMark\Environment;
 use Spatie\CommonMarkHighlighter\FencedCodeRenderer;
 use Spatie\CommonMarkHighlighter\IndentedCodeRenderer;
 
+/**
+ * App\Models\Article.
+ *
+ * @property int $id
+ * @property string $titleurl
+ * @property string|null $url
+ * @property string $title
+ * @property string $main
+ * @property int $published
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property Carbon|null $deleted_at
+ * @property-read string $html
+ * @property-read string $human_time
+ * @property-read string $link
+ * @property-read string $pubdate
+ * @property-read string $tooltip_time
+ * @property-read string $w3c_time
+ * @method static Builder|Article date($year = null, $month = null)
+ * @method static Builder|Article findSimilarSlugs($attribute, $config, $slug)
+ * @method static bool|null forceDelete()
+ * @method static Builder|Article newModelQuery()
+ * @method static Builder|Article newQuery()
+ * @method static \Illuminate\Database\Query\Builder|Article onlyTrashed()
+ * @method static Builder|Article query()
+ * @method static bool|null restore()
+ * @method static Builder|Article whereCreatedAt($value)
+ * @method static Builder|Article whereDeletedAt($value)
+ * @method static Builder|Article whereId($value)
+ * @method static Builder|Article whereMain($value)
+ * @method static Builder|Article wherePublished($value)
+ * @method static Builder|Article whereTitle($value)
+ * @method static Builder|Article whereTitleurl($value)
+ * @method static Builder|Article whereUpdatedAt($value)
+ * @method static Builder|Article whereUrl($value)
+ * @method static \Illuminate\Database\Query\Builder|Article withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Article withoutTrashed()
+ * @mixin Eloquent
+ */
 class Article extends Model
 {
     use Sluggable;
@@ -123,9 +164,12 @@ class Article extends Model
     /**
      * Scope a query to only include articles from a particular year/month.
      *
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @param Builder $query
+     * @param int|null $year
+     * @param int|null $month
+     * @return Builder
      */
-    public function scopeDate($query, int $year = null, int $month = null): Builder
+    public function scopeDate(Builder $query, int $year = null, int $month = null): Builder
     {
         if ($year == null) {
             return $query;

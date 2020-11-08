@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Models\Note;
-use Illuminate\View\View;
-use Illuminate\Http\Response;
 use App\Jobs\ProcessWebMention;
-use Jonnybarnes\IndieWeb\Numbers;
+use App\Models\Note;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\Response;
+use Illuminate\View\View;
+use Jonnybarnes\IndieWeb\Numbers;
 
 class WebMentionsController extends Controller
 {
@@ -19,7 +19,7 @@ class WebMentionsController extends Controller
      * This is probably someone looking for information about what
      * webmentions are, or about my particular implementation.
      *
-     * @return \Illuminate\View\View
+     * @return View
      */
     public function get(): View
     {
@@ -29,11 +29,11 @@ class WebMentionsController extends Controller
     /**
      * Receive and process a webmention.
      *
-     * @return \Illuminate\Http\Respone
+     * @return Response
      */
     public function receive(): Response
     {
-        //first we trivially reject requets that lack all required inputs
+        //first we trivially reject requests that lack all required inputs
         if ((request()->has('target') !== true) || (request()->has('source') !== true)) {
             return response(
                 'You need both the target and source parameters',

@@ -6,15 +6,14 @@ namespace App\Services;
 
 use App\Models\Place;
 use Illuminate\Support\Arr;
-use Phaza\LaravelPostgis\Geometries\Point;
 
 class PlaceService
 {
     /**
      * Create a place.
      *
-     * @param  array $data
-     * @return \App\Place
+     * @param array $data
+     * @return Place
      */
     public function createPlace(array $data): Place
     {
@@ -32,16 +31,17 @@ class PlaceService
         $place = new Place();
         $place->name = $data['name'];
         $place->description = $data['description'];
-        $place->location = new Point((float) $data['latitude'], (float) $data['longitude']);
+        $place->latitude = $data['latitude'];
+        $place->longitude = $data['longitude'];
         $place->save();
 
         return $place;
     }
 
     /**
-     * Create a place from a h-card checkin, for exameple from OwnYourSwarm.
+     * Create a place from a h-card checkin, for example from OwnYourSwarm.
      *
-     * @param  array
+     * @param array
      * @return Place
      */
     public function createPlaceFromCheckin(array $checkin): Place
@@ -62,10 +62,8 @@ class PlaceService
         $place = new Place();
         $place->name = Arr::get($checkin, 'properties.name.0');
         $place->external_urls = Arr::get($checkin, 'properties.url.0');
-        $place->location = new Point(
-            (float) Arr::get($checkin, 'properties.latitude.0'),
-            (float) Arr::get($checkin, 'properties.longitude.0')
-        );
+        $place->latitude = Arr::get($checkin, 'properties.latitude.0');
+        $place->longitude = Arr::get($checkin, 'properties.longitude.0');
         $place->save();
 
         return $place;

@@ -1,18 +1,5 @@
-// app.scss
-
-// General styles
+@import "variables";
 @import "base";
-@import "site-header";
-@import "main";
-@import "articles";
-@import "notes";
-@import "footer";
-
-// Mapbox styles
-@import "mapbox";
-
-// The syndication links at the end of notes
-@import "syndication";
-
-// Accessible emoji
-@import "emoji";
+@import "layout-main";
+@import "link-styles";
+@import "posse";

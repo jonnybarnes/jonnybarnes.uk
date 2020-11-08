@@ -1,41 +1,31 @@
-const webpack = require('webpack');
-const Dotenv = require('dotenv-webpack');
+const path = require('path');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const StyleLintPlugin = require('stylelint-webpack-plugin');
 
-const config = {
-  context: __dirname + '/resources/es6',
-  entry: {
-    a11y: './a11y.js',
-    colours: './colours.js',
-    links: './links.js',
-    maps: './maps.js',
-    piwik: './piwik.js',
-    places: './places.js'
-  },
-  output: {
-    filename: '[name].js',
-    path: __dirname + '/public/assets/js'
-  },
-  devtool: 'source-map',
-  module: {
-    noParse: [/mapbox-gl\.js$/],
-    rules: [
-      {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: ['@babel/preset-env'],
-          }
-        }
-      }
+module.exports = {
+    mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
+    devtool: 'source-map',
+    entry: ['./resources/js/app.js'],
+    output: {
+        path: path.resolve('./public/assets'),
+        filename: 'app.js',
+    },
+    module: {
+        rules: [{
+            test: /\.css$/,
+            exclude: /node_modules/,
+            use: [MiniCssExtractPlugin.loader, 'css-loader']
+        }]
+    },
+    plugins: [
+        new MiniCssExtractPlugin({
+            filename: 'app.css',
+            chunkFilename: 'app.css',
+        }),
+        new StyleLintPlugin({
+            configFile: path.resolve(__dirname + '/.stylelintrc'),
+            context: path.resolve(__dirname + '/resources/css'),
+            files: '**/*.css',
+        }),
     ]
-  },
-  plugins: [
-    new Dotenv({
-      path: './.env'
-    })
-  ]
 };
-
-module.exports = config;

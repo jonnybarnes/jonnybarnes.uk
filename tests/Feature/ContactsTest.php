@@ -38,4 +38,11 @@ class ContactsTest extends TestCase
         $response = $this->get('/contacts/aaron');
         $response->assertViewHas('image', '/assets/profile-images/aaronparecki.com/image');
     }
+
+    /** @test */
+    public function unknownContactGives404()
+    {
+        $response = $this->get('/contacts/unknown');
+        $response->assertNotFound();
+    }
 }

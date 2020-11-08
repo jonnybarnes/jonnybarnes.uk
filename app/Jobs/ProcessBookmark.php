@@ -4,25 +4,29 @@ declare(strict_types=1);
 
 namespace App\Jobs;
 
+use App\Exceptions\InternetArchiveException;
 use App\Models\Bookmark;
-use Illuminate\Bus\Queueable;
 use App\Services\BookmarkService;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use App\Exceptions\InternetArchiveException;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
 
 class ProcessBookmark implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
+    /** @var Bookmark */
     protected $bookmark;
 
     /**
      * Create a new job instance.
      *
-     * @param  \App\Models\Bookmark  $bookmark
+     * @param Bookmark $bookmark
      */
     public function __construct(Bookmark $bookmark)
     {

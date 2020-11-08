@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Exceptions\InvalidTokenException;
 use App\Jobs\AddClientToDatabase;
 use Lcobucci\JWT\Signer\Hmac\Sha256;
-use App\Exceptions\InvalidTokenException;
 use Lcobucci\JWT\{Builder, Parser, Token};
 
 class TokenService

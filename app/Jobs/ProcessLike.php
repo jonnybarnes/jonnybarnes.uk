@@ -5,28 +5,33 @@ declare(strict_types=1);
 namespace App\Jobs;
 
 use App\Models\Like;
+use Codebird\Codebird;
 use GuzzleHttp\Client;
-use Illuminate\Support\Arr;
-use Illuminate\Bus\Queueable;
-use Thujohn\Twitter\Facades\Twitter;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Queue\InteractsWithQueue;
+use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
+use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Arr;
 use Jonnybarnes\WebmentionsParser\Authorship;
 use Jonnybarnes\WebmentionsParser\Exceptions\AuthorshipParserException;
 
 class ProcessLike implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
+    /** @var Like */
     protected $like;
 
     /**
      * Create a new job instance.
      *
-     * @param  \App\Models\Like  $like
+     * @param Like $like
      */
     public function __construct(Like $like)
     {
@@ -36,14 +41,18 @@ class ProcessLike implements ShouldQueue
     /**
      * Execute the job.
      *
-     * @param  \GuzzleHttp\Client  $client
-     * @param  \Jonnybarnes\WebmentionsParser\Authorship  $authorship
+     * @param Client $client
+     * @param Authorship $authorship
      * @return int
+     * @throws GuzzleException
      */
     public function handle(Client $client, Authorship $authorship): int
     {
         if ($this->isTweet($this->like->url)) {
-            $tweet = Twitter::getOembed(['url' => $this->like->url]);
+            $codebird = resolve(Codebird::class);
+
+            $tweet = $codebird->statuses_oembed(['url' => $this->like->url]);
+
             $this->like->author_name = $tweet->author_name;
             $this->like->author_url = $tweet->author_url;
             $this->like->content = $tweet->html;

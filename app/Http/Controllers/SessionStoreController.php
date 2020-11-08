@@ -9,9 +9,9 @@ class SessionStoreController extends Controller
     /**
      * Save the selected colour scheme in the session.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return string[]
      */
-    public function saveColour()
+    public function saveColour(): array
     {
         $css = request()->input('css');
 

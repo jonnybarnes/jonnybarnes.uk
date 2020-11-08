@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Like;
-use App\Jobs\ProcessLike;
-use Illuminate\View\View;
 use App\Http\Controllers\Controller;
+use App\Jobs\ProcessLike;
+use App\Models\Like;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 
 class LikesController extends Controller
 {

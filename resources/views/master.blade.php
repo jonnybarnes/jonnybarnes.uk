@@ -5,15 +5,17 @@
         <title>@if (App::environment() == 'local'){!! "[testing] -"!!}@endif @yield('title'){{ config('app.display_name') }}</title>
         <meta name="viewport" content="width=device-width">
         <link rel="stylesheet" href="/assets/frontend/normalize.css">
-        <link rel="stylesheet" id="colourScheme" href="/assets/css/colours/{{ session('css', 'base16-eighties.css') }}">
-        <link rel="stylesheet" href="/assets/css/app.css">
-        <link rel="stylesheet" href="https://use.typekit.net/csl8adl.css">
+        @if (!empty(config('app.font_link')))<link rel="stylesheet" href="{{ config('app.font_link') }}">@endif
+        <link rel="stylesheet" href="/assets/app.css">
+        <link rel="stylesheet" href="/assets/highlight/zenburn.css">
         <link rel="alternate" type="application/rss+xml" title="Blog RSS Feed" href="/blog/feed.rss">
         <link rel="alternate" type="application/atom+xml" title="Blog Atom Feed" href="/blog/feed.atom">
         <link rel="alternate" type="application/json" title="Blog JSON Feed" href="/blog/feed.json">
+        <link rel="alternate" type="application/jf2feed+json" title="Blog JF2 Feed" href="/blog/feed.jf2">
         <link rel="alternate" type="application/rss+xml" title="Notes RSS Feed" href="/notes/feed.rss">
         <link rel="alternate" type="application/atom+xml" title="Notes Atom Feed" href="/notes/feed.atom">
         <link rel="alternate" type="application/json" title="Notes JSON Feed" href="/notes/feed.json">
+        <link rel="alternate" type="application/jf2feed+json" title="Notes JF2 Feed" href="/blog/feed.jf2">
         <link rel="openid.server" href="https://indieauth.com/openid">
         <link rel="openid.delegate" href="{{ config('app.url') }}">
         <link rel="authorization_endpoint" href="https://indieauth.com/auth">
@@ -24,10 +26,10 @@
         <link rel="pgpkey" href="/assets/jonnybarnes-public-key-ecc.asc">
     </head>
     <body>
-        <header id="topheader">
-            <a rel="author" href="/">
-                <h1>{{ config('app.display_name') }}</h1>
-            </a>
+        <header id="top-header">
+            <h1>
+                <a rel="author" href="/">{{ config('app.display_name') }}</a>
+            </h1>
             <nav>
                 <a href="/">All</a>
                 <a href="/notes">Notes</a>
@@ -45,26 +47,33 @@
 @show
         </main>
 
-        <!--scripts go here when needed-->
-        <script src="/assets/js/colours.js" async defer></script>
-        <script src="/assets/js/a11y.js" async defer></script>
-        @section('scripts')
-        @show
-
         <footer>
             <form action="search" method="get">
                 <input type="text" name="terms" title="Search"><button type="submit">Search</button>
             </form>
-            @include('templates.colour-scheme')
-            <p>The code for <code>{{ config('app.longurl') }}</code> can be found on <a href="https://github.com/jonnybarnes/jonnybarnes.uk">GitHub</a>.</p>
-            <p><label for="a11y.css"><code>a11y.css</code></label>: <input type="checkbox" name="a11y.css" id="a11y.css"></p>
             <p>Built with love: <a href="/colophon">Colophon</a></p>
-            <p><a href="https://indieweb.org"><img src="/assets/img/iwc.svg" alt="Indie Web Camp logo"></a></p>
+            <a href="https://indieweb.org"><img src="/assets/img/iwc.svg" alt="Indie Web Camp logo" class="iwc-logo"></a>
         </footer>
-        @if (config('app.piwik') === true)
-        <!-- Piwik -->
-        <script src="https://analytics.jmb.lv/piwik.js" async defer></script>
-        <script src="/assets/js/piwik.js"></script>
+
+        <!--scripts go here when needed-->
+        @section('scripts')
+        @show
+        @if(config('fathom.id'))
+        <!-- Fathom - simple website analytics - https://github.com/usefathom/fathom -->
+        <script>
+            (function(f, a, t, h, o, m){
+                a[h]=a[h]||function(){
+                    (a[h].q=a[h].q||[]).push(arguments)
+                };
+                o=f.createElement('script'),
+                    m=f.getElementsByTagName('script')[0];
+                o.async=1; o.src=t; o.id='fathom-script';
+                m.parentNode.insertBefore(o,m)
+            })(document, window, '//fathom.jonnybarnes.uk/tracker.js', 'fathom');
+            fathom('set', 'siteId', '{{ config('fathom.id') }}');
+            fathom('trackPageview');
+        </script>
+        <!-- / Fathom -->
         @endif
     </body>
 </html>

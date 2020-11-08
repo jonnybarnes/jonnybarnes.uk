@@ -2,11 +2,16 @@
 
 namespace App\Exceptions;
 
-use App;
 use Exception;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Session\TokenMismatchException;
+use GuzzleHttp\Client;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Session\TokenMismatchException;
+use Illuminate\Support\Facades\Route;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Throwable;
 
 /**
  * @codeCoverageIgnore
@@ -19,7 +24,8 @@ class Handler extends ExceptionHandler
      * @var array
      */
     protected $dontReport = [
-        \Symfony\Component\HttpKernel\Exception\HttpException::class,
+        NotFoundHttpException::class,
+        ModelNotFoundException::class,
     ];
 
     /**
@@ -37,53 +43,61 @@ class Handler extends ExceptionHandler
      *
      * This is a great spot to send exceptions to Sentry, Bugsnag, etc.
      *
-     * @param  \Exception  $exception
+     * @param Throwable $throwable
      * @return void
+     * @throws Exception
+     * @throws Throwable
      */
-    public function report(Exception $exception)
+    public function report(Throwable $throwable)
     {
-        $guzzle = new \GuzzleHttp\Client([
-            'headers' => [
-                'Content-Type' => 'application/json',
-            ],
-        ]);
+        parent::report($throwable);
 
-        $guzzle->post(
-            env('SLACK_WEBHOOK_URL'),
-            [
-                'body' => json_encode([
-                    'attachments' => [[
-                        'fallback' => 'There was an exception.',
-                        'pretext' => 'There was an exception.',
-                        'color' => '#d00000',
-                        'author_name' => App::environment(),
-                        'author_link' => config('app.url'),
-                        'fields' => [[
-                            'title' => get_class($exception) ?? 'Unkown Exception',
-                            'value' => $exception->getMessage() ?? '',
+        if ($this->shouldReport($throwable)) {
+            $guzzle = new Client([
+                'headers' => [
+                    'Content-Type' => 'application/json',
+                ],
+            ]);
+
+            $exceptionName = get_class($throwable) ?? 'Unknown Exception';
+            $title = $exceptionName . ': ' . $throwable->getMessage();
+
+            $guzzle->post(
+                config('logging.slack'),
+                [
+                    'body' => json_encode([
+                        'attachments' => [[
+                            'fallback' => 'There was an exception.',
+                            'pretext' => 'There was an exception.',
+                            'color' => '#d00000',
+                            'author_name' => app()->environment(),
+                            'author_link' => config('app.url'),
+                            'fields' => [[
+                                'title' => $title,
+                                'value' => request()->method() . ' ' . request()->fullUrl(),
+                            ]],
+                            'ts' => time(),
                         ]],
-                        'ts' => time(),
-                    ]],
-                ]),
-            ]
-        );
-
-        parent::report($exception);
+                    ]),
+                ]
+            );
+        }
     }
 
     /**
      * Render an exception into an HTTP response.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Exception  $exception
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param Throwable $throwable
+     * @return Response
+     * @throws Throwable
      */
-    public function render($request, Exception $exception)
+    public function render($request, Throwable $throwable)
     {
-        if ($exception instanceof TokenMismatchException) {
+        if ($throwable instanceof TokenMismatchException) {
             Route::getRoutes()->match($request);
         }
 
-        return parent::render($request, $exception);
+        return parent::render($request, $throwable);
     }
 }

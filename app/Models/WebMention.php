@@ -4,13 +4,54 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use Cache;
-use Twitter;
 use App\Traits\FilterHtml;
-use Illuminate\Filesystem\Filesystem;
+use Codebird\Codebird;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Cache;
 use Jonnybarnes\WebmentionsParser\Authorship;
+use Jonnybarnes\WebmentionsParser\Exceptions\AuthorshipParserException;
 
+/**
+ * App\Models\WebMention.
+ *
+ * @property int $id
+ * @property string $source
+ * @property string $target
+ * @property int|null $commentable_id
+ * @property string|null $commentable_type
+ * @property string|null $type
+ * @property string|null $content
+ * @property int $verified
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property string|null $deleted_at
+ * @property mixed|null $mf2
+ * @property-read WebMention|null $commentable
+ * @property-read array $author
+ * @property-read string|null $published
+ * @property-read string|null $reply
+ * @method static Builder|WebMention newModelQuery()
+ * @method static Builder|WebMention newQuery()
+ * @method static Builder|WebMention query()
+ * @method static Builder|WebMention whereCommentableId($value)
+ * @method static Builder|WebMention whereCommentableType($value)
+ * @method static Builder|WebMention whereContent($value)
+ * @method static Builder|WebMention whereCreatedAt($value)
+ * @method static Builder|WebMention whereDeletedAt($value)
+ * @method static Builder|WebMention whereId($value)
+ * @method static Builder|WebMention whereMf2($value)
+ * @method static Builder|WebMention whereSource($value)
+ * @method static Builder|WebMention whereTarget($value)
+ * @method static Builder|WebMention whereType($value)
+ * @method static Builder|WebMention whereUpdatedAt($value)
+ * @method static Builder|WebMention whereVerified($value)
+ * @mixin Eloquent
+ */
 class WebMention extends Model
 {
     use FilterHtml;
@@ -32,7 +73,7 @@ class WebMention extends Model
     /**
      * Define the relationship.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphTo
+     * @return MorphTo
      */
     public function commentable()
     {
@@ -43,12 +84,19 @@ class WebMention extends Model
      * Get the author of the webmention.
      *
      * @return array
+     * @throws AuthorshipParserException
      */
     public function getAuthorAttribute(): array
     {
         $authorship = new Authorship();
         $hCard = $authorship->findAuthor(json_decode($this->mf2, true));
-        if (array_key_exists('properties', $hCard) &&
+
+        if ($hCard === false) {
+            return [];
+        }
+
+        if (
+            array_key_exists('properties', $hCard) &&
             array_key_exists('photo', $hCard['properties'])
         ) {
             $hCard['properties']['photo'][0] = $this->createPhotoLink($hCard['properties']['photo'][0]);
@@ -102,7 +150,7 @@ class WebMention extends Model
     /**
      * Create the photo link.
      *
-     * @param  string
+     * @param string $url
      * @return string
      */
     public function createPhotoLink(string $url): string
@@ -118,7 +166,8 @@ class WebMention extends Model
                 return Cache::get($url);
             }
             $username = ltrim(parse_url($url, PHP_URL_PATH), '/');
-            $info = Twitter::getUsers(['screen_name' => $username]);
+            $codebird = resolve(Codebird::class);
+            $info = $codebird->users_show(['screen_name' => $username]);
             $profile_image = $info->profile_image_url_https;
             Cache::put($url, $profile_image, 10080); //1 week
 

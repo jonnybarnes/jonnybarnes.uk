@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Article;
-use Illuminate\View\View;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Article;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class ArticlesController extends Controller
 {

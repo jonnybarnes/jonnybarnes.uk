@@ -57,4 +57,11 @@ class NotesControllerTest extends TestCase
         $response = $this->get('/notes/tagged/beer');
         $response->assertViewHas('tag', 'beer');
     }
+
+    /** @test */
+    public function unknownNoteGives404()
+    {
+        $response = $this->get('/notes/112233');
+        $response->assertNotFound();
+    }
 }

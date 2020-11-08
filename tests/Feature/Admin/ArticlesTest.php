@@ -13,7 +13,7 @@ class ArticlesTest extends TestCase
 
     public function test_index_page()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->make();
 
         $response = $this->actingAs($user)
                          ->get('/admin/blog');
@@ -22,7 +22,7 @@ class ArticlesTest extends TestCase
 
     public function test_create_page()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->make();
 
         $response = $this->actingAs($user)
                          ->get('/admin/blog/create');
@@ -31,7 +31,7 @@ class ArticlesTest extends TestCase
 
     public function test_create_new_article()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->make();
 
         $this->actingAs($user)
              ->post('/admin/blog', [
@@ -43,7 +43,7 @@ class ArticlesTest extends TestCase
 
     public function test_create_new_article_with_upload()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->make();
         $faker = \Faker\Factory::create();
         $text = $faker->text;
         if ($fh = fopen(sys_get_temp_dir() . '/article.md', 'w')) {
@@ -51,7 +51,7 @@ class ArticlesTest extends TestCase
             fclose($fh);
         }
         $path = sys_get_temp_dir() . '/article.md';
-        $file = new UploadedFile($path, 'article.md', 'text/plain', filesize($path), null, true);
+        $file = new UploadedFile($path, 'article.md', 'text/plain', null, true);
 
         $this->actingAs($user)
              ->post('/admin/blog', [
@@ -67,7 +67,7 @@ class ArticlesTest extends TestCase
 
     public function test_see_edit_form()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->make();
 
         $response = $this->actingAs($user)
                          ->get('/admin/blog/1/edit');
@@ -76,7 +76,7 @@ class ArticlesTest extends TestCase
 
     public function test_edit_article()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->make();
 
         $this->actingAs($user)
              ->post('/admin/blog/1', [
@@ -92,7 +92,7 @@ class ArticlesTest extends TestCase
 
     public function test_delete_article()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->make();
 
         $this->actingAs($user)
              ->post('/admin/blog/1', [
