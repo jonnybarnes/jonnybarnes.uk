@@ -1,6 +1,8 @@
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const StyleLintPlugin = require('stylelint-webpack-plugin');
+const CompressionPlugin = require('compression-webpack-plugin');
+const zlib = require('zlib');
 
 module.exports = {
     mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
@@ -14,7 +16,24 @@ module.exports = {
         rules: [{
             test: /\.css$/,
             exclude: /node_modules/,
-            use: [MiniCssExtractPlugin.loader, 'css-loader']
+            use: [
+                { loader: MiniCssExtractPlugin.loader },
+                {
+                    loader: 'css-loader',
+                    options: {
+                        sourceMap: process.env.NODE_ENV !== 'production'
+                    }
+                },
+                {
+                    loader: 'postcss-loader',
+                    options: {
+                        postcssOptions: {
+                            config: path.resolve(__dirname, 'postcss.config.js'),
+                        },
+                        sourceMap: process.env.NODE_ENV !== 'production'
+                    }
+                }
+            ]
         }]
     },
     plugins: [
@@ -26,6 +45,17 @@ module.exports = {
             configFile: path.resolve(__dirname + '/.stylelintrc'),
             context: path.resolve(__dirname + '/resources/css'),
             files: '**/*.css',
+        }),
+        new CompressionPlugin({
+            filename: "[path][base].br",
+            algorithm: "brotliCompress",
+            test: /\.js$|\.css$/,
+            exclude: /.map$/,
+            compressionOptions: {
+                params: {
+                    [zlib.constants.BROTLI_PARAM_QUALITY]: 11,
+                },
+            },
         }),
     ]
 };
