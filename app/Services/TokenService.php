@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use App\Exceptions\InvalidTokenException;
 use App\Jobs\AddClientToDatabase;
 use DateTimeImmutable;
 use Lcobucci\JWT\{Configuration, Token};

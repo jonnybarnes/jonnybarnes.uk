@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Exceptions\InvalidTokenException;
 use App\Http\Responses\MicropubResponses;
 use App\Models\Place;
 use App\Services\Micropub\{HCardService, HEntryService, UpdateService};
@@ -39,7 +38,6 @@ class MicropubController extends Controller
      * then passes over the info to the relevant Service class.
      *
      * @return JsonResponse
-     * @throws InvalidTokenException
      */
     public function post(): JsonResponse
     {

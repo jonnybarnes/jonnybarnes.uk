@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Exceptions\InvalidTokenException;
 use App\Http\Responses\MicropubResponses;
 use App\Jobs\ProcessMedia;
 use App\Models\Media;
