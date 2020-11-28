@@ -28,14 +28,11 @@ jobs:
           key: ${{ runner.os }}-${{ hashFiles('**/package.json') }}
       - name: Install npm dependencies
         run: npm install
-      - name: Install ImageMagick
-        run: sudo apt install imagemagick
       - name: Setup PHP with pecl extension
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '7.4'
-          tools: pecl, phpcs
-          extensions: imagick
+          php-version: '8.0'
+          tools: phpcs
       - name: Copy .env
         run: php -r "file_exists('.env') || copy('.env.github', '.env');"
       - name: Install dependencies
