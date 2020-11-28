@@ -11,6 +11,10 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use Laravel\Dusk\DuskServiceProvider;
+use Lcobucci\JWT\Configuration;
+use Lcobucci\JWT\Signer\Hmac\Sha256;
+use Lcobucci\JWT\Signer\Key\InMemory;
+use Lcobucci\JWT\Validation\Constraint\SignedWith;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -72,6 +76,17 @@ class AppServiceProvider extends ServiceProvider
                     'pageName' => $pageName,
                 ]
             );
+        });
+
+        // Configure JWT builder
+        $this->app->bind('Lcobucci\JWT\Configuration', function () {
+            $key = InMemory::plainText('testing');
+
+            $config = Configuration::forSymmetricSigner(new Sha256(), $key);
+
+            $config->setValidationConstraints(new SignedWith(new Sha256(), $key));
+
+            return $config;
         });
     }
 

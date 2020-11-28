@@ -10,6 +10,8 @@ use App\Models\Place;
 use App\Services\Micropub\{HCardService, HEntryService, UpdateService};
 use App\Services\TokenService;
 use Illuminate\Http\JsonResponse;
+use Lcobucci\JWT\Token\InvalidTokenStructure;
+use Lcobucci\JWT\Validation\RequiredConstraintsViolated;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 
@@ -43,13 +45,13 @@ class MicropubController extends Controller
     {
         try {
             $tokenData = $this->tokenService->validateToken(request()->input('access_token'));
-        } catch (InvalidTokenException $e) {
+        } catch (RequiredConstraintsViolated | InvalidTokenStructure) {
             $micropubResponses = new MicropubResponses();
 
             return $micropubResponses->invalidTokenResponse();
         }
 
-        if ($tokenData->hasClaim('scope') === false) {
+        if ($tokenData->claims()->has('scope') === false) {
             $micropubResponses = new MicropubResponses();
 
             return $micropubResponses->tokenHasNoScopeResponse();
@@ -58,7 +60,7 @@ class MicropubController extends Controller
         $this->logMicropubRequest(request()->all());
 
         if ((request()->input('h') == 'entry') || (request()->input('type.0') == 'h-entry')) {
-            if (stristr($tokenData->getClaim('scope'), 'create') === false) {
+            if (stristr($tokenData->claims()->get('scope'), 'create') === false) {
                 $micropubResponses = new MicropubResponses();
 
                 return $micropubResponses->insufficientScopeResponse();
@@ -72,7 +74,7 @@ class MicropubController extends Controller
         }
 
         if (request()->input('h') == 'card' || request()->input('type.0') == 'h-card') {
-            if (stristr($tokenData->getClaim('scope'), 'create') === false) {
+            if (stristr($tokenData->claims()->get('scope'), 'create') === false) {
                 $micropubResponses = new MicropubResponses();
 
                 return $micropubResponses->insufficientScopeResponse();
@@ -86,7 +88,7 @@ class MicropubController extends Controller
         }
 
         if (request()->input('action') == 'update') {
-            if (stristr($tokenData->getClaim('scope'), 'update') === false) {
+            if (stristr($tokenData->claims()->get('scope'), 'update') === false) {
                 $micropubResponses = new MicropubResponses();
 
                 return $micropubResponses->insufficientScopeResponse();
@@ -115,7 +117,7 @@ class MicropubController extends Controller
     {
         try {
             $tokenData = $this->tokenService->validateToken(request()->input('access_token'));
-        } catch (InvalidTokenException $e) {
+        } catch (RequiredConstraintsViolated | InvalidTokenStructure) {
             $micropubResponses = new MicropubResponses();
 
             return $micropubResponses->invalidTokenResponse();
@@ -156,9 +158,9 @@ class MicropubController extends Controller
         return response()->json([
             'response' => 'token',
             'token' => [
-                'me' => $tokenData->getClaim('me'),
-                'scope' => $tokenData->getClaim('scope'),
-                'client_id' => $tokenData->getClaim('client_id'),
+                'me' => $tokenData->claims()->get('me'),
+                'scope' => $tokenData->claims()->get('scope'),
+                'client_id' => $tokenData->claims()->get('client_id'),
             ],
         ]);
     }
@@ -167,13 +169,13 @@ class MicropubController extends Controller
      * Determine the client id from the access token sent with the request.
      *
      * @return string
-     * @throws InvalidTokenException
+     * @throws RequiredConstraintsViolated
      */
     private function getClientId(): string
     {
         return resolve(TokenService::class)
             ->validateToken(request()->input('access_token'))
-            ->getClaim('client_id');
+            ->claims()->get('client_id');
     }
 
     /**

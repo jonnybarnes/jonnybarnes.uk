@@ -5,19 +5,16 @@ namespace Tests\Feature;
 use Carbon\Carbon;
 use Tests\TestCase;
 use Tests\TestToken;
-use App\Jobs\ProcessMedia;
 use App\Jobs\SendWebMentions;
 use App\Models\{Media, Place};
-use Illuminate\Http\UploadedFile;
 use App\Jobs\SyndicateNoteToTwitter;
 use Illuminate\Support\Facades\Queue;
-use Illuminate\Support\Facades\Storage;
-use MStaack\LaravelPostgis\Geometries\Point;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class MicropubControllerTest extends TestCase
 {
-    use DatabaseTransactions, TestToken;
+    use DatabaseTransactions;
+    use TestToken;
 
     /**
      * Test a GET request for the micropub endpoint without a token gives a
