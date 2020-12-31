@@ -9,7 +9,7 @@
     ],
     "license": "CC0-1.0",
     "require": {
-        "php": "^8.0",
+        "php": "^7.4|^8.0",
         "ext-intl": "*",
         "ext-json": "*",
         "ext-dom": "*",
@@ -17,7 +17,7 @@
         "fideloper/proxy": "~4.0",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
-        "indieauth/client": "~0.1",
+        "indieauth/client": "^1.1",
         "intervention/image": "^2.4",
         "jonnybarnes/indieweb": "~0.2",
         "jonnybarnes/webmentions-parser": "~0.5",
@@ -27,11 +27,11 @@
         "laravel/scout": "^8.0",
         "laravel/telescope": "^4.0",
         "laravel/tinker": "^2.0",
-        "lcobucci/jwt": "^3.1",
+        "lcobucci/jwt": "^4.0",
         "league/commonmark": "^1.0",
         "league/flysystem-aws-s3-v3": "^1.0",
         "mf2/mf2": "~0.3",
-        "pmatseykanets/laravel-scout-postgres": "^7.0",
+        "pmatseykanets/laravel-scout-postgres": "dev-php8",
         "predis/predis": "~1.0",
         "sensiolabs/security-checker": "^6.0",
         "spatie/browsershot": "~3.0",
@@ -43,10 +43,11 @@
         "barryvdh/laravel-ide-helper": "^2.6",
         "beyondcode/laravel-dump-server": "^1.0",
         "facade/ignition": "^2.3.6",
-        "fzaninotto/faker": "^1.9.1",
+        "fakerphp/faker": "^1.9.2",
         "laravel/dusk": "^6.0",
         "mockery/mockery": "^1.0",
         "nunomaduro/collision": "^5.0",
+        "phpunit/php-code-coverage": "^9.2",
         "phpunit/phpunit": "^9.0",
         "vimeo/psalm": "^4.0"
     },
@@ -91,5 +92,11 @@
         "test": [
             "vendor/bin/phpunit --stop-on-failure"
         ]
-    }
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/jonnybarnes/laravel-scout-postgres"
+        }
+    ]
 }

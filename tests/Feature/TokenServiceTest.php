@@ -28,9 +28,9 @@ class TokenServiceTest extends TestCase
         $token = $tokenService->getNewToken($data);
         $valid = $tokenService->validateToken($token);
         $validData = [
-            'me' => $valid->getClaim('me'),
-            'client_id' => $valid->getClaim('client_id'),
-            'scope' => $valid->getClaim('scope')
+            'me' => $valid->claims()->get('me'),
+            'client_id' => $valid->claims()->get('client_id'),
+            'scope' => $valid->claims()->get('scope')
         ];
         $this->assertSame($data, $validData);
     }

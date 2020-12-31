@@ -37,7 +37,7 @@ class MicropubMediaController extends Controller
     {
         try {
             $tokenData = $this->tokenService->validateToken(request()->input('access_token'));
-        } catch (RequiredConstraintsViolated | InvalidTokenStructure) {
+        } catch (RequiredConstraintsViolated | InvalidTokenStructure $exception) {
             $micropubResponses = new MicropubResponses();
 
             return $micropubResponses->invalidTokenResponse();
@@ -104,7 +104,7 @@ class MicropubMediaController extends Controller
     {
         try {
             $tokenData = $this->tokenService->validateToken(request()->input('access_token'));
-        } catch (RequiredConstraintsViolated | InvalidTokenStructure) {
+        } catch (RequiredConstraintsViolated | InvalidTokenStructure $exception) {
             $micropubResponses = new MicropubResponses();
 
             return $micropubResponses->invalidTokenResponse();
