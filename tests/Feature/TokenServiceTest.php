@@ -2,11 +2,12 @@
 
 namespace Tests\Feature;
 
+use DateTimeImmutable;
+use Lcobucci\JWT\Configuration;
+use Lcobucci\JWT\Signer\Key\InMemory;
+use Lcobucci\JWT\Validation\RequiredConstraintsViolated;
 use Tests\TestCase;
-use Lcobucci\JWT\Builder;
 use App\Services\TokenService;
-use Lcobucci\JWT\Signer\Hmac\Sha256;
-use App\Exceptions\InvalidTokenException;
 
 class TokenServiceTest extends TestCase
 {
@@ -27,33 +28,35 @@ class TokenServiceTest extends TestCase
         $token = $tokenService->getNewToken($data);
         $valid = $tokenService->validateToken($token);
         $validData = [
-            'me' => $valid->getClaim('me'),
-            'client_id' => $valid->getClaim('client_id'),
-            'scope' => $valid->getClaim('scope')
+            'me' => $valid->claims()->get('me'),
+            'client_id' => $valid->claims()->get('client_id'),
+            'scope' => $valid->claims()->get('scope')
         ];
         $this->assertSame($data, $validData);
     }
 
     public function test_token_with_different_signing_key_throws_exception()
     {
-        $this->expectException(InvalidTokenException::class);
-        $this->expectExceptionMessage('Token failed validation');
+        $this->expectException(RequiredConstraintsViolated::class);
 
         $data = [
             'me' => 'https://example.org',
             'client_id' => 'https://quill.p3k.io',
             'scope' => 'post'
         ];
-        $signer = new Sha256();
-        $token = (new Builder())->set('me', $data['me'])
-            ->set('client_id', $data['client_id'])
-            ->set('scope', $data['scope'])
-            ->set('date_issued', time())
-            ->set('nonce', bin2hex(random_bytes(8)))
-            ->sign($signer, 'r4ndomk3y')
-            ->getToken();
+
+        $config = resolve(Configuration::class);
+
+        $token = $config->builder()
+            ->issuedAt(new DateTimeImmutable())
+            ->withClaim('client_id', $data['client_id'])
+            ->withClaim('me', $data['me'])
+            ->withClaim('scope', $data['scope'])
+            ->withClaim('nonce', bin2hex(random_bytes(8)))
+            ->getToken($config->signer(), InMemory::plainText('r4andomk3y'))
+            ->toString();
 
         $service = new TokenService();
-        $token = $service->validateToken($token);
+        $service->validateToken($token);
     }
 }

@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use App\Exceptions\InvalidTokenException;
 use App\Jobs\AddClientToDatabase;
-use Lcobucci\JWT\Signer\Hmac\Sha256;
-use Lcobucci\JWT\{Builder, Parser, Token};
+use DateTimeImmutable;
+use Lcobucci\JWT\{Configuration, Token};
 
 class TokenService
 {
@@ -19,17 +18,19 @@ class TokenService
      */
     public function getNewToken(array $data): string
     {
-        $signer = new Sha256();
-        $token = (new Builder())->set('me', $data['me'])
-            ->set('client_id', $data['client_id'])
-            ->set('scope', $data['scope'])
-            ->set('date_issued', time())
-            ->set('nonce', bin2hex(random_bytes(8)))
-            ->sign($signer, config('app.key'))
-            ->getToken();
+        $config = resolve(Configuration::class);
+
+        $token = $config->builder()
+            ->issuedAt(new DateTimeImmutable())
+            ->withClaim('client_id', $data['client_id'])
+            ->withClaim('me', $data['me'])
+            ->withClaim('scope', $data['scope'])
+            ->withClaim('nonce', bin2hex(random_bytes(8)))
+            ->getToken($config->signer(), $config->signingKey());
+
         dispatch(new AddClientToDatabase($data['client_id']));
 
-        return (string) $token;
+        return $token->toString();
     }
 
     /**
@@ -40,15 +41,13 @@ class TokenService
      */
     public function validateToken(string $bearerToken): Token
     {
-        $signer = new Sha256();
-        try {
-            $token = (new Parser())->parse((string) $bearerToken);
-        } catch (\InvalidArgumentException $e) {
-            throw new InvalidTokenException('Token could not be parsed');
-        }
-        if (! $token->verify($signer, config('app.key'))) {
-            throw new InvalidTokenException('Token failed validation');
-        }
+        $config = resolve('Lcobucci\JWT\Configuration');
+
+        $token = $config->parser()->parse($bearerToken);
+
+        $constraints = $config->validationConstraints();
+
+        $config->validator()->assert($token, ...$constraints);
 
         return $token;
     }

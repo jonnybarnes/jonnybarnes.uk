@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Exceptions\InvalidTokenException;
 use App\Http\Responses\MicropubResponses;
 use App\Jobs\ProcessMedia;
 use App\Models\Media;
@@ -21,6 +20,8 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Intervention\Image\Exception\NotReadableException;
 use Intervention\Image\ImageManager;
+use Lcobucci\JWT\Token\InvalidTokenStructure;
+use Lcobucci\JWT\Validation\RequiredConstraintsViolated;
 use Ramsey\Uuid\Uuid;
 
 class MicropubMediaController extends Controller
@@ -36,19 +37,19 @@ class MicropubMediaController extends Controller
     {
         try {
             $tokenData = $this->tokenService->validateToken(request()->input('access_token'));
-        } catch (InvalidTokenException $e) {
+        } catch (RequiredConstraintsViolated | InvalidTokenStructure $exception) {
             $micropubResponses = new MicropubResponses();
 
             return $micropubResponses->invalidTokenResponse();
         }
 
-        if ($tokenData->hasClaim('scope') === false) {
+        if ($tokenData->claims()->has('scope') === false) {
             $micropubResponses = new MicropubResponses();
 
             return $micropubResponses->tokenHasNoScopeResponse();
         }
 
-        if (Str::contains($tokenData->getClaim('scope'), 'create') === false) {
+        if (Str::contains($tokenData->claims()->get('scope'), 'create') === false) {
             $micropubResponses = new MicropubResponses();
 
             return $micropubResponses->insufficientScopeResponse();
@@ -103,19 +104,19 @@ class MicropubMediaController extends Controller
     {
         try {
             $tokenData = $this->tokenService->validateToken(request()->input('access_token'));
-        } catch (InvalidTokenException $e) {
+        } catch (RequiredConstraintsViolated | InvalidTokenStructure $exception) {
             $micropubResponses = new MicropubResponses();
 
             return $micropubResponses->invalidTokenResponse();
         }
 
-        if ($tokenData->hasClaim('scope') === false) {
+        if ($tokenData->claims()->has('scope') === false) {
             $micropubResponses = new MicropubResponses();
 
             return $micropubResponses->tokenHasNoScopeResponse();
         }
 
-        if (Str::contains($tokenData->getClaim('scope'), 'create') === false) {
+        if (Str::contains($tokenData->claims()->get('scope'), 'create') === false) {
             $micropubResponses = new MicropubResponses();
 
             return $micropubResponses->insufficientScopeResponse();
