@@ -2,50 +2,47 @@
 
 namespace Tests;
 
-use Lcobucci\JWT\Builder;
-use Lcobucci\JWT\Signer\Hmac\Sha256;
+use DateTimeImmutable;
+use Lcobucci\JWT\Configuration;
 
 trait TestToken
 {
     public function getToken()
     {
-        $signer = new Sha256();
-        $token = (new Builder())
-            ->set('client_id', 'https://quill.p3k.io')
-            ->set('me', 'https://jonnybarnes.localhost')
-            ->set('scope', 'create update')
-            ->set('issued_at', time())
-            ->sign($signer, env('APP_KEY'))
-            ->getToken();
+        $config = $this->app->make(Configuration::class);
 
-        return $token;
+        return $config->builder()
+            ->issuedAt(new DateTimeImmutable())
+            ->withClaim('client_id', 'https://quill.p3k.io')
+            ->withClaim('me', 'https://jonnybarnes.localhost')
+            ->withClaim('scope', 'create update')
+            ->getToken($config->signer(), $config->signingKey())
+            ->toString();
     }
 
     public function getTokenWithIncorrectScope()
     {
-        $signer = new Sha256();
-        $token = (new Builder())
-            ->set('client_id', 'https://quill.p3k.io')
-            ->set('me', 'https://jonnybarnes.localhost')
-            ->set('scope', 'view') //error here
-            ->set('issued_at', time())
-            ->sign($signer, env('APP_KEY'))
-            ->getToken();
+        $config = $this->app->make(Configuration::class);
 
-        return $token;
+        return $config->builder()
+            ->issuedAt(new DateTimeImmutable())
+            ->withClaim('client_id', 'https://quill.p3k.io')
+            ->withClaim('me', 'https://jonnybarnes.localhost')
+            ->withClaim('scope', 'view')
+            ->getToken($config->signer(), $config->signingKey())
+            ->toString();
     }
 
     public function getTokenWithNoScope()
     {
-        $signer = new Sha256();
-        $token = (new Builder())
-            ->set('client_id', 'https://quill.p3k.io')
-            ->set('me', 'https://jonnybarnes.localhost')
-            ->set('issued_at', time())
-            ->sign($signer, env('APP_KEY'))
-            ->getToken();
+        $config = $this->app->make(Configuration::class);
 
-        return $token;
+        return $config->builder()
+            ->issuedAt(new DateTimeImmutable())
+            ->withClaim('client_id', 'https://quill.p3k.io')
+            ->withClaim('me', 'https://jonnybarnes.localhost')
+            ->getToken($config->signer(), $config->signingKey())
+            ->toString();
     }
 
     public function getInvalidToken()

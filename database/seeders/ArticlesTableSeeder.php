@@ -16,7 +16,7 @@ class ArticlesTableSeeder extends Seeder
      */
     public function run()
     {
-        $now = Carbon::now()->subMonth();
+        $now = Carbon::now()->subMonth()->subDays(5);
         $articleFirst = Article::create([
             'title' => 'My New Blog',
             'main' => 'This is *my* new blog. It uses `Markdown`.',
