@@ -6,16 +6,11 @@
 /*!*****************************!*\
   !*** ./resources/js/app.js ***!
   \*****************************/
-/*! namespace exports */
-/*! exports [not provided] [no usage info] */
-/*! runtime requirements: __webpack_require__, __webpack_require__.r, __webpack_exports__, __webpack_require__.* */
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _css_app_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../css/app.css */ "./resources/css/app.css");
-;
-console.warn('this isn’t allowed');
-var a;
+
 
 /***/ }),
 
@@ -23,9 +18,6 @@ var a;
 /*!*******************************!*\
   !*** ./resources/css/app.css ***!
   \*******************************/
-/*! namespace exports */
-/*! exports [not provided] [no usage info] */
-/*! runtime requirements: __webpack_require__.r, __webpack_exports__, __webpack_require__.* */
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 __webpack_require__.r(__webpack_exports__);

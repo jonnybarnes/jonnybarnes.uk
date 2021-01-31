@@ -11,7 +11,7 @@ jobs:
 
     services:
       postgres:
-        image: postgres:12
+        image: postgres:13.1
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
@@ -49,5 +49,3 @@ jobs:
         run: vendor/bin/phpunit
       - name: Run phpcs
         run: phpcs
-      - name: Check for security vulnerabilities
-        run: php vendor/bin/security-checker security:check

@@ -9,6 +9,7 @@ use App\Models\Place;
 use App\Services\Micropub\{HCardService, HEntryService, UpdateService};
 use App\Services\TokenService;
 use Illuminate\Http\JsonResponse;
+use Lcobucci\JWT\Encoding\CannotDecodeContent;
 use Lcobucci\JWT\Token\InvalidTokenStructure;
 use Lcobucci\JWT\Validation\RequiredConstraintsViolated;
 use Monolog\Handler\StreamHandler;
@@ -43,7 +44,7 @@ class MicropubController extends Controller
     {
         try {
             $tokenData = $this->tokenService->validateToken(request()->input('access_token'));
-        } catch (RequiredConstraintsViolated | InvalidTokenStructure $exception) {
+        } catch (RequiredConstraintsViolated | InvalidTokenStructure | CannotDecodeContent $exception) {
             $micropubResponses = new MicropubResponses();
 
             return $micropubResponses->invalidTokenResponse();
