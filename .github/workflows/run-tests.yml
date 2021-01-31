@@ -49,5 +49,3 @@ jobs:
         run: vendor/bin/phpunit
       - name: Run phpcs
         run: phpcs
-      - name: Check for security vulnerabilities
-        run: php vendor/bin/security-checker security:check

@@ -33,7 +33,6 @@
         "mf2/mf2": "~0.3",
         "pmatseykanets/laravel-scout-postgres": "dev-php8",
         "predis/predis": "~1.0",
-        "sensiolabs/security-checker": "^6.0",
         "spatie/browsershot": "~3.0",
         "spatie/commonmark-highlighter": "^2.0",
         "tgalopin/html-sanitizer": "^1.1"
