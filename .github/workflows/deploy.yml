@@ -1,0 +1,113 @@
+name: Deploy
+
+on: release
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    env:
+      repository: 'jonnybarnes/jonnybarnes.uk'
+      host: 'jonnybarnes.uk'
+      username: 'jonny'
+      baseDir: '/var/websites/jonnybarnes.uk-test'
+      newReleaseName: '${{ github.run_id }}'
+
+    steps:
+      - name: 🌍 Set Environment Variables
+        run: |
+          echo "releasesDir=${{ env.baseDir }}/releases" >> $GITHUB_ENV
+          echo "persistentDir=${{ env.baseDir }}/persistent" >> $GITHUB_ENV
+          echo "currentDir=${{ env.baseDir }}/current" >> $GITHUB_ENV
+          echo "newReleaseDir=${{ env.releasesDir }}/${{ env.newReleaseName }}" >> $GITHUB_ENV
+      - name: 🔄 Clone Repository
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ env.host }}
+          username: ${{ env.username }}
+          key: ${{ secrets.KEY }}
+          script: |
+            [ -d ${{ env.releasesDir }} ] || mkdir ${{ env.releasesDir }}
+            [ -d ${{ env.persistentDir }}/storage ] || mkdir ${{ env.persistentDir }}/storage
+
+            cd ${{ env.releasesDir }}
+
+            # Create new release directory
+            mkdir ${{ env.newReleaseDir }}
+
+            # Clone app
+            git clone --depth 1 git@github.com:${{ env.repository }} ${{ env.newReleaseName }}
+
+            # Mark release
+            cd ${{ env.newReleaseDir }}
+            echo "${{ env.newReleaseName }}" > public/release-name.txt
+
+      - name: 🎵 Run Composer
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ env.host }}
+          username: ${{ env.username }}
+          key: ${{ secrets.KEY }}
+          script: |
+            cd ${{ env.newReleaseDir }}
+            composer install --prefer-dist --no-scripts --no-dev --no-progress --optimize-autoloader --quiet --no-interaction
+
+      - name: 🔗 Update Symlinks
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ env.host }}
+          username: ${{ env.username }}
+          key: ${{ secrets.KEY }}
+          script: |
+            # Import the environment config
+            cd ${{ env.newReleaseDir }};
+            ln -nfs ${{ env.baseDir }}/.env .env;
+
+      - name: ✨ Optimize Installation
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ env.host }}
+          username: ${{ env.username }}
+          key: ${{ secrets.KEY }}
+          script: |
+            cd ${{ env.newReleaseDir }};
+            php artisan clear-compiled;
+
+      - name: 🙈 Migrate database
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ env.host }}
+          username: ${{ env.username }}
+          key: ${{ secrets.KEY }}
+          script: |
+            cd ${{ env.newReleaseDir }}
+            php artisan migrate --force
+
+      - name: 🙏 Bless release
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ env.host }}
+          username: ${{ env.username }}
+          key: ${{ secrets.KEY }}
+          script: |
+            ln -nfs ${{ env.newReleaseDir }} ${{ env.currentDir }};
+            cd ${{ env.newReleaseDir }}
+            php artisan horizon:terminate
+            php artisan config:cache
+            php artisan event:cache
+            php artisan route:cache
+            php artisan view:cache
+
+            sudo systemctl restart php-fpm.service
+            sudo supervisorctl restart all
+
+      - name: 🚾 Clean up old releases
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ env.host }}
+          username: ${{ env.username }}
+          key: ${{ secrets.KEY }}
+          script: |
+            cd ${{ env.releasesDir }}
+            ls -dt ${{ env.releasesDir }}/* | tail -n +4 | xargs -d "\n" sudo chown -R jonny .;
+            ls -dt ${{ env.releasesDir }}/* | tail -n +4 | xargs -d "\n" rm -rf;
