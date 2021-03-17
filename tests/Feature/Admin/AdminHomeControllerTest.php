@@ -1,16 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature\Admin;
 
-use Tests\TestCase;
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Tests\TestCase;
 
 class AdminHomeControllerTest extends TestCase
 {
     use DatabaseTransactions;
 
-    public function test_admin_homepage()
+    /** @test */
+    public function adminHomepageLoads(): void
     {
         $user = User::factory()->make();
 

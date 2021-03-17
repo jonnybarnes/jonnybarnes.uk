@@ -1,19 +1,22 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature\Admin;
 
-use App\Models\User;
-use Tests\TestCase;
-use App\Models\Like;
 use App\Jobs\ProcessLike;
+use App\Models\Like;
+use App\Models\User;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Tests\TestCase;
 
 class LikesTest extends TestCase
 {
     use DatabaseTransactions;
 
-    public function test_index_page()
+    /** @test */
+    public function likesPageLoads(): void
     {
         $user = User::factory()->make();
 
@@ -22,7 +25,8 @@ class LikesTest extends TestCase
         $response->assertSeeText('Likes');
     }
 
-    public function test_create_page()
+    /** @test */
+    public function likeCreateFormLoads(): void
     {
         $user = User::factory()->make();
 
@@ -31,7 +35,8 @@ class LikesTest extends TestCase
         $response->assertSeeText('New Like');
     }
 
-    public function test_create_new_like()
+    /** @test */
+    public function adminCanCreateLike(): void
     {
         Queue::fake();
         $user = User::factory()->make();
@@ -46,7 +51,8 @@ class LikesTest extends TestCase
         Queue::assertPushed(ProcessLike::class);
     }
 
-    public function test_see_edit_form()
+    /** @test */
+    public function likeEditFormLoads(): void
     {
         $user = User::factory()->make();
 
@@ -55,7 +61,8 @@ class LikesTest extends TestCase
         $response->assertSee('Edit Like');
     }
 
-    public function test_edit_like()
+    /** @test */
+    public function adminCanEditLike(): void
     {
         Queue::fake();
         $user = User::factory()->make();
@@ -71,7 +78,8 @@ class LikesTest extends TestCase
         Queue::assertPushed(ProcessLike::class);
     }
 
-    public function test_delete_like()
+    /** @test */
+    public function adminCanDeleteLike(): void
     {
         $like = Like::find(1);
         $url = $like->url;

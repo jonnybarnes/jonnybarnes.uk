@@ -1,24 +1,23 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Unit\Jobs;
 
-use Tests\TestCase;
-use Ramsey\Uuid\Uuid;
-use GuzzleHttp\Client;
-use App\Models\Bookmark;
-use GuzzleHttp\HandlerStack;
-use App\Jobs\ProcessBookmark;
-use GuzzleHttp\Psr7\Response;
-use App\Services\BookmarkService;
-use GuzzleHttp\Handler\MockHandler;
 use App\Exceptions\InternetArchiveException;
+use App\Jobs\ProcessBookmark;
+use App\Models\Bookmark;
+use App\Services\BookmarkService;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Ramsey\Uuid\Uuid;
+use Tests\TestCase;
 
 class ProcessBookmarkJobTest extends TestCase
 {
     use DatabaseTransactions;
 
-    public function test_screenshot_and_archive_link_are_saved()
+    /** @test */
+    public function screenshotAndArchiveLinkAreSavedByJob(): void
     {
         $bookmark = Bookmark::find(1);
         $uuid = Uuid::uuid4();
@@ -38,7 +37,8 @@ class ProcessBookmarkJobTest extends TestCase
         ]);
     }
 
-    public function test_exception_casesu_null_value_for_archive_link()
+    /** @test */
+    public function archiveLinkSavedAsNullWhenExceptionThrown(): void
     {
         $bookmark = Bookmark::find(1);
         $uuid = Uuid::uuid4();
@@ -46,7 +46,7 @@ class ProcessBookmarkJobTest extends TestCase
         $service->method('saveScreenshot')
                 ->willReturn($uuid->toString());
         $service->method('getArchiveLink')
-                ->will($this->throwException(new InternetArchiveException));
+                ->will($this->throwException(new InternetArchiveException()));
         $this->app->instance(BookmarkService::class, $service);
 
         $job = new ProcessBookmark($bookmark);

@@ -1,45 +1,50 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature;
 
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ArticlesTest extends TestCase
 {
-    public function test_articles_page()
+    /** @test */
+    public function articlesPageLoads(): void
     {
         $response = $this->get('/blog');
         $response->assertViewIs('articles.index');
     }
 
-    public function test_single_article()
+    /** @test */
+    public function singleArticlePageLoads()
     {
         $response = $this->get('/blog/' . date('Y') . '/' . date('m') . '/some-code-i-did');
         $response->assertViewIs('articles.show');
     }
 
-    public function test_wrong_date_redirects()
+    /** @test */
+    public function wrongDateInUrlRedirectsToCorrectDate()
     {
         $response = $this->get('/blog/1900/01/some-code-i-did');
         $response->assertRedirect('/blog/' . date('Y') . '/' . date('m') . '/some-code-i-did');
     }
 
-    public function test_redirect_for_id()
+    /** @test */
+    public function oldUrlsWithIdAreRedirected()
     {
         $response = $this->get('/blog/s/2');
         $response->assertRedirect('/blog/' . date('Y') . '/' . date('m') . '/some-code-i-did');
     }
 
     /** @test  */
-    public function unknownSlugGives404()
+    public function unknownSlugGetsNotFoundResponse()
     {
         $response = $this->get('/blog/' . date('Y') . '/' . date('m') . '/unknown-slug');
         $response->assertNotFound();
     }
 
     /** @test */
-    public function unknownArticleIdGives404()
+    public function unknownArticleIdGetsNotFoundResponse()
     {
         $response = $this->get('/blog/s/22');
         $response->assertNotFound();

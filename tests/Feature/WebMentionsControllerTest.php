@@ -1,14 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature;
 
-use Tests\TestCase;
 use App\Jobs\ProcessWebMention;
 use Illuminate\Support\Facades\Queue;
+use Tests\TestCase;
 
 class WebMentionsControllerTest extends TestCase
 {
-    public function test_get_endpoint()
+    /** @test */
+    public function webmentionEndpointCanServeBrowserRequest(): void
     {
         $response = $this->get('/webmention');
         $response->assertViewIs('webmention-endpoint');
@@ -17,20 +20,22 @@ class WebMentionsControllerTest extends TestCase
     /**
      * Test webmentions without source and target are rejected.
      *
-     * @return void
+     * @test
      */
-    public function test_webmentions_without_source_and_target_are_rejected()
+    public function webmentionsWithoutSourceAndTargetAreRejected(): void
     {
         $response = $this->call('POST', '/webmention', ['source' => 'https://example.org/post/123']);
         $response->assertStatus(400);
     }
 
     /**
-     * Test invalid target gets a 400 response.
+     * Test invalid target gives a 400 response.
      *
-     * @return void
+     * In this case an invalid target is a URL that doesn’t exist on our domain.
+     *
+     * @test
      */
-    public function test_invalid_target_returns_400_response()
+    public function invalidTargetReturnsErrorResponse(): void
     {
         $response = $this->call('POST', '/webmention', [
             'source' => 'https://example.org/post/123',
@@ -40,11 +45,11 @@ class WebMentionsControllerTest extends TestCase
     }
 
     /**
-     * Test blog target gets a 501 response due to me not supporting it.
+     * Test blog target gets a 501 response due to our not supporting it.
      *
-     * @return void
+     * @test
      */
-    public function test_blog_target_returns_501_response()
+    public function blogTargetReturns501Response(): void
     {
         $response = $this->call('POST', '/webmention', [
             'source' => 'https://example.org/post/123',
@@ -54,11 +59,11 @@ class WebMentionsControllerTest extends TestCase
     }
 
     /**
-     * Test that a non-existant note gives a 400 response.
+     * Test that a non-existent note gives a 400 response.
      *
-     * @return void
+     * @test
      */
-    public function test_nonexistant_note_returns_400_response()
+    public function nonexistentNoteReturnsErrorResponse(): void
     {
         $response = $this->call('POST', '/webmention', [
             'source' => 'https://example.org/post/123',
@@ -67,12 +72,8 @@ class WebMentionsControllerTest extends TestCase
         $response->assertStatus(400);
     }
 
-    /**
-     * Test a legit webmention triggers the ProcessWebMention job.
-     *
-     * @return void
-     */
-    public function test_legitimate_webmnetion_triggers_processwebmention_job()
+    /** @test */
+    public function legitimateWebmentionTriggersProcesswebmentionJob(): void
     {
         Queue::fake();
 

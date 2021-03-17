@@ -1,15 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Unit;
 
-use Tests\TestCase;
 use App\Models\MicropubClient;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
-class MicropbClientsTest extends TestCase
+class MicropubClientsTest extends TestCase
 {
-    public function test_notes_relationship()
+    /** @test */
+    public function weCanGetNotesRelatingToClient(): void
     {
         $client = MicropubClient::find(1);
         $this->assertInstanceOf(Collection::class, $client->notes);

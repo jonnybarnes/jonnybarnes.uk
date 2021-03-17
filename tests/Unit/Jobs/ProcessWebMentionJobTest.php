@@ -1,21 +1,23 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Unit\Jobs;
 
-use Tests\TestCase;
+use App\Exceptions\RemoteContentNotFoundException;
+use App\Jobs\ProcessWebMention;
+use App\Jobs\SaveProfileImage;
 use App\Models\Note;
-use GuzzleHttp\Client;
 use App\Models\WebMention;
+use GuzzleHttp\Client;
+use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
-use App\Jobs\SaveProfileImage;
-use App\Jobs\ProcessWebMention;
-use GuzzleHttp\Handler\MockHandler;
 use Illuminate\FileSystem\FileSystem;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Queue;
 use Jonnybarnes\WebmentionsParser\Parser;
-use App\Exceptions\RemoteContentNotFoundException;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Tests\TestCase;
 
 class ProcessWebMentionJobTest extends TestCase
 {
@@ -30,7 +32,8 @@ class ProcessWebMentionJobTest extends TestCase
         parent::tearDown();
     }
 
-    public function test_for_exception_from_failure_to_get_webmention()
+    /** @test */
+    public function failureGettingWebmentionThrowsAnException(): void
     {
         $this->expectException(RemoteContentNotFoundException::class);
 
@@ -48,17 +51,18 @@ class ProcessWebMentionJobTest extends TestCase
         $job->handle($parser, $client);
     }
 
-    public function test_a_new_webmention_gets_saved()
+    /** @test */
+    public function newWebmentionGetsSavedByJob(): void
     {
         Queue::fake();
 
         $parser = new Parser();
 
         $html = <<<HTML
-<div class="h-entry">
-    I liked <a class="u-like-of" href="/notes/1">a note</a>.
-</div>
-HTML;
+        <div class="h-entry">
+            I liked <a class="u-like-of" href="/notes/1">a note</a>.
+        </div>
+        HTML;
         $html = str_replace('href="', 'href="' . config('app.url'), $html);
         $mock = new MockHandler([
             new Response(200, [], $html),
@@ -79,18 +83,19 @@ HTML;
         ]);
     }
 
-    public function test_existing_webmention_gets_updated()
+    /** @test */
+    public function existingWebmentionGetsUpdatedByJob(): void
     {
         Queue::fake();
 
         $parser = new Parser();
 
         $html = <<<HTML
-<div class="h-entry">
-    <p>In reply to <a class="u-in-reply-to" href="/notes/E">a note</a></p>
-    <div class="e-content">Updated reply</div>
-</div>
-HTML;
+        <div class="h-entry">
+            <p>In reply to <a class="u-in-reply-to" href="/notes/E">a note</a></p>
+            <div class="e-content">Updated reply</div>
+        </div>
+        HTML;
         $html = str_replace('href="', 'href="' . config('app.url'), $html);
         $mock = new MockHandler([
             new Response(200, [], $html),
@@ -108,20 +113,22 @@ HTML;
         $this->assertDatabaseHas('webmentions', [
             'source' => $source,
             'type' => 'in-reply-to',
+            // phpcs:ignore Generic.Files.LineLength.TooLong
             'mf2' => '{"rels": [], "items": [{"type": ["h-entry"], "properties": {"content": [{"html": "Updated reply", "value": "Updated reply"}], "in-reply-to": ["' . config('app.url') . '/notes/E"]}}], "rel-urls": []}',
         ]);
     }
 
-    public function test_webmention_reply_gets_deleted()
+    /** @test */
+    public function webmentionReplyGetsDeletedWhenReplyToValueChanges(): void
     {
         $parser = new Parser();
 
         $html = <<<HTML
-<div class="h-entry">
-    <p>In reply to <a class="u-in-reply-to" href="https://other.com/notes/E">a note</a></p>
-    <div class="e-content">Replying to someone else</div>
-</div>
-HTML;
+        <div class="h-entry">
+            <p>In reply to <a class="u-in-reply-to" href="https://other.com/notes/E">a note</a></p>
+            <div class="e-content">Replying to someone else</div>
+        </div>
+        HTML;
         $mock = new MockHandler([
             new Response(200, [], $html),
         ]);
@@ -148,16 +155,17 @@ HTML;
         ]);
     }
 
-    public function test_webmention_like_gets_deleted()
+    /** @test */
+    public function webmentionLikeGetsDeletedWhenLikeOfValueChanges(): void
     {
         $parser = new Parser();
 
         $html = <<<HTML
-<div class="h-entry">
-    <p>In reply to <a class="u-like-of" href="https://other.com/notes/E">a note</a></p>
-    <div class="e-content">I like someone else now</div>
-</div>
-HTML;
+        <div class="h-entry">
+            <p>In reply to <a class="u-like-of" href="https://other.com/notes/E">a note</a></p>
+            <div class="e-content">I like someone else now</div>
+        </div>
+        HTML;
         $mock = new MockHandler([
             new Response(200, [], $html),
         ]);
@@ -184,16 +192,17 @@ HTML;
         ]);
     }
 
-    public function test_webmention_repost_gets_deleted()
+    /** @test */
+    public function webmentionRepostGetsDeletedWhenRepostOfValueChanges(): void
     {
         $parser = new Parser();
 
         $html = <<<HTML
-<div class="h-entry">
-    <p>In reply to <a class="u-repost-of" href="https://other.com/notes/E">a note</a></p>
-    <div class="e-content">Reposting someone else</div>
-</div>
-HTML;
+        <div class="h-entry">
+            <p>In reply to <a class="u-repost-of" href="https://other.com/notes/E">a note</a></p>
+            <div class="e-content">Reposting someone else</div>
+        </div>
+        HTML;
         $mock = new MockHandler([
             new Response(200, [], $html),
         ]);

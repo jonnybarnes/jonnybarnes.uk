@@ -1,13 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature;
 
+use App\Services\TokenService;
 use DateTimeImmutable;
 use Lcobucci\JWT\Configuration;
 use Lcobucci\JWT\Signer\Key\InMemory;
 use Lcobucci\JWT\Validation\RequiredConstraintsViolated;
 use Tests\TestCase;
-use App\Services\TokenService;
 
 class TokenServiceTest extends TestCase
 {
@@ -15,9 +17,9 @@ class TokenServiceTest extends TestCase
      * Given the token is dependent on a random nonce, the time of creation and
      * the APP_KEY, to test, we shall create a token, and then verify it.
      *
-     * @return void
+     * @test
      */
-    public function test_token_creation_and_validation()
+    public function tokenserviceCreatesAndValidatesTokens(): void
     {
         $tokenService = new TokenService();
         $data = [
@@ -35,7 +37,8 @@ class TokenServiceTest extends TestCase
         $this->assertSame($data, $validData);
     }
 
-    public function test_token_with_different_signing_key_throws_exception()
+    /** @test */
+    public function tokensWithDifferentSigningKeyThrowsException(): void
     {
         $this->expectException(RequiredConstraintsViolated::class);
 

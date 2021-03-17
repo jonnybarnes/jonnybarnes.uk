@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature;
 
 use App\Jobs\ProcessMedia;
@@ -17,7 +19,7 @@ class MicropubMediaTest extends TestCase
     use TestToken;
 
     /** @test */
-    public function emptyResponseForLastUploadWhenNoneFound()
+    public function emptyResponseForLastUploadWhenNoneFound(): void
     {
         // Make sure there’s no media
         Media::all()->each(function ($media) {
@@ -33,7 +35,7 @@ class MicropubMediaTest extends TestCase
     }
 
     /** @test */
-    public function clientCanListLastUpload()
+    public function clientCanListLastUpload(): void
     {
         Queue::fake();
         Storage::fake('s3');
@@ -61,7 +63,7 @@ class MicropubMediaTest extends TestCase
     }
 
     /** @test */
-    public function clientCanSourceUploads()
+    public function clientCanSourceUploads(): void
     {
         Queue::fake();
         Storage::fake('s3');
@@ -91,7 +93,7 @@ class MicropubMediaTest extends TestCase
     }
 
     /** @test */
-    public function clientCanSourceUploadsWithLimit()
+    public function clientCanSourceUploadsWithLimit(): void
     {
         Queue::fake();
         Storage::fake('s3');
@@ -123,7 +125,7 @@ class MicropubMediaTest extends TestCase
     }
 
     /** @test */
-    public function errorResponseForUnknownQValue()
+    public function errorResponseForUnknownQValue(): void
     {
         $response = $this->get(
             '/api/media?q=unknown',
@@ -134,7 +136,7 @@ class MicropubMediaTest extends TestCase
     }
 
     /** @test */
-    public function optionsRequestReturnsCorsResponse()
+    public function optionsRequestReturnsCorsResponse(): void
     {
         $response = $this->options('/api/media');
 
@@ -143,7 +145,7 @@ class MicropubMediaTest extends TestCase
     }
 
     /** @test */
-    public function mediaEndpointRequestWithInvalidTokenReturns400Response()
+    public function mediaEndpointRequestWithInvalidTokenReturns400Response(): void
     {
         $response = $this->post(
             '/api/media',
@@ -155,7 +157,7 @@ class MicropubMediaTest extends TestCase
     }
 
     /** @test */
-    public function mediaEndpointRequestWithTokenWithNoScopeReturns400Response()
+    public function mediaEndpointRequestWithTokenWithNoScopeReturns400Response(): void
     {
         $response = $this->post(
             '/api/media',
@@ -167,7 +169,7 @@ class MicropubMediaTest extends TestCase
     }
 
     /** @test */
-    public function mediaEndpointRequestWithInsufficientTokenScopesReturns401Response()
+    public function mediaEndpointRequestWithInsufficientTokenScopesReturns401Response(): void
     {
         $response = $this->post(
             '/api/media',
@@ -181,7 +183,7 @@ class MicropubMediaTest extends TestCase
     }
 
     /** @test */
-    public function mediaEndpointUploadFile()
+    public function mediaEndpointUploadFile(): void
     {
         Queue::fake();
         Storage::fake('s3');
@@ -204,7 +206,7 @@ class MicropubMediaTest extends TestCase
     }
 
     /** @test */
-    public function mediaEndpointUploadAudioFile()
+    public function mediaEndpointUploadAudioFile(): void
     {
         Queue::fake();
         Storage::fake('s3');
@@ -227,7 +229,7 @@ class MicropubMediaTest extends TestCase
     }
 
     /** @test */
-    public function mediaEndpointUploadVideoFile()
+    public function mediaEndpointUploadVideoFile(): void
     {
         Queue::fake();
         Storage::fake('s3');
@@ -250,7 +252,7 @@ class MicropubMediaTest extends TestCase
     }
 
     /** @test */
-    public function mediaEndpointUploadDocumentFile()
+    public function mediaEndpointUploadDocumentFile(): void
     {
         Queue::fake();
         Storage::fake('s3');
@@ -272,7 +274,7 @@ class MicropubMediaTest extends TestCase
     }
 
     /** @test */
-    public function mediaEndpointUploadInvalidFileReturnsError()
+    public function mediaEndpointUploadInvalidFileReturnsError(): void
     {
         Queue::fake();
         Storage::fake('local');

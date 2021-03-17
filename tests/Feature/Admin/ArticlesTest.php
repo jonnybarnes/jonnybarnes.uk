@@ -1,17 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature\Admin;
 
-use Tests\TestCase;
 use App\Models\User;
+use Faker\Factory;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Tests\TestCase;
 
 class ArticlesTest extends TestCase
 {
     use DatabaseTransactions;
 
-    public function test_index_page()
+    /** @test */
+    public function adminArticlesPageLoads(): void
     {
         $user = User::factory()->make();
 
@@ -20,7 +24,8 @@ class ArticlesTest extends TestCase
         $response->assertSeeText('Select article to edit:');
     }
 
-    public function test_create_page()
+    /** @test */
+    public function adminCanLoadFormToCreateArticle(): void
     {
         $user = User::factory()->make();
 
@@ -29,7 +34,8 @@ class ArticlesTest extends TestCase
         $response->assertSeeText('Title (URL)');
     }
 
-    public function test_create_new_article()
+    /** @test */
+    public function admiNCanCreateNewArticle(): void
     {
         $user = User::factory()->make();
 
@@ -41,10 +47,11 @@ class ArticlesTest extends TestCase
         $this->assertDatabaseHas('articles', ['title' => 'Test Title']);
     }
 
-    public function test_create_new_article_with_upload()
+    /** @test */
+    public function adminCanCreateNewArticleWithFile(): void
     {
         $user = User::factory()->make();
-        $faker = \Faker\Factory::create();
+        $faker = Factory::create();
         $text = $faker->text;
         if ($fh = fopen(sys_get_temp_dir() . '/article.md', 'w')) {
             fwrite($fh, $text);
@@ -65,7 +72,8 @@ class ArticlesTest extends TestCase
         ]);
     }
 
-    public function test_see_edit_form()
+    /** @test */
+    public function articleCanLoadFormToEditArticle(): void
     {
         $user = User::factory()->make();
 
@@ -74,7 +82,8 @@ class ArticlesTest extends TestCase
         $response->assertSeeText('This is *my* new blog. It uses `Markdown`.');
     }
 
-    public function test_edit_article()
+    /** @test */
+    public function adminCanEditArticle(): void
     {
         $user = User::factory()->make();
 
@@ -90,7 +99,8 @@ class ArticlesTest extends TestCase
         ]);
     }
 
-    public function test_delete_article()
+    /** @test */
+    public function adminCanDeleteArticle(): void
     {
         $user = User::factory()->make();
 
