@@ -1,15 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature;
 
-use Tests\TestCase;
 use App\Jobs\DownloadWebMention;
-use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Queue;
+use Tests\TestCase;
 
 class ReDownloadWebMentionsTest extends TestCase
 {
-    public function test_jobs_are_dispatched()
+    /** @test */
+    public function downloadJobGetsQueued(): void
     {
         Queue::fake();
 

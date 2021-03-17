@@ -1,18 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature;
 
-use Tests\TestCase;
 use App\Models\Place;
+use Tests\TestCase;
 
 class PlacesTest extends TestCase
 {
     /**
      * Test the `/places` page for OK response.
      *
-     * @return void
+     * @test
      */
-    public function test_places_page()
+    public function placesPageLoads(): void
     {
         $response = $this->get('/places');
         $response->assertStatus(200);
@@ -21,9 +23,9 @@ class PlacesTest extends TestCase
     /**
      * Test a specific place.
      *
-     * @return void
+     * @test
      */
-    public function test_single_place()
+    public function singlePlacePageLoads(): void
     {
         $place = Place::where('slug', 'the-bridgewater-pub')->first();
         $response = $this->get('/places/the-bridgewater-pub');

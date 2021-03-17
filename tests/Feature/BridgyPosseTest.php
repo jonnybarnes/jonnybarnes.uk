@@ -1,12 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature;
 
 use Tests\TestCase;
 
 class BridgyPosseTest extends TestCase
 {
-    public function test_bridgy_twitter_content()
+    /** @test */
+    public function notesWeWantCopiedToTwitterShouldHaveNecessaryMarkup(): void
     {
         $response = $this->get('/notes/4');
 

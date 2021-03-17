@@ -1,16 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature\Admin;
 
-use Tests\TestCase;
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Tests\TestCase;
 
 class ClientsTest extends TestCase
 {
     use DatabaseTransactions;
 
-    public function test_index_page()
+    /** @test */
+    public function clientsPageLoads(): void
     {
         $user = User::factory()->make();
 
@@ -19,7 +22,8 @@ class ClientsTest extends TestCase
         $response->assertSeeText('Clients');
     }
 
-    public function test_create_page()
+    /** @test */
+    public function adminCanLoadFormToCreateClient(): void
     {
         $user = User::factory()->make();
 
@@ -28,7 +32,8 @@ class ClientsTest extends TestCase
         $response->assertSeeText('New Client');
     }
 
-    public function test_create_new_client()
+    /** @test */
+    public function adminCanCreateNewClient(): void
     {
         $user = User::factory()->make();
 
@@ -43,7 +48,8 @@ class ClientsTest extends TestCase
         ]);
     }
 
-    public function test_see_edit_form()
+    /** @test */
+    public function adminCanLoadEditFormForClient(): void
     {
         $user = User::factory()->make();
 
@@ -52,7 +58,8 @@ class ClientsTest extends TestCase
         $response->assertSee('https://jbl5.dev/notes/new');
     }
 
-    public function test_edit_client()
+    /** @test */
+    public function adminCanEditClient(): void
     {
         $user = User::factory()->make();
 
@@ -68,7 +75,8 @@ class ClientsTest extends TestCase
         ]);
     }
 
-    public function test_delete_client()
+    /** @test */
+    public function adminCanDeleteClient(): void
     {
         $user = User::factory()->make();
 

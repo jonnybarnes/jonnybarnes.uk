@@ -1,16 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature\Admin;
 
-use Tests\TestCase;
 use App\Models\User;
-use GuzzleHttp\Client;
 use App\Models\Contact;
+use GuzzleHttp\Client;
+use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
-use Illuminate\Http\UploadedFile;
-use GuzzleHttp\Handler\MockHandler;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Http\UploadedFile;
+use Tests\TestCase;
 
 class ContactsTest extends TestCase
 {
@@ -25,7 +27,8 @@ class ContactsTest extends TestCase
         parent::tearDown();
     }
 
-    public function test_index_page()
+    /** @test */
+    public function contactIndexPageLoads(): void
     {
         $user = User::factory()->make();
 
@@ -33,7 +36,8 @@ class ContactsTest extends TestCase
         $response->assertViewIs('admin.contacts.index');
     }
 
-    public function test_create_page()
+    /** @test */
+    public function contactCreatePageLoads(): void
     {
         $user = User::factory()->make();
 
@@ -41,7 +45,8 @@ class ContactsTest extends TestCase
         $response->assertViewIs('admin.contacts.create');
     }
 
-    public function test_create_new_contact()
+    /** @test */
+    public function adminCanCreateNewContact(): void
     {
         $user = User::factory()->make();
 
@@ -57,7 +62,8 @@ class ContactsTest extends TestCase
         ]);
     }
 
-    public function test_see_edit_form()
+    /** @test */
+    public function adminCanSeeFormToEditContact(): void
     {
         $user = User::factory()->make();
 
@@ -65,7 +71,8 @@ class ContactsTest extends TestCase
         $response->assertViewIs('admin.contacts.edit');
     }
 
-    public function test_update_contact_no_uploaded_avatar()
+    /** @test */
+    public function adminCanUpdateContact(): void
     {
         $user = User::factory()->make();
 
@@ -82,7 +89,8 @@ class ContactsTest extends TestCase
         ]);
     }
 
-    public function test_edit_contact_with_uploaded_avatar()
+    /** @test */
+    public function adminCanEditContactAndUploadAvatar(): void
     {
         copy(__DIR__ . '/../../aaron.png', sys_get_temp_dir() . '/tantek.png');
         $path = sys_get_temp_dir() . '/tantek.png';
@@ -103,7 +111,8 @@ class ContactsTest extends TestCase
         );
     }
 
-    public function test_delete_contact()
+    /** @test */
+    public function adminCanDeleteContact(): void
     {
         $user = User::factory()->make();
 
@@ -115,13 +124,14 @@ class ContactsTest extends TestCase
         ]);
     }
 
-    public function test_get_avatar_method()
+    /** @test */
+    public function adminCanTriggerRetrievalOfRemoteAvatar(): void
     {
         $html = <<<HTML
-<div class="h-card">
-    <img class="u-photo" src="http://tantek.com/tantek.png">
-</div>
-HTML;
+        <div class="h-card">
+            <img class="u-photo" alt="" src="http://tantek.com/tantek.png">
+        </div>
+        HTML;
         $file = fopen(__DIR__ . '/../../aaron.png', 'r');
         $mock = new MockHandler([
             new Response(200, ['Content-Type' => 'text/html'], $html),
@@ -140,7 +150,8 @@ HTML;
         );
     }
 
-    public function test_get_avatar_method_redirects_with_failed_homepage()
+    /** @test */
+    public function gettingRemoteAvatarFailsGracefullyWithRemoteNotFound(): void
     {
         $mock = new MockHandler([
             new Response(404),
@@ -155,13 +166,14 @@ HTML;
         $response->assertRedirect('/admin/contacts/1/edit');
     }
 
-    public function test_get_avatar_method_redirects_with_failed_avatar_download()
+    /** @test */
+    public function gettingRemoteAvatarFailsGracefullyWithRemoteError(): void
     {
         $html = <<<HTML
-<div class="h-card">
-    <img class="u-photo" src="http://tantek.com/tantek.png">
-</div>
-HTML;
+        <div class="h-card">
+            <img class="u-photo" src="http://tantek.com/tantek.png">
+        </div>
+        HTML;
         $mock = new MockHandler([
             new Response(200, ['Content-Type' => 'text/html'], $html),
             new Response(404),
@@ -176,7 +188,8 @@ HTML;
         $response->assertRedirect('/admin/contacts/1/edit');
     }
 
-    public function test_get_avatar_for_contact_with_no_homepage()
+    /** @test */
+    public function gettingRemoteAvatarFailsGracefullyForContactWithNoHompage(): void
     {
         $contact = Contact::create([
             'nick' => 'fred',

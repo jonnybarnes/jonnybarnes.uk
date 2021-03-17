@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature;
 
-use Tests\TestCase;
 use App\Models\WebMention;
 use Illuminate\FileSystem\FileSystem;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Support\Facades\Artisan;
+use Tests\TestCase;
 
 class ParseCachedWebMentionsTest extends TestCase
 {
@@ -18,11 +20,12 @@ class ParseCachedWebMentionsTest extends TestCase
 
         mkdir(storage_path('HTML') . '/https/aaronpk.localhost/reply', 0777, true);
         mkdir(storage_path('HTML') . '/http/tantek.com', 0777, true);
-        copy(__DIR__.'/../aaron.html', storage_path('HTML') . '/https/aaronpk.localhost/reply/1');
-        copy(__DIR__.'/../tantek.html', storage_path('HTML') . '/http/tantek.com/index.html');
+        copy(__DIR__ . '/../aaron.html', storage_path('HTML') . '/https/aaronpk.localhost/reply/1');
+        copy(__DIR__ . '/../tantek.html', storage_path('HTML') . '/http/tantek.com/index.html');
     }
 
-    public function test_parsing_html()
+    /** @test */
+    public function parseWebmentionHtml(): void
     {
         $this->assertFileExists(storage_path('HTML') . '/https/aaronpk.localhost/reply/1');
         $this->assertFileExists(storage_path('HTML') . '/http/tantek.com/index.html');

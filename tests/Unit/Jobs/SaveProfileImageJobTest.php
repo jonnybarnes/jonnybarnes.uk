@@ -1,16 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Unit\Jobs;
 
-use Tests\TestCase;
+use App\Jobs\SaveProfileImage;
 use GuzzleHttp\Client;
+use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
-use App\Jobs\SaveProfileImage;
-use GuzzleHttp\Handler\MockHandler;
 use Jonnybarnes\WebmentionsParser\Authorship;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Jonnybarnes\WebmentionsParser\Exceptions\AuthorshipParserException;
+use Tests\TestCase;
 
 class SaveProfileImageJobTest extends TestCase
 {
@@ -22,18 +23,21 @@ class SaveProfileImageJobTest extends TestCase
         }
         parent::tearDown();
     }
-    public function test_authorship_algo_exception_return_null()
+
+    /** @test */
+    public function authorshipAlgorithmReturnsNullOnException(): void
     {
         $mf = ['items' => []];
         $authorship = $this->createMock(Authorship::class);
         $authorship->method('findAuthor')
-                   ->will($this->throwException(new AuthorshipParserException));
+                   ->will($this->throwException(new AuthorshipParserException()));
         $job = new SaveProfileImage($mf);
 
         $this->assertNull($job->handle($authorship));
     }
 
-    public function test_we_dont_process_twitter_images()
+    /** @test */
+    public function weDoNotProcessTwitterImages(): void
     {
         $mf = ['items' => []];
         $author = [
@@ -50,7 +54,8 @@ class SaveProfileImageJobTest extends TestCase
         $this->assertNull($job->handle($authorship));
     }
 
-    public function test_saving_of_remote_image()
+    /** @test */
+    public function remoteAuthorImagesAreSavedLocally(): void
     {
         $mock = new MockHandler([
             new Response(200, ['Content-Type' => 'image/jpeg'], 'fake jpeg image'),
@@ -74,7 +79,8 @@ class SaveProfileImageJobTest extends TestCase
         $this->assertFileExists(public_path() . '/assets/profile-images/example.org/image');
     }
 
-    public function test_copying_of_local_image()
+    /** @test */
+    public function localDefaultAuthorImageIsUsedAsFallback(): void
     {
         $mock = new MockHandler([
             new Response(404),

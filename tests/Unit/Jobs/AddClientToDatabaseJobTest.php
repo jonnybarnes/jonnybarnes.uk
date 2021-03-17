@@ -1,16 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Unit\Jobs;
 
-use Tests\TestCase;
 use App\Jobs\AddClientToDatabase;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Tests\TestCase;
 
 class AddClientToDatabaseJobTest extends TestCase
 {
     use DatabaseTransactions;
 
-    public function test_job_adds_client()
+    /** @test */
+    public function clientIsAddedToDatabaseByJob(): void
     {
         $job = new AddClientToDatabase('https://example.org/client');
         $job->handle();

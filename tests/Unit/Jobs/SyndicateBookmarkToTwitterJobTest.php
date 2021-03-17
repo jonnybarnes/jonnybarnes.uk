@@ -1,21 +1,24 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Unit\Jobs;
 
-use Tests\TestCase;
-use GuzzleHttp\Client;
+use App\Jobs\SyndicateBookmarkToTwitter;
 use App\Models\Bookmark;
+use GuzzleHttp\Client;
+use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
-use GuzzleHttp\Handler\MockHandler;
-use App\Jobs\SyndicateBookmarkToTwitter;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Tests\TestCase;
 
 class SyndicateBookmarkToTwitterJobTest extends TestCase
 {
     use DatabaseTransactions;
 
-    public function test_the_job()
+    /** @test */
+    public function weSendBookmarksToTwitter(): void
     {
         $json = json_encode([
             'url' => 'https://twitter.com/123'

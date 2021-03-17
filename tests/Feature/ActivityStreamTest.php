@@ -1,18 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature;
 
+use App\Models\Note;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ActivityStreamTest extends TestCase
 {
-    /**
-     * Test request to homepage returns data for site owner.
-     *
-     * @return void
-     */
-    public function test_homepage_returns_data_for_site_owner()
+    /** @test */
+    public function homepageRequestReturnsDataForSiteOwner(): void
     {
         $response = $this->get('/', ['Accept' => 'application/activity+json']);
         $response->assertHeader('Content-Type', 'application/activity+json');
@@ -24,14 +22,10 @@ class ActivityStreamTest extends TestCase
         ]);
     }
 
-    /**
-     * Test request to a single note returns AS2.0 data.
-     *
-     * @return void
-     */
-    public function test_single_note_returns_as_data()
+    /** @test */
+    public function requestForNoteIncludesActivityStreamData(): void
     {
-        $note = \App\Models\Note::find(11);
+        $note = Note::find(11);
         $response = $this->get('/notes/B', ['Accept' => 'application/activity+json']);
         $response->assertHeader('Content-Type', 'application/activity+json');
         $response->assertJson([

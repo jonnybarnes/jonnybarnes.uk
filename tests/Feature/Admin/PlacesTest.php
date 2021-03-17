@@ -1,16 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature\Admin;
 
 use App\Models\User;
-use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Tests\TestCase;
 
 class PlacesTest extends TestCase
 {
     use DatabaseTransactions;
 
-    public function test_index_page()
+    /** @test */
+    public function placesPageLoads(): void
     {
         $user = User::factory()->make();
 
@@ -18,7 +21,8 @@ class PlacesTest extends TestCase
         $response->assertViewIs('admin.places.index');
     }
 
-    public function test_create_page()
+    /** @test */
+    public function createPlacePageLoads(): void
     {
         $user = User::factory()->make();
 
@@ -26,7 +30,8 @@ class PlacesTest extends TestCase
         $response->assertViewIs('admin.places.create');
     }
 
-    public function test_create_new_place()
+    /** @test */
+    public function adminCanCreateNewPlace(): void
     {
         $user = User::factory()->make();
 
@@ -42,7 +47,8 @@ class PlacesTest extends TestCase
         ]);
     }
 
-    public function test_edit_page()
+    /** @test */
+    public function editPlacePageLoads(): void
     {
         $user = User::factory()->make();
 
@@ -50,7 +56,8 @@ class PlacesTest extends TestCase
         $response->assertViewIs('admin.places.edit');
     }
 
-    public function test_updating_a_place()
+    /** @test */
+    public function adminCanUpdatePlace(): void
     {
         $user = User::factory()->make();
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Unit;
 
 use App\Models\Tag;
@@ -7,15 +9,17 @@ use Tests\TestCase;
 
 class TagsTest extends TestCase
 {
-    public function test_notes_method()
+    /** @test */
+    public function canGetAssociatedNotes(): void
     {
         $tag = Tag::find(1); // should be beer tag
-        $this->assertEquals(1, count($tag->notes));
+        $this->assertCount(1, $tag->notes);
     }
 
-    public function test_bookmarks_method()
+    /** @test */
+    public function canGetAssociatedBookmarks(): void
     {
         $tag = Tag::find(5); //should be first random tag for bookmarks
-        $this->assertEquals(1, count($tag->bookmarks));
+        $this->assertCount(1, $tag->bookmarks);
     }
 }

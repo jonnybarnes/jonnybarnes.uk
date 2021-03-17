@@ -1,15 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature;
 
+use IndieAuth\Client;
 use Mockery;
 use Tests\TestCase;
-use IndieAuth\Client;
-use Illuminate\Http\JsonResponse;
 
 class TokenEndpointTest extends TestCase
 {
-    public function test_token_endpoint_issues_token()
+    /** @test */
+    public function tokenEndpointIssuesToken(): void
     {
         $mockClient = Mockery::mock(Client::class);
         $mockClient->shouldReceive('discoverAuthorizationEndpoint')
@@ -35,7 +37,8 @@ class TokenEndpointTest extends TestCase
         ]);
     }
 
-    public function test_token_endpoint_returns_error_when_auth_endpoint_lacks_me_data()
+    /** @test */
+    public function tokenEndpointReturnsErrorWhenAuthEndpointLacksMeData(): void
     {
         $mockClient = Mockery::mock(Client::class);
         $mockClient->shouldReceive('discoverAuthorizationEndpoint')
@@ -60,7 +63,8 @@ class TokenEndpointTest extends TestCase
         ]);
     }
 
-    public function test_token_endpoint_returns_error_when_no_auth_endpoint_found()
+    /** @test */
+    public function tokenEndpointReturnsErrorWhenNoAuthEndpointFound(): void
     {
         $mockClient = Mockery::mock(Client::class);
         $mockClient->shouldReceive('discoverAuthorizationEndpoint')
