@@ -209,6 +209,12 @@ EOF;
             ->where('id', $noteWithLongUrl->id)
             ->update(['updated_at' => $now->toDateTimeString()]);
 
+        $noteWithLocation = Note::create([
+            'note' => 'Some location data',
+            'created_at' => $now->subDay(),
+            'location' => '1.23,4.56',
+        ]);
+
         Note::factory(10)->create();
     }
 }

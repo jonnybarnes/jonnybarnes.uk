@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Unit;
 
+use Illuminate\Support\Facades\Cache;
 use App\Models\{Media, Note, Tag};
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
@@ -333,5 +334,48 @@ class NotesTest extends TestCase
             '<p>The best search engine? <a href="https://duckduckgo.com">https://duckduckgo.com</a></p>' . PHP_EOL,
             $note->note
         );
+    }
+
+    /**
+     * For now, just reply on a cached object instead of actually querying Twitter.
+     *
+     * @test
+     */
+    public function checkInReplyToIsTwitterLink(): void
+    {
+        $tempContent = (object) [
+            'html' => 'something random',
+        ];
+        Cache::put('933662564587855877', $tempContent);
+
+        $note = Note::find(1);
+
+        $this->assertSame($tempContent, $note->twitter);
+    }
+
+    /** @test */
+    public function latitudeCanBeParsedFromPlainLocation(): void
+    {
+        $note = Note::find(18);
+
+        $this->assertSame(1.23, $note->latitude);
+    }
+
+    /** @test */
+    public function longitudeCanBeParsedFromPlainLocation(): void
+    {
+        $note = Note::find(18);
+
+        $this->assertSame(4.56, $note->longitude);
+    }
+
+    /** @test */
+    public function addressAttributeCanBeRetrievedFromPlainLocation(): void
+    {
+        Cache::put('1.23,4.56', '<span class="p-country-name">Antarctica</span>');
+
+        $note = Note::find(18);
+
+        $this->assertSame('<span class="p-country-name">Antarctica</span>', $note->address);
     }
 }
