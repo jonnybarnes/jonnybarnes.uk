@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Unit;
 
 use App\Models\{Contact, Media, Note, Place, Tag};
+use Illuminate\Filesystem\Filesystem;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Cache;
 use GuzzleHttp\Client;
@@ -65,8 +66,6 @@ class NotesTest extends TestCase
      */
     public function specificProfileImageUsedInMakehcardsMethod(): void
     {
-        // phpcs:ignore
-        $expected = '<p>Hi <span class="u-category h-card mini-h-card"><a class="u-url p-name" href="https://aaronparecki.com">Aaron Parecki</a><span class="hovercard"><a class="u-url" href="https://www.facebook.com/123456"><img class="social-icon" src="/assets/img/social-icons/facebook.svg"> Facebook</a> <img class="u-photo" alt="" src="/assets/profile-images/aaronparecki.com/image"></span></span></p>' . PHP_EOL;
         Contact::factory()->create([
             'nick' => 'aaron',
             'name' => 'Aaron Parecki',
@@ -74,9 +73,17 @@ class NotesTest extends TestCase
             'twitter' => null,
             'facebook' => 123456,
         ]);
+        $fileSystem = new Filesystem();
+        $fileSystem->ensureDirectoryExists(public_path('/assets/profile-images/aaronparecki.com'));
+        if (!$fileSystem->exists(public_path('/assets/profile-images/aaronparecki.com/image'))) {
+            $fileSystem->copy('./tests/aaron.png', public_path('/assets/profile-images/aaronparecki.com/image'));
+        }
         $note = Note::factory()->create([
             'note' => 'Hi @aaron',
         ]);
+
+        // phpcs:ignore
+        $expected = '<p>Hi <span class="u-category h-card mini-h-card"><a class="u-url p-name" href="https://aaronparecki.com">Aaron Parecki</a><span class="hovercard"><a class="u-url" href="https://www.facebook.com/123456"><img class="social-icon" src="/assets/img/social-icons/facebook.svg"> Facebook</a> <img class="u-photo" alt="" src="/assets/profile-images/aaronparecki.com/image"></span></span></p>' . PHP_EOL;
         $this->assertEquals($expected, $note->note);
     }
 
