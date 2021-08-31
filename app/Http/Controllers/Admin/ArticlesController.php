@@ -7,16 +7,10 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Article;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class ArticlesController extends Controller
 {
-    /**
-     * List the articles that can be edited.
-     *
-     * @return \Illuminate\View\View
-     */
     public function index(): View
     {
         $posts = Article::select('id', 'title', 'published')->orderBy('id', 'desc')->get();
@@ -24,11 +18,6 @@ class ArticlesController extends Controller
         return view('admin.articles.index', ['posts' => $posts]);
     }
 
-    /**
-     * Show the new article form.
-     *
-     * @return \Illuminate\View\View
-     */
     public function create(): View
     {
         $message = session('message');
@@ -36,11 +25,6 @@ class ArticlesController extends Controller
         return view('admin.articles.create', ['message' => $message]);
     }
 
-    /**
-     * Process an incoming request for a new article and save it.
-     *
-     * @return \Illuminate\Http\RedirectResponse
-     */
     public function store(): RedirectResponse
     {
         //if a `.md` is attached use that for the main content.
@@ -49,42 +33,21 @@ class ArticlesController extends Controller
             $content = $file->fread($file->getSize());
         }
         $main = $content ?? request()->input('main');
-        $article = Article::create(
-            [
-                'url' => request()->input('url'),
-                'title' => request()->input('title'),
-                'main' => $main,
-                'published' => request()->input('published') ?? 0,
-            ]
-        );
+        Article::create([
+            'url' => request()->input('url'),
+            'title' => request()->input('title'),
+            'main' => $main,
+            'published' => request()->input('published') ?? 0,
+        ]);
 
         return redirect('/admin/blog');
     }
 
-    /**
-     * Show the edit form for an existing article.
-     *
-     * @param  int  $articleId
-     * @return \Illuminate\View\View
-     */
-    public function edit(int $articleId): View
+    public function edit(Article $article): View
     {
-        $post = Article::select(
-            'title',
-            'main',
-            'url',
-            'published'
-        )->where('id', $articleId)->get();
-
-        return view('admin.articles.edit', ['id' => $articleId, 'post' => $post]);
+        return view('admin.articles.edit', ['article' => $article]);
     }
 
-    /**
-     * Process an incoming request to edit an article.
-     *
-     * @param  int  $articleId
-     * @return \Illuminate\Http\RedirectResponse
-     */
     public function update(int $articleId): RedirectResponse
     {
         $article = Article::find($articleId);
@@ -97,12 +60,6 @@ class ArticlesController extends Controller
         return redirect('/admin/blog');
     }
 
-    /**
-     * Process a request to delete an aricle.
-     *
-     * @param  int  $articleId
-     * @return \Illuminate\Http\RedirectResponse
-     */
     public function destroy(int $articleId): RedirectResponse
     {
         Article::where('id', $articleId)->delete();

@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Carbon;
 use Tests\TestCase;
 use Tests\TestToken;
 
 class OwnYourGramTest extends TestCase
 {
-    use DatabaseTransactions;
+    use RefreshDatabase;
     use TestToken;
 
     /** @test */

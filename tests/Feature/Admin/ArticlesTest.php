@@ -4,15 +4,16 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Admin;
 
+use App\Models\Article;
 use App\Models\User;
 use Faker\Factory;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
 class ArticlesTest extends TestCase
 {
-    use DatabaseTransactions;
+    use RefreshDatabase;
 
     /** @test */
     public function adminArticlesPageLoads(): void
@@ -76,9 +77,12 @@ class ArticlesTest extends TestCase
     public function articleCanLoadFormToEditArticle(): void
     {
         $user = User::factory()->make();
+        $article = Article::factory()->create([
+            'main' => 'This is *my* new blog. It uses `Markdown`.',
+        ]);
 
         $response = $this->actingAs($user)
-                         ->get('/admin/blog/1/edit');
+                         ->get('/admin/blog/' . $article->id . '/edit');
         $response->assertSeeText('This is *my* new blog. It uses `Markdown`.');
     }
 
@@ -86,9 +90,10 @@ class ArticlesTest extends TestCase
     public function adminCanEditArticle(): void
     {
         $user = User::factory()->make();
+        $article = Article::factory()->create();
 
         $this->actingAs($user)
-             ->post('/admin/blog/1', [
+             ->post('/admin/blog/' . $article->id, [
                  '_method' => 'PUT',
                  'title' => 'My New Blog',
                  'main' => 'This article has been edited',
@@ -103,13 +108,14 @@ class ArticlesTest extends TestCase
     public function adminCanDeleteArticle(): void
     {
         $user = User::factory()->make();
+        $article = Article::factory()->create();
 
         $this->actingAs($user)
-             ->post('/admin/blog/1', [
+             ->post('/admin/blog/' . $article->id, [
                  '_method' => 'DELETE',
              ]);
         $this->assertSoftDeleted('articles', [
-            'title' => 'My New Blog',
+            'title' => $article->title,
         ]);
     }
 }

@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace Tests\Unit;
 
 use App\Models\Article;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Carbon;
 use Tests\TestCase;
 
 class ArticlesTest extends TestCase
 {
-    use DatabaseTransactions;
+    use RefreshDatabase;
 
     /** @test */
     public function titleSlugIsGeneratedAutomatically(): void
@@ -64,6 +65,12 @@ class ArticlesTest extends TestCase
     /** @test */
     public function dateScopeReturnsExpectedArticles(): void
     {
+        Article::factory()->create([
+            'created_at' => Carbon::now()->subYear()->toDateTimeString(),
+            'updated_at' => Carbon::now()->subYear()->toDateTimeString(),
+        ]);
+        Article::factory()->create();
+
         $yearAndMonth = Article::date(date('Y'), date('m'))->get();
         $this->assertTrue(count($yearAndMonth) === 1);
 

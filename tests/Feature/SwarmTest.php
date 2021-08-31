@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tests\Feature;
 
 use App\Jobs\SendWebMentions;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Queue;
 use Tests\TestCase;
@@ -13,7 +13,7 @@ use Tests\TestToken;
 
 class SwarmTest extends TestCase
 {
-    use DatabaseTransactions;
+    use RefreshDatabase;
     use TestToken;
 
     /**

@@ -10,13 +10,13 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Tests\TestCase;
 
 class ContactsTest extends TestCase
 {
-    use DatabaseTransactions;
+    use RefreshDatabase;
 
     protected function tearDown(): void
     {
@@ -66,8 +66,9 @@ class ContactsTest extends TestCase
     public function adminCanSeeFormToEditContact(): void
     {
         $user = User::factory()->make();
+        $contact = Contact::factory()->create();
 
-        $response = $this->actingAs($user)->get('/admin/contacts/1/edit');
+        $response = $this->actingAs($user)->get('/admin/contacts/' . $contact->id . '/edit');
         $response->assertViewIs('admin.contacts.edit');
     }
 
@@ -75,8 +76,9 @@ class ContactsTest extends TestCase
     public function adminCanUpdateContact(): void
     {
         $user = User::factory()->make();
+        $contact = Contact::factory()->create();
 
-        $this->actingAs($user)->post('/admin/contacts/1', [
+        $this->actingAs($user)->post('/admin/contacts/' . $contact->id, [
             '_method' => 'PUT',
             'name' => 'Tantek Celik',
             'nick' => 'tantek',
@@ -96,8 +98,9 @@ class ContactsTest extends TestCase
         $path = sys_get_temp_dir() . '/tantek.png';
         $file = new UploadedFile($path, 'tantek.png', 'image/png', null, true);
         $user = User::factory()->make();
+        $contact = Contact::factory()->create();
 
-        $this->actingAs($user)->post('/admin/contacts/1', [
+        $this->actingAs($user)->post('/admin/contacts/' . $contact->id, [
             '_method' => 'PUT',
             'name' => 'Tantek Celik',
             'nick' => 'tantek',
@@ -115,8 +118,13 @@ class ContactsTest extends TestCase
     public function adminCanDeleteContact(): void
     {
         $user = User::factory()->make();
+        $contact = Contact::factory()->create(['nick' => 'tantek']);
 
-        $this->actingAs($user)->post('/admin/contacts/1', [
+        $this->assertDatabaseHas('contacts', [
+            'nick' => 'tantek',
+        ]);
+
+        $this->actingAs($user)->post('/admin/contacts/' . $contact->id, [
             '_method' => 'DELETE',
         ]);
         $this->assertDatabaseMissing('contacts', [
@@ -132,7 +140,7 @@ class ContactsTest extends TestCase
             <img class="u-photo" alt="" src="http://tantek.com/tantek.png">
         </div>
         HTML;
-        $file = fopen(__DIR__ . '/../../aaron.png', 'r');
+        $file = fopen(__DIR__ . '/../../aaron.png', 'rb');
         $mock = new MockHandler([
             new Response(200, ['Content-Type' => 'text/html'], $html),
             new Response(200, ['Content-Type' => 'iamge/png'], $file),
@@ -141,8 +149,11 @@ class ContactsTest extends TestCase
         $client = new Client(['handler' => $handler]);
         $this->app->instance(Client::class, $client);
         $user = User::factory()->make();
+        $contact = Contact::factory()->create([
+            'homepage' => 'https://tantek.com',
+        ]);
 
-        $this->actingAs($user)->get('/admin/contacts/1/getavatar');
+        $this->actingAs($user)->get('/admin/contacts/' . $contact->id . '/getavatar');
 
         $this->assertFileEquals(
             __DIR__ . '/../../aaron.png',
@@ -160,10 +171,11 @@ class ContactsTest extends TestCase
         $client = new Client(['handler' => $handler]);
         $this->app->instance(Client::class, $client);
         $user = User::factory()->make();
+        $contact = Contact::factory()->create();
 
-        $response = $this->actingAs($user)->get('/admin/contacts/1/getavatar');
+        $response = $this->actingAs($user)->get('/admin/contacts/' . $contact->id . '/getavatar');
 
-        $response->assertRedirect('/admin/contacts/1/edit');
+        $response->assertRedirect('/admin/contacts/' . $contact->id . '/edit');
     }
 
     /** @test */
@@ -182,10 +194,11 @@ class ContactsTest extends TestCase
         $client = new Client(['handler' => $handler]);
         $this->app->instance(Client::class, $client);
         $user = User::factory()->make();
+        $contact = Contact::factory()->create();
 
-        $response = $this->actingAs($user)->get('/admin/contacts/1/getavatar');
+        $response = $this->actingAs($user)->get('/admin/contacts/' . $contact->id . '/getavatar');
 
-        $response->assertRedirect('/admin/contacts/1/edit');
+        $response->assertRedirect('/admin/contacts/' . $contact->id . '/edit');
     }
 
     /** @test */

@@ -4,18 +4,19 @@ declare(strict_types=1);
 
 namespace Tests\Unit;
 
+use App\Models\{Contact, Media, Note, Place, Tag};
+use Illuminate\Filesystem\Filesystem;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Cache;
-use App\Models\{Media, Note, Tag};
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
 class NotesTest extends TestCase
 {
-    use DatabaseTransactions;
+    use RefreshDatabase;
 
     /**
      * Test the getNoteAttribute method. This will then also call the
@@ -28,7 +29,9 @@ class NotesTest extends TestCase
     {
         // phpcs:ignore
         $expected = '<p>Having a <a rel="tag" class="p-category" href="/notes/tagged/beer">#beer</a> at the local. 🍺</p>' . PHP_EOL;
-        $note = Note::find(2);
+        $note = Note::factory([
+            'note' => 'Having a #beer at the local. 🍺',
+        ])->create();
         $this->assertEquals($expected, $note->note);
     }
 
@@ -42,7 +45,16 @@ class NotesTest extends TestCase
     {
         // phpcs:ignore
         $expected = '<p>Hi <span class="u-category h-card mini-h-card"><a class="u-url p-name" href="http://tantek.com">Tantek Çelik</a><span class="hovercard"> <a class="u-url" href="https://twitter.com/t"><img class="social-icon" src="/assets/img/social-icons/twitter.svg"> t</a><img class="u-photo" alt="" src="/assets/profile-images/default-image"></span></span></p>' . PHP_EOL;
-        $note = Note::find(4);
+        Contact::factory()->create([
+            'nick' => 'tantek',
+            'name' => 'Tantek Çelik',
+            'homepage' => 'http://tantek.com',
+            'twitter' => 't',
+            'facebook' => null,
+        ]);
+        $note = Note::factory()->create([
+            'note' => 'Hi @tantek',
+        ]);
         $this->assertEquals($expected, $note->note);
     }
 
@@ -54,9 +66,24 @@ class NotesTest extends TestCase
      */
     public function specificProfileImageUsedInMakehcardsMethod(): void
     {
+        Contact::factory()->create([
+            'nick' => 'aaron',
+            'name' => 'Aaron Parecki',
+            'homepage' => 'https://aaronparecki.com',
+            'twitter' => null,
+            'facebook' => 123456,
+        ]);
+        $fileSystem = new Filesystem();
+        $fileSystem->ensureDirectoryExists(public_path('/assets/profile-images/aaronparecki.com'));
+        if (!$fileSystem->exists(public_path('/assets/profile-images/aaronparecki.com/image'))) {
+            $fileSystem->copy('./tests/aaron.png', public_path('/assets/profile-images/aaronparecki.com/image'));
+        }
+        $note = Note::factory()->create([
+            'note' => 'Hi @aaron',
+        ]);
+
         // phpcs:ignore
         $expected = '<p>Hi <span class="u-category h-card mini-h-card"><a class="u-url p-name" href="https://aaronparecki.com">Aaron Parecki</a><span class="hovercard"><a class="u-url" href="https://www.facebook.com/123456"><img class="social-icon" src="/assets/img/social-icons/facebook.svg"> Facebook</a> <img class="u-photo" alt="" src="/assets/profile-images/aaronparecki.com/image"></span></span></p>' . PHP_EOL;
-        $note = Note::find(5);
         $this->assertEquals($expected, $note->note);
     }
 
@@ -69,13 +96,16 @@ class NotesTest extends TestCase
     public function twitterLinkIsCreatedWhenNoContactFound(): void
     {
         $expected = '<p>Hi <a href="https://twitter.com/bob">@bob</a></p>' . PHP_EOL;
-        $note = Note::find(6);
+        $note = Note::factory()->create([
+            'note' => 'Hi @bob',
+        ]);
         $this->assertEquals($expected, $note->note);
     }
 
     /** @test */
     public function shorturlMethodReturnsExpectedValue(): void
     {
+        Note::factory(14)->create();
         $note = Note::find(14);
         $this->assertEquals(config('app.shorturl') . '/notes/E', $note->shorturl);
     }
@@ -83,7 +113,13 @@ class NotesTest extends TestCase
     /** @test */
     public function weGetLatitudeLongitudeValuesOfAssociatedPlaceOfNote(): void
     {
-        $note = Note::find(2); // should be having beer at bridgewater note
+        $place = Place::factory()->create([
+            'latitude' => '53.4983',
+            'longitude' => '-2.3805',
+        ]);
+        $note = Note::factory()->create([
+            'place_id' => $place->id,
+        ]);
         $this->assertEquals('53.4983', $note->latitude);
         $this->assertEquals('-2.3805', $note->longitude);
     }
@@ -91,7 +127,7 @@ class NotesTest extends TestCase
     /** @test */
     public function whenNoAssociatedPlaceWeGetNullForLatitudeLongitudeValues(): void
     {
-        $note = Note::find(5);
+        $note = Note::factory()->create();
         $this->assertNull($note->latitude);
         $this->assertNull($note->longitude);
     }
@@ -99,7 +135,14 @@ class NotesTest extends TestCase
     /** @test */
     public function weCanGetAddressAttributeForAssociatedPlace(): void
     {
-        $note = Note::find(2);
+        $place = Place::factory()->create([
+            'name' => 'The Bridgewater Pub',
+            'latitude' => '53.4983',
+            'longitude' => '-2.3805',
+        ]);
+        $note = Note::factory()->create([
+            'place_id' => $place->id,
+        ]);
         $this->assertEquals('The Bridgewater Pub', $note->address);
     }
 
@@ -254,13 +297,13 @@ class NotesTest extends TestCase
     /** @test */
     public function addImageElementToNoteContentWhenMediaAssociated(): void
     {
-        $media = new Media([
+        $media = Media::factory()->create([
             'type' => 'image',
             'path' => 'test.png',
         ]);
-        $media->save();
-        $note = new Note(['note' => 'A nice image']);
-        $note->save();
+        $note = Note::factory()->create([
+            'note' => 'A nice image',
+        ]);
         $note->media()->save($media);
 
         $expected = "<p>A nice image</p>
@@ -271,13 +314,13 @@ class NotesTest extends TestCase
     /** @test */
     public function addVideoElementToNoteContentWhenMediaAssociated(): void
     {
-        $media = new Media([
+        $media = Media::factory()->create([
             'type' => 'video',
             'path' => 'test.mkv',
         ]);
-        $media->save();
-        $note = new Note(['note' => 'A nice video']);
-        $note->save();
+        $note = Note::factory()->create([
+            'note' => 'A nice video',
+        ]);
         $note->media()->save($media);
 
         $expected = "<p>A nice video</p>
@@ -288,13 +331,13 @@ class NotesTest extends TestCase
     /** @test */
     public function addAudioElementToNoteContentWhenMediaAssociated(): void
     {
-        $media = new Media([
+        $media = Media::factory()->create([
             'type' => 'audio',
             'path' => 'test.flac',
         ]);
-        $media->save();
-        $note = new Note(['note' => 'Some nice audio']);
-        $note->save();
+        $note = Note::factory()->create([
+            'note' => 'Some nice audio',
+        ]);
         $note->media()->save($media);
 
         $expected = "<p>Some nice audio</p>
@@ -326,7 +369,7 @@ class NotesTest extends TestCase
     /** @test */
     public function markdownContentGetsConverted(): void
     {
-        $note = Note::create([
+        $note = Note::factory()->create([
             'note' => 'The best search engine? https://duckduckgo.com',
         ]);
 
@@ -348,24 +391,21 @@ class NotesTest extends TestCase
         ];
         Cache::put('933662564587855877', $tempContent);
 
-        $note = Note::find(1);
+        $note = Note::factory()->create([
+            'in_reply_to' => 'https://twitter.com/someRando/status/933662564587855877'
+        ]);
 
         $this->assertSame($tempContent, $note->twitter);
     }
 
     /** @test */
-    public function latitudeCanBeParsedFromPlainLocation(): void
+    public function latitudeAndLongitudeCanBeParsedFromPlainLocation(): void
     {
-        $note = Note::find(18);
+        $note = Note::factory()->create([
+            'location' => '1.23,4.56',
+        ]);
 
         $this->assertSame(1.23, $note->latitude);
-    }
-
-    /** @test */
-    public function longitudeCanBeParsedFromPlainLocation(): void
-    {
-        $note = Note::find(18);
-
         $this->assertSame(4.56, $note->longitude);
     }
 
@@ -374,7 +414,9 @@ class NotesTest extends TestCase
     {
         Cache::put('1.23,4.56', '<span class="p-country-name">Antarctica</span>');
 
-        $note = Note::find(18);
+        $note = Note::factory()->create([
+            'location' => '1.23,4.56',
+        ]);
 
         $this->assertSame('<span class="p-country-name">Antarctica</span>', $note->address);
     }

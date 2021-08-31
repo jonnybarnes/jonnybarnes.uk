@@ -7,6 +7,7 @@ namespace App\Models;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
@@ -58,6 +59,7 @@ use Spatie\CommonMarkHighlighter\IndentedCodeRenderer;
  */
 class Article extends Model
 {
+    use HasFactory;
     use Sluggable;
     use SoftDeletes;
 

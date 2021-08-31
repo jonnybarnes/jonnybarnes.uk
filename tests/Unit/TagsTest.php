@@ -4,22 +4,31 @@ declare(strict_types=1);
 
 namespace Tests\Unit;
 
+use App\Models\Bookmark;
+use App\Models\Note;
 use App\Models\Tag;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class TagsTest extends TestCase
 {
+    use RefreshDatabase;
+
     /** @test */
     public function canGetAssociatedNotes(): void
     {
-        $tag = Tag::find(1); // should be beer tag
+        $note = Note::factory()->create();
+        $tag = Tag::factory()->create();
+        $note->tags()->save($tag);
         $this->assertCount(1, $tag->notes);
     }
 
     /** @test */
     public function canGetAssociatedBookmarks(): void
     {
-        $tag = Tag::find(5); //should be first random tag for bookmarks
+        $bookmark = Bookmark::factory()->create();
+        $tag = Tag::factory()->create();
+        $bookmark->tags()->save($tag);
         $this->assertCount(1, $tag->bookmarks);
     }
 

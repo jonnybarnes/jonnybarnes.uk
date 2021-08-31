@@ -11,7 +11,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Queue;
 use Jonnybarnes\WebmentionsParser\Authorship;
 use Tests\TestCase;
@@ -19,7 +19,7 @@ use Tests\TestToken;
 
 class LikesTest extends TestCase
 {
-    use DatabaseTransactions;
+    use RefreshDatabase;
     use TestToken;
 
     /** @test */
@@ -32,7 +32,8 @@ class LikesTest extends TestCase
     /** @test */
     public function singleLikePageHasCorrectView(): void
     {
-        $response = $this->get('/likes/1');
+        $like = Like::factory()->create();
+        $response = $this->get('/likes/' . $like->id);
         $response->assertViewIs('likes.show');
     }
 

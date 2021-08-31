@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Tests\Unit\Jobs;
 
 use App\Jobs\AddClientToDatabase;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class AddClientToDatabaseJobTest extends TestCase
 {
-    use DatabaseTransactions;
+    use RefreshDatabase;
 
     /** @test */
     public function clientIsAddedToDatabaseByJob(): void

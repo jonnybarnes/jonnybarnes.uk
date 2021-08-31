@@ -8,18 +8,18 @@ use App\Exceptions\InternetArchiveException;
 use App\Jobs\ProcessBookmark;
 use App\Models\Bookmark;
 use App\Services\BookmarkService;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Ramsey\Uuid\Uuid;
 use Tests\TestCase;
 
 class ProcessBookmarkJobTest extends TestCase
 {
-    use DatabaseTransactions;
+    use RefreshDatabase;
 
     /** @test */
     public function screenshotAndArchiveLinkAreSavedByJob(): void
     {
-        $bookmark = Bookmark::find(1);
+        $bookmark = Bookmark::factory()->create();
         $uuid = Uuid::uuid4();
         $service = $this->createMock(BookmarkService::class);
         $service->method('saveScreenshot')
@@ -40,7 +40,7 @@ class ProcessBookmarkJobTest extends TestCase
     /** @test */
     public function archiveLinkSavedAsNullWhenExceptionThrown(): void
     {
-        $bookmark = Bookmark::find(1);
+        $bookmark = Bookmark::factory()->create();
         $uuid = Uuid::uuid4();
         $service = $this->createMock(BookmarkService::class);
         $service->method('saveScreenshot')
