@@ -6,10 +6,13 @@ namespace Tests\Feature;
 
 use App\Models\Contact;
 use App\Models\Note;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class BridgyPosseTest extends TestCase
 {
+    use RefreshDatabase;
+
     /** @test */
     public function notesWeWantCopiedToTwitterShouldHaveNecessaryMarkup(): void
     {

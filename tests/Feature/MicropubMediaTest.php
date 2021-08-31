@@ -6,7 +6,7 @@ namespace Tests\Feature;
 
 use App\Jobs\ProcessMedia;
 use App\Models\Media;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Storage;
@@ -15,7 +15,7 @@ use Tests\TestToken;
 
 class MicropubMediaTest extends TestCase
 {
-    use DatabaseTransactions;
+    use RefreshDatabase;
     use TestToken;
 
     /** @test */

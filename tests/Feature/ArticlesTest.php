@@ -5,11 +5,14 @@ declare(strict_types=1);
 namespace Tests\Feature;
 
 use App\Models\Article;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Jonnybarnes\IndieWeb\Numbers;
 use Tests\TestCase;
 
 class ArticlesTest extends TestCase
 {
+    use RefreshDatabase;
+
     /** @test */
     public function articlesPageLoads(): void
     {

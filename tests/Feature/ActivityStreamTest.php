@@ -5,10 +5,13 @@ declare(strict_types=1);
 namespace Tests\Feature;
 
 use App\Models\Note;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class ActivityStreamTest extends TestCase
 {
+    use RefreshDatabase;
+
     /** @test */
     public function homepageRequestReturnsDataForSiteOwner(): void
     {

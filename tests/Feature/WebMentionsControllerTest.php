@@ -6,11 +6,14 @@ namespace Tests\Feature;
 
 use App\Jobs\ProcessWebMention;
 use App\Models\Note;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Queue;
 use Tests\TestCase;
 
 class WebMentionsControllerTest extends TestCase
 {
+    use RefreshDatabase;
+
     /** @test */
     public function webmentionEndpointCanServeBrowserRequest(): void
     {

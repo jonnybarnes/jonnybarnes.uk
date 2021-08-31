@@ -5,10 +5,13 @@ declare(strict_types=1);
 namespace Tests\Feature;
 
 use App\Models\Note;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class NotesControllerTest extends TestCase
 {
+    use RefreshDatabase;
+
     /**
      * Test the `/notes` page returns 200, this should
      * mean the database is being hit.

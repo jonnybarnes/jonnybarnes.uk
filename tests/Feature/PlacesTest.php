@@ -5,10 +5,13 @@ declare(strict_types=1);
 namespace Tests\Feature;
 
 use App\Models\Place;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class PlacesTest extends TestCase
 {
+    use RefreshDatabase;
+
     /**
      * Test the `/places` page for OK response.
      *
