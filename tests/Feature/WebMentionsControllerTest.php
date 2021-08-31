@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Feature;
 
 use App\Jobs\ProcessWebMention;
+use App\Models\Note;
 use Illuminate\Support\Facades\Queue;
 use Tests\TestCase;
 
@@ -73,13 +74,15 @@ class WebMentionsControllerTest extends TestCase
     }
 
     /** @test */
-    public function legitimateWebmentionTriggersProcesswebmentionJob(): void
+    public function legitimateWebmentionTriggersProcessWebmentionJob(): void
     {
         Queue::fake();
 
+        $note = Note::factory()->create();
+
         $response = $this->call('POST', '/webmention', [
             'source' => 'https://example.org/post/123',
-            'target' => config('app.url') . '/notes/B'
+            'target' => $note->longurl,
         ]);
         $response->assertStatus(202);
 

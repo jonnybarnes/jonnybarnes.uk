@@ -7,13 +7,13 @@ namespace Tests\Feature\Admin;
 use App\Jobs\ProcessLike;
 use App\Models\Like;
 use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Queue;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
 class LikesTest extends TestCase
 {
-    use DatabaseTransactions;
+    use RefreshDatabase;
 
     /** @test */
     public function likesPageLoads(): void
@@ -55,9 +55,10 @@ class LikesTest extends TestCase
     public function likeEditFormLoads(): void
     {
         $user = User::factory()->make();
+        $like = Like::factory()->create();
 
         $response = $this->actingAs($user)
-                         ->get('/admin/likes/1/edit');
+                         ->get('/admin/likes/' . $like->id . '/edit');
         $response->assertSee('Edit Like');
     }
 
@@ -66,9 +67,10 @@ class LikesTest extends TestCase
     {
         Queue::fake();
         $user = User::factory()->make();
+        $like = Like::factory()->create();
 
         $this->actingAs($user)
-             ->post('/admin/likes/1', [
+             ->post('/admin/likes/' . $like->id, [
                  '_method' => 'PUT',
                  'like_url' => 'https://example.com',
              ]);
@@ -81,12 +83,12 @@ class LikesTest extends TestCase
     /** @test */
     public function adminCanDeleteLike(): void
     {
-        $like = Like::find(1);
+        $like = Like::factory()->create();
         $url = $like->url;
         $user = User::factory()->make();
 
         $this->actingAs($user)
-             ->post('/admin/likes/1', [
+             ->post('/admin/likes/' . $like->id, [
                  '_method' => 'DELETE',
              ]);
         $this->assertDatabaseMissing('likes', [

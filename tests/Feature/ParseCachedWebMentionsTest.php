@@ -6,13 +6,14 @@ namespace Tests\Feature;
 
 use App\Models\WebMention;
 use Illuminate\FileSystem\FileSystem;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Artisan;
 use Tests\TestCase;
 
 class ParseCachedWebMentionsTest extends TestCase
 {
-    use DatabaseTransactions;
+    use RefreshDatabase;
 
     protected function setUp(): void
     {
@@ -27,6 +28,16 @@ class ParseCachedWebMentionsTest extends TestCase
     /** @test */
     public function parseWebmentionHtml(): void
     {
+        $webmentionAaron = WebMention::factory()->create([
+            'source' => 'https://aaronpk.localhost/reply/1',
+            'created_at' => Carbon::now()->subDays(5),
+            'updated_at' => Carbon::now()->subDays(5),
+        ]);
+        $webmentionTantek = WebMention::factory()->create([
+            'source' => 'http://tantek.com/',
+            'created_at' => Carbon::now()->subDays(5),
+            'updated_at' => Carbon::now()->subDays(5),
+        ]);
         $this->assertFileExists(storage_path('HTML') . '/https/aaronpk.localhost/reply/1');
         $this->assertFileExists(storage_path('HTML') . '/http/tantek.com/index.html');
         $htmlAaron = file_get_contents(storage_path('HTML') . '/https/aaronpk.localhost/reply/1');
@@ -40,8 +51,9 @@ class ParseCachedWebMentionsTest extends TestCase
 
         Artisan::call('webmentions:parsecached');
 
-        $webmentionAaron = WebMention::find(1);
-        $webmentionTantek = WebMention::find(2);
+        $webmentionAaron = WebMention::find($webmentionAaron->id);
+        $webmentionTantek = WebMention::find($webmentionTantek->id);
+
         $this->assertTrue($webmentionAaron->updated_at->gt($webmentionAaron->created_at));
         $this->assertTrue($webmentionTantek->updated_at->gt($webmentionTantek->created_at));
     }

@@ -5,14 +5,15 @@ declare(strict_types=1);
 namespace Tests\Feature\Admin;
 
 use App\Jobs\SendWebMentions;
+use App\Models\Note;
 use App\Models\User;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Queue;
 use Tests\TestCase;
 
 class NotesTest extends TestCase
 {
-    use DatabaseTransactions;
+    use RefreshDatabase;
 
     /** @test */
     public function notesPageLoads(): void
@@ -49,8 +50,9 @@ class NotesTest extends TestCase
     public function noteEditFormLoads(): void
     {
         $user = User::factory()->make();
+        $note = Note::factory()->create();
 
-        $response = $this->actingAs($user)->get('/admin/notes/1/edit');
+        $response = $this->actingAs($user)->get('/admin/notes/' . $note->id . '/edit');
         $response->assertViewIs('admin.notes.edit');
     }
 
@@ -59,8 +61,9 @@ class NotesTest extends TestCase
     {
         Queue::fake();
         $user = User::factory()->make();
+        $note = Note::factory()->create();
 
-        $this->actingAs($user)->post('/admin/notes/1', [
+        $this->actingAs($user)->post('/admin/notes/' . $note->id, [
             '_method' => 'PUT',
             'content' => 'An edited note',
             'webmentions' => true,
@@ -76,12 +79,13 @@ class NotesTest extends TestCase
     public function adminCanDeleteNote(): void
     {
         $user = User::factory()->make();
+        $note = Note::factory()->create();
 
-        $this->actingAs($user)->post('/admin/notes/1', [
+        $this->actingAs($user)->post('/admin/notes/' . $note->id, [
             '_method' => 'DELETE',
         ]);
         $this->assertSoftDeleted('notes', [
-            'id' => '1',
+            'id' => $note->id,
         ]);
     }
 }

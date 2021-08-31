@@ -6,14 +6,15 @@ namespace Tests\Feature;
 
 use App\Jobs\ProcessBookmark;
 use App\Jobs\SyndicateBookmarkToTwitter;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
+use App\Models\Bookmark;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Queue;
 use Tests\TestCase;
 use Tests\TestToken;
 
 class BookmarksTest extends TestCase
 {
-    use DatabaseTransactions, TestToken;
+    use RefreshDatabase, TestToken;
 
     /** @test */
     public function bookmarksPageLoadsWithoutError(): void
@@ -25,7 +26,8 @@ class BookmarksTest extends TestCase
     /** @test */
     public function singleBookmarkPageLoadsWithoutError(): void
     {
-        $response = $this->get('/bookmarks/1');
+        $bookmark = Bookmark::factory()->create();
+        $response = $this->get('/bookmarks/' . $bookmark->id);
         $response->assertViewIs('bookmarks.show');
     }
 

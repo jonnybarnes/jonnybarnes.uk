@@ -65,7 +65,7 @@ Route::group(['domain' => config('url.longurl')], function () {
             Route::get('/', [AdminArticlesController::class, 'index']);
             Route::get('/create', [AdminArticlesController::class, 'create']);
             Route::post('/', [AdminArticlesController::class, 'store']);
-            Route::get('/{id}/edit', [AdminArticlesController::class, 'edit']);
+            Route::get('/{article}/edit', [AdminArticlesController::class, 'edit']);
             Route::put('/{id}', [AdminArticlesController::class, 'update']);
             Route::delete('/{id}', [AdminArticlesController::class, 'destroy']);
         });

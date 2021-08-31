@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Feature;
 
+use App\Models\Contact;
 use Tests\TestCase;
 
 class ContactsTest extends TestCase
@@ -26,6 +27,9 @@ class ContactsTest extends TestCase
      */
     public function contactPageShouldFallbackToDefaultProfilePic(): void
     {
+        Contact::factory()->create([
+            'nick' => 'tantek',
+        ]);
         $response = $this->get('/contacts/tantek');
         $response->assertViewHas('image', '/assets/profile-images/default-image');
     }
@@ -37,6 +41,10 @@ class ContactsTest extends TestCase
      */
     public function contactPageShouldUseSpecificProfilePicIfPresent(): void
     {
+        Contact::factory()->create([
+            'nick' => 'aaron',
+            'homepage' => 'https://aaronparecki.com',
+        ]);
         $response = $this->get('/contacts/aaron');
         $response->assertViewHas('image', '/assets/profile-images/aaronparecki.com/image');
     }

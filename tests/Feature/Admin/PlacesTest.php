@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Admin;
 
+use App\Models\Place;
 use App\Models\User;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class PlacesTest extends TestCase
 {
-    use DatabaseTransactions;
+    use RefreshDatabase;
 
     /** @test */
     public function placesPageLoads(): void
@@ -51,8 +52,9 @@ class PlacesTest extends TestCase
     public function editPlacePageLoads(): void
     {
         $user = User::factory()->make();
+        $place = Place::factory()->create();
 
-        $response = $this->actingAs($user)->get('/admin/places/1/edit');
+        $response = $this->actingAs($user)->get('/admin/places/' . $place->id . '/edit');
         $response->assertViewIs('admin.places.edit');
     }
 
@@ -60,8 +62,11 @@ class PlacesTest extends TestCase
     public function adminCanUpdatePlace(): void
     {
         $user = User::factory()->make();
+        $place = Place::factory()->create([
+            'name' => 'The Bridgewater Pub',
+        ]);
 
-        $this->actingAs($user)->post('/admin/places/1', [
+        $this->actingAs($user)->post('/admin/places/' . $place->id, [
             '_method' => 'PUT',
             'name' => 'The Bridgewater',
             'description' => 'Who uses “Pub” anyway',

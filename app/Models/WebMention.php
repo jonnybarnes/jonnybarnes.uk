@@ -8,6 +8,7 @@ use App\Traits\FilterHtml;
 use Codebird\Codebird;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Filesystem\Filesystem;
@@ -55,6 +56,7 @@ use Jonnybarnes\WebmentionsParser\Exceptions\AuthorshipParserException;
 class WebMention extends Model
 {
     use FilterHtml;
+    use HasFactory;
 
     /**
      * The database table used by the model.

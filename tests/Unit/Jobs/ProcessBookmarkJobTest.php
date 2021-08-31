@@ -19,7 +19,7 @@ class ProcessBookmarkJobTest extends TestCase
     /** @test */
     public function screenshotAndArchiveLinkAreSavedByJob(): void
     {
-        $bookmark = Bookmark::find(1);
+        $bookmark = Bookmark::factory()->create();
         $uuid = Uuid::uuid4();
         $service = $this->createMock(BookmarkService::class);
         $service->method('saveScreenshot')
@@ -40,7 +40,7 @@ class ProcessBookmarkJobTest extends TestCase
     /** @test */
     public function archiveLinkSavedAsNullWhenExceptionThrown(): void
     {
-        $bookmark = Bookmark::find(1);
+        $bookmark = Bookmark::factory()->create();
         $uuid = Uuid::uuid4();
         $service = $this->createMock(BookmarkService::class);
         $service->method('saveScreenshot')

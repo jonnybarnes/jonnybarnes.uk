@@ -4,19 +4,27 @@ declare(strict_types=1);
 
 namespace Tests\Unit;
 
+use App\Models\Note;
 use App\Models\WebMention;
 use Codebird\Codebird;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Tests\TestCase;
 
 class WebMentionTest extends TestCase
 {
+    use RefreshDatabase;
+
     /** @test */
     public function commentableMethodLinksToNotes(): void
     {
-        $webmention = WebMention::find(1);
-        $this->assertInstanceOf('App\Models\Note', $webmention->commentable);
+        $note = Note::factory()->create();
+        $webmention = WebMention::factory()->make([
+            'commentable_id' => $note->id,
+            'commentable_type' => Note::class,
+        ]);
+        $this->assertInstanceOf(Note::class, $webmention->commentable);
     }
 
     /** @test */

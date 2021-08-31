@@ -11,11 +11,11 @@ jobs:
 
     services:
       postgres:
-        image: postgres:13.1
+        image: postgres:13.2
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: jbuktest
+          POSTGRES_DB: jbukdev_testing
         ports:
           - 5432:5432
 

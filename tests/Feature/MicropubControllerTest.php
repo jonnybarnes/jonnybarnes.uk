@@ -5,17 +5,16 @@ declare(strict_types=1);
 namespace Tests\Feature;
 
 use Faker\Factory;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Jobs\{SendWebMentions, SyndicateNoteToTwitter};
-use App\Models\{Media, Place};
+use App\Models\{Media, Note, Place};
 use Carbon\Carbon;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Queue;
-use Tests\TestCase;
-use Tests\TestToken;
+use Tests\{TestCase, TestToken};
 
 class MicropubControllerTest extends TestCase
 {
-    use DatabaseTransactions;
+    use RefreshDatabase;
     use TestToken;
 
     /** @test */
@@ -57,6 +56,11 @@ class MicropubControllerTest extends TestCase
     /** @test */
     public function micropubClientsCanRequestKnownNearbyPlaces(): void
     {
+        Place::factory()->create([
+            'name' => 'The Bridgewater Pub',
+            'latitude' => '53.5',
+            'longitude' => '-2.38',
+        ]);
         $response = $this->get('/api/post?q=geo:53.5,-2.38', ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]);
         $response->assertJson(['places' => [['slug' => 'the-bridgewater-pub']]]);
     }
@@ -64,12 +68,12 @@ class MicropubControllerTest extends TestCase
     /**
      * @test
      * @todo Add uncertainty parameter
-     */
+     *
     public function micropubClientsCanRequestKnownNearbyPlacesWithUncertaintyParameter(): void
     {
         $response = $this->get('/api/post?q=geo:53.5,-2.38', ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]);
         $response->assertJson(['places' => [['slug' => 'the-bridgewater-pub']]]);
-    }
+    }*/
 
     /** @test */
     public function returnEmptyResultWhenMicropubClientRequestsKnownNearbyPlaces(): void
@@ -459,11 +463,12 @@ class MicropubControllerTest extends TestCase
     /** @test */
     public function micropubClientApiRequestUpdatesExistingNote(): void
     {
+        $note = Note::factory()->create();
         $response = $this->postJson(
             '/api/post',
             [
                 'action' => 'update',
-                'url' => config('app.url') . '/notes/A',
+                'url' => $note->longurl,
                 'replace' => [
                     'content' => ['replaced content'],
                 ],
@@ -478,11 +483,12 @@ class MicropubControllerTest extends TestCase
     /** @test */
     public function micropubClientApiRequestUpdatesNoteSyndicationLinks(): void
     {
+        $note = Note::factory()->create();
         $response = $this->postJson(
             '/api/post',
             [
                 'action' => 'update',
-                'url' => config('app.url') . '/notes/A',
+                'url' => $note->longurl,
                 'add' => [
                     'syndication' => [
                         'https://www.swarmapp.com/checkin/123',
@@ -504,11 +510,12 @@ class MicropubControllerTest extends TestCase
     /** @test */
     public function micropubClientApiRequestAddsImageToNote(): void
     {
+        $note = Note::factory()->create();
         $response = $this->postJson(
             '/api/post',
             [
                 'action' => 'update',
-                'url' => config('app.url') . '/notes/A',
+                'url' => $note->longurl,
                 'add' => [
                     'photo' => ['https://example.org/photo.jpg'],
                 ],
@@ -564,11 +571,12 @@ class MicropubControllerTest extends TestCase
     /** @test */
     public function micropubClientApiRequestReturnsErrorWhenTryingToUpdateUnsupportedProperty(): void
     {
+        $note = Note::factory()->create();
         $response = $this->postJson(
             '/api/post',
             [
                 'action' => 'update',
-                'url' => config('app.url') . '/notes/A',
+                'url' => $note->longurl,
                 'morph' => [ // or any other unsupported update type
                     'syndication' => ['https://www.swarmapp.com/checkin/123'],
                 ],
@@ -602,11 +610,12 @@ class MicropubControllerTest extends TestCase
     /** @test */
     public function micropubClientApiRequestCanReplaceNoteSyndicationTargets(): void
     {
+        $note = Note::factory()->create();
         $response = $this->postJson(
             '/api/post',
             [
                 'action' => 'update',
-                'url' => config('app.url') . '/notes/B',
+                'url' => $note->longurl,
                 'replace' => [
                     'syndication' => [
                         'https://www.swarmapp.com/checkin/the-id',

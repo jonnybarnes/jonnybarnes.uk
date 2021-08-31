@@ -6,6 +6,7 @@ namespace App\Models;
 
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
@@ -41,6 +42,8 @@ use Illuminate\Support\Str;
  */
 class Media extends Model
 {
+    use HasFactory;
+
     /**
      * The table associated with the model.
      *
@@ -62,7 +65,7 @@ class Media extends Model
      */
     public function note(): BelongsTo
     {
-        return $this->belongsTo('App\Models\Note');
+        return $this->belongsTo(Note::class);
     }
 
     /**
@@ -118,7 +121,7 @@ class Media extends Model
         $filenameParts = explode('.', $path);
         array_pop($filenameParts);
 
-        return ltrim(array_reduce($filenameParts, function ($carry, $item) {
+        return ltrim(array_reduce($filenameParts, static function ($carry, $item) {
             return $carry . '.' . $item;
         }, ''), '.');
     }

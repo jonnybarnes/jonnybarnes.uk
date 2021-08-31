@@ -51,7 +51,7 @@ class Tag extends Model
      */
     public function notes()
     {
-        return $this->belongsToMany('App\Models\Note');
+        return $this->belongsToMany(Note::class);
     }
 
     /**

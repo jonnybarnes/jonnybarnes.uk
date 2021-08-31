@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Admin;
 
+use App\Models\MicropubClient;
 use App\Models\User;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class ClientsTest extends TestCase
 {
-    use DatabaseTransactions;
+    use RefreshDatabase;
 
     /** @test */
     public function clientsPageLoads(): void
@@ -52,9 +53,12 @@ class ClientsTest extends TestCase
     public function adminCanLoadEditFormForClient(): void
     {
         $user = User::factory()->make();
+        $client = MicropubClient::factory()->create([
+            'client_url' => 'https://jbl5.dev/notes/new',
+        ]);
 
         $response = $this->actingAs($user)
-                         ->get('/admin/clients/1/edit');
+                         ->get('/admin/clients/' . $client->id . '/edit');
         $response->assertSee('https://jbl5.dev/notes/new');
     }
 
@@ -62,9 +66,10 @@ class ClientsTest extends TestCase
     public function adminCanEditClient(): void
     {
         $user = User::factory()->make();
+        $client = MicropubClient::factory()->create();
 
         $this->actingAs($user)
-             ->post('/admin/clients/1', [
+             ->post('/admin/clients/' . $client->id, [
                  '_method' => 'PUT',
                  'client_url' => 'https://jbl5.dev/notes/new',
                  'client_name' => 'JBL5dev',
@@ -79,9 +84,12 @@ class ClientsTest extends TestCase
     public function adminCanDeleteClient(): void
     {
         $user = User::factory()->make();
+        $client = MicropubClient::factory()->create([
+            'client_url' => 'https://jbl5.dev/notes/new',
+        ]);
 
         $this->actingAs($user)
-             ->post('/admin/clients/1', [
+             ->post('/admin/clients/' . $client->id, [
                  '_method' => 'DELETE',
              ]);
         $this->assertDatabaseMissing('clients', [

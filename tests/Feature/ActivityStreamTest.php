@@ -25,8 +25,8 @@ class ActivityStreamTest extends TestCase
     /** @test */
     public function requestForNoteIncludesActivityStreamData(): void
     {
-        $note = Note::find(11);
-        $response = $this->get('/notes/B', ['Accept' => 'application/activity+json']);
+        $note = Note::factory()->create();
+        $response = $this->get($note->longurl, ['Accept' => 'application/activity+json']);
         $response->assertHeader('Content-Type', 'application/activity+json');
         $response->assertJson([
             '@context' => 'https://www.w3.org/ns/activitystreams',

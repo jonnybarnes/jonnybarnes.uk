@@ -44,7 +44,7 @@ class ProcessWebMentionJobTest extends TestCase
         $handler = HandlerStack::create($mock);
         $client = new Client(['handler' => $handler]);
 
-        $note = Note::find(1);
+        $note = Note::factory()->create();
         $source = 'https://example.org/mention/1/';
 
         $job = new ProcessWebMention($note, $source);
@@ -70,7 +70,7 @@ class ProcessWebMentionJobTest extends TestCase
         $handler = HandlerStack::create($mock);
         $client = new Client(['handler' => $handler]);
 
-        $note = Note::find(1);
+        $note = Note::factory()->create();
         $source = 'https://example.org/mention/1/';
 
         $job = new ProcessWebMention($note, $source);
@@ -103,7 +103,7 @@ class ProcessWebMentionJobTest extends TestCase
         $handler = HandlerStack::create($mock);
         $client = new Client(['handler' => $handler]);
 
-        $note = Note::find(14);
+        $note = Note::factory()->create();
         $source = 'https://aaronpk.localhost/reply/1';
 
         $job = new ProcessWebMention($note, $source);
@@ -135,7 +135,7 @@ class ProcessWebMentionJobTest extends TestCase
         $handler = HandlerStack::create($mock);
         $client = new Client(['handler' => $handler]);
 
-        $note = Note::find(14);
+        $note = Note::factory()->create();
         $source = 'https://example.org/reply/1';
         $webmention = new WebMention();
         $webmention->source = $source;
@@ -172,7 +172,7 @@ class ProcessWebMentionJobTest extends TestCase
         $handler = HandlerStack::create($mock);
         $client = new Client(['handler' => $handler]);
 
-        $note = Note::find(14);
+        $note = Note::factory()->create();
         $source = 'https://example.org/reply/1';
         $webmention = new WebMention();
         $webmention->source = $source;
@@ -209,7 +209,7 @@ class ProcessWebMentionJobTest extends TestCase
         $handler = HandlerStack::create($mock);
         $client = new Client(['handler' => $handler]);
 
-        $note = Note::find(14);
+        $note = Note::factory()->create();
         $source = 'https://example.org/reply/1';
         $webmention = new WebMention();
         $webmention->source = $source;
