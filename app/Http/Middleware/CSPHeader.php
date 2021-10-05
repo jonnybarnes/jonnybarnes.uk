@@ -18,19 +18,15 @@ class CSPHeader
     {
         // headers have to be single-line strings,
         // so we concat multiple lines
-        // phpcs:disable
+        // phpcs:disable Generic.Files.LineLength.TooLong
         return $next($request)
             ->header(
                 'Content-Security-Policy',
                 "default-src 'self'; " .
-                "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://api.mapbox.com https://api.tiles.mapbox.com blob:; " .
-                "style-src 'self' 'unsafe-inline' https://api.mapbox.com https://api.tiles.mapbox.com cloud.typography.com jonnybarnes.uk; " .
-                "img-src 'self' data: blob: https://pbs.twimg.com https://api.mapbox.com https://*.tiles.mapbox.com https://jbuk-media.s3-eu-west-1.amazonaws.com https://jbuk-media-dev.s3-eu-west-1.amazonaws.com https://secure.gravatar.com https://graph.facebook.com *.fbcdn.net https://*.cdninstagram.com https://*.4sqi.net https://upload.wikimedia.org; " .
+                "style-src 'self' cloud.typography.com jonnybarnes.uk; " .
+                "img-src 'self' data: blob: https://pbs.twimg.com https://jbuk-media.s3-eu-west-1.amazonaws.com https://jbuk-media-dev.s3-eu-west-1.amazonaws.com https://secure.gravatar.com https://graph.facebook.com *.fbcdn.net https://*.cdninstagram.com https://*.4sqi.net https://upload.wikimedia.org; " .
                 "font-src 'self' data:; " .
-                "connect-src 'self' https://api.mapbox.com https://*.tiles.mapbox.com https://events.mapbox.com data: blob:; " .
-                "worker-src 'self' blob:; " .
                 "frame-src 'self' https://www.youtube.com blob:; " .
-                'child-src blob:; ' .
                 'upgrade-insecure-requests; ' .
                 'block-all-mixed-content; ' .
                 'report-to csp-endpoint; ' .
@@ -43,6 +39,6 @@ class CSPHeader
                         "'max-age': 10886400" .
                 '}'
             );
-        // phpcs:enable
+        // phpcs:enable Generic.Files.LineLength.TooLong
     }
 }
