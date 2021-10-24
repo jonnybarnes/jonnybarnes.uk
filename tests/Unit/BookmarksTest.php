@@ -1,27 +1,31 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Unit;
 
-use Tests\TestCase;
+use App\Exceptions\InternetArchiveException;
+use App\Services\BookmarkService;
 use GuzzleHttp\Client;
+use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
-use App\Services\BookmarkService;
-use GuzzleHttp\Handler\MockHandler;
-use App\Exceptions\InternetArchiveException;
+use Tests\TestCase;
 
 class BookmarksTest extends TestCase
 {
     /**
+     * @test
      * @group puppeteer
-     */
-    public function test_screenshot_of_google()
+     *
+    public function takeScreenshotOfDuckDuckGo()
     {
-        $uuid = (new BookmarkService())->saveScreenshot('https://www.google.co.uk');
+        $uuid = (new BookmarkService())->saveScreenshot('https://duckduckgo.com');
         $this->assertTrue(file_exists(public_path() . '/assets/img/bookmarks/' . $uuid . '.png'));
-    }
+    }*/
 
-    public function test_archive_link_method()
+    /** @test */
+    public function archiveLinkMethodCallsArchiveService(): void
     {
         $mock = new MockHandler([
             new Response(200, ['Content-Location' => '/web/1234/example.org']),
@@ -33,7 +37,8 @@ class BookmarksTest extends TestCase
         $this->assertEquals('/web/1234/example.org', $url);
     }
 
-    public function test_archive_link_method_archive_site_error_exception()
+    /** @test */
+    public function archiveLinkMethodThrowsAnExceptionOnError(): void
     {
         $this->expectException(InternetArchiveException::class);
 
@@ -43,10 +48,11 @@ class BookmarksTest extends TestCase
         $handler = HandlerStack::create($mock);
         $client = new Client(['handler' => $handler]);
         $this->app->instance(Client::class, $client);
-        $url = (new BookmarkService())->getArchiveLink('https://example.org');
+        (new BookmarkService())->getArchiveLink('https://example.org');
     }
 
-    public function test_archive_link_method_archive_site_no_location_exception()
+    /** @test */
+    public function archiveLinkMethodThrowsAnExceptionIfNoLocationReturned(): void
     {
         $this->expectException(InternetArchiveException::class);
 
@@ -56,6 +62,6 @@ class BookmarksTest extends TestCase
         $handler = HandlerStack::create($mock);
         $client = new Client(['handler' => $handler]);
         $this->app->instance(Client::class, $client);
-        $url = (new BookmarkService())->getArchiveLink('https://example.org');
+        (new BookmarkService())->getArchiveLink('https://example.org');
     }
 }

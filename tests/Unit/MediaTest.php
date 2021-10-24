@@ -1,20 +1,28 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Unit;
 
-use Tests\TestCase;
 use App\Models\Media;
+use App\Models\Note;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class MediaTest extends TestCase
 {
-    public function test_get_note_from_media()
+    use RefreshDatabase;
+
+    /** @test */
+    public function getTheNoteThatMediaInstanceBelongsTo(): void
     {
-        $media = Media::find(1);
-        $note = $media->note;
-        $this->assertInstanceOf('App\Models\Note', $note);
+        $media = Media::factory()->for(Note::factory())->create();
+
+        $this->assertInstanceOf(Note::class, $media->note);
     }
 
-    public function test_media_absolute_url_returned_unmodified()
+    /** @test */
+    public function absoluteUrlsAreReturnedUnmodified(): void
     {
         $absoluteUrl = 'https://instagram-cdn.com/image/uuid';
         $media = new Media();

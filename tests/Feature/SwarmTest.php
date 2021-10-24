@@ -1,26 +1,37 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature;
 
+use App\Jobs\SendWebMentions;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Queue;
 use Tests\TestCase;
 use Tests\TestToken;
-use Lcobucci\JWT\Builder;
-use Lcobucci\JWT\Signer\Hmac\Sha256;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class SwarmTest extends TestCase
 {
-    use DatabaseTransactions, TestToken;
+    use RefreshDatabase;
+    use TestToken;
 
-    public function test_faked_ownyourswarm_request_with_foursquare()
+    /**
+     * Given a check in to Foursquare, this is the content Ownyourswarm will post to us.
+     *
+     * @test
+     */
+    public function mockedOwnyourswarmRequestWithFoursquare(): void
     {
+        Queue::fake();
+
         $response = $this->json(
             'POST',
             'api/post',
             [
                 'type' => ['h-entry'],
                 'properties' => [
-                    'published' => [\Carbon\Carbon::now()->toDateTimeString()],
+                    'published' => [Carbon::now()->toDateTimeString()],
                     'syndication' => ['https://www.swarmapp.com/checkin/abc'],
                     'content' => [[
                         'value' => 'My first #checkin using Example Product',
@@ -48,18 +59,27 @@ class SwarmTest extends TestCase
         $this->assertDatabaseHas('places', [
             'external_urls' => '{"foursquare": "https://foursquare.com/v/123456"}'
         ]);
+
+        Queue::assertPushed(SendWebMentions::class);
     }
 
-    // this request would actually come from another client than OwnYourSwarm
-    public function test_faked_ownyourswarm_request_with_osm()
+    /**
+     * This request would actually come from another client than OwnYourSwarm, but we’re testing
+     * OpenStreetMap data.
+     *
+     * @test
+     */
+    public function mockedOwnyourswarmRequestWithOsm(): void
     {
+        Queue::fake();
+
         $response = $this->json(
             'POST',
             'api/post',
             [
                 'type' => ['h-entry'],
                 'properties' => [
-                    'published' => [\Carbon\Carbon::now()->toDateTimeString()],
+                    'published' => [Carbon::now()->toDateTimeString()],
                     'content' => [[
                         'value' => 'My first #checkin using Example Product',
                         'html' => 'My first #checkin using <a href="http://example.org">Example Product</a>',
@@ -83,18 +103,26 @@ class SwarmTest extends TestCase
         $this->assertDatabaseHas('places', [
             'external_urls' => '{"osm": "https://www.openstreetmap.org/way/123456"}'
         ]);
+
+        Queue::assertPushed(SendWebMentions::class);
     }
 
-    // this request would actually come from another client than OwnYourSwarm
-    public function test_faked_ownyourswarm_request_without_known_external_url()
+    /**
+     * This request would actually come from another client than OwnYourSwarm, as that would include a Foursquare URL
+     *
+     * @test
+     */
+    public function mockedOwnyourswarmRequestWithoutKnownExternalUrl(): void
     {
+        Queue::fake();
+
         $response = $this->json(
             'POST',
             'api/post',
             [
                 'type' => ['h-entry'],
                 'properties' => [
-                    'published' => [\Carbon\Carbon::now()->toDateTimeString()],
+                    'published' => [Carbon::now()->toDateTimeString()],
                     'content' => [[
                         'value' => 'My first #checkin using Example Product',
                         'html' => 'My first #checkin using <a href="http://example.org">Example Product</a>',
@@ -118,9 +146,12 @@ class SwarmTest extends TestCase
         $this->assertDatabaseHas('places', [
             'external_urls' => '{"default": "https://www.example.org/way/123456"}'
         ]);
+
+        Queue::assertPushed(SendWebMentions::class);
     }
 
-    public function test_faked_ownyourswarm_request_with_no_text_content()
+    /** @test */
+    public function mockedOwnyourswarmRequestWithNoTextContent(): void
     {
         $response = $this->json(
             'POST',
@@ -128,7 +159,7 @@ class SwarmTest extends TestCase
             [
                 'type' => ['h-entry'],
                 'properties' => [
-                    'published' => [\Carbon\Carbon::now()->toDateTimeString()],
+                    'published' => [Carbon::now()->toDateTimeString()],
                     'syndication' => ['https://www.swarmapp.com/checkin/def'],
                 ],
                 'checkin' => [
@@ -152,18 +183,22 @@ class SwarmTest extends TestCase
         $this->assertDatabaseHas('notes', [
             'swarm_url' => 'https://www.swarmapp.com/checkin/def'
         ]);
+        // Check the default text content for the note was saved
         $this->get($response->__get('headers')->get('location'))->assertSee('📍');
     }
 
-    public function test_faked_ownyourswarm_request_saves_just_post_when_error_in_checkin_data()
+    /** @test */
+    public function mockedOwnyourswarmRequestSavesJustThePostWhenAnErrorOccursInTheCheckinData(): void
     {
+        Queue::fake();
+
         $response = $this->json(
             'POST',
             'api/post',
             [
                 'type' => ['h-entry'],
                 'properties' => [
-                    'published' => [\Carbon\Carbon::now()->toDateTimeString()],
+                    'published' => [Carbon::now()->toDateTimeString()],
                     'syndication' => ['https://www.swarmapp.com/checkin/abc'],
                     'content' => [[
                         'value' => 'My first #checkin using Example Product',
@@ -186,17 +221,22 @@ class SwarmTest extends TestCase
         $this->assertDatabaseMissing('places', [
             'name' => 'Awesome Venue',
         ]);
+
+        Queue::assertPushed(SendWebMentions::class);
     }
 
-    public function test_ownyourswarm_request_with_hadr_location()
+    /** @test */
+    public function mockedOwnyourswarmRequestWithHAdrLocation(): void
     {
+        Queue::fake();
+
         $response = $this->json(
             'POST',
             'api/post',
             [
                 'type' => ['h-entry'],
                 'properties' => [
-                    'published' => [\Carbon\Carbon::now()->toDateTimeString()],
+                    'published' => [Carbon::now()->toDateTimeString()],
                     'syndication' => ['https://www.swarmapp.com/checkin/abc'],
                     'content' => [[
                         'value' => 'My first #checkin using Example Product',
@@ -227,18 +267,20 @@ class SwarmTest extends TestCase
         $this->assertDatabaseMissing('places', [
             'name' => 'Awesome Venue',
         ]);
+
+        Queue::assertPushed(SendWebMentions::class);
     }
 
     /** @test */
-    public function a_real_ownyourswarm_checkin()
+    public function ownyourswarmCheckinTestUsingRealData(): void
     {
         $response = $this->json(
             'POST',
             'api/post',
             [
                 'type' => ['h-entry'],
-                'properties' =>[
-                    'published' => [\Carbon\Carbon::now()->toDateTimeString()]
+                'properties' => [
+                    'published' => [Carbon::now()->toDateTimeString()]
                 ],
                 'syndication' => [
                     'https://www.swarmapp.com/user/199841/checkin/5c4b1ac56dcf04002c0a4f58'

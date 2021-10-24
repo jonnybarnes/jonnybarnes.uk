@@ -1,19 +1,24 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature;
 
-use Tests\TestCase;
 use App\Models\Note;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class NotesControllerTest extends TestCase
 {
+    use RefreshDatabase;
+
     /**
      * Test the `/notes` page returns 200, this should
      * mean the database is being hit.
      *
-     * @return void
+     * @test
      */
-    public function test_notes_page()
+    public function notesPageLoads(): void
     {
         $response = $this->get('/notes');
         $response->assertStatus(200);
@@ -22,37 +27,41 @@ class NotesControllerTest extends TestCase
     /**
      * Test a specific note.
      *
-     * @return void
+     * @test
      */
-    public function test_specific_note()
+    public function specificNotePageLoads(): void
     {
-        $response = $this->get('/notes/D');
+        $note = Note::factory()->create();
+        $response = $this->get($note->longurl);
         $response->assertViewHas('note');
     }
 
-    public function test_note_replying_to_tweet()
+    /** @todo */
+    /* @test *
+    public function noteReplyingToTweet(): void
     {
         $response = $this->get('/notes/B');
         $response->assertViewHas('note');
-    }
+    }*/
 
     /**
      * Test that `/note/{decID}` redirects to `/notes/{nb60id}`.
      *
-     * @return void
+     * @test
      */
-    public function test_dec_id_redirect()
+    public function oldNoteUrlsRedirect(): void
     {
-        $response = $this->get('/note/11');
-        $response->assertRedirect(config('app.url') . '/notes/B');
+        $note = Note::factory()->create();
+        $response = $this->get('/note/' . $note->id);
+        $response->assertRedirect($note->longurl);
     }
 
     /**
      * Visit the tagged page and check the tag view data.
      *
-     * @return void
+     * @test
      */
-    public function test_tagged_notes_page()
+    public function taggedNotesPageLoads(): void
     {
         $response = $this->get('/notes/tagged/beer');
         $response->assertViewHas('tag', 'beer');

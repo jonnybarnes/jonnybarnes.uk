@@ -1,24 +1,29 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature\Admin;
 
 use Tests\TestCase;
 
 class AdminTest extends TestCase
 {
-    public function test_admin_page_redirects_to_login()
+    /** @test */
+    public function adminPageRedirectsUnauthedUsersToLoginPage(): void
     {
         $response = $this->get('/admin');
         $response->assertRedirect('/login');
     }
 
-    public function test_login_page()
+    /** @test */
+    public function loginPageLoads(): void
     {
         $response = $this->get('/login');
         $response->assertViewIs('login');
     }
 
-    public function test_attempt_login_with_bad_credentials()
+    /** @test */
+    public function loginAttemptWithBadCredentialsFails(): void
     {
         $response = $this->post('/login', [
             'username' => 'bad',

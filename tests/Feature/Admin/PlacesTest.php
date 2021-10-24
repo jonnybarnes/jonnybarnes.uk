@@ -1,16 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature\Admin;
 
+use App\Models\Place;
 use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class PlacesTest extends TestCase
 {
-    use DatabaseTransactions;
+    use RefreshDatabase;
 
-    public function test_index_page()
+    /** @test */
+    public function placesPageLoads(): void
     {
         $user = User::factory()->make();
 
@@ -18,7 +22,8 @@ class PlacesTest extends TestCase
         $response->assertViewIs('admin.places.index');
     }
 
-    public function test_create_page()
+    /** @test */
+    public function createPlacePageLoads(): void
     {
         $user = User::factory()->make();
 
@@ -26,7 +31,8 @@ class PlacesTest extends TestCase
         $response->assertViewIs('admin.places.create');
     }
 
-    public function test_create_new_place()
+    /** @test */
+    public function adminCanCreateNewPlace(): void
     {
         $user = User::factory()->make();
 
@@ -42,19 +48,25 @@ class PlacesTest extends TestCase
         ]);
     }
 
-    public function test_edit_page()
+    /** @test */
+    public function editPlacePageLoads(): void
     {
         $user = User::factory()->make();
+        $place = Place::factory()->create();
 
-        $response = $this->actingAs($user)->get('/admin/places/1/edit');
+        $response = $this->actingAs($user)->get('/admin/places/' . $place->id . '/edit');
         $response->assertViewIs('admin.places.edit');
     }
 
-    public function test_updating_a_place()
+    /** @test */
+    public function adminCanUpdatePlace(): void
     {
         $user = User::factory()->make();
+        $place = Place::factory()->create([
+            'name' => 'The Bridgewater Pub',
+        ]);
 
-        $this->actingAs($user)->post('/admin/places/1', [
+        $this->actingAs($user)->post('/admin/places/' . $place->id, [
             '_method' => 'PUT',
             'name' => 'The Bridgewater',
             'description' => 'Who uses “Pub” anyway',

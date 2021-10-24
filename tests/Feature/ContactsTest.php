@@ -1,17 +1,23 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature;
 
+use App\Models\Contact;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class ContactsTest extends TestCase
 {
+    use RefreshDatabase;
+
     /**
      * Check the `/contacts` page gives a good response.
      *
-     * @return void
+     * @test
      */
-    public function test_contacts_page()
+    public function contactsPageLoadsWithoutError(): void
     {
         $response = $this->get('/contacts');
         $response->assertStatus(200);
@@ -20,10 +26,13 @@ class ContactsTest extends TestCase
     /**
      * Test an individual contact page with default profile image.
      *
-     * @return void
+     * @test
      */
-    public function test_contact_page_with_default_pic()
+    public function contactPageShouldFallbackToDefaultProfilePic(): void
     {
+        Contact::factory()->create([
+            'nick' => 'tantek',
+        ]);
         $response = $this->get('/contacts/tantek');
         $response->assertViewHas('image', '/assets/profile-images/default-image');
     }
@@ -31,16 +40,20 @@ class ContactsTest extends TestCase
     /**
      * Test an individual contact page with a specific profile image.
      *
-     * @return void
+     * @test
      */
-    public function test_contact_page_with_specific_pic()
+    public function contactPageShouldUseSpecificProfilePicIfPresent(): void
     {
+        Contact::factory()->create([
+            'nick' => 'aaron',
+            'homepage' => 'https://aaronparecki.com',
+        ]);
         $response = $this->get('/contacts/aaron');
         $response->assertViewHas('image', '/assets/profile-images/aaronparecki.com/image');
     }
 
     /** @test */
-    public function unknownContactGives404()
+    public function unknownContactReturnsNotFoundResponse(): void
     {
         $response = $this->get('/contacts/unknown');
         $response->assertNotFound();

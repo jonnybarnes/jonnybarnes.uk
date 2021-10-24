@@ -1,23 +1,27 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Unit;
 
-use Tests\TestCase;
 use App\Models\Like;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class LikesTest extends TestCase
 {
-    use DatabaseTransactions;
+    use RefreshDatabase;
 
-    public function test_setting_author_url()
+    /** @test */
+    public function weCanSetTheAuthorUrl(): void
     {
         $like = new Like();
         $like->author_url = 'https://joe.bloggs/';
         $this->assertEquals('https://joe.bloggs', $like->author_url);
     }
 
-    public function test_plaintext_like_content()
+    /** @test */
+    public function weDoNotModifyPlainTextContent(): void
     {
         $like = new Like();
         $like->url = 'https://example.org/post/123';
@@ -27,27 +31,28 @@ class LikesTest extends TestCase
         $this->assertEquals('some plaintext content', $like->content);
     }
 
-    public function test_html_like_content_is_filtered()
+    /** @test */
+    public function htmlLikeContentIsFiltered(): void
     {
         $htmlEvil = <<<HTML
-<div class="h-entry">
-    <div class="e-content">
-        <p>Hello</p>
-        <img src="javascript:evil();" onload="evil();" />
-    </div>
-</div>
-HTML;
+        <div class="h-entry">
+            <div class="e-content">
+                <p>Hello</p>
+                <img src="javascript:evil();" onload="evil();" />
+            </div>
+        </div>
+        HTML;
         $htmlFiltered = <<<HTML
-<p>Hello</p>
-        <img />
-HTML;
+        <p>Hello</p>
+                <img />
+        HTML;
         $like = new Like();
         $like->url = 'https://example.org/post/123';
         $like->content = $htmlEvil;
         $like->save();
 
-        // HTMLPurifer will leave the whitespace before the <img> tag
-        // trim it, saving whitespace in $htmlFilteres can get removed by text editors
+        // HTMLPurifier will leave the whitespace before the <img> tag
+        // trim it, saving whitespace in $htmlFiltered can get removed by text editors
         $this->assertEquals($htmlFiltered, trim($like->content));
     }
 }

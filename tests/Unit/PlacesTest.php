@@ -1,56 +1,77 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Unit;
 
-use Tests\TestCase;
+use App\Models\Note;
 use App\Models\Place;
 use App\Services\PlaceService;
-use MStaack\LaravelPostgis\Geometries\Point;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\DB;
+use InvalidArgumentException;
+use Tests\TestCase;
 
 class PlacesTest extends TestCase
 {
-    use DatabaseTransactions;
+    use RefreshDatabase;
 
-    public function test_notes_method()
+    /** @test */
+    public function canRetrieveAssociatedNotes(): void
     {
-        $place = Place::find(1);
+        $place = Place::factory()->create();
+        Note::factory(5)->create([
+            'place_id' => $place->id,
+        ]);
         $this->assertInstanceOf(Collection::class, $place->notes);
+        $this->assertCount(5, $place->notes);
     }
 
-    /**
-     * Test the near method returns a collection.
-     *
-     * @return void
-     */
-    public function test_near_method()
+    /** @test */
+    public function nearMethodReturnsCollection(): void
     {
-        $nearby = Place::near((object) ['latitude' => 53.5, 'longitude' => -2.38], 1000)->get();
+        Place::factory()->create([
+            'name' => 'The Bridgewater Pub',
+            'latitude' => 53.4983,
+            'longitude' => -2.3805,
+        ]);
+        $nearby = Place::near((object) ['latitude' => 53.5, 'longitude' => -2.38])->get();
         $this->assertEquals('the-bridgewater-pub', $nearby[0]->slug);
     }
 
-    public function test_longurl_method()
+    /** @test */
+    public function getLongurl(): void
     {
-        $place = Place::find(1);
+        $place = Place::factory()->create([
+            'name' => 'The Bridgewater Pub',
+        ]);
         $this->assertEquals(config('app.url') . '/places/the-bridgewater-pub', $place->longurl);
     }
 
-    public function test_uri_method()
+    /** @test */
+    public function getShorturl()
     {
-        $place = Place::find(1);
-        $this->assertEquals(config('app.url') . '/places/the-bridgewater-pub', $place->uri);
-
-    }
-
-    public function test_shorturl_method()
-    {
-        $place = Place::find(1);
+        $place = Place::factory()->create([
+            'name' => 'The Bridgewater Pub',
+        ]);
         $this->assertEquals(config('app.shorturl') . '/places/the-bridgewater-pub', $place->shorturl);
     }
 
-    public function test_service_returns_existing_place()
+    /** @test */
+    public function getUri(): void
     {
+        $place = Place::factory()->create([
+            'name' => 'The Bridgewater Pub',
+        ]);
+        $this->assertEquals(config('app.url') . '/places/the-bridgewater-pub', $place->uri);
+    }
+
+    /** @test */
+    public function placeServiceReturnsExistingPlaceBasedOnExternalUrlsSearch(): void
+    {
+        Place::factory(10)->create();
+
         $place = new Place();
         $place->name = 'Temp Place';
         $place->latitude = 37.422009;
@@ -63,32 +84,48 @@ class PlacesTest extends TestCase
                 'url' => ['https://www.openstreetmap.org/way/1234'],
             ]
         ]);
-        $this->assertInstanceOf('App\Models\Place', $ret); // a place was returned
-        $this->assertEquals(12, count(Place::all())); // still 2 places
+        $this->assertInstanceOf('App\Models\Place', $ret);
+        $this->assertCount(11, Place::all());
     }
 
-    public function test_service_requires_name()
+    /** @test */
+    public function placeServiceRequiresNameWhenCreatingNewPlace(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Missing required name');
 
         $service = new PlaceService();
         $service->createPlaceFromCheckin(['foo' => 'bar']);
     }
 
-    public function test_service_requires_latitude()
+    /** @test */
+    public function placeServiceRequiresLatitudeWhenCreatingNewPlace(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Missing required longitude/latitude');
 
         $service = new PlaceService();
         $service->createPlaceFromCheckin(['properties' => ['name' => 'bar']]);
     }
 
-    public function test_updating_external_urls()
+    /** @test */
+    public function placeServiceCanUpdateExternalUrls(): void
     {
-        $place = Place::find(1);
+        $place = Place::factory()->create([
+            'name' => 'The Bridgewater Pub',
+            'latitude' => 53.4983,
+            'longitude' => -2.3805,
+            'external_urls' => '',
+        ]);
+        $place->external_urls = 'https://www.openstreetmap.org/way/987654';
+        $place->external_urls = 'https://foursquare.com/v/123435/the-bridgewater-pub';
+        $place->save();
+
         $place->external_urls = 'https://bridgewater.pub';
-        $this->assertEquals('{"osm":"https:\/\/www.openstreetmap.org\/way\/987654","foursquare":"https:\/\/foursquare.com\/v\/123435\/the-bridgewater-pub","default":"https:\/\/bridgewater.pub"}', $place->external_urls);
+        $this->assertEquals(json_encode([
+            'default' => 'https://bridgewater.pub',
+            'osm' => 'https://www.openstreetmap.org/way/987654',
+            'foursquare' => 'https://foursquare.com/v/123435/the-bridgewater-pub',
+        ]), $place->external_urls);
     }
 }

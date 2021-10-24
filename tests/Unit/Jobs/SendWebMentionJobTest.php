@@ -1,19 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Unit\Jobs;
 
-use Tests\TestCase;
+use App\Jobs\SendWebMentions;
 use App\Models\Note;
 use GuzzleHttp\Client;
-use GuzzleHttp\HandlerStack;
-use App\Jobs\SendWebMentions;
-use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Handler\MockHandler;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Psr7\Response;
+use Tests\TestCase;
 
 class SendWebMentionJobTest extends TestCase
 {
-    public function test_dicover_endoint_method_on_self()
+    /** @test */
+    public function discoverWebmentionEndpointOnOwnDomain(): void
     {
         $note = new Note();
         $job = new SendWebMentions($note);
@@ -21,7 +23,8 @@ class SendWebMentionJobTest extends TestCase
         $this->assertNull($job->discoverWebmentionEndpoint('/notes/tagged/test'));
     }
 
-    public function test_discover_endpoint_gets_link_from_headers()
+    /** @test */
+    public function discoverWebmentionEndpointFromHeaderLinks(): void
     {
         $url = 'https://example.org/webmention';
         $mock = new MockHandler([
@@ -35,7 +38,8 @@ class SendWebMentionJobTest extends TestCase
         $this->assertEquals($url, $job->discoverWebmentionEndpoint('https://example.org'));
     }
 
-    public function test_discover_endpoint_correctly_parses_html()
+    /** @test */
+    public function discoverWebmentionEndpointFromHtmlLinkTags(): void
     {
         $html = '<link rel="webmention" href="https://example.org/webmention">';
         $mock = new MockHandler([
@@ -52,7 +56,8 @@ class SendWebMentionJobTest extends TestCase
         );
     }
 
-    public function test_discover_endpoint_correctly_parses_html_legacy()
+    /** @test */
+    public function discoverWebmentionEndpointFromLegacyHtmlMarkup(): void
     {
         $html = '<link rel="http://webmention.org/" href="https://example.org/webmention">';
         $mock = new MockHandler([
@@ -69,13 +74,15 @@ class SendWebMentionJobTest extends TestCase
         );
     }
 
-    public function test_empty_note_does_nothing()
+    /** @test */
+    public function ensureEmptyNoteDoesNotTriggerAnyActions(): void
     {
         $job = new SendWebMentions(new Note());
         $this->assertNull($job->handle());
     }
 
-    public function test_resolve_uri()
+    /** @test */
+    public function weResolveRelativeUris(): void
     {
         $uri = '/blog/post';
         $base = 'https://example.org/';
@@ -83,7 +90,8 @@ class SendWebMentionJobTest extends TestCase
         $this->assertEquals('https://example.org/blog/post', $job->resolveUri($uri, $base));
     }
 
-    public function test_the_job()
+    /** @test */
+    public function weSendAWebmentionForANote(): void
     {
         $html = '<link rel="http://webmention.org/" href="https://example.org/webmention">';
         $mock = new MockHandler([
@@ -98,6 +106,7 @@ class SendWebMentionJobTest extends TestCase
         $note->note = 'Hi [Aaron](https://aaronparecki.com)';
         $note->save();
         $job = new SendWebMentions($note);
-        $this->assertNull($job->handle());
+        $job->handle();
+        $this->assertTrue(true);
     }
 }

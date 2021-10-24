@@ -1,18 +1,22 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature\Admin;
 
-use App\Models\User;
-use Tests\TestCase;
 use App\Jobs\SendWebMentions;
+use App\Models\Note;
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Queue;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Tests\TestCase;
 
 class NotesTest extends TestCase
 {
-    use DatabaseTransactions;
+    use RefreshDatabase;
 
-    public function test_index_page()
+    /** @test */
+    public function notesPageLoads(): void
     {
         $user = User::factory()->make();
 
@@ -20,7 +24,8 @@ class NotesTest extends TestCase
         $response->assertViewIs('admin.notes.index');
     }
 
-    public function test_create_page()
+    /** @test */
+    public function noteCreatePageLoads(): void
     {
         $user = User::factory()->make();
 
@@ -28,7 +33,8 @@ class NotesTest extends TestCase
         $response->assertViewIs('admin.notes.create');
     }
 
-    public function test_create_a_new_note()
+    /** @test */
+    public function adminCanCreateNewNote(): void
     {
         $user = User::factory()->make();
 
@@ -40,20 +46,24 @@ class NotesTest extends TestCase
         ]);
     }
 
-    public function test_edit_page()
+    /** @test */
+    public function noteEditFormLoads(): void
     {
         $user = User::factory()->make();
+        $note = Note::factory()->create();
 
-        $response = $this->actingAs($user)->get('/admin/notes/1/edit');
+        $response = $this->actingAs($user)->get('/admin/notes/' . $note->id . '/edit');
         $response->assertViewIs('admin.notes.edit');
     }
 
-    public function test_edit_a_note()
+    /** @test */
+    public function adminCanEditNote(): void
     {
         Queue::fake();
         $user = User::factory()->make();
+        $note = Note::factory()->create();
 
-        $this->actingAs($user)->post('/admin/notes/1', [
+        $this->actingAs($user)->post('/admin/notes/' . $note->id, [
             '_method' => 'PUT',
             'content' => 'An edited note',
             'webmentions' => true,
@@ -65,15 +75,17 @@ class NotesTest extends TestCase
         Queue::assertPushed(SendWebMentions::class);
     }
 
-    public function test_delete_note()
+    /** @test */
+    public function adminCanDeleteNote(): void
     {
         $user = User::factory()->make();
+        $note = Note::factory()->create();
 
-        $this->actingAs($user)->post('/admin/notes/1', [
+        $this->actingAs($user)->post('/admin/notes/' . $note->id, [
             '_method' => 'DELETE',
         ]);
         $this->assertSoftDeleted('notes', [
-            'id' => '1',
+            'id' => $note->id,
         ]);
     }
 }

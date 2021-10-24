@@ -41,11 +41,13 @@ class SaveProfileImage implements ShouldQueue
     {
         try {
             $author = $authorship->findAuthor($this->microformats);
-        } catch (AuthorshipParserException $e) {
-            return;
+        } catch (AuthorshipParserException) {
+            return null;
         }
+
         $photo = Arr::get($author, 'properties.photo.0');
         $home = Arr::get($author, 'properties.url.0');
+
         //dont save pbs.twimg.com links
         if (
             $photo
@@ -53,16 +55,18 @@ class SaveProfileImage implements ShouldQueue
             && parse_url($photo, PHP_URL_HOST) != 'twitter.com'
         ) {
             $client = resolve(Client::class);
+
             try {
                 $response = $client->get($photo);
                 $image = $response->getBody();
-            } catch (RequestException $e) {
+            } catch (RequestException) {
                 // we are opening and reading the default image so that
                 $default = public_path() . '/assets/profile-images/default-image';
                 $handle = fopen($default, 'rb');
                 $image = fread($handle, filesize($default));
                 fclose($handle);
             }
+
             $path = public_path() . '/assets/profile-images/' . parse_url($home, PHP_URL_HOST) . '/image';
             $parts = explode('/', $path);
             $name = array_pop($parts);

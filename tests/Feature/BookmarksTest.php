@@ -1,31 +1,38 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature;
 
+use App\Jobs\ProcessBookmark;
+use App\Jobs\SyndicateBookmarkToTwitter;
+use App\Models\Bookmark;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Queue;
 use Tests\TestCase;
 use Tests\TestToken;
-use App\Jobs\ProcessBookmark;
-use Illuminate\Support\Facades\Queue;
-use App\Jobs\SyndicateBookmarkToTwitter;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class BookmarksTest extends TestCase
 {
-    use DatabaseTransactions, TestToken;
+    use RefreshDatabase, TestToken;
 
-    public function test_bookmarks_page()
+    /** @test */
+    public function bookmarksPageLoadsWithoutError(): void
     {
         $response = $this->get('/bookmarks');
         $response->assertViewIs('bookmarks.index');
     }
 
-    public function test_single_bookmark_page()
+    /** @test */
+    public function singleBookmarkPageLoadsWithoutError(): void
     {
-        $response = $this->get('/bookmarks/1');
+        $bookmark = Bookmark::factory()->create();
+        $response = $this->get('/bookmarks/' . $bookmark->id);
         $response->assertViewIs('bookmarks.show');
     }
 
-    public function test_browsershot_job_dispatches_when_bookmark_added_http_post_syntax()
+    /** @test */
+    public function whenBookmarkIsAddedUsingHttpSyntaxCheckJobToTakeScreenshotIsInvoked(): void
     {
         Queue::fake();
 
@@ -46,7 +53,8 @@ class BookmarksTest extends TestCase
         $this->assertDatabaseHas('bookmarks', ['url' => 'https://example.org/blog-post']);
     }
 
-    public function test_browsershot_job_dispatches_when_bookmark_added_json_syntax()
+    /** @test */
+    public function whenBookmarkIsAddedUsingJsonSyntaxCheckJobToTakeScreenshotIsInvoked(): void
     {
         Queue::fake();
 
@@ -69,7 +77,8 @@ class BookmarksTest extends TestCase
         $this->assertDatabaseHas('bookmarks', ['url' => 'https://example.org/blog-post']);
     }
 
-    public function test_single_twitter_syndication_target_causes_job_dispatch_http_post_syntax()
+    /** @test */
+    public function whenTheBookmarkIsMarkedForPostingToTwitterCheckWeInvokeTheCorrectJob(): void
     {
         Queue::fake();
 
@@ -88,7 +97,8 @@ class BookmarksTest extends TestCase
         $this->assertDatabaseHas('bookmarks', ['url' => 'https://example.org/blog-post']);
     }
 
-    public function test_tags_created_with_new_bookmark()
+    /** @test */
+    public function whenTheBookmarkIsCreatedCheckNecessaryTagsAreAlsoCreated(): void
     {
         Queue::fake();
 

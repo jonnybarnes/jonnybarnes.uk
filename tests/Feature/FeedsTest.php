@@ -1,47 +1,61 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature;
 
+use App\Models\Article;
+use App\Models\Note;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class FeedsTest extends TestCase
 {
+    use RefreshDatabase;
+
     /**
      * Test the blog RSS feed.
      *
-     * @return void
+     * @test
      */
-    public function test_blog_rss_feed()
+    public function blogRssFeedIsPresent(): void
     {
+        Article::factory()->count(3)->create();
         $response = $this->get('/blog/feed.rss');
         $response->assertHeader('Content-Type', 'application/rss+xml; charset=utf-8');
+        $response->assertOk();
     }
 
     /**
      * Test the notes RSS feed.
      *
-     * @return void
+     * @test
      */
-    public function test_notes_rss_feed()
+    public function notesRssFeedIsPresent(): void
     {
+        Note::factory()->count(3)->create();
         $response = $this->get('/notes/feed.rss');
         $response->assertHeader('Content-Type', 'application/rss+xml; charset=utf-8');
+        $response->assertOk();
     }
 
     /**
      * Test the blog RSS feed.
      *
-     * @return void
+     * @test
      */
-    public function test_blog_atom_feed()
+    public function blogAtomFeedIsPresent(): void
     {
+        Article::factory()->count(3)->create();
         $response = $this->get('/blog/feed.atom');
         $response->assertHeader('Content-Type', 'application/atom+xml; charset=utf-8');
+        $response->assertOk();
     }
 
     /** @test */
-    public function blog_jf2_feed()
+    public function blogJf2FeedIsPresent(): void
     {
+        Article::factory()->count(3)->create();
         $response = $this->get('/blog/feed.jf2');
         $response->assertHeader('Content-Type', 'application/jf2feed+json');
         $response->assertJson([
@@ -63,39 +77,46 @@ class FeedsTest extends TestCase
     /**
      * Test the notes RSS feed.
      *
-     * @return void
+     * @test
      */
-    public function test_notes_atom_feed()
+    public function notesAtomFeedIsPresent(): void
     {
+        Note::factory()->count(3)->create();
         $response = $this->get('/notes/feed.atom');
         $response->assertHeader('Content-Type', 'application/atom+xml; charset=utf-8');
+        $response->assertOk();
     }
 
     /**
      * Test the blog JSON feed.
      *
-     * @return void
+     * @test
      */
-    public function test_blog_json_feed()
+    public function blogJsonFeedIsPresent(): void
     {
+        Article::factory()->count(3)->create();
         $response = $this->get('/blog/feed.json');
         $response->assertHeader('Content-Type', 'application/json');
+        $response->assertOk();
     }
 
     /**
      * Test the notes JSON feed.
      *
-     * @return void
+     * @test
      */
-    public function test_notes_json_feed()
+    public function notesJsonFeedIsPresent(): void
     {
+        Note::factory()->count(3)->create();
         $response = $this->get('/notes/feed.json');
         $response->assertHeader('Content-Type', 'application/json');
+        $response->assertOk();
     }
 
     /** @test */
-    public function notes_jf2_feed()
+    public function notesJf2FeedIsPresent(): void
     {
+        Note::factory()->count(3)->create();
         $response = $this->get('/notes/feed.jf2');
         $response->assertHeader('Content-Type', 'application/jf2feed+json');
         $response->assertJson([
@@ -118,10 +139,11 @@ class FeedsTest extends TestCase
      * Each JSON feed item must have one of `content_text` or `content_html`,
      * and whichever one they have can’t be `null`.
      *
-     * @return void
+     * @test
      */
-    public function test_json_feed_has_one_content_attribute_and_it_isnt_null()
+    public function jsonFeedsHaveRequiredAttributes(): void
     {
+        Note::factory()->count(3)->create();
         $response = $this->get('/notes/feed.json');
         $data = json_decode($response->content());
         foreach ($data->items as $item) {
