@@ -8,6 +8,7 @@ jobs:
   deploy:
     name: Deploy (Test)
     runs-on: ubuntu-latest
+    environment: Deployments
     env:
       repository: 'jonnybarnes/jonnybarnes.uk'
       host: 'jonnybarnes.uk'
@@ -27,7 +28,7 @@ jobs:
         with:
           host: ${{ env.host }}
           username: ${{ env.username }}
-          key: ${{ secrets.KEY }}
+          key: ${{ secrets.DEPLOYMENT_KEY }}
           script: |
             [ -d ${{ env.releasesDir }} ] || mkdir ${{ env.releasesDir }}
             [ -d ${{ env.persistentDir }}/storage ] || mkdir ${{ env.persistentDir }}/storage
@@ -49,7 +50,7 @@ jobs:
         with:
           host: ${{ env.host }}
           username: ${{ env.username }}
-          key: ${{ secrets.KEY }}
+          key: ${{ secrets.DEPLOYMENT_KEY }}
           script: |
             cd ${{ env.newReleaseDir }}
             composer install --prefer-dist --no-scripts --no-dev --no-progress --optimize-autoloader --quiet --no-interaction
@@ -59,7 +60,7 @@ jobs:
         with:
           host: ${{ env.host }}
           username: ${{ env.username }}
-          key: ${{ secrets.KEY }}
+          key: ${{ secrets.DEPLOYMENT_KEY }}
           script: |
             # Import the environment config
             cd ${{ env.newReleaseDir }};
@@ -70,7 +71,7 @@ jobs:
         with:
           host: ${{ env.host }}
           username: ${{ env.username }}
-          key: ${{ secrets.KEY }}
+          key: ${{ secrets.DEPLOYMENT_KEY }}
           script: |
             cd ${{ env.newReleaseDir }};
             php artisan clear-compiled;
@@ -80,7 +81,7 @@ jobs:
         with:
           host: ${{ env.host }}
           username: ${{ env.username }}
-          key: ${{ secrets.KEY }}
+          key: ${{ secrets.DEPLOYMENT_KEY }}
           script: |
             cd ${{ env.newReleaseDir }}
             #php artisan migrate --force
@@ -90,7 +91,7 @@ jobs:
         with:
           host: ${{ env.host }}
           username: ${{ env.username }}
-          key: ${{ secrets.KEY }}
+          key: ${{ secrets.DEPLOYMENT_KEY }}
           script: |
             ln -nfs ${{ env.newReleaseDir }} ${{ env.currentDir }};
             cd ${{ env.newReleaseDir }}
@@ -108,7 +109,7 @@ jobs:
         with:
           host: ${{ env.host }}
           username: ${{ env.username }}
-          key: ${{ secrets.KEY }}
+          key: ${{ secrets.DEPLOYMENT_KEY }}
           script: |
             cd ${{ env.releasesDir }}
             ls -dt ${{ env.releasesDir }}/* | tail -n +4 | xargs -d "\n" sudo chown -R jonny .;
