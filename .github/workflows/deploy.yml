@@ -1,4 +1,4 @@
-name: Deploy
+name: Deploy (Test)
 
 on:
   release:
@@ -6,7 +6,7 @@ on:
 
 jobs:
   deploy:
-    name: Deploy
+    name: Deploy (Test)
     runs-on: ubuntu-latest
     env:
       repository: 'jonnybarnes/jonnybarnes.uk'
@@ -83,7 +83,7 @@ jobs:
           key: ${{ secrets.KEY }}
           script: |
             cd ${{ env.newReleaseDir }}
-            php artisan migrate --force
+            #php artisan migrate --force
 
       - name: 🙏 Bless release
         uses: appleboy/ssh-action@master
@@ -94,14 +94,14 @@ jobs:
           script: |
             ln -nfs ${{ env.newReleaseDir }} ${{ env.currentDir }};
             cd ${{ env.newReleaseDir }}
-            php artisan horizon:terminate
+            #php artisan horizon:terminate
             php artisan config:cache
             php artisan event:cache
             php artisan route:cache
             php artisan view:cache
 
-            sudo systemctl restart php-fpm.service
-            sudo supervisorctl restart all
+            #sudo systemctl restart php-fpm.service
+            #sudo supervisorctl restart all
 
       - name: 🚾 Clean up old releases
         uses: appleboy/ssh-action@master
