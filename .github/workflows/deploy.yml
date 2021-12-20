@@ -11,17 +11,14 @@ jobs:
     environment: Deployments
     env:
       repository: 'jonnybarnes/jonnybarnes.uk'
-      host: 'jonnybarnes.uk'
-      username: 'jonny'
-      baseDir: '/var/websites/jonnybarnes.uk-test'
       newReleaseName: '${{ github.run_id }}'
 
     steps:
       - name: 🌍 Set Environment Variables
         run: |
-          echo "releasesDir=${{ env.baseDir }}/releases" >> $GITHUB_ENV
-          echo "persistentDir=${{ env.baseDir }}/persistent" >> $GITHUB_ENV
-          echo "currentDir=${{ env.baseDir }}/current" >> $GITHUB_ENV
+          echo "releasesDir=${{ secrets.DEPLOYMENT_BASE_DIR }}/releases" >> $GITHUB_ENV
+          echo "persistentDir=${{ secrets.DEPLOYMENT_BASE_DIR }}/persistent" >> $GITHUB_ENV
+          echo "currentDir=${{ secrets.DEPLOYMENT_BASE_DIR }}/current" >> $GITHUB_ENV
           echo "newReleaseDir=${{ env.releasesDir }}/${{ env.newReleaseName }}" >> $GITHUB_ENV
       - name: 🔄 Clone Repository
         uses: appleboy/ssh-action@master
@@ -67,7 +64,7 @@ jobs:
           script: |
             # Import the environment config
             cd ${{ env.newReleaseDir }};
-            ln -nfs ${{ env.baseDir }}/.env .env;
+            ln -nfs ${{ secrets.DEPLOYMENT_BASE_DIR }}/.env .env;
 
       - name: ✨ Optimize Installation
         uses: appleboy/ssh-action@master
