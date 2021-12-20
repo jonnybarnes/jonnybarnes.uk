@@ -26,8 +26,9 @@ jobs:
       - name: 🔄 Clone Repository
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ env.host }}
-          username: ${{ env.username }}
+          host: ${{ secrets.DEPLOYMENT_HOST }}
+          port: ${{ secrets.DEPLOYMENT_PORT }}
+          username: ${{ secrets.DEPLOYMENT_USER }}
           key: ${{ secrets.DEPLOYMENT_KEY }}
           script: |
             [ -d ${{ env.releasesDir }} ] || mkdir ${{ env.releasesDir }}
@@ -48,8 +49,9 @@ jobs:
       - name: 🎵 Run Composer
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ env.host }}
-          username: ${{ env.username }}
+          host: ${{ secrets.DEPLOYMENT_HOST }}
+          port: ${{ secrets.DEPLOYMENT_PORT }}
+          username: ${{ secrets.DEPLOYMENT_USER }}
           key: ${{ secrets.DEPLOYMENT_KEY }}
           script: |
             cd ${{ env.newReleaseDir }}
@@ -58,8 +60,9 @@ jobs:
       - name: 🔗 Update Symlinks
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ env.host }}
-          username: ${{ env.username }}
+          host: ${{ secrets.DEPLOYMENT_HOST }}
+          port: ${{ secrets.DEPLOYMENT_PORT }}
+          username: ${{ secrets.DEPLOYMENT_USER }}
           key: ${{ secrets.DEPLOYMENT_KEY }}
           script: |
             # Import the environment config
@@ -69,8 +72,9 @@ jobs:
       - name: ✨ Optimize Installation
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ env.host }}
-          username: ${{ env.username }}
+          host: ${{ secrets.DEPLOYMENT_HOST }}
+          port: ${{ secrets.DEPLOYMENT_PORT }}
+          username: ${{ secrets.DEPLOYMENT_USER }}
           key: ${{ secrets.DEPLOYMENT_KEY }}
           script: |
             cd ${{ env.newReleaseDir }};
@@ -79,8 +83,9 @@ jobs:
       - name: 🙈 Migrate database
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ env.host }}
-          username: ${{ env.username }}
+          host: ${{ secrets.DEPLOYMENT_HOST }}
+          port: ${{ secrets.DEPLOYMENT_PORT }}
+          username: ${{ secrets.DEPLOYMENT_USER }}
           key: ${{ secrets.DEPLOYMENT_KEY }}
           script: |
             cd ${{ env.newReleaseDir }}
@@ -89,8 +94,9 @@ jobs:
       - name: 🙏 Bless release
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ env.host }}
-          username: ${{ env.username }}
+          host: ${{ secrets.DEPLOYMENT_HOST }}
+          port: ${{ secrets.DEPLOYMENT_PORT }}
+          username: ${{ secrets.DEPLOYMENT_USER }}
           key: ${{ secrets.DEPLOYMENT_KEY }}
           script: |
             ln -nfs ${{ env.newReleaseDir }} ${{ env.currentDir }};
@@ -107,8 +113,9 @@ jobs:
       - name: 🚾 Clean up old releases
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ env.host }}
-          username: ${{ env.username }}
+          host: ${{ secrets.DEPLOYMENT_HOST }}
+          port: ${{ secrets.DEPLOYMENT_PORT }}
+          username: ${{ secrets.DEPLOYMENT_USER }}
           key: ${{ secrets.DEPLOYMENT_KEY }}
           script: |
             cd ${{ env.releasesDir }}
