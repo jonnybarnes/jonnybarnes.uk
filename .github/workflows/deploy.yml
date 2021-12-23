@@ -29,9 +29,14 @@ jobs:
           key: ${{ secrets.DEPLOYMENT_KEY }}
           script: |
             [ -d ${{ env.releasesDir }} ] || mkdir ${{ env.releasesDir }}
+            [ -d ${{ env.persistentDir }} ] || mkdir ${{ env.persistentDir }}
             [ -d ${{ env.persistentDir }}/storage ] || mkdir ${{ env.persistentDir }}/storage
 
             cd ${{ env.releasesDir }}
+
+            # A littlw debugging
+            echo "${{ env.releasesDir }}"
+            echo "${{ env.newReleaseDir }}"
 
             # Create new release directory
             mkdir ${{ env.newReleaseDir }}
