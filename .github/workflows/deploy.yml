@@ -1,7 +1,6 @@
 name: Deploy (Test)
 
 on:
-  release:
   workflow_dispatch:
 
 jobs:
