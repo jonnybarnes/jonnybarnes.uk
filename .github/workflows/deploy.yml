@@ -19,6 +19,8 @@ jobs:
           echo "releasesDir=${{ secrets.DEPLOYMENT_BASE_DIR }}/releases" >> $GITHUB_ENV
           echo "persistentDir=${{ secrets.DEPLOYMENT_BASE_DIR }}/persistent" >> $GITHUB_ENV
           echo "currentDir=${{ secrets.DEPLOYMENT_BASE_DIR }}/current" >> $GITHUB_ENV
+      - name: 🌎 Set Environment Variables Part 2
+        run: |
           echo "newReleaseDir=${{ env.releasesDir }}/${{ env.newReleaseName }}" >> $GITHUB_ENV
       - name: 🔄 Clone Repository
         uses: appleboy/ssh-action@master
@@ -34,7 +36,7 @@ jobs:
 
             cd ${{ env.releasesDir }}
 
-            # A littlw debugging
+            # A little debugging
             echo "${{ env.releasesDir }}"
             echo "${{ env.newReleaseDir }}"
 
