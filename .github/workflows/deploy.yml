@@ -35,10 +35,6 @@ jobs:
 
             cd ${{ env.releasesDir }}
 
-            # A little debugging
-            echo "${{ env.releasesDir }}"
-            echo "${{ env.newReleaseDir }}"
-
             # Create new release directory
             mkdir ${{ env.newReleaseDir }}
 
