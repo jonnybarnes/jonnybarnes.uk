@@ -118,5 +118,5 @@ jobs:
           key: ${{ secrets.DEPLOYMENT_KEY }}
           script: |
             cd ${{ env.releasesDir }}
-            ls -dt ${{ env.releasesDir }}/* | tail -n +4 | xargs -d "\n" sudo chown -R jonny .;
+            ls -dt ${{ env.releasesDir }}/* | tail -n +4 | xargs -d "\n" sudo chown -R ${{ secrets.DEPLOYMENT_USER }} .;
             ls -dt ${{ env.releasesDir }}/* | tail -n +4 | xargs -d "\n" rm -rf;
