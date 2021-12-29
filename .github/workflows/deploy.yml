@@ -72,7 +72,8 @@ jobs:
             rm -rf ${{ env.newReleaseDir }}/storage;
             cd ${{ env.newReleaseDir }};
             ln -nfs ${{ secrets.DEPLOYMENT_BASE_DIR }}/persistent/storage storage;
-            sudo chown ${{ secrets.HTTP_USER }}:${{ secrets.HTTP_USER }} storage
+            sudo chown ${{ secrets.HTTP_USER }}:${{ secrets.HTTP_USER }} storage;
+            ls -l | grep storage
 
             # Remove the public/profile-images directory and replace with persistent data
             rm -rf ${{ env.newReleaseDir }}/public/assets/profile-images;
