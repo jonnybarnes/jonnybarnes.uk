@@ -68,6 +68,24 @@ jobs:
             cd ${{ env.newReleaseDir }};
             ln -nfs ${{ secrets.DEPLOYMENT_BASE_DIR }}/.env .env;
 
+            # Remove the storage directory and replace with persistent data
+            rm -rf ${{ env.newReleaseDir }}/storage;
+            cd ${{ env.newReleaseDir }};
+            ln -nfs ${{ secrets.DEPLOYMENT_BASE_DIR }}/persistent/storage storage;
+
+            # Remove the public/profile-images directory and replace with persistent data
+            rm -rf ${{ env.newReleaseDir }}/public/assets/profile-images;
+            cd ${{ env.newReleaseDir }};
+            ln -nfs ${{ env.baseDir }}/persistent/profile-images public/assets/profile-images;
+
+            # Add the persistent files data
+            cd ${{ env.newReleaseDir }};
+            ln -nfs ${{ env.baseDir }}/persistent/files public/files;
+
+            # Add the persistent fonts data
+            cd ${{ env.newReleaseDir }};
+            ln -nfs ${{ env.baseDir }}/persistent/fonts public/fonts;
+
       - name: ✨ Optimize Installation
         uses: appleboy/ssh-action@master
         with:
