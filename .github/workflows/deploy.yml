@@ -45,6 +45,9 @@ jobs:
             cd ${{ env.newReleaseDir }}
             echo "${{ env.newReleaseName }}" > public/release-name.txt
 
+            # Fix cache directory permissions
+            sudo chown -R ${{ secrets.HTTP_USER }}:${{ secrets.HTTP_USER }} bootstrap/cache
+
       - name: 🎵 Run Composer
         uses: appleboy/ssh-action@master
         with:
