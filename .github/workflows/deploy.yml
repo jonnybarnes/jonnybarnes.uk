@@ -5,7 +5,7 @@ on:
 
 jobs:
   deploy:
-    name: Deploy (Test)
+    name: Deploy
     runs-on: ubuntu-latest
     environment: Deployments
     env:
@@ -109,7 +109,7 @@ jobs:
           key: ${{ secrets.DEPLOYMENT_KEY }}
           script: |
             cd ${{ env.newReleaseDir }}
-            #php artisan migrate --force
+            sudo runuser -u ${{ secrets.HTTP_USER }} -- php artisan migrate --force
 
       - name: 🙏 Bless release
         uses: appleboy/ssh-action@master
@@ -121,14 +121,14 @@ jobs:
           script: |
             ln -nfs ${{ env.newReleaseDir }} ${{ env.currentDir }};
             cd ${{ env.newReleaseDir }}
-            #php artisan horizon:terminate
+            sudo runuser -u ${{ secrets.HTTP_USER }} -- php artisan horizon:terminate
             sudo runuser -u ${{ secrets.HTTP_USER }} -- php artisan config:cache
             sudo runuser -u ${{ secrets.HTTP_USER }} -- php artisan event:cache
             sudo runuser -u ${{ secrets.HTTP_USER }} -- php artisan route:cache
             sudo runuser -u ${{ secrets.HTTP_USER }} -- php artisan view:cache
 
-            #sudo systemctl restart php-fpm.service
-            #sudo supervisorctl restart all
+            sudo systemctl restart php-fpm.service
+            sudo supervisorctl restart all
 
       - name: 🚾 Clean up old releases
         uses: appleboy/ssh-action@master
