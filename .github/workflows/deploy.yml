@@ -128,7 +128,7 @@ jobs:
             sudo runuser -u ${{ secrets.HTTP_USER }} -- php artisan view:cache
 
             sudo systemctl restart php-fpm.service
-            sudo supervisorctl restart all
+            sudo systemctl restart jbuk-horizon.service
 
       - name: 🚾 Clean up old releases
         uses: appleboy/ssh-action@master
