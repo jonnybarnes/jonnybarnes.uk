@@ -7,7 +7,7 @@ jobs:
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
-    environment: Deployments
+    environment: Hetzner
     env:
       repository: 'jonnybarnes/jonnybarnes.uk'
       newReleaseName: '${{ github.run_id }}'
