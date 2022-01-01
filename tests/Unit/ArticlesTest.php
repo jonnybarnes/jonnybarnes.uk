@@ -72,12 +72,12 @@ class ArticlesTest extends TestCase
         Article::factory()->create();
 
         $yearAndMonth = Article::date(date('Y'), date('m'))->get();
-        $this->assertTrue(count($yearAndMonth) === 1);
+        $this->assertCount(1, $yearAndMonth);
 
-        $priorYear = Article::date(date('Y') - 1, 1)->get();
-        $this->assertTrue(count($priorYear) === 0);
+        $priorYear = Article::date(date('Y') - 2, 1)->get();
+        $this->assertCount(0, $priorYear);
 
         $emptyScope = Article::date()->get();
-        $this->assertTrue(count($emptyScope) === 2);
+        $this->assertCount(2, $emptyScope);
     }
 }
