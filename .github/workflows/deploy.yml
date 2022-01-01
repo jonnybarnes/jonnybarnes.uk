@@ -1,35 +1,36 @@
 name: Deploy
 
 on:
-  release:
   workflow_dispatch:
 
 jobs:
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
+    environment: Deployments
     env:
       repository: 'jonnybarnes/jonnybarnes.uk'
-      host: 'jonnybarnes.uk'
-      username: 'jonny'
-      baseDir: '/var/websites/jonnybarnes.uk-test'
       newReleaseName: '${{ github.run_id }}'
 
     steps:
       - name: 🌍 Set Environment Variables
         run: |
-          echo "releasesDir=${{ env.baseDir }}/releases" >> $GITHUB_ENV
-          echo "persistentDir=${{ env.baseDir }}/persistent" >> $GITHUB_ENV
-          echo "currentDir=${{ env.baseDir }}/current" >> $GITHUB_ENV
+          echo "releasesDir=${{ secrets.DEPLOYMENT_BASE_DIR }}/releases" >> $GITHUB_ENV
+          echo "persistentDir=${{ secrets.DEPLOYMENT_BASE_DIR }}/persistent" >> $GITHUB_ENV
+          echo "currentDir=${{ secrets.DEPLOYMENT_BASE_DIR }}/current" >> $GITHUB_ENV
+      - name: 🌎 Set Environment Variables Part 2
+        run: |
           echo "newReleaseDir=${{ env.releasesDir }}/${{ env.newReleaseName }}" >> $GITHUB_ENV
       - name: 🔄 Clone Repository
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ env.host }}
-          username: ${{ env.username }}
-          key: ${{ secrets.KEY }}
+          host: ${{ secrets.DEPLOYMENT_HOST }}
+          port: ${{ secrets.DEPLOYMENT_PORT }}
+          username: ${{ secrets.DEPLOYMENT_USER }}
+          key: ${{ secrets.DEPLOYMENT_KEY }}
           script: |
             [ -d ${{ env.releasesDir }} ] || mkdir ${{ env.releasesDir }}
+            [ -d ${{ env.persistentDir }} ] || mkdir ${{ env.persistentDir }}
             [ -d ${{ env.persistentDir }}/storage ] || mkdir ${{ env.persistentDir }}/storage
 
             cd ${{ env.releasesDir }}
@@ -38,18 +39,22 @@ jobs:
             mkdir ${{ env.newReleaseDir }}
 
             # Clone app
-            git clone --depth 1 git@github.com:${{ env.repository }} ${{ env.newReleaseName }}
+            git clone --depth 1 --branch main https://github.com/${{ env.repository }} ${{ env.newReleaseName }}
 
             # Mark release
             cd ${{ env.newReleaseDir }}
             echo "${{ env.newReleaseName }}" > public/release-name.txt
 
+            # Fix cache directory permissions
+            sudo chown -R ${{ secrets.HTTP_USER }}:${{ secrets.HTTP_USER }} bootstrap/cache
+
       - name: 🎵 Run Composer
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ env.host }}
-          username: ${{ env.username }}
-          key: ${{ secrets.KEY }}
+          host: ${{ secrets.DEPLOYMENT_HOST }}
+          port: ${{ secrets.DEPLOYMENT_PORT }}
+          username: ${{ secrets.DEPLOYMENT_USER }}
+          key: ${{ secrets.DEPLOYMENT_KEY }}
           script: |
             cd ${{ env.newReleaseDir }}
             composer install --prefer-dist --no-scripts --no-dev --no-progress --optimize-autoloader --quiet --no-interaction
@@ -57,59 +62,81 @@ jobs:
       - name: 🔗 Update Symlinks
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ env.host }}
-          username: ${{ env.username }}
-          key: ${{ secrets.KEY }}
+          host: ${{ secrets.DEPLOYMENT_HOST }}
+          port: ${{ secrets.DEPLOYMENT_PORT }}
+          username: ${{ secrets.DEPLOYMENT_USER }}
+          key: ${{ secrets.DEPLOYMENT_KEY }}
           script: |
             # Import the environment config
             cd ${{ env.newReleaseDir }};
-            ln -nfs ${{ env.baseDir }}/.env .env;
+            ln -nfs ${{ secrets.DEPLOYMENT_BASE_DIR }}/.env .env;
+
+            # Remove the storage directory and replace with persistent data
+            rm -rf ${{ env.newReleaseDir }}/storage;
+            cd ${{ env.newReleaseDir }};
+            ln -nfs ${{ secrets.DEPLOYMENT_BASE_DIR }}/persistent/storage storage;
+
+            # Remove the public/profile-images directory and replace with persistent data
+            rm -rf ${{ env.newReleaseDir }}/public/assets/profile-images;
+            cd ${{ env.newReleaseDir }};
+            ln -nfs ${{ secrets.DEPLOYMENT_BASE_DIR }}/persistent/profile-images public/assets/profile-images;
+
+            # Add the persistent files data
+            cd ${{ env.newReleaseDir }};
+            ln -nfs ${{ secrets.DEPLOYMENT_BASE_DIR }}/persistent/files public/files;
+
+            # Add the persistent fonts data
+            cd ${{ env.newReleaseDir }};
+            ln -nfs ${{ secrets.DEPLOYMENT_BASE_DIR }}/persistent/fonts public/fonts;
 
       - name: ✨ Optimize Installation
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ env.host }}
-          username: ${{ env.username }}
-          key: ${{ secrets.KEY }}
+          host: ${{ secrets.DEPLOYMENT_HOST }}
+          port: ${{ secrets.DEPLOYMENT_PORT }}
+          username: ${{ secrets.DEPLOYMENT_USER }}
+          key: ${{ secrets.DEPLOYMENT_KEY }}
           script: |
             cd ${{ env.newReleaseDir }};
-            php artisan clear-compiled;
+            sudo runuser -u ${{ secrets.HTTP_USER }} -- php artisan clear-compiled;
 
       - name: 🙈 Migrate database
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ env.host }}
-          username: ${{ env.username }}
-          key: ${{ secrets.KEY }}
+          host: ${{ secrets.DEPLOYMENT_HOST }}
+          port: ${{ secrets.DEPLOYMENT_PORT }}
+          username: ${{ secrets.DEPLOYMENT_USER }}
+          key: ${{ secrets.DEPLOYMENT_KEY }}
           script: |
             cd ${{ env.newReleaseDir }}
-            php artisan migrate --force
+            sudo runuser -u ${{ secrets.HTTP_USER }} -- php artisan migrate --force
 
       - name: 🙏 Bless release
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ env.host }}
-          username: ${{ env.username }}
-          key: ${{ secrets.KEY }}
+          host: ${{ secrets.DEPLOYMENT_HOST }}
+          port: ${{ secrets.DEPLOYMENT_PORT }}
+          username: ${{ secrets.DEPLOYMENT_USER }}
+          key: ${{ secrets.DEPLOYMENT_KEY }}
           script: |
             ln -nfs ${{ env.newReleaseDir }} ${{ env.currentDir }};
             cd ${{ env.newReleaseDir }}
-            php artisan horizon:terminate
-            php artisan config:cache
-            php artisan event:cache
-            php artisan route:cache
-            php artisan view:cache
+            sudo runuser -u ${{ secrets.HTTP_USER }} -- php artisan horizon:terminate
+            sudo runuser -u ${{ secrets.HTTP_USER }} -- php artisan config:cache
+            sudo runuser -u ${{ secrets.HTTP_USER }} -- php artisan event:cache
+            sudo runuser -u ${{ secrets.HTTP_USER }} -- php artisan route:cache
+            sudo runuser -u ${{ secrets.HTTP_USER }} -- php artisan view:cache
 
             sudo systemctl restart php-fpm.service
-            sudo supervisorctl restart all
+            sudo systemctl restart jbuk-horizon.service
 
       - name: 🚾 Clean up old releases
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ env.host }}
-          username: ${{ env.username }}
-          key: ${{ secrets.KEY }}
+          host: ${{ secrets.DEPLOYMENT_HOST }}
+          port: ${{ secrets.DEPLOYMENT_PORT }}
+          username: ${{ secrets.DEPLOYMENT_USER }}
+          key: ${{ secrets.DEPLOYMENT_KEY }}
           script: |
-            cd ${{ env.releasesDir }}
-            ls -dt ${{ env.releasesDir }}/* | tail -n +4 | xargs -d "\n" sudo chown -R jonny .;
-            ls -dt ${{ env.releasesDir }}/* | tail -n +4 | xargs -d "\n" rm -rf;
+            fd '.+' ${{ env.releasesDir }} -d 1 | head -n -3 | xargs -d "\n" -I'{}' sudo chown -R ${{ secrets.DEPLOYMENT_USER }}:${{ secrets.DEPLOYMENT_USER }} {}/bootstrap/cache;
+            fd '.+' ${{ env.releasesDir }} -d 1 | head -n -3 | xargs -d "\n" -I'{}' rm -rf {};
