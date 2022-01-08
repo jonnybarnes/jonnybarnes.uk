@@ -59,18 +59,14 @@ class ArticlesController extends Controller
      * We only have the ID, work out post title, year and month
      * and redirect to it.
      *
-     * @param int $idFromUrl
+     * @param string $idFromUrl
      * @return RedirectResponse
      */
-    public function onlyIdInUrl(int $idFromUrl): RedirectResponse
+    public function onlyIdInUrl(string $idFromUrl): RedirectResponse
     {
-        $realId = resolve(Numbers::class)->b60tonum((string) $idFromUrl);
+        $realId = resolve(Numbers::class)->b60tonum($idFromUrl);
 
-        try {
-            $article = Article::findOrFail($realId);
-        } catch (ModelNotFoundException $exception) {
-            abort(404);
-        }
+        $article = Article::findOrFail($realId);
 
         return redirect($article->link);
     }

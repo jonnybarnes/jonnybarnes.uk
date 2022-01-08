@@ -1,16 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Unit;
 
-use Tests\TestCase;
 use App\Models\Article;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Carbon;
+use Tests\TestCase;
 
 class ArticlesTest extends TestCase
 {
-    use DatabaseTransactions;
+    use RefreshDatabase;
 
-    public function test_sluggable_method()
+    /** @test */
+    public function titleSlugIsGeneratedAutomatically(): void
     {
         $article = new Article();
         $article->title = 'My Title';
@@ -20,15 +24,17 @@ class ArticlesTest extends TestCase
         $this->assertEquals('my-title', $article->titleurl);
     }
 
-    public function test_markdown_conversion()
+    /** @test */
+    public function markdownContentIsConverted(): void
     {
         $article = new Article();
         $article->main = 'Some *markdown*';
 
-        $this->assertEquals('<p>Some <em>markdown</em></p>'.PHP_EOL, $article->html);
+        $this->assertEquals('<p>Some <em>markdown</em></p>' . PHP_EOL, $article->html);
     }
 
-    public function test_time_attributes()
+    /** @test */
+    public function weGenerateTheDifferentTimeAttributes(): void
     {
         $article = Article::create([
             'title' => 'Test',
@@ -41,7 +47,8 @@ class ArticlesTest extends TestCase
         $this->assertEquals($article->pubdate, $article->updated_at->toRSSString());
     }
 
-    public function test_link_accessor()
+    /** @test */
+    public function weGenerateTheArticleLinkFromTheSlug(): void
     {
         $article = Article::create([
             'title' => 'Test',
@@ -55,15 +62,22 @@ class ArticlesTest extends TestCase
         );
     }
 
-    public function test_date_scope()
+    /** @test */
+    public function dateScopeReturnsExpectedArticles(): void
     {
-        $yearAndMonth = Article::date(date('Y'), date('m'))->get();
-        $this->assertTrue(count($yearAndMonth) === 1);
+        Article::factory()->create([
+            'created_at' => Carbon::now()->subYear()->toDateTimeString(),
+            'updated_at' => Carbon::now()->subYear()->toDateTimeString(),
+        ]);
+        Article::factory()->create();
 
-        $priorYear = Article::date(date('Y') - 1, 1)->get();
-        $this->assertTrue(count($priorYear) === 0);
+        $yearAndMonth = Article::date(date('Y'), date('m'))->get();
+        $this->assertCount(1, $yearAndMonth);
+
+        $priorYear = Article::date(date('Y') - 2, 1)->get();
+        $this->assertCount(0, $priorYear);
 
         $emptyScope = Article::date()->get();
-        $this->assertTrue(count($emptyScope) === 2);
+        $this->assertCount(2, $emptyScope);
     }
 }

@@ -9,7 +9,7 @@
     ],
     "license": "CC0-1.0",
     "require": {
-        "php": "^7.4|^8.0",
+        "php": "^8.0",
         "ext-intl": "*",
         "ext-json": "*",
         "ext-dom": "*",
@@ -31,9 +31,8 @@
         "league/commonmark": "^1.0",
         "league/flysystem-aws-s3-v3": "^1.0",
         "mf2/mf2": "~0.3",
-        "pmatseykanets/laravel-scout-postgres": "dev-php8",
+        "pmatseykanets/laravel-scout-postgres": "^7.3",
         "predis/predis": "~1.0",
-        "sensiolabs/security-checker": "^6.0",
         "spatie/browsershot": "~3.0",
         "spatie/commonmark-highlighter": "^2.0",
         "tgalopin/html-sanitizer": "^1.1"
@@ -49,12 +48,17 @@
         "nunomaduro/collision": "^5.0",
         "phpunit/php-code-coverage": "^9.2",
         "phpunit/phpunit": "^9.0",
+        "spatie/laravel-ray": "^1.12",
         "vimeo/psalm": "^4.0"
     },
     "config": {
         "optimize-autoloader": true,
         "preferred-install": "dist",
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "composer/package-versions-deprecated": false,
+            "composer/installers": false
+        }
     },
     "extra": {
         "laravel": {
@@ -92,11 +96,5 @@
         "test": [
             "vendor/bin/phpunit --stop-on-failure"
         ]
-    },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/jonnybarnes/laravel-scout-postgres"
-        }
-    ]
+    }
 }

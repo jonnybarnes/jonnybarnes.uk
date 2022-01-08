@@ -6,7 +6,10 @@ namespace App\Jobs;
 
 use App\Models\Note;
 use GuzzleHttp\Client;
+use GuzzleHttp\Psr7\Header;
 use GuzzleHttp\Psr7\Uri;
+use GuzzleHttp\Psr7\UriResolver;
+use GuzzleHttp\Psr7\Utils;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
@@ -65,14 +68,14 @@ class SendWebMentions implements ShouldQueue
      * @param string $url
      * @return string|null
      */
-    public function discoverWebmentionEndpoint(string $url)
+    public function discoverWebmentionEndpoint(string $url): ?string
     {
         //let’s not send webmentions to myself
-        if (parse_url($url, PHP_URL_HOST) == config('app.longurl')) {
-            return;
+        if (parse_url($url, PHP_URL_HOST) === config('app.longurl')) {
+            return null;
         }
         if (Str::startsWith($url, '/notes/tagged/')) {
-            return;
+            return null;
         }
 
         $endpoint = null;
@@ -80,7 +83,7 @@ class SendWebMentions implements ShouldQueue
         $guzzle = resolve(Client::class);
         $response = $guzzle->get($url);
         //check HTTP Headers for webmention endpoint
-        $links = \GuzzleHttp\Psr7\parse_header($response->getHeader('Link'));
+        $links = Header::parse($response->getHeader('Link'));
         foreach ($links as $link) {
             if (mb_stristr($link['rel'], 'webmention')) {
                 return $this->resolveUri(trim($link[0], '<>'), $url);
@@ -110,7 +113,7 @@ class SendWebMentions implements ShouldQueue
      */
     public function getLinks(?string $html): array
     {
-        if ($html == '' || is_null($html)) {
+        if ($html === '' || is_null($html)) {
             return [];
         }
 
@@ -136,13 +139,13 @@ class SendWebMentions implements ShouldQueue
      */
     public function resolveUri(string $url, string $base): string
     {
-        $endpoint = \GuzzleHttp\Psr7\uri_for($url);
-        if ($endpoint->getScheme() != '') {
+        $endpoint = Utils::uriFor($url);
+        if ($endpoint->getScheme() !== '') {
             return (string) $endpoint;
         }
 
-        return (string) Uri::resolve(
-            \GuzzleHttp\Psr7\uri_for($base),
+        return (string) UriResolver::resolve(
+            Utils::uriFor($base),
             $endpoint
         );
     }

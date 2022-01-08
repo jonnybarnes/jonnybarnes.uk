@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature;
 
 use Tests\TestCase;
@@ -7,9 +9,9 @@ use Tests\TestCase;
 class CSPHeadersTest extends TestCase
 {
     /** @test */
-    public function check_csp_headers_test()
+    public function checkCspHeadersArePresent(): void
     {
-        $response = $this->get('/');
+        $response = $this->get('/blog');
         $response->assertHeader('Content-Security-Policy');
         $response->assertHeader('Report-To');
     }

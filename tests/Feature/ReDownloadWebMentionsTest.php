@@ -1,17 +1,26 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature;
 
-use Tests\TestCase;
 use App\Jobs\DownloadWebMention;
-use Illuminate\Support\Facades\Queue;
+use App\Models\WebMention;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Queue;
+use Tests\TestCase;
 
 class ReDownloadWebMentionsTest extends TestCase
 {
-    public function test_jobs_are_dispatched()
+    use RefreshDatabase;
+
+    /** @test */
+    public function downloadJobGetsQueued(): void
     {
         Queue::fake();
+
+        WebMention::factory()->create();
 
         Artisan::call('webmentions:redownload');
 

@@ -1,18 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature;
 
 use Tests\TestCase;
 use Tests\TestToken;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class CorsHeadersTest extends TestCase
 {
     use TestToken;
 
     /** @test */
-    public function check_cors_headers_on_media_endpoint_options_request()
+    public function checkCorsHeadersOnMediaEndpoint(): void
     {
         $response = $this->call(
             'OPTIONS',
@@ -26,9 +26,9 @@ class CorsHeadersTest extends TestCase
     }
 
     /** @test */
-    public function check_missing_on_other_route()
+    public function checkForNoCorsHeaderOnNonMediaEndpointLinks(): void
     {
-        $response = $this->get('/');
+        $response = $this->get('/blog');
         $response->assertHeaderMissing('Access-Control-Allow-Origin');
     }
 }

@@ -1,24 +1,29 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Unit\Jobs;
 
-use Tests\TestCase;
-use GuzzleHttp\Client;
+use App\Jobs\SyndicateBookmarkToTwitter;
 use App\Models\Bookmark;
+use GuzzleHttp\Client;
+use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
-use GuzzleHttp\Handler\MockHandler;
-use App\Jobs\SyndicateBookmarkToTwitter;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class SyndicateBookmarkToTwitterJobTest extends TestCase
 {
-    use DatabaseTransactions;
+    use RefreshDatabase;
 
-    public function test_the_job()
+    /** @test */
+    public function weSendBookmarksToTwitter(): void
     {
+        $faker = \Faker\Factory::create();
+        $randomNumber = $faker->randomNumber();
         $json = json_encode([
-            'url' => 'https://twitter.com/123'
+            'url' => 'https://twitter.com/' . $randomNumber
         ]);
         $mock = new MockHandler([
             new Response(201, ['Content-Type' => 'application/json'], $json),
@@ -26,13 +31,12 @@ class SyndicateBookmarkToTwitterJobTest extends TestCase
         $handler = HandlerStack::create($mock);
         $client = new Client(['handler' => $handler]);
 
-        $bookmark = Bookmark::find(1);
+        $bookmark = Bookmark::factory()->create();
         $job = new SyndicateBookmarkToTwitter($bookmark);
         $job->handle($client);
 
         $this->assertDatabaseHas('bookmarks', [
-            'id' => 1,
-            'syndicates' => '{"twitter": "https://twitter.com/123"}',
+            'syndicates' => '{"twitter": "https://twitter.com/' . $randomNumber . '"}',
         ]);
     }
 }

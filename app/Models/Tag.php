@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Str;
 
 /**
  * App\Models\Tag.
@@ -50,7 +51,7 @@ class Tag extends Model
      */
     public function notes()
     {
-        return $this->belongsToMany('App\Models\Note');
+        return $this->belongsToMany(Note::class);
     }
 
     /**
@@ -82,13 +83,6 @@ class Tag extends Model
      */
     public static function normalize(string $tag): string
     {
-        return mb_strtolower(
-            preg_replace(
-                '/&([a-z]{1,2})(acute|cedil|circ|grave|lig|orn|ring|slash|th|tilde|uml|caron);/i',
-                '$1',
-                htmlentities($tag)
-            ),
-            'UTF-8'
-        );
+        return Str::slug($tag);
     }
 }

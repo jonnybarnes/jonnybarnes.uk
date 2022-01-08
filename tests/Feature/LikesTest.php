@@ -1,40 +1,44 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature;
 
-use Codebird\Codebird;
-use Queue;
-use stdClass;
-use Tests\TestCase;
-use App\Models\Like;
-use Tests\TestToken;
-use GuzzleHttp\Client;
 use App\Jobs\ProcessLike;
-use Lcobucci\JWT\Builder;
+use App\Models\Like;
+use Codebird\Codebird;
+use GuzzleHttp\Client;
+use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
-use GuzzleHttp\Handler\MockHandler;
-use Lcobucci\JWT\Signer\Hmac\Sha256;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Queue;
 use Jonnybarnes\WebmentionsParser\Authorship;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Tests\TestCase;
+use Tests\TestToken;
 
 class LikesTest extends TestCase
 {
-    use DatabaseTransactions, TestToken;
+    use RefreshDatabase;
+    use TestToken;
 
-    public function test_likes_page()
+    /** @test */
+    public function likesPageHasCorrectView(): void
     {
         $response = $this->get('/likes');
         $response->assertViewIs('likes.index');
     }
 
-    public function test_single_like_page()
+    /** @test */
+    public function singleLikePageHasCorrectView(): void
     {
-        $response = $this->get('/likes/1');
+        $like = Like::factory()->create();
+        $response = $this->get('/likes/' . $like->id);
         $response->assertViewIs('likes.show');
     }
 
-    public function test_like_micropub_json_request()
+    /** @test */
+    public function checkLikeCreatedFromMicropubApiRequests(): void
     {
         Queue::fake();
 
@@ -53,7 +57,8 @@ class LikesTest extends TestCase
         $this->assertDatabaseHas('likes', ['url' => 'https://example.org/blog-post']);
     }
 
-    public function test_like_micropub_form_request()
+    /** @test */
+    public function checkLikeCreatedFromMicropubWebRequests(): void
     {
         Queue::fake();
 
@@ -70,7 +75,8 @@ class LikesTest extends TestCase
         $this->assertDatabaseHas('likes', ['url' => 'https://example.org/blog-post']);
     }
 
-    public function test_process_like_job_with_simple_author()
+    /** @test */
+    public function likeWithSimpleAuthor(): void
     {
         $like = new Like();
         $like->url = 'http://example.org/note/id';
@@ -80,17 +86,18 @@ class LikesTest extends TestCase
         $job = new ProcessLike($like);
 
         $content = <<<END
-<html>
-<body>
-    <div class="h-entry">
-        <div class="e-content">
-            A post that I like.
-        </div>
-        by <span class="p-author">Fred Bloggs</span>
-    </div>
-</body>
-</html>
-END;
+        <html>
+            <body>
+                <div class="h-entry">
+                    <div class="e-content">
+                        A post that I like.
+                    </div>
+                    by <span class="p-author">Fred Bloggs</span>
+                </div>
+            </body>
+        </html>
+        END;
+
         $mock = new MockHandler([
             new Response(200, [], $content),
             new Response(200, [], $content),
@@ -107,7 +114,8 @@ END;
         $this->assertEquals('Fred Bloggs', Like::find($id)->author_name);
     }
 
-    public function test_process_like_job_with_h_card()
+    /** @test */
+    public function likeWithHCard(): void
     {
         $like = new Like();
         $like->url = 'http://example.org/note/id';
@@ -117,21 +125,22 @@ END;
         $job = new ProcessLike($like);
 
         $content = <<<END
-<html>
-<body>
-    <div class="h-entry">
-        <div class="e-content">
-            A post that I like.
-        </div>
-        by
-        <div class="p-author h-card">
-            <span class="p-name">Fred Bloggs</span>
-            <a class="u-url" href="https://fredd.blog/gs"></a>
-        </div>
-    </div>
-</body>
-</html>
-END;
+        <html>
+            <body>
+                <div class="h-entry">
+                    <div class="e-content">
+                        A post that I like.
+                    </div>
+                    by
+                    <div class="p-author h-card">
+                        <span class="p-name">Fred Bloggs</span>
+                        <a class="u-url" href="https://fredd.blog/gs"></a>
+                    </div>
+                </div>
+            </body>
+        </html>
+        END;
+
         $mock = new MockHandler([
             new Response(200, [], $content),
             new Response(200, [], $content),
@@ -148,7 +157,8 @@ END;
         $this->assertEquals('Fred Bloggs', Like::find($id)->author_name);
     }
 
-    public function test_process_like_job_without_mf2()
+    /** @test */
+    public function likeWithoutMicroformats(): void
     {
         $like = new Like();
         $like->url = 'http://example.org/note/id';
@@ -158,14 +168,15 @@ END;
         $job = new ProcessLike($like);
 
         $content = <<<END
-<html>
-<body>
-    <div>
-        I liked a post
-    </div>
-</body>
-</html>
-END;
+        <html>
+            <body>
+                <div>
+                    I liked a post
+                </div>
+            </body>
+        </html>
+        END;
+
         $mock = new MockHandler([
             new Response(200, [], $content),
             new Response(200, [], $content),
@@ -182,7 +193,8 @@ END;
         $this->assertNull(Like::find($id)->author_name);
     }
 
-    public function test_process_like_that_is_tweet()
+    /** @test */
+    public function likeThatIsATweet(): void
     {
         $like = new Like();
         $like->url = 'https://twitter.com/jonnybarnes/status/1050823255123251200';
@@ -202,10 +214,11 @@ END;
             return $client;
         });
 
-        $info = new stdClass();
-        $info->author_name = 'Jonny Barnes';
-        $info->author_url = 'https://twitter.com/jonnybarnes';
-        $info->html = '<div>HTML of the tweet embed</div>';
+        $info = (object) [
+            'author_name' => 'Jonny Barnes',
+            'author_url' => 'https://twitter.com/jonnybarnes',
+            'html' => '<div>HTML of the tweet embed</div>',
+        ];
         $codebirdMock = $this->getMockBuilder(Codebird::class)
             ->addMethods(['statuses_oembed'])
             ->getMock();
@@ -221,7 +234,7 @@ END;
     }
 
     /** @test */
-    public function unknownLikeGives404()
+    public function unknownLikeGivesNotFoundResponse(): void
     {
         $response = $this->get('/likes/202');
         $response->assertNotFound();

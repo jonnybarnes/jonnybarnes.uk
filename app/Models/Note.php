@@ -5,14 +5,15 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Exceptions\TwitterContentException;
+use Barryvdh\LaravelIdeHelper\Eloquent;
 use Codebird\Codebird;
-use Eloquent;
 use Exception;
 use GuzzleHttp\Client;
 use Illuminate\Database\Eloquent\Relations\{BelongsTo, BelongsToMany, HasMany, MorphMany};
 use Illuminate\Database\Eloquent\{Builder, Collection, Factories\HasFactory, Model, SoftDeletes};
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
+use JetBrains\PhpStorm\ArrayShape;
 use Jonnybarnes\IndieWeb\Numbers;
 use Laravel\Scout\Searchable;
 use League\CommonMark\Block\Element\{FencedCode, IndentedCode};
@@ -20,6 +21,11 @@ use League\CommonMark\Extension\Autolink\AutolinkExtension;
 use League\CommonMark\{CommonMarkConverter, Environment};
 use Normalizer;
 use Spatie\CommonMarkHighlighter\{FencedCodeRenderer, IndentedCodeRenderer};
+use App\Models\Tag;
+use App\Models\MicropubClient;
+use App\Models\WebMention;
+use App\Models\Place;
+use App\Models\Media;
 
 /**
  * App\Models\Note.
@@ -102,12 +108,12 @@ class Note extends Model
     /**
      * This variable is used to keep track of contacts in a note.
      */
-    protected $contacts;
+    protected ?array $contacts;
 
     /**
      * Set our contacts variable to null.
      *
-     * @param  array  $attributes
+     * @param array $attributes
      */
     public function __construct(array $attributes = [])
     {
@@ -145,9 +151,9 @@ class Note extends Model
      *
      * @return BelongsToMany
      */
-    public function tags()
+    public function tags(): BelongsToMany
     {
-        return $this->belongsToMany('App\Models\Tag');
+        return $this->belongsToMany(Tag::class);
     }
 
     /**
@@ -155,9 +161,9 @@ class Note extends Model
      *
      * @return BelongsTo
      */
-    public function client()
+    public function client(): BelongsTo
     {
-        return $this->belongsTo('App\Models\MicropubClient', 'client_id', 'client_url');
+        return $this->belongsTo(MicropubClient::class, 'client_id', 'client_url');
     }
 
     /**
@@ -165,9 +171,9 @@ class Note extends Model
      *
      * @return MorphMany
      */
-    public function webmentions()
+    public function webmentions(): MorphMany
     {
-        return $this->morphMany('App\Models\WebMention', 'commentable');
+        return $this->morphMany(WebMention::class, 'commentable');
     }
 
     /**
@@ -175,9 +181,9 @@ class Note extends Model
      *
      * @return BelongsTo
      */
-    public function place()
+    public function place(): BelongsTo
     {
-        return $this->belongsTo('App\Models\Place');
+        return $this->belongsTo(Place::class);
     }
 
     /**
@@ -185,9 +191,9 @@ class Note extends Model
      *
      * @return HasMany
      */
-    public function media()
+    public function media(): HasMany
     {
-        return $this->hasMany('App\Models\Media');
+        return $this->hasMany(Media::class);
     }
 
     /**
@@ -195,6 +201,7 @@ class Note extends Model
      *
      * @return array
      */
+    #[ArrayShape(['note' => "null|string"])]
     public function toSearchableArray(): array
     {
         return [
@@ -207,7 +214,7 @@ class Note extends Model
      *
      * @param string|null $value
      */
-    public function setNoteAttribute(?string $value)
+    public function setNoteAttribute(?string $value): void
     {
         if ($value !== null) {
             $normalized = normalizer_normalize($value, Normalizer::FORM_C);
@@ -253,13 +260,13 @@ class Note extends Model
         $note = $this->note;
 
         foreach ($this->media as $media) {
-            if ($media->type == 'image') {
+            if ($media->type === 'image') {
                 $note .= '<img src="' . $media->url . '" alt="">';
             }
-            if ($media->type == 'audio') {
+            if ($media->type === 'audio') {
                 $note .= '<audio src="' . $media->url . '">';
             }
-            if ($media->type == 'video') {
+            if ($media->type === 'video') {
                 $note .= '<video src="' . $media->url . '">';
             }
         }
@@ -398,7 +405,10 @@ class Note extends Model
      */
     public function getTwitterAttribute(): ?object
     {
-        if ($this->in_reply_to == null || mb_substr($this->in_reply_to, 0, 20, 'UTF-8') !== 'https://twitter.com/') {
+        if (
+            $this->in_reply_to === null ||
+            !$this->isTwitterLink($this->in_reply_to)
+        ) {
             return null;
         }
 
@@ -569,7 +579,7 @@ class Note extends Model
     public function autoLinkHashtag(string $note): string
     {
         return preg_replace_callback(
-            '/#([^\s]*)\b/',
+            '/#([^\s[:punct:]]+)/',
             function ($matches) {
                 return '<a rel="tag" class="p-category" href="/notes/tagged/'
                 . Tag::normalize($matches[1]) . '">#'
@@ -659,5 +669,10 @@ class Note extends Model
 
             return $address;
         });
+    }
+
+    private function isTwitterLink(string $inReplyTo): bool
+    {
+        return str_starts_with($inReplyTo, 'https://twitter.com/');
     }
 }

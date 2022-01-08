@@ -1,15 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Unit\Jobs;
 
-use Storage;
-use Tests\TestCase;
 use App\Jobs\ProcessMedia;
+use Illuminate\Support\Facades\Storage;
 use Intervention\Image\ImageManager;
+use Tests\TestCase;
 
 class ProcessMediaJobTest extends TestCase
 {
-    public function test_job_does_nothing_to_non_image()
+    /** @test */
+    public function nonMediaFilesAreNotSaved(): void
     {
         Storage::fake('s3');
         $manager = app()->make(ImageManager::class);
@@ -20,18 +23,20 @@ class ProcessMediaJobTest extends TestCase
         $this->assertFalse(file_exists(storage_path('app') . '/file.txt'));
     }
 
-    public function test_job_does_nothing_to_small_images()
+    /** @test */
+    public function smallImagesAreNotResized(): void
     {
         Storage::fake('s3');
         $manager = app()->make(ImageManager::class);
-        Storage::disk('local')->put('aaron.png', file_get_contents(__DIR__.'/../../aaron.png'));
+        Storage::disk('local')->put('aaron.png', file_get_contents(__DIR__ . '/../../aaron.png'));
         $job = new ProcessMedia('aaron.png');
         $job->handle($manager);
 
         $this->assertFalse(file_exists(storage_path('app') . '/aaron.png'));
     }
 
-    public function test_large_images_have_smaller_files_created()
+    /** @test */
+    public function largeImagesHaveSmallerImagesCreated(): void
     {
         $manager = app()->make(ImageManager::class);
         Storage::disk('local')->put('test-image.jpg', file_get_contents(__DIR__.'/../../test-image.jpg'));
