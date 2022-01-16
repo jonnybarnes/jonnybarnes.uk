@@ -40,8 +40,8 @@ jobs:
 
             # Clone app
             echo "Cloning repository..."
-            echo "${{ github.ref }}"
-            git clone --depth 1 --branch ${{ github.ref }} https://github.com/${{ env.repository }} ${{ env.newReleaseName }}
+            echo "${{ github.ref#refs/heads/ }}"
+            git clone --depth 1 --branch ${{ github.ref#refs/heads/ }} https://github.com/${{ env.repository }} ${{ env.newReleaseName }}
 
             # Mark release
             cd ${{ env.newReleaseDir }}
