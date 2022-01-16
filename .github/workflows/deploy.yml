@@ -39,7 +39,7 @@ jobs:
             mkdir ${{ env.newReleaseDir }}
 
             # Clone app
-            git clone --depth 1 --branch main https://github.com/${{ env.repository }} ${{ env.newReleaseName }}
+            git clone --depth 1 --branch ${{ env.GITHUB_BASE_REF || env.GITHUB_REF }} https://github.com/${{ env.repository }} ${{ env.newReleaseName }}
 
             # Mark release
             cd ${{ env.newReleaseDir }}
