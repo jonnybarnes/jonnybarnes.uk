@@ -24,8 +24,8 @@ jobs:
       - name: 🔀 Get Branch
         id: branch
         run: |
-          echo "gitBranch=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
-      - name: Check Branch
+          echo "branch=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
+      - name: 🔍 Check Branch
         run: echo "${{ env.branch }}"
       - name: 🔄 Clone Repository
         uses: appleboy/ssh-action@master
