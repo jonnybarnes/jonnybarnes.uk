@@ -23,7 +23,8 @@ jobs:
           echo "newReleaseDir=${{ env.releasesDir }}/${{ env.newReleaseName }}" >> $GITHUB_ENV
       - name: 🔀 Get Branch
         id: branch
-        run: echo "git_branch=${GITHUB_REF#refs/heads/}" >> $GITHUB_BRANCH
+        run: |
+          echo "gitBranch=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
       - name: Check Branch
         run: echo "${{ env.branch }}"
       - name: 🔄 Clone Repository
