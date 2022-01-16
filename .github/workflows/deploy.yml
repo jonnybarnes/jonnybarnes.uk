@@ -40,7 +40,7 @@ jobs:
 
             # Clone app
             echo "Cloning repository..."
-            echo "git clone --depth 1 --branch ${{ env.GITHUB_REF }} https://github.com/${{ env.repository }} ${{ env.newReleaseName }}"
+            echo "${{ env.GITHUB_REF }}"
             git clone --depth 1 --branch ${{ env.GITHUB_REF }} https://github.com/${{ env.repository }} ${{ env.newReleaseName }}
 
             # Mark release
