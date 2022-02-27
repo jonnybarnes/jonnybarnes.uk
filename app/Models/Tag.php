@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -13,26 +12,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 
-/**
- * App\Models\Tag.
- *
- * @property int $id
- * @property string $tag
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
- * @property-read Collection|Bookmark[] $bookmarks
- * @property-read int|null $bookmarks_count
- * @property-read Collection|Note[] $notes
- * @property-read int|null $notes_count
- * @method static Builder|Tag newModelQuery()
- * @method static Builder|Tag newQuery()
- * @method static Builder|Tag query()
- * @method static Builder|Tag whereCreatedAt($value)
- * @method static Builder|Tag whereId($value)
- * @method static Builder|Tag whereTag($value)
- * @method static Builder|Tag whereUpdatedAt($value)
- * @mixin Eloquent
- */
 class Tag extends Model
 {
     use HasFactory;

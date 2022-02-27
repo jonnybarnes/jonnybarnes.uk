@@ -138,8 +138,8 @@ class ContactsController extends Controller
             }
             $mf2 = \Mf2\parse((string) $response->getBody(), $contact->homepage);
             foreach ($mf2['items'] as $microformat) {
-                if (Arr::get($microformat, 'type.0') == 'h-card') {
-                    $avatarURL = Arr::get($microformat, 'properties.photo.0');
+                if (Arr::get($microformat, 'type.0') === 'h-card') {
+                    $avatarURL = Arr::get($microformat, 'properties.photo.0.value');
                     break;
                 }
             }

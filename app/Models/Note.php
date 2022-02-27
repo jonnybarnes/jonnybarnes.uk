@@ -10,92 +10,22 @@ use Codebird\Codebird;
 use Exception;
 use GuzzleHttp\Client;
 use Illuminate\Database\Eloquent\Relations\{BelongsTo, BelongsToMany, HasMany, MorphMany};
-use Illuminate\Database\Eloquent\{Builder, Collection, Factories\HasFactory, Model, SoftDeletes};
-use Illuminate\Support\Carbon;
+use Illuminate\Database\Eloquent\{Builder, Factories\HasFactory, Model, SoftDeletes};
 use Illuminate\Support\Facades\Cache;
 use JetBrains\PhpStorm\ArrayShape;
 use Jonnybarnes\IndieWeb\Numbers;
-use Laravel\Scout\Searchable;
-use League\CommonMark\Block\Element\{FencedCode, IndentedCode};
+use League\CommonMark\Environment\Environment;
 use League\CommonMark\Extension\Autolink\AutolinkExtension;
-use League\CommonMark\{CommonMarkConverter, Environment};
+use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
+use League\CommonMark\Extension\CommonMark\Node\Block\FencedCode;
+use League\CommonMark\Extension\CommonMark\Node\Block\IndentedCode;
+use League\CommonMark\MarkdownConverter;
 use Normalizer;
 use Spatie\CommonMarkHighlighter\{FencedCodeRenderer, IndentedCodeRenderer};
-use App\Models\Tag;
-use App\Models\MicropubClient;
-use App\Models\WebMention;
-use App\Models\Place;
-use App\Models\Media;
 
-/**
- * App\Models\Note.
- *
- * @property int $id
- * @property string|null $note
- * @property string|null $in_reply_to
- * @property string $shorturl
- * @property string|null $location
- * @property int|null $photo
- * @property string|null $tweet_id
- * @property string|null $client_id
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
- * @property Carbon|null $deleted_at
- * @property int|null $place_id
- * @property string|null $facebook_url
- * @property string|null $searchable
- * @property string|null $swarm_url
- * @property string|null $instagram_url
- * @property-read MicropubClient|null $client
- * @property-read string|null $address
- * @property-read string $content
- * @property-read string $humandiff
- * @property-read string $iso8601
- * @property-read float|null $latitude
- * @property-read float|null $longitude
- * @property-read string $longurl
- * @property-read string $nb60id
- * @property-read string $pubdate
- * @property-read object|null $twitter
- * @property-read string $twitter_content
- * @property-read Collection|Media[] $media
- * @property-read int|null $media_count
- * @property-read Place|null $place
- * @property-read Collection|Tag[] $tags
- * @property-read int|null $tags_count
- * @property-read Collection|WebMention[] $webmentions
- * @property-read int|null $webmentions_count
- * @method static bool|null forceDelete()
- * @method static Builder|Note nb60($nb60id)
- * @method static Builder|Note newModelQuery()
- * @method static Builder|Note newQuery()
- * @method static \Illuminate\Database\Query\Builder|Note onlyTrashed()
- * @method static Builder|Note query()
- * @method static bool|null restore()
- * @method static Builder|Note whereClientId($value)
- * @method static Builder|Note whereCreatedAt($value)
- * @method static Builder|Note whereDeletedAt($value)
- * @method static Builder|Note whereFacebookUrl($value)
- * @method static Builder|Note whereId($value)
- * @method static Builder|Note whereInReplyTo($value)
- * @method static Builder|Note whereInstagramUrl($value)
- * @method static Builder|Note whereLocation($value)
- * @method static Builder|Note whereNote($value)
- * @method static Builder|Note wherePhoto($value)
- * @method static Builder|Note wherePlaceId($value)
- * @method static Builder|Note whereSearchable($value)
- * @method static Builder|Note whereShorturl($value)
- * @method static Builder|Note whereSwarmUrl($value)
- * @method static Builder|Note whereTweetId($value)
- * @method static Builder|Note whereUpdatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|Note withTrashed()
- * @method static \Illuminate\Database\Query\Builder|Note withoutTrashed()
- * @mixin Eloquent
- */
 class Note extends Model
 {
     use HasFactory;
-    use Searchable;
     use SoftDeletes;
 
     /**
@@ -597,13 +527,14 @@ class Note extends Model
      */
     private function convertMarkdown(string $note): string
     {
-        $environment = Environment::createCommonMarkEnvironment();
+        $environment = new Environment();
+        $environment->addExtension(new CommonMarkCoreExtension());
         $environment->addExtension(new AutolinkExtension());
-        $environment->addBlockRenderer(FencedCode::class, new FencedCodeRenderer());
-        $environment->addBlockRenderer(IndentedCode::class, new IndentedCodeRenderer());
-        $converter = new CommonMarkConverter([], $environment);
+        $environment->addRenderer(FencedCode::class, new FencedCodeRenderer());
+        $environment->addRenderer(IndentedCode::class, new IndentedCodeRenderer());
+        $markdownConverter = new MarkdownConverter($environment);
 
-        return $converter->convertToHtml($note);
+        return $markdownConverter->convert($note)->getContent();
     }
 
     /**

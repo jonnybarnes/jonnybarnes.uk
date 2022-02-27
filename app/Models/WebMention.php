@@ -6,7 +6,6 @@ namespace App\Models;
 
 use App\Traits\FilterHtml;
 use Codebird\Codebird;
-use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -17,42 +16,6 @@ use Illuminate\Support\Facades\Cache;
 use Jonnybarnes\WebmentionsParser\Authorship;
 use Jonnybarnes\WebmentionsParser\Exceptions\AuthorshipParserException;
 
-/**
- * App\Models\WebMention.
- *
- * @property int $id
- * @property string $source
- * @property string $target
- * @property int|null $commentable_id
- * @property string|null $commentable_type
- * @property string|null $type
- * @property string|null $content
- * @property int $verified
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
- * @property string|null $deleted_at
- * @property mixed|null $mf2
- * @property-read WebMention|null $commentable
- * @property-read array $author
- * @property-read string|null $published
- * @property-read string|null $reply
- * @method static Builder|WebMention newModelQuery()
- * @method static Builder|WebMention newQuery()
- * @method static Builder|WebMention query()
- * @method static Builder|WebMention whereCommentableId($value)
- * @method static Builder|WebMention whereCommentableType($value)
- * @method static Builder|WebMention whereContent($value)
- * @method static Builder|WebMention whereCreatedAt($value)
- * @method static Builder|WebMention whereDeletedAt($value)
- * @method static Builder|WebMention whereId($value)
- * @method static Builder|WebMention whereMf2($value)
- * @method static Builder|WebMention whereSource($value)
- * @method static Builder|WebMention whereTarget($value)
- * @method static Builder|WebMention whereType($value)
- * @method static Builder|WebMention whereUpdatedAt($value)
- * @method static Builder|WebMention whereVerified($value)
- * @mixin Eloquent
- */
 class WebMention extends Model
 {
     use FilterHtml;

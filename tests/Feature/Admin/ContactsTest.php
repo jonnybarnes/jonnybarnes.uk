@@ -143,7 +143,7 @@ class ContactsTest extends TestCase
         $file = fopen(__DIR__ . '/../../aaron.png', 'rb');
         $mock = new MockHandler([
             new Response(200, ['Content-Type' => 'text/html'], $html),
-            new Response(200, ['Content-Type' => 'iamge/png'], $file),
+            new Response(200, ['Content-Type' => 'image/png'], $file),
         ]);
         $handler = HandlerStack::create($mock);
         $client = new Client(['handler' => $handler]);

@@ -183,8 +183,6 @@ Route::group(['domain' => config('url.longurl')], function () {
     // Places
     Route::get('places', [PlacesController::class, 'index']);
     Route::get('places/{place}', [PlacesController::class, 'show']);
-
-    Route::get('search', [SearchController::class, 'search']);
 });
 
 // Short URL
