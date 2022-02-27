@@ -5,50 +5,11 @@ declare(strict_types=1);
 namespace App\Models;
 
 use Cviebrock\EloquentSluggable\Sluggable;
-use Eloquent;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\{Builder, Collection, Factories\HasFactory, Model};
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 
-/**
- * App\Models\Place.
- *
- * @property int $id
- * @property string $name
- * @property string $slug
- * @property string|null $description
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
- * @property string|null $icon
- * @property string|null $foursquare
- * @property mixed|null $external_urls
- * @property float|null $latitude
- * @property float|null $longitude
- * @property-read string $longurl
- * @property-read string $shorturl
- * @property-read string $uri
- * @property-read Collection|\App\Models\Note[] $notes
- * @property-read int|null $notes_count
- * @method static Builder|Place findSimilarSlugs($attribute, $config, $slug)
- * @method static Builder|Place near($location, $distance = 1000)
- * @method static Builder|Place newModelQuery()
- * @method static Builder|Place newQuery()
- * @method static Builder|Place query()
- * @method static Builder|Place whereCreatedAt($value)
- * @method static Builder|Place whereDescription($value)
- * @method static Builder|Place whereExternalURL($url)
- * @method static Builder|Place whereExternalUrls($value)
- * @method static Builder|Place whereFoursquare($value)
- * @method static Builder|Place whereIcon($value)
- * @method static Builder|Place whereId($value)
- * @method static Builder|Place whereLatitude($value)
- * @method static Builder|Place whereLongitude($value)
- * @method static Builder|Place whereName($value)
- * @method static Builder|Place whereSlug($value)
- * @method static Builder|Place whereUpdatedAt($value)
- * @mixin Eloquent
- */
 class Place extends Model
 {
     use HasFactory;

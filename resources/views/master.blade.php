@@ -2,7 +2,7 @@
 <html lang="en-GB">
     <head>
         <meta charset="UTF-8">
-        <title>@if (App::environment() == 'local'){!! "[testing] -"!!}@endif @yield('title'){{ config('app.display_name') }}</title>
+        <title>@yield('title'){{ config('app.display_name') }}</title>
         <meta name="viewport" content="width=device-width">
         <link rel="stylesheet" href="/assets/frontend/normalize.css">
         @if (!empty(config('app.font_link')))<link rel="stylesheet" href="{{ config('app.font_link') }}">@endif
@@ -48,9 +48,9 @@
         </main>
 
         <footer>
-            <form action="search" method="get">
-                <input type="text" name="terms" title="Search"><button type="submit">Search</button>
-            </form>
+{{--            <form action="search" method="get">--}}
+{{--                <input type="text" name="terms" title="Search"><button type="submit">Search</button>--}}
+{{--            </form>--}}
             <p>Built with love: <a href="/colophon">Colophon</a></p>
             <a href="https://indieweb.org"><img src="/assets/img/iwc.svg" alt="Indie Web Camp logo" class="iwc-logo"></a>
         </footer>

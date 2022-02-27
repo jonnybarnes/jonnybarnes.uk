@@ -5,58 +5,19 @@ declare(strict_types=1);
 namespace App\Models;
 
 use Cviebrock\EloquentSluggable\Sluggable;
-use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Carbon;
-use League\CommonMark\Block\Element\FencedCode;
-use League\CommonMark\Block\Element\IndentedCode;
 use League\CommonMark\CommonMarkConverter;
-use League\CommonMark\Environment;
+use League\CommonMark\Environment\Environment;
+use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
+use League\CommonMark\Extension\CommonMark\Node\Block\FencedCode;
+use League\CommonMark\Extension\CommonMark\Node\Block\IndentedCode;
+use League\CommonMark\MarkdownConverter;
 use Spatie\CommonMarkHighlighter\FencedCodeRenderer;
 use Spatie\CommonMarkHighlighter\IndentedCodeRenderer;
 
-/**
- * App\Models\Article.
- *
- * @property int $id
- * @property string $titleurl
- * @property string|null $url
- * @property string $title
- * @property string $main
- * @property int $published
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
- * @property Carbon|null $deleted_at
- * @property-read string $html
- * @property-read string $human_time
- * @property-read string $link
- * @property-read string $pubdate
- * @property-read string $tooltip_time
- * @property-read string $w3c_time
- * @method static Builder|Article date($year = null, $month = null)
- * @method static Builder|Article findSimilarSlugs($attribute, $config, $slug)
- * @method static bool|null forceDelete()
- * @method static Builder|Article newModelQuery()
- * @method static Builder|Article newQuery()
- * @method static \Illuminate\Database\Query\Builder|Article onlyTrashed()
- * @method static Builder|Article query()
- * @method static bool|null restore()
- * @method static Builder|Article whereCreatedAt($value)
- * @method static Builder|Article whereDeletedAt($value)
- * @method static Builder|Article whereId($value)
- * @method static Builder|Article whereMain($value)
- * @method static Builder|Article wherePublished($value)
- * @method static Builder|Article whereTitle($value)
- * @method static Builder|Article whereTitleurl($value)
- * @method static Builder|Article whereUpdatedAt($value)
- * @method static Builder|Article whereUrl($value)
- * @method static \Illuminate\Database\Query\Builder|Article withTrashed()
- * @method static \Illuminate\Database\Query\Builder|Article withoutTrashed()
- * @mixin Eloquent
- */
 class Article extends Model
 {
     use HasFactory;
@@ -105,12 +66,13 @@ class Article extends Model
      */
     public function getHtmlAttribute(): string
     {
-        $environment = Environment::createCommonMarkEnvironment();
-        $environment->addBlockRenderer(FencedCode::class, new FencedCodeRenderer());
-        $environment->addBlockRenderer(IndentedCode::class, new IndentedCodeRenderer());
-        $commonMarkConverter = new CommonMarkConverter([], $environment);
+        $environment = new Environment();
+        $environment->addExtension(new CommonMarkCoreExtension());
+        $environment->addRenderer(FencedCode::class, new FencedCodeRenderer());
+        $environment->addRenderer(IndentedCode::class, new IndentedCodeRenderer());
+        $markdownConverter = new MarkdownConverter($environment);
 
-        return $commonMarkConverter->convertToHtml($this->main);
+        return $markdownConverter->convert($this->main)->getContent();
     }
 
     /**
