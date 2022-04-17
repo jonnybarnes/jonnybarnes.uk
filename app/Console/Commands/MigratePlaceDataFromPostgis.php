@@ -6,6 +6,9 @@ use App\Models\Place;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * @codeCoverageIgnore
+ */
 class MigratePlaceDataFromPostgis extends Command
 {
     /**
