@@ -26,6 +26,19 @@ class ActivityStreamTest extends TestCase
     }
 
     /** @test */
+    public function notesPageContainsAuthorActivityStreamData(): void
+    {
+        $response = $this->get('/notes', ['Accept' => 'application/activity+json']);
+        $response->assertHeader('Content-Type', 'application/activity+json');
+        $response->assertJson([
+            '@context' => 'https://www.w3.org/ns/activitystreams',
+            'id' => config('app.url'),
+            'type' => 'Person',
+            'name' => config('user.displayname'),
+        ]);
+    }
+
+    /** @test */
     public function requestForNoteIncludesActivityStreamData(): void
     {
         $note = Note::factory()->create();

@@ -24,7 +24,7 @@ class WebMentionFactory extends Factory
         return [
             'source' => $this->faker->url,
             'target' => url('notes/1'),
-            'type' => 'reply',
+            'type' => 'in-reply-to',
             'content' => $this->faker->paragraph,
         ];
     }
