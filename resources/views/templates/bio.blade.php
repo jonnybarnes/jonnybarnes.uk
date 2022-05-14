@@ -13,6 +13,7 @@
                 <ul>
                     <li>I keep in touch with friends on <a rel="me" href="https://www.facebook.com/jonnybarnes" class="u-url">Facebook</a></li>
                     <li>I follow people I find interesting on <a rel="me" href="https://twitter.com/jonnybarnes" class="u-url">Twitter</a></li>
+                    <li>I toot on the fediverse with my own instance of <a rel="me" href="https://mastodon.thebeeches.house/@jonny">Mastodon</a></li>
                     <li>I push code to <a rel="me" href="https://github.com/jonnybarnes" class="u-url">GitHub</a></li>
                     <li>I scrobble songs to <a rel="me" href="https://last.fm/user/jonnymbarnes" class="u-url">last.fm</a> that I listen to on <a rel="me" href="https://open.spotify.com/user/jonnybarnes89" class="u-url">Spotify</a></li>
                     <li>I post photos to <a rel="me" href="https://www.instagram.com/jonnybarnes/">Instagram</a></li>
