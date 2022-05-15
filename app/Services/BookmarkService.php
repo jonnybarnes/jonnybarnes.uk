@@ -79,11 +79,12 @@ class BookmarkService
     }
 
     /**
-     * Given a URL, use browsershot to save an image of the page.
+     * Given a URL, use `browsershot` to save an image of the page.
      *
      * @param string $url
      * @return string  The uuid for the screenshot
      * @throws CouldNotTakeBrowsershot
+     * @codeCoverageIgnore
      */
     public function saveScreenshot(string $url): string
     {

@@ -89,22 +89,24 @@ class ProcessWebMentionJobTest extends TestCase
         Queue::fake();
 
         $parser = new Parser();
+        $note = Note::factory()->create();
+        $source = 'https://aaronpk.localhost/reply/1';
+        WebMention::factory()->create([
+            'source' => $source,
+            'target' => $note->longurl,
+        ]);
 
         $html = <<<HTML
         <div class="h-entry">
-            <p>In reply to <a class="u-in-reply-to" href="/notes/E">a note</a></p>
+            <p>In reply to <a class="u-in-reply-to" href="{$note->longurl}">a note</a></p>
             <div class="e-content">Updated reply</div>
         </div>
         HTML;
-        $html = str_replace('href="', 'href="' . config('app.url'), $html);
         $mock = new MockHandler([
             new Response(200, [], $html),
         ]);
         $handler = HandlerStack::create($mock);
         $client = new Client(['handler' => $handler]);
-
-        $note = Note::factory()->create();
-        $source = 'https://aaronpk.localhost/reply/1';
 
         $job = new ProcessWebMention($note, $source);
         $job->handle($parser, $client);
@@ -114,7 +116,7 @@ class ProcessWebMentionJobTest extends TestCase
             'source' => $source,
             'type' => 'in-reply-to',
             // phpcs:ignore Generic.Files.LineLength.TooLong
-            'mf2' => '{"rels": [], "items": [{"type": ["h-entry"], "properties": {"content": [{"html": "Updated reply", "value": "Updated reply"}], "in-reply-to": ["' . config('app.url') . '/notes/E"]}}], "rel-urls": []}',
+            'mf2' => '{"rels": [], "items": [{"type": ["h-entry"], "properties": {"content": [{"html": "Updated reply", "value": "Updated reply"}], "in-reply-to": ["' . $note->longurl . '"]}}], "rel-urls": []}',
         ]);
     }
 

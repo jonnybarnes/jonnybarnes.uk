@@ -234,6 +234,44 @@ class LikesTest extends TestCase
     }
 
     /** @test */
+    public function noErrorForFailureToPosseWithBridgy(): void
+    {
+        $like = new Like();
+        $like->url = 'https://twitter.com/jonnybarnes/status/1050823255123251200';
+        $like->save();
+        $id = $like->id;
+
+        $job = new ProcessLike($like);
+
+        $mock = new MockHandler([
+            new Response(404, [], 'Not found'),
+        ]);
+        $handler = HandlerStack::create($mock);
+        $client = new Client(['handler' => $handler]);
+        $this->app->bind(Client::class, function () use ($client) {
+            return $client;
+        });
+
+        $info = (object) [
+            'author_name' => 'Jonny Barnes',
+            'author_url' => 'https://twitter.com/jonnybarnes',
+            'html' => '<div>HTML of the tweet embed</div>',
+        ];
+        $codebirdMock = $this->getMockBuilder(Codebird::class)
+            ->addMethods(['statuses_oembed'])
+            ->getMock();
+        $codebirdMock->method('statuses_oembed')
+            ->willReturn($info);
+        $this->app->instance(Codebird::class, $codebirdMock);
+
+        $authorship = new Authorship();
+
+        $job->handle($client, $authorship);
+
+        $this->assertEquals('Jonny Barnes', Like::find($id)->author_name);
+    }
+
+    /** @test */
     public function unknownLikeGivesNotFoundResponse(): void
     {
         $response = $this->get('/likes/202');

@@ -60,7 +60,7 @@ class ProcessLike implements ShouldQueue
 
             //POSSE like
             try {
-                $response = $client->request(
+                $client->request(
                     'POST',
                     'https://brid.gy/publish/webmention',
                     [
@@ -70,8 +70,8 @@ class ProcessLike implements ShouldQueue
                         ],
                     ]
                 );
-            } catch (RequestException $exception) {
-                //no biggie
+            } catch (RequestException) {
+                return 0;
             }
 
             return 0;

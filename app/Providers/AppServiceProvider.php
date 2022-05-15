@@ -38,6 +38,8 @@ class AppServiceProvider extends ServiceProvider
         });
 
         // Bind the Codebird client
+        // Codebird gets mocked in tests
+        // @codeCoverageIgnoreStart
         $this->app->bind('Codebird\Codebird', function () {
             Codebird::setConsumerKey(
                 env('TWITTER_CONSUMER_KEY'),
@@ -53,6 +55,7 @@ class AppServiceProvider extends ServiceProvider
 
             return $cb;
         });
+        // @codeCoverageIgnoreEnd
 
         /**
          * Paginate a standard Laravel Collection.

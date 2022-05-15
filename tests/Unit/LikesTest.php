@@ -32,6 +32,17 @@ class LikesTest extends TestCase
     }
 
     /** @test */
+    public function weCanHandleBlankContent(): void
+    {
+        $like = new Like();
+        $like->url = 'https://example.org/post/123';
+        $like->content = null;
+        $like->save();
+
+        $this->assertNull($like->content);
+    }
+
+    /** @test */
     public function htmlLikeContentIsFiltered(): void
     {
         $htmlEvil = <<<HTML

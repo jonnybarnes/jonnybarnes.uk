@@ -35,6 +35,50 @@ class MicropubMediaTest extends TestCase
     }
 
     /** @test */
+    public function getRequestWithInvalidTokenReturnsErrorResponse(): void
+    {
+        $response = $this->get(
+            '/api/media?q=last',
+            ['HTTP_Authorization' => 'Bearer abc123']
+        );
+        $response->assertStatus(400);
+        $response->assertJsonFragment(['error_description' => 'The provided token did not pass validation']);
+    }
+
+    /** @test */
+    public function getRequestWithTokenWithoutScopeReturnsErrorResponse(): void
+    {
+        $response = $this->get(
+            '/api/media?q=last',
+            ['HTTP_Authorization' => 'Bearer ' . $this->getTokenWithNoScope()]
+        );
+        $response->assertStatus(400);
+        $response->assertJsonFragment(['error_description' => 'The provided token has no scopes']);
+    }
+
+    /** @test */
+    public function getRequestWithTokenWithInsufficientScopeReturnsErrorResponse(): void
+    {
+        $response = $this->get(
+            '/api/media?q=last',
+            ['HTTP_Authorization' => 'Bearer ' . $this->getTokenWithIncorrectScope()]
+        );
+        $response->assertStatus(401);
+        $response->assertJsonFragment(['error_description' => 'The token’s scope does not have the necessary requirements.']);
+    }
+
+    /** @test */
+    public function emptyGetRequestWithTokenReceivesOkResponse(): void
+    {
+        $response = $this->get(
+            '/api/media',
+            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+        );
+        $response->assertStatus(200);
+        $response->assertJson(['status' => 'OK']);
+    }
+
+    /** @test */
     public function clientCanListLastUpload(): void
     {
         Queue::fake();
@@ -122,6 +166,22 @@ class MicropubMediaTest extends TestCase
 
         // now remove file
         unlink(storage_path('app/') . $filename);
+    }
+
+    /** @test */
+    public function mediaEndpointUploadRequiresFile(): void
+    {
+        $response = $this->post(
+            '/api/media',
+            [],
+            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+        );
+        $response->assertStatus(400);
+        $response->assertJson([
+            'response' => 'error',
+            'error' => 'invalid_request',
+            'error_description' => 'No file was sent with the request',
+        ]);
     }
 
     /** @test */
