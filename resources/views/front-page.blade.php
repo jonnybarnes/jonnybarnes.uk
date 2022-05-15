@@ -26,7 +26,7 @@
         @endforeach
     </div>
 
-    {{ $items->links() }}
+    {{ $items->links('templates.pagination') }}
 
     @include('templates.bio')
 @stop
