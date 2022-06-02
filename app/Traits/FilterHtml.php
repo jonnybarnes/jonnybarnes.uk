@@ -4,21 +4,13 @@ declare(strict_types=1);
 
 namespace App\Traits;
 
-use HtmlSanitizer\Sanitizer;
+use Illuminate\Support\Facades\App;
+use Symfony\Component\HtmlSanitizer\HtmlSanitizer;
 
 trait FilterHtml
 {
     public function filterHtml(string $html): string
     {
-        return Sanitizer::create([
-            'extensions' => [
-                'basic',
-                'code',
-                'image',
-                'list',
-                'table',
-                'extra',
-            ],
-        ])->sanitize($html);
+        return App::make(HtmlSanitizer::class)->sanitize($html);
     }
 }
