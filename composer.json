@@ -10,9 +10,9 @@
     "license": "CC0-1.0",
     "require": {
         "php": "^8.0",
+        "ext-dom": "*",
         "ext-intl": "*",
         "ext-json": "*",
-        "ext-dom": "*",
         "cviebrock/eloquent-sluggable": "^9.0",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
@@ -31,7 +31,7 @@
         "predis/predis": "~1.0",
         "spatie/browsershot": "~3.0",
         "spatie/commonmark-highlighter": "^3.0",
-        "tgalopin/html-sanitizer": "^1.1"
+        "symfony/html-sanitizer": "^6.1"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.0",

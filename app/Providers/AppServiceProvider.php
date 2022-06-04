@@ -15,6 +15,8 @@ use Lcobucci\JWT\Configuration;
 use Lcobucci\JWT\Signer\Hmac\Sha256;
 use Lcobucci\JWT\Signer\Key\InMemory;
 use Lcobucci\JWT\Validation\Constraint\SignedWith;
+use Symfony\Component\HtmlSanitizer\HtmlSanitizer;
+use Symfony\Component\HtmlSanitizer\HtmlSanitizerConfig;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -90,6 +92,15 @@ class AppServiceProvider extends ServiceProvider
             $config->setValidationConstraints(new SignedWith(new Sha256(), $key));
 
             return $config;
+        });
+
+        // Configure HtmlSanitizer
+        $this->app->bind(HtmlSanitizer::class, function () {
+            return new HtmlSanitizer(
+                (new HtmlSanitizerConfig())
+                    ->allowSafeElements()
+                    ->forceAttribute('a', 'rel', 'noopener nofollow')
+            );
         });
     }
 
