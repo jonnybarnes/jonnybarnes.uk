@@ -21,12 +21,6 @@ jobs:
       - name: 🌎 Set Environment Variables Part 2
         run: |
           echo "newReleaseDir=${{ env.releasesDir }}/${{ env.newReleaseName }}" >> $GITHUB_ENV
-      - name: 🔀 Get Branch
-        id: branch
-        run: |
-          echo "branch=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
-      - name: 🔍 Check Branch
-        run: echo "${{ env.branch }}"
       - name: 🔄 Clone Repository
         uses: appleboy/ssh-action@master
         with:
@@ -45,7 +39,7 @@ jobs:
             mkdir ${{ env.newReleaseDir }}
 
             # Clone app
-            git clone --depth 1 --branch ${{ env.branch }} https://github.com/${{ env.repository }} ${{ env.newReleaseName }}
+            git clone --depth 1 --branch ${{ github.ref_name }} https://github.com/${{ env.repository }} ${{ env.newReleaseName }}
 
             # Mark release
             cd ${{ env.newReleaseDir }}
