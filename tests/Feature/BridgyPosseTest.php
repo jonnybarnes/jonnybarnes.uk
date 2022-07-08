@@ -25,6 +25,6 @@ class BridgyPosseTest extends TestCase
         $response = $this->get($note->longurl);
 
         $html = $response->content();
-        $this->assertStringContainsString('p-bridgy-twitter-content', $html);
+        $this->assertStringContainsString('Hi @joe__', $html);
     }
 }

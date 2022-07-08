@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\CommonMark\Generators\ContactMentionGenerator;
+use App\CommonMark\Renderers\ContactMentionRenderer;
 use App\Exceptions\TwitterContentException;
-use Barryvdh\LaravelIdeHelper\Eloquent;
 use Codebird\Codebird;
 use Exception;
 use GuzzleHttp\Client;
-use Illuminate\Database\Eloquent\Relations\{BelongsTo, BelongsToMany, HasMany, MorphMany};
 use Illuminate\Database\Eloquent\{Builder, Factories\HasFactory, Model, SoftDeletes};
+use Illuminate\Database\Eloquent\Relations\{BelongsTo, BelongsToMany, HasMany, MorphMany};
 use Illuminate\Support\Facades\Cache;
 use JetBrains\PhpStorm\ArrayShape;
 use Jonnybarnes\IndieWeb\Numbers;
@@ -19,6 +20,8 @@ use League\CommonMark\Extension\Autolink\AutolinkExtension;
 use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
 use League\CommonMark\Extension\CommonMark\Node\Block\FencedCode;
 use League\CommonMark\Extension\CommonMark\Node\Block\IndentedCode;
+use League\CommonMark\Extension\Mention\Mention;
+use League\CommonMark\Extension\Mention\MentionExtension;
 use League\CommonMark\MarkdownConverter;
 use Normalizer;
 use Spatie\CommonMarkHighlighter\{FencedCodeRenderer, IndentedCodeRenderer};
@@ -172,8 +175,7 @@ class Note extends Model
             return null;
         }
 
-        $hcards = $this->makeHCards($value);
-        $hashtags = $this->autoLinkHashtag($hcards);
+        $hashtags = $this->autoLinkHashtag($value);
 
         return $this->convertMarkdown($hashtags);
     }
@@ -377,9 +379,11 @@ class Note extends Model
      */
     public function getTwitterContentAttribute(): string
     {
+        $this->getContacts();
+
         // check for contacts
         if ($this->contacts === null || count($this->contacts) === 0) {
-            throw new TwitterContentException('There are no contacts for this note');
+            return '';
         }
 
         // here we check the matched contact from the note corresponds to a contact
@@ -388,10 +392,10 @@ class Note extends Model
             count(array_unique(array_values($this->contacts))) === 1
             && array_unique(array_values($this->contacts))[0] === null
         ) {
-            throw new TwitterContentException('The matched contact is not in the database');
+            return '';
         }
 
-        // swap in twitter usernames
+        // swap in Twitter usernames
         $swapped = preg_replace_callback(
             self::USERNAMES_REGEX,
             function ($matches) {
@@ -406,7 +410,7 @@ class Note extends Model
 
                 return $contact->name;
             },
-            $this->getOriginal('note')
+            $this->getRawOriginal('note')
         );
 
         return $this->convertMarkdown($swapped);
@@ -527,9 +531,21 @@ class Note extends Model
      */
     private function convertMarkdown(string $note): string
     {
-        $environment = new Environment();
+        $config = [
+            'mentions' => [
+                'contacts_handle' => [
+                    'prefix'    => '@',
+                    'pattern'   => '[a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38}(?!\w)',
+                    'generator' => new ContactMentionGenerator(),
+                ],
+            ],
+        ];
+
+        $environment = new Environment($config);
         $environment->addExtension(new CommonMarkCoreExtension());
         $environment->addExtension(new AutolinkExtension());
+        $environment->addExtension(new MentionExtension());
+        $environment->addRenderer(Mention::class, new ContactMentionRenderer());
         $environment->addRenderer(FencedCode::class, new FencedCodeRenderer());
         $environment->addRenderer(IndentedCode::class, new IndentedCodeRenderer());
         $markdownConverter = new MarkdownConverter($environment);
