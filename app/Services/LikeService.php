@@ -13,7 +13,7 @@ class LikeService
     /**
      * Create a new Like.
      *
-     * @param  array $request
+     * @param  array  $request
      * @return Like $like
      */
     public function createLike(array $request): Like

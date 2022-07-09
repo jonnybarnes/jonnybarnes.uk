@@ -24,7 +24,7 @@ class PlacesController extends Controller
     /**
      * Show a specific place.
      *
-     * @param Place $place
+     * @param  Place  $place
      * @return View
      */
     public function show(Place $place): View

@@ -3,7 +3,6 @@
 namespace Tests\Browser;
 
 use Tests\DuskTestCase;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
 
 class NotesTest extends DuskTestCase
 {

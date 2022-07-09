@@ -6,7 +6,8 @@ namespace App\Services;
 
 use App\Jobs\AddClientToDatabase;
 use DateTimeImmutable;
-use Lcobucci\JWT\{Configuration, Token};
+use Lcobucci\JWT\Configuration;
+use Lcobucci\JWT\Token;
 
 class TokenService
 {

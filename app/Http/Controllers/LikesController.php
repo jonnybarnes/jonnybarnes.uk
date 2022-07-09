@@ -24,7 +24,7 @@ class LikesController extends Controller
     /**
      * Show a single like.
      *
-     * @param Like $like
+     * @param  Like  $like
      * @return View
      */
     public function show(Like $like): View

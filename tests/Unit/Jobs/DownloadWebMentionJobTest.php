@@ -28,7 +28,7 @@ class DownloadWebMentionJobTest extends TestCase
     {
         $this->assertFileDoesNotExist(storage_path('HTML/https'));
         $source = 'https://example.org/reply/1';
-        $html = <<<HTML
+        $html = <<<'HTML'
         <div class="h-entry">
             <a class="u-like-of" href=""></a>
         </div>
@@ -56,12 +56,12 @@ class DownloadWebMentionJobTest extends TestCase
     {
         $this->assertFileDoesNotExist(storage_path('HTML/https'));
         $source = 'https://example.org/reply/1';
-        $html = <<<HTML
+        $html = <<<'HTML'
         <div class="h-entry">
             <a class="u-like-of" href=""></a>
         </div>
         HTML;
-        $html2 = <<<HTML
+        $html2 = <<<'HTML'
         <div class="h-entry">
             <a class="u-like-of" href=""></a>
             <a class="u-repost-of" href=""></a>
@@ -91,7 +91,7 @@ class DownloadWebMentionJobTest extends TestCase
     {
         $this->assertFileDoesNotExist(storage_path('HTML/https'));
         $source = 'https://example.org/reply-one/';
-        $html = <<<HTML
+        $html = <<<'HTML'
         <div class="h-entry">
             <a class="u-like-of" href=""></a>
         </div>

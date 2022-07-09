@@ -53,8 +53,8 @@ class ActivityStreamTest extends TestCase
             ],
             'object' => [
                 'type' => 'Note',
-                'name' => strip_tags($note->note)
-            ]
+                'name' => strip_tags($note->note),
+            ],
         ]);
     }
 }

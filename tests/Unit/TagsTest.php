@@ -35,8 +35,9 @@ class TagsTest extends TestCase
     /**
      * @test
      * @dataProvider tagsProvider
-     * @param string $input
-     * @param string $expected
+     *
+     * @param  string  $input
+     * @param  string  $expected
      */
     public function canNormalize(string $input, string $expected): void
     {

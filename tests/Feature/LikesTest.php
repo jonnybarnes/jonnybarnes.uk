@@ -85,7 +85,7 @@ class LikesTest extends TestCase
 
         $job = new ProcessLike($like);
 
-        $content = <<<END
+        $content = <<<'END'
         <html>
             <body>
                 <div class="h-entry">
@@ -124,7 +124,7 @@ class LikesTest extends TestCase
 
         $job = new ProcessLike($like);
 
-        $content = <<<END
+        $content = <<<'END'
         <html>
             <body>
                 <div class="h-entry">
@@ -167,7 +167,7 @@ class LikesTest extends TestCase
 
         $job = new ProcessLike($like);
 
-        $content = <<<END
+        $content = <<<'END'
         <html>
             <body>
                 <div>

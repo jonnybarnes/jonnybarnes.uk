@@ -41,11 +41,11 @@ class ClientsTest extends TestCase
         $this->actingAs($user)
              ->post('/admin/clients', [
                  'client_name' => 'Micropublish',
-                 'client_url' => 'https://micropublish.net'
+                 'client_url' => 'https://micropublish.net',
              ]);
         $this->assertDatabaseHas('clients', [
             'client_name' => 'Micropublish',
-            'client_url' => 'https://micropublish.net'
+            'client_url' => 'https://micropublish.net',
         ]);
     }
 

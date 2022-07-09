@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
 class CreateWebMentionsTable extends Migration
 {
@@ -12,8 +12,7 @@ class CreateWebMentionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('webmentions', function (Blueprint $table)
-        {
+        Schema::create('webmentions', function (Blueprint $table) {
             $table->increments('id');
             $table->string('source');
             $table->string('target');

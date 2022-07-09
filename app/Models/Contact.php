@@ -30,7 +30,7 @@ class Contact extends Model
     {
         $photo = '/assets/profile-images/default-image';
 
-        if (array_key_exists('homepage', $this->attributes) && !empty($this->attributes['homepage'])) {
+        if (array_key_exists('homepage', $this->attributes) && ! empty($this->attributes['homepage'])) {
             $host = parse_url($this->attributes['homepage'], PHP_URL_HOST);
             if (file_exists(public_path() . '/assets/profile-images/' . $host . '/image')) {
                 $photo = '/assets/profile-images/' . $host . '/image';

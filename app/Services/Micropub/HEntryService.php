@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Services\Micropub;
 
-use App\Services\{BookmarkService, LikeService, NoteService};
+use App\Services\BookmarkService;
+use App\Services\LikeService;
+use App\Services\NoteService;
 use Illuminate\Support\Arr;
 
 class HEntryService

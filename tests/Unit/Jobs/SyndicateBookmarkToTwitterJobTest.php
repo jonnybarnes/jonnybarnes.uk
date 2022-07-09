@@ -23,7 +23,7 @@ class SyndicateBookmarkToTwitterJobTest extends TestCase
         $faker = \Faker\Factory::create();
         $randomNumber = $faker->randomNumber();
         $json = json_encode([
-            'url' => 'https://twitter.com/' . $randomNumber
+            'url' => 'https://twitter.com/' . $randomNumber,
         ]);
         $mock = new MockHandler([
             new Response(201, ['Content-Type' => 'application/json'], $json),

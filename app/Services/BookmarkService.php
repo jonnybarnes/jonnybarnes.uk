@@ -7,10 +7,12 @@ namespace App\Services;
 use App\Exceptions\InternetArchiveException;
 use App\Jobs\ProcessBookmark;
 use App\Jobs\SyndicateBookmarkToTwitter;
-use App\Models\{Bookmark, Tag};
+use App\Models\Bookmark;
+use App\Models\Tag;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
-use Illuminate\Support\{Arr, Str};
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Ramsey\Uuid\Uuid;
 use Spatie\Browsershot\Browsershot;
 use Spatie\Browsershot\Exceptions\CouldNotTakeBrowsershot;
@@ -20,7 +22,7 @@ class BookmarkService
     /**
      * Create a new Bookmark.
      *
-     * @param array $request Data from request()->all()
+     * @param  array  $request Data from request()->all()
      * @return Bookmark
      */
     public function createBookmark(array $request): Bookmark
@@ -81,8 +83,9 @@ class BookmarkService
     /**
      * Given a URL, use `browsershot` to save an image of the page.
      *
-     * @param string $url
+     * @param  string  $url
      * @return string  The uuid for the screenshot
+     *
      * @throws CouldNotTakeBrowsershot
      * @codeCoverageIgnore
      */
@@ -104,8 +107,9 @@ class BookmarkService
     /**
      * Given a URL, attempt to save it to the Internet Archive.
      *
-     * @param string $url
+     * @param  string  $url
      * @return string
+     *
      * @throws InternetArchiveException
      */
     public function getArchiveLink(string $url): string
