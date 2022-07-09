@@ -1,0 +1,38 @@
+name: Laravel Pint
+
+on:
+  pull_request:
+
+jobs:
+  pint:
+    runs-on: ubuntu-latest
+
+    name: Laravel Pint
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup PHP with pecl extensions
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+
+      - name: Get Composer Cache Directory
+        id: composer-cache
+        run: |
+          echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+      - name: Cache composer dependencies
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+
+      - name: Install Composer Dependencies
+        run: composer install --quiet --no-ansi --no-interaction --no-progress
+
+      - name: Check Files with Laravel Pint
+        run: vendor/bin/pint --test
