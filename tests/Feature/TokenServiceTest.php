@@ -25,14 +25,14 @@ class TokenServiceTest extends TestCase
         $data = [
             'me' => 'https://example.org',
             'client_id' => 'https://quill.p3k.io',
-            'scope' => 'post'
+            'scope' => 'post',
         ];
         $token = $tokenService->getNewToken($data);
         $valid = $tokenService->validateToken($token);
         $validData = [
             'me' => $valid->claims()->get('me'),
             'client_id' => $valid->claims()->get('client_id'),
-            'scope' => $valid->claims()->get('scope')
+            'scope' => $valid->claims()->get('scope'),
         ];
         $this->assertSame($data, $validData);
     }
@@ -45,7 +45,7 @@ class TokenServiceTest extends TestCase
         $data = [
             'me' => 'https://example.org',
             'client_id' => 'https://quill.p3k.io',
-            'scope' => 'post'
+            'scope' => 'post',
         ];
 
         $config = resolve(Configuration::class);

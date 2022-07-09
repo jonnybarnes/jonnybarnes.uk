@@ -59,7 +59,7 @@ class TokenEndpointTest extends TestCase
         ]);
         $response->assertStatus(401);
         $response->assertJson([
-            'error' => 'There was an error verifying the authorisation code.'
+            'error' => 'There was an error verifying the authorisation code.',
         ]);
     }
 
@@ -81,7 +81,7 @@ class TokenEndpointTest extends TestCase
         ]);
         $response->assertStatus(400);
         $response->assertJson([
-            'error' => 'Can’t determine the authorisation endpoint.']
+            'error' => 'Can’t determine the authorisation endpoint.', ]
         );
     }
 }

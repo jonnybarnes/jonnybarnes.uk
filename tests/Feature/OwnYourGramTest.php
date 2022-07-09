@@ -29,7 +29,7 @@ class OwnYourGramTest extends TestCase
                     'syndication' => ['https://www.instagram.com/p/BVC_nVTBFfi/'],
                     'photo' => [
                         // phpcs:ignore Generic.Files.LineLength.TooLong
-                        'https://scontent-sjc2-1.cdninstagram.com/t51.2885-15/e35/18888604_425332491185600_326487281944756224_n.jpg'
+                        'https://scontent-sjc2-1.cdninstagram.com/t51.2885-15/e35/18888604_425332491185600_326487281944756224_n.jpg',
                     ],
                 ],
             ],
@@ -37,15 +37,15 @@ class OwnYourGramTest extends TestCase
         );
 
         $response->assertStatus(201)->assertJson([
-            'response' => 'created'
+            'response' => 'created',
         ]);
         $this->assertDatabaseHas('media_endpoint', [
             // phpcs:ignore Generic.Files.LineLength.TooLong
-            'path' => 'https://scontent-sjc2-1.cdninstagram.com/t51.2885-15/e35/18888604_425332491185600_326487281944756224_n.jpg'
+            'path' => 'https://scontent-sjc2-1.cdninstagram.com/t51.2885-15/e35/18888604_425332491185600_326487281944756224_n.jpg',
         ]);
         $this->assertDatabaseHas('notes', [
             'note' => 'How beautiful are the plates and chopsticks',
-            'instagram_url' => 'https://www.instagram.com/p/BVC_nVTBFfi/'
+            'instagram_url' => 'https://www.instagram.com/p/BVC_nVTBFfi/',
         ]);
     }
 }

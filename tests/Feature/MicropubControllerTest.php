@@ -4,13 +4,17 @@ declare(strict_types=1);
 
 namespace Tests\Feature;
 
+use App\Jobs\SendWebMentions;
+use App\Jobs\SyndicateNoteToTwitter;
+use App\Models\Media;
+use App\Models\Note;
+use App\Models\Place;
+use Carbon\Carbon;
 use Faker\Factory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use App\Jobs\{SendWebMentions, SyndicateNoteToTwitter};
-use App\Models\{Media, Note, Place};
-use Carbon\Carbon;
 use Illuminate\Support\Facades\Queue;
-use Tests\{TestCase, TestToken};
+use Tests\TestCase;
+use Tests\TestToken;
 
 class MicropubControllerTest extends TestCase
 {
@@ -67,6 +71,7 @@ class MicropubControllerTest extends TestCase
 
     /**
      * @test
+     *
      * @todo Add uncertainty parameter
      *
     public function micropubClientsCanRequestKnownNearbyPlacesWithUncertaintyParameter(): void
@@ -119,7 +124,7 @@ class MicropubControllerTest extends TestCase
             [
                 'h' => 'entry',
                 'content' => $note,
-                'mp-syndicate-to' => 'https://twitter.com/jonnybarnes'
+                'mp-syndicate-to' => 'https://twitter.com/jonnybarnes',
             ],
             ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
         );
@@ -136,7 +141,7 @@ class MicropubControllerTest extends TestCase
             [
                 'h' => 'card',
                 'name' => 'The Barton Arms',
-                'geo' => 'geo:53.4974,-2.3768'
+                'geo' => 'geo:53.4974,-2.3768',
             ],
             ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
         );
@@ -199,7 +204,7 @@ class MicropubControllerTest extends TestCase
             [
                 'h' => 'card',
                 'name' => 'The Barton Arms',
-                'geo' => 'geo:53.4974,-2.3768'
+                'geo' => 'geo:53.4974,-2.3768',
             ],
             ['HTTP_Authorization' => 'Bearer ' . $this->getTokenWithIncorrectScope()]
         );
@@ -366,7 +371,7 @@ class MicropubControllerTest extends TestCase
         $response
             ->assertJson([
                 'response' => 'error',
-                'error' => 'unauthorized'
+                'error' => 'unauthorized',
             ])
             ->assertStatus(401);
     }
@@ -394,7 +399,7 @@ class MicropubControllerTest extends TestCase
         $response
             ->assertJson([
                 'response' => 'error',
-                'error' => 'insufficient_scope'
+                'error' => 'insufficient_scope',
             ])
             ->assertStatus(401);
     }
@@ -415,7 +420,7 @@ class MicropubControllerTest extends TestCase
         $response
             ->assertJson([
                 'response' => 'error',
-                'error_description' => 'unsupported_request_type'
+                'error_description' => 'unsupported_request_type',
             ])
             ->assertStatus(500);
     }
@@ -430,7 +435,7 @@ class MicropubControllerTest extends TestCase
                 'type' => ['h-card'],
                 'properties' => [
                     'name' => $faker->name,
-                    'geo' => 'geo:' . $faker->latitude . ',' . $faker->longitude
+                    'geo' => 'geo:' . $faker->latitude . ',' . $faker->longitude,
                 ],
             ],
             ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
@@ -450,7 +455,7 @@ class MicropubControllerTest extends TestCase
                 'type' => ['h-card'],
                 'properties' => [
                     'name' => $faker->name,
-                    'geo' => 'geo:' . $faker->latitude . ',' . $faker->longitude . ';u=35'
+                    'geo' => 'geo:' . $faker->latitude . ',' . $faker->longitude . ';u=35',
                 ],
             ],
             ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]

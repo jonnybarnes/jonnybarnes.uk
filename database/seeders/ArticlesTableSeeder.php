@@ -3,8 +3,8 @@
 namespace Database\Seeders;
 
 use App\Models\Article;
-use Illuminate\Support\Carbon;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class ArticlesTableSeeder extends Seeder
@@ -28,7 +28,7 @@ class ArticlesTableSeeder extends Seeder
             ->update(['updated_at' => $now->toDateTimeString()]);
 
         $now = Carbon::now()->subHours(2)->subMinutes(25);
-        $articleWithCode = <<<EOF
+        $articleWithCode = <<<'EOF'
 I wrote some code.
 
 I liked writing this:

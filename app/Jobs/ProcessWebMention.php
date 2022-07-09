@@ -5,13 +5,15 @@ declare(strict_types=1);
 namespace App\Jobs;
 
 use App\Exceptions\RemoteContentNotFoundException;
-use App\Models\{Note, WebMention};
+use App\Models\Note;
+use App\Models\WebMention;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\{InteractsWithQueue, SerializesModels};
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
 use Jonnybarnes\WebmentionsParser\Exceptions\InvalidMentionException;
 use Jonnybarnes\WebmentionsParser\Parser;
 use Mf2;
@@ -31,8 +33,8 @@ class ProcessWebMention implements ShouldQueue
     /**
      * Create a new job instance.
      *
-     * @param Note $note
-     * @param string $source
+     * @param  Note  $note
+     * @param  string  $source
      */
     public function __construct(Note $note, string $source)
     {
@@ -43,8 +45,9 @@ class ProcessWebMention implements ShouldQueue
     /**
      * Execute the job.
      *
-     * @param Parser $parser
-     * @param Client $guzzle
+     * @param  Parser  $parser
+     * @param  Client  $guzzle
+     *
      * @throws RemoteContentNotFoundException
      * @throws GuzzleException
      * @throws InvalidMentionException

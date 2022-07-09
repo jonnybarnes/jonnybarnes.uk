@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace App\Models;
 
 use Cviebrock\EloquentSluggable\Sluggable;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\{Builder, Collection, Factories\HasFactory, Model};
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 
 class Place extends Model
@@ -70,9 +71,9 @@ class Place extends Model
     /**
      * Select places near a given location.
      *
-     * @param Builder $query
-     * @param object $location
-     * @param int $distance
+     * @param  Builder  $query
+     * @param  object  $location
+     * @param  int  $distance
      * @return Builder
      */
     public function scopeNear(Builder $query, object $location, int $distance = 1000): Builder
@@ -93,8 +94,8 @@ class Place extends Model
     /**
      * Select places based on a URL.
      *
-     * @param Builder $query
-     * @param string $url
+     * @param  Builder  $query
+     * @param  string  $url
      * @return Builder
      */
     public function scopeWhereExternalURL(Builder $query, string $url): Builder

@@ -2,7 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\{Bookmark, Tag};
+use App\Models\Bookmark;
+use App\Models\Tag;
 use Illuminate\Database\Seeder;
 
 class BookmarksTableSeeder extends Seeder

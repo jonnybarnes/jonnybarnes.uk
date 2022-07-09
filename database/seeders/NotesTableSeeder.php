@@ -2,10 +2,12 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Support\Carbon;
+use App\Models\Media;
+use App\Models\Note;
+use App\Models\Place;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
-use App\Models\{Media, Note, Place};
 use SplFileInfo;
 
 class NotesTableSeeder extends Seeder
@@ -184,7 +186,7 @@ class NotesTableSeeder extends Seeder
             ->update(['updated_at' => $now->toDateTimeString()]);
 
         $now = Carbon::now()->subHours(2);
-        $noteWithCodeContent = <<<EOF
+        $noteWithCodeContent = <<<'EOF'
 A note with some code:
 ```php
 <?php
@@ -203,7 +205,7 @@ EOF;
         $noteWithLongUrl = Note::create([
             'note' => 'Best site: https://example.org/posts/some-really-long-slug-that-is-too-wide-on-mobile',
             'created_at' => $now,
-            'client_id' => 'https://beta.indigenous.abode.pub/ios/'
+            'client_id' => 'https://beta.indigenous.abode.pub/ios/',
         ]);
         DB::table('notes')
             ->where('id', $noteWithLongUrl->id)

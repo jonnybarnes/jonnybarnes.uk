@@ -4,15 +4,17 @@ declare(strict_types=1);
 
 namespace App\Observers;
 
-use App\Models\{Note, Tag};
-use Illuminate\Support\{Arr, Collection};
+use App\Models\Note;
+use App\Models\Tag;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 
 class NoteObserver
 {
     /**
      * Listen to the Note created event.
      *
-     * @param Note $note
+     * @param  Note  $note
      */
     public function created(Note $note)
     {
@@ -36,7 +38,7 @@ class NoteObserver
     /**
      * Listen to the Note updated event.
      *
-     * @param Note $note
+     * @param  Note  $note
      */
     public function updated(Note $note)
     {
@@ -62,7 +64,7 @@ class NoteObserver
     /**
      * Listen to the Note deleting event.
      *
-     * @param Note $note
+     * @param  Note  $note
      */
     public function deleting(Note $note)
     {
@@ -72,7 +74,7 @@ class NoteObserver
     /**
      * Retrieve the tags from a note’s text, tag for form #tag.
      *
-     * @param string $note
+     * @param  string  $note
      * @return Collection
      */
     private function getTagsFromNote(string $note): Collection

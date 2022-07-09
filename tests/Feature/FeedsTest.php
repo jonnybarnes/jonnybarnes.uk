@@ -70,7 +70,7 @@ class FeedsTest extends TestCase
             'children' => [[
                 'type' => 'entry',
                 'post-type' => 'article',
-            ]]
+            ]],
         ]);
     }
 
@@ -131,7 +131,7 @@ class FeedsTest extends TestCase
             'children' => [[
                 'type' => 'entry',
                 'post-type' => 'note',
-            ]]
+            ]],
         ]);
     }
 

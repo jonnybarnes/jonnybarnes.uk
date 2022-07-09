@@ -29,7 +29,6 @@ use App\Http\Controllers\MicropubController;
 use App\Http\Controllers\MicropubMediaController;
 use App\Http\Controllers\NotesController;
 use App\Http\Controllers\PlacesController;
-use App\Http\Controllers\SearchController;
 use App\Http\Controllers\ShortURLsController;
 use App\Http\Controllers\TokenEndpointController;
 use App\Http\Controllers\WebMentionsController;
@@ -167,7 +166,7 @@ Route::group(['domain' => config('url.longurl')], function () {
     Route::get('api/post', [MicropubController::class, 'get'])->middleware('micropub.token');
     Route::post('api/post', [MicropubController::class, 'post'])->middleware('micropub.token');
     Route::get('api/media', [MicropubMediaController::class, 'getHandler'])->middleware('micropub.token');
-    Route::post('api/media', [MicropubMediaController:: class, 'media'])
+    Route::post('api/media', [MicropubMediaController::class, 'media'])
         ->middleware('micropub.token', 'cors')
         ->name('media-endpoint');
     Route::options('/api/media', [MicropubMediaController::class, 'mediaOptionsResponse'])->middleware('cors');

@@ -1,0 +1,68 @@
+name: PHP Unit
+
+on:
+  pull_request:
+
+jobs:
+  phpunit:
+    runs-on: ubuntu-latest
+
+    name: PHPUnit test suite
+
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: jbukdev_testing
+        ports:
+          - 5432:5432
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install Node and dependencies
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: 'npm'
+      - run: npm ci
+
+      - name: Setup PHP with pecl extensions
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: phpredis,imagick
+
+      - name: Copy .env
+        run: php -r "file_exists('.env') || copy('.env.github', '.env');"
+
+      - name: Get Composer Cache Directory
+        id: composer-cache
+        run: |
+          echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+      - name: Cache composer dependencies
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+
+      - name: Install Composer Dependencies
+        run: composer install --quiet --no-ansi --no-interaction --no-progress
+
+      - name: Generate Key
+        run: php artisan key:generate
+
+      - name: Setup Directory Permissions
+        run: chmod -R 777 storage bootstrap/cache
+
+      - name: Setup Database
+        run: php artisan migrate
+
+      - name: Execute PHPUnit Tests
+        run: vendor/bin/phpunit

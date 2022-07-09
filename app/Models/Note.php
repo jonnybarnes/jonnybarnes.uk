@@ -4,13 +4,20 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\CommonMark\Generators\ContactMentionGenerator;
+use App\CommonMark\Renderers\ContactMentionRenderer;
 use App\Exceptions\TwitterContentException;
-use Barryvdh\LaravelIdeHelper\Eloquent;
 use Codebird\Codebird;
 use Exception;
 use GuzzleHttp\Client;
-use Illuminate\Database\Eloquent\Relations\{BelongsTo, BelongsToMany, HasMany, MorphMany};
-use Illuminate\Database\Eloquent\{Builder, Factories\HasFactory, Model, SoftDeletes};
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Cache;
 use JetBrains\PhpStorm\ArrayShape;
 use Jonnybarnes\IndieWeb\Numbers;
@@ -19,9 +26,12 @@ use League\CommonMark\Extension\Autolink\AutolinkExtension;
 use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
 use League\CommonMark\Extension\CommonMark\Node\Block\FencedCode;
 use League\CommonMark\Extension\CommonMark\Node\Block\IndentedCode;
+use League\CommonMark\Extension\Mention\Mention;
+use League\CommonMark\Extension\Mention\MentionExtension;
 use League\CommonMark\MarkdownConverter;
 use Normalizer;
-use Spatie\CommonMarkHighlighter\{FencedCodeRenderer, IndentedCodeRenderer};
+use Spatie\CommonMarkHighlighter\FencedCodeRenderer;
+use Spatie\CommonMarkHighlighter\IndentedCodeRenderer;
 
 class Note extends Model
 {
@@ -43,7 +53,7 @@ class Note extends Model
     /**
      * Set our contacts variable to null.
      *
-     * @param array $attributes
+     * @param  array  $attributes
      */
     public function __construct(array $attributes = [])
     {
@@ -131,7 +141,7 @@ class Note extends Model
      *
      * @return array
      */
-    #[ArrayShape(['note' => "null|string"])]
+    #[ArrayShape(['note' => 'null|string'])]
     public function toSearchableArray(): array
     {
         return [
@@ -142,7 +152,7 @@ class Note extends Model
     /**
      * Normalize the note to Unicode FORM C.
      *
-     * @param string|null $value
+     * @param  string|null  $value
      */
     public function setNoteAttribute(?string $value): void
     {
@@ -158,7 +168,7 @@ class Note extends Model
     /**
      * Pre-process notes for web-view.
      *
-     * @param string|null $value
+     * @param  string|null  $value
      * @return string|null
      */
     public function getNoteAttribute(?string $value): ?string
@@ -172,8 +182,7 @@ class Note extends Model
             return null;
         }
 
-        $hcards = $this->makeHCards($value);
-        $hashtags = $this->autoLinkHashtag($hcards);
+        $hashtags = $this->autoLinkHashtag($value);
 
         return $this->convertMarkdown($hashtags);
     }
@@ -337,7 +346,7 @@ class Note extends Model
     {
         if (
             $this->in_reply_to === null ||
-            !$this->isTwitterLink($this->in_reply_to)
+            ! $this->isTwitterLink($this->in_reply_to)
         ) {
             return null;
         }
@@ -373,13 +382,16 @@ class Note extends Model
      * That is we swap the contacts names for their known Twitter handles.
      *
      * @return string
+     *
      * @throws TwitterContentException
      */
     public function getTwitterContentAttribute(): string
     {
+        $this->getContacts();
+
         // check for contacts
         if ($this->contacts === null || count($this->contacts) === 0) {
-            throw new TwitterContentException('There are no contacts for this note');
+            return '';
         }
 
         // here we check the matched contact from the note corresponds to a contact
@@ -388,10 +400,10 @@ class Note extends Model
             count(array_unique(array_values($this->contacts))) === 1
             && array_unique(array_values($this->contacts))[0] === null
         ) {
-            throw new TwitterContentException('The matched contact is not in the database');
+            return '';
         }
 
-        // swap in twitter usernames
+        // swap in Twitter usernames
         $swapped = preg_replace_callback(
             self::USERNAMES_REGEX,
             function ($matches) {
@@ -406,7 +418,7 @@ class Note extends Model
 
                 return $contact->name;
             },
-            $this->getOriginal('note')
+            $this->getRawOriginal('note')
         );
 
         return $this->convertMarkdown($swapped);
@@ -415,8 +427,8 @@ class Note extends Model
     /**
      * Scope a query to select a note via a NewBase60 id.
      *
-     * @param Builder $query
-     * @param string $nb60id
+     * @param  Builder  $query
+     * @param  string  $nb60id
      * @return Builder
      */
     public function scopeNb60(Builder $query, string $nb60id): Builder
@@ -432,7 +444,7 @@ class Note extends Model
      * due to lack of contact info, we assume @username is a twitter handle and link it
      * as such.
      *
-     * @param string $text
+     * @param  string  $text
      * @return string
      */
     private function makeHCards(string $text): string
@@ -503,7 +515,7 @@ class Note extends Model
      * `#[\-_a-zA-Z0-9]+` and wraps them in an `a` element with
      * `rel=tag` set and a `href` of 'section/tagged/' + tagname without the #.
      *
-     * @param string $note
+     * @param  string  $note
      * @return string
      */
     public function autoLinkHashtag(string $note): string
@@ -522,14 +534,26 @@ class Note extends Model
     /**
      * Pass a note through the commonmark library.
      *
-     * @param string $note
+     * @param  string  $note
      * @return string
      */
     private function convertMarkdown(string $note): string
     {
-        $environment = new Environment();
+        $config = [
+            'mentions' => [
+                'contacts_handle' => [
+                    'prefix' => '@',
+                    'pattern' => '[a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38}(?!\w)',
+                    'generator' => new ContactMentionGenerator(),
+                ],
+            ],
+        ];
+
+        $environment = new Environment($config);
         $environment->addExtension(new CommonMarkCoreExtension());
         $environment->addExtension(new AutolinkExtension());
+        $environment->addExtension(new MentionExtension());
+        $environment->addRenderer(Mention::class, new ContactMentionRenderer());
         $environment->addRenderer(FencedCode::class, new FencedCodeRenderer());
         $environment->addRenderer(IndentedCode::class, new IndentedCodeRenderer());
         $markdownConverter = new MarkdownConverter($environment);
@@ -540,8 +564,8 @@ class Note extends Model
     /**
      * Do a reverse geocode lookup of a `lat,lng` value.
      *
-     * @param float $latitude
-     * @param float $longitude
+     * @param  float  $latitude
+     * @param  float  $longitude
      * @return string
      */
     public function reverseGeoCode(float $latitude, float $longitude): string

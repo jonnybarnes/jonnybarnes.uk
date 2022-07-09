@@ -6,7 +6,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Responses\MicropubResponses;
 use App\Models\Place;
-use App\Services\Micropub\{HCardService, HEntryService, UpdateService};
+use App\Services\Micropub\HCardService;
+use App\Services\Micropub\HEntryService;
+use App\Services\Micropub\UpdateService;
 use App\Services\TokenService;
 use Illuminate\Http\JsonResponse;
 use Lcobucci\JWT\Encoding\CannotDecodeContent;
@@ -18,8 +20,11 @@ use Monolog\Logger;
 class MicropubController extends Controller
 {
     protected TokenService $tokenService;
+
     protected HEntryService $hentryService;
+
     protected HCardService $hcardService;
+
     protected UpdateService $updateService;
 
     public function __construct(
@@ -168,6 +173,7 @@ class MicropubController extends Controller
      * Determine the client id from the access token sent with the request.
      *
      * @return string
+     *
      * @throws RequiredConstraintsViolated
      */
     private function getClientId(): string
@@ -180,7 +186,7 @@ class MicropubController extends Controller
     /**
      * Save the details of the micropub request to a log file.
      *
-     * @param array $request This is the info from request()->all()
+     * @param  array  $request This is the info from request()->all()
      */
     private function logMicropubRequest(array $request)
     {

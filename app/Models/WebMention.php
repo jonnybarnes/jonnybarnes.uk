@@ -6,12 +6,10 @@ namespace App\Models;
 
 use App\Traits\FilterHtml;
 use Codebird\Codebird;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Filesystem\Filesystem;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Jonnybarnes\WebmentionsParser\Authorship;
 use Jonnybarnes\WebmentionsParser\Exceptions\AuthorshipParserException;
@@ -49,6 +47,7 @@ class WebMention extends Model
      * Get the author of the webmention.
      *
      * @return array
+     *
      * @throws AuthorshipParserException
      */
     public function getAuthorAttribute(): array
@@ -115,7 +114,7 @@ class WebMention extends Model
     /**
      * Create the photo link.
      *
-     * @param string $url
+     * @param  string  $url
      * @return string
      */
     public function createPhotoLink(string $url): string

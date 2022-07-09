@@ -24,7 +24,7 @@ class BookmarksController extends Controller
     /**
      * Show a single bookmark.
      *
-     * @param Bookmark $bookmark
+     * @param  Bookmark  $bookmark
      * @return View
      */
     public function show(Bookmark $bookmark): View

@@ -23,8 +23,8 @@ class TokenEndpointController extends Controller
     /**
      * Inject the dependencies.
      *
-     * @param Client $client
-     * @param TokenService $tokenService
+     * @param  Client  $client
+     * @param  TokenService  $tokenService
      */
     public function __construct(
         Client $client,

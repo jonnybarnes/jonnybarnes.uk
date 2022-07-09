@@ -5,11 +5,9 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Traits\FilterHtml;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Carbon;
 use Mf2;
 
 class Like extends Model
@@ -32,7 +30,7 @@ class Like extends Model
     /**
      * Normalize the URL of the author of the like.
      *
-     * @param string|null $value The author’s url
+     * @param  string|null  $value The author’s url
      */
     public function setAuthorUrlAttribute(?string $value)
     {
@@ -42,7 +40,7 @@ class Like extends Model
     /**
      * If the content contains HTML, filter it.
      *
-     * @param string|null $value The content of the like
+     * @param  string|null  $value The content of the like
      * @return string|null
      */
     public function getContentAttribute(?string $value): ?string

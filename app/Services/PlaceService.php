@@ -12,7 +12,7 @@ class PlaceService
     /**
      * Create a place.
      *
-     * @param array $data
+     * @param  array  $data
      * @return Place
      */
     public function createPlace(array $data): Place

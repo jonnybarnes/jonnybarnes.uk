@@ -3,8 +3,6 @@
 namespace Tests\Feature;
 
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class HorizonTest extends TestCase
@@ -13,6 +11,7 @@ class HorizonTest extends TestCase
      * Horizon has its own test suite, here we just test it has been installed successfully.
      *
      * @test
+     *
      * @return void
      */
     public function horizonIsInstalled(): void

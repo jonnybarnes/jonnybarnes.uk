@@ -68,7 +68,7 @@ if (! function_exists('normalize_url')) {
             $url['path'] = preg_replace_callback(
                 array_map(
                     function ($str) {
-                        return "/%" . strtoupper($str) . "/x";
+                        return '/%' . strtoupper($str) . '/x';
                     },
                     $u
                 ),
@@ -78,10 +78,10 @@ if (! function_exists('normalize_url')) {
                 $url['path']
             );
             // Remove directory index
-            $defaultIndexes = ["/default\.aspx/" => 'default.aspx/', "/default\.asp/"  => 'default.asp/',
-                               "/index\.html/"   => 'index.html/',   "/index\.htm/"    => 'index.htm/',
-                               "/default\.html/" => 'default.html/', "/default\.htm/"  => 'default.htm/',
-                               "/index\.php/"    => 'index.php/',    "/index\.jsp/"    => 'index.jsp/', ];
+            $defaultIndexes = ["/default\.aspx/" => 'default.aspx/', "/default\.asp/" => 'default.asp/',
+                "/index\.html/" => 'index.html/',   "/index\.htm/" => 'index.htm/',
+                "/default\.html/" => 'default.html/', "/default\.htm/" => 'default.htm/',
+                "/index\.php/" => 'index.php/',    "/index\.jsp/" => 'index.jsp/', ];
             foreach ($defaultIndexes as $index => $strip) {
                 if (preg_match($index, $url['path'])) {
                     $url['path'] = str_replace($strip, '', $url['path']);

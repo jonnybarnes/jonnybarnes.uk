@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use League\CommonMark\CommonMarkConverter;
 use League\CommonMark\Environment\Environment;
 use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
 use League\CommonMark\Extension\CommonMark\Node\Block\FencedCode;
@@ -128,9 +127,9 @@ class Article extends Model
     /**
      * Scope a query to only include articles from a particular year/month.
      *
-     * @param Builder $query
-     * @param int|null $year
-     * @param int|null $month
+     * @param  Builder  $query
+     * @param  int|null  $year
+     * @param  int|null  $month
      * @return Builder
      */
     public function scopeDate(Builder $query, int $year = null, int $month = null): Builder
