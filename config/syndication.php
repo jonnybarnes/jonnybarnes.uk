@@ -22,5 +22,5 @@ return [
                 'photo' => 'https://pbs.twimg.com/profile_images/875422855932121089/W628ZI8w_400x400.jpg',
             ],
         ],
-    ]
+    ],
 ];

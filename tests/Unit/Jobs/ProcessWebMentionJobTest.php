@@ -58,7 +58,7 @@ class ProcessWebMentionJobTest extends TestCase
 
         $parser = new Parser();
 
-        $html = <<<HTML
+        $html = <<<'HTML'
         <div class="h-entry">
             I liked <a class="u-like-of" href="/notes/1">a note</a>.
         </div>
@@ -125,7 +125,7 @@ class ProcessWebMentionJobTest extends TestCase
     {
         $parser = new Parser();
 
-        $html = <<<HTML
+        $html = <<<'HTML'
         <div class="h-entry">
             <p>In reply to <a class="u-in-reply-to" href="https://other.com/notes/E">a note</a></p>
             <div class="e-content">Replying to someone else</div>
@@ -162,7 +162,7 @@ class ProcessWebMentionJobTest extends TestCase
     {
         $parser = new Parser();
 
-        $html = <<<HTML
+        $html = <<<'HTML'
         <div class="h-entry">
             <p>In reply to <a class="u-like-of" href="https://other.com/notes/E">a note</a></p>
             <div class="e-content">I like someone else now</div>
@@ -199,7 +199,7 @@ class ProcessWebMentionJobTest extends TestCase
     {
         $parser = new Parser();
 
-        $html = <<<HTML
+        $html = <<<'HTML'
         <div class="h-entry">
             <p>In reply to <a class="u-repost-of" href="https://other.com/notes/E">a note</a></p>
             <div class="e-content">Reposting someone else</div>

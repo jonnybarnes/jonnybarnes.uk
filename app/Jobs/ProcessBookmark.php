@@ -26,7 +26,7 @@ class ProcessBookmark implements ShouldQueue
     /**
      * Create a new job instance.
      *
-     * @param Bookmark $bookmark
+     * @param  Bookmark  $bookmark
      */
     public function __construct(Bookmark $bookmark)
     {

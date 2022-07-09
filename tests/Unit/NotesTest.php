@@ -4,14 +4,18 @@ declare(strict_types=1);
 
 namespace Tests\Unit;
 
-use App\Models\{Contact, Media, Note, Place, Tag};
-use Illuminate\Filesystem\Filesystem;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Cache;
+use App\Models\Contact;
+use App\Models\Media;
+use App\Models\Note;
+use App\Models\Place;
+use App\Models\Tag;
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
+use Illuminate\Filesystem\Filesystem;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Cache;
 use Tests\TestCase;
 
 class NotesTest extends TestCase
@@ -23,6 +27,7 @@ class NotesTest extends TestCase
      * relevant sub-methods.
      *
      * @test
+     *
      * @return void
      */
     public function getNoteAttributeMethodCallsSubMethods(): void
@@ -39,6 +44,7 @@ class NotesTest extends TestCase
      * Look for a default image in the contact’s h-card for the makeHCards method.
      *
      * @test
+     *
      * @return void
      */
     public function defaultImageUsedAsFallbackInMakehcardsMethod(): void
@@ -62,6 +68,7 @@ class NotesTest extends TestCase
      * Look for a specific profile image in the contact’s h-card.
      *
      * @test
+     *
      * @return void
      */
     public function specificProfileImageUsedInMakehcardsMethod(): void
@@ -75,7 +82,7 @@ class NotesTest extends TestCase
         ]);
         $fileSystem = new Filesystem();
         $fileSystem->ensureDirectoryExists(public_path('/assets/profile-images/aaronparecki.com'));
-        if (!$fileSystem->exists(public_path('/assets/profile-images/aaronparecki.com/image'))) {
+        if (! $fileSystem->exists(public_path('/assets/profile-images/aaronparecki.com/image'))) {
             $fileSystem->copy('./tests/aaron.png', public_path('/assets/profile-images/aaronparecki.com/image'));
         }
         $note = Note::factory()->create([
@@ -91,6 +98,7 @@ class NotesTest extends TestCase
      * Look for twitter URL when there’s no associated contact.
      *
      * @test
+     *
      * @return void
      */
     public function twitterLinkIsCreatedWhenNoContactFound(): void
@@ -306,8 +314,8 @@ class NotesTest extends TestCase
         ]);
         $note->media()->save($media);
 
-        $expected = "<p>A nice image</p>
-<img src=\"" . config('filesystems.disks.s3.url') . "/test.png\" alt=\"\">";
+        $expected = '<p>A nice image</p>
+<img src="' . config('filesystems.disks.s3.url') . '/test.png" alt="">';
         $this->assertEquals($expected, $note->content);
     }
 
@@ -323,8 +331,8 @@ class NotesTest extends TestCase
         ]);
         $note->media()->save($media);
 
-        $expected = "<p>A nice video</p>
-<video src=\"" . config('filesystems.disks.s3.url') . "/test.mkv\">";
+        $expected = '<p>A nice video</p>
+<video src="' . config('filesystems.disks.s3.url') . '/test.mkv">';
         $this->assertEquals($expected, $note->content);
     }
 
@@ -340,13 +348,14 @@ class NotesTest extends TestCase
         ]);
         $note->media()->save($media);
 
-        $expected = "<p>Some nice audio</p>
-<audio src=\"" . config('filesystems.disks.s3.url') . "/test.flac\">";
+        $expected = '<p>Some nice audio</p>
+<audio src="' . config('filesystems.disks.s3.url') . '/test.flac">';
         $this->assertEquals($expected, $note->content);
     }
 
     /**
      * @test
+     *
      * @todo Why do we need to provide text?
      */
     public function provideTextForBlankContent(): void
@@ -392,7 +401,7 @@ class NotesTest extends TestCase
         Cache::put('933662564587855877', $tempContent);
 
         $note = Note::factory()->create([
-            'in_reply_to' => 'https://twitter.com/someRando/status/933662564587855877'
+            'in_reply_to' => 'https://twitter.com/someRando/status/933662564587855877',
         ]);
 
         $this->assertSame($tempContent, $note->twitter);

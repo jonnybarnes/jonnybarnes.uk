@@ -43,10 +43,10 @@ class LikesTest extends TestCase
 
         $this->actingAs($user)
              ->post('/admin/likes', [
-                 'like_url' => 'https://example.com'
+                 'like_url' => 'https://example.com',
              ]);
         $this->assertDatabaseHas('likes', [
-            'url' => 'https://example.com'
+            'url' => 'https://example.com',
         ]);
         Queue::assertPushed(ProcessLike::class);
     }

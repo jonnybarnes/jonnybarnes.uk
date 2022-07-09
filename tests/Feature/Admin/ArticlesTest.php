@@ -43,7 +43,7 @@ class ArticlesTest extends TestCase
         $this->actingAs($user)
              ->post('/admin/blog', [
                  'title' => 'Test Title',
-                 'main' => 'Article content'
+                 'main' => 'Article content',
              ]);
         $this->assertDatabaseHas('articles', ['title' => 'Test Title']);
     }
@@ -63,8 +63,8 @@ class ArticlesTest extends TestCase
 
         $this->actingAs($user)
              ->post('/admin/blog', [
-                'title' => 'Uploaded Article',
-                'article' => $file,
+                 'title' => 'Uploaded Article',
+                 'article' => $file,
              ]);
 
         $this->assertDatabaseHas('articles', [

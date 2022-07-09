@@ -97,6 +97,7 @@ class MicropubMediaController extends Controller
      * Process a media item posted to the media endpoint.
      *
      * @return JsonResponse
+     *
      * @throws BindingResolutionException
      * @throws Exception
      */
@@ -184,7 +185,7 @@ class MicropubMediaController extends Controller
     /**
      * Get the file type from the mime-type of the uploaded file.
      *
-     * @param string $mimeType
+     * @param  string  $mimeType
      * @return string
      */
     private function getFileTypeFromMimeType(string $mimeType): string
@@ -229,8 +230,9 @@ class MicropubMediaController extends Controller
     /**
      * Save an uploaded file to the local disk.
      *
-     * @param UploadedFile $file
+     * @param  UploadedFile  $file
      * @return string
+     *
      * @throws Exception
      */
     private function saveFile(UploadedFile $file): string

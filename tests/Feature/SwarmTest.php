@@ -54,10 +54,10 @@ class SwarmTest extends TestCase
             ->assertStatus(201)
             ->assertJson(['response' => 'created']);
         $this->assertDatabaseHas('notes', [
-            'swarm_url' => 'https://www.swarmapp.com/checkin/abc'
+            'swarm_url' => 'https://www.swarmapp.com/checkin/abc',
         ]);
         $this->assertDatabaseHas('places', [
-            'external_urls' => '{"foursquare": "https://foursquare.com/v/123456"}'
+            'external_urls' => '{"foursquare": "https://foursquare.com/v/123456"}',
         ]);
 
         Queue::assertPushed(SendWebMentions::class);
@@ -101,7 +101,7 @@ class SwarmTest extends TestCase
             ->assertStatus(201)
             ->assertJson(['response' => 'created']);
         $this->assertDatabaseHas('places', [
-            'external_urls' => '{"osm": "https://www.openstreetmap.org/way/123456"}'
+            'external_urls' => '{"osm": "https://www.openstreetmap.org/way/123456"}',
         ]);
 
         Queue::assertPushed(SendWebMentions::class);
@@ -144,7 +144,7 @@ class SwarmTest extends TestCase
             ->assertStatus(201)
             ->assertJson(['response' => 'created']);
         $this->assertDatabaseHas('places', [
-            'external_urls' => '{"default": "https://www.example.org/way/123456"}'
+            'external_urls' => '{"default": "https://www.example.org/way/123456"}',
         ]);
 
         Queue::assertPushed(SendWebMentions::class);
@@ -178,10 +178,10 @@ class SwarmTest extends TestCase
             ->assertStatus(201)
             ->assertJson(['response' => 'created']);
         $this->assertDatabaseHas('places', [
-            'external_urls' => '{"foursquare": "https://foursquare.com/v/654321"}'
+            'external_urls' => '{"foursquare": "https://foursquare.com/v/654321"}',
         ]);
         $this->assertDatabaseHas('notes', [
-            'swarm_url' => 'https://www.swarmapp.com/checkin/def'
+            'swarm_url' => 'https://www.swarmapp.com/checkin/def',
         ]);
         // Check the default text content for the note was saved
         $this->get($response->__get('headers')->get('location'))->assertSee('📍');
@@ -280,10 +280,10 @@ class SwarmTest extends TestCase
             [
                 'type' => ['h-entry'],
                 'properties' => [
-                    'published' => [Carbon::now()->toDateTimeString()]
+                    'published' => [Carbon::now()->toDateTimeString()],
                 ],
                 'syndication' => [
-                    'https://www.swarmapp.com/user/199841/checkin/5c4b1ac56dcf04002c0a4f58'
+                    'https://www.swarmapp.com/user/199841/checkin/5c4b1ac56dcf04002c0a4f58',
                 ],
                 'checkin' => [
                     'type' => ['h-card'],
@@ -295,9 +295,9 @@ class SwarmTest extends TestCase
                         'street-address' => ['65 Oldham St.'],
                         'locality' => ['Manchester'],
                         'country-name' => ['United Kingdom'],
-                        'postal-code' => ['M1 1JR']
+                        'postal-code' => ['M1 1JR'],
                     ],
-                    'value' => 'https://foursquare.com/v/4ade0e46f964a520bf6f21e3'
+                    'value' => 'https://foursquare.com/v/4ade0e46f964a520bf6f21e3',
                 ],
                 'location' => [
                     'type' => ['h-adr'],
@@ -307,8 +307,8 @@ class SwarmTest extends TestCase
                         'street-address' => ['65 Oldham St.'],
                         'locality' => ['Manchester'],
                         'country-name' => ['United Kingdom'],
-                        'postal-code' => ['M1 1JR']
-                    ]
+                        'postal-code' => ['M1 1JR'],
+                    ],
                 ],
             ],
             ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]

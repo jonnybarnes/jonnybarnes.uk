@@ -31,7 +31,7 @@ class ProcessLike implements ShouldQueue
     /**
      * Create a new job instance.
      *
-     * @param Like $like
+     * @param  Like  $like
      */
     public function __construct(Like $like)
     {
@@ -41,9 +41,10 @@ class ProcessLike implements ShouldQueue
     /**
      * Execute the job.
      *
-     * @param Client $client
-     * @param Authorship $authorship
+     * @param  Client  $client
+     * @param  Authorship  $authorship
      * @return int
+     *
      * @throws GuzzleException
      */
     public function handle(Client $client, Authorship $authorship): int

@@ -4,12 +4,9 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 
 class Tag extends Model
@@ -46,7 +43,7 @@ class Tag extends Model
     /**
      * When creating a Tag model instance, invoke the nomralize method on the tag.
      *
-     * @param string $value
+     * @param  string  $value
      */
     public function setTagAttribute(string $value)
     {
@@ -57,7 +54,7 @@ class Tag extends Model
      * This method actually normalizes a tag. That means lowercase-ing and
      * removing fancy diatric characters.
      *
-     * @param string $tag
+     * @param  string  $tag
      * @return string
      */
     public static function normalize(string $tag): string

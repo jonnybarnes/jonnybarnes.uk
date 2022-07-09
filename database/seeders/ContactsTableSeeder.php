@@ -28,7 +28,7 @@ class ContactsTableSeeder extends Seeder
             'facebook' => '123456',
         ]);
         $fs = new FileSystem();
-        if (!$fs->exists(public_path('assets/profile-images/aaronparecki.com'))) {
+        if (! $fs->exists(public_path('assets/profile-images/aaronparecki.com'))) {
             $fs->makeDirectory(public_path('assets/profile-images/aaronparecki.com'));
         }
         $fs->copy(

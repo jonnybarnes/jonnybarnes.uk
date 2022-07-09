@@ -4,9 +4,13 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use App\Jobs\{SendWebMentions, SyndicateNoteToTwitter};
-use App\Models\{Media, Note, Place};
-use Illuminate\Support\{Arr, Str};
+use App\Jobs\SendWebMentions;
+use App\Jobs\SyndicateNoteToTwitter;
+use App\Models\Media;
+use App\Models\Note;
+use App\Models\Place;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 
 class NoteService
 {
@@ -61,7 +65,7 @@ class NoteService
     /**
      * Get the content from the request to create a new note.
      *
-     * @param array $request Data from request()->all()
+     * @param  array  $request Data from request()->all()
      * @return string|null
      */
     private function getContent(array $request): ?string
@@ -79,7 +83,7 @@ class NoteService
     /**
      * Get the in-reply-to from the request to create a new note.
      *
-     * @param array $request Data from request()->all()
+     * @param  array  $request Data from request()->all()
      * @return string|null
      */
     private function getInReplyTo(array $request): ?string
@@ -94,7 +98,7 @@ class NoteService
     /**
      * Get the published time from the request to create a new note.
      *
-     * @param array $request Data from request()->all()
+     * @param  array  $request Data from request()->all()
      * @return string|null
      */
     private function getPublished(array $request): ?string
@@ -113,7 +117,7 @@ class NoteService
     /**
      * Get the location data from the request to create a new note.
      *
-     * @param array $request Data from request()->all()
+     * @param  array  $request Data from request()->all()
      * @return string|null
      */
     private function getLocation(array $request): ?string
@@ -135,7 +139,7 @@ class NoteService
     /**
      * Get the checkin data from the request to create a new note. This will be a Place.
      *
-     * @param array $request Data from request()->all()
+     * @param  array  $request Data from request()->all()
      * @return Place|null
      */
     private function getCheckin(array $request): ?Place
@@ -181,7 +185,7 @@ class NoteService
     /**
      * Get the Swarm URL from the syndication data in the request to create a new note.
      *
-     * @param array $request Data from request()->all()
+     * @param  array  $request Data from request()->all()
      * @return string|null
      */
     private function getSwarmUrl(array $request): ?string
@@ -196,7 +200,7 @@ class NoteService
     /**
      * Get the syndication targets from the request to create a new note.
      *
-     * @param array $request Data from request()->all()
+     * @param  array  $request Data from request()->all()
      * @return array
      */
     private function getSyndicationTargets(array $request): array
@@ -225,7 +229,7 @@ class NoteService
     /**
      * Get the media URLs from the request to create a new note.
      *
-     * @param array $request Data from request()->all()
+     * @param  array  $request Data from request()->all()
      * @return array
      */
     private function getMedia(array $request): array
@@ -255,7 +259,7 @@ class NoteService
     /**
      * Get the Instagram photo URL from the request to create a new note.
      *
-     * @param array $request Data from request()->all()
+     * @param  array  $request Data from request()->all()
      * @return string|null
      */
     private function getInstagramUrl(array $request): ?string

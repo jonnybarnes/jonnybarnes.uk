@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Admin;
 
-use App\Models\User;
 use App\Models\Contact;
+use App\Models\User;
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
@@ -58,7 +58,7 @@ class ContactsTest extends TestCase
         $this->assertDatabaseHas('contacts', [
             'name' => 'Fred Bloggs',
             'nick' => 'fred',
-            'homepage' => 'https://fred.blog/gs'
+            'homepage' => 'https://fred.blog/gs',
         ]);
     }
 
@@ -135,7 +135,7 @@ class ContactsTest extends TestCase
     /** @test */
     public function adminCanTriggerRetrievalOfRemoteAvatar(): void
     {
-        $html = <<<HTML
+        $html = <<<'HTML'
         <div class="h-card">
             <img class="u-photo" alt="" src="http://tantek.com/tantek.png">
         </div>
@@ -181,7 +181,7 @@ class ContactsTest extends TestCase
     /** @test */
     public function gettingRemoteAvatarFailsGracefullyWithRemoteError(): void
     {
-        $html = <<<HTML
+        $html = <<<'HTML'
         <div class="h-card">
             <img class="u-photo" src="http://tantek.com/tantek.png">
         </div>

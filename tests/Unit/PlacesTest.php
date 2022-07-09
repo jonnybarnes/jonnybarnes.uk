@@ -9,7 +9,6 @@ use App\Models\Place;
 use App\Services\PlaceService;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\DB;
 use InvalidArgumentException;
 use Tests\TestCase;
 
@@ -82,7 +81,7 @@ class PlacesTest extends TestCase
         $ret = $service->createPlaceFromCheckin([
             'properties' => [
                 'url' => ['https://www.openstreetmap.org/way/1234'],
-            ]
+            ],
         ]);
         $this->assertInstanceOf('App\Models\Place', $ret);
         $this->assertCount(11, Place::all());

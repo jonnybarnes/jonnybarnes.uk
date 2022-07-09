@@ -26,6 +26,7 @@ use Illuminate\Support\Carbon;
  * @property-read string $longurl
  * @property-read Collection|Tag[] $tags
  * @property-read int|null $tags_count
+ *
  * @method static Builder|Bookmark newModelQuery()
  * @method static Builder|Bookmark newQuery()
  * @method static Builder|Bookmark query()

@@ -45,7 +45,7 @@ class LikesTest extends TestCase
     /** @test */
     public function htmlLikeContentIsFiltered(): void
     {
-        $htmlEvil = <<<HTML
+        $htmlEvil = <<<'HTML'
         <div class="h-entry">
             <div class="e-content">
                 <p>Hello</p>
@@ -53,7 +53,7 @@ class LikesTest extends TestCase
             </div>
         </div>
         HTML;
-        $htmlFiltered = <<<HTML
+        $htmlFiltered = <<<'HTML'
         <p>Hello</p>
                 <img />
         HTML;

@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Models\{Article, Note};
+use App\Models\Article;
+use App\Models\Note;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 

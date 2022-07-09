@@ -29,7 +29,7 @@ class DownloadWebMention implements ShouldQueue
     /**
      * Create a new job instance.
      *
-     * @param string $source
+     * @param  string  $source
      */
     public function __construct(string $source)
     {
@@ -39,7 +39,8 @@ class DownloadWebMention implements ShouldQueue
     /**
      * Execute the job.
      *
-     * @param Client $guzzle
+     * @param  Client  $guzzle
+     *
      * @throws GuzzleException
      * @throws FileNotFoundException
      */
@@ -81,7 +82,7 @@ class DownloadWebMention implements ShouldQueue
     /**
      * Create a file path from a URL. This is used when caching the HTML response.
      *
-     * @param string $url
+     * @param  string  $url
      * @return string The path name
      */
     private function createFilenameFromURL(string $url)

@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace App\Services\Micropub;
 
-use App\Models\{Media, Note};
+use App\Models\Media;
+use App\Models\Note;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Support\{Arr, Str};
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 
 class UpdateService
 {
