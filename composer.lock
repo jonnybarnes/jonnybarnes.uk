@@ -114,16 +114,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.224.3",
+            "version": "3.231.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "52f45dfe0d1e5a77f33c050bde5134901fc54a57"
+                "reference": "9a7c2a8c4b7f95074749e1a7b575e6b4486bdcab"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/52f45dfe0d1e5a77f33c050bde5134901fc54a57",
-                "reference": "52f45dfe0d1e5a77f33c050bde5134901fc54a57",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/9a7c2a8c4b7f95074749e1a7b575e6b4486bdcab",
+                "reference": "9a7c2a8c4b7f95074749e1a7b575e6b4486bdcab",
                 "shasum": ""
             },
             "require": {
@@ -131,9 +131,9 @@
                 "ext-json": "*",
                 "ext-pcre": "*",
                 "ext-simplexml": "*",
-                "guzzlehttp/guzzle": "^5.3.3 || ^6.2.1 || ^7.0",
+                "guzzlehttp/guzzle": "^6.5.8 || ^7.4.5",
                 "guzzlehttp/promises": "^1.4.0",
-                "guzzlehttp/psr7": "^1.7.0 || ^2.1.1",
+                "guzzlehttp/psr7": "^1.8.5 || ^2.3",
                 "mtdowling/jmespath.php": "^2.6",
                 "php": ">=5.5"
             },
@@ -141,6 +141,7 @@
                 "andrewsville/php-token-reflection": "^1.4",
                 "aws/aws-php-sns-message-validator": "~1.0",
                 "behat/behat": "~3.0",
+                "composer/composer": "^1.10.22",
                 "doctrine/cache": "~1.4",
                 "ext-dom": "*",
                 "ext-openssl": "*",
@@ -199,9 +200,9 @@
             "support": {
                 "forum": "https://forums.aws.amazon.com/forum.jspa?forumID=80",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.224.3"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.231.2"
             },
-            "time": "2022-06-02T18:22:57+00:00"
+            "time": "2022-07-08T18:16:11+00:00"
         },
         {
             "name": "brick/math",
@@ -2665,16 +2666,16 @@
         },
         {
             "name": "league/flysystem-aws-s3-v3",
-            "version": "3.0.13",
+            "version": "3.0.22",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/flysystem-aws-s3-v3.git",
-                "reference": "0074cf016e21a6d1eb99b6db70acdd23743fc371"
+                "reference": "e5fc508faf83df2fbd2a215d2b4bea9584906221"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/flysystem-aws-s3-v3/zipball/0074cf016e21a6d1eb99b6db70acdd23743fc371",
-                "reference": "0074cf016e21a6d1eb99b6db70acdd23743fc371",
+                "url": "https://api.github.com/repos/thephpleague/flysystem-aws-s3-v3/zipball/e5fc508faf83df2fbd2a215d2b4bea9584906221",
+                "reference": "e5fc508faf83df2fbd2a215d2b4bea9584906221",
                 "shasum": ""
             },
             "require": {
@@ -2715,9 +2716,9 @@
             ],
             "support": {
                 "issues": "https://github.com/thephpleague/flysystem-aws-s3-v3/issues",
-                "source": "https://github.com/thephpleague/flysystem-aws-s3-v3/tree/3.0.13"
+                "source": "https://github.com/thephpleague/flysystem-aws-s3-v3/tree/3.0.22"
             },
-            "time": "2022-04-01T22:05:11+00:00"
+            "time": "2022-06-29T07:09:46+00:00"
         },
         {
             "name": "league/glide",
