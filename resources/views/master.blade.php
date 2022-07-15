@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width">
         <link rel="stylesheet" href="/assets/frontend/normalize.css">
         @if (!empty(config('app.font_link')))<link rel="stylesheet" href="{{ config('app.font_link') }}">@endif
-        <link rel="stylesheet" href="/assets/app.css">
+        @vite('resources/js/app.js')
         <link rel="stylesheet" href="/assets/highlight/zenburn.css">
         <link rel="alternate" type="application/rss+xml" title="Blog RSS Feed" href="/blog/feed.rss">
         <link rel="alternate" type="application/atom+xml" title="Blog Atom Feed" href="/blog/feed.atom">
