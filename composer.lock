@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c152af902b24084f8a8b69201651179f",
+    "content-hash": "0661a04d55cb19d1416d1ce0c1c005cb",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -8893,6 +8893,66 @@
                 "source": "https://github.com/laravel/pint"
             },
             "time": "2022-07-14T14:50:04+00:00"
+        },
+        {
+            "name": "laravel/sail",
+            "version": "v1.15.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laravel/sail.git",
+                "reference": "2fe64c0b45a3af56cac0af638c8020a8adc860d7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laravel/sail/zipball/2fe64c0b45a3af56cac0af638c8020a8adc860d7",
+                "reference": "2fe64c0b45a3af56cac0af638c8020a8adc860d7",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/console": "^8.0|^9.0",
+                "illuminate/contracts": "^8.0|^9.0",
+                "illuminate/support": "^8.0|^9.0",
+                "php": "^7.3|^8.0"
+            },
+            "bin": [
+                "bin/sail"
+            ],
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.x-dev"
+                },
+                "laravel": {
+                    "providers": [
+                        "Laravel\\Sail\\SailServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Laravel\\Sail\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Taylor Otwell",
+                    "email": "taylor@laravel.com"
+                }
+            ],
+            "description": "Docker files for running a basic Laravel application.",
+            "keywords": [
+                "docker",
+                "laravel"
+            ],
+            "support": {
+                "issues": "https://github.com/laravel/sail/issues",
+                "source": "https://github.com/laravel/sail"
+            },
+            "time": "2022-07-21T14:33:56+00:00"
         },
         {
             "name": "maximebf/debugbar",
