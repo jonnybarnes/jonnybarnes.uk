@@ -4429,16 +4429,16 @@
         },
         {
             "name": "spatie/browsershot",
-            "version": "3.57.0",
+            "version": "3.57.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/browsershot.git",
-                "reference": "b608ee8af5152c2a24363561024e9ead4eb9b1de"
+                "reference": "f430a81b1b8e07f089046984ae0f53c9161b1477"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/browsershot/zipball/b608ee8af5152c2a24363561024e9ead4eb9b1de",
-                "reference": "b608ee8af5152c2a24363561024e9ead4eb9b1de",
+                "url": "https://api.github.com/repos/spatie/browsershot/zipball/f430a81b1b8e07f089046984ae0f53c9161b1477",
+                "reference": "f430a81b1b8e07f089046984ae0f53c9161b1477",
                 "shasum": ""
             },
             "require": {
@@ -4483,8 +4483,7 @@
                 "webpage"
             ],
             "support": {
-                "issues": "https://github.com/spatie/browsershot/issues",
-                "source": "https://github.com/spatie/browsershot/tree/3.57.0"
+                "source": "https://github.com/spatie/browsershot/tree/3.57.1"
             },
             "funding": [
                 {
@@ -4492,7 +4491,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-06-28T13:49:41+00:00"
+            "time": "2022-08-03T11:26:45+00:00"
         },
         {
             "name": "spatie/commonmark-highlighter",
