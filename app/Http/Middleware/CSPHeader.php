@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 
 class CSPHeader
 {
@@ -16,6 +17,10 @@ class CSPHeader
      */
     public function handle($request, Closure $next)
     {
+        if (App::environment('local', 'development')) {
+            return $next($request);
+        }
+
         // headers have to be single-line strings,
         // so we concat multiple lines
         // phpcs:disable Generic.Files.LineLength.TooLong
