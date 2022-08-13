@@ -142,6 +142,7 @@ Route::group(['domain' => config('url.longurl')], function () {
         Route::get('/feed.atom', [FeedsController::class, 'notesAtom']);
         Route::get('/feed.json', [FeedsController::class, 'notesJson']);
         Route::get('/feed.jf2', [FeedsController::class, 'notesJf2']);
+        Route::get('/new', [NotesController::class, 'create']);
         Route::get('/{id}', [NotesController::class, 'show']);
         Route::get('/tagged/{tag}', [NotesController::class, 'tagged']);
     });
@@ -182,6 +183,9 @@ Route::group(['domain' => config('url.longurl')], function () {
     // Places
     Route::get('places', [PlacesController::class, 'index']);
     Route::get('places/{place}', [PlacesController::class, 'show']);
+
+    // Micropub
+    Route::redirect('/micropub/create', '/notes/new');
 });
 
 // Short URL
