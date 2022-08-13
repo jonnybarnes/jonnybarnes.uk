@@ -83,4 +83,16 @@ class NotesController extends Controller
 
         return view('notes.tagged', compact('notes', 'tag'));
     }
+
+    /**
+     * Page to create a new note.
+     *
+     * Dummy page for now.
+     *
+     * @return View
+     */
+    public function create(): View
+    {
+        return view('notes.create');
+    }
 }
