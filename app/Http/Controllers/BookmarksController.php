@@ -33,4 +33,19 @@ class BookmarksController extends Controller
 
         return view('bookmarks.show', compact('bookmark'));
     }
+
+    /**
+     * Show bookmakrs tagged with a specific tag.
+     *
+     * @param  string  $tag
+     * @return View
+     */
+    public function tagged(string $tag): View
+    {
+        $bookmarks = Bookmark::whereHas('tags', function ($query) use ($tag) {
+            $query->where('tag', $tag);
+        })->latest()->with('tags')->withCount('tags')->paginate(10);
+
+        return view('bookmarks.tagged', compact('bookmarks', 'tag'));
+    }
 }
