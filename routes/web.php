@@ -158,6 +158,7 @@ Route::group(['domain' => config('url.longurl')], function () {
     Route::group(['prefix' => 'bookmarks'], function () {
         Route::get('/', [BookmarksController::class, 'index']);
         Route::get('/{bookmark}', [BookmarksController::class, 'show']);
+        Route::get('/tagged/{tag}', [BookmarksController::class, 'tagged']);
     });
 
     // Token Endpoint
