@@ -35,7 +35,7 @@ class BookmarksController extends Controller
     }
 
     /**
-     * Show bookmakrs tagged with a specific tag.
+     * Show bookmarks tagged with a specific tag.
      *
      * @param  string  $tag
      * @return View
