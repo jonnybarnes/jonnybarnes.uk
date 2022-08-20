@@ -13,16 +13,16 @@
                 <ul>
                     <li>I keep in touch with friends on <a rel="me" href="https://www.facebook.com/jonnybarnes" class="u-url">Facebook</a></li>
                     <li>I follow people I find interesting on <a rel="me" href="https://twitter.com/jonnybarnes" class="u-url">Twitter</a></li>
-                    <li>I toot on the fediverse with my own instance of <a rel="me" href="https://mastodon.thebeeches.house/@jonny">Mastodon</a></li>
+                    <li>I toot on the fediverse with my own instance of <a rel="me" href="https://mastodon.thebeeches.house/@jonny" class="u-url">Mastodon</a></li>
                     <li>I push code to <a rel="me" href="https://github.com/jonnybarnes" class="u-url">GitHub</a></li>
-                    <li>I scrobble songs to <a rel="me" href="https://last.fm/user/jonnymbarnes" class="u-url">last.fm</a> that I listen to on <a rel="me" href="https://open.spotify.com/user/jonnybarnes89" class="u-url">Spotify</a></li>
-                    <li>I post photos to <a rel="me" href="https://www.instagram.com/jonnybarnes/">Instagram</a></li>
-                    <li>I also post to <a rel="me" href="https://pnut.io/@jonnybarnes">pnut.io</a></li>
+                    <li>I scrobble songs to <a rel="me" href="https://last.fm/user/jonnymbarnes" class="u-url">last.fm</a> that I listen to on <a rel="me" href="https://open.spotify.com/user/jonnybarnes89" class="u-url">Spotify</a> or <a rel="me" href="https://music.apple.com/profile/jonnybarnes" class="u-url">Apple Music</a></li>
+                    <li>I post photos to <a rel="me" href="https://www.instagram.com/jonnybarnes/" class="u-url">Instagram</a></li>
+                    <li>I also post to <a rel="me" href="https://beta.pnut.io/@jonnybarnes" class="u-url">pnut.io</a></li>
                 </ul>
                 <p>My usual online nickname is normally <code class="nickname">
                 jonnybarnes</code> for other services. I also syndicate my content
                 to the IndieWeb friendly site
-                <a rel="me" href="https://micro.blog/jonnybarnes">micro.blog</a>.
+                <a rel="me" href="https://micro.blog/jonnybarnes" class="u-url">micro.blog</a>.
                 Here’s a <a href="/assets/img/jmb-bw.png" class="u-photo photo">
                 profile pic</a>. I also have a
                 <a class="pgpkey" href="/assets/jonnybarnes-public-key-ecc.asc">PGP
