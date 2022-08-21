@@ -17,7 +17,6 @@
                     <li>I push code to <a rel="me" href="https://github.com/jonnybarnes" class="u-url">GitHub</a></li>
                     <li>I scrobble songs to <a rel="me" href="https://last.fm/user/jonnymbarnes" class="u-url">last.fm</a> that I listen to on <a rel="me" href="https://open.spotify.com/user/jonnybarnes89" class="u-url">Spotify</a> or <a rel="me" href="https://music.apple.com/profile/jonnybarnes" class="u-url">Apple Music</a></li>
                     <li>I post photos to <a rel="me" href="https://www.instagram.com/jonnybarnes/" class="u-url">Instagram</a></li>
-                    <li>I also post to <a rel="me" href="https://beta.pnut.io/@jonnybarnes" class="u-url">pnut.io</a></li>
                 </ul>
                 <p>My usual online nickname is normally <code class="nickname">
                 jonnybarnes</code> for other services. I also syndicate my content
