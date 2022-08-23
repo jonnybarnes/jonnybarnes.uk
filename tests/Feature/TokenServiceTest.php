@@ -37,7 +37,10 @@ class TokenServiceTest extends TestCase
         $this->assertSame($data, $validData);
     }
 
-    /** @test */
+    /**
+     * @test
+     * @throws \Exception
+     */
     public function tokensWithDifferentSigningKeyThrowsException(): void
     {
         $this->expectException(RequiredConstraintsViolated::class);
@@ -56,7 +59,7 @@ class TokenServiceTest extends TestCase
             ->withClaim('me', $data['me'])
             ->withClaim('scope', $data['scope'])
             ->withClaim('nonce', bin2hex(random_bytes(8)))
-            ->getToken($config->signer(), InMemory::plainText('r4andomk3y'))
+            ->getToken($config->signer(), InMemory::plainText(random_bytes(32)))
             ->toString();
 
         $service = new TokenService();
