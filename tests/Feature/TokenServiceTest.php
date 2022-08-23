@@ -39,6 +39,7 @@ class TokenServiceTest extends TestCase
 
     /**
      * @test
+     *
      * @throws \Exception
      */
     public function tokensWithDifferentSigningKeyThrowsException(): void
