@@ -85,7 +85,7 @@ class AppServiceProvider extends ServiceProvider
 
         // Configure JWT builder
         $this->app->bind('Lcobucci\JWT\Configuration', function () {
-            $key = InMemory::plainText('testing');
+            $key = InMemory::plainText(config('app.key'));
 
             $config = Configuration::forSymmetricSigner(new Sha256(), $key);
 
