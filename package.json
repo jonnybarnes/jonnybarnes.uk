@@ -11,7 +11,7 @@
     "devDependencies": {
         "@babel/core": "^7.19.0",
         "@babel/preset-env": "^7.19.0",
-        "autoprefixer": "^10.4.9",
+        "autoprefixer": "^10.4.11",
         "babel-loader": "^8.2.1",
         "browserlist": "^1.0.1",
         "compression-webpack-plugin": "^10.0.0",
