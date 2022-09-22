@@ -6,7 +6,7 @@
     "license": "CC0-1.0",
     "dependencies": {
         "normalize.css": "^8.0.1",
-        "puppeteer": "^18.0.3"
+        "puppeteer": "^18.0.5"
     },
     "devDependencies": {
         "@babel/core": "^7.19.1",
