@@ -63,7 +63,7 @@ class TokenEndpointController extends Controller
 
         if (empty($authorizationEndpoint)) {
             return response()->json([
-                'error' => sprintf('Could not discover the authorization endpoint for %s', $request->input('me'))
+                'error' => sprintf('Could not discover the authorization endpoint for %s', $request->input('me')),
             ], 400);
         }
 
@@ -75,7 +75,7 @@ class TokenEndpointController extends Controller
             $request->input('client_id'),
         );
 
-        if ($auth === null || !array_key_exists('me', $auth)) {
+        if ($auth === null || ! array_key_exists('me', $auth)) {
             return response()->json([
                 'error' => 'There was an error verifying the IndieAuth code',
             ], 401);

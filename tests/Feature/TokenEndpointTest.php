@@ -17,6 +17,7 @@ class TokenEndpointTest extends TestCase
 {
     /**
      * @test
+     *
      * @throws JsonException
      * @throws Exception
      */
@@ -52,6 +53,7 @@ class TokenEndpointTest extends TestCase
 
     /**
      * @test
+     *
      * @throws JsonException
      * @throws Exception
      */
@@ -86,6 +88,7 @@ class TokenEndpointTest extends TestCase
 
     /**
      * @test
+     *
      * @throws Exception
      */
     public function tokenEndpointReturnsErrorWhenNoAuthEndpointFound(): void
