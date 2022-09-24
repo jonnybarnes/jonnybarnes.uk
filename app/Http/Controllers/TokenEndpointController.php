@@ -53,24 +53,9 @@ class TokenEndpointController extends Controller
      */
     public function create(Request $request): JsonResponse
     {
-        if (empty($request->input('me'))) {
-            return response()->json([
-                'error' => 'Missing {me} param from input',
-            ], 400);
-        }
-
-        $authorizationEndpoint = $this->client::discoverAuthorizationEndpoint(normalize_url($request->input('me')));
-
-        if (empty($authorizationEndpoint)) {
-            return response()->json([
-                'error' => sprintf('Could not discover the authorization endpoint for %s', $request->input('me')),
-            ], 400);
-        }
-
         $auth = $this->verifyIndieAuthCode(
-            $authorizationEndpoint,
+            config('app.authorization_endpoint'),
             $request->input('code'),
-            $request->input('me'),
             $request->input('redirect_uri'),
             $request->input('client_id'),
         );
@@ -100,7 +85,6 @@ class TokenEndpointController extends Controller
     protected function verifyIndieAuthCode(
         string $authorizationEndpoint,
         string $code,
-        string $me,
         string $redirectUri,
         string $clientId
     ): ?array {
@@ -111,7 +95,7 @@ class TokenEndpointController extends Controller
                 ],
                 'form_params' => [
                     'code' => $code,
-                    'me' => $me,
+                    'me' => config('app.url'),
                     'redirect_uri' => $redirectUri,
                     'client_id' => $clientId,
                 ],

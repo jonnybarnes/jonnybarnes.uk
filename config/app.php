@@ -80,6 +80,17 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Authorization endpoint
+    |--------------------------------------------------------------------------
+    |
+    | The authorization endpoint for the application, used primarily for Micropub
+    |
+    */
+
+    'authorization_endpoint' => env('AUTHORIZATION_ENDPOINT', 'https://indieauth.com/auth'),
+
+    /*
+    |--------------------------------------------------------------------------
     | Application Display Name
     |--------------------------------------------------------------------------
     |
