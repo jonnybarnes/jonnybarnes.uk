@@ -10,6 +10,7 @@ use GuzzleHttp\Exception\BadResponseException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use IndieAuth\Client;
+use JsonException;
 
 class TokenEndpointController extends Controller
 {
@@ -68,13 +69,13 @@ class TokenEndpointController extends Controller
 
         $scope = $auth['scope'] ?? '';
         $tokenData = [
-            'me' => $request->input('me'),
+            'me' => config('app.url'),
             'client_id' => $request->input('client_id'),
             'scope' => $scope,
         ];
         $token = $this->tokenService->getNewToken($tokenData);
         $content = [
-            'me' => $request->input('me'),
+            'me' => config('app.url'),
             'scope' => $scope,
             'access_token' => $token,
         ];
@@ -106,7 +107,7 @@ class TokenEndpointController extends Controller
 
         try {
             $authData = json_decode((string) $response->getBody(), true, 512, JSON_THROW_ON_ERROR);
-        } catch (\JsonException) {
+        } catch (JsonException) {
             return null;
         }
 
