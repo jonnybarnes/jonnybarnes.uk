@@ -31,16 +31,15 @@ class TokenEndpointTest extends TestCase
         $mockGuzzleClient = new Client(['handler' => $handlerStack]);
         $this->app->instance(Client::class, $mockGuzzleClient);
         $response = $this->post('/api/token', [
-            'me' => config('app.url'),
-            'code' => 'abc123',
-            'redirect_uri' => config('app.url') . '/indieauth-callback',
-            'client_id' => config('app.url') . '/micropub-client',
-            'state' => random_int(1000, 10000),
+            'grant_type' => 'authorization_code',
+            'code' => '1234567890',
+            'redirect_uri' => 'https://example.com/auth/callback',
+            'client_id' => 'https://example.com',
+            'code_verifier' => '1234567890',
         ]);
-        $response->assertJson([
-            'me' => config('app.url'),
-            'scope' => 'create update',
-        ]);
+
+        $this->assertSame(config('app.url'), $response->json('me'));
+        $this->assertNotEmpty($response->json('access_token'));
     }
 
     /**
