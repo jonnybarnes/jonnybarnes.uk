@@ -14,7 +14,7 @@ return [
             'service' => [
                 'name' => 'Twitter',
                 'url' => 'https://twitter.com',
-                'photo' => 'https://upload.wikimedia.org/wikipedia/en/9/9f/Twitter_bird_logo_2012.svg',
+                'photo' => 'https://upload.wikimedia.org/wikipedia/commons/4/4f/Twitter-logo.svg',
             ],
             'user' => [
                 'name' => 'jonnybarnes',
