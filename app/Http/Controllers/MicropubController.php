@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Responses\MicropubResponses;
 use App\Models\Place;
+use App\Models\SyndicationTarget;
 use App\Services\Micropub\HCardService;
 use App\Services\Micropub\HEntryService;
 use App\Services\Micropub\UpdateService;
@@ -121,21 +122,19 @@ class MicropubController extends Controller
     {
         try {
             $tokenData = $this->tokenService->validateToken(request()->input('access_token'));
-        } catch (RequiredConstraintsViolated | InvalidTokenStructure $exception) {
-            $micropubResponses = new MicropubResponses();
-
-            return $micropubResponses->invalidTokenResponse();
+        } catch (RequiredConstraintsViolated | InvalidTokenStructure) {
+            return (new MicropubResponses())->invalidTokenResponse();
         }
 
         if (request()->input('q') === 'syndicate-to') {
             return response()->json([
-                'syndicate-to' => config('syndication.targets'),
+                'syndicate-to' => SyndicationTarget::all(),
             ]);
         }
 
-        if (request()->input('q') == 'config') {
+        if (request()->input('q') === 'config') {
             return response()->json([
-                'syndicate-to' => config('syndication.targets'),
+                'syndicate-to' => SyndicationTarget::all(),
                 'media-endpoint' => route('media-endpoint'),
             ]);
         }
