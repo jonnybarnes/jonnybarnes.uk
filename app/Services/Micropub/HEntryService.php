@@ -21,19 +21,13 @@ class HEntryService
     public function process(array $request, ?string $client = null): ?string
     {
         if (Arr::get($request, 'properties.like-of') || Arr::get($request, 'like-of')) {
-            $like = resolve(LikeService::class)->createLike($request);
-
-            return $like->longurl;
+            return resolve(LikeService::class)->createLike($request)->longurl;
         }
 
         if (Arr::get($request, 'properties.bookmark-of') || Arr::get($request, 'bookmark-of')) {
-            $bookmark = resolve(BookmarkService::class)->createBookmark($request);
-
-            return $bookmark->longurl;
+            return resolve(BookmarkService::class)->createBookmark($request)->longurl;
         }
 
-        $note = resolve(NoteService::class)->createNote($request, $client);
-
-        return $note->longurl;
+        return resolve(NoteService::class)->createNote($request, $client)->longurl;
     }
 }

@@ -126,6 +126,12 @@ class MicropubControllerTest extends TestCase
     public function micropubClientCanRequestTheNewNoteIsSyndicatedToTwitter(): void
     {
         Queue::fake();
+
+        SyndicationTarget::factory()->create([
+            'uid' => 'https://twitter.com/jonnybarnes',
+            'service_name' => 'Twitter',
+        ]);
+
         $faker = Factory::create();
         $note = $faker->text;
         $response = $this->post(
@@ -233,6 +239,11 @@ class MicropubControllerTest extends TestCase
             'path' => 'test-photo.jpg',
             'type' => 'image',
         ]);
+        SyndicationTarget::factory()->create([
+            'uid' => 'https://twitter.com/jonnybarnes',
+            'service_name' => 'Twitter',
+        ]);
+
         $faker = Factory::create();
         $note = $faker->text;
         $response = $this->postJson(

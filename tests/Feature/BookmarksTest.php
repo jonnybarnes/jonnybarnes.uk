@@ -7,6 +7,7 @@ namespace Tests\Feature;
 use App\Jobs\ProcessBookmark;
 use App\Jobs\SyndicateBookmarkToTwitter;
 use App\Models\Bookmark;
+use App\Models\SyndicationTarget;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Queue;
 use Tests\TestCase;
@@ -36,6 +37,11 @@ class BookmarksTest extends TestCase
     {
         Queue::fake();
 
+        SyndicationTarget::factory()->create([
+            'uid' => 'https://twitter.com/jonnybarnes',
+            'service_name' => 'Twitter',
+        ]);
+
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $this->getToken(),
         ])->post('/api/post', [
@@ -57,6 +63,11 @@ class BookmarksTest extends TestCase
     public function whenBookmarkIsAddedUsingJsonSyntaxCheckJobToTakeScreenshotIsInvoked(): void
     {
         Queue::fake();
+
+        SyndicationTarget::factory()->create([
+            'uid' => 'https://twitter.com/jonnybarnes',
+            'service_name' => 'Twitter',
+        ]);
 
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $this->getToken(),
@@ -81,6 +92,11 @@ class BookmarksTest extends TestCase
     public function whenTheBookmarkIsMarkedForPostingToTwitterCheckWeInvokeTheCorrectJob(): void
     {
         Queue::fake();
+
+        SyndicationTarget::factory()->create([
+            'uid' => 'https://twitter.com/jonnybarnes',
+            'service_name' => 'Twitter',
+        ]);
 
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $this->getToken(),
