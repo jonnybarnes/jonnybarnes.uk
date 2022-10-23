@@ -13,6 +13,22 @@ class SyndicationTarget extends Model
     use HasFactory;
 
     /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'uid',
+        'name',
+        'service_name',
+        'service_url',
+        'service_photo',
+        'user_name',
+        'user_url',
+        'user_photo',
+    ];
+
+    /**
      * The attributes that are visible when serializing the model.
      *
      * @var array<string>

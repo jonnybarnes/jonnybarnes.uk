@@ -40,4 +40,10 @@
         You can either <a href="/admin/places/create">create</a> new places,
         or <a href="/admin/places/">edit</a> them.
     </p>
+
+    <h2>Syndication</h2>
+    <p>
+        You can either <a href="/admin/syndication/create">create</a> new syndication targets,
+        or <a href="/admin/syndication">edit</a> them.
+    </p>
 @stop
