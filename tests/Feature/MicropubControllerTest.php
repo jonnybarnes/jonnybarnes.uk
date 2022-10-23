@@ -100,7 +100,7 @@ class MicropubControllerTest extends TestCase
     public function micropubClientCanRequestEndpointConfig(): void
     {
         $response = $this->get('/api/post?q=config', ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]);
-        $response->assertJsonFragment(['uid' => 'https://twitter.com/jonnybarnes']);
+        $response->assertJsonFragment(['media-endpoint' => route('media-endpoint')]);
     }
 
     /** @test */
