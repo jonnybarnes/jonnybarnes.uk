@@ -9,6 +9,7 @@ use App\Jobs\SyndicateNoteToTwitter;
 use App\Models\Media;
 use App\Models\Note;
 use App\Models\Place;
+use App\Models\SyndicationTarget;
 use Carbon\Carbon;
 use Faker\Factory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -51,10 +52,18 @@ class MicropubControllerTest extends TestCase
     }
 
     /** @test */
-    public function micropubClientsCanRequestSyndicationTargets(): void
+    public function micropubClientsCanRequestSyndicationTargetsCanBeEmpty(): void
     {
         $response = $this->get('/api/post?q=syndicate-to', ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]);
-        $response->assertJsonFragment(['uid' => 'https://twitter.com/jonnybarnes']);
+        $response->assertJsonFragment(['syndicate-to' => []]);
+    }
+
+    /** @test */
+    public function micropubClientsCanRequestSyndicationTargetsPopulatesFromModel(): void
+    {
+        $syndicationTarget = SyndicationTarget::factory()->create();
+        $response = $this->get('/api/post?q=syndicate-to', ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]);
+        $response->assertJsonFragment(['uid' => $syndicationTarget->uid]);
     }
 
     /** @test */
@@ -91,7 +100,7 @@ class MicropubControllerTest extends TestCase
     public function micropubClientCanRequestEndpointConfig(): void
     {
         $response = $this->get('/api/post?q=config', ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]);
-        $response->assertJsonFragment(['uid' => 'https://twitter.com/jonnybarnes']);
+        $response->assertJsonFragment(['media-endpoint' => route('media-endpoint')]);
     }
 
     /** @test */
@@ -117,6 +126,12 @@ class MicropubControllerTest extends TestCase
     public function micropubClientCanRequestTheNewNoteIsSyndicatedToTwitter(): void
     {
         Queue::fake();
+
+        SyndicationTarget::factory()->create([
+            'uid' => 'https://twitter.com/jonnybarnes',
+            'service_name' => 'Twitter',
+        ]);
+
         $faker = Factory::create();
         $note = $faker->text;
         $response = $this->post(
@@ -224,6 +239,11 @@ class MicropubControllerTest extends TestCase
             'path' => 'test-photo.jpg',
             'type' => 'image',
         ]);
+        SyndicationTarget::factory()->create([
+            'uid' => 'https://twitter.com/jonnybarnes',
+            'service_name' => 'Twitter',
+        ]);
+
         $faker = Factory::create();
         $note = $faker->text;
         $response = $this->postJson(

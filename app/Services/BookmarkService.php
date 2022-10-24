@@ -8,6 +8,7 @@ use App\Exceptions\InternetArchiveException;
 use App\Jobs\ProcessBookmark;
 use App\Jobs\SyndicateBookmarkToTwitter;
 use App\Models\Bookmark;
+use App\Models\SyndicationTarget;
 use App\Models\Tag;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
@@ -52,7 +53,6 @@ class BookmarkService
             $bookmark->tags()->save($tag);
         }
 
-        $targets = Arr::pluck(config('syndication.targets'), 'uid', 'service.name');
         $mpSyndicateTo = null;
         if (Arr::get($request, 'mp-syndicate-to')) {
             $mpSyndicateTo = Arr::get($request, 'mp-syndicate-to');
@@ -60,18 +60,13 @@ class BookmarkService
         if (Arr::get($request, 'properties.mp-syndicate-to')) {
             $mpSyndicateTo = Arr::get($request, 'properties.mp-syndicate-to');
         }
-        if (is_string($mpSyndicateTo)) {
-            $service = array_search($mpSyndicateTo, $targets);
-            if ($service == 'Twitter') {
+        $mpSyndicateTo = Arr::wrap($mpSyndicateTo);
+        foreach ($mpSyndicateTo as $uid) {
+            $target = SyndicationTarget::where('uid', $uid)->first();
+            if ($target && $target->service_name === 'Twitter') {
                 SyndicateBookmarkToTwitter::dispatch($bookmark);
-            }
-        }
-        if (is_array($mpSyndicateTo)) {
-            foreach ($mpSyndicateTo as $uid) {
-                $service = array_search($uid, $targets);
-                if ($service == 'Twitter') {
-                    SyndicateBookmarkToTwitter::dispatch($bookmark);
-                }
+
+                break;
             }
         }
 

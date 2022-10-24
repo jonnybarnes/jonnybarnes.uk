@@ -6,11 +6,13 @@ namespace App\Http\Controllers;
 
 use App\Http\Responses\MicropubResponses;
 use App\Models\Place;
+use App\Models\SyndicationTarget;
 use App\Services\Micropub\HCardService;
 use App\Services\Micropub\HEntryService;
 use App\Services\Micropub\UpdateService;
 use App\Services\TokenService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Lcobucci\JWT\Encoding\CannotDecodeContent;
 use Lcobucci\JWT\Token\InvalidTokenStructure;
 use Lcobucci\JWT\Validation\RequiredConstraintsViolated;
@@ -43,13 +45,14 @@ class MicropubController extends Controller
      * This function receives an API request, verifies the authenticity
      * then passes over the info to the relevant Service class.
      *
+     * @param  Request  $request
      * @return JsonResponse
      */
-    public function post(): JsonResponse
+    public function post(Request $request): JsonResponse
     {
         try {
-            $tokenData = $this->tokenService->validateToken(request()->input('access_token'));
-        } catch (RequiredConstraintsViolated | InvalidTokenStructure | CannotDecodeContent $exception) {
+            $tokenData = $this->tokenService->validateToken($request->input('access_token'));
+        } catch (RequiredConstraintsViolated | InvalidTokenStructure | CannotDecodeContent) {
             $micropubResponses = new MicropubResponses();
 
             return $micropubResponses->invalidTokenResponse();
@@ -61,15 +64,15 @@ class MicropubController extends Controller
             return $micropubResponses->tokenHasNoScopeResponse();
         }
 
-        $this->logMicropubRequest(request()->all());
+        $this->logMicropubRequest($request->all());
 
-        if ((request()->input('h') == 'entry') || (request()->input('type.0') == 'h-entry')) {
-            if (stristr($tokenData->claims()->get('scope'), 'create') === false) {
+        if (($request->input('h') === 'entry') || ($request->input('type.0') === 'h-entry')) {
+            if (stripos($tokenData->claims()->get('scope'), 'create') === false) {
                 $micropubResponses = new MicropubResponses();
 
                 return $micropubResponses->insufficientScopeResponse();
             }
-            $location = $this->hentryService->process(request()->all(), $this->getCLientId());
+            $location = $this->hentryService->process($request->all(), $this->getCLientId());
 
             return response()->json([
                 'response' => 'created',
@@ -77,13 +80,13 @@ class MicropubController extends Controller
             ], 201)->header('Location', $location);
         }
 
-        if (request()->input('h') == 'card' || request()->input('type.0') == 'h-card') {
-            if (stristr($tokenData->claims()->get('scope'), 'create') === false) {
+        if ($request->input('h') === 'card' || $request->input('type.0') === 'h-card') {
+            if (stripos($tokenData->claims()->get('scope'), 'create') === false) {
                 $micropubResponses = new MicropubResponses();
 
                 return $micropubResponses->insufficientScopeResponse();
             }
-            $location = $this->hcardService->process(request()->all());
+            $location = $this->hcardService->process($request->all());
 
             return response()->json([
                 'response' => 'created',
@@ -91,14 +94,14 @@ class MicropubController extends Controller
             ], 201)->header('Location', $location);
         }
 
-        if (request()->input('action') == 'update') {
-            if (stristr($tokenData->claims()->get('scope'), 'update') === false) {
+        if ($request->input('action') === 'update') {
+            if (stripos($tokenData->claims()->get('scope'), 'update') === false) {
                 $micropubResponses = new MicropubResponses();
 
                 return $micropubResponses->insufficientScopeResponse();
             }
 
-            return $this->updateService->process(request()->all());
+            return $this->updateService->process($request->all());
         }
 
         return response()->json([
@@ -121,21 +124,19 @@ class MicropubController extends Controller
     {
         try {
             $tokenData = $this->tokenService->validateToken(request()->input('access_token'));
-        } catch (RequiredConstraintsViolated | InvalidTokenStructure $exception) {
-            $micropubResponses = new MicropubResponses();
-
-            return $micropubResponses->invalidTokenResponse();
+        } catch (RequiredConstraintsViolated | InvalidTokenStructure) {
+            return (new MicropubResponses())->invalidTokenResponse();
         }
 
         if (request()->input('q') === 'syndicate-to') {
             return response()->json([
-                'syndicate-to' => config('syndication.targets'),
+                'syndicate-to' => SyndicationTarget::all(),
             ]);
         }
 
-        if (request()->input('q') == 'config') {
+        if (request()->input('q') === 'config') {
             return response()->json([
-                'syndicate-to' => config('syndication.targets'),
+                'syndicate-to' => SyndicationTarget::all(),
                 'media-endpoint' => route('media-endpoint'),
             ]);
         }
