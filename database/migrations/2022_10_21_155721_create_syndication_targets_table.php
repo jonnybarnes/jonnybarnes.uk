@@ -17,12 +17,12 @@ return new class extends Migration
             $table->id();
             $table->string('uid');
             $table->string('name');
-            $table->string('service_name');
-            $table->string('service_url');
-            $table->string('service_photo');
-            $table->string('user_name');
-            $table->string('user_url');
-            $table->string('user_photo');
+            $table->string('service_name')->nullable();
+            $table->string('service_url')->nullable();
+            $table->string('service_photo')->nullable();
+            $table->string('user_name')->nullable();
+            $table->string('user_url')->nullable();
+            $table->string('user_photo')->nullable();
             $table->timestamps();
         });
     }
