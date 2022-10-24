@@ -9,6 +9,7 @@ use App\Jobs\SyndicateNoteToTwitter;
 use App\Models\Media;
 use App\Models\Note;
 use App\Models\Place;
+use App\Models\SyndicationTarget;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
@@ -18,7 +19,7 @@ class NoteService
      * Create a new note.
      *
      * @param  array  $request Data from request()->all()
-     * @param  string  $client
+     * @param  string|null  $client
      * @return Note
      */
     public function createNote(array $request, ?string $client = null): Note
@@ -52,11 +53,9 @@ class NoteService
 
         dispatch(new SendWebMentions($note));
 
-        //syndication targets
-        if (count($this->getSyndicationTargets($request)) > 0) {
-            if (in_array('twitter', $this->getSyndicationTargets($request))) {
-                dispatch(new SyndicateNoteToTwitter($note));
-            }
+        // Syndication targets
+        if (in_array('twitter', $this->getSyndicationTargets($request), true)) {
+            dispatch(new SyndicateNoteToTwitter($note));
         }
 
         return $note;
@@ -206,20 +205,12 @@ class NoteService
     private function getSyndicationTargets(array $request): array
     {
         $syndication = [];
-        $targets = Arr::pluck(config('syndication.targets'), 'uid', 'service.name');
         $mpSyndicateTo = Arr::get($request, 'mp-syndicate-to') ?? Arr::get($request, 'properties.mp-syndicate-to');
-        if (is_string($mpSyndicateTo)) {
-            $service = array_search($mpSyndicateTo, $targets);
-            if ($service == 'Twitter') {
+        $mpSyndicateTo = Arr::wrap($mpSyndicateTo);
+        foreach ($mpSyndicateTo as $uid) {
+            $target = SyndicationTarget::where('uid', $uid)->first();
+            if ($target && $target->service_name === 'Twitter') {
                 $syndication[] = 'twitter';
-            }
-        }
-        if (is_array($mpSyndicateTo)) {
-            foreach ($mpSyndicateTo as $uid) {
-                $service = array_search($uid, $targets);
-                if ($service == 'Twitter') {
-                    $syndication[] = 'twitter';
-                }
             }
         }
 
