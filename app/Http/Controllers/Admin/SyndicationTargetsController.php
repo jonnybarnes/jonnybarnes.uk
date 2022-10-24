@@ -45,6 +45,12 @@ class SyndicationTargetsController extends Controller
         $validated = $request->validate([
             'uid' => 'required|string',
             'name' => 'required|string',
+            'service_name' => 'nullable|string',
+            'service_url' => 'nullable|string',
+            'service_photo' => 'nullable|string',
+            'user_name' => 'nullable|string',
+            'user_url' => 'nullable|string',
+            'user_photo' => 'nullable|string',
         ]);
 
         SyndicationTarget::create($validated);
@@ -77,6 +83,12 @@ class SyndicationTargetsController extends Controller
         $validated = $request->validate([
             'uid' => 'required|string',
             'name' => 'required|string',
+            'service_name' => 'nullable|string',
+            'service_url' => 'nullable|string',
+            'service_photo' => 'nullable|string',
+            'user_name' => 'nullable|string',
+            'user_url' => 'nullable|string',
+            'user_photo' => 'nullable|string',
         ]);
 
         $syndicationTarget->update($validated);
