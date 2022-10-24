@@ -18,6 +18,7 @@ use App\Http\Controllers\Admin\HomeController;
 use App\Http\Controllers\Admin\LikesController as AdminLikesController;
 use App\Http\Controllers\Admin\NotesController as AdminNotesController;
 use App\Http\Controllers\Admin\PlacesController as AdminPlacesController;
+use App\Http\Controllers\Admin\SyndicationTargetsController;
 use App\Http\Controllers\ArticlesController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BookmarksController;
@@ -121,6 +122,16 @@ Route::group(['domain' => config('url.longurl')], function () {
             Route::get('/{id}/edit', [AdminLikesController::class, 'edit']);
             Route::put('/{id}', [AdminLikesController::class, 'update']);
             Route::delete('/{id}', [AdminLikesController::class, 'destroy']);
+        });
+
+        // Syndication Targets
+        Route::group(['prefix' => 'syndication'], function () {
+            Route::get('/', [SyndicationTargetsController::class, 'index']);
+            Route::get('/create', [SyndicationTargetsController::class, 'create']);
+            Route::post('/', [SyndicationTargetsController::class, 'store']);
+            Route::get('/{syndicationTarget}/edit', [SyndicationTargetsController::class, 'edit']);
+            Route::put('/{syndicationTarget}', [SyndicationTargetsController::class, 'update']);
+            Route::delete('/{syndicationTarget}', [SyndicationTargetsController::class, 'destroy']);
         });
     });
 
