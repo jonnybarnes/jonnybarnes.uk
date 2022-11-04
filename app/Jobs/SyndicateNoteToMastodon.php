@@ -1,16 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Jobs;
 
 use App\Models\Note;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use JsonException;
 
 class SyndicateNoteToMastodon implements ShouldQueue
 {
@@ -24,17 +25,20 @@ class SyndicateNoteToMastodon implements ShouldQueue
      */
     public function __construct(
         protected Note $note
-    ) {}
+    ) {
+    }
 
     /**
      * Execute the job.
      *
-     * @param Client  $guzzle
+     * @param  Client  $guzzle
      * @return void
+     *
+     * @throws GuzzleException
      */
-    public function handle(Client $guzzle)
+    public function handle(Client $guzzle): void
     {
-        // We can only maks the request if we have an access token
+        // We can only make the request if we have an access token
         if (config('bridgy.mastodon_token') === null) {
             return;
         }
