@@ -113,8 +113,8 @@ class NotesTest extends TestCase
     /** @test */
     public function shorturlMethodReturnsExpectedValue(): void
     {
-        Note::factory(14)->create();
-        $note = Note::find(14);
+        $note = Note::factory()->make();
+        $note->id = 14;
         $this->assertEquals(config('app.shorturl') . '/notes/E', $note->shorturl);
     }
 

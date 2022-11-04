@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Jobs\SendWebMentions;
+use App\Jobs\SyndicateNoteToMastodon;
 use App\Jobs\SyndicateNoteToTwitter;
 use App\Models\Media;
 use App\Models\Note;
@@ -56,6 +57,10 @@ class NoteService
         // Syndication targets
         if (in_array('twitter', $this->getSyndicationTargets($request), true)) {
             dispatch(new SyndicateNoteToTwitter($note));
+        }
+
+        if (in_array('mastodon', $this->getSyndicationTargets($request), true)) {
+            dispatch(new SyndicateNoteToMastodon($note));
         }
 
         return $note;
@@ -211,6 +216,9 @@ class NoteService
             $target = SyndicationTarget::where('uid', $uid)->first();
             if ($target && $target->service_name === 'Twitter') {
                 $syndication[] = 'twitter';
+            }
+            if ($target && $target->service_name === 'Mastodon') {
+                $syndication[] = 'mastodon';
             }
         }
 
