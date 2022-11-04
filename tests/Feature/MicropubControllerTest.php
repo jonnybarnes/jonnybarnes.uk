@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Feature;
 
 use App\Jobs\SendWebMentions;
+use App\Jobs\SyndicateNoteToMastodon;
 use App\Jobs\SyndicateNoteToTwitter;
 use App\Models\Media;
 use App\Models\Note;
@@ -123,13 +124,17 @@ class MicropubControllerTest extends TestCase
     }
 
     /** @test */
-    public function micropubClientCanRequestTheNewNoteIsSyndicatedToTwitter(): void
+    public function micropubClientCanRequestTheNewNoteIsSyndicatedToTwitterAndMastodon(): void
     {
         Queue::fake();
 
         SyndicationTarget::factory()->create([
             'uid' => 'https://twitter.com/jonnybarnes',
             'service_name' => 'Twitter',
+        ]);
+        SyndicationTarget::factory()->create([
+            'uid' => 'https://mastodon.social/@jonnybarnes',
+            'service_name' => 'Mastodon',
         ]);
 
         $faker = Factory::create();
@@ -139,13 +144,17 @@ class MicropubControllerTest extends TestCase
             [
                 'h' => 'entry',
                 'content' => $note,
-                'mp-syndicate-to' => 'https://twitter.com/jonnybarnes',
+                'mp-syndicate-to' => [
+                    'https://twitter.com/jonnybarnes',
+                    'https://mastodon.social/@jonnybarnes',
+                ],
             ],
             ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
         );
         $response->assertJson(['response' => 'created']);
         $this->assertDatabaseHas('notes', ['note' => $note]);
         Queue::assertPushed(SyndicateNoteToTwitter::class);
+        Queue::assertPushed(SyndicateNoteToMastodon::class);
     }
 
     /** @test */
@@ -243,6 +252,10 @@ class MicropubControllerTest extends TestCase
             'uid' => 'https://twitter.com/jonnybarnes',
             'service_name' => 'Twitter',
         ]);
+        SyndicationTarget::factory()->create([
+            'uid' => 'https://mastodon.social/@jonnybarnes',
+            'service_name' => 'Mastodon',
+        ]);
 
         $faker = Factory::create();
         $note = $faker->text;
@@ -255,6 +268,7 @@ class MicropubControllerTest extends TestCase
                     'in-reply-to' => ['https://aaronpk.localhost'],
                     'mp-syndicate-to' => [
                         'https://twitter.com/jonnybarnes',
+                        'https://mastodon.social/@jonnybarnes',
                     ],
                     'photo' => [config('filesystems.disks.s3.url') . '/test-photo.jpg'],
                 ],
@@ -266,6 +280,7 @@ class MicropubControllerTest extends TestCase
             ->assertJson(['response' => 'created']);
         Queue::assertPushed(SendWebMentions::class);
         Queue::assertPushed(SyndicateNoteToTwitter::class);
+        Queue::assertPushed(SyndicateNoteToMastodon::class);
     }
 
     /**
