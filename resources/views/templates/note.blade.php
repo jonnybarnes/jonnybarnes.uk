@@ -33,12 +33,14 @@
     $note->tweet_id ||
     $note->facebook_url ||
     $note->swarm_url ||
-    $note->instagram_url)
+    $note->instagram_url ||
+    $note->mastodon_url)
                                 @include('templates.social-links', [
                                     'tweet_id' => $note->tweet_id,
                                     'facebook_url' => $note->facebook_url,
                                     'swarm_url' => $note->swarm_url,
                                     'instagram_url' => $note->instagram_url,
+                                    'mastodon_url' => $note->mastodon_url,
                                 ])
 @endif
 
