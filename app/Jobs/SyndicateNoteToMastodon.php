@@ -54,7 +54,7 @@ class SyndicateNoteToMastodon implements ShouldQueue
                 'json' => [
                     'type' => ['h-entry'],
                     'properties' => [
-                        'content' => [$this->note->note],
+                        'content' => [$this->note->getRawOriginal('note')],
                     ],
                 ],
             ]
