@@ -109,4 +109,18 @@ class SendWebMentionJobTest extends TestCase
         $job->handle();
         $this->assertTrue(true);
     }
+
+    /** @test */
+    public function linksInNotesCanNotSupportWebmentions(): void
+    {
+        $mock = new MockHandler([
+            new Response(200),
+        ]);
+        $handler = HandlerStack::create($mock);
+        $client = new Client(['handler' => $handler]);
+        $this->app->instance(Client::class, $client);
+
+        $job = new SendWebMentions(new Note());
+        $this->assertNull($job->discoverWebmentionEndpoint('https://example.org'));
+    }
 }
