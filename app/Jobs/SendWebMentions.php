@@ -100,9 +100,12 @@ class SendWebMentions implements ShouldQueue
         } elseif (array_key_exists('http://webmention.org/', $rels[0])) {
             $endpoint = $rels[0]['http://webmention.org/'][0];
         }
-        if ($endpoint) {
-            return $this->resolveUri($endpoint, $url);
+
+        if ($endpoint === null) {
+            return null;
         }
+
+        return $this->resolveUri($endpoint, $url);
     }
 
     /**
