@@ -93,14 +93,14 @@ class MicropubMediaTest extends TestCase
             ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
         );
 
-        $path = parse_url($response->getData()->location, PHP_URL_PATH);
+        $path = parse_url($response->headers->get('Location'), PHP_URL_PATH);
         $filename = substr($path, 7);
 
         $lastUploadResponse = $this->get(
             '/api/media?q=last',
             ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
         );
-        $lastUploadResponse->assertJson(['url' => $response->getData()->location]);
+        $lastUploadResponse->assertJson(['url' => $response->headers->get('Location')]);
 
         // now remove file
         unlink(storage_path('app/') . $filename);
@@ -121,7 +121,7 @@ class MicropubMediaTest extends TestCase
             ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
         );
 
-        $path = parse_url($response->getData()->location, PHP_URL_PATH);
+        $path = parse_url($response->headers->get('Location'), PHP_URL_PATH);
         $filename = substr($path, 7);
 
         $sourceUploadResponse = $this->get(
@@ -129,7 +129,7 @@ class MicropubMediaTest extends TestCase
             ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
         );
         $sourceUploadResponse->assertJson(['items' => [[
-            'url' => $response->getData()->location,
+            'url' => $response->headers->get('Location'),
         ]]]);
 
         // now remove file
@@ -151,7 +151,7 @@ class MicropubMediaTest extends TestCase
             ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
         );
 
-        $path = parse_url($response->getData()->location, PHP_URL_PATH);
+        $path = parse_url($response->headers->get('Location'), PHP_URL_PATH);
         $filename = substr($path, 7);
 
         $sourceUploadResponse = $this->get(
@@ -159,7 +159,7 @@ class MicropubMediaTest extends TestCase
             ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
         );
         $sourceUploadResponse->assertJson(['items' => [[
-            'url' => $response->getData()->location,
+            'url' => $response->headers->get('Location'),
         ]]]);
         // And given our limit of 1 there should only be one result
         $this->assertCount(1, json_decode($sourceUploadResponse->getContent(), true)['items']);
@@ -257,7 +257,7 @@ class MicropubMediaTest extends TestCase
             ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
         );
 
-        $path = parse_url($response->getData()->location, PHP_URL_PATH);
+        $path = parse_url($response->headers->get('Location'), PHP_URL_PATH);
         $filename = substr($path, 7);
         Queue::assertPushed(ProcessMedia::class);
         Storage::disk('local')->assertExists($filename);
@@ -280,7 +280,7 @@ class MicropubMediaTest extends TestCase
             ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
         );
 
-        $path = parse_url($response->getData()->location, PHP_URL_PATH);
+        $path = parse_url($response->headers->get('Location'), PHP_URL_PATH);
         $filename = substr($path, 7);
         Queue::assertPushed(ProcessMedia::class);
         Storage::disk('local')->assertExists($filename);
@@ -303,7 +303,7 @@ class MicropubMediaTest extends TestCase
             ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
         );
 
-        $path = parse_url($response->getData()->location, PHP_URL_PATH);
+        $path = parse_url($response->headers->get('Location'), PHP_URL_PATH);
         $filename = substr($path, 7);
         Queue::assertPushed(ProcessMedia::class);
         Storage::disk('local')->assertExists($filename);
@@ -325,7 +325,7 @@ class MicropubMediaTest extends TestCase
             ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
         );
 
-        $path = parse_url($response->getData()->location, PHP_URL_PATH);
+        $path = parse_url($response->headers->get('Location'), PHP_URL_PATH);
         $filename = substr($path, 7);
         Queue::assertPushed(ProcessMedia::class);
         Storage::disk('local')->assertExists($filename);
