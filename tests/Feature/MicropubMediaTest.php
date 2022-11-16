@@ -84,21 +84,27 @@ class MicropubMediaTest extends TestCase
         Queue::fake();
         Storage::fake('s3');
         $file = __DIR__ . '/../aaron.png';
+        $token = $this->getToken();
+        config(['filesystems.disks.s3.url' => 'https://s3.example.com']);
 
         $response = $this->post(
             '/api/media',
             [
                 'file' => new UploadedFile($file, 'aaron.png', 'image/png', null, true),
             ],
-            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+            ['HTTP_Authorization' => 'Bearer ' . $token]
         );
+
+        $location = $response->headers->get('Location');
+
+        $this->assertStringStartsWith('https://s3.example.com/', $location);
 
         $path = parse_url($response->headers->get('Location'), PHP_URL_PATH);
         $filename = substr($path, 7);
 
         $lastUploadResponse = $this->get(
             '/api/media?q=last',
-            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+            ['HTTP_Authorization' => 'Bearer ' . $token]
         );
         $lastUploadResponse->assertJson(['url' => $response->headers->get('Location')]);
 
@@ -112,13 +118,14 @@ class MicropubMediaTest extends TestCase
         Queue::fake();
         Storage::fake('s3');
         $file = __DIR__ . '/../aaron.png';
+        $token = $this->getToken();
 
         $response = $this->post(
             '/api/media',
             [
                 'file' => new UploadedFile($file, 'aaron.png', 'image/png', null, true),
             ],
-            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+            ['HTTP_Authorization' => 'Bearer ' . $token]
         );
 
         $path = parse_url($response->headers->get('Location'), PHP_URL_PATH);
@@ -126,7 +133,7 @@ class MicropubMediaTest extends TestCase
 
         $sourceUploadResponse = $this->get(
             '/api/media?q=source',
-            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+            ['HTTP_Authorization' => 'Bearer ' . $token]
         );
         $sourceUploadResponse->assertJson(['items' => [[
             'url' => $response->headers->get('Location'),
@@ -142,13 +149,14 @@ class MicropubMediaTest extends TestCase
         Queue::fake();
         Storage::fake('s3');
         $file = __DIR__ . '/../aaron.png';
+        $token = $this->getToken();
 
         $response = $this->post(
             '/api/media',
             [
                 'file' => new UploadedFile($file, 'aaron.png', 'image/png', null, true),
             ],
-            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+            ['HTTP_Authorization' => 'Bearer ' . $token]
         );
 
         $path = parse_url($response->headers->get('Location'), PHP_URL_PATH);
@@ -156,7 +164,7 @@ class MicropubMediaTest extends TestCase
 
         $sourceUploadResponse = $this->get(
             '/api/media?q=source&limit=1',
-            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+            ['HTTP_Authorization' => 'Bearer ' . $token]
         );
         $sourceUploadResponse->assertJson(['items' => [[
             'url' => $response->headers->get('Location'),
