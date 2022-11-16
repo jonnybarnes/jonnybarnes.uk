@@ -10,7 +10,6 @@ use App\Models\Media;
 use App\Services\TokenService;
 use Exception;
 use Illuminate\Contracts\Container\BindingResolutionException;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\File;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
