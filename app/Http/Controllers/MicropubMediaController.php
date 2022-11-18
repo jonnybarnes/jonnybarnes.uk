@@ -10,9 +10,9 @@ use App\Models\Media;
 use App\Services\TokenService;
 use Exception;
 use Illuminate\Contracts\Container\BindingResolutionException;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\File;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Carbon;
@@ -33,11 +33,11 @@ class MicropubMediaController extends Controller
         $this->tokenService = $tokenService;
     }
 
-    public function getHandler(): JsonResponse
+    public function getHandler(Request $request): JsonResponse
     {
         try {
-            $tokenData = $this->tokenService->validateToken(request()->input('access_token'));
-        } catch (RequiredConstraintsViolated | InvalidTokenStructure $exception) {
+            $tokenData = $this->tokenService->validateToken($request->input('access_token'));
+        } catch (RequiredConstraintsViolated | InvalidTokenStructure) {
             $micropubResponses = new MicropubResponses();
 
             return $micropubResponses->invalidTokenResponse();
@@ -55,19 +55,19 @@ class MicropubMediaController extends Controller
             return $micropubResponses->insufficientScopeResponse();
         }
 
-        if (request()->input('q') === 'last') {
-            try {
-                $media = Media::latest()->whereDate('created_at', '>=', Carbon::now()->subMinutes(30))->firstOrFail();
-            } catch (ModelNotFoundException $exception) {
-                return response()->json(['url' => null]);
-            }
+        if ($request->input('q') === 'last') {
+            $media = Media::where('created_at', '>=', Carbon::now()->subMinutes(30))
+                ->where('token', $request->input('access_token'))
+                ->latest()
+                ->first();
+            $mediaUrl = $media?->url;
 
-            return response()->json(['url' => $media->url]);
+            return response()->json(['url' => $mediaUrl]);
         }
 
-        if (request()->input('q') === 'source') {
-            $limit = request()->input('limit', 10);
-            $offset = request()->input('offset', 0);
+        if ($request->input('q') === 'source') {
+            $limit = $request->input('limit', 10);
+            $offset = $request->input('offset', 0);
 
             $media = Media::latest()->offset($offset)->limit($limit)->get();
 
@@ -80,12 +80,12 @@ class MicropubMediaController extends Controller
             return response()->json(['items' => $media]);
         }
 
-        if (request()->has('q')) {
+        if ($request->has('q')) {
             return response()->json([
                 'error' => 'invalid_request',
                 'error_description' => sprintf(
                     'This server does not know how to handle this q parameter (%s)',
-                    request()->input('q')
+                    $request->input('q')
                 ),
             ], 400);
         }

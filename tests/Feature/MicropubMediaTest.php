@@ -84,23 +84,29 @@ class MicropubMediaTest extends TestCase
         Queue::fake();
         Storage::fake('s3');
         $file = __DIR__ . '/../aaron.png';
+        $token = $this->getToken();
+        config(['filesystems.disks.s3.url' => 'https://s3.example.com']);
 
         $response = $this->post(
             '/api/media',
             [
                 'file' => new UploadedFile($file, 'aaron.png', 'image/png', null, true),
             ],
-            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+            ['HTTP_Authorization' => 'Bearer ' . $token]
         );
 
-        $path = parse_url($response->getData()->location, PHP_URL_PATH);
+        $location = $response->headers->get('Location');
+
+        $this->assertStringStartsWith('https://s3.example.com/', $location);
+
+        $path = parse_url($response->headers->get('Location'), PHP_URL_PATH);
         $filename = substr($path, 7);
 
         $lastUploadResponse = $this->get(
             '/api/media?q=last',
-            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+            ['HTTP_Authorization' => 'Bearer ' . $token]
         );
-        $lastUploadResponse->assertJson(['url' => $response->getData()->location]);
+        $lastUploadResponse->assertJson(['url' => $response->headers->get('Location')]);
 
         // now remove file
         unlink(storage_path('app/') . $filename);
@@ -112,24 +118,25 @@ class MicropubMediaTest extends TestCase
         Queue::fake();
         Storage::fake('s3');
         $file = __DIR__ . '/../aaron.png';
+        $token = $this->getToken();
 
         $response = $this->post(
             '/api/media',
             [
                 'file' => new UploadedFile($file, 'aaron.png', 'image/png', null, true),
             ],
-            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+            ['HTTP_Authorization' => 'Bearer ' . $token]
         );
 
-        $path = parse_url($response->getData()->location, PHP_URL_PATH);
+        $path = parse_url($response->headers->get('Location'), PHP_URL_PATH);
         $filename = substr($path, 7);
 
         $sourceUploadResponse = $this->get(
             '/api/media?q=source',
-            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+            ['HTTP_Authorization' => 'Bearer ' . $token]
         );
         $sourceUploadResponse->assertJson(['items' => [[
-            'url' => $response->getData()->location,
+            'url' => $response->headers->get('Location'),
         ]]]);
 
         // now remove file
@@ -142,24 +149,25 @@ class MicropubMediaTest extends TestCase
         Queue::fake();
         Storage::fake('s3');
         $file = __DIR__ . '/../aaron.png';
+        $token = $this->getToken();
 
         $response = $this->post(
             '/api/media',
             [
                 'file' => new UploadedFile($file, 'aaron.png', 'image/png', null, true),
             ],
-            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+            ['HTTP_Authorization' => 'Bearer ' . $token]
         );
 
-        $path = parse_url($response->getData()->location, PHP_URL_PATH);
+        $path = parse_url($response->headers->get('Location'), PHP_URL_PATH);
         $filename = substr($path, 7);
 
         $sourceUploadResponse = $this->get(
             '/api/media?q=source&limit=1',
-            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+            ['HTTP_Authorization' => 'Bearer ' . $token]
         );
         $sourceUploadResponse->assertJson(['items' => [[
-            'url' => $response->getData()->location,
+            'url' => $response->headers->get('Location'),
         ]]]);
         // And given our limit of 1 there should only be one result
         $this->assertCount(1, json_decode($sourceUploadResponse->getContent(), true)['items']);
@@ -257,7 +265,7 @@ class MicropubMediaTest extends TestCase
             ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
         );
 
-        $path = parse_url($response->getData()->location, PHP_URL_PATH);
+        $path = parse_url($response->headers->get('Location'), PHP_URL_PATH);
         $filename = substr($path, 7);
         Queue::assertPushed(ProcessMedia::class);
         Storage::disk('local')->assertExists($filename);
@@ -280,7 +288,7 @@ class MicropubMediaTest extends TestCase
             ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
         );
 
-        $path = parse_url($response->getData()->location, PHP_URL_PATH);
+        $path = parse_url($response->headers->get('Location'), PHP_URL_PATH);
         $filename = substr($path, 7);
         Queue::assertPushed(ProcessMedia::class);
         Storage::disk('local')->assertExists($filename);
@@ -303,7 +311,7 @@ class MicropubMediaTest extends TestCase
             ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
         );
 
-        $path = parse_url($response->getData()->location, PHP_URL_PATH);
+        $path = parse_url($response->headers->get('Location'), PHP_URL_PATH);
         $filename = substr($path, 7);
         Queue::assertPushed(ProcessMedia::class);
         Storage::disk('local')->assertExists($filename);
@@ -325,7 +333,7 @@ class MicropubMediaTest extends TestCase
             ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
         );
 
-        $path = parse_url($response->getData()->location, PHP_URL_PATH);
+        $path = parse_url($response->headers->get('Location'), PHP_URL_PATH);
         $filename = substr($path, 7);
         Queue::assertPushed(ProcessMedia::class);
         Storage::disk('local')->assertExists($filename);
