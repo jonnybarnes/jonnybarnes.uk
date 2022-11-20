@@ -107,4 +107,28 @@ class Media extends Model
 
         return array_pop($parts);
     }
+
+    /**
+     * Get the mime type of the media file.
+     *
+     * For now we will just use the extension, but this could be improved.
+     *
+     * @return string
+     */
+    public function getMimeType(): string
+    {
+        $extension = $this->getExtension($this->path);
+
+        return match ($extension) {
+            'gif' => 'image/gif',
+            'jpeg', 'jpg' => 'image/jpeg',
+            'png' => 'image/png',
+            'svg' => 'image/svg+xml',
+            'tiff' => 'image/tiff',
+            'webp' => 'image/webp',
+            'mp4' => 'video/mp4',
+            'mkv' => 'video/mkv',
+            default => 'application/octet-stream',
+        };
+    }
 }
