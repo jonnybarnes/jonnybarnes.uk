@@ -74,6 +74,8 @@ class MicropubMediaController extends Controller
             $media->transform(function ($mediaItem) {
                 return [
                     'url' => $mediaItem->url,
+                    'published' => $mediaItem->created_at->toW3cString(),
+                    'mime_type' => $mediaItem->getMimeType(),
                 ];
             });
 
