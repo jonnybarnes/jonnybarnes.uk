@@ -23,7 +23,7 @@ class FrontPageController extends Controller
             return (new ActivityStreamsService())->siteOwnerResponse();
         }
 
-        $notes = Note::latest()->get();
+        $notes = Note::latest()->with(['media', 'client', 'place'])->get();
         $articles = Article::latest()->get();
         $bookmarks = Bookmark::latest()->get();
         $likes = Like::latest()->get();

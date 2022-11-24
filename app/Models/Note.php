@@ -141,7 +141,6 @@ class Note extends Model
      *
      * @return array
      */
-    #[ArrayShape(['note' => 'null|string'])]
     public function toSearchableArray(): array
     {
         return [
@@ -190,7 +189,7 @@ class Note extends Model
     /**
      * Provide the content_html for JSON feed.
      *
-     * In particular we want to include media links such as images.
+     * In particular, we want to include media links such as images.
      *
      * @return string
      */

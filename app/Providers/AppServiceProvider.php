@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Models\Note;
 use App\Observers\NoteObserver;
 use Codebird\Codebird;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
@@ -102,6 +103,9 @@ class AppServiceProvider extends ServiceProvider
                     ->forceAttribute('a', 'rel', 'noopener nofollow')
             );
         });
+
+        // Turn on Eloquent strict mode when developing
+        Model::shouldBeStrict(! $this->app->isProduction());
     }
 
     /**

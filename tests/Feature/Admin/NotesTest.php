@@ -41,6 +41,7 @@ class NotesTest extends TestCase
         $this->actingAs($user)->post('/admin/notes', [
             'content' => 'A new test note',
         ]);
+
         $this->assertDatabaseHas('notes', [
             'note' => 'A new test note',
         ]);
