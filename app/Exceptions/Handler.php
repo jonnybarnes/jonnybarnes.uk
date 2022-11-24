@@ -53,7 +53,7 @@ class Handler extends ExceptionHandler
     {
         parent::report($throwable);
 
-        if ($this->shouldReport($throwable)) {
+        if (config('logging.slack') && $this->shouldReport($throwable)) {
             $guzzle = new Client([
                 'headers' => [
                     'Content-Type' => 'application/json',

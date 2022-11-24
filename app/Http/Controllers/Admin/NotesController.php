@@ -41,13 +41,14 @@ class NotesController extends Controller
     /**
      * Process a request to make a new note.
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @param  Request  $request
+     * @return RedirectResponse
      */
-    public function store(): RedirectResponse
+    public function store(Request $request): RedirectResponse
     {
         Note::create([
-            'in-reply-to' => request()->input('in-reply-to'),
-            'note' => request()->input('content'),
+            'in_reply_to' => $request->input('in-reply-to'),
+            'note' => $request->input('content'),
         ]);
 
         return redirect('/admin/notes');
