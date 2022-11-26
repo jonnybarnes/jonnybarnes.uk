@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -40,14 +41,11 @@ class Tag extends Model
         return $this->belongsToMany('App\Models\Bookmark');
     }
 
-    /**
-     * When creating a Tag model instance, invoke the nomralize method on the tag.
-     *
-     * @param  string  $value
-     */
-    public function setTagAttribute(string $value)
+    protected function tag(): Attribute
     {
-        $this->attributes['tag'] = $this->normalize($value);
+        return Attribute::set(
+            set: fn ($value) => self::normalize($value),
+        );
     }
 
     /**

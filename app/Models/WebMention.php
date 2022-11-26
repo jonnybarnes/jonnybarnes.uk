@@ -6,13 +6,14 @@ namespace App\Models;
 
 use App\Traits\FilterHtml;
 use Codebird\Codebird;
+use Exception;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Cache;
 use Jonnybarnes\WebmentionsParser\Authorship;
-use Jonnybarnes\WebmentionsParser\Exceptions\AuthorshipParserException;
 
 class WebMention extends Model
 {
@@ -43,72 +44,79 @@ class WebMention extends Model
         return $this->morphTo();
     }
 
-    /**
-     * Get the author of the webmention.
-     *
-     * @return array
-     *
-     * @throws AuthorshipParserException
-     */
-    public function getAuthorAttribute(): array
+    protected function author(): Attribute
     {
-        $authorship = new Authorship();
-        $hCard = $authorship->findAuthor(json_decode($this->mf2, true));
+        return Attribute::get(
+            get: function ($value, $attributes) {
+                if (
+                    ! array_key_exists('mf2', $attributes) ||
+                    $attributes['mf2'] === null
+                ) {
+                    return null;
+                }
 
-        if ($hCard === false) {
-            return [];
-        }
+                $authorship = new Authorship();
+                $hCard = $authorship->findAuthor(json_decode($attributes['mf2'], true));
 
-        if (
-            array_key_exists('properties', $hCard) &&
-            array_key_exists('photo', $hCard['properties'])
-        ) {
-            $hCard['properties']['photo'][0] = $this->createPhotoLink($hCard['properties']['photo'][0]);
-        }
+                if ($hCard === false) {
+                    return null;
+                }
 
-        return $hCard;
-    }
+                if (
+                    array_key_exists('properties', $hCard) &&
+                    array_key_exists('photo', $hCard['properties'])
+                ) {
+                    $hCard['properties']['photo'][0] = $this->createPhotoLink($hCard['properties']['photo'][0]);
+                }
 
-    /**
-     * Get the published value for the webmention.
-     *
-     * @return string|null
-     */
-    public function getPublishedAttribute(): ?string
-    {
-        $mf2 = $this->mf2 ?? '';
-        $microformats = json_decode($mf2, true);
-        if (isset($microformats['items'][0]['properties']['published'][0])) {
-            try {
-                $published = carbon()->parse(
-                    $microformats['items'][0]['properties']['published'][0]
-                )->toDayDateTimeString();
-            } catch (\Exception $exception) {
-                $published = $this->updated_at->toDayDateTimeString();
+                return $hCard;
             }
-        } else {
-            $published = $this->updated_at->toDayDateTimeString();
-        }
-
-        return $published;
+        );
     }
 
-    /**
-     * Get the filtered HTML of a reply.
-     *
-     * @return string|null
-     */
-    public function getReplyAttribute(): ?string
+    protected function published(): Attribute
     {
-        if ($this->mf2 === null) {
-            return null;
-        }
-        $microformats = json_decode($this->mf2, true);
-        if (isset($microformats['items'][0]['properties']['content'][0]['html'])) {
-            return $this->filterHtml($microformats['items'][0]['properties']['content'][0]['html']);
-        }
+        return Attribute::get(
+            get: function ($value, $attributes) {
+                $mf2 = $attributes['mf2'] ?? '';
+                $microformats = json_decode($mf2, true);
+                if (isset($microformats['items'][0]['properties']['published'][0])) {
+                    try {
+                        $published = carbon()->parse(
+                            $microformats['items'][0]['properties']['published'][0]
+                        )->toDayDateTimeString();
+                    } catch (Exception) {
+                        $published = $this->updated_at->toDayDateTimeString();
+                    }
+                } else {
+                    $published = $this->updated_at->toDayDateTimeString();
+                }
 
-        return null;
+                return $published;
+            }
+        );
+    }
+
+    protected function reply(): Attribute
+    {
+        return Attribute::get(
+            get: function ($value, $attributes) {
+                if (
+                    ! array_key_exists('mf2', $attributes) ||
+                    $attributes['mf2'] === null
+                ) {
+                    return null;
+                }
+
+                $microformats = json_decode($attributes['mf2'], true);
+
+                if (isset($microformats['items'][0]['properties']['content'][0]['html'])) {
+                    return $this->filterHtml($microformats['items'][0]['properties']['content'][0]['html']);
+                }
+
+                return null;
+            }
+        );
     }
 
     /**
@@ -121,11 +129,13 @@ class WebMention extends Model
     {
         $url = normalize_url($url);
         $host = parse_url($url, PHP_URL_HOST);
-        if ($host == 'pbs.twimg.com') {
+
+        if ($host === 'pbs.twimg.com') {
             //make sure we use HTTPS, we know twitter supports it
             return str_replace('http://', 'https://', $url);
         }
-        if ($host == 'twitter.com') {
+
+        if ($host === 'twitter.com') {
             if (Cache::has($url)) {
                 return Cache::get($url);
             }
@@ -137,6 +147,7 @@ class WebMention extends Model
 
             return $profile_image;
         }
+
         $filesystem = new Filesystem();
         if ($filesystem->exists(public_path() . '/assets/profile-images/' . $host . '/image')) {
             return '/assets/profile-images/' . $host . '/image';

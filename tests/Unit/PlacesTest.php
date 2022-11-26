@@ -83,7 +83,6 @@ class PlacesTest extends TestCase
                 'url' => ['https://www.openstreetmap.org/way/1234'],
             ],
         ]);
-        $this->assertInstanceOf('App\Models\Place', $ret);
         $this->assertCount(11, Place::all());
     }
 

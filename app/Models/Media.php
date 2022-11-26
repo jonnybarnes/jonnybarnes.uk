@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -37,53 +38,63 @@ class Media extends Model
         return $this->belongsTo(Note::class);
     }
 
-    /**
-     * Get the URL for an S3 media file.
-     *
-     * @return string
-     */
-    public function getUrlAttribute(): string
+    protected function url(): Attribute
     {
-        if (Str::startsWith($this->path, 'https://')) {
-            return $this->path;
-        }
+        return Attribute::get(
+            get: function ($value, $attributes) {
+                if (Str::startsWith($attributes['path'], 'https://')) {
+                    return $attributes['path'];
+                }
 
-        return config('filesystems.disks.s3.url') . '/' . $this->path;
+                return config('filesystems.disks.s3.url') . '/' . $attributes['path'];
+            }
+        );
     }
 
-    /**
-     * Get the URL for the medium size of an S3 image file.
-     *
-     * @return string
-     */
-    public function getMediumurlAttribute(): string
+    protected function mediumurl(): Attribute
     {
-        $basename = $this->getBasename($this->path);
-        $extension = $this->getExtension($this->path);
-
-        return config('filesystems.disks.s3.url') . '/' . $basename . '-medium.' . $extension;
+        return Attribute::get(
+            get: fn ($value, $attributes) => $this->getSizeUrl($attributes['path'], 'medium'),
+        );
     }
 
-    /**
-     * Get the URL for the small size of an S3 image file.
-     *
-     * @return string
-     */
-    public function getSmallurlAttribute(): string
+    protected function smallmurl(): Attribute
     {
-        $basename = $this->getBasename($this->path);
-        $extension = $this->getExtension($this->path);
-
-        return config('filesystems.disks.s3.url') . '/' . $basename . '-small.' . $extension;
+        return Attribute::get(
+            get: fn ($value, $attributes) => $this->getSizeUrl($attributes['path'], 'small'),
+        );
     }
 
-    /**
-     * Give the real part of a filename, i.e. strip the file extension.
-     *
-     * @param  string  $path
-     * @return string
-     */
-    public function getBasename(string $path): string
+    protected function mimetype(): Attribute
+    {
+        return Attribute::get(
+            get: function ($value, $attributes) {
+                $extension = $this->getExtension($attributes['path']);
+
+                return match ($extension) {
+                    'gif' => 'image/gif',
+                    'jpeg', 'jpg' => 'image/jpeg',
+                    'png' => 'image/png',
+                    'svg' => 'image/svg+xml',
+                    'tiff' => 'image/tiff',
+                    'webp' => 'image/webp',
+                    'mp4' => 'video/mp4',
+                    'mkv' => 'video/mkv',
+                    default => 'application/octet-stream',
+                };
+            },
+        );
+    }
+
+    private function getSizeUrl(string $path, string $size): string
+    {
+        $basename = $this->getBasename($path);
+        $extension = $this->getExtension($path);
+
+        return config('filesystems.disks.s3.url') . '/' . $basename . '-' . $size . '.' . $extension;
+    }
+
+    private function getBasename(string $path): string
     {
         // the following achieves this data flow
         // foo.bar.png => ['foo', 'bar', 'png'] => ['foo', 'bar'] => foo.bar
@@ -95,40 +106,10 @@ class Media extends Model
         }, ''), '.');
     }
 
-    /**
-     * Get the extension from a given filename.
-     *
-     * @param  string  $path
-     * @return string
-     */
-    public function getExtension(string $path): string
+    private function getExtension(string $path): string
     {
         $parts = explode('.', $path);
 
         return array_pop($parts);
-    }
-
-    /**
-     * Get the mime type of the media file.
-     *
-     * For now we will just use the extension, but this could be improved.
-     *
-     * @return string
-     */
-    public function getMimeType(): string
-    {
-        $extension = $this->getExtension($this->path);
-
-        return match ($extension) {
-            'gif' => 'image/gif',
-            'jpeg', 'jpg' => 'image/jpeg',
-            'png' => 'image/png',
-            'svg' => 'image/svg+xml',
-            'tiff' => 'image/tiff',
-            'webp' => 'image/webp',
-            'mp4' => 'video/mp4',
-            'mkv' => 'video/mkv',
-            default => 'application/octet-stream',
-        };
     }
 }

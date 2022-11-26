@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Traits\FilterHtml;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
@@ -17,46 +18,38 @@ class Like extends Model
 
     protected $fillable = ['url'];
 
-    /**
-     * Normalize the URL of a Like.
-     *
-     * @param  string  $value The provided URL
-     */
-    public function setUrlAttribute(string $value)
+    protected function url(): Attribute
     {
-        $this->attributes['url'] = normalize_url($value);
+        return Attribute::set(
+            set: fn ($value) => normalize_url($value),
+        );
     }
 
-    /**
-     * Normalize the URL of the author of the like.
-     *
-     * @param  string|null  $value The author’s url
-     */
-    public function setAuthorUrlAttribute(?string $value)
+    protected function authorUrl(): Attribute
     {
-        $this->attributes['author_url'] = normalize_url($value);
+        return Attribute::set(
+            set: fn ($value) => normalize_url($value),
+        );
     }
 
-    /**
-     * If the content contains HTML, filter it.
-     *
-     * @param  string|null  $value The content of the like
-     * @return string|null
-     */
-    public function getContentAttribute(?string $value): ?string
+    protected function content(): Attribute
     {
-        if ($value === null) {
-            return null;
-        }
+        return Attribute::get(
+            get: function ($value, $attributes) {
+                if ($value === null) {
+                    return null;
+                }
 
-        $mf2 = Mf2\parse($value, $this->url);
+                $mf2 = Mf2\parse($value, $attributes['url']);
 
-        if (Arr::get($mf2, 'items.0.properties.content.0.html')) {
-            return $this->filterHtml(
-                $mf2['items'][0]['properties']['content'][0]['html']
-            );
-        }
+                if (Arr::get($mf2, 'items.0.properties.content.0.html')) {
+                    return $this->filterHtml(
+                        $mf2['items'][0]['properties']['content'][0]['html']
+                    );
+                }
 
-        return $value;
+                return $value;
+            }
+        );
     }
 }
