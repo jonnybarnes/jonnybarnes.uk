@@ -8,7 +8,7 @@ use App\Jobs\ProcessLike;
 use App\Models\Like;
 use Illuminate\Support\Arr;
 
-class LikeService
+class LikeService extends Service
 {
     /**
      * Create a new Like.
@@ -16,7 +16,7 @@ class LikeService
      * @param  array  $request
      * @return Like $like
      */
-    public function createLike(array $request): Like
+    public function create(array $request, ?string $client = null): Like
     {
         if (Arr::get($request, 'properties.like-of.0')) {
             //micropub request

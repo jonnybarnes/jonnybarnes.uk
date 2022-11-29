@@ -675,7 +675,7 @@ class MicropubControllerTest extends TestCase
     }
 
     /** @test */
-    public function micropubClientWebReauestCanEncodeTokenWithinTheForm(): void
+    public function micropubClientWebRequestCanEncodeTokenWithinTheForm(): void
     {
         $faker = Factory::create();
         $note = $faker->text;
@@ -690,5 +690,33 @@ class MicropubControllerTest extends TestCase
         );
         $response->assertJson(['response' => 'created']);
         $this->assertDatabaseHas('notes', ['note' => $note]);
+    }
+
+    /** @test */
+    public function micropubClientApiRequestCreatesArticlesWhenItIncludesTheNameProperty(): void
+    {
+        $faker = Factory::create();
+        $name = $faker->text(50);
+        $content = $faker->paragraphs(5, true);
+
+        $response = $this->postJson(
+            '/api/post',
+            [
+                'type' => ['h-entry'],
+                'properties' => [
+                    'name' => $name,
+                    'content' => $content,
+                ],
+            ],
+            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+        );
+
+        $response
+            ->assertJson(['response' => 'created'])
+            ->assertStatus(201);
+        $this->assertDatabaseHas('articles', [
+            'title' => $name,
+            'main' => $content,
+        ]);
     }
 }

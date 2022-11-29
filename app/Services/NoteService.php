@@ -14,7 +14,7 @@ use App\Models\SyndicationTarget;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
-class NoteService
+class NoteService extends Service
 {
     /**
      * Create a new note.
@@ -23,12 +23,12 @@ class NoteService
      * @param  string|null  $client
      * @return Note
      */
-    public function createNote(array $request, ?string $client = null): Note
+    public function create(array $request, ?string $client = null): Note
     {
         $note = Note::create(
             [
-                'note' => $this->getContent($request),
-                'in_reply_to' => $this->getInReplyTo($request),
+                'note' => $this->getDataByKey($request, 'content'),
+                'in_reply_to' => $this->getDataByKey($request, 'in-reploy-to'),
                 'client_id' => $client,
             ]
         );
@@ -64,39 +64,6 @@ class NoteService
         }
 
         return $note;
-    }
-
-    /**
-     * Get the content from the request to create a new note.
-     *
-     * @param  array  $request Data from request()->all()
-     * @return string|null
-     */
-    private function getContent(array $request): ?string
-    {
-        if (Arr::get($request, 'properties.content.0.html')) {
-            return Arr::get($request, 'properties.content.0.html');
-        }
-        if (is_string(Arr::get($request, 'properties.content.0'))) {
-            return Arr::get($request, 'properties.content.0');
-        }
-
-        return Arr::get($request, 'content');
-    }
-
-    /**
-     * Get the in-reply-to from the request to create a new note.
-     *
-     * @param  array  $request Data from request()->all()
-     * @return string|null
-     */
-    private function getInReplyTo(array $request): ?string
-    {
-        if (Arr::get($request, 'properties.in-reply-to.0')) {
-            return Arr::get($request, 'properties.in-reply-to.0');
-        }
-
-        return Arr::get($request, 'in-reply-to');
     }
 
     /**

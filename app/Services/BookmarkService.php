@@ -18,7 +18,7 @@ use Ramsey\Uuid\Uuid;
 use Spatie\Browsershot\Browsershot;
 use Spatie\Browsershot\Exceptions\CouldNotTakeBrowsershot;
 
-class BookmarkService
+class BookmarkService extends Service
 {
     /**
      * Create a new Bookmark.
@@ -26,7 +26,7 @@ class BookmarkService
      * @param  array  $request Data from request()->all()
      * @return Bookmark
      */
-    public function createBookmark(array $request): Bookmark
+    public function create(array $request, ?string $client = null): Bookmark
     {
         if (Arr::get($request, 'properties.bookmark-of.0')) {
             //micropub request
