@@ -53,11 +53,16 @@ class Article extends Model
     }
 
     /**
-     * We shall set a blacklist of non-modifiable model attributes.
+     * The attributes that are mass assignable.
      *
-     * @var array
+     * @var array<int, string>
      */
-    protected $guarded = ['id'];
+    protected $fillable = [
+        'url',
+        'title',
+        'main',
+        'published',
+    ];
 
     protected function html(): Attribute
     {
