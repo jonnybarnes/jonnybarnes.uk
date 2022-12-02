@@ -52,7 +52,7 @@ class MicropubController extends Controller
     {
         try {
             $tokenData = $this->tokenService->validateToken($request->input('access_token'));
-        } catch (RequiredConstraintsViolated | InvalidTokenStructure | CannotDecodeContent) {
+        } catch (RequiredConstraintsViolated|InvalidTokenStructure|CannotDecodeContent) {
             $micropubResponses = new MicropubResponses();
 
             return $micropubResponses->invalidTokenResponse();
@@ -124,7 +124,7 @@ class MicropubController extends Controller
     {
         try {
             $tokenData = $this->tokenService->validateToken(request()->input('access_token'));
-        } catch (RequiredConstraintsViolated | InvalidTokenStructure) {
+        } catch (RequiredConstraintsViolated|InvalidTokenStructure) {
             return (new MicropubResponses())->invalidTokenResponse();
         }
 
