@@ -46,7 +46,7 @@
         "phpunit/phpunit": "^9.0",
         "spatie/laravel-ignition": "^1.0",
         "spatie/laravel-ray": "^1.12",
-        "vimeo/psalm": "^4.0"
+        "vimeo/psalm": "^5.0"
     },
     "config": {
         "optimize-autoloader": true,
