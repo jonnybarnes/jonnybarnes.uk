@@ -3,7 +3,6 @@
 @section('title'){{ strip_tags($note->getOriginal('note')) }} « Notes « @stop
 
 @section('content')
-            <div class="h-entry">
 @include('templates.note', ['note' => $note])
 @foreach($note->webmentions->filter(function ($webmention) {
     return ($webmention->type == 'in-reply-to');
@@ -49,7 +48,6 @@
 @endif
                 <!-- this empty tags are for https://brid.gy’s publishing service -->
                 <a href="https://brid.gy/publish/twitter"></a>
-            </div>
 @stop
 
 @section('scripts')

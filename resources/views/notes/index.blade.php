@@ -8,9 +8,7 @@
                 generating a name property for the h-feed -->
                 <span class="p-name"></span>
 @foreach ($notes as $note)
-                <div class="h-entry">
-                    @include('templates.note', ['note' => $note])
-                </div>
+                @include('templates.note', ['note' => $note])
 @endforeach
             </div>
             {!! $notes->render() !!}

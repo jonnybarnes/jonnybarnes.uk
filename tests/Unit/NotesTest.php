@@ -257,7 +257,7 @@ class NotesTest extends TestCase
     /** @test */
     public function reverseGeocodeACounty(): void
     {
-        // Note I’ve removed everything below county to test for querires where
+        // Note I’ve removed everything below county to test for queries where
         // that’s all that is returned
         // phpcs:disable Generic.Files.LineLength.TooLong
         $json = <<<JSON

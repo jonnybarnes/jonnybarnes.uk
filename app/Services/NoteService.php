@@ -28,7 +28,7 @@ class NoteService extends Service
         $note = Note::create(
             [
                 'note' => $this->getDataByKey($request, 'content'),
-                'in_reply_to' => $this->getDataByKey($request, 'in-reploy-to'),
+                'in_reply_to' => $this->getDataByKey($request, 'in-reply-to'),
                 'client_id' => $client,
             ]
         );

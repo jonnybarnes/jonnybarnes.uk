@@ -212,6 +212,17 @@ EOF;
             ->where('id', $noteWithLongUrl->id)
             ->update(['updated_at' => $now->toDateTimeString()]);
 
+        $now = Carbon::now();
+        $noteReplyingToMastodon = Note::create([
+            'note' => 'Yup, #DevOps is hard',
+            'in_reply_to' => 'https://mastodon.social/@Gargron/109381161123311795',
+            'created_at' => $now,
+            'client_id' => 'https://quill.p3k.io/',
+        ]);
+        DB::table('notes')
+            ->where('id', $noteReplyingToMastodon->id)
+            ->update(['updated_at' => $now->toDateTimeString()]);
+
         Note::factory(10)->create();
     }
 }
