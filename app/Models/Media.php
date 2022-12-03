@@ -58,7 +58,7 @@ class Media extends Model
         );
     }
 
-    protected function smallmurl(): Attribute
+    protected function smallurl(): Attribute
     {
         return Attribute::get(
             get: fn ($value, $attributes) => $this->getSizeUrl($attributes['path'], 'small'),
