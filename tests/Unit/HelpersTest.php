@@ -17,6 +17,7 @@ class HelpersTest extends TestCase
 
     /**
      * @test
+     *
      * @dataProvider urlProvider
      *
      * @param  string  $input
