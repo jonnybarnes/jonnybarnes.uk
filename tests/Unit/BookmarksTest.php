@@ -16,6 +16,7 @@ class BookmarksTest extends TestCase
 {
     /**
      * @test
+     *
      * @group puppeteer
      *
     public function takeScreenshotOfDuckDuckGo()

@@ -82,6 +82,7 @@ class BookmarkService extends Service
      * @return string  The uuid for the screenshot
      *
      * @throws CouldNotTakeBrowsershot
+     *
      * @codeCoverageIgnore
      */
     public function saveScreenshot(string $url): string
