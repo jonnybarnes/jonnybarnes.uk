@@ -58,10 +58,10 @@ class SaveScreenshot implements ShouldQueue
             ],
         ]);
 
-        $jobId = json_decode($takeScreenshotJobResponse->getBody()->getContents(), false, 512, JSON_THROW_ON_ERROR)->data->id;
+        $taskId = json_decode($takeScreenshotJobResponse->getBody()->getContents(), false, 512, JSON_THROW_ON_ERROR)->data->id;
 
         // Now wait till the status job is finished
-        $screenshotJobStatusResponse = $retryClient->request('GET', 'https://api.cloudconvert.com/v2/tasks/' . $jobId, [
+        $screenshotJobStatusResponse = $retryClient->request('GET', 'https://api.cloudconvert.com/v2/tasks/' . $taskId, [
             'headers' => [
                 'Authorization' => 'Bearer ' . config('services.cloudconvert.token'),
             ],
@@ -96,12 +96,13 @@ class SaveScreenshot implements ShouldQueue
         ]);
 
         // Now we can download the screenshot and save it to the storage
-        $finalImageUrl = json_decode($finalImageUrlResponse->getBody()->getContents(), false, 512, JSON_THROW_ON_ERROR)->data->url;
+        $finalImageUrl = json_decode($finalImageUrlResponse->getBody()->getContents(), false, 512, JSON_THROW_ON_ERROR)->data->result->files[0]->url;
 
         $finalImageUrlContent = $client->request('GET', $finalImageUrl);
 
-        Storage::disk('public')->put('/assets/img/bookmarks/' . $jobId . '.png', $finalImageUrlContent->getBody()->getContents());
+        Storage::disk('public')->put('/assets/img/bookmarks/' . $taskId . '.png', $finalImageUrlContent->getBody()->getContents());
 
-        $this->bookmark->screenshot = $jobId;
+        $this->bookmark->screenshot = $taskId;
+        $this->bookmark->save();
     }
 }
