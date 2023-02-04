@@ -24,8 +24,8 @@ class SaveScreenshotJobTest extends TestCase
     {
         Storage::fake('public');
         $guzzleMock = new MockHandler([
-            new Response(201, ['Content-Type' => 'application/json'], '{"data":{"id":"68d52633-e170-465e-b13e-746c97d01ffb","job_id":null,"status":"waiting","credits":null,"code":null,"message":null,"percent":100,"operation":"capture-website","engine":"chrome","engine_version":"107","result":null,"created_at":"2023-01-07T21:05:48+00:00","started_at":null,"ended_at":null,"retry_of_task_id":null,"copy_of_task_id":null,"user_id":61485254,"priority":-10,"host_name":null,"storage":"ceph-fra","depends_on_task_ids":[],"links":{"self":"https:\/\/api.cloudconvert.com\/v2\/tasks\/68d52633-e170-465e-b13e-746c97d01ffb"}}}'),
-            new Response(201, ['Content-Type' => 'application/json'], '{"data":{"id":"27f33137-cc03-4468-aba4-1e1aa8c096fb","job_id":null,"status":"waiting","credits":null,"code":null,"message":null,"percent":100,"operation":"export\/url","result":null,"created_at":"2023-01-07T21:10:02+00:00","started_at":null,"ended_at":null,"retry_of_task_id":null,"copy_of_task_id":null,"user_id":61485254,"priority":-10,"host_name":null,"storage":"ceph-fra","depends_on_task_ids":["68d52633-e170-465e-b13e-746c97d01ffb"],"links":{"self":"https:\/\/api.cloudconvert.com\/v2\/tasks\/27f33137-cc03-4468-aba4-1e1aa8c096fb"}}}'),
+            new Response(201, ['Content-Type' => 'application/json'], '{"data":{"id":"68d52633-e170-465e-b13e-746c97d01ffb","job_id":null,"status":"finished","credits":null,"code":null,"message":null,"percent":100,"operation":"capture-website","engine":"chrome","engine_version":"107","result":null,"created_at":"2023-01-07T21:05:48+00:00","started_at":null,"ended_at":null,"retry_of_task_id":null,"copy_of_task_id":null,"user_id":61485254,"priority":-10,"host_name":null,"storage":"ceph-fra","depends_on_task_ids":[],"links":{"self":"https:\/\/api.cloudconvert.com\/v2\/tasks\/68d52633-e170-465e-b13e-746c97d01ffb"}}}'),
+            new Response(201, ['Content-Type' => 'application/json'], '{"data":{"id":"27f33137-cc03-4468-aba4-1e1aa8c096fb","job_id":null,"status":"finished","credits":null,"code":null,"message":null,"percent":100,"operation":"export\/url","result":null,"created_at":"2023-01-07T21:10:02+00:00","started_at":null,"ended_at":null,"retry_of_task_id":null,"copy_of_task_id":null,"user_id":61485254,"priority":-10,"host_name":null,"storage":"ceph-fra","depends_on_task_ids":["68d52633-e170-465e-b13e-746c97d01ffb"],"links":{"self":"https:\/\/api.cloudconvert.com\/v2\/tasks\/27f33137-cc03-4468-aba4-1e1aa8c096fb"}}}'),
             new Response(200, ['Content-Type' => 'image/png'], fopen(__DIR__ . '/../../theverge.com.png', 'rb')),
         ]);
         $guzzleHandler = HandlerStack::create($guzzleMock);
@@ -36,8 +36,44 @@ class SaveScreenshotJobTest extends TestCase
             new Response(200, ['Content-Type' => 'application/json'], '{"data":{"id":"27f33137-cc03-4468-aba4-1e1aa8c096fb","job_id":null,"status":"finished","credits":0,"code":null,"message":null,"percent":100,"operation":"export\/url","payload":{"input":"68d52633-e170-465e-b13e-746c97d01ffb","archive_multiple_files":false},"result":{"files":[{"filename":"theverge.com.png","size":811819,"url":"https:\/\/storage.cloudconvert.com\/tasks\/27f33137-cc03-4468-aba4-1e1aa8c096fb\/theverge.com.png?AWSAccessKeyId=cloudconvert-production&Expires=1673212203&Signature=xyz&response-content-disposition=attachment%3B%20filename%3D%22theverge.com.png%22&response-content-type=image%2Fpng"}]},"created_at":"2023-01-07T21:10:02+00:00","started_at":"2023-01-07T21:10:03+00:00","ended_at":"2023-01-07T21:10:03+00:00","retry_of_task_id":null,"copy_of_task_id":null,"user_id":61485254,"priority":-10,"host_name":"virgie","storage":"ceph-fra","depends_on_task_ids":["68d52633-e170-465e-b13e-746c97d01ffb"],"links":{"self":"https:\/\/api.cloudconvert.com\/v2\/tasks\/27f33137-cc03-4468-aba4-1e1aa8c096fb"}}}'),
         ]);
         $retryHandler = HandlerStack::create($retryMock);
+        $retryHandler->push(Middleware::retry(
+            function ($retries, $request, $response, $exception) {
+                // Limit the number of retries to 5
+                if ($retries >= 5) {
+                    return false;
+                }
+
+                // Retry connection exceptions
+                if ($exception instanceof \GuzzleHttp\Exception\ConnectException) {
+                    return true;
+                }
+
+                // Retry on server errors
+                if ($response && $response->getStatusCode() >= 500) {
+                    return true;
+                }
+
+                $responseBody = '';
+
+                if (is_string($response)) {
+                    $responseBody = $response;
+                }
+
+                if ($response instanceof Response) {
+                    $responseBody = $response->getBody()->getContents();
+                    $response->getBody()->rewind();
+                }
+
+                // Finally for CloudConvert, retry if status is not final
+                return json_decode($responseBody, false, 512, JSON_THROW_ON_ERROR)?->data?->status !== 'finished';
+            },
+            function () {
+                // Retry after 1 second
+                return 1000;
+            }
+        ));
         $retryClient = new Client(['handler' => $retryHandler]);
-        $this->app->instance('RetryClient', $retryClient);
+        $this->app->instance('RetryGuzzle', $retryClient);
 
         $bookmark = Bookmark::factory()->create();
         $job = new SaveScreenshot($bookmark);
