@@ -28,7 +28,6 @@
         "league/commonmark": "^2.0",
         "league/flysystem-aws-s3-v3": "^3.0",
         "mf2/mf2": "~0.3",
-        "spatie/browsershot": "~3.0",
         "spatie/commonmark-highlighter": "^3.0",
         "symfony/html-sanitizer": "^6.1"
     },
@@ -46,7 +45,7 @@
         "phpunit/phpunit": "^9.0",
         "spatie/laravel-ignition": "^1.0",
         "spatie/laravel-ray": "^1.12",
-        "vimeo/psalm": "^4.0"
+        "vimeo/psalm": "^5.0"
     },
     "config": {
         "optimize-autoloader": true,

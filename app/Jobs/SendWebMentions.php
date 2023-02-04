@@ -6,8 +6,8 @@ namespace App\Jobs;
 
 use App\Models\Note;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Psr7\Header;
-use GuzzleHttp\Psr7\Uri;
 use GuzzleHttp\Psr7\UriResolver;
 use GuzzleHttp\Psr7\Utils;
 use Illuminate\Bus\Queueable;
@@ -22,8 +22,7 @@ class SendWebMentions implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
-    /** @var Note */
-    protected $note;
+    protected Note $note;
 
     /**
      * Create the job instance, inject dependencies.
@@ -39,15 +38,14 @@ class SendWebMentions implements ShouldQueue
      * Execute the job.
      *
      * @return void
+     *
+     * @throws GuzzleException
      */
-    public function handle()
+    public function handle(): void
     {
-        //grab the URLs
-        $inReplyTo = $this->note->in_reply_to ?? '';
-        // above so explode doesn’t complain about null being passed in
-        $urlsInReplyTo = explode(' ', $inReplyTo);
+        $urlsInReplyTo = explode(' ', $this->note->in_reply_to ?? '');
         $urlsNote = $this->getLinks($this->note->note);
-        $urls = array_filter(array_merge($urlsInReplyTo, $urlsNote)); //filter out none URLs
+        $urls = array_filter(array_merge($urlsInReplyTo, $urlsNote));
         foreach ($urls as $url) {
             $endpoint = $this->discoverWebmentionEndpoint($url);
             if ($endpoint !== null) {
@@ -67,10 +65,12 @@ class SendWebMentions implements ShouldQueue
      *
      * @param  string  $url
      * @return string|null
+     *
+     * @throws GuzzleException
      */
     public function discoverWebmentionEndpoint(string $url): ?string
     {
-        //let’s not send webmentions to myself
+        // let’s not send webmentions to myself
         if (parse_url($url, PHP_URL_HOST) === config('app.longurl')) {
             return null;
         }
@@ -80,6 +80,7 @@ class SendWebMentions implements ShouldQueue
 
         $endpoint = null;
 
+        /** @var Client $guzzle */
         $guzzle = resolve(Client::class);
         $response = $guzzle->get($url);
         //check HTTP Headers for webmention endpoint
@@ -133,8 +134,6 @@ class SendWebMentions implements ShouldQueue
 
     /**
      * Resolve a URI if necessary.
-     *
-     * @todo Update deprecated resolve method
      *
      * @param  string  $url
      * @param  string  $base The base of the URL

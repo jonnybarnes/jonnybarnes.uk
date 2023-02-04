@@ -6,6 +6,7 @@ namespace App\Models;
 
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -105,53 +106,46 @@ class Place extends Model
         ]));
     }
 
-    /**
-     * The Long URL for a place.
-     *
-     * @return string
-     */
-    public function getLongurlAttribute(): string
+    protected function longurl(): Attribute
     {
-        return config('app.url') . '/places/' . $this->slug;
+        return Attribute::get(
+            get: fn ($value, $attributes) => config('app.url') . '/places/' . $attributes['slug'],
+        );
     }
 
-    /**
-     * The Short URL for a place.
-     *
-     * @return string
-     */
-    public function getShorturlAttribute(): string
+    protected function shorturl(): Attribute
     {
-        return config('app.shorturl') . '/places/' . $this->slug;
+        return Attribute::get(
+            get: fn ($value, $attributes) => config('app.shorturl') . '/places/' . $attributes['slug'],
+        );
     }
 
-    /**
-     * This method is an alternative for `longurl`.
-     *
-     * @return string
-     */
-    public function getUriAttribute(): string
+    protected function uri(): Attribute
     {
-        return $this->longurl;
+        return Attribute::get(
+            get: fn () => $this->longurl,
+        );
     }
 
-    /**
-     * Dealing with a jsonb column, so we check input first.
-     *
-     * @param  string|null  $url
-     */
-    public function setExternalUrlsAttribute(?string $url)
+    protected function externalUrls(): Attribute
     {
-        if ($url === null) {
-            return;
-        }
-        $type = $this->getType($url);
-        $already = [];
-        if (array_key_exists('external_urls', $this->attributes)) {
-            $already = json_decode($this->attributes['external_urls'], true);
-        }
-        $already[$type] = $url;
-        $this->attributes['external_urls'] = json_encode($already);
+        return Attribute::set(
+            set: function ($value, $attributes) {
+                if ($value === null) {
+                    return $attributes['external_urls'] ?? null;
+                }
+
+                $type = $this->getType($value);
+                $already = [];
+
+                if (array_key_exists('external_urls', $attributes)) {
+                    $already = json_decode($attributes['external_urls'], true);
+                }
+                $already[$type] = $value;
+
+                return json_encode($already);
+            }
+        );
     }
 
     /**

@@ -79,12 +79,21 @@ class ArticlesTest extends TestCase
 
         $emptyScope = Article::date()->get();
         $this->assertCount(2, $emptyScope);
+    }
 
-        // Check the December case
-        $article = Article::factory()->create([
-            'created_at' => Carbon::now()->setMonth(12)->toDateTimeString(),
-            'updated_at' => Carbon::now()->setMonth(12)->toDateTimeString(),
+    /** @test */
+    public function dateScopeReturnsExpectedArticlesForDecember(): void
+    {
+        Article::factory()->create([
+            'created_at' => Carbon::now()->setDay(11)->setMonth(11)->toDateTimeString(),
+            'updated_at' => Carbon::now()->setDay(11)->setMonth(11)->toDateTimeString(),
         ]);
+
+        Article::factory()->create([
+            'created_at' => Carbon::now()->setMonth(12)->setDay(12)->toDateTimeString(),
+            'updated_at' => Carbon::now()->setMonth(12)->setDay(12)->toDateTimeString(),
+        ]);
+
         $this->assertCount(1, Article::date(date('Y'), 12)->get());
     }
 }

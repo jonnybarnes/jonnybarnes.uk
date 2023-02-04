@@ -6,6 +6,7 @@ namespace App\Models;
 
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -52,76 +53,65 @@ class Article extends Model
     }
 
     /**
-     * We shall set a blacklist of non-modifiable model attributes.
+     * The attributes that are mass assignable.
      *
-     * @var array
+     * @var array<int, string>
      */
-    protected $guarded = ['id'];
+    protected $fillable = [
+        'url',
+        'title',
+        'main',
+        'published',
+    ];
 
-    /**
-     * Process the article for display.
-     *
-     * @return string
-     */
-    public function getHtmlAttribute(): string
+    protected function html(): Attribute
     {
-        $environment = new Environment();
-        $environment->addExtension(new CommonMarkCoreExtension());
-        $environment->addRenderer(FencedCode::class, new FencedCodeRenderer());
-        $environment->addRenderer(IndentedCode::class, new IndentedCodeRenderer());
-        $markdownConverter = new MarkdownConverter($environment);
+        return Attribute::get(
+            get: function () {
+                $environment = new Environment();
+                $environment->addExtension(new CommonMarkCoreExtension());
+                $environment->addRenderer(FencedCode::class, new FencedCodeRenderer());
+                $environment->addRenderer(IndentedCode::class, new IndentedCodeRenderer());
+                $markdownConverter = new MarkdownConverter($environment);
 
-        return $markdownConverter->convert($this->main)->getContent();
+                return $markdownConverter->convert($this->main)->getContent();
+            },
+        );
     }
 
-    /**
-     * Convert updated_at to W3C time format.
-     *
-     * @return string
-     */
-    public function getW3cTimeAttribute(): string
+    protected function w3cTime(): Attribute
     {
-        return $this->updated_at->toW3CString();
+        return Attribute::get(
+            get: fn () => $this->updated_at->toW3CString(),
+        );
     }
 
-    /**
-     * Convert updated_at to a tooltip appropriate format.
-     *
-     * @return string
-     */
-    public function getTooltipTimeAttribute(): string
+    protected function tooltipTime(): Attribute
     {
-        return $this->updated_at->toRFC850String();
+        return Attribute::get(
+            get: fn () => $this->updated_at->toRFC850String(),
+        );
     }
 
-    /**
-     * Convert updated_at to a human readable format.
-     *
-     * @return string
-     */
-    public function getHumanTimeAttribute(): string
+    protected function humanTime(): Attribute
     {
-        return $this->updated_at->diffForHumans();
+        return Attribute::get(
+            get: fn () => $this->updated_at->diffForHumans(),
+        );
     }
 
-    /**
-     * Get the pubdate value for RSS feeds.
-     *
-     * @return string
-     */
-    public function getPubdateAttribute(): string
+    protected function pubdate(): Attribute
     {
-        return $this->updated_at->toRSSString();
+        return Attribute::get(
+            get: fn () => $this->updated_at->toRSSString(),
+        );
     }
 
-    /**
-     * A link to the article, i.e. `/blog/1999/12/25/merry-christmas`.
-     *
-     * @return string
-     */
-    public function getLinkAttribute(): string
+    protected function link(): Attribute
     {
-        return '/blog/' . $this->updated_at->year . '/' . $this->updated_at->format('m') . '/' . $this->titleurl;
+        return Attribute::get(
+            get: fn () => '/blog/' . $this->updated_at->year . '/' . $this->updated_at->format('m') . '/' . $this->titleurl,
+        );
     }
 
     /**
@@ -134,7 +124,7 @@ class Article extends Model
      */
     public function scopeDate(Builder $query, int $year = null, int $month = null): Builder
     {
-        if ($year == null) {
+        if ($year === null) {
             return $query;
         }
         $start = $year . '-01-01 00:00:00';

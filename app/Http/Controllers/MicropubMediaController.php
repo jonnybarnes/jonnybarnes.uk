@@ -37,7 +37,7 @@ class MicropubMediaController extends Controller
     {
         try {
             $tokenData = $this->tokenService->validateToken($request->input('access_token'));
-        } catch (RequiredConstraintsViolated | InvalidTokenStructure) {
+        } catch (RequiredConstraintsViolated|InvalidTokenStructure) {
             $micropubResponses = new MicropubResponses();
 
             return $micropubResponses->invalidTokenResponse();
@@ -75,7 +75,7 @@ class MicropubMediaController extends Controller
                 return [
                     'url' => $mediaItem->url,
                     'published' => $mediaItem->created_at->toW3cString(),
-                    'mime_type' => $mediaItem->getMimeType(),
+                    'mime_type' => $mediaItem->mimetype,
                 ];
             });
 
@@ -107,7 +107,7 @@ class MicropubMediaController extends Controller
     {
         try {
             $tokenData = $this->tokenService->validateToken(request()->input('access_token'));
-        } catch (RequiredConstraintsViolated | InvalidTokenStructure $exception) {
+        } catch (RequiredConstraintsViolated|InvalidTokenStructure $exception) {
             $micropubResponses = new MicropubResponses();
 
             return $micropubResponses->invalidTokenResponse();

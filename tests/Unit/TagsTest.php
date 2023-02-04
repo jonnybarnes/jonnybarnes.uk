@@ -34,6 +34,7 @@ class TagsTest extends TestCase
 
     /**
      * @test
+     *
      * @dataProvider tagsProvider
      *
      * @param  string  $input
