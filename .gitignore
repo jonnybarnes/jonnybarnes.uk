@@ -11,6 +11,7 @@ yarn-error.log
 /lsp
 .phpstorm.meta.php
 _ide_helper.php
+ray.php
 # Custom paths in /public
 /public/coverage
 /public/hot

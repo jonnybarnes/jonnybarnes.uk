@@ -41,7 +41,7 @@ class SaveScreenshot implements ShouldQueue
         // A normal Guzzle client
         $client = resolve(Client::class);
         // A Guzzle client with a custom Middleware to retry the CloudConvert API requests
-        $retryClient = resolve('RetryClient');
+        $retryClient = resolve('RetryGuzzle');
 
         // First request that CloudConvert takes a screenshot of the URL
         $takeScreenshotJobResponse = $client->request('POST', 'https://api.cloudconvert.com/v2/capture-website', [
