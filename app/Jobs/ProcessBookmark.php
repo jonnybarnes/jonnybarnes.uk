@@ -20,8 +20,7 @@ class ProcessBookmark implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
-    /** @var Bookmark */
-    protected $bookmark;
+    protected Bookmark $bookmark;
 
     /**
      * Create a new job instance.
@@ -38,14 +37,13 @@ class ProcessBookmark implements ShouldQueue
      *
      * @return void
      */
-    public function handle()
+    public function handle(): void
     {
-        $uuid = (resolve(BookmarkService::class))->saveScreenshot($this->bookmark->url);
-        $this->bookmark->screenshot = $uuid;
+        SaveScreenshot::dispatch($this->bookmark);
 
         try {
             $archiveLink = (resolve(BookmarkService::class))->getArchiveLink($this->bookmark->url);
-        } catch (InternetArchiveException $e) {
+        } catch (InternetArchiveException) {
             $archiveLink = null;
         }
         $this->bookmark->archive = $archiveLink;

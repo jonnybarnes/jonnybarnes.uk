@@ -6,10 +6,11 @@ namespace Tests\Unit\Jobs;
 
 use App\Exceptions\InternetArchiveException;
 use App\Jobs\ProcessBookmark;
+use App\Jobs\SaveScreenshot;
 use App\Models\Bookmark;
 use App\Services\BookmarkService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Ramsey\Uuid\Uuid;
+use Illuminate\Support\Facades\Queue;
 use Tests\TestCase;
 
 class ProcessBookmarkJobTest extends TestCase
@@ -17,13 +18,12 @@ class ProcessBookmarkJobTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function screenshotAndArchiveLinkAreSavedByJob(): void
+    public function archiveLinkIsSavedByJobAndScreenshotJobIsQueued(): void
     {
+        Queue::fake();
+
         $bookmark = Bookmark::factory()->create();
-        $uuid = Uuid::uuid4();
         $service = $this->createMock(BookmarkService::class);
-        $service->method('saveScreenshot')
-                ->willReturn($uuid->toString());
         $service->method('getArchiveLink')
                 ->willReturn('https://web.archive.org/web/1234');
         $this->app->instance(BookmarkService::class, $service);
@@ -32,19 +32,19 @@ class ProcessBookmarkJobTest extends TestCase
         $job->handle();
 
         $this->assertDatabaseHas('bookmarks', [
-            'screenshot' => $uuid->toString(),
             'archive' => 'https://web.archive.org/web/1234',
         ]);
+
+        Queue::assertPushed(SaveScreenshot::class);
     }
 
     /** @test */
     public function archiveLinkSavedAsNullWhenExceptionThrown(): void
     {
+        Queue::fake();
+
         $bookmark = Bookmark::factory()->create();
-        $uuid = Uuid::uuid4();
         $service = $this->createMock(BookmarkService::class);
-        $service->method('saveScreenshot')
-                ->willReturn($uuid->toString());
         $service->method('getArchiveLink')
                 ->will($this->throwException(new InternetArchiveException()));
         $this->app->instance(BookmarkService::class, $service);
@@ -53,7 +53,7 @@ class ProcessBookmarkJobTest extends TestCase
         $job->handle();
 
         $this->assertDatabaseHas('bookmarks', [
-            'screenshot' => $uuid->toString(),
+            'id' => $bookmark->id,
             'archive' => null,
         ]);
     }

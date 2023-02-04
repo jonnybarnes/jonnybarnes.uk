@@ -14,9 +14,6 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
-use Ramsey\Uuid\Uuid;
-use Spatie\Browsershot\Browsershot;
-use Spatie\Browsershot\Exceptions\CouldNotTakeBrowsershot;
 
 class BookmarkService extends Service
 {
@@ -24,6 +21,7 @@ class BookmarkService extends Service
      * Create a new Bookmark.
      *
      * @param  array  $request Data from request()->all()
+     * @param  string|null  $client
      * @return Bookmark
      */
     public function create(array $request, ?string $client = null): Bookmark
@@ -73,31 +71,6 @@ class BookmarkService extends Service
         ProcessBookmark::dispatch($bookmark);
 
         return $bookmark;
-    }
-
-    /**
-     * Given a URL, use `browsershot` to save an image of the page.
-     *
-     * @param  string  $url
-     * @return string  The uuid for the screenshot
-     *
-     * @throws CouldNotTakeBrowsershot
-     *
-     * @codeCoverageIgnore
-     */
-    public function saveScreenshot(string $url): string
-    {
-        $browsershot = new Browsershot();
-
-        $uuid = Uuid::uuid4();
-
-        $browsershot->url($url)
-                    ->setIncludePath('$PATH:/usr/local/bin')
-                    ->noSandbox()
-                    ->windowSize(960, 640)
-                    ->save(public_path() . '/assets/img/bookmarks/' . $uuid . '.png');
-
-        return $uuid->toString();
     }
 
     /**
