@@ -14,15 +14,14 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
-use Ramsey\Uuid\Uuid;
 
 class BookmarkService extends Service
 {
     /**
      * Create a new Bookmark.
      *
-     * @param array $request Data from request()->all()
-     * @param string|null $client
+     * @param  array  $request Data from request()->all()
+     * @param  string|null  $client
      * @return Bookmark
      */
     public function create(array $request, ?string $client = null): Bookmark

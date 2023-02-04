@@ -134,6 +134,7 @@ class AppServiceProvider extends ServiceProvider
                     return 1000;
                 }
             ));
+
             return new Client(['handler' => $handlerStack]);
         });
 

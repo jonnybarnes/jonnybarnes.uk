@@ -34,6 +34,7 @@ class SaveScreenshot implements ShouldQueue
      * Execute the job.
      *
      * @return void
+     *
      * @throws JsonException
      */
     public function handle(): void
@@ -54,7 +55,7 @@ class SaveScreenshot implements ShouldQueue
                 'screen_width' => 1440,
                 'screen_height' => 900,
                 'wait_until' => 'networkidle0',
-                'wait_time' => 100
+                'wait_time' => 100,
             ],
         ]);
 
