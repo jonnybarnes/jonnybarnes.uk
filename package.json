@@ -4,12 +4,10 @@
     "version": "0.0.1",
     "repository": "https://github.com/jonnybarnes/jonnybarnes.uk",
     "license": "CC0-1.0",
-    "dependencies": {
-        "normalize.css": "^8.0.1"
-    },
     "devDependencies": {
         "@babel/core": "^7.21.4",
         "@babel/preset-env": "^7.21.4",
+        "@csstools/postcss-oklab-function": "^2.2.0",
         "autoprefixer": "^10.4.14",
         "babel-loader": "^9.1.2",
         "browserlist": "^1.0.1",
@@ -24,6 +22,7 @@
         "postcss-combine-media-query": "^1.0.1",
         "postcss-import": "^15.1.0",
         "postcss-loader": "^7.2.4",
+        "postcss-nesting": "^11.2.2",
         "stylelint": "^15.4.0",
         "stylelint-config-standard": "^32.0.0",
         "stylelint-webpack-plugin": "^4.1.0",
@@ -31,15 +30,8 @@
         "webpack-cli": "^5.0.1"
     },
     "scripts": {
-        "compress": "scripts/compress",
-        "copy-dist": "cp ./node_modules/normalize.css/normalize.css ./public/assets/frontend/",
-        "lint:es6": "eslint resources/es/*.js",
-        "lint:sass": "stylelint --syntax=scss resources/sass/**/*.scss",
-        "make-orig": "npm run make:css && npm run make:js",
-        "make": "npm run lint:sass && npm run webpack",
-        "make:css": "npm run lint:sass && npm run sass && npm run postcss",
-        "make:js": "npm run lint:es6 && npm run webpack && npm run uglifyjs",
-        "webpack": "webpack"
+        "dev": "webpack",
+        "prod": "NODE_ENV=production webpack"
     },
     "browserslist": [
         "last 2 versions",

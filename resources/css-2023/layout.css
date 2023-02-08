@@ -1,0 +1,25 @@
+.grid {
+    display: grid;
+    grid-template-columns: 5vw 1fr 5vw;
+    grid-template-rows: min-content 1fr min-content;
+    row-gap: 1rem;
+}
+
+#site-header {
+    grid-column: 2 / 3;
+    grid-row: 1 / 2;
+}
+
+main {
+    grid-column: 2 / 3;
+    grid-row: 2 / 3;
+}
+
+footer {
+    grid-column: 2 / 3;
+    grid-row: 3 / 4;
+
+    & .iwc-logo {
+        max-width: 85vw;
+    }
+}

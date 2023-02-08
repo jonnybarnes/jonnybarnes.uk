@@ -1,0 +1,22 @@
+:root {
+    /* Font Family */
+    --font-family-headings: "Archer SSm A", "Archer SSm B", serif;
+    --font-family-body: "Verlag A", "Verlag B", sans-serif;
+    --font-family-monospace: "Operator Mono SSm A", "Operator Mono SSm B", monospace;
+
+    /* Font Size */
+    --font-size-sm: 0.75rem;   /* 12px */
+    --font-size-base: 1rem;    /* 16px, base */
+    --font-size-md: 1.25rem;   /* 20px */
+    --font-size-lg: 1.5rem;    /* 24px */
+    --font-size-xl: 1.75rem;   /* 28px */
+    --font-size-xxl: 2rem;     /* 32px */
+    --font-size-xxxl: 2.25rem; /* 36px */
+
+    /* Colours */
+    --color-primary: oklch(36.8% 0.1 125.505);
+    --color-secondary: oklch(96.3% 0.1 125.505);
+    --color-link: oklch(48.09% 0.146 241.41);
+    --color-link-visited: oklch(70.44% 0.21 304.41);
+    --color-primary-shadow: oklch(19.56% 0.054 125.505 / 40%);
+}

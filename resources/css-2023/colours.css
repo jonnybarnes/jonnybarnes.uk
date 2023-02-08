@@ -1,0 +1,18 @@
+body {
+    background-color: var(--color-secondary);
+    color: var(--color-primary);
+}
+
+a {
+    color: var(--color-link);
+
+    &:visited {
+        color: var(--color-link-visited);
+    }
+}
+
+#site-header {
+    & a:visited {
+        color: var(--color-link);
+    }
+}
