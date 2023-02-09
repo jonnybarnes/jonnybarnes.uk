@@ -8813,16 +8813,16 @@
         },
         {
             "name": "laravel/dusk",
-            "version": "v7.5.0",
+            "version": "v7.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/dusk.git",
-                "reference": "cf04717664f80204567ad3077ea7484a0be16497"
+                "reference": "4ac4cae1347a5e35a2ab88bd9de2ef5cad7af506"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/dusk/zipball/cf04717664f80204567ad3077ea7484a0be16497",
-                "reference": "cf04717664f80204567ad3077ea7484a0be16497",
+                "url": "https://api.github.com/repos/laravel/dusk/zipball/4ac4cae1347a5e35a2ab88bd9de2ef5cad7af506",
+                "reference": "4ac4cae1347a5e35a2ab88bd9de2ef5cad7af506",
                 "shasum": ""
             },
             "require": {
@@ -8841,7 +8841,7 @@
             "require-dev": {
                 "mockery/mockery": "^1.4.2",
                 "orchestra/testbench": "^7.0|^8.0",
-                "phpunit/phpunit": "^9.0"
+                "phpunit/phpunit": "^9.5.10|^10.0.1"
             },
             "suggest": {
                 "ext-pcntl": "Used to gracefully terminate Dusk when tests are running."
@@ -8880,9 +8880,9 @@
             ],
             "support": {
                 "issues": "https://github.com/laravel/dusk/issues",
-                "source": "https://github.com/laravel/dusk/tree/v7.5.0"
+                "source": "https://github.com/laravel/dusk/tree/v7.6.0"
             },
-            "time": "2023-01-23T04:45:46+00:00"
+            "time": "2023-02-06T16:16:04+00:00"
         },
         {
             "name": "laravel/pint",
