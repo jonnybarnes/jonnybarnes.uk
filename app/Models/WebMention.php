@@ -121,9 +121,6 @@ class WebMention extends Model
 
     /**
      * Create the photo link.
-     *
-     * @param  string  $url
-     * @return string
      */
     public function createPhotoLink(string $url): string
     {

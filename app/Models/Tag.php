@@ -51,9 +51,6 @@ class Tag extends Model
     /**
      * This method actually normalizes a tag. That means lowercase-ing and
      * removing fancy diatric characters.
-     *
-     * @param  string  $tag
-     * @return string
      */
     public static function normalize(string $tag): string
     {

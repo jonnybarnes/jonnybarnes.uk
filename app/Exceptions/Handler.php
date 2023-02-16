@@ -43,7 +43,6 @@ class Handler extends ExceptionHandler
      *
      * This is a great spot to send exceptions to Sentry, Bugsnag, etc.
      *
-     * @param  Throwable  $throwable
      * @return void
      *
      * @throws Exception
@@ -89,7 +88,6 @@ class Handler extends ExceptionHandler
      * Render an exception into an HTTP response.
      *
      * @param  Request  $request
-     * @param  Throwable  $throwable
      * @return Response
      *
      * @throws Throwable

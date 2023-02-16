@@ -25,8 +25,6 @@ class SyndicateBookmarkToTwitter implements ShouldQueue
 
     /**
      * Create a new job instance.
-     *
-     * @param  Bookmark  $bookmark
      */
     public function __construct(Bookmark $bookmark)
     {
@@ -36,7 +34,6 @@ class SyndicateBookmarkToTwitter implements ShouldQueue
     /**
      * Execute the job.
      *
-     * @param  Client  $guzzle
      *
      * @throws GuzzleException
      */

@@ -19,8 +19,6 @@ class ShortURLsController extends Controller
 
     /**
      * Redirect from '/' to the long url.
-     *
-     * @return RedirectResponse
      */
     public function baseURL(): RedirectResponse
     {
@@ -29,8 +27,6 @@ class ShortURLsController extends Controller
 
     /**
      * Redirect from '/@' to a twitter profile.
-     *
-     * @return RedirectResponse
      */
     public function twitter(): RedirectResponse
     {
@@ -43,7 +39,6 @@ class ShortURLsController extends Controller
      *
      * @param  string  Post type
      * @param  string  Post ID
-     * @return RedirectResponse
      */
     public function expandType(string $type, string $postId): RedirectResponse
     {

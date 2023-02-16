@@ -40,8 +40,6 @@ class Article extends Model
 
     /**
      * Return the sluggable configuration array for this model.
-     *
-     * @return array
      */
     public function sluggable(): array
     {
@@ -116,11 +114,6 @@ class Article extends Model
 
     /**
      * Scope a query to only include articles from a particular year/month.
-     *
-     * @param  Builder  $query
-     * @param  int|null  $year
-     * @param  int|null  $month
-     * @return Builder
      */
     public function scopeDate(Builder $query, int $year = null, int $month = null): Builder
     {

@@ -25,8 +25,6 @@ class ProcessMedia implements ShouldQueue
 
     /**
      * Create a new job instance.
-     *
-     * @param  string  $filename
      */
     public function __construct(string $filename)
     {
@@ -35,8 +33,6 @@ class ProcessMedia implements ShouldQueue
 
     /**
      * Execute the job.
-     *
-     * @param  ImageManager  $manager
      */
     public function handle(ImageManager $manager)
     {

@@ -13,8 +13,6 @@ class FeedsController extends Controller
 {
     /**
      * Returns the blog RSS feed.
-     *
-     * @return Response
      */
     public function blogRss(): Response
     {
@@ -28,8 +26,6 @@ class FeedsController extends Controller
 
     /**
      * Returns the blog Atom feed.
-     *
-     * @return Response
      */
     public function blogAtom(): Response
     {
@@ -42,8 +38,6 @@ class FeedsController extends Controller
 
     /**
      * Returns the notes RSS feed.
-     *
-     * @return Response
      */
     public function notesRss(): Response
     {
@@ -57,8 +51,6 @@ class FeedsController extends Controller
 
     /**
      * Returns the notes Atom feed.
-     *
-     * @return Response
      */
     public function notesAtom(): Response
     {
@@ -73,8 +65,6 @@ class FeedsController extends Controller
 
     /**
      * Returns the blog JSON feed.
-     *
-     * @return array
      */
     public function blogJson(): array
     {
@@ -138,8 +128,6 @@ class FeedsController extends Controller
 
     /**
      * Returns the blog JF2 feed.
-     *
-     * @return JsonResponse
      */
     public function blogJf2(): JsonResponse
     {
@@ -176,8 +164,6 @@ class FeedsController extends Controller
 
     /**
      * Returns the notes JF2 feed.
-     *
-     * @return JsonResponse
      */
     public function notesJf2(): JsonResponse
     {

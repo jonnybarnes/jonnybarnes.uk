@@ -46,8 +46,6 @@ class Place extends Model
 
     /**
      * Return the sluggable configuration array for this model.
-     *
-     * @return array
      */
     public function sluggable(): array
     {
@@ -71,11 +69,6 @@ class Place extends Model
 
     /**
      * Select places near a given location.
-     *
-     * @param  Builder  $query
-     * @param  object  $location
-     * @param  int  $distance
-     * @return Builder
      */
     public function scopeNear(Builder $query, object $location, int $distance = 1000): Builder
     {
@@ -94,10 +87,6 @@ class Place extends Model
 
     /**
      * Select places based on a URL.
-     *
-     * @param  Builder  $query
-     * @param  string  $url
-     * @return Builder
      */
     public function scopeWhereExternalURL(Builder $query, string $url): Builder
     {
@@ -150,9 +139,6 @@ class Place extends Model
 
     /**
      * Given a URL, see if it is one of our known types.
-     *
-     * @param  string  $url
-     * @return string
      */
     private function getType(string $url): string
     {

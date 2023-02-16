@@ -11,8 +11,6 @@ class HomeController extends Controller
 {
     /**
      * Show the homepage of the admin CP.
-     *
-     * @return \Illuminate\View\View
      */
     public function welcome(): View
     {

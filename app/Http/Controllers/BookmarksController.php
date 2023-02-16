@@ -11,8 +11,6 @@ class BookmarksController extends Controller
 {
     /**
      * Show the most recent bookmarks.
-     *
-     * @return View
      */
     public function index(): View
     {
@@ -23,9 +21,6 @@ class BookmarksController extends Controller
 
     /**
      * Show a single bookmark.
-     *
-     * @param  Bookmark  $bookmark
-     * @return View
      */
     public function show(Bookmark $bookmark): View
     {
@@ -36,9 +31,6 @@ class BookmarksController extends Controller
 
     /**
      * Show bookmarks tagged with a specific tag.
-     *
-     * @param  string  $tag
-     * @return View
      */
     public function tagged(string $tag): View
     {

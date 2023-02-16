@@ -23,8 +23,6 @@ class SyndicateNoteToTwitter implements ShouldQueue
 
     /**
      * Create a new job instance.
-     *
-     * @param  Note  $note
      */
     public function __construct(Note $note)
     {
@@ -34,7 +32,6 @@ class SyndicateNoteToTwitter implements ShouldQueue
     /**
      * Execute the job.
      *
-     * @param  Client  $guzzle
      *
      * @throws GuzzleException
      */

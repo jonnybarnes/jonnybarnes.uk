@@ -28,8 +28,6 @@ class MicropubClient extends Model
 
     /**
      * Define the relationship with notes.
-     *
-     * @return HasMany
      */
     public function notes(): HasMany
     {

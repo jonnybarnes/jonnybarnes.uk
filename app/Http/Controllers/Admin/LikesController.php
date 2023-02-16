@@ -14,8 +14,6 @@ class LikesController extends Controller
 {
     /**
      * List the likes that can be edited.
-     *
-     * @return \Illuminate\View\View
      */
     public function index(): View
     {
@@ -26,8 +24,6 @@ class LikesController extends Controller
 
     /**
      * Show the form to make a new like.
-     *
-     * @return \Illuminate\View\View
      */
     public function create(): View
     {
@@ -36,8 +32,6 @@ class LikesController extends Controller
 
     /**
      * Process a request to make a new like.
-     *
-     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(): RedirectResponse
     {
@@ -51,9 +45,6 @@ class LikesController extends Controller
 
     /**
      * Display the form to edit a specific like.
-     *
-     * @param  int  $likeId
-     * @return \Illuminate\View\View
      */
     public function edit(int $likeId): View
     {
@@ -67,9 +58,6 @@ class LikesController extends Controller
 
     /**
      * Process a request to edit a like.
-     *
-     * @param  int  $likeId
-     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(int $likeId): RedirectResponse
     {
@@ -83,9 +71,6 @@ class LikesController extends Controller
 
     /**
      * Process the request to delete a like.
-     *
-     * @param  int  $likeId
-     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(int $likeId): RedirectResponse
     {

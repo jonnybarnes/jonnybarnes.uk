@@ -44,9 +44,6 @@ class MicropubController extends Controller
     /**
      * This function receives an API request, verifies the authenticity
      * then passes over the info to the relevant Service class.
-     *
-     * @param  Request  $request
-     * @return JsonResponse
      */
     public function post(Request $request): JsonResponse
     {
@@ -117,8 +114,6 @@ class MicropubController extends Controller
      * token, here we check whether the token is valid and respond
      * appropriately. Further if the request has the query parameter
      * syndicate-to we respond with the known syndication endpoints.
-     *
-     * @return JsonResponse
      */
     public function get(): JsonResponse
     {
@@ -173,7 +168,6 @@ class MicropubController extends Controller
     /**
      * Determine the client id from the access token sent with the request.
      *
-     * @return string
      *
      * @throws RequiredConstraintsViolated
      */

@@ -51,7 +51,6 @@ class ParseCachedWebMentions extends Command
      * Determine the source URL from a filename.
      *
      * @param  string
-     * @return string
      */
     private function urlFromFilename(string $filepath): string
     {

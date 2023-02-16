@@ -98,7 +98,6 @@ class MicropubMediaController extends Controller
     /**
      * Process a media item posted to the media endpoint.
      *
-     * @return JsonResponse
      *
      * @throws BindingResolutionException
      * @throws Exception
@@ -176,8 +175,6 @@ class MicropubMediaController extends Controller
 
     /**
      * Return the relevant CORS headers to a pre-flight OPTIONS request.
-     *
-     * @return Response
      */
     public function mediaOptionsResponse(): Response
     {
@@ -186,9 +183,6 @@ class MicropubMediaController extends Controller
 
     /**
      * Get the file type from the mime-type of the uploaded file.
-     *
-     * @param  string  $mimeType
-     * @return string
      */
     private function getFileTypeFromMimeType(string $mimeType): string
     {
@@ -232,8 +226,6 @@ class MicropubMediaController extends Controller
     /**
      * Save an uploaded file to the local disk.
      *
-     * @param  UploadedFile  $file
-     * @return string
      *
      * @throws Exception
      */

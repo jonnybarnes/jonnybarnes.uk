@@ -30,8 +30,6 @@ class Media extends Model
 
     /**
      * Get the note that owns this media.
-     *
-     * @return BelongsTo
      */
     public function note(): BelongsTo
     {
