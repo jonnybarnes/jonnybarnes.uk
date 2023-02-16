@@ -32,9 +32,6 @@ class ProcessWebMention implements ShouldQueue
 
     /**
      * Create a new job instance.
-     *
-     * @param  Note  $note
-     * @param  string  $source
      */
     public function __construct(Note $note, string $source)
     {
@@ -45,8 +42,6 @@ class ProcessWebMention implements ShouldQueue
     /**
      * Execute the job.
      *
-     * @param  Parser  $parser
-     * @param  Client  $guzzle
      *
      * @throws RemoteContentNotFoundException
      * @throws GuzzleException

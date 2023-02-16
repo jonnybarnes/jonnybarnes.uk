@@ -24,8 +24,6 @@ class SaveProfileImage implements ShouldQueue
 
     /**
      * Create a new job instance.
-     *
-     * @param  array  $microformats
      */
     public function __construct(array $microformats)
     {
@@ -34,8 +32,6 @@ class SaveProfileImage implements ShouldQueue
 
     /**
      * Execute the job.
-     *
-     * @param  Authorship  $authorship
      */
     public function handle(Authorship $authorship)
     {

@@ -26,8 +26,6 @@ class SendWebMentions implements ShouldQueue
 
     /**
      * Create the job instance, inject dependencies.
-     *
-     * @param  Note  $note
      */
     public function __construct(Note $note)
     {
@@ -37,7 +35,6 @@ class SendWebMentions implements ShouldQueue
     /**
      * Execute the job.
      *
-     * @return void
      *
      * @throws GuzzleException
      */
@@ -63,8 +60,6 @@ class SendWebMentions implements ShouldQueue
     /**
      * Discover if a URL has a webmention endpoint.
      *
-     * @param  string  $url
-     * @return string|null
      *
      * @throws GuzzleException
      */
@@ -111,9 +106,6 @@ class SendWebMentions implements ShouldQueue
 
     /**
      * Get the URLs from a note.
-     *
-     * @param  string|null  $html
-     * @return array
      */
     public function getLinks(?string $html): array
     {
@@ -135,9 +127,7 @@ class SendWebMentions implements ShouldQueue
     /**
      * Resolve a URI if necessary.
      *
-     * @param  string  $url
      * @param  string  $base The base of the URL
-     * @return string
      */
     public function resolveUri(string $url, string $base): string
     {

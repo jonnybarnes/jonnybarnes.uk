@@ -17,8 +17,6 @@ class ContactsController extends Controller
 {
     /**
      * List the currect contacts that can be edited.
-     *
-     * @return \Illuminate\View\View
      */
     public function index(): View
     {
@@ -29,8 +27,6 @@ class ContactsController extends Controller
 
     /**
      * Display the form to add a new contact.
-     *
-     * @return \Illuminate\View\View
      */
     public function create(): View
     {
@@ -39,8 +35,6 @@ class ContactsController extends Controller
 
     /**
      * Process the request to add a new contact.
-     *
-     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(): RedirectResponse
     {
@@ -57,9 +51,6 @@ class ContactsController extends Controller
 
     /**
      * Show the form to edit an existing contact.
-     *
-     * @param  int  $contactId
-     * @return \Illuminate\View\View
      */
     public function edit(int $contactId): View
     {
@@ -72,9 +63,6 @@ class ContactsController extends Controller
      * Process the request to edit a contact.
      *
      * @todo   Allow saving profile pictures for people without homepages
-     *
-     * @param  int  $contactId
-     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(int $contactId): RedirectResponse
     {
@@ -101,9 +89,6 @@ class ContactsController extends Controller
 
     /**
      * Process the request to delete a contact.
-     *
-     * @param  int  $contactId
-     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(int $contactId): RedirectResponse
     {
@@ -119,7 +104,6 @@ class ContactsController extends Controller
      * This method attempts to find the microformat marked-up profile image
      * from a given homepage and save it accordingly
      *
-     * @param  int  $contactId
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\View\View
      */
     public function getAvatar(int $contactId)

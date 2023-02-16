@@ -20,8 +20,6 @@ class NoteService extends Service
      * Create a new note.
      *
      * @param  array  $request Data from request()->all()
-     * @param  string|null  $client
-     * @return Note
      */
     public function create(array $request, ?string $client = null): Note
     {
@@ -70,7 +68,6 @@ class NoteService extends Service
      * Get the published time from the request to create a new note.
      *
      * @param  array  $request Data from request()->all()
-     * @return string|null
      */
     private function getPublished(array $request): ?string
     {
@@ -89,7 +86,6 @@ class NoteService extends Service
      * Get the location data from the request to create a new note.
      *
      * @param  array  $request Data from request()->all()
-     * @return string|null
      */
     private function getLocation(array $request): ?string
     {
@@ -111,7 +107,6 @@ class NoteService extends Service
      * Get the checkin data from the request to create a new note. This will be a Place.
      *
      * @param  array  $request Data from request()->all()
-     * @return Place|null
      */
     private function getCheckin(array $request): ?Place
     {
@@ -157,7 +152,6 @@ class NoteService extends Service
      * Get the Swarm URL from the syndication data in the request to create a new note.
      *
      * @param  array  $request Data from request()->all()
-     * @return string|null
      */
     private function getSwarmUrl(array $request): ?string
     {
@@ -172,7 +166,6 @@ class NoteService extends Service
      * Get the syndication targets from the request to create a new note.
      *
      * @param  array  $request Data from request()->all()
-     * @return array
      */
     private function getSyndicationTargets(array $request): array
     {
@@ -196,7 +189,6 @@ class NoteService extends Service
      * Get the media URLs from the request to create a new note.
      *
      * @param  array  $request Data from request()->all()
-     * @return array
      */
     private function getMedia(array $request): array
     {
@@ -226,7 +218,6 @@ class NoteService extends Service
      * Get the Instagram photo URL from the request to create a new note.
      *
      * @param  array  $request Data from request()->all()
-     * @return string|null
      */
     private function getInstagramUrl(array $request): ?string
     {

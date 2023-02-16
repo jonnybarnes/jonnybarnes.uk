@@ -51,8 +51,6 @@ class Note extends Model
 
     /**
      * Set our contacts variable to null.
-     *
-     * @param  array  $attributes
      */
     public function __construct(array $attributes = [])
     {
@@ -87,8 +85,6 @@ class Note extends Model
 
     /**
      * Define the relationship with tags.
-     *
-     * @return BelongsToMany
      */
     public function tags(): BelongsToMany
     {
@@ -97,8 +93,6 @@ class Note extends Model
 
     /**
      * Define the relationship with clients.
-     *
-     * @return BelongsTo
      */
     public function client(): BelongsTo
     {
@@ -107,8 +101,6 @@ class Note extends Model
 
     /**
      * Define the relationship with webmentions.
-     *
-     * @return MorphMany
      */
     public function webmentions(): MorphMany
     {
@@ -117,8 +109,6 @@ class Note extends Model
 
     /**
      * Define the relationship with places.
-     *
-     * @return BelongsTo
      */
     public function place(): BelongsTo
     {
@@ -127,8 +117,6 @@ class Note extends Model
 
     /**
      * Define the relationship with media.
-     *
-     * @return HasMany
      */
     public function media(): HasMany
     {
@@ -137,8 +125,6 @@ class Note extends Model
 
     /**
      * Set the attributes to be indexed for searching with Scout.
-     *
-     * @return array
      */
     public function toSearchableArray(): array
     {
@@ -149,8 +135,6 @@ class Note extends Model
 
     /**
      * Normalize the note to Unicode FORM C.
-     *
-     * @param  string|null  $value
      */
     public function setNoteAttribute(?string $value): void
     {
@@ -165,9 +149,6 @@ class Note extends Model
 
     /**
      * Pre-process notes for web-view.
-     *
-     * @param  string|null  $value
-     * @return string|null
      */
     public function getNoteAttribute(?string $value): ?string
     {
@@ -189,8 +170,6 @@ class Note extends Model
      * Provide the content_html for JSON feed.
      *
      * In particular, we want to include media links such as images.
-     *
-     * @return string
      */
     public function getContentAttribute(): string
     {
@@ -218,8 +197,6 @@ class Note extends Model
 
     /**
      * Generate the NewBase60 ID from primary ID.
-     *
-     * @return string
      */
     public function getNb60idAttribute(): string
     {
@@ -229,8 +206,6 @@ class Note extends Model
 
     /**
      * The Long URL for a note.
-     *
-     * @return string
      */
     public function getLongurlAttribute(): string
     {
@@ -239,8 +214,6 @@ class Note extends Model
 
     /**
      * The Short URL for a note.
-     *
-     * @return string
      */
     public function getShorturlAttribute(): string
     {
@@ -249,8 +222,6 @@ class Note extends Model
 
     /**
      * Get the ISO8601 value for mf2.
-     *
-     * @return string
      */
     public function getIso8601Attribute(): string
     {
@@ -259,8 +230,6 @@ class Note extends Model
 
     /**
      * Get the ISO8601 value for mf2.
-     *
-     * @return string
      */
     public function getHumandiffAttribute(): string
     {
@@ -269,8 +238,6 @@ class Note extends Model
 
     /**
      * Get the publish date value for RSS feeds.
-     *
-     * @return string
      */
     public function getPubdateAttribute(): string
     {
@@ -279,8 +246,6 @@ class Note extends Model
 
     /**
      * Get the latitude value.
-     *
-     * @return float|null
      */
     public function getLatitudeAttribute(): ?float
     {
@@ -299,8 +264,6 @@ class Note extends Model
 
     /**
      * Get the longitude value.
-     *
-     * @return float|null
      */
     public function getLongitudeAttribute(): ?float
     {
@@ -320,8 +283,6 @@ class Note extends Model
     /**
      * Get the address for a note. This is either a reverse geo-code from the
      * location, or is derived from the associated place.
-     *
-     * @return string|null
      */
     public function getAddressAttribute(): ?string
     {
@@ -337,8 +298,6 @@ class Note extends Model
 
     /**
      * Get the OEmbed html for a tweet the note is a reply to.
-     *
-     * @return object|null
      */
     public function getTwitterAttribute(): ?object
     {
@@ -379,7 +338,6 @@ class Note extends Model
      *
      * That is we swap the contacts names for their known Twitter handles.
      *
-     * @return string
      *
      * @throws TwitterContentException
      */
@@ -424,10 +382,6 @@ class Note extends Model
 
     /**
      * Scope a query to select a note via a NewBase60 id.
-     *
-     * @param  Builder  $query
-     * @param  string  $nb60id
-     * @return Builder
      */
     public function scopeNb60(Builder $query, string $nb60id): Builder
     {
@@ -441,9 +395,6 @@ class Note extends Model
      * we try to create a fancy hcard from our contact info. If this is not possible
      * due to lack of contact info, we assume @username is a twitter handle and link it
      * as such.
-     *
-     * @param  string  $text
-     * @return string
      */
     private function makeHCards(string $text): string
     {
@@ -475,8 +426,6 @@ class Note extends Model
 
     /**
      * Get the value of the `contacts` property.
-     *
-     * @return array
      */
     public function getContacts(): array
     {
@@ -489,8 +438,6 @@ class Note extends Model
 
     /**
      * Process the note and save the contacts to the `contacts` property.
-     *
-     * @return void
      */
     public function setContacts(): void
     {
@@ -512,9 +459,6 @@ class Note extends Model
      * Given a string and section, finds all hashtags matching
      * `#[\-_a-zA-Z0-9]+` and wraps them in an `a` element with
      * `rel=tag` set and a `href` of 'section/tagged/' + tagname without the #.
-     *
-     * @param  string  $note
-     * @return string
      */
     public function autoLinkHashtag(string $note): string
     {
@@ -531,9 +475,6 @@ class Note extends Model
 
     /**
      * Pass a note through the commonmark library.
-     *
-     * @param  string  $note
-     * @return string
      */
     private function convertMarkdown(string $note): string
     {
@@ -561,10 +502,6 @@ class Note extends Model
 
     /**
      * Do a reverse geocode lookup of a `lat,lng` value.
-     *
-     * @param  float  $latitude
-     * @param  float  $longitude
-     * @return string
      */
     public function reverseGeoCode(float $latitude, float $longitude): string
     {

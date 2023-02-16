@@ -21,8 +21,6 @@ class PlacesController extends Controller
 
     /**
      * List the places that can be edited.
-     *
-     * @return View
      */
     public function index(): View
     {
@@ -33,8 +31,6 @@ class PlacesController extends Controller
 
     /**
      * Show the form to make a new place.
-     *
-     * @return View
      */
     public function create(): View
     {
@@ -43,8 +39,6 @@ class PlacesController extends Controller
 
     /**
      * Process a request to make a new place.
-     *
-     * @return RedirectResponse
      */
     public function store(): RedirectResponse
     {
@@ -62,9 +56,6 @@ class PlacesController extends Controller
 
     /**
      * Display the form to edit a specific place.
-     *
-     * @param  int  $placeId
-     * @return View
      */
     public function edit(int $placeId): View
     {
@@ -75,9 +66,6 @@ class PlacesController extends Controller
 
     /**
      * Process a request to edit a place.
-     *
-     * @param  int  $placeId
-     * @return RedirectResponse
      */
     public function update(int $placeId): RedirectResponse
     {
@@ -94,9 +82,6 @@ class PlacesController extends Controller
 
     /**
      * List the places we can merge with the current place.
-     *
-     * @param  int  $placeId
-     * @return View
      */
     public function mergeIndex(int $placeId): View
     {
@@ -114,10 +99,6 @@ class PlacesController extends Controller
 
     /**
      * Show a form for merging two specific places.
-     *
-     * @param  int  $placeId1
-     * @param  int  $placeId2
-     * @return View
      */
     public function mergeEdit(int $placeId1, int $placeId2): View
     {
@@ -129,8 +110,6 @@ class PlacesController extends Controller
 
     /**
      * Process the request to merge two places.
-     *
-     * @return RedirectResponse
      */
     public function mergeStore(): RedirectResponse
     {

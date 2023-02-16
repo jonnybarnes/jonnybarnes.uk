@@ -31,10 +31,6 @@ class TokenEndpointController extends Controller
 
     /**
      * Inject the dependencies.
-     *
-     * @param  Client  $client
-     * @param  GuzzleClient  $guzzle
-     * @param  TokenService  $tokenService
      */
     public function __construct(
         Client $client,
@@ -48,9 +44,6 @@ class TokenEndpointController extends Controller
 
     /**
      * If the user has auth’d via the IndieAuth protocol, issue a valid token.
-     *
-     * @param  Request  $request
-     * @return JsonResponse
      */
     public function create(Request $request): JsonResponse
     {

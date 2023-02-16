@@ -33,7 +33,6 @@ class SaveScreenshot implements ShouldQueue
     /**
      * Execute the job.
      *
-     * @return void
      *
      * @throws JsonException
      */

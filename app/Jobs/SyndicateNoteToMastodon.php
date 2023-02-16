@@ -20,7 +20,6 @@ class SyndicateNoteToMastodon implements ShouldQueue
     /**
      * Create a new job instance.
      *
-     * @param  Note  $note
      * @return void
      */
     public function __construct(
@@ -31,8 +30,6 @@ class SyndicateNoteToMastodon implements ShouldQueue
     /**
      * Execute the job.
      *
-     * @param  Client  $guzzle
-     * @return void
      *
      * @throws GuzzleException
      */

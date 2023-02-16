@@ -29,7 +29,6 @@ class ActivityStreamsService
     /**
      * Return the relevant data to an AS2.0 request for a particular note.
      *
-     * @param  \App\Models\Note  $note
      * @return \Illuminate\Http\Response
      */
     public function singleNoteResponse(Note $note)

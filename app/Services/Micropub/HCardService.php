@@ -13,7 +13,6 @@ class HCardService
      * Create a Place from h-card data, return the URL.
      *
      * @param  array  $request Data from request()->all()
-     * @return string
      */
     public function process(array $request): string
     {

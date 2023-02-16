@@ -30,8 +30,6 @@ class ProcessLike implements ShouldQueue
 
     /**
      * Create a new job instance.
-     *
-     * @param  Like  $like
      */
     public function __construct(Like $like)
     {
@@ -41,9 +39,6 @@ class ProcessLike implements ShouldQueue
     /**
      * Execute the job.
      *
-     * @param  Client  $client
-     * @param  Authorship  $authorship
-     * @return int
      *
      * @throws GuzzleException
      */
@@ -104,9 +99,6 @@ class ProcessLike implements ShouldQueue
 
     /**
      * Determine if a given URL is that of a Tweet.
-     *
-     * @param  string  $url
-     * @return bool
      */
     private function isTweet(string $url): bool
     {

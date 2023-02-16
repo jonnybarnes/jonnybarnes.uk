@@ -27,8 +27,6 @@ class AuthController extends Controller
     /**
      * Log in a user, set a session variable, check credentials against
      * the .env file.
-     *
-     * @return RedirectResponse
      */
     public function login(): RedirectResponse
     {

@@ -19,9 +19,6 @@ class HelpersTest extends TestCase
      * @test
      *
      * @dataProvider urlProvider
-     *
-     * @param  string  $input
-     * @param  string  $output
      */
     public function normalizeUrlOnDataProvider(string $input, string $output): void
     {

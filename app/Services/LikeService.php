@@ -13,7 +13,6 @@ class LikeService extends Service
     /**
      * Create a new Like.
      *
-     * @param  array  $request
      * @return Like $like
      */
     public function create(array $request, ?string $client = null): Like

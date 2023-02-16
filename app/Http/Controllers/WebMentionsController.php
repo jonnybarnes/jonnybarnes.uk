@@ -18,8 +18,6 @@ class WebMentionsController extends Controller
      *
      * This is probably someone looking for information about what
      * webmentions are, or about my particular implementation.
-     *
-     * @return View
      */
     public function get(): View
     {
@@ -28,8 +26,6 @@ class WebMentionsController extends Controller
 
     /**
      * Receive and process a webmention.
-     *
-     * @return Response
      */
     public function receive(): Response
     {

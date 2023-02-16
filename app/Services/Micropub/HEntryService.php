@@ -17,7 +17,6 @@ class HEntryService
      *
      * @param  array  $request Data from request()->all()
      * @param  string|null  $client The micropub client that made the request
-     * @return string|null
      */
     public function process(array $request, ?string $client = null): ?string
     {

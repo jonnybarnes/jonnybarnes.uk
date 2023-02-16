@@ -14,8 +14,6 @@ class SyndicationTargetsController extends Controller
 {
     /**
      * Show a list of known syndication targets.
-     *
-     * @return View
      */
     public function index(): View
     {
@@ -26,8 +24,6 @@ class SyndicationTargetsController extends Controller
 
     /**
      * Show form to add a syndication target.
-     *
-     * @return View
      */
     public function create(): View
     {
@@ -36,9 +32,6 @@ class SyndicationTargetsController extends Controller
 
     /**
      * Process the request to adda new syndication target.
-     *
-     * @param  Request  $request
-     * @return RedirectResponse
      */
     public function store(Request $request): RedirectResponse
     {
@@ -60,9 +53,6 @@ class SyndicationTargetsController extends Controller
 
     /**
      * Show a form to edit a syndication target.
-     *
-     * @param  SyndicationTarget  $syndicationTarget
-     * @return View
      */
     public function edit(SyndicationTarget $syndicationTarget): View
     {
@@ -73,10 +63,6 @@ class SyndicationTargetsController extends Controller
 
     /**
      * Process the request to edit a client name.
-     *
-     * @param  Request  $request
-     * @param  SyndicationTarget  $syndicationTarget
-     * @return RedirectResponse
      */
     public function update(Request $request, SyndicationTarget $syndicationTarget): RedirectResponse
     {
@@ -98,9 +84,6 @@ class SyndicationTargetsController extends Controller
 
     /**
      * Process a request to delete a client.
-     *
-     * @param  SyndicationTarget  $syndicationTarget
-     * @return RedirectResponse
      */
     public function destroy(SyndicationTarget $syndicationTarget): RedirectResponse
     {

@@ -62,7 +62,6 @@ class NotesController extends Controller
      * Redirect /note/{decID} to /notes/{nb60id}.
      *
      * @param  int  $decId The decimal id of the note
-     * @return RedirectResponse
      */
     public function redirect(int $decId): RedirectResponse
     {
@@ -71,9 +70,6 @@ class NotesController extends Controller
 
     /**
      * Show all notes tagged with {tag}.
-     *
-     * @param  string  $tag
-     * @return View
      */
     public function tagged(string $tag): View
     {
@@ -88,8 +84,6 @@ class NotesController extends Controller
      * Page to create a new note.
      *
      * Dummy page for now.
-     *
-     * @return View
      */
     public function create(): View
     {

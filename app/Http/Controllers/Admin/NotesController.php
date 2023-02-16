@@ -15,8 +15,6 @@ class NotesController extends Controller
 {
     /**
      * List the notes that can be edited.
-     *
-     * @return \Illuminate\View\View
      */
     public function index(): View
     {
@@ -30,8 +28,6 @@ class NotesController extends Controller
 
     /**
      * Show the form to make a new note.
-     *
-     * @return \Illuminate\View\View
      */
     public function create(): View
     {
@@ -40,9 +36,6 @@ class NotesController extends Controller
 
     /**
      * Process a request to make a new note.
-     *
-     * @param  Request  $request
-     * @return RedirectResponse
      */
     public function store(Request $request): RedirectResponse
     {
@@ -56,9 +49,6 @@ class NotesController extends Controller
 
     /**
      * Display the form to edit a specific note.
-     *
-     * @param  int  $noteId
-     * @return \Illuminate\View\View
      */
     public function edit(int $noteId): View
     {
@@ -71,9 +61,6 @@ class NotesController extends Controller
     /**
      * Process a request to edit a note. Easy since this can only be done
      * from the admin CP.
-     *
-     * @param  int  $noteId
-     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(int $noteId): RedirectResponse
     {
@@ -92,9 +79,6 @@ class NotesController extends Controller
 
     /**
      * Delete the note.
-     *
-     * @param  int  $noteId
-     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(int $noteId): RedirectResponse
     {

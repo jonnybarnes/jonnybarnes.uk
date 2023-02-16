@@ -13,8 +13,6 @@ class MyAuthMiddleware
     /**
      * Check the user is logged in.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
      * @return mixed
      */
     public function handle(Request $request, Closure $next)
