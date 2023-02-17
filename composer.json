@@ -13,14 +13,14 @@
         "ext-dom": "*",
         "ext-intl": "*",
         "ext-json": "*",
-        "cviebrock/eloquent-sluggable": "^9.0",
+        "cviebrock/eloquent-sluggable": "^10.0",
         "guzzlehttp/guzzle": "^7.0.1",
         "indieauth/client": "^1.1",
         "intervention/image": "^2.4",
         "jonnybarnes/indieweb": "~0.2",
         "jonnybarnes/webmentions-parser": "~0.5",
         "jublonet/codebird-php": "4.0.0-beta.1",
-        "laravel/framework": "^9.0",
+        "laravel/framework": "^10.0",
         "laravel/horizon": "^5.0",
         "laravel/sanctum": "^3.0",
         "laravel/tinker": "^2.0",
@@ -40,10 +40,10 @@
         "laravel/pint": "^1.0.0",
         "laravel/sail": "^1.15",
         "mockery/mockery": "^1.0",
-        "nunomaduro/collision": "^6.0",
-        "phpunit/php-code-coverage": "^9.2",
-        "phpunit/phpunit": "^9.0",
-        "spatie/laravel-ignition": "^1.0",
+        "nunomaduro/collision": "^7.0",
+        "phpunit/php-code-coverage": "^10.0",
+        "phpunit/phpunit": "^10.0",
+        "spatie/laravel-ignition": "^2.0",
         "spatie/laravel-ray": "^1.12",
         "vimeo/psalm": "^5.0"
     },
@@ -76,7 +76,7 @@
             "Tests\\": "tests"
         }
     },
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "prefer-stable": true,
     "scripts": {
         "post-autoload-dump": [
