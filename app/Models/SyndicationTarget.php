@@ -53,7 +53,7 @@ class SyndicationTarget extends Model
     /**
      * Get the service data as a single attribute.
      *
-     * @vreturn Attribute
+     * @return Attribute
      */
     protected function service(): Attribute
     {
