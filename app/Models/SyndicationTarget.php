@@ -12,11 +12,7 @@ class SyndicationTarget extends Model
 {
     use HasFactory;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
+    /** @var array<int, string> */
     protected $fillable = [
         'uid',
         'name',
@@ -28,11 +24,7 @@ class SyndicationTarget extends Model
         'user_photo',
     ];
 
-    /**
-     * The attributes that are visible when serializing the model.
-     *
-     * @var array<string>
-     */
+    /** @var array<int, string> */
     protected $visible = [
         'uid',
         'name',
@@ -40,21 +32,12 @@ class SyndicationTarget extends Model
         'user',
     ];
 
-    /**
-     * The accessors to append to the model's array form.
-     *
-     * @var array
-     */
+    /** @var array<int, string> */
     protected $appends = [
         'service',
         'user',
     ];
 
-    /**
-     * Get the service data as a single attribute.
-     *
-     * @vreturn Attribute
-     */
     protected function service(): Attribute
     {
         return Attribute::get(
@@ -66,11 +49,6 @@ class SyndicationTarget extends Model
         );
     }
 
-    /**
-     * Get the user data as a single attribute.
-     *
-     * @vreturn Attribute
-     */
     protected function user(): Attribute
     {
         return Attribute::get(

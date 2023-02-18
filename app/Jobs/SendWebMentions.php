@@ -22,19 +22,16 @@ class SendWebMentions implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
-    protected Note $note;
-
     /**
-     * Create the job instance, inject dependencies.
+     * Create a new job instance.
      */
-    public function __construct(Note $note)
-    {
-        $this->note = $note;
+    public function __construct(
+        protected Note $note
+    ) {
     }
 
     /**
      * Execute the job.
-     *
      *
      * @throws GuzzleException
      */
@@ -59,7 +56,6 @@ class SendWebMentions implements ShouldQueue
 
     /**
      * Discover if a URL has a webmention endpoint.
-     *
      *
      * @throws GuzzleException
      */
@@ -126,8 +122,6 @@ class SendWebMentions implements ShouldQueue
 
     /**
      * Resolve a URI if necessary.
-     *
-     * @param  string  $base The base of the URL
      */
     public function resolveUri(string $url, string $base): string
     {

@@ -8,11 +8,9 @@ use Illuminate\Database\Seeder;
 class WebMentionsTableSeeder extends Seeder
 {
     /**
-     * Run the database seeds.
-     *
-     * @return void
+     * Seed the webmentions table.
      */
-    public function run()
+    public function run(): void
     {
         // WebMention Aaron
         WebMention::create([

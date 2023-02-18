@@ -63,7 +63,7 @@ return [
     | Application Long URL
     |--------------------------------------------------------------------------
     |
-    | The short URL for the application
+    | The long URL for the application
     |
     */
 
@@ -191,7 +191,9 @@ return [
     |--------------------------------------------------------------------------
     | Font Link
     |--------------------------------------------------------------------------
+    |
     | Which URL should the app load custom fonts from
+    |
     */
 
     'font_link' => env('FONT_LINK'),

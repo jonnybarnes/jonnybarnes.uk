@@ -7,13 +7,21 @@
 >
     <testsuites>
         <testsuite name="Unit">
-            <directory suffix="Test.php">./tests/Unit</directory>
+            <directory>./tests/Unit</directory>
         </testsuite>
 
         <testsuite name="Feature">
-            <directory suffix="Test.php">./tests/Feature</directory>
+            <directory>./tests/Feature</directory>
         </testsuite>
     </testsuites>
+    <coverage pathCoverage="true">
+        <include>
+            <directory suffix=".php">./app</directory>
+        </include>
+        <report>
+            <html outputDirectory="./public/coverage"/>
+        </report>
+    </coverage>
     <php>
         <env name="APP_ENV" value="testing"/>
         <env name="DB_DATABASE" value="jbukdev_testing"/>
@@ -25,12 +33,4 @@
         <env name="TELESCOPE_ENABLED" value="false"/>
         <ini name="memory_limit" value="512M"/>
     </php>
-    <coverage pathCoverage="true" includeUncoveredFiles="true" processUncoveredFiles="true">
-        <include>
-            <directory suffix=".php">./app</directory>
-        </include>
-        <report>
-            <html outputDirectory="./public/coverage"/>
-        </report>
-    </coverage>
 </phpunit>

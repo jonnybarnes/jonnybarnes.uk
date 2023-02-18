@@ -20,25 +20,23 @@ class SaveProfileImage implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
-    protected array $microformats;
-
     /**
      * Create a new job instance.
      */
-    public function __construct(array $microformats)
-    {
-        $this->microformats = $microformats;
+    public function __construct(
+        protected array $microformats
+    ) {
     }
 
     /**
      * Execute the job.
      */
-    public function handle(Authorship $authorship)
+    public function handle(Authorship $authorship): void
     {
         try {
             $author = $authorship->findAuthor($this->microformats);
         } catch (AuthorshipParserException) {
-            return null;
+            return;
         }
 
         $photo = Arr::get($author, 'properties.photo.0');
@@ -47,8 +45,8 @@ class SaveProfileImage implements ShouldQueue
         //dont save pbs.twimg.com links
         if (
             $photo
-            && parse_url($photo, PHP_URL_HOST) != 'pbs.twimg.com'
-            && parse_url($photo, PHP_URL_HOST) != 'twitter.com'
+            && parse_url($photo, PHP_URL_HOST) !== 'pbs.twimg.com'
+            && parse_url($photo, PHP_URL_HOST) !== 'twitter.com'
         ) {
             $client = resolve(Client::class);
 
@@ -67,8 +65,8 @@ class SaveProfileImage implements ShouldQueue
             $parts = explode('/', $path);
             $name = array_pop($parts);
             $dir = implode('/', $parts);
-            if (! is_dir($dir)) {
-                mkdir($dir, 0755, true);
+            if (! is_dir($dir) && ! mkdir($dir, 0755, true) && ! is_dir($dir)) {
+                throw new \RuntimeException(sprintf('Directory "%s" was not created', $dir));
             }
             file_put_contents("$dir/$name", $image);
         }

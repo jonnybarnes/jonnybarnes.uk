@@ -17,36 +17,20 @@ class Place extends Model
     use HasFactory;
     use Sluggable;
 
-    /**
-     * Get the route key for the model.
-     *
-     * @return string
-     */
-    public function getRouteKeyName()
+    public function getRouteKeyName(): string
     {
         return 'slug';
     }
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
+    /** @var array<int, string> */
     protected $fillable = ['name', 'slug'];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array
-     */
+    /** @var array<string, string> */
     protected $casts = [
         'latitude' => 'float',
         'longitude' => 'float',
     ];
 
-    /**
-     * Return the sluggable configuration array for this model.
-     */
     public function sluggable(): array
     {
         return [
@@ -57,12 +41,7 @@ class Place extends Model
         ];
     }
 
-    /**
-     * Define the relationship with Notes.
-     *
-     * @return HasMany
-     */
-    public function notes()
+    public function notes(): HasMany
     {
         return $this->hasMany('App\Models\Note');
     }

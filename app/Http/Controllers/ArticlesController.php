@@ -27,10 +27,8 @@ class ArticlesController extends Controller
 
     /**
      * Show a single article.
-     *
-     * @return RedirectResponse|View
      */
-    public function show(int $year, int $month, string $slug)
+    public function show(int $year, int $month, string $slug): RedirectResponse|View
     {
         try {
             $article = Article::where('titleurl', $slug)->firstOrFail();
@@ -49,8 +47,7 @@ class ArticlesController extends Controller
     }
 
     /**
-     * We only have the ID, work out post title, year and month
-     * and redirect to it.
+     * We only have the ID, work out post title, year and month and redirect to it.
      */
     public function onlyIdInUrl(string $idFromUrl): RedirectResponse
     {

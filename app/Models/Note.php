@@ -6,7 +6,6 @@ namespace App\Models;
 
 use App\CommonMark\Generators\ContactMentionGenerator;
 use App\CommonMark\Renderers\ContactMentionRenderer;
-use App\Exceptions\TwitterContentException;
 use Codebird\Codebird;
 use Exception;
 use GuzzleHttp\Client;
@@ -58,73 +57,46 @@ class Note extends Model
         $this->contacts = null;
     }
 
-    /**
-     * The database table used by the model.
-     *
-     * @var string
-     */
+    /** @var string */
     protected $table = 'notes';
 
-    /**
-     * Mass-assignment.
-     *
-     * @var array
-     */
+    /** @var array<int, string> */
     protected $fillable = [
         'note',
         'in_reply_to',
         'client_id',
     ];
 
-    /**
-     * Hide the column used with Laravel Scout.
-     *
-     * @var array
-     */
+    /** @var array<int, string> */
     protected $hidden = ['searchable'];
 
-    /**
-     * Define the relationship with tags.
-     */
     public function tags(): BelongsToMany
     {
         return $this->belongsToMany(Tag::class);
     }
 
-    /**
-     * Define the relationship with clients.
-     */
     public function client(): BelongsTo
     {
         return $this->belongsTo(MicropubClient::class, 'client_id', 'client_url');
     }
 
-    /**
-     * Define the relationship with webmentions.
-     */
     public function webmentions(): MorphMany
     {
         return $this->morphMany(WebMention::class, 'commentable');
     }
 
-    /**
-     * Define the relationship with places.
-     */
     public function place(): BelongsTo
     {
         return $this->belongsTo(Place::class);
     }
 
-    /**
-     * Define the relationship with media.
-     */
     public function media(): HasMany
     {
         return $this->hasMany(Media::class);
     }
 
     /**
-     * Set the attributes to be indexed for searching with Scout.
+     * @return array<int, string>
      */
     public function toSearchableArray(): array
     {
@@ -133,9 +105,6 @@ class Note extends Model
         ];
     }
 
-    /**
-     * Normalize the note to Unicode FORM C.
-     */
     public function setNoteAttribute(?string $value): void
     {
         if ($value !== null) {
@@ -195,58 +164,37 @@ class Note extends Model
         return $note;
     }
 
-    /**
-     * Generate the NewBase60 ID from primary ID.
-     */
     public function getNb60idAttribute(): string
     {
         // we cast to string because sometimes the nb60id is an “int”
         return (string) resolve(Numbers::class)->numto60($this->id);
     }
 
-    /**
-     * The Long URL for a note.
-     */
     public function getLongurlAttribute(): string
     {
         return config('app.url') . '/notes/' . $this->nb60id;
     }
 
-    /**
-     * The Short URL for a note.
-     */
     public function getShorturlAttribute(): string
     {
         return config('app.shorturl') . '/notes/' . $this->nb60id;
     }
 
-    /**
-     * Get the ISO8601 value for mf2.
-     */
     public function getIso8601Attribute(): string
     {
         return $this->updated_at->toISO8601String();
     }
 
-    /**
-     * Get the ISO8601 value for mf2.
-     */
     public function getHumandiffAttribute(): string
     {
         return $this->updated_at->diffForHumans();
     }
 
-    /**
-     * Get the publish date value for RSS feeds.
-     */
     public function getPubdateAttribute(): string
     {
         return $this->updated_at->toRSSString();
     }
 
-    /**
-     * Get the latitude value.
-     */
     public function getLatitudeAttribute(): ?float
     {
         if ($this->place !== null) {
@@ -262,9 +210,6 @@ class Note extends Model
         return null;
     }
 
-    /**
-     * Get the longitude value.
-     */
     public function getLongitudeAttribute(): ?float
     {
         if ($this->place !== null) {
@@ -281,8 +226,9 @@ class Note extends Model
     }
 
     /**
-     * Get the address for a note. This is either a reverse geo-code from the
-     * location, or is derived from the associated place.
+     * Get the address for a note.
+     *
+     * This is either a reverse geo-code from the location, or is derived from the associated place.
      */
     public function getAddressAttribute(): ?string
     {
@@ -337,9 +283,6 @@ class Note extends Model
      * Show a specific form of the note for twitter.
      *
      * That is we swap the contacts names for their known Twitter handles.
-     *
-     *
-     * @throws TwitterContentException
      */
     public function getTwitterContentAttribute(): string
     {
@@ -389,7 +332,7 @@ class Note extends Model
     }
 
     /**
-     * Swap contact’s nicks for a full  mf2 h-card.
+     * Swap contact’s nicks for a full mf2 h-card.
      *
      * Take note that this method does two things, given @username (NOT [@username](URL)!)
      * we try to create a fancy hcard from our contact info. If this is not possible
@@ -473,9 +416,6 @@ class Note extends Model
         );
     }
 
-    /**
-     * Pass a note through the commonmark library.
-     */
     private function convertMarkdown(string $note): string
     {
         $config = [
@@ -500,9 +440,6 @@ class Note extends Model
         return $markdownConverter->convert($note)->getContent();
     }
 
-    /**
-     * Do a reverse geocode lookup of a `lat,lng` value.
-     */
     public function reverseGeoCode(float $latitude, float $longitude): string
     {
         $latLng = $latitude . ',' . $longitude;

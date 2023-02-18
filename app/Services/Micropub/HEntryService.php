@@ -13,10 +13,7 @@ use Illuminate\Support\Arr;
 class HEntryService
 {
     /**
-     * Create the relavent model from some h-entry data.
-     *
-     * @param  array  $request Data from request()->all()
-     * @param  string|null  $client The micropub client that made the request
+     * Create the relevant model from some h-entry data.
      */
     public function process(array $request, ?string $client = null): ?string
     {

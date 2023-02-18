@@ -18,16 +18,12 @@ class SaveScreenshot implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    private Bookmark $bookmark;
-
     /**
      * Create a new job instance.
-     *
-     * @return void
      */
-    public function __construct(Bookmark $bookmark)
-    {
-        $this->bookmark = $bookmark;
+    public function __construct(
+        protected Bookmark $bookmark
+    ) {
     }
 
     /**

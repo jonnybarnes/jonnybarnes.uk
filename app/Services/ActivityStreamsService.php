@@ -5,15 +5,14 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Models\Note;
+use Illuminate\Http\Response;
 
 class ActivityStreamsService
 {
     /**
      * Return the relevant data to an AS2.0 request to the root path.
-     *
-     * @return \Illuminate\Http\Response
      */
-    public function siteOwnerResponse()
+    public function siteOwnerResponse(): Response
     {
         $data = json_encode([
             '@context' => 'https://www.w3.org/ns/activitystreams',
@@ -28,10 +27,8 @@ class ActivityStreamsService
 
     /**
      * Return the relevant data to an AS2.0 request for a particular note.
-     *
-     * @return \Illuminate\Http\Response
      */
-    public function singleNoteResponse(Note $note)
+    public function singleNoteResponse(Note $note): Response
     {
         $data = json_encode([
             '@context' => 'https://www.w3.org/ns/activitystreams',

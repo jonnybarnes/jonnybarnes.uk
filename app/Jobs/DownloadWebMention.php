@@ -20,33 +20,25 @@ class DownloadWebMention implements ShouldQueue
     use SerializesModels;
 
     /**
-     * The webmention source URL.
-     *
-     * @var string
-     */
-    protected $source;
-
-    /**
      * Create a new job instance.
      */
-    public function __construct(string $source)
-    {
-        $this->source = $source;
+    public function __construct(
+        protected string $source
+    ) {
     }
 
     /**
      * Execute the job.
      *
-     *
      * @throws GuzzleException
      * @throws FileNotFoundException
      */
-    public function handle(Client $guzzle)
+    public function handle(Client $guzzle): void
     {
         $response = $guzzle->request('GET', $this->source);
         //4XX and 5XX responses should get Guzzle to throw an exception,
         //Laravel should catch and retry these automatically.
-        if ($response->getStatusCode() == '200') {
+        if ($response->getStatusCode() === 200) {
             $filesystem = new FileSystem();
             $filename = storage_path('HTML') . '/' . $this->createFilenameFromURL($this->source);
             //backup file first
@@ -69,7 +61,7 @@ class DownloadWebMention implements ShouldQueue
             );
             //remove backup if the same
             if ($filesystem->exists($filenameBackup)) {
-                if ($filesystem->get($filename) == $filesystem->get($filenameBackup)) {
+                if ($filesystem->get($filename) === $filesystem->get($filenameBackup)) {
                     $filesystem->delete($filenameBackup);
                 }
             }
@@ -78,13 +70,11 @@ class DownloadWebMention implements ShouldQueue
 
     /**
      * Create a file path from a URL. This is used when caching the HTML response.
-     *
-     * @return string The path name
      */
-    private function createFilenameFromURL(string $url)
+    private function createFilenameFromURL(string $url): string
     {
         $filepath = str_replace(['https://', 'http://'], ['https/', 'http/'], $url);
-        if (substr($filepath, -1) == '/') {
+        if (str_ends_with($filepath, '/')) {
             $filepath .= 'index.html';
         }
 

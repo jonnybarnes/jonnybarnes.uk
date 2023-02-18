@@ -24,30 +24,23 @@ class ProcessWebMention implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
-    /** @var Note */
-    protected $note;
-
-    /** @var string */
-    protected $source;
-
     /**
      * Create a new job instance.
      */
-    public function __construct(Note $note, string $source)
-    {
-        $this->note = $note;
-        $this->source = $source;
+    public function __construct(
+        protected Note $note,
+        protected string $source
+    ) {
     }
 
     /**
      * Execute the job.
      *
-     *
      * @throws RemoteContentNotFoundException
      * @throws GuzzleException
      * @throws InvalidMentionException
      */
-    public function handle(Parser $parser, Client $guzzle)
+    public function handle(Parser $parser, Client $guzzle): void
     {
         try {
             $response = $guzzle->request('GET', $this->source);
@@ -60,8 +53,8 @@ class ProcessWebMention implements ShouldQueue
         foreach ($webmentions as $webmention) {
             // check webmention still references target
             // we try each type of mention (reply/like/repost)
-            if ($webmention->type == 'in-reply-to') {
-                if ($parser->checkInReplyTo($microformats, $this->note->longurl) == false) {
+            if ($webmention->type === 'in-reply-to') {
+                if ($parser->checkInReplyTo($microformats, $this->note->longurl) === false) {
                     // it doesn’t so delete
                     $webmention->delete();
 
@@ -74,16 +67,16 @@ class ProcessWebMention implements ShouldQueue
 
                 return;
             }
-            if ($webmention->type == 'like-of') {
-                if ($parser->checkLikeOf($microformats, $this->note->longurl) == false) {
+            if ($webmention->type === 'like-of') {
+                if ($parser->checkLikeOf($microformats, $this->note->longurl) === false) {
                     // it doesn’t so delete
                     $webmention->delete();
 
                     return;
                 } // note we don’t need to do anything if it still is a like
             }
-            if ($webmention->type == 'repost-of') {
-                if ($parser->checkRepostOf($microformats, $this->note->longurl) == false) {
+            if ($webmention->type === 'repost-of') {
+                if ($parser->checkRepostOf($microformats, $this->note->longurl) === false) {
                     // it doesn’t so delete
                     $webmention->delete();
 
@@ -107,26 +100,23 @@ class ProcessWebMention implements ShouldQueue
 
     /**
      * Save the HTML of a webmention for future use.
-     *
-     * @param  string  $html
-     * @param  string  $url
      */
-    private function saveRemoteContent($html, $url)
+    private function saveRemoteContent(string $html, string $url): void
     {
         $filenameFromURL = str_replace(
             ['https://', 'http://'],
             ['https/', 'http/'],
             $url
         );
-        if (substr($url, -1) == '/') {
+        if (str_ends_with($url, '/')) {
             $filenameFromURL .= 'index.html';
         }
         $path = storage_path() . '/HTML/' . $filenameFromURL;
         $parts = explode('/', $path);
         $name = array_pop($parts);
         $dir = implode('/', $parts);
-        if (! is_dir($dir)) {
-            mkdir($dir, 0755, true);
+        if (! is_dir($dir) && ! mkdir($dir, 0755, true) && ! is_dir($dir)) {
+            throw new \RuntimeException(sprintf('Directory "%s" was not created', $dir));
         }
         file_put_contents("$dir/$name", $html);
     }

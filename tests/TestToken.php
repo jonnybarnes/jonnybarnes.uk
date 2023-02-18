@@ -7,7 +7,7 @@ use Lcobucci\JWT\Configuration;
 
 trait TestToken
 {
-    public function getToken()
+    public function getToken(): string
     {
         $config = $this->app->make(Configuration::class);
 
@@ -20,7 +20,7 @@ trait TestToken
             ->toString();
     }
 
-    public function getTokenWithIncorrectScope()
+    public function getTokenWithIncorrectScope(): string
     {
         $config = $this->app->make(Configuration::class);
 

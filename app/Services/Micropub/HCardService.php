@@ -11,8 +11,6 @@ class HCardService
 {
     /**
      * Create a Place from h-card data, return the URL.
-     *
-     * @param  array  $request Data from request()->all()
      */
     public function process(array $request): string
     {
@@ -28,8 +26,7 @@ class HCardService
             $data['latitude'] = Arr::get($request, 'latitude');
             $data['longitude'] = Arr::get($request, 'longitude');
         }
-        $place = resolve(PlaceService::class)->createPlace($data);
 
-        return $place->longurl;
+        return resolve(PlaceService::class)->createPlace($data)->longurl;
     }
 }

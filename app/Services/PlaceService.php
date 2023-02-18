@@ -37,8 +37,6 @@ class PlaceService
 
     /**
      * Create a place from a h-card checkin, for example from OwnYourSwarm.
-     *
-     * @param array
      */
     public function createPlaceFromCheckin(array $checkin): Place
     {

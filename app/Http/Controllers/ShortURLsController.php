@@ -35,17 +35,15 @@ class ShortURLsController extends Controller
 
     /**
      * Redirect a short url of this site out to a long one based on post type.
-     * Further redirects may happen.
      *
-     * @param  string  Post type
-     * @param  string  Post ID
+     * Further redirects may happen.
      */
     public function expandType(string $type, string $postId): RedirectResponse
     {
-        if ($type == 't') {
+        if ($type === 't') {
             $type = 'notes';
         }
-        if ($type == 'b') {
+        if ($type === 'b') {
             $type = 'blog/s';
         }
 

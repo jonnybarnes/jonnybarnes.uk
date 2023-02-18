@@ -20,21 +20,18 @@ class ProcessMedia implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
-    /** @var string */
-    protected $filename;
-
     /**
      * Create a new job instance.
      */
-    public function __construct(string $filename)
-    {
-        $this->filename = $filename;
+    public function __construct(
+        protected string $filename
+    ) {
     }
 
     /**
      * Execute the job.
      */
-    public function handle(ImageManager $manager)
+    public function handle(ImageManager $manager): void
     {
         //open file
         try {
