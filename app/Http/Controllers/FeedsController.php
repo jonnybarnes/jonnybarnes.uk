@@ -96,10 +96,8 @@ class FeedsController extends Controller
 
     /**
      * Returns the notes JSON feed.
-     *
-     * @return array
      */
-    public function notesJson()
+    public function notesJson(): array
     {
         $notes = Note::latest()->with('media')->take(20)->get();
         $data = [

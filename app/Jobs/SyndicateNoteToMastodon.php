@@ -19,8 +19,6 @@ class SyndicateNoteToMastodon implements ShouldQueue
 
     /**
      * Create a new job instance.
-     *
-     * @return void
      */
     public function __construct(
         protected Note $note
@@ -29,7 +27,6 @@ class SyndicateNoteToMastodon implements ShouldQueue
 
     /**
      * Execute the job.
-     *
      *
      * @throws GuzzleException
      */

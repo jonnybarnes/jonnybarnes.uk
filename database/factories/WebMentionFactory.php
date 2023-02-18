@@ -5,6 +5,9 @@ namespace Database\Factories;
 use App\Models\WebMention;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
+/**
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\WebMention>
+ */
 class WebMentionFactory extends Factory
 {
     /**
@@ -17,9 +20,9 @@ class WebMentionFactory extends Factory
     /**
      * Define the model's default state.
      *
-     * @return array
+     * @return array<string, mixed>
      */
-    public function definition()
+    public function definition(): array
     {
         return [
             'source' => $this->faker->url,

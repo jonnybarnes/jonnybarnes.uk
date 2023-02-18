@@ -8,11 +8,9 @@ use Illuminate\Database\Seeder;
 class PlacesTableSeeder extends Seeder
 {
     /**
-     * Run the database seeds.
-     *
-     * @return void
+     * Seed the places table.
      */
-    public function run()
+    public function run(): void
     {
         $place = new Place();
         $place->name = 'The Bridgewater Pub';

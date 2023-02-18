@@ -10,7 +10,7 @@ use Tests\TestCase;
 class AdminTest extends TestCase
 {
     /** @test */
-    public function adminPageRedirectsUnauthedUsersToLoginPage(): void
+    public function adminPageRedirectsUnauthorisedUsersToLoginPage(): void
     {
         $response = $this->get('/admin');
         $response->assertRedirect('/login');

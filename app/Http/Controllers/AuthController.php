@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
@@ -12,10 +13,8 @@ class AuthController extends Controller
 {
     /**
      * Show the login form.
-     *
-     * @return View|RedirectResponse
      */
-    public function showLogin()
+    public function showLogin(): View|RedirectResponse
     {
         if (Auth::check()) {
             return redirect('/');
@@ -25,12 +24,11 @@ class AuthController extends Controller
     }
 
     /**
-     * Log in a user, set a session variable, check credentials against
-     * the .env file.
+     * Log in a user, set a session variable, check credentials against the `.env` file.
      */
-    public function login(): RedirectResponse
+    public function login(Request $request): RedirectResponse
     {
-        $credentials = request()->only('name', 'password');
+        $credentials = $request->only('name', 'password');
 
         if (Auth::attempt($credentials, true)) {
             return redirect()->intended('/');
@@ -40,11 +38,9 @@ class AuthController extends Controller
     }
 
     /**
-     * Show the form to logout a user.
-     *
-     * @return View|RedirectResponse
+     * Show the form to allow a user to log-out.
      */
-    public function showLogout()
+    public function showLogout(): View|RedirectResponse
     {
         if (Auth::check() === false) {
             // The user is not logged in, just redirect them home
@@ -56,8 +52,6 @@ class AuthController extends Controller
 
     /**
      * Log the user out from their current session.
-     *
-     * @return RedirectResponse;
      */
     public function logout(): RedirectResponse
     {

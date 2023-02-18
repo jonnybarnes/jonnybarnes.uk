@@ -6,6 +6,9 @@ use App\Models\Bookmark;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
 
+/**
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Bookmark>
+ */
 class BookmarkFactory extends Factory
 {
     /**
@@ -18,9 +21,9 @@ class BookmarkFactory extends Factory
     /**
      * Define the model's default state.
      *
-     * @return array
+     * @return array<string, mixed>
      */
-    public function definition()
+    public function definition(): array
     {
         $now = Carbon::now()->subDays(rand(5, 15));
 

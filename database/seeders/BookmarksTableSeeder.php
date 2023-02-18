@@ -9,11 +9,9 @@ use Illuminate\Database\Seeder;
 class BookmarksTableSeeder extends Seeder
 {
     /**
-     * Run the database seeds.
-     *
-     * @return void
+     * Seed the bookmarks table.
      */
-    public function run()
+    public function run(): void
     {
         Bookmark::factory(10)
             ->has(Tag::factory()->count(1))

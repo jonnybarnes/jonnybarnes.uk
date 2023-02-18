@@ -6,6 +6,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class LocalhostSessionMiddleware
 {
@@ -13,10 +14,8 @@ class LocalhostSessionMiddleware
      * Whilst we are developing locally, automatically log in as
      * `['me' => config('app.url')]` as I can’t manually log in as
      * a .localhost domain.
-     *
-     * @return mixed
      */
-    public function handle(Request $request, Closure $next)
+    public function handle(Request $request, Closure $next): Response
     {
         if (config('app.env') !== 'production') {
             session(['me' => config('app.url')]);

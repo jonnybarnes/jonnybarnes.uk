@@ -16,6 +16,7 @@ class Like extends Model
     use FilterHtml;
     use HasFactory;
 
+    /** @var array<int, string> */
     protected $fillable = ['url'];
 
     protected function url(): Attribute

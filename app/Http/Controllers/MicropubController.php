@@ -115,34 +115,34 @@ class MicropubController extends Controller
      * appropriately. Further if the request has the query parameter
      * syndicate-to we respond with the known syndication endpoints.
      */
-    public function get(): JsonResponse
+    public function get(Request $request): JsonResponse
     {
         try {
-            $tokenData = $this->tokenService->validateToken(request()->input('access_token'));
+            $tokenData = $this->tokenService->validateToken($request->input('access_token'));
         } catch (RequiredConstraintsViolated|InvalidTokenStructure) {
             return (new MicropubResponses())->invalidTokenResponse();
         }
 
-        if (request()->input('q') === 'syndicate-to') {
+        if ($request->input('q') === 'syndicate-to') {
             return response()->json([
                 'syndicate-to' => SyndicationTarget::all(),
             ]);
         }
 
-        if (request()->input('q') === 'config') {
+        if ($request->input('q') === 'config') {
             return response()->json([
                 'syndicate-to' => SyndicationTarget::all(),
                 'media-endpoint' => route('media-endpoint'),
             ]);
         }
 
-        if (request()->has('q') && substr(request()->input('q'), 0, 4) === 'geo:') {
+        if ($request->has('q') && str_starts_with($request->input('q'), 'geo:')) {
             preg_match_all(
                 '/([0-9.\-]+)/',
-                request()->input('q'),
+                $request->input('q'),
                 $matches
             );
-            $distance = (count($matches[0]) == 3) ? 100 * $matches[0][2] : 1000;
+            $distance = (count($matches[0]) === 3) ? 100 * $matches[0][2] : 1000;
             $places = Place::near(
                 (object) ['latitude' => $matches[0][0], 'longitude' => $matches[0][1]],
                 $distance
@@ -168,22 +168,19 @@ class MicropubController extends Controller
     /**
      * Determine the client id from the access token sent with the request.
      *
-     *
      * @throws RequiredConstraintsViolated
      */
     private function getClientId(): string
     {
         return resolve(TokenService::class)
-            ->validateToken(request()->input('access_token'))
+            ->validateToken(app('request')->input('access_token'))
             ->claims()->get('client_id');
     }
 
     /**
      * Save the details of the micropub request to a log file.
-     *
-     * @param  array  $request This is the info from request()->all()
      */
-    private function logMicropubRequest(array $request)
+    private function logMicropubRequest(array $request): void
     {
         $logger = new Logger('micropub');
         $logger->pushHandler(new StreamHandler(storage_path('logs/micropub.log')));

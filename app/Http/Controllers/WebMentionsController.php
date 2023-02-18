@@ -7,6 +7,7 @@ namespace App\Http\Controllers;
 use App\Jobs\ProcessWebMention;
 use App\Models\Note;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\View\View;
 use Jonnybarnes\IndieWeb\Numbers;
@@ -27,10 +28,10 @@ class WebMentionsController extends Controller
     /**
      * Receive and process a webmention.
      */
-    public function receive(): Response
+    public function receive(Request $request): Response
     {
         //first we trivially reject requests that lack all required inputs
-        if ((request()->has('target') !== true) || (request()->has('source') !== true)) {
+        if (($request->has('target') !== true) || ($request->has('source') !== true)) {
             return response(
                 'You need both the target and source parameters',
                 400
@@ -38,15 +39,15 @@ class WebMentionsController extends Controller
         }
 
         //next check the $target is valid
-        $path = parse_url(request()->input('target'), PHP_URL_PATH);
+        $path = parse_url($request->input('target'), PHP_URL_PATH);
         $pathParts = explode('/', $path);
 
-        if ($pathParts[1] == 'notes') {
+        if ($pathParts[1] === 'notes') {
             //we have a note
             $noteId = $pathParts[2];
             try {
                 $note = Note::findOrFail(resolve(Numbers::class)->b60tonum($noteId));
-                dispatch(new ProcessWebMention($note, request()->input('source')));
+                dispatch(new ProcessWebMention($note, $request->input('source')));
             } catch (ModelNotFoundException $e) {
                 return response('This note doesn’t exist.', 400);
             }
@@ -56,7 +57,7 @@ class WebMentionsController extends Controller
                 202
             );
         }
-        if ($pathParts[1] == 'blog') {
+        if ($pathParts[1] === 'blog') {
             return response(
                 'I don’t accept webmentions for blog posts yet.',
                 501

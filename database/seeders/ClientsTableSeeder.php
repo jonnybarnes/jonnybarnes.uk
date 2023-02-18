@@ -10,11 +10,9 @@ use Illuminate\Support\Facades\DB;
 class ClientsTableSeeder extends Seeder
 {
     /**
-     * Run the database seeds.
-     *
-     * @return void
+     * Seed the clients table.
      */
-    public function run()
+    public function run(): void
     {
         DB::table('clients')->insert([
             'client_url' => 'https://jbl5.dev/notes/new',

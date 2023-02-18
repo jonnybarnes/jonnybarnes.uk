@@ -25,10 +25,8 @@ class AppServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap any application services.
-     *
-     * @return void
      */
-    public function boot()
+    public function boot(): void
     {
         Note::observe(NoteObserver::class);
 
@@ -144,10 +142,8 @@ class AppServiceProvider extends ServiceProvider
 
     /**
      * Register any application services.
-     *
-     * @return void
      */
-    public function register()
+    public function register(): void
     {
         if ($this->app->environment('local', 'testing')) {
             $this->app->register(DuskServiceProvider::class);

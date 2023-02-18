@@ -20,24 +20,20 @@ class SyndicateBookmarkToTwitter implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
-    /** @var Bookmark */
-    protected $bookmark;
-
     /**
      * Create a new job instance.
      */
-    public function __construct(Bookmark $bookmark)
-    {
-        $this->bookmark = $bookmark;
+    public function __construct(
+        protected Bookmark $bookmark
+    ) {
     }
 
     /**
      * Execute the job.
      *
-     *
      * @throws GuzzleException
      */
-    public function handle(Client $guzzle)
+    public function handle(Client $guzzle): void
     {
         //send webmention
         $response = $guzzle->request(
@@ -52,7 +48,7 @@ class SyndicateBookmarkToTwitter implements ShouldQueue
             ]
         );
         //parse for syndication URL
-        if ($response->getStatusCode() == 201) {
+        if ($response->getStatusCode() === 201) {
             $json = json_decode((string) $response->getBody());
             $syndicates = $this->bookmark->syndicates;
             $syndicates['twitter'] = $json->url;

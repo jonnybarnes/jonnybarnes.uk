@@ -21,7 +21,7 @@ class Handler extends ExceptionHandler
     /**
      * A list of the exception types that are not reported.
      *
-     * @var array
+     * @var array<int, class-string<\Throwable>>
      */
     protected $dontReport = [
         NotFoundHttpException::class,
@@ -29,38 +29,26 @@ class Handler extends ExceptionHandler
     ];
 
     /**
-     * A list of the inputs that are never flashed for validation exceptions.
-     *
-     * @var array
-     */
-    protected $dontFlash = [
-        'password',
-        'password_confirmation',
-    ];
-
-    /**
      * Report or log an exception.
      *
      * This is a great spot to send exceptions to Sentry, Bugsnag, etc.
      *
-     * @return void
-     *
      * @throws Exception
      * @throws Throwable
      */
-    public function report(Throwable $throwable)
+    public function report(Throwable $e): void
     {
-        parent::report($throwable);
+        parent::report($e);
 
-        if (config('logging.slack') && $this->shouldReport($throwable)) {
+        if (config('logging.slack') && $this->shouldReport($e)) {
             $guzzle = new Client([
                 'headers' => [
                     'Content-Type' => 'application/json',
                 ],
             ]);
 
-            $exceptionName = get_class($throwable) ?? 'Unknown Exception';
-            $title = $exceptionName . ': ' . $throwable->getMessage();
+            $exceptionName = get_class($e) ?? 'Unknown Exception';
+            $title = $exceptionName . ': ' . $e->getMessage();
 
             $guzzle->post(
                 config('logging.slack'),

@@ -7,6 +7,9 @@ use Exception;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
 
+/**
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Note>
+ */
 class NoteFactory extends Factory
 {
     /**
@@ -19,11 +22,11 @@ class NoteFactory extends Factory
     /**
      * Define the model's default state.
      *
-     * @return array
+     * @return array<string, mixed>
      *
      * @throws Exception
      */
-    public function definition()
+    public function definition(): array
     {
         $now = Carbon::now()->subDays(random_int(5, 15));
 

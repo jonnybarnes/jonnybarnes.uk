@@ -10,11 +10,9 @@ use Illuminate\Support\Facades\DB;
 class ArticlesTableSeeder extends Seeder
 {
     /**
-     * Run the database seeds.
-     *
-     * @return void
+     * Seed the articles table.
      */
-    public function run()
+    public function run(): void
     {
         $now = Carbon::now()->subMonth()->subDays(5);
         $articleFirst = Article::create([

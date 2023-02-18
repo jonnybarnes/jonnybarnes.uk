@@ -6,6 +6,9 @@ use App\Models\Contact;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
 
+/**
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Contact>
+ */
 class ContactFactory extends Factory
 {
     /**
@@ -18,9 +21,9 @@ class ContactFactory extends Factory
     /**
      * Define the model's default state.
      *
-     * @return array
+     * @return array<string, mixed>
      */
-    public function definition()
+    public function definition(): array
     {
         return [
             'nick' => mb_strtolower($this->faker->firstName),

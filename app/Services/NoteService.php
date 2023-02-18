@@ -18,8 +18,6 @@ class NoteService extends Service
 {
     /**
      * Create a new note.
-     *
-     * @param  array  $request Data from request()->all()
      */
     public function create(array $request, ?string $client = null): Note
     {
@@ -66,8 +64,6 @@ class NoteService extends Service
 
     /**
      * Get the published time from the request to create a new note.
-     *
-     * @param  array  $request Data from request()->all()
      */
     private function getPublished(array $request): ?string
     {
@@ -84,13 +80,11 @@ class NoteService extends Service
 
     /**
      * Get the location data from the request to create a new note.
-     *
-     * @param  array  $request Data from request()->all()
      */
     private function getLocation(array $request): ?string
     {
         $location = Arr::get($request, 'properties.location.0') ?? Arr::get($request, 'location');
-        if (is_string($location) && substr($location, 0, 4) == 'geo:') {
+        if (is_string($location) && str_starts_with($location, 'geo:')) {
             preg_match_all(
                 '/([0-9\.\-]+)/',
                 $location,
@@ -105,8 +99,6 @@ class NoteService extends Service
 
     /**
      * Get the checkin data from the request to create a new note. This will be a Place.
-     *
-     * @param  array  $request Data from request()->all()
      */
     private function getCheckin(array $request): ?Place
     {
@@ -150,12 +142,10 @@ class NoteService extends Service
 
     /**
      * Get the Swarm URL from the syndication data in the request to create a new note.
-     *
-     * @param  array  $request Data from request()->all()
      */
     private function getSwarmUrl(array $request): ?string
     {
-        if (stristr(Arr::get($request, 'properties.syndication.0', ''), 'swarmapp')) {
+        if (str_contains(Arr::get($request, 'properties.syndication.0', ''), 'swarmapp')) {
             return Arr::get($request, 'properties.syndication.0');
         }
 
@@ -164,8 +154,6 @@ class NoteService extends Service
 
     /**
      * Get the syndication targets from the request to create a new note.
-     *
-     * @param  array  $request Data from request()->all()
      */
     private function getSyndicationTargets(array $request): array
     {
@@ -187,8 +175,6 @@ class NoteService extends Service
 
     /**
      * Get the media URLs from the request to create a new note.
-     *
-     * @param  array  $request Data from request()->all()
      */
     private function getMedia(array $request): array
     {
@@ -216,8 +202,6 @@ class NoteService extends Service
 
     /**
      * Get the Instagram photo URL from the request to create a new note.
-     *
-     * @param  array  $request Data from request()->all()
      */
     private function getInstagramUrl(array $request): ?string
     {

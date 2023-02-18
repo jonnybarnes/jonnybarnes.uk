@@ -24,9 +24,6 @@ class TokenEndpointController extends Controller
      */
     protected GuzzleClient $guzzle;
 
-    /**
-     * @var TokenService The Token handling service.
-     */
     protected TokenService $tokenService;
 
     /**

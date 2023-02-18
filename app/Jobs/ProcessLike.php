@@ -25,20 +25,16 @@ class ProcessLike implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
-    /** @var Like */
-    protected $like;
-
     /**
      * Create a new job instance.
      */
-    public function __construct(Like $like)
-    {
-        $this->like = $like;
+    public function __construct(
+        protected Like $like
+    ) {
     }
 
     /**
      * Execute the job.
-     *
      *
      * @throws GuzzleException
      */

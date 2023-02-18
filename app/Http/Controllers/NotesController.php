@@ -9,6 +9,7 @@ use App\Services\ActivityStreamsService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\View\View;
 use Jonnybarnes\IndieWeb\Numbers;
@@ -19,12 +20,10 @@ class NotesController extends Controller
 {
     /**
      * Show all the notes. This is also the homepage.
-     *
-     * @return View|Response
      */
-    public function index()
+    public function index(Request $request): View|Response
     {
-        if (request()->wantsActivityStream()) {
+        if ($request->wantsActivityStream()) {
             return (new ActivityStreamsService())->siteOwnerResponse();
         }
 
@@ -39,11 +38,8 @@ class NotesController extends Controller
 
     /**
      * Show a single note.
-     *
-     * @param  string  $urlId The id of the note
-     * @return View|JsonResponse|Response
      */
-    public function show(string $urlId)
+    public function show(string $urlId): View|JsonResponse|Response
     {
         try {
             $note = Note::nb60($urlId)->with('webmentions')->firstOrFail();
@@ -60,8 +56,6 @@ class NotesController extends Controller
 
     /**
      * Redirect /note/{decID} to /notes/{nb60id}.
-     *
-     * @param  int  $decId The decimal id of the note
      */
     public function redirect(int $decId): RedirectResponse
     {

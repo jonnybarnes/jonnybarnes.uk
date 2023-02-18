@@ -9,11 +9,9 @@ use Illuminate\FileSystem\FileSystem;
 class ContactsTableSeeder extends Seeder
 {
     /**
-     * Run the database seeds.
-     *
-     * @return void
+     * Seed the contacts table.
      */
-    public function run()
+    public function run(): void
     {
         Contact::create([
             'nick' => 'tantek',

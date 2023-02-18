@@ -98,14 +98,13 @@ class MicropubMediaController extends Controller
     /**
      * Process a media item posted to the media endpoint.
      *
-     *
      * @throws BindingResolutionException
      * @throws Exception
      */
-    public function media(): JsonResponse
+    public function media(Request $request): JsonResponse
     {
         try {
-            $tokenData = $this->tokenService->validateToken(request()->input('access_token'));
+            $tokenData = $this->tokenService->validateToken($request->input('access_token'));
         } catch (RequiredConstraintsViolated|InvalidTokenStructure $exception) {
             $micropubResponses = new MicropubResponses();
 
@@ -124,7 +123,7 @@ class MicropubMediaController extends Controller
             return $micropubResponses->insufficientScopeResponse();
         }
 
-        if (request()->hasFile('file') === false) {
+        if ($request->hasFile('file') === false) {
             return response()->json([
                 'response' => 'error',
                 'error' => 'invalid_request',
@@ -132,7 +131,7 @@ class MicropubMediaController extends Controller
             ], 400);
         }
 
-        if (request()->file('file')->isValid() === false) {
+        if ($request->file('file')->isValid() === false) {
             return response()->json([
                 'response' => 'error',
                 'error' => 'invalid_request',
@@ -140,11 +139,11 @@ class MicropubMediaController extends Controller
             ], 400);
         }
 
-        $filename = $this->saveFile(request()->file('file'));
+        $filename = $this->saveFile($request->file('file'));
 
         $manager = resolve(ImageManager::class);
         try {
-            $image = $manager->make(request()->file('file'));
+            $image = $manager->make($request->file('file'));
             $width = $image->width();
         } catch (NotReadableException $exception) {
             // not an image
@@ -152,9 +151,9 @@ class MicropubMediaController extends Controller
         }
 
         $media = Media::create([
-            'token' => request()->bearerToken(),
+            'token' => $request->bearerToken(),
             'path' => 'media/' . $filename,
-            'type' => $this->getFileTypeFromMimeType(request()->file('file')->getMimeType()),
+            'type' => $this->getFileTypeFromMimeType($request->file('file')->getMimeType()),
             'image_widths' => $width,
         ]);
 
@@ -225,7 +224,6 @@ class MicropubMediaController extends Controller
 
     /**
      * Save an uploaded file to the local disk.
-     *
      *
      * @throws Exception
      */

@@ -13,28 +13,15 @@ class Bookmark extends Model
 {
     use HasFactory;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
+    /** @var array<int, string> */
     protected $fillable = ['url', 'name', 'content'];
 
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
+    /** @var array<string, string> */
     protected $casts = [
         'syndicates' => 'array',
     ];
 
-    /**
-     * The tags that belong to the bookmark.
-     *
-     * @return  BelongsToMany
-     */
-    public function tags()
+    public function tags(): BelongsToMany
     {
         return $this->belongsToMany('App\Models\Tag');
     }
