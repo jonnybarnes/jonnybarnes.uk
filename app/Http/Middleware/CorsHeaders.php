@@ -11,7 +11,7 @@ class CorsHeaders
     /**
      * Handle an incoming request.
      */
-    public function handle(Request$request, Closure $next): Response
+    public function handle(Request $request, Closure $next): Response
     {
         $response = $next($request);
         if ($request->path() === 'api/media') {

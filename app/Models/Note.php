@@ -6,7 +6,6 @@ namespace App\Models;
 
 use App\CommonMark\Generators\ContactMentionGenerator;
 use App\CommonMark\Renderers\ContactMentionRenderer;
-use App\Exceptions\TwitterContentException;
 use Codebird\Codebird;
 use Exception;
 use GuzzleHttp\Client;

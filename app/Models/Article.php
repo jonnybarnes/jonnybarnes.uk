@@ -36,7 +36,7 @@ class Article extends Model
     ];
 
     /** @var array<string, string> */
-    protected  $casts = [
+    protected $casts = [
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
         'deleted_at' => 'datetime',

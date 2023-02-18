@@ -115,7 +115,7 @@ class ProcessWebMention implements ShouldQueue
         $parts = explode('/', $path);
         $name = array_pop($parts);
         $dir = implode('/', $parts);
-        if (! is_dir($dir) && ! mkdir($dir, 0755, true) && !is_dir($dir)) {
+        if (! is_dir($dir) && ! mkdir($dir, 0755, true) && ! is_dir($dir)) {
             throw new \RuntimeException(sprintf('Directory "%s" was not created', $dir));
         }
         file_put_contents("$dir/$name", $html);
