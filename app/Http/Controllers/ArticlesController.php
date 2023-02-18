@@ -14,10 +14,6 @@ class ArticlesController extends Controller
 {
     /**
      * Show all articles (with pagination).
-     *
-     * @param  int|null  $year
-     * @param  int|null  $month
-     * @return View
      */
     public function index(int $year = null, int $month = null): View
     {
@@ -31,13 +27,8 @@ class ArticlesController extends Controller
 
     /**
      * Show a single article.
-     *
-     * @param  int  $year
-     * @param  int  $month
-     * @param  string  $slug
-     * @return RedirectResponse|View
      */
-    public function show(int $year, int $month, string $slug)
+    public function show(int $year, int $month, string $slug): RedirectResponse|View
     {
         try {
             $article = Article::where('titleurl', $slug)->firstOrFail();
@@ -56,11 +47,7 @@ class ArticlesController extends Controller
     }
 
     /**
-     * We only have the ID, work out post title, year and month
-     * and redirect to it.
-     *
-     * @param  string  $idFromUrl
-     * @return RedirectResponse
+     * We only have the ID, work out post title, year and month and redirect to it.
      */
     public function onlyIdInUrl(string $idFromUrl): RedirectResponse
     {

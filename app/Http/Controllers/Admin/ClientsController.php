@@ -14,8 +14,6 @@ class ClientsController extends Controller
 {
     /**
      * Show a list of known clients.
-     *
-     * @return \Illuminate\View\View
      */
     public function index(): View
     {
@@ -26,8 +24,6 @@ class ClientsController extends Controller
 
     /**
      * Show form to add a client name.
-     *
-     * @return \Illuminate\View\View
      */
     public function create(): View
     {
@@ -36,8 +32,6 @@ class ClientsController extends Controller
 
     /**
      * Process the request to adda new client name.
-     *
-     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(): RedirectResponse
     {
@@ -51,9 +45,6 @@ class ClientsController extends Controller
 
     /**
      * Show a form to edit a client name.
-     *
-     * @param  int  $clientId
-     * @return \Illuminate\View\View
      */
     public function edit(int $clientId): View
     {
@@ -68,9 +59,6 @@ class ClientsController extends Controller
 
     /**
      * Process the request to edit a client name.
-     *
-     * @param  int  $clientId
-     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(int $clientId): RedirectResponse
     {
@@ -84,9 +72,6 @@ class ClientsController extends Controller
 
     /**
      * Process a request to delete a client.
-     *
-     * @param  int  $clientId
-     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(int $clientId): RedirectResponse
     {

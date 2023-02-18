@@ -18,23 +18,17 @@ class SyndicateNoteToTwitter implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
-    /** @var Note */
-    protected $note;
-
     /**
      * Create a new job instance.
-     *
-     * @param  Note  $note
      */
-    public function __construct(Note $note)
-    {
-        $this->note = $note;
+    public function __construct(
+        protected Note $note
+    ) {
     }
 
     /**
      * Execute the job.
      *
-     * @param  Client  $guzzle
      *
      * @throws GuzzleException
      */

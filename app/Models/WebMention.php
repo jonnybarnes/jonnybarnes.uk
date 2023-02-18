@@ -20,26 +20,13 @@ class WebMention extends Model
     use FilterHtml;
     use HasFactory;
 
-    /**
-     * The database table used by the model.
-     *
-     * @var string
-     */
+    /** @var string */
     protected $table = 'webmentions';
 
-    /**
-     * We shall set a blacklist of non-modifiable model attributes.
-     *
-     * @var array
-     */
+    /** @var array<int, string> */
     protected $guarded = ['id'];
 
-    /**
-     * Define the relationship.
-     *
-     * @return MorphTo
-     */
-    public function commentable()
+    public function commentable(): MorphTo
     {
         return $this->morphTo();
     }
@@ -121,9 +108,6 @@ class WebMention extends Model
 
     /**
      * Create the photo link.
-     *
-     * @param  string  $url
-     * @return string
      */
     public function createPhotoLink(string $url): string
     {

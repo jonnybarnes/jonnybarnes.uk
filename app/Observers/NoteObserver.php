@@ -13,10 +13,8 @@ class NoteObserver
 {
     /**
      * Listen to the Note created event.
-     *
-     * @param  Note  $note
      */
-    public function created(Note $note)
+    public function created(Note $note): void
     {
         $text = Arr::get($note->getAttributes(), 'note');
         if ($text === null) {
@@ -37,10 +35,8 @@ class NoteObserver
 
     /**
      * Listen to the Note updated event.
-     *
-     * @param  Note  $note
      */
-    public function updated(Note $note)
+    public function updated(Note $note): void
     {
         $text = Arr::get($note->getAttributes(), 'note');
         if ($text === null) {
@@ -63,19 +59,14 @@ class NoteObserver
 
     /**
      * Listen to the Note deleting event.
-     *
-     * @param  Note  $note
      */
-    public function deleting(Note $note)
+    public function deleting(Note $note): void
     {
         $note->tags()->detach();
     }
 
     /**
      * Retrieve the tags from a note’s text, tag for form #tag.
-     *
-     * @param  string  $note
-     * @return Collection
      */
     private function getTagsFromNote(string $note): Collection
     {

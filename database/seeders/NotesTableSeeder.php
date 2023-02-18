@@ -13,11 +13,9 @@ use SplFileInfo;
 class NotesTableSeeder extends Seeder
 {
     /**
-     * Run the database seeds.
-     *
-     * @return void
+     * Seed the notes table.
      */
-    public function run()
+    public function run(): void
     {
         $now = Carbon::now()->subDays(rand(2, 5));
         $noteTwitterReply = Note::create([

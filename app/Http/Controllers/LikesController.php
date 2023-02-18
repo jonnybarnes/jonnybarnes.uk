@@ -11,8 +11,6 @@ class LikesController extends Controller
 {
     /**
      * Show the latest likes.
-     *
-     * @return View
      */
     public function index(): View
     {
@@ -23,9 +21,6 @@ class LikesController extends Controller
 
     /**
      * Show a single like.
-     *
-     * @param  Like  $like
-     * @return View
      */
     public function show(Like $like): View
     {

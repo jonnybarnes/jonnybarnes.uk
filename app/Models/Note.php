@@ -6,7 +6,6 @@ namespace App\Models;
 
 use App\CommonMark\Generators\ContactMentionGenerator;
 use App\CommonMark\Renderers\ContactMentionRenderer;
-use App\Exceptions\TwitterContentException;
 use Codebird\Codebird;
 use Exception;
 use GuzzleHttp\Client;
@@ -51,8 +50,6 @@ class Note extends Model
 
     /**
      * Set our contacts variable to null.
-     *
-     * @param  array  $attributes
      */
     public function __construct(array $attributes = [])
     {
@@ -60,85 +57,46 @@ class Note extends Model
         $this->contacts = null;
     }
 
-    /**
-     * The database table used by the model.
-     *
-     * @var string
-     */
+    /** @var string */
     protected $table = 'notes';
 
-    /**
-     * Mass-assignment.
-     *
-     * @var array
-     */
+    /** @var array<int, string> */
     protected $fillable = [
         'note',
         'in_reply_to',
         'client_id',
     ];
 
-    /**
-     * Hide the column used with Laravel Scout.
-     *
-     * @var array
-     */
+    /** @var array<int, string> */
     protected $hidden = ['searchable'];
 
-    /**
-     * Define the relationship with tags.
-     *
-     * @return BelongsToMany
-     */
     public function tags(): BelongsToMany
     {
         return $this->belongsToMany(Tag::class);
     }
 
-    /**
-     * Define the relationship with clients.
-     *
-     * @return BelongsTo
-     */
     public function client(): BelongsTo
     {
         return $this->belongsTo(MicropubClient::class, 'client_id', 'client_url');
     }
 
-    /**
-     * Define the relationship with webmentions.
-     *
-     * @return MorphMany
-     */
     public function webmentions(): MorphMany
     {
         return $this->morphMany(WebMention::class, 'commentable');
     }
 
-    /**
-     * Define the relationship with places.
-     *
-     * @return BelongsTo
-     */
     public function place(): BelongsTo
     {
         return $this->belongsTo(Place::class);
     }
 
-    /**
-     * Define the relationship with media.
-     *
-     * @return HasMany
-     */
     public function media(): HasMany
     {
         return $this->hasMany(Media::class);
     }
 
     /**
-     * Set the attributes to be indexed for searching with Scout.
-     *
-     * @return array
+     * @return array<int, string>
      */
     public function toSearchableArray(): array
     {
@@ -147,11 +105,6 @@ class Note extends Model
         ];
     }
 
-    /**
-     * Normalize the note to Unicode FORM C.
-     *
-     * @param  string|null  $value
-     */
     public function setNoteAttribute(?string $value): void
     {
         if ($value !== null) {
@@ -165,9 +118,6 @@ class Note extends Model
 
     /**
      * Pre-process notes for web-view.
-     *
-     * @param  string|null  $value
-     * @return string|null
      */
     public function getNoteAttribute(?string $value): ?string
     {
@@ -189,8 +139,6 @@ class Note extends Model
      * Provide the content_html for JSON feed.
      *
      * In particular, we want to include media links such as images.
-     *
-     * @return string
      */
     public function getContentAttribute(): string
     {
@@ -216,72 +164,37 @@ class Note extends Model
         return $note;
     }
 
-    /**
-     * Generate the NewBase60 ID from primary ID.
-     *
-     * @return string
-     */
     public function getNb60idAttribute(): string
     {
         // we cast to string because sometimes the nb60id is an “int”
         return (string) resolve(Numbers::class)->numto60($this->id);
     }
 
-    /**
-     * The Long URL for a note.
-     *
-     * @return string
-     */
     public function getLongurlAttribute(): string
     {
         return config('app.url') . '/notes/' . $this->nb60id;
     }
 
-    /**
-     * The Short URL for a note.
-     *
-     * @return string
-     */
     public function getShorturlAttribute(): string
     {
         return config('app.shorturl') . '/notes/' . $this->nb60id;
     }
 
-    /**
-     * Get the ISO8601 value for mf2.
-     *
-     * @return string
-     */
     public function getIso8601Attribute(): string
     {
         return $this->updated_at->toISO8601String();
     }
 
-    /**
-     * Get the ISO8601 value for mf2.
-     *
-     * @return string
-     */
     public function getHumandiffAttribute(): string
     {
         return $this->updated_at->diffForHumans();
     }
 
-    /**
-     * Get the publish date value for RSS feeds.
-     *
-     * @return string
-     */
     public function getPubdateAttribute(): string
     {
         return $this->updated_at->toRSSString();
     }
 
-    /**
-     * Get the latitude value.
-     *
-     * @return float|null
-     */
     public function getLatitudeAttribute(): ?float
     {
         if ($this->place !== null) {
@@ -297,11 +210,6 @@ class Note extends Model
         return null;
     }
 
-    /**
-     * Get the longitude value.
-     *
-     * @return float|null
-     */
     public function getLongitudeAttribute(): ?float
     {
         if ($this->place !== null) {
@@ -318,10 +226,9 @@ class Note extends Model
     }
 
     /**
-     * Get the address for a note. This is either a reverse geo-code from the
-     * location, or is derived from the associated place.
+     * Get the address for a note.
      *
-     * @return string|null
+     * This is either a reverse geo-code from the location, or is derived from the associated place.
      */
     public function getAddressAttribute(): ?string
     {
@@ -337,8 +244,6 @@ class Note extends Model
 
     /**
      * Get the OEmbed html for a tweet the note is a reply to.
-     *
-     * @return object|null
      */
     public function getTwitterAttribute(): ?object
     {
@@ -378,10 +283,6 @@ class Note extends Model
      * Show a specific form of the note for twitter.
      *
      * That is we swap the contacts names for their known Twitter handles.
-     *
-     * @return string
-     *
-     * @throws TwitterContentException
      */
     public function getTwitterContentAttribute(): string
     {
@@ -424,10 +325,6 @@ class Note extends Model
 
     /**
      * Scope a query to select a note via a NewBase60 id.
-     *
-     * @param  Builder  $query
-     * @param  string  $nb60id
-     * @return Builder
      */
     public function scopeNb60(Builder $query, string $nb60id): Builder
     {
@@ -435,15 +332,12 @@ class Note extends Model
     }
 
     /**
-     * Swap contact’s nicks for a full  mf2 h-card.
+     * Swap contact’s nicks for a full mf2 h-card.
      *
      * Take note that this method does two things, given @username (NOT [@username](URL)!)
      * we try to create a fancy hcard from our contact info. If this is not possible
      * due to lack of contact info, we assume @username is a twitter handle and link it
      * as such.
-     *
-     * @param  string  $text
-     * @return string
      */
     private function makeHCards(string $text): string
     {
@@ -475,8 +369,6 @@ class Note extends Model
 
     /**
      * Get the value of the `contacts` property.
-     *
-     * @return array
      */
     public function getContacts(): array
     {
@@ -489,8 +381,6 @@ class Note extends Model
 
     /**
      * Process the note and save the contacts to the `contacts` property.
-     *
-     * @return void
      */
     public function setContacts(): void
     {
@@ -512,9 +402,6 @@ class Note extends Model
      * Given a string and section, finds all hashtags matching
      * `#[\-_a-zA-Z0-9]+` and wraps them in an `a` element with
      * `rel=tag` set and a `href` of 'section/tagged/' + tagname without the #.
-     *
-     * @param  string  $note
-     * @return string
      */
     public function autoLinkHashtag(string $note): string
     {
@@ -529,12 +416,6 @@ class Note extends Model
         );
     }
 
-    /**
-     * Pass a note through the commonmark library.
-     *
-     * @param  string  $note
-     * @return string
-     */
     private function convertMarkdown(string $note): string
     {
         $config = [
@@ -559,13 +440,6 @@ class Note extends Model
         return $markdownConverter->convert($note)->getContent();
     }
 
-    /**
-     * Do a reverse geocode lookup of a `lat,lng` value.
-     *
-     * @param  float  $latitude
-     * @param  float  $longitude
-     * @return string
-     */
     public function reverseGeoCode(float $latitude, float $longitude): string
     {
         $latLng = $latitude . ',' . $longitude;

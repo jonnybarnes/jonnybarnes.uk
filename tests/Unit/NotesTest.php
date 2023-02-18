@@ -27,8 +27,6 @@ class NotesTest extends TestCase
      * relevant sub-methods.
      *
      * @test
-     *
-     * @return void
      */
     public function getNoteAttributeMethodCallsSubMethods(): void
     {
@@ -44,8 +42,6 @@ class NotesTest extends TestCase
      * Look for a default image in the contact’s h-card for the makeHCards method.
      *
      * @test
-     *
-     * @return void
      */
     public function defaultImageUsedAsFallbackInMakehcardsMethod(): void
     {
@@ -68,8 +64,6 @@ class NotesTest extends TestCase
      * Look for a specific profile image in the contact’s h-card.
      *
      * @test
-     *
-     * @return void
      */
     public function specificProfileImageUsedInMakehcardsMethod(): void
     {
@@ -98,8 +92,6 @@ class NotesTest extends TestCase
      * Look for twitter URL when there’s no associated contact.
      *
      * @test
-     *
-     * @return void
      */
     public function twitterLinkIsCreatedWhenNoContactFound(): void
     {

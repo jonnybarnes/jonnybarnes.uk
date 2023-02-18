@@ -17,38 +17,20 @@ class Place extends Model
     use HasFactory;
     use Sluggable;
 
-    /**
-     * Get the route key for the model.
-     *
-     * @return string
-     */
-    public function getRouteKeyName()
+    public function getRouteKeyName(): string
     {
         return 'slug';
     }
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
+    /** @var array<int, string> */
     protected $fillable = ['name', 'slug'];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array
-     */
+    /** @var array<string, string> */
     protected $casts = [
         'latitude' => 'float',
         'longitude' => 'float',
     ];
 
-    /**
-     * Return the sluggable configuration array for this model.
-     *
-     * @return array
-     */
     public function sluggable(): array
     {
         return [
@@ -59,23 +41,13 @@ class Place extends Model
         ];
     }
 
-    /**
-     * Define the relationship with Notes.
-     *
-     * @return HasMany
-     */
-    public function notes()
+    public function notes(): HasMany
     {
         return $this->hasMany('App\Models\Note');
     }
 
     /**
      * Select places near a given location.
-     *
-     * @param  Builder  $query
-     * @param  object  $location
-     * @param  int  $distance
-     * @return Builder
      */
     public function scopeNear(Builder $query, object $location, int $distance = 1000): Builder
     {
@@ -94,10 +66,6 @@ class Place extends Model
 
     /**
      * Select places based on a URL.
-     *
-     * @param  Builder  $query
-     * @param  string  $url
-     * @return Builder
      */
     public function scopeWhereExternalURL(Builder $query, string $url): Builder
     {
@@ -150,9 +118,6 @@ class Place extends Model
 
     /**
      * Given a URL, see if it is one of our known types.
-     *
-     * @param  string  $url
-     * @return string
      */
     private function getType(string $url): string
     {

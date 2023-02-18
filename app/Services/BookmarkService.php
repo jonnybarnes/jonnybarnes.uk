@@ -19,10 +19,6 @@ class BookmarkService extends Service
 {
     /**
      * Create a new Bookmark.
-     *
-     * @param  array  $request Data from request()->all()
-     * @param  string|null  $client
-     * @return Bookmark
      */
     public function create(array $request, ?string $client = null): Bookmark
     {
@@ -75,9 +71,6 @@ class BookmarkService extends Service
 
     /**
      * Given a URL, attempt to save it to the Internet Archive.
-     *
-     * @param  string  $url
-     * @return string
      *
      * @throws InternetArchiveException
      */

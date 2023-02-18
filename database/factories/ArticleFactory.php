@@ -6,6 +6,9 @@ use App\Models\Article;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
 
+/**
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Article>
+ */
 class ArticleFactory extends Factory
 {
     /**
@@ -18,9 +21,9 @@ class ArticleFactory extends Factory
     /**
      * Define the model's default state.
      *
-     * @return array
+     * @return array<string, mixed>
      */
-    public function definition()
+    public function definition(): array
     {
         return [
             'titleurl' => $this->faker->slug(3),

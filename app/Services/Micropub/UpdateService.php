@@ -7,6 +7,7 @@ namespace App\Services\Micropub;
 use App\Models\Media;
 use App\Models\Note;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
@@ -14,11 +15,8 @@ class UpdateService
 {
     /**
      * Process a micropub request to update an entry.
-     *
-     * @param  array  $request Data from request()->all()
-     * @return \Illuminate\Http\JsonResponse
      */
-    public function process(array $request)
+    public function process(array $request): JsonResponse
     {
         $urlPath = parse_url(Arr::get($request, 'url'), PHP_URL_PATH);
 
@@ -42,10 +40,10 @@ class UpdateService
         //got the note, are we dealing with a “replace” request?
         if (Arr::get($request, 'replace')) {
             foreach (Arr::get($request, 'replace') as $property => $value) {
-                if ($property == 'content') {
+                if ($property === 'content') {
                     $note->note = $value[0];
                 }
-                if ($property == 'syndication') {
+                if ($property === 'syndication') {
                     foreach ($value as $syndicationURL) {
                         if (Str::startsWith($syndicationURL, 'https://www.facebook.com')) {
                             $note->facebook_url = $syndicationURL;
@@ -69,7 +67,7 @@ class UpdateService
         //how about “add”
         if (Arr::get($request, 'add')) {
             foreach (Arr::get($request, 'add') as $property => $value) {
-                if ($property == 'syndication') {
+                if ($property === 'syndication') {
                     foreach ($value as $syndicationURL) {
                         if (Str::startsWith($syndicationURL, 'https://www.facebook.com')) {
                             $note->facebook_url = $syndicationURL;
@@ -82,7 +80,7 @@ class UpdateService
                         }
                     }
                 }
-                if ($property == 'photo') {
+                if ($property === 'photo') {
                     foreach ($value as $photoURL) {
                         if (Str::startsWith($photoURL, 'https://')) {
                             $media = new Media();

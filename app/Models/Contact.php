@@ -12,18 +12,10 @@ class Contact extends Model
 {
     use HasFactory;
 
-    /**
-     * The database table used by the model.
-     *
-     * @var string
-     */
+    /** @var string */
     protected $table = 'contacts';
 
-    /**
-     * We shall guard against mass-migration.
-     *
-     * @var array
-     */
+    /** @var array<int, string> */
     protected $fillable = ['nick', 'name', 'homepage', 'twitter', 'facebook'];
 
     protected function photo(): Attribute

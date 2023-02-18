@@ -14,29 +14,15 @@ class Tag extends Model
 {
     use HasFactory;
 
-    /**
-     * We shall set a blacklist of non-modifiable model attributes.
-     *
-     * @var array
-     */
+    /** @var array<int, string> */
     protected $guarded = ['id'];
 
-    /**
-     * Define the relationship with notes.
-     *
-     * @return BelongsToMany
-     */
-    public function notes()
+    public function notes(): BelongsToMany
     {
         return $this->belongsToMany(Note::class);
     }
 
-    /**
-     * The bookmarks that belong to the tag.
-     *
-     * @return BelongsToMany
-     */
-    public function bookmarks()
+    public function bookmarks(): BelongsToMany
     {
         return $this->belongsToMany('App\Models\Bookmark');
     }
@@ -49,11 +35,9 @@ class Tag extends Model
     }
 
     /**
-     * This method actually normalizes a tag. That means lowercase-ing and
-     * removing fancy diatric characters.
+     * Normalizes a tag.
      *
-     * @param  string  $tag
-     * @return string
+     * That means convert to lowercase and removing fancy diatric characters.
      */
     public static function normalize(string $tag): string
     {

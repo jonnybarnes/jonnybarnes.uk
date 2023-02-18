@@ -14,7 +14,7 @@ class SyndicationTargetFactory extends Factory
      *
      * @return array<string, mixed>
      */
-    public function definition()
+    public function definition(): array
     {
         return [
             'uid' => $this->faker->url,

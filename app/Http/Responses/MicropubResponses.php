@@ -10,8 +10,6 @@ class MicropubResponses
 {
     /**
      * Generate a response to be returned when the token has insufficient scope.
-     *
-     * @return JsonResponse
      */
     public function insufficientScopeResponse(): JsonResponse
     {
@@ -24,8 +22,6 @@ class MicropubResponses
 
     /**
      * Generate a response to be returned when the token is invalid.
-     *
-     * @return JsonResponse
      */
     public function invalidTokenResponse(): JsonResponse
     {
@@ -38,8 +34,6 @@ class MicropubResponses
 
     /**
      * Generate a response to be returned when the token has no scope.
-     *
-     * @return JsonResponse
      */
     public function tokenHasNoScopeResponse(): JsonResponse
     {

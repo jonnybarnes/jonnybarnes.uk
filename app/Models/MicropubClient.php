@@ -12,25 +12,12 @@ class MicropubClient extends Model
 {
     use HasFactory;
 
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
+    /** @var string */
     protected $table = 'clients';
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
+    /** @var array<int, string> */
     protected $fillable = ['client_url', 'client_name'];
 
-    /**
-     * Define the relationship with notes.
-     *
-     * @return HasMany
-     */
     public function notes(): HasMany
     {
         return $this->hasMany('App\Models\Note', 'client_id', 'client_url');

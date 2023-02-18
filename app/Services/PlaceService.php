@@ -11,9 +11,6 @@ class PlaceService
 {
     /**
      * Create a place.
-     *
-     * @param  array  $data
-     * @return Place
      */
     public function createPlace(array $data): Place
     {
@@ -40,9 +37,6 @@ class PlaceService
 
     /**
      * Create a place from a h-card checkin, for example from OwnYourSwarm.
-     *
-     * @param array
-     * @return Place
      */
     public function createPlaceFromCheckin(array $checkin): Place
     {

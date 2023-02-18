@@ -11,8 +11,6 @@ class HorizonTest extends TestCase
      * Horizon has its own test suite, here we just test it has been installed successfully.
      *
      * @test
-     *
-     * @return void
      */
     public function horizonIsInstalled(): void
     {

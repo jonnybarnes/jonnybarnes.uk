@@ -8,11 +8,9 @@ use Illuminate\Support\Facades\DB;
 class UsersTableSeeder extends Seeder
 {
     /**
-     * Run the database seeds.
-     *
-     * @return void
+     * Seed the users table.
      */
-    public function run()
+    public function run(): void
     {
         DB::table('users')->insert([
             'name' => 'jonny',

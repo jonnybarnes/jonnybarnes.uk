@@ -13,9 +13,6 @@ class TokenService
 {
     /**
      * Generate a JWT token.
-     *
-     * @param  array The data to be encoded
-     * @return string The signed token
      */
     public function getNewToken(array $data): string
     {
@@ -36,9 +33,6 @@ class TokenService
 
     /**
      * Check the token signature is valid.
-     *
-     * @param  string The token
-     * @return mixed
      */
     public function validateToken(string $bearerToken): Token
     {

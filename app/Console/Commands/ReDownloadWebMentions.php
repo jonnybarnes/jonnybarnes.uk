@@ -25,21 +25,9 @@ class ReDownloadWebMentions extends Command
     protected $description = 'Redownload the HTML content of webmentions';
 
     /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
-     *
-     * @return mixed
      */
-    public function handle()
+    public function handle(): void
     {
         $webmentions = WebMention::all();
         foreach ($webmentions as $webmention) {

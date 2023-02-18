@@ -6,6 +6,7 @@ namespace App\Console\Commands;
 
 use App\Models\WebMention;
 use Illuminate\Console\Command;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\FileSystem\FileSystem;
 
 class ParseCachedWebMentions extends Command
@@ -27,9 +28,9 @@ class ParseCachedWebMentions extends Command
     /**
      * Execute the console command.
      *
-     * @return mixed
+     * @throws FileNotFoundException
      */
-    public function handle(FileSystem $filesystem)
+    public function handle(FileSystem $filesystem): void
     {
         $htmlFiles = $filesystem->allFiles(storage_path() . '/HTML');
         foreach ($htmlFiles as $file) {
@@ -49,9 +50,6 @@ class ParseCachedWebMentions extends Command
 
     /**
      * Determine the source URL from a filename.
-     *
-     * @param  string
-     * @return string
      */
     private function urlFromFilename(string $filepath): string
     {

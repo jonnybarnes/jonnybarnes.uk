@@ -20,22 +20,16 @@ class ProcessBookmark implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
-    protected Bookmark $bookmark;
-
     /**
      * Create a new job instance.
-     *
-     * @param  Bookmark  $bookmark
      */
-    public function __construct(Bookmark $bookmark)
-    {
-        $this->bookmark = $bookmark;
+    public function __construct(
+        protected Bookmark $bookmark
+    ) {
     }
 
     /**
      * Execute the job.
-     *
-     * @return void
      */
     public function handle(): void
     {

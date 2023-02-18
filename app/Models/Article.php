@@ -24,24 +24,26 @@ class Article extends Model
     use Sluggable;
     use SoftDeletes;
 
-    /**
-     * The attributes that should be mutated to dates.
-     *
-     * @var array
-     */
-    protected $dates = ['created_at', 'updated_at', 'deleted_at'];
-
-    /**
-     * The database table used by the model.
-     *
-     * @var string
-     */
+    /** @var string */
     protected $table = 'articles';
+
+    /** @var array<int, string> */
+    protected $fillable = [
+        'url',
+        'title',
+        'main',
+        'published',
+    ];
+
+    /** @var array<string, string> */
+    protected $casts = [
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+        'deleted_at' => 'datetime',
+    ];
 
     /**
      * Return the sluggable configuration array for this model.
-     *
-     * @return array
      */
     public function sluggable(): array
     {
@@ -51,18 +53,6 @@ class Article extends Model
             ],
         ];
     }
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
-    protected $fillable = [
-        'url',
-        'title',
-        'main',
-        'published',
-    ];
 
     protected function html(): Attribute
     {
@@ -116,11 +106,6 @@ class Article extends Model
 
     /**
      * Scope a query to only include articles from a particular year/month.
-     *
-     * @param  Builder  $query
-     * @param  int|null  $year
-     * @param  int|null  $month
-     * @return Builder
      */
     public function scopeDate(Builder $query, int $year = null, int $month = null): Builder
     {

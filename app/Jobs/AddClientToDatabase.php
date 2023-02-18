@@ -18,26 +18,22 @@ class AddClientToDatabase implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
-    protected $client_id;
+    protected string $client_id;
 
     /**
      * Create a new job instance.
-     *
-     * @param  string  $client_id
      */
-    public function __construct(string $client_id)
+    public function __construct(string $clientId)
     {
-        $this->client_id = $client_id;
+        $this->client_id = $clientId;
     }
 
     /**
      * Execute the job.
-     *
-     * @return void
      */
-    public function handle()
+    public function handle(): void
     {
-        if (MicropubClient::where('client_url', $this->client_id)->count() == 0) {
+        if (MicropubClient::where('client_url', $this->client_id)->count() === 0) {
             MicropubClient::create([
                 'client_url' => $this->client_id,
                 'client_name' => $this->client_id, // default client name is the URL

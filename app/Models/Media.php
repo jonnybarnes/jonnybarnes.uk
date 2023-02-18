@@ -14,25 +14,12 @@ class Media extends Model
 {
     use HasFactory;
 
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
+    /** @var string */
     protected $table = 'media_endpoint';
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
+    /** @var array<int, string> */
     protected $fillable = ['token', 'path', 'type', 'image_widths'];
 
-    /**
-     * Get the note that owns this media.
-     *
-     * @return BelongsTo
-     */
     public function note(): BelongsTo
     {
         return $this->belongsTo(Note::class);

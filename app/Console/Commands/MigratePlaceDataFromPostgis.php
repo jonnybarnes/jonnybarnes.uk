@@ -26,21 +26,9 @@ class MigratePlaceDataFromPostgis extends Command
     protected $description = 'Copy Postgis data to normal latitude longitude fields';
 
     /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
-     *
-     * @return int
      */
-    public function handle()
+    public function handle(): int
     {
         $locationColumn = DB::selectOne(DB::raw("
             SELECT EXISTS (

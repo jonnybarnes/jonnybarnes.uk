@@ -11,8 +11,6 @@ class PlacesController extends Controller
 {
     /**
      * Show all the places.
-     *
-     * @return View
      */
     public function index(): View
     {
@@ -23,9 +21,6 @@ class PlacesController extends Controller
 
     /**
      * Show a specific place.
-     *
-     * @param  Place  $place
-     * @return View
      */
     public function show(Place $place): View
     {

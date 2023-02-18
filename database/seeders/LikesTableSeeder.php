@@ -11,11 +11,9 @@ use Illuminate\Support\Facades\DB;
 class LikesTableSeeder extends Seeder
 {
     /**
-     * Run the database seeds.
-     *
-     * @return void
+     * Seed the likes table.
      */
-    public function run()
+    public function run(): void
     {
         Like::factory(10)->create();
 
