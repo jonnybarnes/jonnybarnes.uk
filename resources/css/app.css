@@ -1,6 +1,6 @@
 @import "variables.css";
-@import "base.css";
-@import "layout/main.css";
-@import "link-style.css";
-@import "posse.css";
-@import "user-profiles.css";
+@import "fonts.css";
+@import "layout.css";
+@import "colours.css";
+@import "code.css";
+@import "content.css";
