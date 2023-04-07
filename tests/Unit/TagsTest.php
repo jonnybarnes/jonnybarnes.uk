@@ -42,7 +42,7 @@ class TagsTest extends TestCase
         $this->assertSame($expected, Tag::normalize($input));
     }
 
-    public function tagsProvider(): array
+    public static function tagsProvider(): array
     {
         return [
             ['test', 'test'],

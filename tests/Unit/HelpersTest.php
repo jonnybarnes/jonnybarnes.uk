@@ -65,7 +65,7 @@ class HelpersTest extends TestCase
         $this->assertEquals($expected, prettyPrintJson($json));
     }
 
-    public function urlProvider(): array
+    public static function urlProvider(): array
     {
         return [
             ['https://example.org/', 'https://example.org'],
