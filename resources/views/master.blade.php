@@ -4,8 +4,9 @@
         <meta charset="UTF-8">
         <title>@yield('title'){{ config('app.display_name') }}</title>
         <meta name="viewport" content="width=device-width">
-        <link rel="stylesheet" href="/assets/frontend/normalize.css">
-        @if (!empty(config('app.font_link')))<link rel="stylesheet" href="{{ config('app.font_link') }}">@endif
+        @if (!empty(config('app.font_link')))
+            <link rel="stylesheet" href="{{ config('app.font_link') }}">
+        @endif
         <link rel="stylesheet" href="/assets/app.css">
         <link rel="stylesheet" href="/assets/highlight/zenburn.css">
         <link rel="alternate" type="application/rss+xml" title="Blog RSS Feed" href="/blog/feed.rss">
@@ -22,11 +23,11 @@
         <link rel="token_endpoint" href="{{ config('app.url') }}/api/token">
         <link rel="micropub" href="{{ config('app.url') }}/api/post">
         <link rel="webmention" href="{{ config('app.url') }}/webmention">
-        <link rel="shortcut icon" href="/assets/img/jmb-bw.png">
+        <link rel="shortcut icon" href="{{ config('app.url') }}/assets/img/memoji-orange-bg-small-fs8.png">
         <link rel="pgpkey" href="/assets/jonnybarnes-public-key-ecc.asc">
     </head>
-    <body>
-        <header id="top-header">
+    <body class="grid">
+        <header id="site-header">
             <h1>
                 <a rel="author" href="/">{{ config('app.display_name') }}</a>
             </h1>
@@ -58,22 +59,5 @@
         <!--scripts go here when needed-->
         @section('scripts')
         @show
-        @if(config('fathom.id'))
-        <!-- Fathom - simple website analytics - https://github.com/usefathom/fathom -->
-        <script>
-            (function(f, a, t, h, o, m){
-                a[h]=a[h]||function(){
-                    (a[h].q=a[h].q||[]).push(arguments)
-                };
-                o=f.createElement('script'),
-                    m=f.getElementsByTagName('script')[0];
-                o.async=1; o.src=t; o.id='fathom-script';
-                m.parentNode.insertBefore(o,m)
-            })(document, window, '//fathom.jonnybarnes.uk/tracker.js', 'fathom');
-            fathom('set', 'siteId', '{{ config('fathom.id') }}');
-            fathom('trackPageview');
-        </script>
-        <!-- / Fathom -->
-        @endif
     </body>
 </html>

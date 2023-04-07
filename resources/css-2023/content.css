@@ -1,0 +1,36 @@
+@import "posse.css";
+@import "h-card.css";
+
+.h-entry {
+    border-inline-start: 1px solid var(--color-primary);
+    padding-inline-start: .5rem;
+
+    & .reply-to {
+        font-style: italic;
+    }
+
+    & .post-info {
+        & a {
+            text-decoration: none;
+        }
+    }
+
+    & .note-metadata {
+        display: flex;
+        flex-direction: row;
+        gap: 1rem;
+
+        & .syndication-links {
+            flex-flow: row wrap;
+
+            & a {
+                text-decoration: none;
+
+                & svg {
+                    width: 1rem;
+                    height: 1rem;
+                }
+            }
+        }
+    }
+}
