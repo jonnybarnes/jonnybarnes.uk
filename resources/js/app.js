@@ -1,1 +1,1 @@
-import '../css-2023/app.css';
+import '../css/app.css';
