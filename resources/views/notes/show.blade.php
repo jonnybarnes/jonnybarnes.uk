@@ -46,8 +46,6 @@
                 </p>
 @endforeach
 @endif
-                <!-- this empty tags are for https://brid.gy’s publishing service -->
-                <a href="https://brid.gy/publish/twitter"></a>
 @stop
 
 @section('scripts')
