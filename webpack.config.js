@@ -53,7 +53,7 @@ module.exports = {
         }),
         new StyleLintPlugin({
             configFile: path.resolve(__dirname + '/.stylelintrc'),
-            context: path.resolve(__dirname + '/resources/css'),
+            context: path.resolve(__dirname + '/resources/css-2023'),
             files: '**/*.css',
         }),
         new EslintPlugin({

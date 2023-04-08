@@ -46,7 +46,15 @@ class NotesTest extends TestCase
     public function defaultImageUsedAsFallbackInMakehcardsMethod(): void
     {
         // phpcs:ignore
-        $expected = '<p>Hi <span class="u-category h-card mini-h-card"><a class="u-url p-name" href="http://tantek.com">Tantek Çelik</a><span class="hovercard"> <a class="u-url" href="https://twitter.com/t"><img class="social-icon" src="/assets/img/social-icons/twitter.svg"> t</a><img class="u-photo" alt="" src="/assets/profile-images/default-image"></span></span></p>' . PHP_EOL;
+        $expected = '<p>Hi <span class="u-category h-card mini-h-card">
+    <a class="u-url p-name" href="http://tantek.com">Tantek Çelik</a>
+    <span class="hovercard">
+        <img class="u-photo" alt="" src="/assets/profile-images/default-image">
+                            <a class="u-url" href="https://twitter.com/t">
+                <img class="social-icon" src="/assets/img/social-icons/twitter.svg"> t
+            </a>
+            </span>
+</span></p>' . PHP_EOL;
         Contact::factory()->create([
             'nick' => 'tantek',
             'name' => 'Tantek Çelik',
@@ -84,7 +92,15 @@ class NotesTest extends TestCase
         ]);
 
         // phpcs:ignore
-        $expected = '<p>Hi <span class="u-category h-card mini-h-card"><a class="u-url p-name" href="https://aaronparecki.com">Aaron Parecki</a><span class="hovercard"><a class="u-url" href="https://www.facebook.com/123456"><img class="social-icon" src="/assets/img/social-icons/facebook.svg"> Facebook</a> <img class="u-photo" alt="" src="/assets/profile-images/aaronparecki.com/image"></span></span></p>' . PHP_EOL;
+        $expected = '<p>Hi <span class="u-category h-card mini-h-card">
+    <a class="u-url p-name" href="https://aaronparecki.com">Aaron Parecki</a>
+    <span class="hovercard">
+        <img class="u-photo" alt="" src="/assets/profile-images/aaronparecki.com/image">
+                    <a class="u-url" href="https://www.facebook.com/123456">
+                <img class="social-icon" src="/assets/img/social-icons/facebook.svg"> Facebook
+            </a>
+                    </span>
+</span></p>' . PHP_EOL;
         $this->assertEquals($expected, $note->note);
     }
 

@@ -6,7 +6,6 @@ namespace App\Services;
 
 use App\Jobs\SendWebMentions;
 use App\Jobs\SyndicateNoteToMastodon;
-use App\Jobs\SyndicateNoteToTwitter;
 use App\Models\Media;
 use App\Models\Note;
 use App\Models\Place;
@@ -49,11 +48,6 @@ class NoteService extends Service
         $note->save();
 
         dispatch(new SendWebMentions($note));
-
-        // Syndication targets
-        if (in_array('twitter', $this->getSyndicationTargets($request), true)) {
-            dispatch(new SyndicateNoteToTwitter($note));
-        }
 
         if (in_array('mastodon', $this->getSyndicationTargets($request), true)) {
             dispatch(new SyndicateNoteToMastodon($note));

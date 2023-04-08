@@ -68,7 +68,7 @@ class NotesControllerTest extends TestCase
     }
 
     /** @test */
-    public function unknownNoteGives404()
+    public function unknownNoteGives404(): void
     {
         $response = $this->get('/notes/112233');
         $response->assertNotFound();

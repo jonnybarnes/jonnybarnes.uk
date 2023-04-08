@@ -5,9 +5,7 @@ declare(strict_types=1);
 namespace Tests\Feature;
 
 use App\Jobs\ProcessBookmark;
-use App\Jobs\SyndicateBookmarkToTwitter;
 use App\Models\Bookmark;
-use App\Models\SyndicationTarget;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Queue;
 use Tests\TestCase;
@@ -37,25 +35,16 @@ class BookmarksTest extends TestCase
     {
         Queue::fake();
 
-        SyndicationTarget::factory()->create([
-            'uid' => 'https://twitter.com/jonnybarnes',
-            'service_name' => 'Twitter',
-        ]);
-
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $this->getToken(),
         ])->post('/api/post', [
             'h' => 'entry',
             'bookmark-of' => 'https://example.org/blog-post',
-            'mp-syndicate-to' => [
-                'https://twitter.com/jonnybarnes',
-            ],
         ]);
 
         $response->assertJson(['response' => 'created']);
 
         Queue::assertPushed(ProcessBookmark::class);
-        Queue::assertPushed(SyndicateBookmarkToTwitter::class);
         $this->assertDatabaseHas('bookmarks', ['url' => 'https://example.org/blog-post']);
     }
 
@@ -64,52 +53,18 @@ class BookmarksTest extends TestCase
     {
         Queue::fake();
 
-        SyndicationTarget::factory()->create([
-            'uid' => 'https://twitter.com/jonnybarnes',
-            'service_name' => 'Twitter',
-        ]);
-
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $this->getToken(),
         ])->json('POST', '/api/post', [
             'type' => ['h-entry'],
             'properties' => [
                 'bookmark-of' => ['https://example.org/blog-post'],
-                'mp-syndicate-to' => [
-                    'https://twitter.com/jonnybarnes',
-                ],
             ],
         ]);
 
         $response->assertJson(['response' => 'created']);
 
         Queue::assertPushed(ProcessBookmark::class);
-        Queue::assertPushed(SyndicateBookmarkToTwitter::class);
-        $this->assertDatabaseHas('bookmarks', ['url' => 'https://example.org/blog-post']);
-    }
-
-    /** @test */
-    public function whenTheBookmarkIsMarkedForPostingToTwitterCheckWeInvokeTheCorrectJob(): void
-    {
-        Queue::fake();
-
-        SyndicationTarget::factory()->create([
-            'uid' => 'https://twitter.com/jonnybarnes',
-            'service_name' => 'Twitter',
-        ]);
-
-        $response = $this->withHeaders([
-            'Authorization' => 'Bearer ' . $this->getToken(),
-        ])->post('/api/post', [
-            'h' => 'entry',
-            'bookmark-of' => 'https://example.org/blog-post',
-            'mp-syndicate-to' => 'https://twitter.com/jonnybarnes',
-        ]);
-
-        $response->assertJson(['response' => 'created']);
-
-        Queue::assertPushed(ProcessBookmark::class);
-        Queue::assertPushed(SyndicateBookmarkToTwitter::class);
         $this->assertDatabaseHas('bookmarks', ['url' => 'https://example.org/blog-post']);
     }
 
