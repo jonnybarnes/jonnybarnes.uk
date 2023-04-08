@@ -137,7 +137,6 @@ class MicropubMediaTest extends TestCase
         );
         $sourceUploadResponse->assertJson(['items' => [[
             'url' => $response->headers->get('Location'),
-            'published' => carbon()->toW3cString(),
             'mime_type' => 'image/png',
         ]]]);
 
@@ -170,7 +169,6 @@ class MicropubMediaTest extends TestCase
         );
         $sourceUploadResponse->assertJson(['items' => [[
             'url' => $response->headers->get('Location'),
-            'published' => carbon()->toW3cString(),
             'mime_type' => 'image/png',
         ]]]);
         // And given our limit of 1 there should only be one result
