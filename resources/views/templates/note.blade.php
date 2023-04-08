@@ -26,11 +26,6 @@
                 @endif
             @endforeach
         </div>
-        @if ($note->twitter_content)
-            <div class="p-bridgy-twitter-content">
-                {!! $note->twitter_content !!}
-            </div>
-        @endif
         <div class="note-metadata">
             <div>
                 <a class="u-url" href="/notes/{{ $note->nb60id }}">

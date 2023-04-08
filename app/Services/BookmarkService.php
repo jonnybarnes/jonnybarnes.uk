@@ -6,9 +6,7 @@ namespace App\Services;
 
 use App\Exceptions\InternetArchiveException;
 use App\Jobs\ProcessBookmark;
-use App\Jobs\SyndicateBookmarkToTwitter;
 use App\Models\Bookmark;
-use App\Models\SyndicationTarget;
 use App\Models\Tag;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
@@ -45,23 +43,6 @@ class BookmarkService extends Service
         foreach ((array) $categories as $category) {
             $tag = Tag::firstOrCreate(['tag' => $category]);
             $bookmark->tags()->save($tag);
-        }
-
-        $mpSyndicateTo = null;
-        if (Arr::get($request, 'mp-syndicate-to')) {
-            $mpSyndicateTo = Arr::get($request, 'mp-syndicate-to');
-        }
-        if (Arr::get($request, 'properties.mp-syndicate-to')) {
-            $mpSyndicateTo = Arr::get($request, 'properties.mp-syndicate-to');
-        }
-        $mpSyndicateTo = Arr::wrap($mpSyndicateTo);
-        foreach ($mpSyndicateTo as $uid) {
-            $target = SyndicationTarget::where('uid', $uid)->first();
-            if ($target && $target->service_name === 'Twitter') {
-                SyndicateBookmarkToTwitter::dispatch($bookmark);
-
-                break;
-            }
         }
 
         ProcessBookmark::dispatch($bookmark);

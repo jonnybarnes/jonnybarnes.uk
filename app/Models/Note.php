@@ -280,50 +280,6 @@ class Note extends Model
     }
 
     /**
-     * Show a specific form of the note for twitter.
-     *
-     * That is we swap the contacts names for their known Twitter handles.
-     */
-    public function getTwitterContentAttribute(): string
-    {
-        $this->getContacts();
-
-        // check for contacts
-        if ($this->contacts === null || count($this->contacts) === 0) {
-            return '';
-        }
-
-        // here we check the matched contact from the note corresponds to a contact
-        // in the database
-        if (
-            count(array_unique(array_values($this->contacts))) === 1
-            && array_unique(array_values($this->contacts))[0] === null
-        ) {
-            return '';
-        }
-
-        // swap in Twitter usernames
-        $swapped = preg_replace_callback(
-            self::USERNAMES_REGEX,
-            function ($matches) {
-                if (is_null($this->contacts[$matches[1]])) {
-                    return $matches[0];
-                }
-
-                $contact = $this->contacts[$matches[1]];
-                if ($contact->twitter) {
-                    return '@' . $contact->twitter;
-                }
-
-                return $contact->name;
-            },
-            $this->getRawOriginal('note')
-        );
-
-        return $this->convertMarkdown($swapped);
-    }
-
-    /**
      * Scope a query to select a note via a NewBase60 id.
      */
     public function scopeNb60(Builder $query, string $nb60id): Builder

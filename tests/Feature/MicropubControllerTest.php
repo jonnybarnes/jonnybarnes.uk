@@ -6,7 +6,6 @@ namespace Tests\Feature;
 
 use App\Jobs\SendWebMentions;
 use App\Jobs\SyndicateNoteToMastodon;
-use App\Jobs\SyndicateNoteToTwitter;
 use App\Models\Media;
 use App\Models\Note;
 use App\Models\Place;
@@ -145,7 +144,6 @@ class MicropubControllerTest extends TestCase
                 'h' => 'entry',
                 'content' => $note,
                 'mp-syndicate-to' => [
-                    'https://twitter.com/jonnybarnes',
                     'https://mastodon.social/@jonnybarnes',
                 ],
             ],
@@ -153,7 +151,6 @@ class MicropubControllerTest extends TestCase
         );
         $response->assertJson(['response' => 'created']);
         $this->assertDatabaseHas('notes', ['note' => $note]);
-        Queue::assertPushed(SyndicateNoteToTwitter::class);
         Queue::assertPushed(SyndicateNoteToMastodon::class);
     }
 
@@ -249,10 +246,6 @@ class MicropubControllerTest extends TestCase
             'type' => 'image',
         ]);
         SyndicationTarget::factory()->create([
-            'uid' => 'https://twitter.com/jonnybarnes',
-            'service_name' => 'Twitter',
-        ]);
-        SyndicationTarget::factory()->create([
             'uid' => 'https://mastodon.social/@jonnybarnes',
             'service_name' => 'Mastodon',
         ]);
@@ -267,7 +260,6 @@ class MicropubControllerTest extends TestCase
                     'content' => [$note],
                     'in-reply-to' => ['https://aaronpk.localhost'],
                     'mp-syndicate-to' => [
-                        'https://twitter.com/jonnybarnes',
                         'https://mastodon.social/@jonnybarnes',
                     ],
                     'photo' => [config('filesystems.disks.s3.url') . '/test-photo.jpg'],
@@ -279,7 +271,6 @@ class MicropubControllerTest extends TestCase
             ->assertStatus(201)
             ->assertJson(['response' => 'created']);
         Queue::assertPushed(SendWebMentions::class);
-        Queue::assertPushed(SyndicateNoteToTwitter::class);
         Queue::assertPushed(SyndicateNoteToMastodon::class);
     }
 
