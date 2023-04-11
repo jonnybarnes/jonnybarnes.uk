@@ -12,6 +12,7 @@
 */
 
 use App\Http\Controllers\Admin\ArticlesController as AdminArticlesController;
+use App\Http\Controllers\Admin\BioController;
 use App\Http\Controllers\Admin\ClientsController;
 use App\Http\Controllers\Admin\ContactsController as AdminContactsController;
 use App\Http\Controllers\Admin\HomeController;
@@ -132,6 +133,12 @@ Route::group(['domain' => config('url.longurl')], function () {
             Route::get('/{syndicationTarget}/edit', [SyndicationTargetsController::class, 'edit']);
             Route::put('/{syndicationTarget}', [SyndicationTargetsController::class, 'update']);
             Route::delete('/{syndicationTarget}', [SyndicationTargetsController::class, 'destroy']);
+        });
+
+        // Bio
+        Route::group(['prefix' => 'bio'], function () {
+            Route::get('/', [BioController::class, 'show'])->name('admin.bio.show');
+            Route::put('/', [BioController::class, 'update']);
         });
     });
 

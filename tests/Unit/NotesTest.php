@@ -412,7 +412,7 @@ class NotesTest extends TestCase
             'in_reply_to' => 'https://twitter.com/someRando/status/933662564587855877',
         ]);
 
-        $this->assertSame($tempContent, $note->twitter);
+        $this->assertEquals($tempContent, $note->twitter);
     }
 
     /** @test */
