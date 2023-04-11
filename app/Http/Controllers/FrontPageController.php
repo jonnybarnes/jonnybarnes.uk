@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Article;
+use App\Models\Bio;
 use App\Models\Bookmark;
 use App\Models\Like;
 use App\Models\Note;
@@ -34,8 +35,11 @@ class FrontPageController extends Controller
             ->sortByDesc('updated_at')
             ->paginate(10);
 
+        $bio = Bio::first()?->content;
+
         return view('front-page', [
             'items' => $items,
+            'bio' => $bio,
         ]);
     }
 }

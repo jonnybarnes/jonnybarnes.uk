@@ -27,6 +27,4 @@
     </div>
 
     {{ $items->links('templates.pagination') }}
-
-    @include('templates.bio')
 @stop

@@ -43,9 +43,11 @@
         </header>
 
         <main>
-@yield('content')
-@section('bio')
-@show
+            @yield('content')
+
+            @isset($bio)
+                {!! $bio !!}
+            @endisset
         </main>
 
         <footer>
