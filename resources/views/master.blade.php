@@ -51,9 +51,9 @@
         </main>
 
         <footer>
-{{--            <form action="search" method="get">--}}
-{{--                <input type="text" name="terms" title="Search"><button type="submit">Search</button>--}}
-{{--            </form>--}}
+            <form action="/search" method="get">
+                <input type="text" name="q" title="Search"><button type="submit">Search</button>
+            </form>
             <p>Built with love: <a href="/colophon">Colophon</a></p>
             <a href="https://indieweb.org"><img src="/assets/img/iwc.svg" alt="Indie Web Camp logo" class="iwc-logo"></a>
         </footer>
