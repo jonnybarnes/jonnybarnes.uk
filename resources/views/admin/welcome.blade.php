@@ -46,4 +46,9 @@
         You can either <a href="/admin/syndication/create">create</a> new syndication targets,
         or <a href="/admin/syndication">edit</a> them.
     </p>
+
+    <h2>Bio</h2>
+    <p>
+        Edit your <a href="/admin/bio">bio</a>.
+    </p>
 @stop
