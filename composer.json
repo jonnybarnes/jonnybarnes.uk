@@ -23,6 +23,7 @@
         "laravel/framework": "^10.0",
         "laravel/horizon": "^5.0",
         "laravel/sanctum": "^3.0",
+        "laravel/scout": "^10.1",
         "laravel/tinker": "^2.0",
         "lcobucci/jwt": "^5.0",
         "league/commonmark": "^2.0",

@@ -3,17 +3,18 @@
 @section('title')Search « @stop
 
 @section('content')
-            <h2>Search Results</h2>
-@foreach($notes as $note)
-            <div class="h-entry">
-@include('templates.note', ['note' => $note])
-            </div>
-@endforeach
-{{ $notes->links() }}
-@stop
+    <h2>Search Results</h2>
+    <p>Searching for “{{ $search }}”</p>
 
-@section('scripts')
-            @include('templates.mapbox-links')
-            <script src="/assets/js/links.js"></script>
-            <link rel="stylesheet" href="/assets/highlight/zenburn.css">
+    <div class="h-feed">
+        <!-- the following span stops microformat parses going haywire
+        generating a name property for the h-feed -->
+        <span class="p-name"></span>
+
+        @foreach ($notes as $note)
+            @include('templates.note', ['note' => $note])
+        @endforeach
+    </div>
+
+    {{ $notes->links() }}
 @stop

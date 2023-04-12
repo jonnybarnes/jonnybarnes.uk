@@ -31,6 +31,7 @@ use App\Http\Controllers\MicropubController;
 use App\Http\Controllers\MicropubMediaController;
 use App\Http\Controllers\NotesController;
 use App\Http\Controllers\PlacesController;
+use App\Http\Controllers\SearchController;
 use App\Http\Controllers\ShortURLsController;
 use App\Http\Controllers\TokenEndpointController;
 use App\Http\Controllers\WebMentionsController;
@@ -205,6 +206,9 @@ Route::group(['domain' => config('url.longurl')], function () {
 
     // Micropub
     Route::redirect('/micropub/create', '/notes/new');
+
+    // Search
+    Route::get('search', [SearchController::class, 'search']);
 });
 
 // Short URL
