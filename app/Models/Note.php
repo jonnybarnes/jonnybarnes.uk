@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Cache;
 use Jonnybarnes\IndieWeb\Numbers;
+use Laravel\Scout\Searchable;
 use League\CommonMark\Environment\Environment;
 use League\CommonMark\Extension\Autolink\AutolinkExtension;
 use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
@@ -34,6 +35,7 @@ use Spatie\CommonMarkHighlighter\IndentedCodeRenderer;
 class Note extends Model
 {
     use HasFactory;
+    use Searchable;
     use SoftDeletes;
 
     /**
@@ -96,7 +98,7 @@ class Note extends Model
     }
 
     /**
-     * @return array<int, string>
+     * @return array<string, mixed>
      */
     public function toSearchableArray(): array
     {
