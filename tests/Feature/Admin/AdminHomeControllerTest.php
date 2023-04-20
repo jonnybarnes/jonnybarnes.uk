@@ -18,7 +18,7 @@ class AdminHomeControllerTest extends TestCase
         $user = User::factory()->make();
 
         $response = $this->actingAs($user)
-                         ->get('/admin');
+            ->get('/admin');
 
         $response->assertViewIs('admin.welcome');
     }

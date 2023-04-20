@@ -20,8 +20,8 @@ class FeedsController extends Controller
         $buildDate = $articles->first()->updated_at->toRssString();
 
         return response()
-                    ->view('articles.rss', compact('articles', 'buildDate'))
-                    ->header('Content-Type', 'application/rss+xml; charset=utf-8');
+            ->view('articles.rss', compact('articles', 'buildDate'))
+            ->header('Content-Type', 'application/rss+xml; charset=utf-8');
     }
 
     /**
@@ -32,8 +32,8 @@ class FeedsController extends Controller
         $articles = Article::where('published', '1')->latest('updated_at')->take(20)->get();
 
         return response()
-                    ->view('articles.atom', compact('articles'))
-                    ->header('Content-Type', 'application/atom+xml; charset=utf-8');
+            ->view('articles.atom', compact('articles'))
+            ->header('Content-Type', 'application/atom+xml; charset=utf-8');
     }
 
     /**
@@ -45,8 +45,8 @@ class FeedsController extends Controller
         $buildDate = $notes->first()->updated_at->toRssString();
 
         return response()
-                    ->view('notes.rss', compact('notes', 'buildDate'))
-                    ->header('Content-Type', 'application/rss+xml; charset=utf-8');
+            ->view('notes.rss', compact('notes', 'buildDate'))
+            ->header('Content-Type', 'application/rss+xml; charset=utf-8');
     }
 
     /**
@@ -57,8 +57,8 @@ class FeedsController extends Controller
         $notes = Note::latest()->take(20)->get();
 
         return response()
-                    ->view('notes.atom', compact('notes'))
-                    ->header('Content-Type', 'application/atom+xml; charset=utf-8');
+            ->view('notes.atom', compact('notes'))
+            ->header('Content-Type', 'application/atom+xml; charset=utf-8');
     }
 
     /** @todo sort out return type for json responses */

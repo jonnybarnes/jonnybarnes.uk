@@ -25,7 +25,7 @@ class ProcessBookmarkJobTest extends TestCase
         $bookmark = Bookmark::factory()->create();
         $service = $this->createMock(BookmarkService::class);
         $service->method('getArchiveLink')
-                ->willReturn('https://web.archive.org/web/1234');
+            ->willReturn('https://web.archive.org/web/1234');
         $this->app->instance(BookmarkService::class, $service);
 
         $job = new ProcessBookmark($bookmark);
@@ -46,7 +46,7 @@ class ProcessBookmarkJobTest extends TestCase
         $bookmark = Bookmark::factory()->create();
         $service = $this->createMock(BookmarkService::class);
         $service->method('getArchiveLink')
-                ->will($this->throwException(new InternetArchiveException()));
+            ->will($this->throwException(new InternetArchiveException()));
         $this->app->instance(BookmarkService::class, $service);
 
         $job = new ProcessBookmark($bookmark);
