@@ -30,7 +30,7 @@ class SaveProfileImageJobTest extends TestCase
         $mf = ['items' => []];
         $authorship = $this->createMock(Authorship::class);
         $authorship->method('findAuthor')
-                   ->will($this->throwException(new AuthorshipParserException()));
+            ->will($this->throwException(new AuthorshipParserException()));
         $job = new SaveProfileImage($mf);
 
         $this->assertNull($job->handle($authorship));
@@ -48,7 +48,7 @@ class SaveProfileImageJobTest extends TestCase
         ];
         $authorship = $this->createMock(Authorship::class);
         $authorship->method('findAuthor')
-                   ->willReturn($author);
+            ->willReturn($author);
         $job = new SaveProfileImage($mf);
 
         $this->assertNull($job->handle($authorship));
@@ -72,7 +72,7 @@ class SaveProfileImageJobTest extends TestCase
         ];
         $authorship = $this->createMock(Authorship::class);
         $authorship->method('findAuthor')
-                   ->willReturn($author);
+            ->willReturn($author);
 
         $job = new SaveProfileImage($mf);
         $job->handle($authorship);
@@ -97,7 +97,7 @@ class SaveProfileImageJobTest extends TestCase
         ];
         $authorship = $this->createMock(Authorship::class);
         $authorship->method('findAuthor')
-                   ->willReturn($author);
+            ->willReturn($author);
 
         $job = new SaveProfileImage($mf);
         $job->handle($authorship);

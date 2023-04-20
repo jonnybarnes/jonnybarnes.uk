@@ -21,7 +21,7 @@ class ArticlesTest extends TestCase
         $user = User::factory()->make();
 
         $response = $this->actingAs($user)
-                         ->get('/admin/blog');
+            ->get('/admin/blog');
         $response->assertSeeText('Select article to edit:');
     }
 
@@ -31,7 +31,7 @@ class ArticlesTest extends TestCase
         $user = User::factory()->make();
 
         $response = $this->actingAs($user)
-                         ->get('/admin/blog/create');
+            ->get('/admin/blog/create');
         $response->assertSeeText('Title (URL)');
     }
 
@@ -41,10 +41,10 @@ class ArticlesTest extends TestCase
         $user = User::factory()->make();
 
         $this->actingAs($user)
-             ->post('/admin/blog', [
-                 'title' => 'Test Title',
-                 'main' => 'Article content',
-             ]);
+            ->post('/admin/blog', [
+                'title' => 'Test Title',
+                'main' => 'Article content',
+            ]);
         $this->assertDatabaseHas('articles', ['title' => 'Test Title']);
     }
 
@@ -62,10 +62,10 @@ class ArticlesTest extends TestCase
         $file = new UploadedFile($path, 'article.md', 'text/plain', null, true);
 
         $this->actingAs($user)
-             ->post('/admin/blog', [
-                 'title' => 'Uploaded Article',
-                 'article' => $file,
-             ]);
+            ->post('/admin/blog', [
+                'title' => 'Uploaded Article',
+                'article' => $file,
+            ]);
 
         $this->assertDatabaseHas('articles', [
             'title' => 'Uploaded Article',
@@ -82,7 +82,7 @@ class ArticlesTest extends TestCase
         ]);
 
         $response = $this->actingAs($user)
-                         ->get('/admin/blog/' . $article->id . '/edit');
+            ->get('/admin/blog/' . $article->id . '/edit');
         $response->assertSeeText('This is *my* new blog. It uses `Markdown`.');
     }
 
@@ -93,11 +93,11 @@ class ArticlesTest extends TestCase
         $article = Article::factory()->create();
 
         $this->actingAs($user)
-             ->post('/admin/blog/' . $article->id, [
-                 '_method' => 'PUT',
-                 'title' => 'My New Blog',
-                 'main' => 'This article has been edited',
-             ]);
+            ->post('/admin/blog/' . $article->id, [
+                '_method' => 'PUT',
+                'title' => 'My New Blog',
+                'main' => 'This article has been edited',
+            ]);
         $this->assertDatabaseHas('articles', [
             'title' => 'My New Blog',
             'main' => 'This article has been edited',
@@ -111,9 +111,9 @@ class ArticlesTest extends TestCase
         $article = Article::factory()->create();
 
         $this->actingAs($user)
-             ->post('/admin/blog/' . $article->id, [
-                 '_method' => 'DELETE',
-             ]);
+            ->post('/admin/blog/' . $article->id, [
+                '_method' => 'DELETE',
+            ]);
         $this->assertSoftDeleted('articles', [
             'title' => $article->title,
         ]);
