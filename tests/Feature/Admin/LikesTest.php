@@ -21,7 +21,7 @@ class LikesTest extends TestCase
         $user = User::factory()->make();
 
         $response = $this->actingAs($user)
-                         ->get('/admin/likes');
+            ->get('/admin/likes');
         $response->assertSeeText('Likes');
     }
 
@@ -31,7 +31,7 @@ class LikesTest extends TestCase
         $user = User::factory()->make();
 
         $response = $this->actingAs($user)
-                         ->get('/admin/likes/create');
+            ->get('/admin/likes/create');
         $response->assertSeeText('New Like');
     }
 
@@ -42,9 +42,9 @@ class LikesTest extends TestCase
         $user = User::factory()->make();
 
         $this->actingAs($user)
-             ->post('/admin/likes', [
-                 'like_url' => 'https://example.com',
-             ]);
+            ->post('/admin/likes', [
+                'like_url' => 'https://example.com',
+            ]);
         $this->assertDatabaseHas('likes', [
             'url' => 'https://example.com',
         ]);
@@ -58,7 +58,7 @@ class LikesTest extends TestCase
         $like = Like::factory()->create();
 
         $response = $this->actingAs($user)
-                         ->get('/admin/likes/' . $like->id . '/edit');
+            ->get('/admin/likes/' . $like->id . '/edit');
         $response->assertSee('Edit Like');
     }
 
@@ -70,10 +70,10 @@ class LikesTest extends TestCase
         $like = Like::factory()->create();
 
         $this->actingAs($user)
-             ->post('/admin/likes/' . $like->id, [
-                 '_method' => 'PUT',
-                 'like_url' => 'https://example.com',
-             ]);
+            ->post('/admin/likes/' . $like->id, [
+                '_method' => 'PUT',
+                'like_url' => 'https://example.com',
+            ]);
         $this->assertDatabaseHas('likes', [
             'url' => 'https://example.com',
         ]);
@@ -88,9 +88,9 @@ class LikesTest extends TestCase
         $user = User::factory()->make();
 
         $this->actingAs($user)
-             ->post('/admin/likes/' . $like->id, [
-                 '_method' => 'DELETE',
-             ]);
+            ->post('/admin/likes/' . $like->id, [
+                '_method' => 'DELETE',
+            ]);
         $this->assertDatabaseMissing('likes', [
             'url' => $url,
         ]);

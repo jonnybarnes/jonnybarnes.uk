@@ -19,7 +19,7 @@ class ClientsTest extends TestCase
         $user = User::factory()->make();
 
         $response = $this->actingAs($user)
-                         ->get('/admin/clients');
+            ->get('/admin/clients');
         $response->assertSeeText('Clients');
     }
 
@@ -29,7 +29,7 @@ class ClientsTest extends TestCase
         $user = User::factory()->make();
 
         $response = $this->actingAs($user)
-                         ->get('/admin/clients/create');
+            ->get('/admin/clients/create');
         $response->assertSeeText('New Client');
     }
 
@@ -39,10 +39,10 @@ class ClientsTest extends TestCase
         $user = User::factory()->make();
 
         $this->actingAs($user)
-             ->post('/admin/clients', [
-                 'client_name' => 'Micropublish',
-                 'client_url' => 'https://micropublish.net',
-             ]);
+            ->post('/admin/clients', [
+                'client_name' => 'Micropublish',
+                'client_url' => 'https://micropublish.net',
+            ]);
         $this->assertDatabaseHas('clients', [
             'client_name' => 'Micropublish',
             'client_url' => 'https://micropublish.net',
@@ -58,7 +58,7 @@ class ClientsTest extends TestCase
         ]);
 
         $response = $this->actingAs($user)
-                         ->get('/admin/clients/' . $client->id . '/edit');
+            ->get('/admin/clients/' . $client->id . '/edit');
         $response->assertSee('https://jbl5.dev/notes/new');
     }
 
@@ -69,11 +69,11 @@ class ClientsTest extends TestCase
         $client = MicropubClient::factory()->create();
 
         $this->actingAs($user)
-             ->post('/admin/clients/' . $client->id, [
-                 '_method' => 'PUT',
-                 'client_url' => 'https://jbl5.dev/notes/new',
-                 'client_name' => 'JBL5dev',
-             ]);
+            ->post('/admin/clients/' . $client->id, [
+                '_method' => 'PUT',
+                'client_url' => 'https://jbl5.dev/notes/new',
+                'client_name' => 'JBL5dev',
+            ]);
         $this->assertDatabaseHas('clients', [
             'client_url' => 'https://jbl5.dev/notes/new',
             'client_name' => 'JBL5dev',
@@ -89,9 +89,9 @@ class ClientsTest extends TestCase
         ]);
 
         $this->actingAs($user)
-             ->post('/admin/clients/' . $client->id, [
-                 '_method' => 'DELETE',
-             ]);
+            ->post('/admin/clients/' . $client->id, [
+                '_method' => 'DELETE',
+            ]);
         $this->assertDatabaseMissing('clients', [
             'client_url' => 'https://jbl5.dev/notes/new',
         ]);

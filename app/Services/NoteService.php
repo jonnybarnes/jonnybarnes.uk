@@ -63,7 +63,7 @@ class NoteService extends Service
     {
         if (Arr::get($request, 'properties.published.0')) {
             return carbon(Arr::get($request, 'properties.published.0'))
-                        ->toDateTimeString();
+                ->toDateTimeString();
         }
         if (Arr::get($request, 'published')) {
             return carbon(Arr::get($request, 'published'))->toDateTimeString();

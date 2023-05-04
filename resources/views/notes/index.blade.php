@@ -13,7 +13,3 @@
             </div>
             {!! $notes->render() !!}
 @stop
-
-@section('scripts')
-        @include('templates.mapbox-links')
-@stop

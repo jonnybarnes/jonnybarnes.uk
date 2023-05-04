@@ -15,7 +15,7 @@ class NotesTest extends DuskTestCase
     {
         $this->browse(function ($browser) {
             $browser->visit('/notes/D')
-                    ->assertSee('JBL5');
+                ->assertSee('JBL5');
         });
     }
 
@@ -28,7 +28,7 @@ class NotesTest extends DuskTestCase
     {
         $this->browse(function ($browser) {
             $browser->visit('/notes/E')
-                    ->assertSee('quill.p3k.io');
+                ->assertSee('quill.p3k.io');
         });
     }
 }

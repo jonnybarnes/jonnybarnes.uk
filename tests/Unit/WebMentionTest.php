@@ -105,11 +105,11 @@ class WebMentionTest extends TestCase
         $this->app->instance(Codebird::class, $codebirdMock);
 
         Cache::shouldReceive('has')
-                    ->once()
-                    ->andReturn(false);
+            ->once()
+            ->andReturn(false);
         Cache::shouldReceive('put')
-                    ->once()
-                    ->andReturn(true);
+            ->once()
+            ->andReturn(true);
 
         $webmention = new WebMention();
         $twitterURL = 'https://twitter.com/example';
