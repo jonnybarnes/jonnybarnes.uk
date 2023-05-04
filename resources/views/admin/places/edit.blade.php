@@ -141,8 +141,3 @@
         <a href="/admin/places/{{ $place->id }}/merge">Merge with another place?</a>
     </p>
 @stop
-
-@section('scripts')
-    <script src="/assets/js/places.js"></script>
-    <link rel="stylesheet" href="/assets/frontend/mapbox-gl.css">
-@stop

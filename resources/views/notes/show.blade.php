@@ -50,5 +50,4 @@
 
 @section('scripts')
             <link rel="stylesheet" href="/assets/highlight/zenburn.css">
-            @include('templates.mapbox-links')
 @stop
