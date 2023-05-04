@@ -10,7 +10,3 @@
                 <p class="latlnginfo">Latitude: <span class="p-latitude">{{ $place->latitude }}</span>, longitude: <span class="p-longitude">{{ $place->longitude }}</span></p>
             </div>
 @stop
-
-@section('scripts')
-@include('templates.mapbox-links')
-@stop

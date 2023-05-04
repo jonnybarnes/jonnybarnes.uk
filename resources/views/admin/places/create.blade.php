@@ -31,8 +31,3 @@
         </div>
     </form>
 @stop
-
-@section('scripts')
-    @include('templates.mapbox-links')
-    <script src="/assets/js/newplace.js"></script>
-@stop
