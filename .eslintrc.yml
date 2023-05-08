@@ -4,6 +4,8 @@ extends: 'eslint:recommended'
 env:
   browser: true
   es6: true
+ignorePatterns:
+  - webpack.config.js
 rules:
   indent:
     - error

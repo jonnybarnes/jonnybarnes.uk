@@ -16,13 +16,13 @@
         "cssnano": "^6.0.1",
         "eslint": "^8.39.0",
         "eslint-webpack-plugin": "^4.0.1",
-        "mini-css-extract-plugin": "^2.7.5",
         "postcss": "^8.4.23",
         "postcss-combine-duplicated-selectors": "^10.0.2",
         "postcss-combine-media-query": "^1.0.1",
         "postcss-import": "^15.1.0",
         "postcss-loader": "^7.3.0",
         "postcss-nesting": "^11.2.2",
+        "style-loader": "^3.3.2",
         "stylelint": "^15.6.1",
         "stylelint-config-standard": "^33.0.0",
         "stylelint-webpack-plugin": "^4.1.1",
@@ -30,8 +30,8 @@
         "webpack-cli": "^5.0.2"
     },
     "scripts": {
-        "dev": "webpack",
-        "prod": "NODE_ENV=production webpack"
+        "dev": "webpack --mode=development",
+        "prod": "webpack --mode=production"
     },
     "browserslist": [
         "last 2 versions",

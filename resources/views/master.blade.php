@@ -7,7 +7,6 @@
         @if (!empty(config('app.font_link')))
             <link rel="stylesheet" href="{{ config('app.font_link') }}">
         @endif
-        <link rel="stylesheet" href="/assets/app.css">
         <link rel="stylesheet" href="/assets/highlight/zenburn.css">
         <link rel="alternate" type="application/rss+xml" title="Blog RSS Feed" href="/blog/feed.rss">
         <link rel="alternate" type="application/atom+xml" title="Blog Atom Feed" href="/blog/feed.atom">
@@ -60,6 +59,7 @@
 
         <!--scripts go here when needed-->
         @section('scripts')
+            <script src="/assets/app.js"></script>
         @show
     </body>
 </html>
