@@ -1,13 +1,11 @@
 const path = require('path');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const StyleLintPlugin = require('stylelint-webpack-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
 const zlib = require('zlib');
 const EslintPlugin = require('eslint-webpack-plugin');
 
 module.exports = {
-    mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
-    devtool: 'source-map',
+    devtool: 'eval-source-map',
     entry: ['./resources/js/app.js'],
     output: {
         path: path.resolve('./public/assets'),
@@ -18,7 +16,9 @@ module.exports = {
             test: /\.css$/,
             exclude: /node_modules/,
             use: [
-                { loader: MiniCssExtractPlugin.loader },
+                {
+                    loader: 'style-loader'
+                },
                 {
                     loader: 'css-loader',
                     options: {
@@ -41,19 +41,17 @@ module.exports = {
             use: {
                 loader: 'babel-loader',
                 options: {
-                    presets: ['@babel/preset-env']
+                    presets: [
+                        ['@babel/preset-env', { targets: "defaults" }]
+                    ]
                 }
             }
         }]
     },
     plugins: [
-        new MiniCssExtractPlugin({
-            filename: 'app.css',
-            chunkFilename: 'app.css',
-        }),
         new StyleLintPlugin({
             configFile: path.resolve(__dirname + '/.stylelintrc'),
-            context: path.resolve(__dirname + '/resources/css-2023'),
+            context: path.resolve(__dirname + '/resources/css'),
             files: '**/*.css',
         }),
         new EslintPlugin({
