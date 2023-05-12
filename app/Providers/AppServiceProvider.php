@@ -30,11 +30,6 @@ class AppServiceProvider extends ServiceProvider
     {
         Note::observe(NoteObserver::class);
 
-        // Request AS macro
-        Request::macro('wantsActivityStream', function () {
-            return Str::contains(mb_strtolower($this->header('Accept')), 'application/activity+json');
-        });
-
         // configure Intervention/Image
         $this->app->bind('Intervention\Image\ImageManager', function () {
             return new \Intervention\Image\ImageManager(['driver' => config('image.driver')]);

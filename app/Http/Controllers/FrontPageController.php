@@ -19,10 +19,6 @@ class FrontPageController extends Controller
      */
     public function index(Request $request): Response|View
     {
-        if ($request->wantsActivityStream()) {
-            return (new ActivityStreamsService())->siteOwnerResponse();
-        }
-
         $notes = Note::latest()->with(['media', 'client', 'place'])->get();
         $articles = Article::latest()->get();
         $bookmarks = Bookmark::latest()->get();
