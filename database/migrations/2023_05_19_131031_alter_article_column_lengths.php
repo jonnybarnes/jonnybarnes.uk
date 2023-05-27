@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('articles', function (Blueprint $table) {
             $table->string('titleurl', 255)->change();
-            $table->string('url', 255)->change();
+            $table->string('url', 255)->nullable()->change();
         });
     }
 
