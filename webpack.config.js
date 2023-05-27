@@ -4,8 +4,7 @@ const CompressionPlugin = require('compression-webpack-plugin');
 const zlib = require('zlib');
 const EslintPlugin = require('eslint-webpack-plugin');
 
-module.exports = {
-    devtool: 'eval-source-map',
+const config = {
     entry: ['./resources/js/app.js'],
     output: {
         path: path.resolve('./public/assets'),
@@ -70,4 +69,12 @@ module.exports = {
             },
         }),
     ]
+};
+
+module.exports = (env, argv) => {
+    if (argv.mode === 'development') {
+        config.devtool = 'eval-source-map';
+    }
+
+    return config;
 };
