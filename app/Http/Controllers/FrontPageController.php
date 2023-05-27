@@ -7,7 +7,6 @@ use App\Models\Bio;
 use App\Models\Bookmark;
 use App\Models\Like;
 use App\Models\Note;
-use App\Services\ActivityStreamsService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\View\View;
@@ -19,10 +18,6 @@ class FrontPageController extends Controller
      */
     public function index(Request $request): Response|View
     {
-        if ($request->wantsActivityStream()) {
-            return (new ActivityStreamsService())->siteOwnerResponse();
-        }
-
         $notes = Note::latest()->with(['media', 'client', 'place'])->get();
         $articles = Article::latest()->get();
         $bookmarks = Bookmark::latest()->get();

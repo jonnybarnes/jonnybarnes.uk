@@ -7,31 +7,31 @@
     "devDependencies": {
         "@babel/core": "^7.21.8",
         "@babel/preset-env": "^7.21.5",
-        "@csstools/postcss-oklab-function": "^2.2.1",
+        "@csstools/postcss-oklab-function": "^2.2.2",
         "autoprefixer": "^10.4.14",
         "babel-loader": "^9.1.2",
         "browserlist": "^1.0.1",
         "compression-webpack-plugin": "^10.0.0",
-        "css-loader": "^6.7.3",
+        "css-loader": "^6.7.4",
         "cssnano": "^6.0.1",
-        "eslint": "^8.39.0",
+        "eslint": "^8.41.0",
         "eslint-webpack-plugin": "^4.0.1",
-        "mini-css-extract-plugin": "^2.7.5",
         "postcss": "^8.4.23",
         "postcss-combine-duplicated-selectors": "^10.0.2",
         "postcss-combine-media-query": "^1.0.1",
         "postcss-import": "^15.1.0",
-        "postcss-loader": "^7.3.0",
+        "postcss-loader": "^7.3.1",
         "postcss-nesting": "^11.2.2",
-        "stylelint": "^15.6.1",
+        "style-loader": "^3.3.3",
+        "stylelint": "^15.6.2",
         "stylelint-config-standard": "^33.0.0",
         "stylelint-webpack-plugin": "^4.1.1",
-        "webpack": "^5.82.0",
-        "webpack-cli": "^5.0.2"
+        "webpack": "^5.84.1",
+        "webpack-cli": "^5.1.1"
     },
     "scripts": {
-        "dev": "webpack",
-        "prod": "NODE_ENV=production webpack"
+        "dev": "webpack --mode=development",
+        "prod": "webpack --mode=production"
     },
     "browserslist": [
         "last 2 versions",

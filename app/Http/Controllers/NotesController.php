@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Models\Note;
-use App\Services\ActivityStreamsService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -23,10 +22,6 @@ class NotesController extends Controller
      */
     public function index(Request $request): View|Response
     {
-        if ($request->wantsActivityStream()) {
-            return (new ActivityStreamsService())->siteOwnerResponse();
-        }
-
         $notes = Note::latest()
             ->with('place', 'media', 'client')
             ->withCount(['webmentions As replies' => function ($query) {
@@ -45,10 +40,6 @@ class NotesController extends Controller
             $note = Note::nb60($urlId)->with('webmentions')->firstOrFail();
         } catch (ModelNotFoundException $exception) {
             abort(404);
-        }
-
-        if (request()->wantsActivityStream()) {
-            return (new ActivityStreamsService())->singleNoteResponse($note);
         }
 
         return view('notes.show', compact('note'));

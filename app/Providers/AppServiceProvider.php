@@ -8,11 +8,9 @@ use Codebird\Codebird;
 use GuzzleHttp\Client;
 use GuzzleHttp\Middleware;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Str;
 use Laravel\Dusk\DuskServiceProvider;
 use Lcobucci\JWT\Configuration;
 use Lcobucci\JWT\Signer\Hmac\Sha256;
@@ -29,11 +27,6 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Note::observe(NoteObserver::class);
-
-        // Request AS macro
-        Request::macro('wantsActivityStream', function () {
-            return Str::contains(mb_strtolower($this->header('Accept')), 'application/activity+json');
-        });
 
         // configure Intervention/Image
         $this->app->bind('Intervention\Image\ImageManager', function () {
