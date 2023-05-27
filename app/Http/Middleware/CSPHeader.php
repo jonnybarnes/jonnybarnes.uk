@@ -25,7 +25,7 @@ class CSPHeader
             ->header(
                 'Content-Security-Policy',
                 "default-src 'self'; " .
-                "style-src 'self' cloud.typography.com jonnybarnes.uk; " .
+                "style-src 'self' 'unsafe-inline' cloud.typography.com jonnybarnes.uk; " .
                 "img-src 'self' data: blob: https://pbs.twimg.com https://jbuk-media.s3-eu-west-1.amazonaws.com https://jbuk-media-dev.s3-eu-west-1.amazonaws.com https://secure.gravatar.com https://graph.facebook.com *.fbcdn.net https://*.cdninstagram.com https://*.4sqi.net https://upload.wikimedia.org; " .
                 "font-src 'self' data:; " .
                 "frame-src 'self' https://www.youtube.com blob:; " .
