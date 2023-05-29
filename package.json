@@ -6,7 +6,7 @@
     "license": "CC0-1.0",
     "devDependencies": {
         "@babel/core": "^7.22.1",
-        "@babel/preset-env": "^7.21.5",
+        "@babel/preset-env": "^7.22.2",
         "@csstools/postcss-oklab-function": "^2.2.2",
         "autoprefixer": "^10.4.14",
         "babel-loader": "^9.1.2",
