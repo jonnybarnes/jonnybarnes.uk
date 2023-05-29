@@ -3,6 +3,7 @@ const StyleLintPlugin = require('stylelint-webpack-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
 const zlib = require('zlib');
 const EslintPlugin = require('eslint-webpack-plugin');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 const config = {
     entry: ['./resources/js/app.js'],
@@ -12,29 +13,6 @@ const config = {
     },
     module: {
         rules: [{
-            test: /\.css$/,
-            exclude: /node_modules/,
-            use: [
-                {
-                    loader: 'style-loader'
-                },
-                {
-                    loader: 'css-loader',
-                    options: {
-                        sourceMap: process.env.NODE_ENV !== 'production'
-                    }
-                },
-                {
-                    loader: 'postcss-loader',
-                    options: {
-                        postcssOptions: {
-                            config: path.resolve(__dirname, 'postcss.config.js'),
-                        },
-                        sourceMap: process.env.NODE_ENV !== 'production'
-                    }
-                }
-            ]
-        }, {
             test: /\.js$/,
             exclude: /node_modules/,
             use: {
@@ -74,6 +52,56 @@ const config = {
 module.exports = (env, argv) => {
     if (argv.mode === 'development') {
         config.devtool = 'eval-source-map';
+
+        config.module.rules.push({
+            test: /\.css$/,
+            exclude: /node_modules/,
+            use: [
+                {
+                    loader: 'style-loader'
+                },
+                {
+                    loader: 'css-loader',
+                    options: {
+                        sourceMap: true
+                    }
+                },
+                {
+                    loader: 'postcss-loader',
+                    options: {
+                        postcssOptions: {
+                            config: path.resolve(__dirname, 'postcss.config.js'),
+                        },
+                        sourceMap: true
+                    }
+                }
+            ]
+        });
+    }
+
+    if (argv.mode === 'production') {
+        config.module.rules.push({
+            test: /\.css$/,
+            exclude: /node_modules/,
+            use: [
+                {
+                    loader: MiniCssExtractPlugin.loader,
+                },
+                {
+                    loader: 'css-loader',
+                },
+                {
+                    loader: 'postcss-loader',
+                    options: {
+                        postcssOptions: {
+                            config: path.resolve(__dirname, 'postcss.config.js'),
+                        },
+                    }
+                }
+            ]
+        });
+
+        config.plugins.push(new MiniCssExtractPlugin({filename: 'app.css'}));
     }
 
     return config;

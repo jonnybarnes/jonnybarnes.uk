@@ -16,6 +16,7 @@
         "cssnano": "^6.0.1",
         "eslint": "^8.41.0",
         "eslint-webpack-plugin": "^4.0.1",
+        "mini-css-extract-plugin": "^2.7.6",
         "postcss": "^8.4.24",
         "postcss-combine-duplicated-selectors": "^10.0.2",
         "postcss-combine-media-query": "^1.0.1",
