@@ -1,8 +1,9 @@
-preset: laravel
-
-disabled:
-  - concat_without_spaces
-  - single_import_per_statement
-
-finder:
-  path: app/
+php:
+  preset: laravel
+  disabled:
+    - no_unused_imports
+  finder:
+    not-name:
+      - index.php
+js: true
+css: true

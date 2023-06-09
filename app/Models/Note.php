@@ -179,7 +179,7 @@ class Note extends Model
 
     public function getShorturlAttribute(): string
     {
-        return config('app.shorturl') . '/notes/' . $this->nb60id;
+        return config('url.shorturl') . '/notes/' . $this->nb60id;
     }
 
     public function getIso8601Attribute(): string

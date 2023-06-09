@@ -21,7 +21,7 @@
         <link rel="alternate" type="application/jf2feed+json" title="Notes JF2 Feed" href="/blog/feed.jf2">
         <link rel="openid.server" href="https://indieauth.com/openid">
         <link rel="openid.delegate" href="{{ config('app.url') }}">
-        <link rel="authorization_endpoint" href="{{ config('app.authorization_endpoint') }}">
+        <link rel="authorization_endpoint" href="{{ config('url.authorization_endpoint') }}">
         <link rel="token_endpoint" href="{{ config('app.url') }}/api/token">
         <link rel="micropub" href="{{ config('app.url') }}/api/post">
         <link rel="webmention" href="{{ config('app.url') }}/webmention">

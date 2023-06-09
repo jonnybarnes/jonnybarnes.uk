@@ -54,7 +54,7 @@ class PlacesTest extends TestCase
         $place = Place::factory()->create([
             'name' => 'The Bridgewater Pub',
         ]);
-        $this->assertEquals(config('app.shorturl') . '/places/the-bridgewater-pub', $place->shorturl);
+        $this->assertEquals(config('url.shorturl') . '/places/the-bridgewater-pub', $place->shorturl);
     }
 
     /** @test */
