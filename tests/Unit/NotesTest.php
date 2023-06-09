@@ -123,7 +123,7 @@ class NotesTest extends TestCase
     {
         $note = Note::factory()->make();
         $note->id = 14;
-        $this->assertEquals(config('app.shorturl') . '/notes/E', $note->shorturl);
+        $this->assertEquals(config('url.shorturl') . '/notes/E', $note->shorturl);
     }
 
     /** @test */
