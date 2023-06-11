@@ -2,7 +2,7 @@
 <html lang="en-GB">
     <head>
         <meta charset="UTF-8">
-        <title>@yield('title'){{ config('app.display_name') }}</title>
+        <title>@yield('title'){{ config('app.name') }}</title>
         <meta name="viewport" content="width=device-width">
         @if (!empty(config('app.font_link')))
             <link rel="stylesheet" href="{{ config('app.font_link') }}">
@@ -31,7 +31,7 @@
     <body class="grid">
         <header id="site-header">
             <h1>
-                <a rel="author" href="/">{{ config('app.display_name') }}</a>
+                <a rel="author" href="/">{{ config('user.display_name') }}</a>
             </h1>
             <nav>
                 <a href="/">All</a>

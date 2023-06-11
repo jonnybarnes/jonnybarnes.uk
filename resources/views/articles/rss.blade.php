@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
-        <title>{{ config('app.display_name') }}</title>
+        <title>{{ config('user.display_name') }}</title>
         <atom:link href="{{ config('app.url') }}/blog/feed.rss" rel="self" type="application/rss+xml" />
         <description>An RSS feed of the blog posts found on {{ config('url.longurl') }}</description>
         <link>{{ config('app.url') }}/blog</link>

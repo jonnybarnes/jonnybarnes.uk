@@ -71,7 +71,7 @@ class FeedsController extends Controller
         $articles = Article::where('published', '1')->latest('updated_at')->take(20)->get();
         $data = [
             'version' => 'https://jsonfeed.org/version/1',
-            'title' => 'The JSON Feed for ' . config('app.display_name') . '’s blog',
+            'title' => 'The JSON Feed for ' . config('user.display_name') . '’s blog',
             'home_page_url' => config('app.url') . '/blog',
             'feed_url' => config('app.url') . '/blog/feed.json',
             'items' => [],
@@ -86,7 +86,7 @@ class FeedsController extends Controller
                 'date_published' => $article->created_at->tz('UTC')->toRfc3339String(),
                 'date_modified' => $article->updated_at->tz('UTC')->toRfc3339String(),
                 'author' => [
-                    'name' => config('app.display_name'),
+                    'name' => config('user.display_name'),
                 ],
             ];
         }
@@ -102,7 +102,7 @@ class FeedsController extends Controller
         $notes = Note::latest()->with('media')->take(20)->get();
         $data = [
             'version' => 'https://jsonfeed.org/version/1',
-            'title' => 'The JSON Feed for ' . config('app.display_name') . '’s notes',
+            'title' => 'The JSON Feed for ' . config('user.display_name') . '’s notes',
             'home_page_url' => config('app.url') . '/notes',
             'feed_url' => config('app.url') . '/notes/feed.json',
             'items' => [],
@@ -116,7 +116,7 @@ class FeedsController extends Controller
                 'date_published' => $note->created_at->tz('UTC')->toRfc3339String(),
                 'date_modified' => $note->updated_at->tz('UTC')->toRfc3339String(),
                 'author' => [
-                    'name' => config('app.display_name'),
+                    'name' => config('user.display_name'),
                 ],
             ];
         }
@@ -151,7 +151,7 @@ class FeedsController extends Controller
             'url' => url('/blog'),
             'author' => [
                 'type' => 'card',
-                'name' => config('user.displayname'),
+                'name' => config('user.display_name'),
                 'url' => config('url.longurl'),
             ],
             'children' => $items,
@@ -187,7 +187,7 @@ class FeedsController extends Controller
             'url' => url('/notes'),
             'author' => [
                 'type' => 'card',
-                'name' => config('user.displayname'),
+                'name' => config('user.display_name'),
                 'url' => config('url.longurl'),
             ],
             'children' => $items,
