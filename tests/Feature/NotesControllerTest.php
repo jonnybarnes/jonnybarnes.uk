@@ -73,4 +73,11 @@ class NotesControllerTest extends TestCase
         $response = $this->get('/notes/112233');
         $response->assertNotFound();
     }
+
+    /** @test */
+    public function checkNoteIdNotOutOfRange(): void
+    {
+        $response = $this->get('/notes/photou-photologo');
+        $response->assertNotFound();
+    }
 }

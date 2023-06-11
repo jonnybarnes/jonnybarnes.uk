@@ -62,7 +62,7 @@ class SendWebMentions implements ShouldQueue
     public function discoverWebmentionEndpoint(string $url): ?string
     {
         // let’s not send webmentions to myself
-        if (parse_url($url, PHP_URL_HOST) === config('app.longurl')) {
+        if (parse_url($url, PHP_URL_HOST) === config('url.longurl')) {
             return null;
         }
         if (Str::startsWith($url, '/notes/tagged/')) {

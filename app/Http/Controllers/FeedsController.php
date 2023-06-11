@@ -152,7 +152,7 @@ class FeedsController extends Controller
             'author' => [
                 'type' => 'card',
                 'name' => config('user.displayname'),
-                'url' => config('app.longurl'),
+                'url' => config('url.longurl'),
             ],
             'children' => $items,
         ], 200, [
@@ -188,7 +188,7 @@ class FeedsController extends Controller
             'author' => [
                 'type' => 'card',
                 'name' => config('user.displayname'),
-                'url' => config('app.longurl'),
+                'url' => config('url.longurl'),
             ],
             'children' => $items,
         ], 200, [

@@ -6,6 +6,38 @@
  */
 
 return [
-    'longurl' => env('APP_LONGURL', 'jonnybarnes.uk'),
-    'shorturl' => env('APP_SHORTURL', 'jmb.lv'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Application Long URL
+    |--------------------------------------------------------------------------
+    |
+    | The long URL for the application
+    |
+    */
+
+    'longurl' => env('APP_LONGURL', 'longurl.local'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Application Short URL
+    |--------------------------------------------------------------------------
+    |
+    | The short URL for the application
+    |
+    */
+
+    'shorturl' => env('APP_SHORTURL', 'shorturl.local'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Authorization endpoint
+    |--------------------------------------------------------------------------
+    |
+    | The authorization endpoint for the application, used primarily for Micropub
+    |
+    */
+
+    'authorization_endpoint' => env('AUTHORIZATION_ENDPOINT', 'https://indieauth.com/auth'),
+
 ];

@@ -179,7 +179,7 @@ class Note extends Model
 
     public function getShorturlAttribute(): string
     {
-        return config('app.shorturl') . '/notes/' . $this->nb60id;
+        return config('url.shorturl') . '/notes/' . $this->nb60id;
     }
 
     public function getIso8601Attribute(): string
@@ -286,6 +286,13 @@ class Note extends Model
      */
     public function scopeNb60(Builder $query, string $nb60id): Builder
     {
+        $realId = resolve(Numbers::class)->b60tonum($nb60id);
+
+        // Check nb60 does not translate to ID too big for database int4 column
+        if ($realId > 2_147_483_647) {
+            abort(404);
+        }
+
         return $query->where('id', resolve(Numbers::class)->b60tonum($nb60id));
     }
 

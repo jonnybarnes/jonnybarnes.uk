@@ -45,7 +45,7 @@ class TokenEndpointController extends Controller
     public function create(Request $request): JsonResponse
     {
         $auth = $this->verifyIndieAuthCode(
-            config('app.authorization_endpoint'),
+            config('url.authorization_endpoint'),
             $request->input('code'),
             $request->input('redirect_uri'),
             $request->input('client_id'),

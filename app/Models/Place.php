@@ -84,7 +84,7 @@ class Place extends Model
     protected function shorturl(): Attribute
     {
         return Attribute::get(
-            get: fn ($value, $attributes) => config('app.shorturl') . '/places/' . $attributes['slug'],
+            get: fn ($value, $attributes) => config('url.shorturl') . '/places/' . $attributes['slug'],
         );
     }
 
