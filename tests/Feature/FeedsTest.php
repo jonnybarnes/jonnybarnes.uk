@@ -64,7 +64,7 @@ class FeedsTest extends TestCase
             'url' => url('/blog'),
             'author' => [
                 'type' => 'card',
-                'name' => config('user.displayname'),
+                'name' => config('user.display_name'),
                 'url' => config('url.longurl'),
             ],
             'children' => [[
@@ -125,7 +125,7 @@ class FeedsTest extends TestCase
             'url' => url('/notes'),
             'author' => [
                 'type' => 'card',
-                'name' => config('user.displayname'),
+                'name' => config('user.display_name'),
                 'url' => config('url.longurl'),
             ],
             'children' => [[

@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'displayname' => env('DISPLAY_NAME'),
+    'display_name' => env('DISPLAY_NAME'),
 
     'username' => env('USER_NAME'),
 ];
