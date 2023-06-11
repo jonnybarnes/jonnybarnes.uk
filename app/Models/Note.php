@@ -12,6 +12,7 @@ use GuzzleHttp\Client;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -286,6 +287,13 @@ class Note extends Model
      */
     public function scopeNb60(Builder $query, string $nb60id): Builder
     {
+        $realId = resolve(Numbers::class)->b60tonum($nb60id);
+
+        // Check nb60 does not translate to ID too big for database int4 column
+        if ($realId > 2_147_483_647) {
+            abort(404);
+        }
+
         return $query->where('id', resolve(Numbers::class)->b60tonum($nb60id));
     }
 
