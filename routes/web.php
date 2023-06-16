@@ -150,8 +150,8 @@ Route::group(['domain' => config('url.longurl')], function () {
         Route::get('/feed.json', [FeedsController::class, 'blogJson']);
         Route::get('/feed.jf2', [FeedsController::class, 'blogJf2']);
         Route::get('/s/{id}', [ArticlesController::class, 'onlyIdInURL']);
-        Route::get('/{year?}/{month?}', [ArticlesController::class, 'index']);
-        Route::get('/{year}/{month}/{slug}', [ArticlesController::class, 'show']);
+        Route::get('/{year?}/{month?}', [ArticlesController::class, 'index'])->where(['year' => '[0-9]{4}', 'month' => '[0-9]{2}']);
+        Route::get('/{year}/{month}/{slug}', [ArticlesController::class, 'show'])->where(['year' => '[0-9]{4}', 'month' => '[0-9]{2}']);
     });
 
     // Notes pages using NotesController

@@ -58,4 +58,11 @@ class ArticlesTest extends TestCase
         $response = $this->get('/blog/s/22');
         $response->assertNotFound();
     }
+
+    /** @test */
+    public function someUrlsDoNotParseCorrectly(): void
+    {
+        $response = $this->get('/blog/feed.js');
+        $response->assertNotFound();
+    }
 }
