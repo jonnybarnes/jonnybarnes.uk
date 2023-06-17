@@ -106,4 +106,63 @@ class SaveProfileImageJobTest extends TestCase
             public_path() . '/assets/profile-images/example.org/image'
         );
     }
+
+    /** @test */
+    public function weGetUrlFromPhotoObjectIfAltTextIsProvided(): void
+    {
+        $mock = new MockHandler([
+            new Response(200, ['Content-Type' => 'image/jpeg'], 'fake jpeg image'),
+        ]);
+        $handler = HandlerStack::create($mock);
+        $client = new Client(['handler' => $handler]);
+        $this->app->instance(Client::class, $client);
+        $mf = ['items' => []];
+        $author = [
+            'properties' => [
+                'photo' => [[
+                    'value' => 'https://example.org/profile.jpg',
+                    'alt' => null,
+                ]],
+                'url' => ['https://example.org'],
+            ],
+        ];
+        $authorship = $this->createMock(Authorship::class);
+        $authorship->method('findAuthor')
+            ->willReturn($author);
+
+        $job = new SaveProfileImage($mf);
+        $job->handle($authorship);
+        $this->assertFileExists(public_path() . '/assets/profile-images/example.org/image');
+    }
+
+    /** @test */
+    public function useFirstUrlIfMultipleHomepagesAreProvided(): void
+    {
+        $mock = new MockHandler([
+            new Response(200, ['Content-Type' => 'image/jpeg'], 'fake jpeg image'),
+        ]);
+        $handler = HandlerStack::create($mock);
+        $client = new Client(['handler' => $handler]);
+        $this->app->instance(Client::class, $client);
+        $mf = ['items' => []];
+        $author = [
+            'properties' => [
+                'photo' => [[
+                    'value' => 'https://example.org/profile.jpg',
+                    'alt' => null,
+                ]],
+                'url' => [[
+                    'https://example.org',
+                    'https://example.com',
+                ]],
+            ],
+        ];
+        $authorship = $this->createMock(Authorship::class);
+        $authorship->method('findAuthor')
+            ->willReturn($author);
+
+        $job = new SaveProfileImage($mf);
+        $job->handle($authorship);
+        $this->assertFileExists(public_path() . '/assets/profile-images/example.org/image');
+    }
 }

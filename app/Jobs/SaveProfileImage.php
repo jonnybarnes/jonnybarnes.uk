@@ -42,6 +42,14 @@ class SaveProfileImage implements ShouldQueue
         $photo = Arr::get($author, 'properties.photo.0');
         $home = Arr::get($author, 'properties.url.0');
 
+        if (is_array($photo) && array_key_exists('value', $photo)) {
+            $photo = $photo['value'];
+        }
+
+        if (is_array($home)) {
+            $home = array_shift($home);
+        }
+
         //dont save pbs.twimg.com links
         if (
             $photo
