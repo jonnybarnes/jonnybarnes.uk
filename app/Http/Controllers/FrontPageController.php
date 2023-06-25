@@ -16,7 +16,7 @@ class FrontPageController extends Controller
     /**
      * Show all the recent activity.
      */
-    public function index(Request $request): Response|View
+    public function index(): Response|View
     {
         $notes = Note::latest()->with(['media', 'client', 'place'])->get();
         $articles = Article::latest()->get();
