@@ -7,7 +7,6 @@ use App\Models\Bio;
 use App\Models\Bookmark;
 use App\Models\Like;
 use App\Models\Note;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\View\View;
 
