@@ -7,7 +7,7 @@
     "devDependencies": {
         "@babel/core": "^7.22.5",
         "@babel/preset-env": "^7.22.5",
-        "@csstools/postcss-oklab-function": "^2.2.3",
+        "@csstools/postcss-oklab-function": "^3.0.0",
         "autoprefixer": "^10.4.14",
         "babel-loader": "^9.1.2",
         "browserlist": "^1.0.1",
