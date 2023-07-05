@@ -5,7 +5,7 @@
     "repository": "https://github.com/jonnybarnes/jonnybarnes.uk",
     "license": "CC0-1.0",
     "devDependencies": {
-        "@babel/core": "^7.22.5",
+        "@babel/core": "^7.22.6",
         "@babel/preset-env": "^7.22.6",
         "@csstools/postcss-oklab-function": "^3.0.0",
         "autoprefixer": "^10.4.14",
