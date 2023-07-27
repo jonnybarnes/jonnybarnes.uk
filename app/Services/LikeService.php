@@ -13,7 +13,7 @@ class LikeService extends Service
     /**
      * Create a new Like.
      */
-    public function create(array $request, ?string $client = null): Like
+    public function create(array $request, string $client = null): Like
     {
         if (Arr::get($request, 'properties.like-of.0')) {
             //micropub request
