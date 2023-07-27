@@ -9,7 +9,7 @@ use Illuminate\Support\Arr;
 
 abstract class Service
 {
-    abstract public function create(array $request, ?string $client = null): Model;
+    abstract public function create(array $request, string $client = null): Model;
 
     protected function getDataByKey(array $request, string $key): ?string
     {
