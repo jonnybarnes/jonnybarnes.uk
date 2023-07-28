@@ -12,6 +12,8 @@ class LikesTableSeeder extends Seeder
 {
     /**
      * Seed the likes table.
+     *
+     * @psalm-suppress PossiblyUnusedMethod
      */
     public function run(): void
     {

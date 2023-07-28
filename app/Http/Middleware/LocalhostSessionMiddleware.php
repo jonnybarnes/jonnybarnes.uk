@@ -14,6 +14,8 @@ class LocalhostSessionMiddleware
      * Whilst we are developing locally, automatically log in as
      * `['me' => config('app.url')]` as I can’t manually log in as
      * a .localhost domain.
+     *
+     * @psalm-suppress PossiblyUnusedMethod
      */
     public function handle(Request $request, Closure $next): Response
     {

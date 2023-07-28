@@ -10,6 +10,9 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Jonnybarnes\IndieWeb\Numbers;
 
+/**
+ * @psalm-suppress UnusedClass
+ */
 class ArticlesController extends Controller
 {
     /**

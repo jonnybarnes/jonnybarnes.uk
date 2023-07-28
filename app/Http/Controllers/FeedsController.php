@@ -9,6 +9,9 @@ use App\Models\Note;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 
+/**
+ * @psalm-suppress UnusedClass
+ */
 class FeedsController extends Controller
 {
     /**

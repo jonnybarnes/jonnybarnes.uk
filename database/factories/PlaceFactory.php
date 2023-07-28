@@ -6,6 +6,8 @@ use App\Models\Place;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
+ * @psalm-suppress UnusedClass
+ *
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Place>
  */
 class PlaceFactory extends Factory

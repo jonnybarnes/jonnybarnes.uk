@@ -24,6 +24,9 @@ use Lcobucci\JWT\Token\InvalidTokenStructure;
 use Lcobucci\JWT\Validation\RequiredConstraintsViolated;
 use Ramsey\Uuid\Uuid;
 
+/**
+ * @psalm-suppress UnusedClass
+ */
 class MicropubMediaController extends Controller
 {
     protected TokenService $tokenService;

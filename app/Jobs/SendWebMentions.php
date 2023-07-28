@@ -71,7 +71,6 @@ class SendWebMentions implements ShouldQueue
 
         $endpoint = null;
 
-        /** @var Client $guzzle */
         $guzzle = resolve(Client::class);
         $response = $guzzle->get($url);
         //check HTTP Headers for webmention endpoint

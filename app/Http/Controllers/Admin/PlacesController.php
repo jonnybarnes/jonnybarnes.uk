@@ -10,6 +10,9 @@ use App\Services\PlaceService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
+/**
+ * @psalm-suppress UnusedClass
+ */
 class PlacesController extends Controller
 {
     protected PlaceService $placeService;

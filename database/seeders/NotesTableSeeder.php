@@ -14,6 +14,8 @@ class NotesTableSeeder extends Seeder
 {
     /**
      * Seed the notes table.
+     *
+     * @psalm-suppress PossiblyUnusedMethod
      */
     public function run(): void
     {
