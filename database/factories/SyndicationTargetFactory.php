@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
  * @psalm-suppress UnusedClass
+ *
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\SyndicationTarget>
  */
 class SyndicationTargetFactory extends Factory
