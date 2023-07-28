@@ -8,6 +8,9 @@ use App\Models\Contact;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\View\View;
 
+/**
+ * @psalm-suppress UnusedClass
+ */
 class ContactsController extends Controller
 {
     /**

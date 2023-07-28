@@ -13,14 +13,16 @@ use Illuminate\Http\Response;
 use Illuminate\View\View;
 use Jonnybarnes\IndieWeb\Numbers;
 
-// Need to sort out Twitter and webmentions!
-
+/**
+ * @todo Need to sort out Twitter and webmentions!
+ * @psalm-suppress UnusedClass
+ */
 class NotesController extends Controller
 {
     /**
      * Show all the notes. This is also the homepage.
      */
-    public function index(Request $request): View|Response
+    public function index(): View|Response
     {
         $notes = Note::latest()
             ->with('place', 'media', 'client')

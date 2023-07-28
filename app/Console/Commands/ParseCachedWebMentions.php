@@ -9,6 +9,9 @@ use Illuminate\Console\Command;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\FileSystem\FileSystem;
 
+/**
+ * @psalm-suppress UnusedClass
+ */
 class ParseCachedWebMentions extends Command
 {
     /**

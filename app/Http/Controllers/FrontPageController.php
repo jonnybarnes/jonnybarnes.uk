@@ -10,6 +10,9 @@ use App\Models\Note;
 use Illuminate\Http\Response;
 use Illuminate\View\View;
 
+/**
+ * @psalm-suppress UnusedClass
+ */
 class FrontPageController extends Controller
 {
     /**

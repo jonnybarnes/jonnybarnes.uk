@@ -6,6 +6,7 @@ use App\Models\MicropubClient;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
+ * @psalm-suppress UnusedClass
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\MicropubClient>
  */
 class MicropubClientFactory extends Factory

@@ -10,6 +10,8 @@ class BookmarksTableSeeder extends Seeder
 {
     /**
      * Seed the bookmarks table.
+     *
+     * @psalm-suppress PossiblyUnusedMethod
      */
     public function run(): void
     {

@@ -4,6 +4,9 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 
+/**
+ * @psalm-suppress UnusedClass
+ */
 class DatabaseSeeder extends Seeder
 {
     /**

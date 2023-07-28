@@ -9,6 +9,9 @@ use App\Models\MicropubClient;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
+/**
+ * @psalm-suppress UnusedClass
+ */
 class ClientsController extends Controller
 {
     /**

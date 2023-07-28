@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
 
 /**
+ * @psalm-suppress UnusedClass
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Media>
  */
 class MediaFactory extends Factory

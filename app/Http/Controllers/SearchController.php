@@ -6,6 +6,9 @@ use App\Models\Note;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
+/**
+ * @psalm-suppress UnusedClass
+ */
 class SearchController extends Controller
 {
     public function search(Request $request): View

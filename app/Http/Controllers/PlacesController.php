@@ -7,6 +7,9 @@ namespace App\Http\Controllers;
 use App\Models\Place;
 use Illuminate\View\View;
 
+/**
+ * @psalm-suppress UnusedClass
+ */
 class PlacesController extends Controller
 {
     /**

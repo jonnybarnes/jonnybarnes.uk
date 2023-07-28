@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
 
 /**
+ * @psalm-suppress UnusedClass
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Note>
  */
 class NoteFactory extends Factory
