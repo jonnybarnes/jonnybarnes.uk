@@ -51,4 +51,9 @@
     <p>
         Edit your <a href="/admin/bio">bio</a>.
     </p>
+
+    <h2>Passkeys</h2>
+    <p>
+        List passkeys here?
+    </p>
 @stop

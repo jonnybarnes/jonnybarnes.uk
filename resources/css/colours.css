@@ -1,18 +1,18 @@
 body {
-    background-color: var(--color-secondary);
-    color: var(--color-primary);
+  background-color: var(--color-secondary);
+  color: var(--color-primary);
 }
 
 a {
-    color: var(--color-link);
+  color: var(--color-link);
 
-    &:visited {
-        color: var(--color-link-visited);
-    }
+  &:visited {
+    color: var(--color-link-visited);
+  }
 }
 
 #site-header {
-    & a:visited {
-        color: var(--color-link);
-    }
+  & a:visited {
+    color: var(--color-link);
+  }
 }
