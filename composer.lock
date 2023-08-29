@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a0824739b9d145bf875bf9ae54e89b07",
+    "content-hash": "7a49a70ba3f86f5a6435141412e255c1",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -9662,16 +9662,16 @@
         },
         {
             "name": "openai-php/client",
-            "version": "v0.6.4",
+            "version": "v0.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/openai-php/client.git",
-                "reference": "6e0738a3f052fb0d27bd57136fff47db96248f65"
+                "reference": "726054addb6deb96c70c1ff720bed708f3acc0b7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/openai-php/client/zipball/6e0738a3f052fb0d27bd57136fff47db96248f65",
-                "reference": "6e0738a3f052fb0d27bd57136fff47db96248f65",
+                "url": "https://api.github.com/repos/openai-php/client/zipball/726054addb6deb96c70c1ff720bed708f3acc0b7",
+                "reference": "726054addb6deb96c70c1ff720bed708f3acc0b7",
                 "shasum": ""
             },
             "require": {
@@ -9688,7 +9688,7 @@
                 "guzzlehttp/psr7": "^2.5.0",
                 "laravel/pint": "^1.10.3",
                 "nunomaduro/collision": "^7.7.0",
-                "pestphp/pest": "dev-develop as 2.6.2",
+                "pestphp/pest": "^2.16.0",
                 "pestphp/pest-plugin-arch": "^2.2.1",
                 "pestphp/pest-plugin-mock": "^2.0.0",
                 "pestphp/pest-plugin-type-coverage": "^2.0.0",
@@ -9734,7 +9734,7 @@
             ],
             "support": {
                 "issues": "https://github.com/openai-php/client/issues",
-                "source": "https://github.com/openai-php/client/tree/v0.6.4"
+                "source": "https://github.com/openai-php/client/tree/v0.7.0"
             },
             "funding": [
                 {
@@ -9750,7 +9750,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-07-18T22:59:43+00:00"
+            "time": "2023-08-29T05:42:28+00:00"
         },
         {
             "name": "orchestra/testbench",
