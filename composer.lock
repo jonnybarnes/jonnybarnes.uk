@@ -2018,16 +2018,16 @@
         },
         {
             "name": "laravel/horizon",
-            "version": "v5.20.0",
+            "version": "v5.20.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/horizon.git",
-                "reference": "2fc2ba769a592e92d170d85e346a5631b3a90ed5"
+                "reference": "6eaf4efebbfc9955be7504b5b6f045d9d10e86af"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/horizon/zipball/2fc2ba769a592e92d170d85e346a5631b3a90ed5",
-                "reference": "2fc2ba769a592e92d170d85e346a5631b3a90ed5",
+                "url": "https://api.github.com/repos/laravel/horizon/zipball/6eaf4efebbfc9955be7504b5b6f045d9d10e86af",
+                "reference": "6eaf4efebbfc9955be7504b5b6f045d9d10e86af",
                 "shasum": ""
             },
             "require": {
@@ -2090,9 +2090,9 @@
             ],
             "support": {
                 "issues": "https://github.com/laravel/horizon/issues",
-                "source": "https://github.com/laravel/horizon/tree/v5.20.0"
+                "source": "https://github.com/laravel/horizon/tree/v5.20.1"
             },
-            "time": "2023-08-30T14:04:11+00:00"
+            "time": "2023-09-12T11:21:57+00:00"
         },
         {
             "name": "laravel/sanctum",
@@ -3371,16 +3371,16 @@
         },
         {
             "name": "nesbot/carbon",
-            "version": "2.69.0",
+            "version": "2.70.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/briannesbitt/Carbon.git",
-                "reference": "4308217830e4ca445583a37d1bf4aff4153fa81c"
+                "reference": "d3298b38ea8612e5f77d38d1a99438e42f70341d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/4308217830e4ca445583a37d1bf4aff4153fa81c",
-                "reference": "4308217830e4ca445583a37d1bf4aff4153fa81c",
+                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/d3298b38ea8612e5f77d38d1a99438e42f70341d",
+                "reference": "d3298b38ea8612e5f77d38d1a99438e42f70341d",
                 "shasum": ""
             },
             "require": {
@@ -3473,7 +3473,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-08-03T09:00:52+00:00"
+            "time": "2023-09-07T16:43:50+00:00"
         },
         {
             "name": "nette/schema",
