@@ -54,6 +54,6 @@
 
     <h2>Passkeys</h2>
     <p>
-        List passkeys here?
+        Manager <a href="/admin/passkeys">your passkeys</a>.
     </p>
 @stop

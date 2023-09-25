@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\ContactsController as AdminContactsController;
 use App\Http\Controllers\Admin\HomeController;
 use App\Http\Controllers\Admin\LikesController as AdminLikesController;
 use App\Http\Controllers\Admin\NotesController as AdminNotesController;
+use App\Http\Controllers\Admin\PasskeysController;
 use App\Http\Controllers\Admin\PlacesController as AdminPlacesController;
 use App\Http\Controllers\Admin\SyndicationTargetsController;
 use App\Http\Controllers\ArticlesController;
@@ -140,6 +141,13 @@ Route::group(['domain' => config('url.longurl')], function () {
         Route::group(['prefix' => 'bio'], function () {
             Route::get('/', [BioController::class, 'show'])->name('admin.bio.show');
             Route::put('/', [BioController::class, 'update']);
+        });
+
+        // Passkeys
+        Route::group(['prefix' => 'passkeys'], static function () {
+            Route::get('/', [PasskeysController::class, 'index']);
+            Route::post('save', [PasskeysController::class, 'save']);
+            Route::get('/init', [PasskeysController::class, 'init']);
         });
     });
 

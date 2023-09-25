@@ -2,6 +2,7 @@
 <html lang="en-GB">
     <head>
         <meta charset="UTF-8">
+        <meta name="csrf-token" content="{{ csrf_token() }}">
         <title>@yield('title'){{ config('app.name') }}</title>
         <meta name="viewport" content="width=device-width">
         @if (!empty(config('app.font_link')))

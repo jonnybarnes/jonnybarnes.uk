@@ -1,6 +1,6 @@
 parserOptions:
   sourceType: 'module'
-  ecmaVersion: 8
+  ecmaVersion: 'latest'
 extends: 'eslint:recommended'
 env:
   browser: true
@@ -25,3 +25,14 @@ rules:
     - allow:
       - warn
       - error
+  no-await-in-loop:
+    - error
+  no-promise-executor-return:
+    - error
+  require-atomic-updates:
+    - error
+  max-nested-callbacks:
+    - error
+    - 3
+  prefer-promise-reject-errors:
+    - error

@@ -9,6 +9,7 @@
         "ext-dom": "*",
         "ext-intl": "*",
         "ext-json": "*",
+        "ext-pgsql": "*",
         "cviebrock/eloquent-sluggable": "^10.0",
         "guzzlehttp/guzzle": "^7.2",
         "indieauth/client": "^1.1",
