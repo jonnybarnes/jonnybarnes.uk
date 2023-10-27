@@ -22,4 +22,10 @@ footer {
   & .iwc-logo {
     max-width: 85vw;
   }
+
+  & .footer-actions {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+  }
 }

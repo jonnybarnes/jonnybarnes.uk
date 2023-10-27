@@ -9,6 +9,10 @@ a {
   &:visited {
     color: var(--color-link-visited);
   }
+
+  &.auth:visited {
+    color: var(--color-link);
+  }
 }
 
 #site-header {

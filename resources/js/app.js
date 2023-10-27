@@ -9,3 +9,9 @@ document.querySelectorAll('.add-passkey').forEach((el) => {
     auth.register();
   });
 });
+
+document.querySelectorAll('.login-passkey').forEach((el) => {
+  el.addEventListener('click', () => {
+    auth.login();
+  });
+});

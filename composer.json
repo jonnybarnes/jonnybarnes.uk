@@ -28,7 +28,8 @@
         "mf2/mf2": "~0.3",
         "spatie/commonmark-highlighter": "^3.0",
         "spatie/laravel-ignition": "^2.1",
-        "symfony/html-sanitizer": "^6.1"
+        "symfony/html-sanitizer": "^6.1",
+        "web-auth/webauthn-lib": "^4.7"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.0",

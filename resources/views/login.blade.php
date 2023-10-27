@@ -9,4 +9,5 @@
                 <input type="password" name="password" placeholder="password">
                 <input type="submit" name="submit" value="Login">
             </form>
+            <p><button type="button" class="login-passkey">Login with Passkeys</button></p>
 @stop

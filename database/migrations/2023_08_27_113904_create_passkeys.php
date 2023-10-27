@@ -15,8 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->string('passkey_id')->unique();
-            $table->binary('passkey');
-            $table->json('transports');
+            $table->text('passkey');
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users');

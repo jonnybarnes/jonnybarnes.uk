@@ -13,27 +13,11 @@ class Passkey extends Model
 {
     use HasFactory;
 
-    /**
-     * Save and access the passkey appropriately.
-     */
-    protected function passkey(): Attribute
-    {
-        return Attribute::make(
-            get: static fn ($value) => stream_get_contents($value),
-            set: static fn ($value) => pg_escape_bytea($value),
-        );
-    }
-
-    /**
-     * Save and access the transports appropriately.
-     */
-    protected function transports(): Attribute
-    {
-        return Attribute::make(
-            get: static fn ($value) => json_decode($value, true, 512, JSON_THROW_ON_ERROR),
-            set: static fn ($value) => json_encode($value, JSON_THROW_ON_ERROR),
-        );
-    }
+    /** @inerhitDoc */
+    protected $fillable = [
+        'passkey_id',
+        'passkey',
+    ];
 
     public function user(): BelongsTo
     {

@@ -46,7 +46,7 @@ class AdminTest extends TestCase
             'password' => 'password',
         ]);
 
-        $response->assertRedirect('/');
+        $response->assertRedirect('/admin');
     }
 
     /** @test */
