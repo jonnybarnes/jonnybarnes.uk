@@ -16,8 +16,6 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\View\View;
 use ParagonIE\ConstantTime\Base64UrlSafe;
 use Throwable;
@@ -121,12 +119,12 @@ class PasskeysController extends Controller
 
         $attestationSupportManager = AttestationStatementSupportManager::create();
         $attestationSupportManager->add(NoneAttestationStatementSupport::create());
-        $attestationObjectLoader   = AttestationObjectLoader::create($attestationSupportManager);
+        $attestationObjectLoader = AttestationObjectLoader::create($attestationSupportManager);
         $publicKeyCredentialLoader = PublicKeyCredentialLoader::create($attestationObjectLoader);
 
         $publicKeyCredential = $publicKeyCredentialLoader->load(json_encode($request->all(), JSON_THROW_ON_ERROR));
 
-        if (!$publicKeyCredential->response instanceof AuthenticatorAttestationResponse) {
+        if (! $publicKeyCredential->response instanceof AuthenticatorAttestationResponse) {
             throw new WebAuthnException('Invalid response type');
         }
 
@@ -193,12 +191,12 @@ class PasskeysController extends Controller
 
         $attestationSupportManager = AttestationStatementSupportManager::create();
         $attestationSupportManager->add(NoneAttestationStatementSupport::create());
-        $attestationObjectLoader   = AttestationObjectLoader::create($attestationSupportManager);
+        $attestationObjectLoader = AttestationObjectLoader::create($attestationSupportManager);
         $publicKeyCredentialLoader = PublicKeyCredentialLoader::create($attestationObjectLoader);
 
         $publicKeyCredential = $publicKeyCredentialLoader->load(json_encode($request->all(), JSON_THROW_ON_ERROR));
 
-        if (!$publicKeyCredential->response instanceof AuthenticatorAssertionResponse) {
+        if (! $publicKeyCredential->response instanceof AuthenticatorAssertionResponse) {
             return response()->json([
                 'success' => false,
                 'message' => 'Invalid response type',
@@ -206,7 +204,7 @@ class PasskeysController extends Controller
         }
 
         $passkey = Passkey::firstWhere('passkey_id', $publicKeyCredential->id);
-        if (!$passkey) {
+        if (! $passkey) {
             return response()->json([
                 'success' => false,
                 'message' => 'Passkey not found',
