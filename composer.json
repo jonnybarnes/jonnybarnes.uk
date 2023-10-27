@@ -41,7 +41,7 @@
         "laravel/sail": "^1.18",
         "mockery/mockery": "^1.4.4",
         "nunomaduro/collision": "^7.0",
-        "openai-php/client": "^0.6.1",
+        "openai-php/client": "^0.7.1",
         "phpunit/php-code-coverage": "^10.0",
         "phpunit/phpunit": "^10.1",
         "psalm/plugin-laravel": "^2.8",
