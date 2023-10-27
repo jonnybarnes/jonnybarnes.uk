@@ -7,16 +7,18 @@ use App\Models\Bio;
 use App\Models\Bookmark;
 use App\Models\Like;
 use App\Models\Note;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\View\View;
 
+/**
+ * @psalm-suppress UnusedClass
+ */
 class FrontPageController extends Controller
 {
     /**
      * Show all the recent activity.
      */
-    public function index(Request $request): Response|View
+    public function index(): Response|View
     {
         $notes = Note::latest()->with(['media', 'client', 'place'])->get();
         $articles = Article::latest()->get();

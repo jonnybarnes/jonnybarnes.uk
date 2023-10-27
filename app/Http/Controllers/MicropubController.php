@@ -19,6 +19,9 @@ use Lcobucci\JWT\Validation\RequiredConstraintsViolated;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 
+/**
+ * @psalm-suppress UnusedClass
+ */
 class MicropubController extends Controller
 {
     protected TokenService $tokenService;

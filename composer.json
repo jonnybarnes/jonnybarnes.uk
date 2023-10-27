@@ -5,10 +5,11 @@
     "keywords": ["laravel", "framework", "indieweb"],
     "license": "CC0-1.0",
     "require": {
-        "php": "^8.1",
+        "php": "^8.2",
         "ext-dom": "*",
         "ext-intl": "*",
         "ext-json": "*",
+        "ext-pgsql": "*",
         "cviebrock/eloquent-sluggable": "^10.0",
         "guzzlehttp/guzzle": "^7.2",
         "indieauth/client": "^1.1",
@@ -27,7 +28,8 @@
         "mf2/mf2": "~0.3",
         "spatie/commonmark-highlighter": "^3.0",
         "spatie/laravel-ignition": "^2.1",
-        "symfony/html-sanitizer": "^6.1"
+        "symfony/html-sanitizer": "^6.1",
+        "web-auth/webauthn-lib": "^4.7"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.0",
@@ -39,8 +41,10 @@
         "laravel/sail": "^1.18",
         "mockery/mockery": "^1.4.4",
         "nunomaduro/collision": "^7.0",
+        "openai-php/client": "^0.7.1",
         "phpunit/php-code-coverage": "^10.0",
         "phpunit/phpunit": "^10.1",
+        "psalm/plugin-laravel": "^2.8",
         "spatie/laravel-ray": "^1.12",
         "vimeo/psalm": "^5.0"
     },

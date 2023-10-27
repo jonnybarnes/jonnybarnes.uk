@@ -10,6 +10,9 @@ use App\Models\Like;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
+/**
+ * @psalm-suppress UnusedClass
+ */
 class LikesController extends Controller
 {
     /**

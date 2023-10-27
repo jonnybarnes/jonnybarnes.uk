@@ -8,6 +8,9 @@ use App\Jobs\DownloadWebMention;
 use App\Models\WebMention;
 use Illuminate\Console\Command;
 
+/**
+ * @psalm-suppress UnusedClass
+ */
 class ReDownloadWebMentions extends Command
 {
     /**

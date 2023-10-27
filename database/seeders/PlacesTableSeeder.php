@@ -9,6 +9,8 @@ class PlacesTableSeeder extends Seeder
 {
     /**
      * Seed the places table.
+     *
+     * @psalm-suppress PossiblyUnusedMethod
      */
     public function run(): void
     {

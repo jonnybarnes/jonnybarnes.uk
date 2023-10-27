@@ -9,6 +9,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
+/**
+ * @psalm-suppress UnusedClass
+ */
 class AuthController extends Controller
 {
     /**
@@ -31,7 +34,7 @@ class AuthController extends Controller
         $credentials = $request->only('name', 'password');
 
         if (Auth::attempt($credentials, true)) {
-            return redirect()->intended('/');
+            return redirect()->intended('/admin');
         }
 
         return redirect()->route('login');

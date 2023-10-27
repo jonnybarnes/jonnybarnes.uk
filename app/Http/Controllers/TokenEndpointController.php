@@ -12,6 +12,9 @@ use Illuminate\Http\Request;
 use IndieAuth\Client;
 use JsonException;
 
+/**
+ * @psalm-suppress UnusedClass
+ */
 class TokenEndpointController extends Controller
 {
     /**

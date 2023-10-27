@@ -6,6 +6,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\RedirectResponse;
 
+/**
+ * @psalm-suppress UnusedClass
+ */
 class ShortURLsController extends Controller
 {
     /*

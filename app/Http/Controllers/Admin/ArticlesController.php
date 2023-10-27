@@ -9,6 +9,9 @@ use App\Models\Article;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
+/**
+ * @psalm-suppress UnusedClass
+ */
 class ArticlesController extends Controller
 {
     public function index(): View

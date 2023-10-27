@@ -6,6 +6,8 @@ use App\Models\Tag;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
+ * @psalm-suppress UnusedClass
+ *
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Tag>
  */
 class TagFactory extends Factory

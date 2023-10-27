@@ -11,6 +11,9 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
+/**
+ * @psalm-suppress UnusedClass
+ */
 class NotesController extends Controller
 {
     /**

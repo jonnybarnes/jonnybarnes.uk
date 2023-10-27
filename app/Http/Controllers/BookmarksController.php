@@ -7,6 +7,9 @@ namespace App\Http\Controllers;
 use App\Models\Bookmark;
 use Illuminate\View\View;
 
+/**
+ * @psalm-suppress UnusedClass
+ */
 class BookmarksController extends Controller
 {
     /**

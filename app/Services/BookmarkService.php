@@ -18,7 +18,7 @@ class BookmarkService extends Service
     /**
      * Create a new Bookmark.
      */
-    public function create(array $request, ?string $client = null): Bookmark
+    public function create(array $request, string $client = null): Bookmark
     {
         if (Arr::get($request, 'properties.bookmark-of.0')) {
             //micropub request

@@ -18,7 +18,7 @@ class NoteService extends Service
     /**
      * Create a new note.
      */
-    public function create(array $request, ?string $client = null): Note
+    public function create(array $request, string $client = null): Note
     {
         $note = Note::create(
             [

@@ -6,6 +6,9 @@ use Illuminate\Support\Facades\Gate;
 use Laravel\Horizon\Horizon;
 use Laravel\Horizon\HorizonApplicationServiceProvider;
 
+/**
+ * @psalm-suppress UnusedClass
+ */
 class HorizonServiceProvider extends HorizonApplicationServiceProvider
 {
     /**

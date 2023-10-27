@@ -7,6 +7,9 @@ namespace App\Http\Controllers;
 use App\Models\Like;
 use Illuminate\View\View;
 
+/**
+ * @psalm-suppress UnusedClass
+ */
 class LikesController extends Controller
 {
     /**

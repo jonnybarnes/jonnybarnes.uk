@@ -12,6 +12,8 @@ class VerifyMicropubToken
 {
     /**
      * Handle an incoming request.
+     *
+     * @psalm-suppress PossiblyUnusedMethod
      */
     public function handle(Request $request, Closure $next): Response
     {
