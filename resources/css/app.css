@@ -1,6 +1,6 @@
-@import "variables.css";
-@import "fonts.css";
-@import "layout.css";
-@import "colours.css";
-@import "code.css";
-@import "content.css";
+@import url('variables.css');
+@import url('fonts.css');
+@import url('layout.css');
+@import url('colours.css');
+@import url('code.css');
+@import url('content.css');

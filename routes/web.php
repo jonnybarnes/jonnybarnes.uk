@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\ContactsController as AdminContactsController;
 use App\Http\Controllers\Admin\HomeController;
 use App\Http\Controllers\Admin\LikesController as AdminLikesController;
 use App\Http\Controllers\Admin\NotesController as AdminNotesController;
+use App\Http\Controllers\Admin\PasskeysController;
 use App\Http\Controllers\Admin\PlacesController as AdminPlacesController;
 use App\Http\Controllers\Admin\SyndicationTargetsController;
 use App\Http\Controllers\ArticlesController;
@@ -49,6 +50,8 @@ Route::group(['domain' => config('url.longurl')], function () {
     // The login routes to get auth’d for admin
     Route::get('login', [AuthController::class, 'showLogin'])->name('login');
     Route::post('login', [AuthController::class, 'login']);
+    Route::get('login/passkey', [PasskeysController::class, 'getRequestOptions']);
+    Route::post('login/passkey', [PasskeysController::class, 'login']);
 
     // And the logout routes
     Route::get('logout', [AuthController::class, 'showLogout'])->name('logout');
@@ -140,6 +143,13 @@ Route::group(['domain' => config('url.longurl')], function () {
         Route::group(['prefix' => 'bio'], function () {
             Route::get('/', [BioController::class, 'show'])->name('admin.bio.show');
             Route::put('/', [BioController::class, 'update']);
+        });
+
+        // Passkeys
+        Route::group(['prefix' => 'passkeys'], static function () {
+            Route::get('/', [PasskeysController::class, 'index']);
+            Route::get('register', [PasskeysController::class, 'getCreateOptions']);
+            Route::post('register', [PasskeysController::class, 'create']);
         });
     });
 
