@@ -140,5 +140,5 @@ jobs:
           username: ${{ secrets.DEPLOYMENT_USER }}
           key: ${{ secrets.DEPLOYMENT_KEY }}
           script: |
-            fd '.+' ${{ env.releasesDir }} -d 1 | head -n -3 | xargs -d "\n" -I'{}' sudo chown -R ${{ secrets.DEPLOYMENT_USER }}:${{ secrets.DEPLOYMENT_USER }} {}/bootstrap/cache;
-            fd '.+' ${{ env.releasesDir }} -d 1 | head -n -3 | xargs -d "\n" -I'{}' rm -rf {};
+            fd '.+' ${{ env.releasesDir }} -d 1 | head -n -3 | xargs -d "\n" -I'{}' sudo chown -R ${{ secrets.DEPLOYMENT_USER }}:${{ secrets.DEPLOYMENT_USER }} {}
+            fd '.+' ${{ env.releasesDir }} -d 1 | head -n -3 | xargs -d "\n" -I'{}' rm -rf {}
