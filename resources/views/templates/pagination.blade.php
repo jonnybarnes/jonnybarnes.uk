@@ -1,5 +1,5 @@
 @if ($paginator->hasPages())
-    <nav role="navigation">
+    <nav role="navigation" class="pagination">
         <div>
             @if ($paginator->onFirstPage())
                 <span>
