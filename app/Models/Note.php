@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use App\CommonMark\Generators\ContactMentionGenerator;
-use App\CommonMark\Renderers\ContactMentionRenderer;
+use App\CommonMark\Generators\MentionGenerator;
+use App\CommonMark\Renderers\MentionRenderer;
 use Codebird\Codebird;
 use Exception;
 use GuzzleHttp\Client;
@@ -385,10 +385,10 @@ class Note extends Model
     {
         $config = [
             'mentions' => [
-                'contacts_handle' => [
+                'mentions_handle' => [
                     'prefix' => '@',
-                    'pattern' => '[a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38}(?!\w)',
-                    'generator' => new ContactMentionGenerator(),
+                    'pattern' => '([\w@.])+(\b)',
+                    'generator' => new MentionGenerator(),
                 ],
             ],
         ];
@@ -397,7 +397,7 @@ class Note extends Model
         $environment->addExtension(new CommonMarkCoreExtension());
         $environment->addExtension(new AutolinkExtension());
         $environment->addExtension(new MentionExtension());
-        $environment->addRenderer(Mention::class, new ContactMentionRenderer());
+        $environment->addRenderer(Mention::class, new MentionRenderer());
         $environment->addRenderer(FencedCode::class, new FencedCodeRenderer());
         $environment->addRenderer(IndentedCode::class, new IndentedCodeRenderer());
         $markdownConverter = new MarkdownConverter($environment);

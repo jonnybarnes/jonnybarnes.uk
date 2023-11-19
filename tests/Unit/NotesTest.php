@@ -437,4 +437,15 @@ class NotesTest extends TestCase
 
         $this->assertSame('<span class="p-country-name">Antarctica</span>', $note->address);
     }
+
+    /** @test */
+    public function mastodonUsernamesAreParsedCorrectly(): void
+    {
+        $expected = '<p>Hi <a href="https://phpc.social/@freekmurze">@freekmurze@phpc.social</a> how are you?</p>' . PHP_EOL;
+        $note = Note::factory()->create([
+            'note' => 'Hi @freekmurze@phpc.social how are you?',
+        ]);
+
+        $this->assertSame($expected, $note->note);
+    }
 }
