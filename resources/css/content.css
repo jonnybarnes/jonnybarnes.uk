@@ -19,6 +19,15 @@
     flex-direction: row;
     gap: 1rem;
 
+    & .replies,
+    & .likes,
+    & .reposts {
+      display: inline-flex;
+      flex-direction: row;
+      gap: .5rem;
+      align-items: center;
+    }
+
     & .syndication-links {
       flex-flow: row wrap;
 
@@ -32,4 +41,24 @@
       }
     }
   }
+}
+
+.feather {
+  width: 24px;
+  height: 24px;
+  stroke: currentcolor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+}
+
+.sr-only {
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
 }
