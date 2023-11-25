@@ -26,8 +26,14 @@ class NotesController extends Controller
     {
         $notes = Note::latest()
             ->with('place', 'media', 'client')
-            ->withCount(['webmentions As replies' => function ($query) {
+            ->withCount(['webmentions AS replies' => function ($query) {
                 $query->where('type', 'in-reply-to');
+            }])
+            ->withCount(['webmentions AS likes' => function ($query) {
+                $query->where('type', 'like-of');
+            }])
+            ->withCount(['webmentions AS reposts' => function ($query) {
+                $query->where('type', 'repost-of');
             }])->paginate(10);
 
         return view('notes.index', compact('notes'));
@@ -39,7 +45,16 @@ class NotesController extends Controller
     public function show(string $urlId): View|JsonResponse|Response
     {
         try {
-            $note = Note::nb60($urlId)->with('webmentions')->firstOrFail();
+            $note = Note::nb60($urlId)->with('place', 'media', 'client')
+                ->withCount(['webmentions AS replies' => function ($query) {
+                    $query->where('type', 'in-reply-to');
+                }])
+                ->withCount(['webmentions AS likes' => function ($query) {
+                    $query->where('type', 'like-of');
+                }])
+                ->withCount(['webmentions AS reposts' => function ($query) {
+                    $query->where('type', 'repost-of');
+                }])->firstOrFail();
         } catch (ModelNotFoundException $exception) {
             abort(404);
         }

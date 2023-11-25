@@ -145,7 +145,7 @@ class NotesTableSeeder extends Seeder
 
         $now = Carbon::now()->subHours(6);
         $noteWithTextLinkandEmoji = Note::create([
-            'note' => 'I love https://duckduckgo.com 💕', // there’s a two-heart emoji at the end of this
+            'note' => 'I love https://kagi.com 💕', // there’s a two-heart emoji at the end of this
             'created_at' => $now,
         ]);
         DB::table('notes')
