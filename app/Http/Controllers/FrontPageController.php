@@ -23,12 +23,12 @@ class FrontPageController extends Controller
         $notes = Note::latest()->with(['media', 'client', 'place'])->withCount(['webmentions AS replies' => function ($query) {
             $query->where('type', 'in-reply-to');
         }])
-        ->withCount(['webmentions AS likes' => function ($query) {
-            $query->where('type', 'like-of');
-        }])
-        ->withCount(['webmentions AS reposts' => function ($query) {
-            $query->where('type', 'repost-of');
-        }])->get();
+            ->withCount(['webmentions AS likes' => function ($query) {
+                $query->where('type', 'like-of');
+            }])
+            ->withCount(['webmentions AS reposts' => function ($query) {
+                $query->where('type', 'repost-of');
+            }])->get();
         $articles = Article::latest()->get();
         $bookmarks = Bookmark::latest()->with('tags')->get();
         $likes = Like::latest()->get();
