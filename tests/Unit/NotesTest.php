@@ -51,7 +51,7 @@ class NotesTest extends TestCase
     <span class="hovercard">
         <img class="u-photo" alt="" src="/assets/profile-images/default-image">
                             <a class="u-url" href="https://twitter.com/t">
-                <img class="social-icon" src="/assets/img/social-icons/twitter.svg"> t
+                <img class="social-icon" src="/assets/img/social-icons/twitter.svg" alt=""> t
             </a>
             </span>
 </span></p>' . PHP_EOL;
@@ -97,7 +97,7 @@ class NotesTest extends TestCase
     <span class="hovercard">
         <img class="u-photo" alt="" src="/assets/profile-images/aaronparecki.com/image">
                     <a class="u-url" href="https://www.facebook.com/123456">
-                <img class="social-icon" src="/assets/img/social-icons/facebook.svg"> Facebook
+                <img class="social-icon" src="/assets/img/social-icons/facebook.svg" alt=""> Facebook
             </a>
                     </span>
 </span></p>' . PHP_EOL;
