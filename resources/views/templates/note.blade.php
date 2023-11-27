@@ -74,6 +74,7 @@
                     $note->mastodon_url
                 )
                     @include('templates.social-links', [
+                        'id' => $note->id,
                         'tweet_id' => $note->tweet_id,
                         'facebook_url' => $note->facebook_url,
                         'swarm_url' => $note->swarm_url,
