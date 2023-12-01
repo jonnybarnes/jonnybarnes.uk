@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3ebf86a88d1a3248d7ae704ee6c827d9",
+    "content-hash": "cee34851c8b229497a4bd596d4b02047",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -3022,16 +3022,16 @@
         },
         {
             "name": "league/uri",
-            "version": "7.3.0",
+            "version": "7.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/uri.git",
-                "reference": "36743c3961bb82bf93da91917b6bced0358a8d45"
+                "reference": "bf414ba956d902f5d98bf9385fcf63954f09dce5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/uri/zipball/36743c3961bb82bf93da91917b6bced0358a8d45",
-                "reference": "36743c3961bb82bf93da91917b6bced0358a8d45",
+                "url": "https://api.github.com/repos/thephpleague/uri/zipball/bf414ba956d902f5d98bf9385fcf63954f09dce5",
+                "reference": "bf414ba956d902f5d98bf9385fcf63954f09dce5",
                 "shasum": ""
             },
             "require": {
@@ -3100,7 +3100,7 @@
                 "docs": "https://uri.thephpleague.com",
                 "forum": "https://thephpleague.slack.com",
                 "issues": "https://github.com/thephpleague/uri-src/issues",
-                "source": "https://github.com/thephpleague/uri/tree/7.3.0"
+                "source": "https://github.com/thephpleague/uri/tree/7.4.0"
             },
             "funding": [
                 {
@@ -3108,20 +3108,20 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-09-09T17:21:43+00:00"
+            "time": "2023-12-01T06:24:25+00:00"
         },
         {
             "name": "league/uri-interfaces",
-            "version": "7.3.0",
+            "version": "7.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/uri-interfaces.git",
-                "reference": "c409b60ed2245ff94c965a8c798a60166db53361"
+                "reference": "bd8c487ec236930f7bbc42b8d374fa882fbba0f3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/uri-interfaces/zipball/c409b60ed2245ff94c965a8c798a60166db53361",
-                "reference": "c409b60ed2245ff94c965a8c798a60166db53361",
+                "url": "https://api.github.com/repos/thephpleague/uri-interfaces/zipball/bd8c487ec236930f7bbc42b8d374fa882fbba0f3",
+                "reference": "bd8c487ec236930f7bbc42b8d374fa882fbba0f3",
                 "shasum": ""
             },
             "require": {
@@ -3184,7 +3184,7 @@
                 "docs": "https://uri.thephpleague.com",
                 "forum": "https://thephpleague.slack.com",
                 "issues": "https://github.com/thephpleague/uri-src/issues",
-                "source": "https://github.com/thephpleague/uri-interfaces/tree/7.3.0"
+                "source": "https://github.com/thephpleague/uri-interfaces/tree/7.4.0"
             },
             "funding": [
                 {
@@ -3192,7 +3192,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-09-09T17:21:43+00:00"
+            "time": "2023-11-24T15:40:42+00:00"
         },
         {
             "name": "masterminds/html5",
@@ -5942,23 +5942,23 @@
         },
         {
             "name": "symfony/html-sanitizer",
-            "version": "v6.3.7",
+            "version": "v7.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/html-sanitizer.git",
-                "reference": "45e5a24b63d394fa6472c595df448aecfd1e1ea5"
+                "reference": "388787213379c85f07ce270afd78c5b7cff3b0f6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/html-sanitizer/zipball/45e5a24b63d394fa6472c595df448aecfd1e1ea5",
-                "reference": "45e5a24b63d394fa6472c595df448aecfd1e1ea5",
+                "url": "https://api.github.com/repos/symfony/html-sanitizer/zipball/388787213379c85f07ce270afd78c5b7cff3b0f6",
+                "reference": "388787213379c85f07ce270afd78c5b7cff3b0f6",
                 "shasum": ""
             },
             "require": {
                 "ext-dom": "*",
                 "league/uri": "^6.5|^7.0",
                 "masterminds/html5": "^2.7.2",
-                "php": ">=8.1"
+                "php": ">=8.2"
             },
             "type": "library",
             "autoload": {
@@ -5991,7 +5991,7 @@
                 "sanitizer"
             ],
             "support": {
-                "source": "https://github.com/symfony/html-sanitizer/tree/v6.3.7"
+                "source": "https://github.com/symfony/html-sanitizer/tree/v7.0.0"
             },
             "funding": [
                 {
@@ -6007,7 +6007,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-10-27T13:27:27+00:00"
+            "time": "2023-10-28T23:12:22+00:00"
         },
         {
             "name": "symfony/http-foundation",
