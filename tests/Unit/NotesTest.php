@@ -51,7 +51,7 @@ class NotesTest extends TestCase
     <span class="hovercard">
         <img class="u-photo" alt="" src="/assets/profile-images/default-image">
                             <a class="u-url" href="https://twitter.com/t">
-                <img class="social-icon" src="/assets/img/social-icons/twitter.svg"> t
+                <img class="social-icon" src="/assets/img/social-icons/twitter.svg" alt=""> t
             </a>
             </span>
 </span></p>' . PHP_EOL;
@@ -97,7 +97,7 @@ class NotesTest extends TestCase
     <span class="hovercard">
         <img class="u-photo" alt="" src="/assets/profile-images/aaronparecki.com/image">
                     <a class="u-url" href="https://www.facebook.com/123456">
-                <img class="social-icon" src="/assets/img/social-icons/facebook.svg"> Facebook
+                <img class="social-icon" src="/assets/img/social-icons/facebook.svg" alt=""> Facebook
             </a>
                     </span>
 </span></p>' . PHP_EOL;
@@ -436,5 +436,16 @@ class NotesTest extends TestCase
         ]);
 
         $this->assertSame('<span class="p-country-name">Antarctica</span>', $note->address);
+    }
+
+    /** @test */
+    public function mastodonUsernamesAreParsedCorrectly(): void
+    {
+        $expected = '<p>Hi <a href="https://phpc.social/@freekmurze">@freekmurze@phpc.social</a> how are you?</p>' . PHP_EOL;
+        $note = Note::factory()->create([
+            'note' => 'Hi @freekmurze@phpc.social how are you?',
+        ]);
+
+        $this->assertSame($expected, $note->note);
     }
 }

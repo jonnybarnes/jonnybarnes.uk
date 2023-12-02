@@ -55,9 +55,12 @@
 
         <footer>
             <div class="footer-actions">
-                <form action="/search" method="get">
-                    <input type="text" name="q" title="Search"><button type="submit">Search</button>
-                </form>
+                <search>
+                    <form action="/search" method="get">
+                        <label for="search" class="sr-only">Search</label>
+                        <input type="search" id="search" name="q" title="Search"><button type="submit">Search</button>
+                    </form>
+                </search>
                 @auth()
                     <a href="/logout" class="auth">Logout</a>
                 @else

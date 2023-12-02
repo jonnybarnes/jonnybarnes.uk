@@ -25,29 +25,36 @@
                 </div>
 @endforeach
 @if($note->webmentions->filter(function ($webmention) {
-    return ($webmention->type == 'like-of');
-})->count() > 0)                <h1 class="notes-subtitle">Likes</h1>
-@foreach($note->webmentions->filter(function ($webmention) {
-    return ($webmention->type == 'like-of');
-}) as $like)
-                <a href="{{ $like['author']['properties']['url'][0] }}"><img src="{{ $like['author']['properties']['photo'][0] }}" alt="profile picture of {{ $like['author']['properties']['name'][0] }}" class="like-photo"></a>
-@endforeach
+    return ($webmention->type === 'like-of');
+})->count() > 0)
+    <h1 class="notes-subtitle">Likes</h1>
+    <div class="webmentions-author-list">
+        @foreach($note->webmentions->filter(function ($webmention) {
+            return ($webmention->type === 'like-of');
+        }) as $like)
+            <a href="{{ $like['author']['properties']['url'][0] }}">
+                <img src="{{ $like['author']['properties']['photo'][0] }}" alt="profile picture of {{ $like['author']['properties']['name'][0] }}" class="like-photo">
+            </a>
+        @endforeach
+    </div>
 @endif
 @if($note->webmentions->filter(function ($webmention) {
-    return ($webmention->type == 'repost-of');
-})->count() > 0)                <h1 class="notes-subtitle">Reposts</h1>
-@foreach($note->webmentions->filter(function ($webmention) {
-    return ($webmention->type == 'repost-of');
-}) as $repost)
-                <p>
-                    <a class="h-card vcard mini-h-card p-author" href="{{ $repost['author']['properties']['url'][0] }}">
-                        <img src="{{ $repost['author']['properties']['photo'][0] }}" alt="profile picture of {{ $repost['author']['properties']['name'][0] }}" class="photo u-photo logo"> <span class="fn">{{ $repost['author']['properties']['name'][0] }}</span>
-                    </a> reposted this at <a href="{{ $repost['source'] }}">{{ $repost['published'] }}</a>.
-                </p>
-@endforeach
+    return ($webmention->type === 'repost-of');
+})->count() > 0)
+    <h1 class="notes-subtitle">Reposts</h1>
+    <div class="webmentions-author-list">
+        @foreach($note->webmentions->filter(function ($webmention) {
+            return ($webmention->type == 'repost-of');
+        }) as $repost)
+            <a href="{{ $repost['source'] }}">
+                <img src="{{ $repost['author']['properties']['photo'][0] }}" alt="{{ $repost['author']['properties']['name'][0] }} reposted this at {{ $repost['published'] }}">
+            </a>
+        @endforeach
+    </div>
 @endif
 @stop
 
 @section('scripts')
-            <link rel="stylesheet" href="/assets/highlight/zenburn.css">
+    @parent
+    <link rel="stylesheet" href="/assets/highlight/zenburn.css">
 @stop

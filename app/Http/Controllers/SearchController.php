@@ -20,7 +20,16 @@ class SearchController extends Controller
 
         /** @var Note $note */
         foreach ($notes as $note) {
-            $note->load('place', 'media', 'client');
+            $note->load('place', 'media', 'client')
+                ->loadCount(['webmentions AS replies' => function ($query) {
+                    $query->where('type', 'in-reply-to');
+                }])
+                ->loadCount(['webmentions AS likes' => function ($query) {
+                    $query->where('type', 'like-of');
+                }])
+                ->loadCount(['webmentions AS reposts' => function ($query) {
+                    $query->where('type', 'repost-of');
+                }]);
         }
 
         return view('search', compact('search', 'notes'));

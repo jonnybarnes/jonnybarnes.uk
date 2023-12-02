@@ -28,7 +28,7 @@
         "mf2/mf2": "~0.3",
         "spatie/commonmark-highlighter": "^3.0",
         "spatie/laravel-ignition": "^2.1",
-        "symfony/html-sanitizer": "^6.1",
+        "symfony/html-sanitizer": "^7.0",
         "web-auth/webauthn-lib": "^4.7"
     },
     "require-dev": {
@@ -41,7 +41,7 @@
         "laravel/sail": "^1.18",
         "mockery/mockery": "^1.4.4",
         "nunomaduro/collision": "^7.0",
-        "openai-php/client": "^0.7.1",
+        "openai-php/client": "^0.8.0",
         "phpunit/php-code-coverage": "^10.0",
         "phpunit/phpunit": "^10.1",
         "psalm/plugin-laravel": "^2.8",

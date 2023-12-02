@@ -40,6 +40,31 @@
                     in <span class="p-location h-adr">{!! $note->address !!}<data class="p-latitude" value="{{ $note->latitude }}"></data><data class="p-longitude" value="{{ $note->longitude }}"></data></span>
                 @endif
             </div>
+            @if($note->replies > 0 || $note->likes > 0 || $note->reposts > 0)
+                <div class="webmention-info">
+                    @if($note->replies > 0)
+                        <div class="replies">
+                            @include('icons.reply')
+                            {{ $note->replies }}
+                            <span class="sr-only">replies</span>
+                        </div>
+                    @endif
+                    @if($note->likes > 0)
+                        <div class="likes">
+                            @include('icons.like')
+                            {{ $note->likes }}
+                            <span class="sr-only">likes</span>
+                        </div>
+                    @endif
+                    @if($note->reposts > 0)
+                        <div class="reposts">
+                            @include('icons.repost')
+                            {{ $note->reposts }}
+                            <span class="sr-only">reposts</span>
+                        </div>
+                    @endif
+                </div>
+            @endif
             <div class="syndication-links">
                 @if(
                     $note->tweet_id ||
@@ -49,6 +74,7 @@
                     $note->mastodon_url
                 )
                     @include('templates.social-links', [
+                        'id' => $note->id,
                         'tweet_id' => $note->tweet_id,
                         'facebook_url' => $note->facebook_url,
                         'swarm_url' => $note->swarm_url,

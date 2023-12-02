@@ -8,7 +8,7 @@ use League\CommonMark\Extension\Mention\Generator\MentionGeneratorInterface;
 use League\CommonMark\Extension\Mention\Mention;
 use League\CommonMark\Node\Inline\AbstractInline;
 
-class ContactMentionGenerator implements MentionGeneratorInterface
+class MentionGenerator implements MentionGeneratorInterface
 {
     public function generateMention(Mention $mention): ?AbstractInline
     {
