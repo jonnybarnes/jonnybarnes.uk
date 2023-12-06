@@ -8,7 +8,7 @@ use App\Models\Article;
 
 class ArticleService extends Service
 {
-    public function create(array $request, string $client = null): Article
+    public function create(array $request, ?string $client = null): Article
     {
         return Article::create([
             'title' => $this->getDataByKey($request, 'name'),

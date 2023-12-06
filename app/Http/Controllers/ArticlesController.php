@@ -18,7 +18,7 @@ class ArticlesController extends Controller
     /**
      * Show all articles (with pagination).
      */
-    public function index(int $year = null, int $month = null): View
+    public function index(?int $year = null, ?int $month = null): View
     {
         $articles = Article::where('published', '1')
             ->date($year, $month)
