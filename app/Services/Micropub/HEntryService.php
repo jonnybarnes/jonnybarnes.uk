@@ -15,7 +15,7 @@ class HEntryService
     /**
      * Create the relevant model from some h-entry data.
      */
-    public function process(array $request, string $client = null): ?string
+    public function process(array $request, ?string $client = null): ?string
     {
         if (Arr::get($request, 'properties.like-of') || Arr::get($request, 'like-of')) {
             return resolve(LikeService::class)->create($request)->longurl;
