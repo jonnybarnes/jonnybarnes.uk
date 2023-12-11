@@ -8117,7 +8117,7 @@
         },
         {
             "name": "web-auth/metadata-service",
-            "version": "4.7.7",
+            "version": "4.7.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/web-auth/webauthn-metadata-service.git",
@@ -8182,7 +8182,7 @@
                 "webauthn"
             ],
             "support": {
-                "source": "https://github.com/web-auth/webauthn-metadata-service/tree/4.7.7"
+                "source": "https://github.com/web-auth/webauthn-metadata-service/tree/4.7.8"
             },
             "funding": [
                 {
@@ -8198,16 +8198,16 @@
         },
         {
             "name": "web-auth/webauthn-lib",
-            "version": "4.7.7",
+            "version": "4.7.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/web-auth/webauthn-lib.git",
-                "reference": "4e1b877733e4cbd43101cf0ba07f0854e4cb23de"
+                "reference": "71dda902527deef6421727105c289b5ef53b6967"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/web-auth/webauthn-lib/zipball/4e1b877733e4cbd43101cf0ba07f0854e4cb23de",
-                "reference": "4e1b877733e4cbd43101cf0ba07f0854e4cb23de",
+                "url": "https://api.github.com/repos/web-auth/webauthn-lib/zipball/71dda902527deef6421727105c289b5ef53b6967",
+                "reference": "71dda902527deef6421727105c289b5ef53b6967",
                 "shasum": ""
             },
             "require": {
@@ -8221,12 +8221,9 @@
                 "psr/http-factory": "^1.0",
                 "psr/log": "^1.0|^2.0|^3.0",
                 "spomky-labs/cbor-php": "^3.0",
-                "symfony/uid": "^6.1",
+                "symfony/uid": "^6.1|^7.0",
                 "web-auth/cose-lib": "^4.2.3",
                 "web-auth/metadata-service": "self.version"
-            },
-            "require-dev": {
-                "symfony/event-dispatcher": "^6.1"
             },
             "suggest": {
                 "psr/log-implementation": "Recommended to receive logs from the library",
@@ -8270,7 +8267,7 @@
                 "webauthn"
             ],
             "support": {
-                "source": "https://github.com/web-auth/webauthn-lib/tree/4.7.7"
+                "source": "https://github.com/web-auth/webauthn-lib/tree/4.7.8"
             },
             "funding": [
                 {
@@ -8282,7 +8279,7 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2023-11-17T11:42:57+00:00"
+            "time": "2023-12-08T13:02:43+00:00"
         },
         {
             "name": "webmozart/assert",
