@@ -78,7 +78,7 @@
 
         <!--scripts go here when needed-->
         @section('scripts')
-            <script type="module" src="/assets/frontent/is-land.js"></script>
+            <script type="module" src="/assets/frontend/is-land.js"></script>
             <script type="module" src="/assets/frontend/snow-fall.js"></script>
             <script src="/assets/app.js"></script>
         @show
