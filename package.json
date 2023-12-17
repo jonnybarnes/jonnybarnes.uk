@@ -39,5 +39,9 @@
         "> 1%",
         "not IE 11",
         "not IE_Mob 11"
-    ]
+    ],
+    "dependencies": {
+        "@11ty/is-land": "^4.0.0",
+        "@zachleat/snow-fall": "^1.0.2"
+    }
 }
