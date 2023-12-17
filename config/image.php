@@ -1,5 +1,7 @@
 <?php
 
+use Intervention\Image\Drivers\Gd\Driver;
+
 return [
 
     /*
@@ -15,6 +17,6 @@ return [
     |
     */
 
-    'driver' => 'gd',
+    'driver' => Driver::class,
 
 ];

@@ -107,7 +107,7 @@ class Article extends Model
     /**
      * Scope a query to only include articles from a particular year/month.
      */
-    public function scopeDate(Builder $query, int $year = null, int $month = null): Builder
+    public function scopeDate(Builder $query, ?int $year = null, ?int $month = null): Builder
     {
         if ($year === null) {
             return $query;

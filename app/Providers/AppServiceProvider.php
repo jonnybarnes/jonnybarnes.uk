@@ -30,7 +30,7 @@ class AppServiceProvider extends ServiceProvider
 
         // configure Intervention/Image
         $this->app->bind('Intervention\Image\ImageManager', function () {
-            return new \Intervention\Image\ImageManager(['driver' => config('image.driver')]);
+            return \Intervention\Image\ImageManager::withDriver(config('image.driver'));
         });
 
         // Bind the Codebird client

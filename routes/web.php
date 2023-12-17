@@ -186,6 +186,7 @@ Route::group(['domain' => config('url.longurl')], function () {
     // Bookmarks
     Route::group(['prefix' => 'bookmarks'], function () {
         Route::get('/', [BookmarksController::class, 'index']);
+        Route::redirect('/tagged', '/bookmarks');
         Route::get('/{bookmark}', [BookmarksController::class, 'show']);
         Route::get('/tagged/{tag}', [BookmarksController::class, 'tagged']);
     });
