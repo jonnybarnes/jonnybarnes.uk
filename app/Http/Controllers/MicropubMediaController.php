@@ -18,7 +18,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use Intervention\Image\Exception\NotReadableException;
+use Intervention\Image\Exceptions\DecoderException;
 use Intervention\Image\ImageManager;
 use Lcobucci\JWT\Token\InvalidTokenStructure;
 use Lcobucci\JWT\Validation\RequiredConstraintsViolated;
@@ -108,7 +108,7 @@ class MicropubMediaController extends Controller
     {
         try {
             $tokenData = $this->tokenService->validateToken($request->input('access_token'));
-        } catch (RequiredConstraintsViolated|InvalidTokenStructure $exception) {
+        } catch (RequiredConstraintsViolated|InvalidTokenStructure) {
             $micropubResponses = new MicropubResponses();
 
             return $micropubResponses->invalidTokenResponse();
@@ -144,11 +144,12 @@ class MicropubMediaController extends Controller
 
         $filename = $this->saveFile($request->file('file'));
 
+        /** @var ImageManager $manager */
         $manager = resolve(ImageManager::class);
         try {
-            $image = $manager->make($request->file('file'));
+            $image = $manager->read($request->file('file'));
             $width = $image->width();
-        } catch (NotReadableException $exception) {
+        } catch (DecoderException) {
             // not an image
             $width = null;
         }

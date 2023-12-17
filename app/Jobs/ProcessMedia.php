@@ -10,7 +10,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Storage;
-use Intervention\Image\Exception\NotReadableException;
+use Intervention\Image\Exceptions\DecoderException;
 use Intervention\Image\ImageManager;
 
 class ProcessMedia implements ShouldQueue
@@ -35,8 +35,8 @@ class ProcessMedia implements ShouldQueue
     {
         //open file
         try {
-            $image = $manager->make(storage_path('app') . '/' . $this->filename);
-        } catch (NotReadableException $exception) {
+            $image = $manager->read(storage_path('app') . '/' . $this->filename);
+        } catch (DecoderException) {
             // not an image; delete file and end job
             unlink(storage_path('app') . '/' . $this->filename);
 
