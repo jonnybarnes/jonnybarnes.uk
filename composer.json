@@ -13,7 +13,7 @@
         "cviebrock/eloquent-sluggable": "^10.0",
         "guzzlehttp/guzzle": "^7.2",
         "indieauth/client": "^1.1",
-        "intervention/image": "^2.4",
+        "intervention/image": "^3",
         "jonnybarnes/indieweb": "~0.2",
         "jonnybarnes/webmentions-parser": "~0.5",
         "jublonet/codebird-php": "4.0.0-beta.1",
