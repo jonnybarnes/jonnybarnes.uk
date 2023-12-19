@@ -102,7 +102,7 @@ class FeedsController extends Controller
      */
     public function notesJson(): array
     {
-        $notes = Note::latest()->with('media')->take(20)->get();
+        $notes = Note::latest()->with('media', 'place')->take(20)->get();
         $data = [
             'version' => 'https://jsonfeed.org/version/1',
             'title' => 'The JSON Feed for ' . config('user.display_name') . '’s notes',

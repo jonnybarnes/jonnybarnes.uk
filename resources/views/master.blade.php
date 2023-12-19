@@ -47,6 +47,7 @@
                 <a href="/likes">Likes</a>
                 <a href="/contacts">Contacts</a>
                 <a href="/projects">Projects</a>
+                <a href="/notes/feed.json" class="rss-icon">@include('icons.rss', ['title' => 'RSS Feed'])</a>
             </nav>
         </header>
 
