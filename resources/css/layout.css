@@ -8,6 +8,13 @@
 #site-header {
   grid-column: 2 / 3;
   grid-row: 1 / 2;
+
+  & .rss-icon {
+    & svg {
+      width: auto;
+      height: 1rem;
+    }
+  }
 }
 
 main {
