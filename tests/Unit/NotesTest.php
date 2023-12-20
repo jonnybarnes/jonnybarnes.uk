@@ -322,7 +322,7 @@ class NotesTest extends TestCase
         ]);
         $note->media()->save($media);
 
-        $expected = '<p>A nice image</p>
+        $expected = 'A nice image
 <img src="' . config('filesystems.disks.s3.url') . '/test.png" alt="">';
         $this->assertEquals($expected, $note->content);
     }
@@ -339,7 +339,7 @@ class NotesTest extends TestCase
         ]);
         $note->media()->save($media);
 
-        $expected = '<p>A nice video</p>
+        $expected = 'A nice video
 <video src="' . config('filesystems.disks.s3.url') . '/test.mkv">';
         $this->assertEquals($expected, $note->content);
     }
@@ -356,7 +356,7 @@ class NotesTest extends TestCase
         ]);
         $note->media()->save($media);
 
-        $expected = '<p>Some nice audio</p>
+        $expected = 'Some nice audio
 <audio src="' . config('filesystems.disks.s3.url') . '/test.flac">';
         $this->assertEquals($expected, $note->content);
     }

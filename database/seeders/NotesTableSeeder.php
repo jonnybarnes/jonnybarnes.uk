@@ -193,6 +193,7 @@ A note with some code:
 <?php
 
 echo 'Hello World';
+```
 EOF;
         $noteWithCode = Note::create([
             'note' => $noteWithCodeContent,
