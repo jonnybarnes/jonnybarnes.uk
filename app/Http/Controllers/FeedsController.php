@@ -73,10 +73,16 @@ class FeedsController extends Controller
     {
         $articles = Article::where('published', '1')->latest('updated_at')->take(20)->get();
         $data = [
-            'version' => 'https://jsonfeed.org/version/1',
+            'version' => 'https://jsonfeed.org/version/1.1',
             'title' => 'The JSON Feed for ' . config('user.display_name') . '’s blog',
             'home_page_url' => config('app.url') . '/blog',
             'feed_url' => config('app.url') . '/blog/feed.json',
+            'authors' => [
+                [
+                    'name' => config('user.display_name'),
+                    'url' => config('app.url'),
+                ],
+            ],
             'items' => [],
         ];
 
@@ -88,9 +94,6 @@ class FeedsController extends Controller
                 'content_html' => $article->main,
                 'date_published' => $article->created_at->tz('UTC')->toRfc3339String(),
                 'date_modified' => $article->updated_at->tz('UTC')->toRfc3339String(),
-                'author' => [
-                    'name' => config('user.display_name'),
-                ],
             ];
         }
 
