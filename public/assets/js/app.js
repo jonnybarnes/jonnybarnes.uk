@@ -1,5 +1,3 @@
-import '../css/app.css';
-
 import { Auth } from './auth.js';
 
 let auth = new Auth();
