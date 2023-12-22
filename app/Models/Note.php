@@ -144,17 +144,17 @@ class Note extends Model
      */
     public function getContentAttribute(): string
     {
-        $note = $this->note;
+        $note = $this->getRawOriginal('note');
 
         foreach ($this->media as $media) {
             if ($media->type === 'image') {
-                $note .= '<img src="' . $media->url . '" alt="">';
+                $note .= PHP_EOL . '<img src="' . $media->url . '" alt="">';
             }
             if ($media->type === 'audio') {
-                $note .= '<audio src="' . $media->url . '">';
+                $note .= PHP_EOL . '<audio src="' . $media->url . '">';
             }
             if ($media->type === 'video') {
-                $note .= '<video src="' . $media->url . '">';
+                $note .= PHP_EOL . '<video src="' . $media->url . '">';
             }
         }
 

@@ -73,10 +73,16 @@ class FeedsController extends Controller
     {
         $articles = Article::where('published', '1')->latest('updated_at')->take(20)->get();
         $data = [
-            'version' => 'https://jsonfeed.org/version/1',
+            'version' => 'https://jsonfeed.org/version/1.1',
             'title' => 'The JSON Feed for ' . config('user.display_name') . '’s blog',
             'home_page_url' => config('app.url') . '/blog',
             'feed_url' => config('app.url') . '/blog/feed.json',
+            'authors' => [
+                [
+                    'name' => config('user.display_name'),
+                    'url' => config('app.url'),
+                ],
+            ],
             'items' => [],
         ];
 
@@ -88,9 +94,6 @@ class FeedsController extends Controller
                 'content_html' => $article->main,
                 'date_published' => $article->created_at->tz('UTC')->toRfc3339String(),
                 'date_modified' => $article->updated_at->tz('UTC')->toRfc3339String(),
-                'author' => [
-                    'name' => config('user.display_name'),
-                ],
             ];
         }
 
@@ -102,12 +105,18 @@ class FeedsController extends Controller
      */
     public function notesJson(): array
     {
-        $notes = Note::latest()->with('media')->take(20)->get();
+        $notes = Note::latest()->with('media', 'place', 'tags')->take(20)->get();
         $data = [
-            'version' => 'https://jsonfeed.org/version/1',
+            'version' => 'https://jsonfeed.org/version/1.1',
             'title' => 'The JSON Feed for ' . config('user.display_name') . '’s notes',
             'home_page_url' => config('app.url') . '/notes',
             'feed_url' => config('app.url') . '/notes/feed.json',
+            'authors' => [
+                [
+                    'name' => config('user.display_name'),
+                    'url' => config('app.url'),
+                ],
+            ],
             'items' => [],
         ];
 
@@ -115,13 +124,13 @@ class FeedsController extends Controller
             $data['items'][$key] = [
                 'id' => $note->longurl,
                 'url' => $note->longurl,
-                'content_html' => $note->content,
+                'content_text' => $note->content,
                 'date_published' => $note->created_at->tz('UTC')->toRfc3339String(),
                 'date_modified' => $note->updated_at->tz('UTC')->toRfc3339String(),
-                'author' => [
-                    'name' => config('user.display_name'),
-                ],
             ];
+            if ($note->tags->count() > 0) {
+                $data['items'][$key]['tags'] = implode(',', $note->tags->pluck('tag')->toArray());
+            }
         }
 
         return $data;

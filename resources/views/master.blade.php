@@ -4,14 +4,11 @@
         <meta charset="UTF-8">
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <title>@yield('title'){{ config('app.name') }}</title>
-        <meta name="viewport" content="width=device-width">
         @if (!empty(config('app.font_link')))
             <link rel="stylesheet" href="{{ config('app.font_link') }}">
         @endif
         <link rel="stylesheet" href="/assets/highlight/zenburn.css">
-        @production
-            <link rel="stylesheet" href="/assets/app.css">
-        @endproduction
+        <link rel="stylesheet" href="/assets/css/app.css">
         <link rel="alternate" type="application/rss+xml" title="Blog RSS Feed" href="/blog/feed.rss">
         <link rel="alternate" type="application/atom+xml" title="Blog Atom Feed" href="/blog/feed.atom">
         <link rel="alternate" type="application/json" title="Blog JSON Feed" href="/blog/feed.json">
@@ -47,6 +44,7 @@
                 <a href="/likes">Likes</a>
                 <a href="/contacts">Contacts</a>
                 <a href="/projects">Projects</a>
+                <a href="/notes/feed.json" class="rss-icon">@include('icons.rss', ['title' => 'RSS Feed'])</a>
             </nav>
         </header>
 
@@ -80,7 +78,7 @@
         @section('scripts')
             <script type="module" src="/assets/frontend/is-land.js"></script>
             <script type="module" src="/assets/frontend/snow-fall.js"></script>
-            <script src="/assets/app.js"></script>
+            <script type="module" src="/assets/js/app.js"></script>
         @show
     </body>
 </html>

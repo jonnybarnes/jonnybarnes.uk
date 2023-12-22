@@ -6,6 +6,7 @@ namespace Tests\Feature;
 
 use App\Models\Article;
 use App\Models\Note;
+use App\Models\Place;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -158,5 +159,15 @@ class FeedsTest extends TestCase
                 $this->assertNotNull($item->content_html);
             }
         }
+    }
+
+    /** @test */
+    public function jsonNoteFeedLoadsPlaceDataWithoutLazyLoading(): void
+    {
+        $place = Place::factory()->create();
+        Note::factory()->create(['note' => null, 'place_id' => $place->id]);
+        $response = $this->get('/notes/feed.json');
+
+        $response->assertOk();
     }
 }
