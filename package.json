@@ -7,7 +7,7 @@
     "devDependencies": {
         "eslint": "^8.56.0",
         "stylelint": "^16.1.0",
-        "stylelint-config-standard": "^35.0.0"
+        "stylelint-config-standard": "^36.0.0"
     },
     "scripts": {
         "eslint": "eslint public/assets/js/*.js",
