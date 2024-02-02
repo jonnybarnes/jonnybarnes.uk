@@ -6,7 +6,7 @@
     "license": "CC0-1.0",
     "devDependencies": {
         "eslint": "^8.56.0",
-        "stylelint": "^16.2.0",
+        "stylelint": "^16.2.1",
         "stylelint-config-standard": "^36.0.0"
     },
     "scripts": {
