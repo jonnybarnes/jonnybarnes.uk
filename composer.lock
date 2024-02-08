@@ -10398,16 +10398,16 @@
         },
         {
             "name": "openai-php/client",
-            "version": "v0.8.2",
+            "version": "v0.8.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/openai-php/client.git",
-                "reference": "081ea0b0096d5788ae1d4f8e2e4c82d7f68dccb7"
+                "reference": "00470f5fedd7b08ee4860959d6952f0be0ec48a0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/openai-php/client/zipball/081ea0b0096d5788ae1d4f8e2e4c82d7f68dccb7",
-                "reference": "081ea0b0096d5788ae1d4f8e2e4c82d7f68dccb7",
+                "url": "https://api.github.com/repos/openai-php/client/zipball/00470f5fedd7b08ee4860959d6952f0be0ec48a0",
+                "reference": "00470f5fedd7b08ee4860959d6952f0be0ec48a0",
                 "shasum": ""
             },
             "require": {
@@ -10470,7 +10470,7 @@
             ],
             "support": {
                 "issues": "https://github.com/openai-php/client/issues",
-                "source": "https://github.com/openai-php/client/tree/v0.8.2"
+                "source": "https://github.com/openai-php/client/tree/v0.8.4"
             },
             "funding": [
                 {
@@ -10486,7 +10486,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-01-26T08:20:30+00:00"
+            "time": "2024-02-07T07:57:38+00:00"
         },
         {
             "name": "orchestra/canvas",
