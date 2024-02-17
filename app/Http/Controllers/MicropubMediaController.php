@@ -149,7 +149,7 @@ class MicropubMediaController extends Controller
         try {
             $image = $manager->read($request->file('file'));
             $width = $image->width();
-        } catch (DecoderException) {
+        } catch (Exception) {
             // not an image
             $width = null;
         }
