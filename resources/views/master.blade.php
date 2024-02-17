@@ -27,11 +27,6 @@
         <link rel="pgpkey" href="/assets/jonnybarnes-public-key-ecc.asc">
     </head>
     <body class="grid">
-        <is-land on:media="(prefers-reduced-motion: no-preference)">
-            <snow-fall
-                style="--snow-fall-color: oklch(36.14% 0.224 277.28)"
-            ></snow-fall>
-        </is-land>
         <header id="site-header">
             <h1>
                 <a rel="author" href="/">{{ config('user.display_name') }}</a>
@@ -76,8 +71,6 @@
 
         <!--scripts go here when needed-->
         @section('scripts')
-            <script type="module" src="/assets/frontend/is-land.js"></script>
-            <script type="module" src="/assets/frontend/snow-fall.js"></script>
             <script type="module" src="/assets/js/app.js"></script>
         @show
     </body>
