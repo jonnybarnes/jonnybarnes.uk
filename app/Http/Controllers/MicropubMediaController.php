@@ -18,7 +18,6 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use Intervention\Image\Exceptions\DecoderException;
 use Intervention\Image\ImageManager;
 use Lcobucci\JWT\Token\InvalidTokenStructure;
 use Lcobucci\JWT\Validation\RequiredConstraintsViolated;
