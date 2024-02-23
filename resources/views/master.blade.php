@@ -4,9 +4,6 @@
         <meta charset="UTF-8">
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <title>@yield('title'){{ config('app.name') }}</title>
-        @if (!empty(config('app.font_link')))
-            <link rel="stylesheet" href="{{ config('app.font_link') }}">
-        @endif
         <link rel="stylesheet" href="/assets/highlight/zenburn.css">
         <link rel="stylesheet" href="/assets/css/app.css">
         <link rel="alternate" type="application/rss+xml" title="Blog RSS Feed" href="/blog/feed.rss">
