@@ -9,12 +9,6 @@ jobs:
 
     name: PHPUnit test suite
 
-    strategy:
-      matrix:
-        operating-system: ['ubuntu-latest']
-        php-versions: ['8.2', '8.3']
-        phpunit-versions: ['latest']
-
     services:
       postgres:
         image: postgres:latest
@@ -32,10 +26,10 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: ${{ matrix.php-versions }}
+          php-version: '8.3'
           extensions: mbstring, intl, phpredis, imagick
           coverage: xdebug
-          tools: phpunit:${{ matrix.phpunit-versions }}
+          tools: phpunit
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -51,9 +45,9 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-php-${{ matrix.php-version }}-composer-${{ hashFiles('**/composer.lock') }}
+          key: ${{ runner.os }}-php-8.3-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: |
-            ${{ runner.os }}-php-${{ matrix.php-version }}-composer-
+            ${{ runner.os }}-php-8.3-composer-
 
       - name: Install Composer Dependencies
         run: composer install --quiet --no-ansi --no-interaction --no-progress
