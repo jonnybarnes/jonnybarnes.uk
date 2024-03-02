@@ -76,7 +76,7 @@ class SendWebMentions implements ShouldQueue
         //check HTTP Headers for webmention endpoint
         $links = Header::parse($response->getHeader('Link'));
         foreach ($links as $link) {
-            if (mb_stristr($link['rel'], 'webmention')) {
+            if (array_key_exists('rel', $link) && mb_stristr($link['rel'], 'webmention')) {
                 return $this->resolveUri(trim($link[0], '<>'), $url);
             }
         }
