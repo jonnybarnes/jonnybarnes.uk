@@ -114,7 +114,8 @@ class SendWebMentionJobTest extends TestCase
     public function linksInNotesCanNotSupportWebmentions(): void
     {
         $mock = new MockHandler([
-            new Response(200),
+            // URLs with commas currently break the parse function I’m using
+            new Response(200, ['Link' => '<https://example.org/foo,bar>; rel="preconnect"']),
         ]);
         $handler = HandlerStack::create($mock);
         $client = new Client(['handler' => $handler]);
