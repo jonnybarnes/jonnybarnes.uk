@@ -11365,16 +11365,16 @@
         },
         {
             "name": "psalm/plugin-laravel",
-            "version": "v2.10.0",
+            "version": "v2.10.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/psalm/psalm-plugin-laravel.git",
-                "reference": "cde78002024019b03f3186da67b46991292d301c"
+                "reference": "a87f401437c0555af5f6570566bf6e689916a316"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/psalm/psalm-plugin-laravel/zipball/cde78002024019b03f3186da67b46991292d301c",
-                "reference": "cde78002024019b03f3186da67b46991292d301c",
+                "url": "https://api.github.com/repos/psalm/psalm-plugin-laravel/zipball/a87f401437c0555af5f6570566bf6e689916a316",
+                "reference": "a87f401437c0555af5f6570566bf6e689916a316",
                 "shasum": ""
             },
             "require": {
@@ -11429,13 +11429,13 @@
                     "email": "github@muglug.com"
                 }
             ],
-            "description": "A Laravel plugin for Psalm",
+            "description": "Psalm plugin for Laravel",
             "homepage": "https://github.com/psalm/psalm-plugin-laravel",
             "support": {
                 "issues": "https://github.com/psalm/psalm-plugin-laravel/issues",
-                "source": "https://github.com/psalm/psalm-plugin-laravel/tree/v2.10.0"
+                "source": "https://github.com/psalm/psalm-plugin-laravel/tree/v2.10.1"
             },
-            "time": "2024-03-12T23:21:13+00:00"
+            "time": "2024-03-13T11:16:29+00:00"
         },
         {
             "name": "rector/rector",
