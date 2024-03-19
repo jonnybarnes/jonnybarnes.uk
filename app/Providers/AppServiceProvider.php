@@ -11,7 +11,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\ServiceProvider;
-use Laravel\Dusk\DuskServiceProvider;
 use Lcobucci\JWT\Configuration;
 use Lcobucci\JWT\Signer\Hmac\Sha256;
 use Lcobucci\JWT\Signer\Key\InMemory;
@@ -21,6 +20,14 @@ use Symfony\Component\HtmlSanitizer\HtmlSanitizerConfig;
 
 class AppServiceProvider extends ServiceProvider
 {
+    /**
+     * Register any application services.
+     */
+    public function register(): void
+    {
+        //
+    }
+
     /**
      * Bootstrap any application services.
      */
@@ -131,15 +138,5 @@ class AppServiceProvider extends ServiceProvider
 
         // Turn on Eloquent strict mode when developing
         Model::shouldBeStrict(! $this->app->isProduction());
-    }
-
-    /**
-     * Register any application services.
-     */
-    public function register(): void
-    {
-        if ($this->app->environment('local', 'testing')) {
-            $this->app->register(DuskServiceProvider::class);
-        }
     }
 }
