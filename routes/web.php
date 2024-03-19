@@ -25,6 +25,9 @@ use App\Http\Controllers\SearchController;
 use App\Http\Controllers\ShortURLsController;
 use App\Http\Controllers\TokenEndpointController;
 use App\Http\Controllers\WebMentionsController;
+use App\Http\Middleware\CorsHeaders;
+use App\Http\Middleware\MyAuthMiddleware;
+use App\Http\Middleware\VerifyMicropubToken;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -38,7 +41,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::group(['domain' => config('url.longurl')], function () {
+Route::domain(config('url.longurl'))->group(function () {
     Route::get('/', [FrontPageController::class, 'index']);
 
     // Static project page
@@ -58,15 +61,11 @@ Route::group(['domain' => config('url.longurl')], function () {
     Route::post('logout', [AuthController::class, 'logout']);
 
     // Admin pages grouped for filter
-    Route::group([
-        'middleware' => 'myauth',
-        'namespace' => 'Admin',
-        'prefix' => 'admin',
-    ], function () {
+    Route::middleware(MyAuthMiddleware::class)->prefix('admin')->group(function () {
         Route::get('/', [HomeController::class, 'welcome']);
 
         //Articles
-        Route::group(['prefix' => 'blog'], function () {
+        Route::prefix('blog')->group(function () {
             Route::get('/', [AdminArticlesController::class, 'index']);
             Route::get('/create', [AdminArticlesController::class, 'create']);
             Route::post('/', [AdminArticlesController::class, 'store']);
@@ -76,7 +75,7 @@ Route::group(['domain' => config('url.longurl')], function () {
         });
 
         // Notes
-        Route::group(['prefix' => 'notes'], function () {
+        Route::prefix('notes')->group(function () {
             Route::get('/', [AdminNotesController::class, 'index']);
             Route::get('/create', [AdminNotesController::class, 'create']);
             Route::post('/', [AdminNotesController::class, 'store']);
@@ -86,7 +85,7 @@ Route::group(['domain' => config('url.longurl')], function () {
         });
 
         // Micropub Clients
-        Route::group(['prefix' => 'clients'], function () {
+        Route::prefix('clients')->group(function () {
             Route::get('/', [ClientsController::class, 'index']);
             Route::get('/create', [ClientsController::class, 'create']);
             Route::post('/', [ClientsController::class, 'store']);
@@ -96,7 +95,7 @@ Route::group(['domain' => config('url.longurl')], function () {
         });
 
         // Contacts
-        Route::group(['prefix' => 'contacts'], function () {
+        Route::prefix('contacts')->group(function () {
             Route::get('/', [AdminContactsController::class, 'index']);
             Route::get('/create', [AdminContactsController::class, 'create']);
             Route::post('/', [AdminContactsController::class, 'store']);
@@ -107,7 +106,7 @@ Route::group(['domain' => config('url.longurl')], function () {
         });
 
         // Places
-        Route::group(['prefix' => 'places'], function () {
+        Route::prefix('places')->group(function () {
             Route::get('/', [AdminPlacesController::class, 'index']);
             Route::get('/create', [AdminPlacesController::class, 'create']);
             Route::post('/', [AdminPlacesController::class, 'store']);
@@ -120,7 +119,7 @@ Route::group(['domain' => config('url.longurl')], function () {
         });
 
         // Likes
-        Route::group(['prefix' => 'likes'], function () {
+        Route::prefix('likes')->group(function () {
             Route::get('/', [AdminLikesController::class, 'index']);
             Route::get('/create', [AdminLikesController::class, 'create']);
             Route::post('/', [AdminLikesController::class, 'store']);
@@ -130,7 +129,7 @@ Route::group(['domain' => config('url.longurl')], function () {
         });
 
         // Syndication Targets
-        Route::group(['prefix' => 'syndication'], function () {
+        Route::prefix('syndication')->group(function () {
             Route::get('/', [SyndicationTargetsController::class, 'index']);
             Route::get('/create', [SyndicationTargetsController::class, 'create']);
             Route::post('/', [SyndicationTargetsController::class, 'store']);
@@ -140,13 +139,13 @@ Route::group(['domain' => config('url.longurl')], function () {
         });
 
         // Bio
-        Route::group(['prefix' => 'bio'], function () {
+        Route::prefix('bio')->group(function () {
             Route::get('/', [BioController::class, 'show'])->name('admin.bio.show');
             Route::put('/', [BioController::class, 'update']);
         });
 
         // Passkeys
-        Route::group(['prefix' => 'passkeys'], static function () {
+        Route::prefix('passkeys')->group(function () {
             Route::get('/', [PasskeysController::class, 'index']);
             Route::get('register', [PasskeysController::class, 'getCreateOptions']);
             Route::post('register', [PasskeysController::class, 'create']);
@@ -154,7 +153,7 @@ Route::group(['domain' => config('url.longurl')], function () {
     });
 
     // Blog pages using ArticlesController
-    Route::group(['prefix' => 'blog'], function () {
+    Route::prefix('blog')->group(function () {
         Route::get('/feed.rss', [FeedsController::class, 'blogRss']);
         Route::get('/feed.atom', [FeedsController::class, 'blogAtom']);
         Route::get('/feed.json', [FeedsController::class, 'blogJson']);
@@ -165,7 +164,7 @@ Route::group(['domain' => config('url.longurl')], function () {
     });
 
     // Notes pages using NotesController
-    Route::group(['prefix' => 'notes'], function () {
+    Route::prefix('notes')->group(function () {
         Route::get('/', [NotesController::class, 'index']);
         Route::get('/feed.rss', [FeedsController::class, 'notesRss']);
         Route::get('/feed.atom', [FeedsController::class, 'notesAtom']);
@@ -178,13 +177,13 @@ Route::group(['domain' => config('url.longurl')], function () {
     Route::get('note/{id}', [NotesController::class, 'redirect']); // for legacy note URLs
 
     // Likes
-    Route::group(['prefix' => 'likes'], function () {
+    Route::prefix('likes')->group(function () {
         Route::get('/', [LikesController::class, 'index']);
         Route::get('/{like}', [LikesController::class, 'show']);
     });
 
     // Bookmarks
-    Route::group(['prefix' => 'bookmarks'], function () {
+    Route::prefix('bookmarks')->group(function () {
         Route::get('/', [BookmarksController::class, 'index']);
         Route::redirect('/tagged', '/bookmarks');
         Route::get('/{bookmark}', [BookmarksController::class, 'show']);
@@ -195,13 +194,13 @@ Route::group(['domain' => config('url.longurl')], function () {
     Route::post('api/token', [TokenEndpointController::class, 'create']);
 
     // Micropub Endpoints
-    Route::get('api/post', [MicropubController::class, 'get'])->middleware('micropub.token');
-    Route::post('api/post', [MicropubController::class, 'post'])->middleware('micropub.token');
-    Route::get('api/media', [MicropubMediaController::class, 'getHandler'])->middleware('micropub.token');
+    Route::get('api/post', [MicropubController::class, 'get'])->middleware(VerifyMicropubToken::class);
+    Route::post('api/post', [MicropubController::class, 'post'])->middleware(VerifyMicropubToken::class);
+    Route::get('api/media', [MicropubMediaController::class, 'getHandler'])->middleware(VerifyMicropubToken::class);
     Route::post('api/media', [MicropubMediaController::class, 'media'])
-        ->middleware('micropub.token', 'cors')
+        ->middleware([VerifyMicropubToken::class, CorsHeaders::class])
         ->name('media-endpoint');
-    Route::options('/api/media', [MicropubMediaController::class, 'mediaOptionsResponse'])->middleware('cors');
+    Route::options('/api/media', [MicropubMediaController::class, 'mediaOptionsResponse'])->middleware(CorsHeaders::class);
 
     // Webmention
     Route::get('webmention', [WebMentionsController::class, 'get']);
@@ -223,7 +222,7 @@ Route::group(['domain' => config('url.longurl')], function () {
 });
 
 // Short URL
-Route::group(['domain' => config('url.shorturl')], function () {
+Route::domain(config('url.shorturl'))->group(function () {
     Route::get('/', [ShortURLsController::class, 'baseURL']);
     Route::get('@', [ShortURLsController::class, 'twitter']);
 

@@ -22,6 +22,14 @@ use Symfony\Component\HtmlSanitizer\HtmlSanitizerConfig;
 class AppServiceProvider extends ServiceProvider
 {
     /**
+     * Register any application services.
+     */
+    public function register(): void
+    {
+        //
+    }
+
+    /**
      * Bootstrap any application services.
      */
     public function boot(): void
@@ -131,15 +139,5 @@ class AppServiceProvider extends ServiceProvider
 
         // Turn on Eloquent strict mode when developing
         Model::shouldBeStrict(! $this->app->isProduction());
-    }
-
-    /**
-     * Register any application services.
-     */
-    public function register(): void
-    {
-        if ($this->app->environment('local', 'testing')) {
-            $this->app->register(DuskServiceProvider::class);
-        }
     }
 }
