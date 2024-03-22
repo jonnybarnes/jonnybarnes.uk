@@ -92,7 +92,7 @@ class ProcessWebMention implements ShouldQueue
         $webmention->source = $this->source;
         $webmention->target = $this->note->longurl;
         $webmention->commentable_id = $this->note->id;
-        $webmention->commentable_type = 'App\Model\Note';
+        $webmention->commentable_type = Note::class;
         $webmention->type = $type;
         $webmention->mf2 = json_encode($microformats);
         $webmention->save();
