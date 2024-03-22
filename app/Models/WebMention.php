@@ -109,8 +109,16 @@ class WebMention extends Model
     /**
      * Create the photo link.
      */
-    public function createPhotoLink(string $url): string
+    public function createPhotoLink(string|array $url): string
     {
+        if (is_array($url)) {
+            if (! array_key_exists('value', $url)) {
+                return '';
+            }
+
+            $url = $url['value'];
+        }
+
         $url = normalize_url($url);
         $host = parse_url($url, PHP_URL_HOST);
 
