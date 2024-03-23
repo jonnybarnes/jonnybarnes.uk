@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Feature;
 
 use App\Jobs\SendWebMentions;
+use App\Jobs\SyndicateNoteToBluesky;
 use App\Jobs\SyndicateNoteToMastodon;
 use App\Models\Media;
 use App\Models\Note;
@@ -123,17 +124,17 @@ class MicropubControllerTest extends TestCase
     }
 
     /** @test */
-    public function micropubClientCanRequestTheNewNoteIsSyndicatedToTwitterAndMastodon(): void
+    public function micropubClientCanRequestTheNewNoteIsSyndicatedToMastodonAndBluesky(): void
     {
         Queue::fake();
 
         SyndicationTarget::factory()->create([
-            'uid' => 'https://twitter.com/jonnybarnes',
-            'service_name' => 'Twitter',
-        ]);
-        SyndicationTarget::factory()->create([
             'uid' => 'https://mastodon.social/@jonnybarnes',
             'service_name' => 'Mastodon',
+        ]);
+        SyndicationTarget::factory()->create([
+            'uid' => 'https://bsky.app/profile/jonnybarnes.uk',
+            'service_name' => 'Bluesky',
         ]);
 
         $faker = Factory::create();
@@ -145,6 +146,7 @@ class MicropubControllerTest extends TestCase
                 'content' => $note,
                 'mp-syndicate-to' => [
                     'https://mastodon.social/@jonnybarnes',
+                    'https://bsky.app/profile/jonnybarnes.uk',
                 ],
             ],
             ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
@@ -152,6 +154,7 @@ class MicropubControllerTest extends TestCase
         $response->assertJson(['response' => 'created']);
         $this->assertDatabaseHas('notes', ['note' => $note]);
         Queue::assertPushed(SyndicateNoteToMastodon::class);
+        Queue::assertPushed(SyndicateNoteToBluesky::class);
     }
 
     /** @test */
@@ -249,6 +252,10 @@ class MicropubControllerTest extends TestCase
             'uid' => 'https://mastodon.social/@jonnybarnes',
             'service_name' => 'Mastodon',
         ]);
+        SyndicationTarget::factory()->create([
+            'uid' => 'https://bsky.app/profile/jonnybarnes.uk',
+            'service_name' => 'Bluesky',
+        ]);
 
         $faker = Factory::create();
         $note = $faker->text;
@@ -261,6 +268,7 @@ class MicropubControllerTest extends TestCase
                     'in-reply-to' => ['https://aaronpk.localhost'],
                     'mp-syndicate-to' => [
                         'https://mastodon.social/@jonnybarnes',
+                        'https://bsky.app/profile/jonnybarnes.uk',
                     ],
                     'photo' => [config('filesystems.disks.s3.url') . '/test-photo.jpg'],
                 ],
@@ -272,6 +280,7 @@ class MicropubControllerTest extends TestCase
             ->assertJson(['response' => 'created']);
         Queue::assertPushed(SendWebMentions::class);
         Queue::assertPushed(SyndicateNoteToMastodon::class);
+        Queue::assertPushed(SyndicateNoteToBluesky::class);
     }
 
     /**
