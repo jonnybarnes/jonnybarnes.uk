@@ -19,7 +19,6 @@ return Application::configure(basePath: dirname(__DIR__))
             'micropub/places',
             'webmention',
         ]);
-        $middleware->append(CSPHeader::class);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
