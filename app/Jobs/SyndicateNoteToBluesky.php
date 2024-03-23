@@ -56,7 +56,7 @@ class SyndicateNoteToBluesky implements ShouldQueue
 
         // Parse for syndication URL
         if ($response->getStatusCode() === 201) {
-            $this->note->bluesky_url = $response->getHeader('Location')[0];;
+            $this->note->bluesky_url = $response->getHeader('Location')[0];
             $this->note->save();
         }
     }
