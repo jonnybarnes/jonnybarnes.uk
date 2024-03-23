@@ -71,7 +71,8 @@
                     $note->facebook_url ||
                     $note->swarm_url ||
                     $note->instagram_url ||
-                    $note->mastodon_url
+                    $note->mastodon_url ||
+                    $note->bluesky_url
                 )
                     @include('templates.social-links', [
                         'id' => $note->id,
@@ -80,6 +81,7 @@
                         'swarm_url' => $note->swarm_url,
                         'instagram_url' => $note->instagram_url,
                         'mastodon_url' => $note->mastodon_url,
+                        'bluesky_url' => $note->bluesky_url
                     ])
                 @endif
             </div>

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Jobs\SendWebMentions;
+use App\Jobs\SyndicateNoteToBluesky;
 use App\Jobs\SyndicateNoteToMastodon;
 use App\Models\Media;
 use App\Models\Note;
@@ -51,6 +52,10 @@ class NoteService extends Service
 
         if (in_array('mastodon', $this->getSyndicationTargets($request), true)) {
             dispatch(new SyndicateNoteToMastodon($note));
+        }
+
+        if (in_array('bluesky', $this->getSyndicationTargets($request), true)) {
+            dispatch(new SyndicateNoteToBluesky($note));
         }
 
         return $note;
@@ -156,11 +161,11 @@ class NoteService extends Service
         $mpSyndicateTo = Arr::wrap($mpSyndicateTo);
         foreach ($mpSyndicateTo as $uid) {
             $target = SyndicationTarget::where('uid', $uid)->first();
-            if ($target && $target->service_name === 'Twitter') {
-                $syndication[] = 'twitter';
-            }
             if ($target && $target->service_name === 'Mastodon') {
                 $syndication[] = 'mastodon';
+            }
+            if ($target && $target->service_name === 'Bluesky') {
+                $syndication[] = 'bluesky';
             }
         }
 
