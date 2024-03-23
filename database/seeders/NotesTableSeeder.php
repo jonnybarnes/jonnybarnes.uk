@@ -138,6 +138,7 @@ class NotesTableSeeder extends Seeder
         $noteSyndicated->swarm_url = 'https://www.swarmapp.com/checking/123456789';
         $noteSyndicated->instagram_url = 'https://www.instagram.com/p/aWsEd123Jh';
         $noteSyndicated->mastodon_url = 'https://mastodon.social/@jonnybarnes/123456789';
+        $noteSyndicated->bluesky_url = 'https://bsky.app/profile/jonnybarnes.uk/post/123456789';
         $noteSyndicated->save();
         DB::table('notes')
             ->where('id', $noteSyndicated->id)
