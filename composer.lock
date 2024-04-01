@@ -3621,16 +3621,16 @@
         },
         {
             "name": "nesbot/carbon",
-            "version": "3.2.2",
+            "version": "3.2.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/briannesbitt/Carbon.git",
-                "reference": "2d69b6de67e2a3c0652d0c9dfcfda8b4563c4cee"
+                "reference": "4d599a6e2351d6b6bf21737accdfe1a4ce3fdbb1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/2d69b6de67e2a3c0652d0c9dfcfda8b4563c4cee",
-                "reference": "2d69b6de67e2a3c0652d0c9dfcfda8b4563c4cee",
+                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/4d599a6e2351d6b6bf21737accdfe1a4ce3fdbb1",
+                "reference": "4d599a6e2351d6b6bf21737accdfe1a4ce3fdbb1",
                 "shasum": ""
             },
             "require": {
@@ -3723,7 +3723,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-03-28T12:59:49+00:00"
+            "time": "2024-03-30T18:22:00+00:00"
         },
         {
             "name": "nette/schema",
@@ -10829,16 +10829,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.10.63",
+            "version": "1.10.66",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "ad12836d9ca227301f5fb9960979574ed8628339"
+                "reference": "94779c987e4ebd620025d9e5fdd23323903950bd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/ad12836d9ca227301f5fb9960979574ed8628339",
-                "reference": "ad12836d9ca227301f5fb9960979574ed8628339",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/94779c987e4ebd620025d9e5fdd23323903950bd",
+                "reference": "94779c987e4ebd620025d9e5fdd23323903950bd",
                 "shasum": ""
             },
             "require": {
@@ -10887,7 +10887,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-03-18T16:53:53+00:00"
+            "time": "2024-03-28T16:17:31+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -12475,16 +12475,16 @@
         },
         {
             "name": "spatie/laravel-ray",
-            "version": "1.35.1",
+            "version": "1.36.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/laravel-ray.git",
-                "reference": "f504d3787d88c7e5de7a4290658f7ad9b1352f22"
+                "reference": "f15936b5d308ae391ee67370a5628f0712537c34"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/laravel-ray/zipball/f504d3787d88c7e5de7a4290658f7ad9b1352f22",
-                "reference": "f504d3787d88c7e5de7a4290658f7ad9b1352f22",
+                "url": "https://api.github.com/repos/spatie/laravel-ray/zipball/f15936b5d308ae391ee67370a5628f0712537c34",
+                "reference": "f15936b5d308ae391ee67370a5628f0712537c34",
                 "shasum": ""
             },
             "require": {
@@ -12546,7 +12546,7 @@
             ],
             "support": {
                 "issues": "https://github.com/spatie/laravel-ray/issues",
-                "source": "https://github.com/spatie/laravel-ray/tree/1.35.1"
+                "source": "https://github.com/spatie/laravel-ray/tree/1.36.0"
             },
             "funding": [
                 {
@@ -12558,7 +12558,7 @@
                     "type": "other"
                 }
             ],
-            "time": "2024-02-13T14:19:41+00:00"
+            "time": "2024-03-29T09:10:11+00:00"
         },
         {
             "name": "spatie/macroable",
