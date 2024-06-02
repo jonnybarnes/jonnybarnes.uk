@@ -16,6 +16,7 @@ use App\Http\Controllers\BookmarksController;
 use App\Http\Controllers\ContactsController;
 use App\Http\Controllers\FeedsController;
 use App\Http\Controllers\FrontPageController;
+use App\Http\Controllers\IndieAuthController;
 use App\Http\Controllers\LikesController;
 use App\Http\Controllers\MicropubController;
 use App\Http\Controllers\MicropubMediaController;
@@ -188,6 +189,23 @@ Route::domain(config('url.longurl'))->group(function () {
         Route::redirect('/tagged', '/bookmarks');
         Route::get('/{bookmark}', [BookmarksController::class, 'show']);
         Route::get('/tagged/{tag}', [BookmarksController::class, 'tagged']);
+    });
+
+    // IndieAuth
+    Route::get('auth', [IndieAuthController::class, 'start'])->middleware(MyAuthMiddleware::class);
+    Route::post('auth/confirm', [IndieAuthController::class, 'confirm'])->middleware(MyAuthMiddleware::class);
+    Route::post('auth', [IndieAuthController::class, 'processCodeExchange']);
+
+    Route::get('/test-auth-cache', function () {
+        $cacheKey = hash('xxh3', 'http://jonnybarnes.localhost');
+
+        dump(Cache::get($cacheKey));
+    });
+
+    Route::get('/test-me', function () {
+        return response()->json([
+            'me' => config('app.url'),
+        ]);
     });
 
     // Token Endpoint
