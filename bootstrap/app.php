@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\LinkHeadersMiddleware;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -11,14 +12,16 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        $middleware->validateCsrfTokens(except: [
-            'auth',  // This is the IndieAuth auth endpoint
-            'token', // This is the IndieAuth token endpoint
-            'api/post',
-            'api/media',
-            'micropub/places',
-            'webmention',
-        ]);
+        $middleware
+            ->append(LinkHeadersMiddleware::class)
+            ->validateCsrfTokens(except: [
+                'auth',  // This is the IndieAuth auth endpoint
+                'token', // This is the IndieAuth token endpoint
+                'api/post',
+                'api/media',
+                'micropub/places',
+                'webmention',
+            ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

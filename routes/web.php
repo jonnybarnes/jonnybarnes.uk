@@ -192,7 +192,7 @@ Route::domain(config('url.longurl'))->group(function () {
     });
 
     // IndieAuth
-    Route::get('.well-known/indieauth-server', [IndieAuthController::class, 'indieAuthMetadataEndpoint']);
+    Route::get('.well-known/indieauth-server', [IndieAuthController::class, 'indieAuthMetadataEndpoint'])->name('indieauth.metadata');
     Route::get('auth', [IndieAuthController::class, 'start'])->middleware(MyAuthMiddleware::class)->name('indieauth.start');
     Route::post('auth/confirm', [IndieAuthController::class, 'confirm'])->middleware(MyAuthMiddleware::class);
     Route::post('auth', [IndieAuthController::class, 'processCodeExchange']);
@@ -200,7 +200,7 @@ Route::domain(config('url.longurl'))->group(function () {
 
     // Micropub Endpoints
     Route::get('api/post', [MicropubController::class, 'get'])->middleware(VerifyMicropubToken::class);
-    Route::post('api/post', [MicropubController::class, 'post'])->middleware(VerifyMicropubToken::class);
+    Route::post('api/post', [MicropubController::class, 'post'])->middleware(VerifyMicropubToken::class)->name('micropub-endpoint');
     Route::get('api/media', [MicropubMediaController::class, 'getHandler'])->middleware(VerifyMicropubToken::class);
     Route::post('api/media', [MicropubMediaController::class, 'media'])
         ->middleware([VerifyMicropubToken::class, CorsHeaders::class])
@@ -208,7 +208,7 @@ Route::domain(config('url.longurl'))->group(function () {
     Route::options('/api/media', [MicropubMediaController::class, 'mediaOptionsResponse'])->middleware(CorsHeaders::class);
 
     // Webmention
-    Route::get('webmention', [WebMentionsController::class, 'get']);
+    Route::get('webmention', [WebMentionsController::class, 'get']) ->name('webmention-endpoint');
     Route::post('webmention', [WebMentionsController::class, 'receive']);
 
     // Contacts
