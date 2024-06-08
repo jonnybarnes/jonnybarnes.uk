@@ -12,7 +12,8 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->validateCsrfTokens(except: [
-            'api/token',
+            'auth',  // This is the IndieAuth auth endpoint
+            'token', // This is the IndieAuth token endpoint
             'api/post',
             'api/media',
             'micropub/places',

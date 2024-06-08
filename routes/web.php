@@ -192,24 +192,11 @@ Route::domain(config('url.longurl'))->group(function () {
     });
 
     // IndieAuth
-    Route::get('auth', [IndieAuthController::class, 'start'])->middleware(MyAuthMiddleware::class);
+    Route::get('.well-known/indieauth-server', [IndieAuthController::class, 'indieAuthMetadataEndpoint']);
+    Route::get('auth', [IndieAuthController::class, 'start'])->middleware(MyAuthMiddleware::class)->name('indieauth.start');
     Route::post('auth/confirm', [IndieAuthController::class, 'confirm'])->middleware(MyAuthMiddleware::class);
     Route::post('auth', [IndieAuthController::class, 'processCodeExchange']);
-
-    Route::get('/test-auth-cache', function () {
-        $cacheKey = hash('xxh3', 'http://jonnybarnes.localhost');
-
-        dump(Cache::get($cacheKey));
-    });
-
-    Route::get('/test-me', function () {
-        return response()->json([
-            'me' => config('app.url'),
-        ]);
-    });
-
-    // Token Endpoint
-    Route::post('api/token', [TokenEndpointController::class, 'create']);
+    Route::post('token', [IndieAuthController::class, 'processTokenRequest'])->name('indieauth.token');
 
     // Micropub Endpoints
     Route::get('api/post', [MicropubController::class, 'get'])->middleware(VerifyMicropubToken::class);
