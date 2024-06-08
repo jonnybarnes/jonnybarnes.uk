@@ -24,7 +24,6 @@ use App\Http\Controllers\NotesController;
 use App\Http\Controllers\PlacesController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\ShortURLsController;
-use App\Http\Controllers\TokenEndpointController;
 use App\Http\Controllers\WebMentionsController;
 use App\Http\Middleware\CorsHeaders;
 use App\Http\Middleware\MyAuthMiddleware;
@@ -208,7 +207,7 @@ Route::domain(config('url.longurl'))->group(function () {
     Route::options('/api/media', [MicropubMediaController::class, 'mediaOptionsResponse'])->middleware(CorsHeaders::class);
 
     // Webmention
-    Route::get('webmention', [WebMentionsController::class, 'get']) ->name('webmention-endpoint');
+    Route::get('webmention', [WebMentionsController::class, 'get'])->name('webmention-endpoint');
     Route::post('webmention', [WebMentionsController::class, 'receive']);
 
     // Contacts
