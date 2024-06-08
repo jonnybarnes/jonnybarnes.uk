@@ -2,10 +2,14 @@
     "private": true,
     "name": "jbuk-frontend",
     "version": "0.0.1",
+    "type": "module",
     "repository": "https://github.com/jonnybarnes/jonnybarnes.uk",
     "license": "CC0-1.0",
     "devDependencies": {
+        "@eslint/js": "^9.4.0",
+        "@stylistic/eslint-plugin": "^2.1.0",
         "eslint": "^9.4.0",
+        "globals": "^15.4.0",
         "stylelint": "^16.6.1",
         "stylelint-config-standard": "^36.0.0"
     },
