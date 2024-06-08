@@ -20,4 +20,6 @@
   --color-link-visited: oklch(70.44% 0.21 304.41deg);
   --color-primary-shadow: oklch(19.56% 0.054 125.505deg / 40%);
   --rss-color-link: oklch(67.59% 0.189 42.04deg);
+  --color-danger: oklch(64.41% 0.281 23.29deg);
+  --color-danger-shadow: oklch(64.41% 0.281 23.29deg / 10%);
 }
