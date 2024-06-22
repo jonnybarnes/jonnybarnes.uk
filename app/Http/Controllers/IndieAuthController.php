@@ -71,7 +71,7 @@ class IndieAuthController extends Controller
             return view('indieauth.error')->withErrors(['redirect_uri' => 'redirect_uri is not valid for this client_id']);
         }
 
-        $scopes = $request->get('scopes', '');
+        $scopes = $request->get('scope', '');
         $scopes = explode(' ', $scopes);
 
         return view('indieauth.start', [
@@ -130,8 +130,6 @@ class IndieAuthController extends Controller
      * This is one possible second step in the IndieAuth flow, where the client app sends the auth code to the IndieAuth
      * endpoint. As it is to the auth endpoint we return profile information. A similar request can be made to the token
      * endpoint to get an access token.
-     *
-     * @throws SodiumException
      */
     public function processCodeExchange(Request $request): JsonResponse
     {
@@ -227,6 +225,9 @@ class IndieAuthController extends Controller
         return in_array($redirectUri, $redirectUris, true);
     }
 
+    /**
+     * @throws SodiumException
+     */
     protected function validateAuthorizationCode(Request $request): JsonResponse|array
     {
         // First check all the data is present
