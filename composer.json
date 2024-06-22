@@ -10,6 +10,7 @@
         "ext-intl": "*",
         "ext-json": "*",
         "ext-pgsql": "*",
+        "ext-sodium": "*",
         "cviebrock/eloquent-sluggable": "^11.0",
         "guzzlehttp/guzzle": "^7.2",
         "indieauth/client": "^1.1",
@@ -26,9 +27,12 @@
         "league/commonmark": "^2.0",
         "league/flysystem-aws-s3-v3": "^3.0",
         "mf2/mf2": "~0.3",
+        "phpdocumentor/reflection-docblock": "^5.3",
         "spatie/commonmark-highlighter": "^3.0",
         "spatie/laravel-ignition": "^2.1",
         "symfony/html-sanitizer": "^7.0",
+        "symfony/property-access": "^7.0",
+        "symfony/serializer": "^7.0",
         "web-auth/webauthn-lib": "^4.7"
     },
     "require-dev": {

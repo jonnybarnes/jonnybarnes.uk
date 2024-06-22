@@ -20,6 +20,8 @@ class MyAuthMiddleware
     {
         if (Auth::check() === false) {
             // they’re not logged in, so send them to login form
+            redirect()->setIntendedUrl($request->url());
+
             return redirect()->route('login');
         }
 

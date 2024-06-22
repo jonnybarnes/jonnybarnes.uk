@@ -19,7 +19,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use ParagonIE\ConstantTime\Base64UrlSafe;
 use Throwable;
-use Webauthn\AttestationStatement\AttestationObjectLoader;
 use Webauthn\AttestationStatement\AttestationStatementSupportManager;
 use Webauthn\AttestationStatement\NoneAttestationStatementSupport;
 use Webauthn\AuthenticationExtensions\ExtensionOutputCheckerHandler;
@@ -28,9 +27,11 @@ use Webauthn\AuthenticatorAssertionResponseValidator;
 use Webauthn\AuthenticatorAttestationResponse;
 use Webauthn\AuthenticatorAttestationResponseValidator;
 use Webauthn\AuthenticatorSelectionCriteria;
+use Webauthn\CeremonyStep\CeremonyStepManagerFactory;
+use Webauthn\Denormalizer\WebauthnSerializerFactory;
 use Webauthn\Exception\WebauthnException;
+use Webauthn\PublicKeyCredential;
 use Webauthn\PublicKeyCredentialCreationOptions;
-use Webauthn\PublicKeyCredentialLoader;
 use Webauthn\PublicKeyCredentialParameters;
 use Webauthn\PublicKeyCredentialRequestOptions;
 use Webauthn\PublicKeyCredentialRpEntity;
@@ -109,39 +110,57 @@ class PasskeysController extends Controller
         $user = auth()->user();
 
         $publicKeyCredentialCreationOptionsData = session('create_options');
+        // Unset session data to mitigate replay attacks
+        session()->forget('create_options');
         if (empty($publicKeyCredentialCreationOptionsData)) {
             throw new WebAuthnException('No public key credential request options found');
         }
-        $publicKeyCredentialCreationOptions = PublicKeyCredentialCreationOptions::createFromString($publicKeyCredentialCreationOptionsData);
 
-        // Unset session data to mitigate replay attacks
-        session()->forget('create_options');
+        $attestationStatementSupportManager = new AttestationStatementSupportManager();
+        $attestationStatementSupportManager->add(new NoneAttestationStatementSupport());
 
-        $attestationSupportManager = AttestationStatementSupportManager::create();
-        $attestationSupportManager->add(NoneAttestationStatementSupport::create());
-        $attestationObjectLoader = AttestationObjectLoader::create($attestationSupportManager);
-        $publicKeyCredentialLoader = PublicKeyCredentialLoader::create($attestationObjectLoader);
+        $webauthnSerializer = (new WebauthnSerializerFactory(
+            $attestationStatementSupportManager
+        ))->create();
 
-        $publicKeyCredential = $publicKeyCredentialLoader->load(json_encode($request->all(), JSON_THROW_ON_ERROR));
+        $publicKeyCredential = $webauthnSerializer->deserialize(
+            json_encode($request->all(), JSON_THROW_ON_ERROR),
+            PublicKeyCredential::class,
+            'json'
+        );
 
         if (! $publicKeyCredential->response instanceof AuthenticatorAttestationResponse) {
             throw new WebAuthnException('Invalid response type');
         }
 
-        $attestationStatementSupportManager = AttestationStatementSupportManager::create();
-        $attestationStatementSupportManager->add(NoneAttestationStatementSupport::create());
+        $algorithmManager = new Manager();
+        $algorithmManager->add(new Ed25519());
+        $algorithmManager->add(new ES256());
+        $algorithmManager->add(new RS256());
 
-        $authenticatorAttestationResponseValidator = AuthenticatorAttestationResponseValidator::create(
-            attestationStatementSupportManager: $attestationStatementSupportManager,
-            publicKeyCredentialSourceRepository: null,
-            tokenBindingHandler: null,
-            extensionOutputCheckerHandler: ExtensionOutputCheckerHandler::create(),
+        $ceremonyStepManagerFactory = new CeremonyStepManagerFactory();
+        $ceremonyStepManagerFactory->setAlgorithmManager($algorithmManager);
+        $ceremonyStepManagerFactory->setAttestationStatementSupportManager(
+            $attestationStatementSupportManager
         );
-
+        $ceremonyStepManagerFactory->setExtensionOutputCheckerHandler(
+            ExtensionOutputCheckerHandler::create()
+        );
         $securedRelyingPartyId = [];
         if (App::environment('local', 'development')) {
             $securedRelyingPartyId = [config('url.longurl')];
         }
+        $ceremonyStepManagerFactory->setSecuredRelyingPartyId($securedRelyingPartyId);
+
+        $authenticatorAttestationResponseValidator = AuthenticatorAttestationResponseValidator::create(
+            ceremonyStepManager: $ceremonyStepManagerFactory->creationCeremony()
+        );
+
+        $publicKeyCredentialCreationOptions = $webauthnSerializer->deserialize(
+            $publicKeyCredentialCreationOptionsData,
+            PublicKeyCredentialCreationOptions::class,
+            'json'
+        );
 
         $publicKeyCredentialSource = $authenticatorAttestationResponseValidator->check(
             authenticatorAttestationResponse: $publicKeyCredential->response,
@@ -187,14 +206,18 @@ class PasskeysController extends Controller
             ], 400);
         }
 
-        $publicKeyCredentialRequestOptions = PublicKeyCredentialRequestOptions::createFromString($requestOptions);
+        $attestationStatementSupportManager = new AttestationStatementSupportManager();
+        $attestationStatementSupportManager->add(new NoneAttestationStatementSupport());
 
-        $attestationSupportManager = AttestationStatementSupportManager::create();
-        $attestationSupportManager->add(NoneAttestationStatementSupport::create());
-        $attestationObjectLoader = AttestationObjectLoader::create($attestationSupportManager);
-        $publicKeyCredentialLoader = PublicKeyCredentialLoader::create($attestationObjectLoader);
+        $webauthnSerializer = (new WebauthnSerializerFactory(
+            $attestationStatementSupportManager
+        ))->create();
 
-        $publicKeyCredential = $publicKeyCredentialLoader->load(json_encode($request->all(), JSON_THROW_ON_ERROR));
+        $publicKeyCredential = $webauthnSerializer->deserialize(
+            json_encode($request->all(), JSON_THROW_ON_ERROR),
+            PublicKeyCredential::class,
+            'json'
+        );
 
         if (! $publicKeyCredential->response instanceof AuthenticatorAssertionResponse) {
             return response()->json([
@@ -211,28 +234,47 @@ class PasskeysController extends Controller
             ], 404);
         }
 
-        $credential = PublicKeyCredentialSource::createFromArray(json_decode($passkey->passkey, true, 512, JSON_THROW_ON_ERROR));
+        $publicKeyCredentialSource = $webauthnSerializer->deserialize(
+            $passkey->passkey,
+            PublicKeyCredentialSource::class,
+            'json'
+        );
 
-        $algorithmManager = Manager::create();
+        $algorithmManager = new Manager();
         $algorithmManager->add(new Ed25519());
         $algorithmManager->add(new ES256());
         $algorithmManager->add(new RS256());
 
-        $authenticatorAssertionResponseValidator = new AuthenticatorAssertionResponseValidator(
-            publicKeyCredentialSourceRepository: null,
-            tokenBindingHandler: null,
-            extensionOutputCheckerHandler: ExtensionOutputCheckerHandler::create(),
-            algorithmManager: $algorithmManager,
-        );
+        $attestationStatementSupportManager = new AttestationStatementSupportManager();
+        $attestationStatementSupportManager->add(new NoneAttestationStatementSupport());
 
+        $ceremonyStepManagerFactory = new CeremonyStepManagerFactory();
+        $ceremonyStepManagerFactory->setAlgorithmManager($algorithmManager);
+        $ceremonyStepManagerFactory->setAttestationStatementSupportManager(
+            $attestationStatementSupportManager
+        );
+        $ceremonyStepManagerFactory->setExtensionOutputCheckerHandler(
+            ExtensionOutputCheckerHandler::create()
+        );
         $securedRelyingPartyId = [];
         if (App::environment('local', 'development')) {
             $securedRelyingPartyId = [config('url.longurl')];
         }
+        $ceremonyStepManagerFactory->setSecuredRelyingPartyId($securedRelyingPartyId);
+
+        $authenticatorAssertionResponseValidator = AuthenticatorAssertionResponseValidator::create(
+            ceremonyStepManager: $ceremonyStepManagerFactory->requestCeremony()
+        );
+
+        $publicKeyCredentialRequestOptions = $webauthnSerializer->deserialize(
+            $requestOptions,
+            PublicKeyCredentialRequestOptions::class,
+            'json'
+        );
 
         try {
             $authenticatorAssertionResponseValidator->check(
-                credentialId: $credential,
+                credentialId: $publicKeyCredentialSource,
                 authenticatorAssertionResponse: $publicKeyCredential->response,
                 publicKeyCredentialRequestOptions: $publicKeyCredentialRequestOptions,
                 request: config('url.longurl'),

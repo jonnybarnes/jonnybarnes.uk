@@ -2,12 +2,16 @@
     "private": true,
     "name": "jbuk-frontend",
     "version": "0.0.1",
+    "type": "module",
     "repository": "https://github.com/jonnybarnes/jonnybarnes.uk",
     "license": "CC0-1.0",
     "devDependencies": {
-        "eslint": "^8.57.0",
-        "stylelint": "^16.2.1",
-        "stylelint-config-standard": "^36.0.0"
+        "@eslint/js": "^9.4.0",
+        "@stylistic/eslint-plugin": "^2.2.2",
+        "eslint": "^9.5.0",
+        "globals": "^15.6.0",
+        "stylelint": "^16.6.1",
+        "stylelint-config-standard": "^36.0.1"
     },
     "scripts": {
         "eslint": "eslint public/assets/js/*.js",

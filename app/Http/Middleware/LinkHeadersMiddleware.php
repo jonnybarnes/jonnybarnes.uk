@@ -16,10 +16,11 @@ class LinkHeadersMiddleware
     public function handle(Request $request, Closure $next): Response
     {
         $response = $next($request);
-        $response->header('Link', '<https://indieauth.com/auth>; rel="authorization_endpoint"', false);
-        $response->header('Link', '<' . config('app.url') . '/api/token>; rel="token_endpoint"', false);
-        $response->header('Link', '<' . config('app.url') . '/api/post>; rel="micropub"', false);
-        $response->header('Link', '<' . config('app.url') . '/webmention>; rel="webmention"', false);
+        $response->header('Link', '<' . route('indieauth.metadata') . '>; rel="indieauth-metadata"', false);
+        $response->header('Link', '<' . route('indieauth.start') . '>; rel="authorization_endpoint"', false);
+        $response->header('Link', '<' . route('indieauth.token') . '>; rel="token_endpoint"', false);
+        $response->header('Link', '<' . route('micropub-endpoint') . '>; rel="micropub"', false);
+        $response->header('Link', '<' . route('webmention-endpoint') . '>; rel="webmention"', false);
 
         return $response;
     }

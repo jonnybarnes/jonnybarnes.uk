@@ -16,6 +16,7 @@ use App\Http\Controllers\BookmarksController;
 use App\Http\Controllers\ContactsController;
 use App\Http\Controllers\FeedsController;
 use App\Http\Controllers\FrontPageController;
+use App\Http\Controllers\IndieAuthController;
 use App\Http\Controllers\LikesController;
 use App\Http\Controllers\MicropubController;
 use App\Http\Controllers\MicropubMediaController;
@@ -23,7 +24,6 @@ use App\Http\Controllers\NotesController;
 use App\Http\Controllers\PlacesController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\ShortURLsController;
-use App\Http\Controllers\TokenEndpointController;
 use App\Http\Controllers\WebMentionsController;
 use App\Http\Middleware\CorsHeaders;
 use App\Http\Middleware\MyAuthMiddleware;
@@ -190,12 +190,16 @@ Route::domain(config('url.longurl'))->group(function () {
         Route::get('/tagged/{tag}', [BookmarksController::class, 'tagged']);
     });
 
-    // Token Endpoint
-    Route::post('api/token', [TokenEndpointController::class, 'create']);
+    // IndieAuth
+    Route::get('.well-known/indieauth-server', [IndieAuthController::class, 'indieAuthMetadataEndpoint'])->name('indieauth.metadata');
+    Route::get('auth', [IndieAuthController::class, 'start'])->middleware(MyAuthMiddleware::class)->name('indieauth.start');
+    Route::post('auth/confirm', [IndieAuthController::class, 'confirm'])->middleware(MyAuthMiddleware::class);
+    Route::post('auth', [IndieAuthController::class, 'processCodeExchange']);
+    Route::post('token', [IndieAuthController::class, 'processTokenRequest'])->name('indieauth.token');
 
     // Micropub Endpoints
     Route::get('api/post', [MicropubController::class, 'get'])->middleware(VerifyMicropubToken::class);
-    Route::post('api/post', [MicropubController::class, 'post'])->middleware(VerifyMicropubToken::class);
+    Route::post('api/post', [MicropubController::class, 'post'])->middleware(VerifyMicropubToken::class)->name('micropub-endpoint');
     Route::get('api/media', [MicropubMediaController::class, 'getHandler'])->middleware(VerifyMicropubToken::class);
     Route::post('api/media', [MicropubMediaController::class, 'media'])
         ->middleware([VerifyMicropubToken::class, CorsHeaders::class])
@@ -203,7 +207,7 @@ Route::domain(config('url.longurl'))->group(function () {
     Route::options('/api/media', [MicropubMediaController::class, 'mediaOptionsResponse'])->middleware(CorsHeaders::class);
 
     // Webmention
-    Route::get('webmention', [WebMentionsController::class, 'get']);
+    Route::get('webmention', [WebMentionsController::class, 'get'])->name('webmention-endpoint');
     Route::post('webmention', [WebMentionsController::class, 'receive']);
 
     // Contacts
