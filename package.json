@@ -7,7 +7,7 @@
     "license": "CC0-1.0",
     "devDependencies": {
         "@eslint/js": "^9.4.0",
-        "@stylistic/eslint-plugin": "^2.1.0",
+        "@stylistic/eslint-plugin": "^2.2.2",
         "eslint": "^9.5.0",
         "globals": "^15.6.0",
         "stylelint": "^16.6.1",
