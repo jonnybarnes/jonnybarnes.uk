@@ -14,12 +14,10 @@
         <link rel="alternate" type="application/atom+xml" title="Notes Atom Feed" href="/notes/feed.atom">
         <link rel="alternate" type="application/json" title="Notes JSON Feed" href="/notes/feed.json">
         <link rel="alternate" type="application/jf2feed+json" title="Notes JF2 Feed" href="/blog/feed.jf2">
-        <link rel="openid.server" href="https://indieauth.com/openid">
-        <link rel="openid.delegate" href="{{ config('app.url') }}">
-        <link rel="indieauth-metadata" href="{{ config('app.url') }}/.well-known/indieauth-server">
-        <link rel="authorization_endpoint" href="{{ config('app.url') }}/auth }}">
-        <link rel="token_endpoint" href="{{ config('app.url') }}/token">
-        <link rel="micropub" href="{{ config('app.url') }}/api/post">
+        <link rel="indieauth-metadata" href="{{ route('indieauth.metadata') }}">
+        <link rel="authorization_endpoint" href="{{ route('indieauth.start') }}">
+        <link rel="token_endpoint" href="{{ route('indieauth.token') }}">
+        <link rel="micropub" href="{{ route('micropub-endpoint') }}">
         <link rel="webmention" href="{{ config('app.url') }}/webmention">
         <link rel="shortcut icon" href="{{ config('app.url') }}/assets/img/memoji-orange-bg-small-fs8.png">
         <link rel="pgpkey" href="/assets/jonnybarnes-public-key-ecc.asc">
