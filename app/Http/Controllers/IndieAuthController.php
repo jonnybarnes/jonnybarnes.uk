@@ -104,7 +104,7 @@ class IndieAuthController extends Controller
             'client_id' => $request->get('client_id'),
             'redirect_uri' => $request->get('redirect_uri'),
             'auth_code' => $authCode,
-            'scopes' => $request->get('scopes', ''),
+            'scope' => $request->get('scope', ''),
         ];
 
         Cache::put($cacheKey, $indieAuthRequestData, now()->addMinutes(10));
@@ -115,11 +115,6 @@ class IndieAuthController extends Controller
             'state' => $request->get('state'),
             'iss' => config('app.url'),
         ]);
-
-        // For now just dump URL scheme
-        //        return response()->json([
-        //            'redirect_uri' => $redirectUri,
-        //        ]);
 
         return redirect()->away($redirectUri);
     }
@@ -160,7 +155,7 @@ class IndieAuthController extends Controller
             return $indieAuthData;
         }
 
-        if ($indieAuthData['scopes'] === '') {
+        if ($indieAuthData['scope'] === '') {
             return response()->json(['errors' => [
                 'scope' => [
                     'The scope property must be non-empty for an access token to be issued.',
@@ -171,7 +166,7 @@ class IndieAuthController extends Controller
         $tokenData = [
             'me' => config('app.url'),
             'client_id' => $request->get('client_id'),
-            'scope' => $indieAuthData['scopes'],
+            'scope' => $indieAuthData['scope'],
         ];
         $tokenService = resolve(TokenService::class);
         $token = $tokenService->getNewToken($tokenData);
@@ -179,7 +174,7 @@ class IndieAuthController extends Controller
         return response()->json([
             'access_token' => $token,
             'token_type' => 'Bearer',
-            'scope' => $indieAuthData['scopes'],
+            'scope' => $indieAuthData['scope'],
             'me' => config('app.url'),
         ]);
     }
@@ -189,16 +184,12 @@ class IndieAuthController extends Controller
         // If client_id is not a valid URL, then it's not valid
         $clientIdParsed = \Mf2\parseUriToComponents($clientId);
         if (! isset($clientIdParsed['authority'])) {
-            ray($clientIdParsed);
-
             return false;
         }
 
         // If redirect_uri is not a valid URL, then it's not valid
         $redirectUriParsed = \Mf2\parseUriToComponents($redirectUri);
         if (! isset($redirectUriParsed['authority'])) {
-            ray($redirectUriParsed);
-
             return false;
         }
 
@@ -212,9 +203,7 @@ class IndieAuthController extends Controller
 
         try {
             $clientInfo = $guzzle->get($clientId);
-        } catch (Exception $e) {
-            ray('Failed to fetch client info', $e->getMessage());
-
+        } catch (Exception) {
             return false;
         }
 
