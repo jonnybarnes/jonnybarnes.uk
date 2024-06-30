@@ -45,7 +45,7 @@ class IndieAuthTest extends TestCase
             'client_id' => 'https://app.example.com',
             'redirect_uri' => 'https://app.example.com/callback',
             'state' => '123456',
-            'scopes' => 'create update delete',
+            'scope' => 'create update delete',
             'code_challenge' => '123456',
             'code_challenge_method' => 'S256',
         ]);
@@ -68,7 +68,7 @@ class IndieAuthTest extends TestCase
             'client_id' => 'https://app.example.com',
             'redirect_uri' => 'https://app.example.com/callback',
             'state' => '123456',
-            'scopes' => 'create update delete',
+            'scope' => 'create update delete',
             'code_challenge' => '123456',
             'code_challenge_method' => 'S256',
         ]);
@@ -89,7 +89,7 @@ class IndieAuthTest extends TestCase
             'client_id' => 'https://app.example.com',
             'redirect_uri' => 'https://app.example.com/callback',
             'state' => '123456',
-            'scopes' => 'create update delete',
+            'scope' => 'create update delete',
             'code_challenge' => '123456',
             'code_challenge_method' => 'S256',
         ]);
@@ -110,7 +110,7 @@ class IndieAuthTest extends TestCase
             'client_id' => 'https://app.example.com',
             'redirect_uri' => 'https://app.example.com/callback',
             'state' => '123456',
-            'scopes' => 'create update delete',
+            'scope' => 'create update delete',
             'code_challenge' => '123456',
             'code_challenge_method' => 'S256',
         ]);
@@ -131,7 +131,7 @@ class IndieAuthTest extends TestCase
             'me' => 'https://example.com',
             'redirect_uri' => 'https://app.example.com/callback',
             'state' => '123456',
-            'scopes' => 'create update delete',
+            'scope' => 'create update delete',
             'code_challenge' => '123456',
             'code_challenge_method' => 'S256',
         ]);
@@ -152,7 +152,7 @@ class IndieAuthTest extends TestCase
             'me' => 'https://example.com',
             'client_id' => 'https://app.example.com',
             'state' => '123456',
-            'scopes' => 'create update delete',
+            'scope' => 'create update delete',
             'code_challenge' => '123456',
             'code_challenge_method' => 'S256',
         ]);
@@ -173,7 +173,7 @@ class IndieAuthTest extends TestCase
             'me' => 'https://example.com',
             'client_id' => 'https://app.example.com',
             'redirect_uri' => 'https://app.example.com/callback',
-            'scopes' => 'create update delete',
+            'scope' => 'create update delete',
             'code_challenge' => '123456',
             'code_challenge_method' => 'S256',
         ]);
@@ -195,7 +195,7 @@ class IndieAuthTest extends TestCase
             'client_id' => 'https://app.example.com',
             'redirect_uri' => 'https://app.example.com/callback',
             'state' => '123456',
-            'scopes' => 'create update delete',
+            'scope' => 'create update delete',
             'code_challenge_method' => 'S256',
         ]);
 
@@ -216,7 +216,7 @@ class IndieAuthTest extends TestCase
             'client_id' => 'https://app.example.com',
             'redirect_uri' => 'https://app.example.com/callback',
             'state' => '123456',
-            'scopes' => 'create update delete',
+            'scope' => 'create update delete',
             'code_challenge' => '123456',
         ]);
 
@@ -237,7 +237,7 @@ class IndieAuthTest extends TestCase
             'client_id' => 'https://app.example.com',
             'redirect_uri' => 'https://app.example.com/callback',
             'state' => '123456',
-            'scopes' => 'create update delete',
+            'scope' => 'create update delete',
             'code_challenge' => '123456',
             'code_challenge_method' => 'invalid_value',
         ]);
@@ -283,7 +283,7 @@ class IndieAuthTest extends TestCase
             'client_id' => 'https://app.example.com',
             'redirect_uri' => 'example-app://callback',
             'state' => '123456',
-            'scopes' => 'create update delete',
+            'scope' => 'create update delete',
             'code_challenge' => '123456',
             'code_challenge_method' => 'S256',
         ]);
@@ -327,7 +327,7 @@ class IndieAuthTest extends TestCase
             'client_id' => 'https://app.example.com',
             'redirect_uri' => 'example-app://callback',
             'state' => '123456',
-            'scopes' => 'create update delete',
+            'scope' => 'create update delete',
             'code_challenge' => '123456',
             'code_challenge_method' => 'S256',
         ]);
@@ -611,7 +611,7 @@ class IndieAuthTest extends TestCase
                     hash('sha256', 'abc123def', true),
                     SODIUM_BASE64_VARIANT_URLSAFE_NO_PADDING
                 ),
-                'scopes' => '',
+                'scope' => '',
                 'client_id' => 'https://app.example.com',
                 'redirect_uri' => 'example-app://callback',
             ]);
@@ -646,7 +646,7 @@ class IndieAuthTest extends TestCase
                     hash('sha256', 'abc123def', true),
                     SODIUM_BASE64_VARIANT_URLSAFE_NO_PADDING
                 ),
-                'scopes' => 'create update',
+                'scope' => 'create update',
                 'client_id' => 'https://app.example.invalid',
                 'redirect_uri' => 'example-app://callback',
             ]);
@@ -681,7 +681,7 @@ class IndieAuthTest extends TestCase
                     hash('sha256', 'abc123def', true),
                     SODIUM_BASE64_VARIANT_URLSAFE_NO_PADDING
                 ),
-                'scopes' => 'create update',
+                'scope' => 'create update',
                 'client_id' => 'https://app.example.com',
                 'redirect_uri' => 'example-app://callback',
             ]);
