@@ -25,8 +25,7 @@ class ProcessBookmark implements ShouldQueue
      */
     public function __construct(
         protected Bookmark $bookmark
-    ) {
-    }
+    ) {}
 
     /**
      * Execute the job.
