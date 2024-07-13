@@ -13,7 +13,6 @@ use App\Services\Micropub\UpdateService;
 use App\Services\TokenService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use illuminate\Support\Arr;
 use Lcobucci\JWT\Encoding\CannotDecodeContent;
 use Lcobucci\JWT\Token\InvalidTokenStructure;
 use Lcobucci\JWT\Validation\RequiredConstraintsViolated;
@@ -73,7 +72,7 @@ class MicropubController extends Controller
                 $scopes = explode(' ', $scopes);
             }
 
-            if (!in_array('create', $scopes)) {
+            if (! in_array('create', $scopes)) {
                 $micropubResponses = new MicropubResponses();
 
                 return $micropubResponses->insufficientScopeResponse();
@@ -91,7 +90,7 @@ class MicropubController extends Controller
             if (is_string($scopes)) {
                 $scopes = explode(' ', $scopes);
             }
-            if (!in_array('create', $scopes)) {
+            if (! in_array('create', $scopes)) {
                 $micropubResponses = new MicropubResponses();
 
                 return $micropubResponses->insufficientScopeResponse();
@@ -109,7 +108,7 @@ class MicropubController extends Controller
             if (is_string($scopes)) {
                 $scopes = explode(' ', $scopes);
             }
-            if (!in_array('update', $scopes)) {
+            if (! in_array('update', $scopes)) {
                 $micropubResponses = new MicropubResponses();
 
                 return $micropubResponses->insufficientScopeResponse();
