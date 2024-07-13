@@ -17,7 +17,6 @@ use Illuminate\Http\Response;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 use Intervention\Image\ImageManager;
 use Lcobucci\JWT\Token\InvalidTokenStructure;
 use Lcobucci\JWT\Validation\RequiredConstraintsViolated;
@@ -51,7 +50,11 @@ class MicropubMediaController extends Controller
             return $micropubResponses->tokenHasNoScopeResponse();
         }
 
-        if (Str::contains($tokenData->claims()->get('scope'), 'create') === false) {
+        $scopes = $tokenData->claims()->get('scope');
+        if (is_string($scopes)) {
+            $scopes = explode(' ', $scopes);
+        }
+        if (! in_array('create', $scopes)) {
             $micropubResponses = new MicropubResponses();
 
             return $micropubResponses->insufficientScopeResponse();
@@ -119,7 +122,11 @@ class MicropubMediaController extends Controller
             return $micropubResponses->tokenHasNoScopeResponse();
         }
 
-        if (Str::contains($tokenData->claims()->get('scope'), 'create') === false) {
+        $scopes = $tokenData->claims()->get('scope');
+        if (is_string($scopes)) {
+            $scopes = explode(' ', $scopes);
+        }
+        if (! in_array('create', $scopes)) {
             $micropubResponses = new MicropubResponses();
 
             return $micropubResponses->insufficientScopeResponse();
