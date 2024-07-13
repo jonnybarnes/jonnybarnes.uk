@@ -67,7 +67,12 @@ class MicropubController extends Controller
         $this->logMicropubRequest($request->all());
 
         if (($request->input('h') === 'entry') || ($request->input('type.0') === 'h-entry')) {
-            if (stripos($tokenData->claims()->get('scope'), 'create') === false) {
+            $scopes = $tokenData->claims()->get('scope');
+            if (is_string($scopes)) {
+                $scopes = explode(' ', $scopes);
+            }
+
+            if (! in_array('create', $scopes)) {
                 $micropubResponses = new MicropubResponses();
 
                 return $micropubResponses->insufficientScopeResponse();
@@ -81,7 +86,11 @@ class MicropubController extends Controller
         }
 
         if ($request->input('h') === 'card' || $request->input('type.0') === 'h-card') {
-            if (stripos($tokenData->claims()->get('scope'), 'create') === false) {
+            $scopes = $tokenData->claims()->get('scope');
+            if (is_string($scopes)) {
+                $scopes = explode(' ', $scopes);
+            }
+            if (! in_array('create', $scopes)) {
                 $micropubResponses = new MicropubResponses();
 
                 return $micropubResponses->insufficientScopeResponse();
@@ -95,7 +104,11 @@ class MicropubController extends Controller
         }
 
         if ($request->input('action') === 'update') {
-            if (stripos($tokenData->claims()->get('scope'), 'update') === false) {
+            $scopes = $tokenData->claims()->get('scope');
+            if (is_string($scopes)) {
+                $scopes = explode(' ', $scopes);
+            }
+            if (! in_array('update', $scopes)) {
                 $micropubResponses = new MicropubResponses();
 
                 return $micropubResponses->insufficientScopeResponse();

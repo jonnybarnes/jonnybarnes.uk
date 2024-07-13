@@ -27,8 +27,7 @@ class SendWebMentions implements ShouldQueue
      */
     public function __construct(
         protected Note $note
-    ) {
-    }
+    ) {}
 
     /**
      * Execute the job.

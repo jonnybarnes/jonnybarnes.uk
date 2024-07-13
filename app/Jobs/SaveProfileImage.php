@@ -25,8 +25,7 @@ class SaveProfileImage implements ShouldQueue
      */
     public function __construct(
         protected array $microformats
-    ) {
-    }
+    ) {}
 
     /**
      * Execute the job.

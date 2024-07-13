@@ -2,6 +2,4 @@
 
 namespace App\Exceptions;
 
-class InternetArchiveException extends \Exception
-{
-}
+class InternetArchiveException extends \Exception {}

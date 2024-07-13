@@ -22,8 +22,7 @@ class SyndicateNoteToMastodon implements ShouldQueue
      */
     public function __construct(
         protected Note $note
-    ) {
-    }
+    ) {}
 
     /**
      * Execute the job.
