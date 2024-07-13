@@ -14,8 +14,8 @@ trait TestToken
         return $config->builder()
             ->issuedAt(new DateTimeImmutable())
             ->withClaim('client_id', 'https://quill.p3k.io')
-            ->withClaim('me', 'https://jonnybarnes.localhost')
-            ->withClaim('scope', 'create update')
+            ->withClaim('me', 'http://jonnybarnes.localhost')
+            ->withClaim('scope', ['create', 'update'])
             ->getToken($config->signer(), $config->signingKey())
             ->toString();
     }

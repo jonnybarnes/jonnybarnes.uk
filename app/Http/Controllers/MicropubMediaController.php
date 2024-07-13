@@ -51,7 +51,11 @@ class MicropubMediaController extends Controller
             return $micropubResponses->tokenHasNoScopeResponse();
         }
 
-        if (Str::contains($tokenData->claims()->get('scope'), 'create') === false) {
+        $scopes = $tokenData->claims()->get('scope');
+        if (is_string($scopes)) {
+            $scopes = explode(' ', $scopes);
+        }
+        if (!in_array('create', $scopes)) {
             $micropubResponses = new MicropubResponses();
 
             return $micropubResponses->insufficientScopeResponse();
@@ -119,7 +123,11 @@ class MicropubMediaController extends Controller
             return $micropubResponses->tokenHasNoScopeResponse();
         }
 
-        if (Str::contains($tokenData->claims()->get('scope'), 'create') === false) {
+        $scopes = $tokenData->claims()->get('scope');
+        if (is_string($scopes)) {
+            $scopes = explode(' ', $scopes);
+        }
+        if (!in_array('create', $scopes)) {
             $micropubResponses = new MicropubResponses();
 
             return $micropubResponses->insufficientScopeResponse();
