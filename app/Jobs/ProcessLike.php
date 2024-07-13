@@ -30,8 +30,7 @@ class ProcessLike implements ShouldQueue
      */
     public function __construct(
         protected Like $like
-    ) {
-    }
+    ) {}
 
     /**
      * Execute the job.

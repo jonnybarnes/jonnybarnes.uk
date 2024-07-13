@@ -30,8 +30,7 @@ class ProcessWebMention implements ShouldQueue
     public function __construct(
         protected Note $note,
         protected string $source
-    ) {
-    }
+    ) {}
 
     /**
      * Execute the job.

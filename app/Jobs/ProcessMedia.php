@@ -25,8 +25,7 @@ class ProcessMedia implements ShouldQueue
      */
     public function __construct(
         protected string $filename
-    ) {
-    }
+    ) {}
 
     /**
      * Execute the job.

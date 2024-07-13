@@ -24,8 +24,7 @@ class DownloadWebMention implements ShouldQueue
      */
     public function __construct(
         protected string $source
-    ) {
-    }
+    ) {}
 
     /**
      * Execute the job.
