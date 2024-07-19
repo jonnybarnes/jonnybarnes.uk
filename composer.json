@@ -33,7 +33,7 @@
         "symfony/html-sanitizer": "^7.0",
         "symfony/property-access": "^7.0",
         "symfony/serializer": "^7.0",
-        "web-auth/webauthn-lib": "^4.7"
+        "web-auth/webauthn-lib": "^5.0"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.0",
