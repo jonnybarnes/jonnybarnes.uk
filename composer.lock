@@ -8811,16 +8811,16 @@
         },
         {
             "name": "web-auth/webauthn-lib",
-            "version": "5.0.0",
+            "version": "5.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/web-auth/webauthn-lib.git",
-                "reference": "aff3ff0f4225e570b0ed188eeba98d9501607d11"
+                "reference": "2cc8262b885cf01eee3c4c10ca3985bdd2614c97"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/web-auth/webauthn-lib/zipball/aff3ff0f4225e570b0ed188eeba98d9501607d11",
-                "reference": "aff3ff0f4225e570b0ed188eeba98d9501607d11",
+                "url": "https://api.github.com/repos/web-auth/webauthn-lib/zipball/2cc8262b885cf01eee3c4c10ca3985bdd2614c97",
+                "reference": "2cc8262b885cf01eee3c4c10ca3985bdd2614c97",
                 "shasum": ""
             },
             "require": {
@@ -8881,7 +8881,7 @@
                 "webauthn"
             ],
             "support": {
-                "source": "https://github.com/web-auth/webauthn-lib/tree/5.0.0"
+                "source": "https://github.com/web-auth/webauthn-lib/tree/5.0.1"
             },
             "funding": [
                 {
@@ -8893,7 +8893,7 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2024-07-12T14:35:35+00:00"
+            "time": "2024-07-20T05:24:59+00:00"
         },
         {
             "name": "webmozart/assert",
