@@ -104,7 +104,7 @@ class IndieAuthController extends Controller
             'client_id' => $request->get('client_id'),
             'redirect_uri' => $request->get('redirect_uri'),
             'auth_code' => $authCode,
-            'scope' => $request->get('scope', ''),
+            'scope' => implode(' ', $request->get('scope', '')),
         ];
 
         Cache::put($cacheKey, $indieAuthRequestData, now()->addMinutes(10));
