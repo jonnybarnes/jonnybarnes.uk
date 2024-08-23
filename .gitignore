@@ -22,3 +22,4 @@ yarn-error.log
 /.vscode
 ray.php
 /public/gpg.key
+/public/assets/img/favicon.png

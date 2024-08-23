@@ -19,7 +19,9 @@
         <link rel="token_endpoint" href="{{ route('indieauth.token') }}">
         <link rel="micropub" href="{{ route('micropub-endpoint') }}">
         <link rel="webmention" href="{{ config('app.url') }}/webmention">
-        <link rel="shortcut icon" href="{{ config('app.url') }}/assets/img/memoji-orange-bg-small-fs8.png">
+        @if (File::exists(public_path('assets/img/favicon.png')))
+            <link rel="icon" href="{{ config('app.url') }}/assets/img/favicon.png">
+        @endif
         @if (File::exists(public_path('gpg.key')))
             <link rel="pgpkey" href="{{ config('app.url')}}/gpg.key">
         @endif
