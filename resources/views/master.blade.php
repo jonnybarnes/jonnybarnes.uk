@@ -20,7 +20,9 @@
         <link rel="micropub" href="{{ route('micropub-endpoint') }}">
         <link rel="webmention" href="{{ config('app.url') }}/webmention">
         <link rel="shortcut icon" href="{{ config('app.url') }}/assets/img/memoji-orange-bg-small-fs8.png">
-        <link rel="pgpkey" href="/assets/jonnybarnes-public-key-ecc.asc">
+        @if (File::exists(public_path('gpg.key')))
+            <link rel="pgpkey" href="{{ config('app.url')}}/gpg.key">
+        @endif
     </head>
     <body class="grid">
         <header id="site-header">
