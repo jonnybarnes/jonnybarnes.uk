@@ -25,7 +25,7 @@ class PlaceService
             $data['latitude'] = $matches[0][0];
             $data['longitude'] = $matches[0][1];
         }
-        $place = new Place();
+        $place = new Place;
         $place->name = $data['name'];
         $place->description = $data['description'];
         $place->latitude = $data['latitude'];
@@ -53,7 +53,7 @@ class PlaceService
         if (Arr::has($checkin, 'properties.latitude') === false) {
             throw new \InvalidArgumentException('Missing required longitude/latitude');
         }
-        $place = new Place();
+        $place = new Place;
         $place->name = Arr::get($checkin, 'properties.name.0');
         $place->external_urls = Arr::get($checkin, 'properties.url.0');
         $place->latitude = Arr::get($checkin, 'properties.latitude.0');

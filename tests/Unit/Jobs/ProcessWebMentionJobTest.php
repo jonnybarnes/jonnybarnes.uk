@@ -25,7 +25,7 @@ class ProcessWebMentionJobTest extends TestCase
 
     protected function tearDown(): void
     {
-        $fs = new FileSystem();
+        $fs = new FileSystem;
         if ($fs->exists(storage_path() . '/HTML/https')) {
             $fs->deleteDirectory(storage_path() . '/HTML/https');
         }
@@ -37,7 +37,7 @@ class ProcessWebMentionJobTest extends TestCase
     {
         $this->expectException(RemoteContentNotFoundException::class);
 
-        $parser = new Parser();
+        $parser = new Parser;
         $mock = new MockHandler([
             new Response(404),
         ]);
@@ -56,7 +56,7 @@ class ProcessWebMentionJobTest extends TestCase
     {
         Queue::fake();
 
-        $parser = new Parser();
+        $parser = new Parser;
 
         $html = <<<'HTML'
         <div class="h-entry">
@@ -88,7 +88,7 @@ class ProcessWebMentionJobTest extends TestCase
     {
         Queue::fake();
 
-        $parser = new Parser();
+        $parser = new Parser;
         $note = Note::factory()->create();
         $source = 'https://aaronpk.localhost/reply/1';
         WebMention::factory()->create([
@@ -123,7 +123,7 @@ class ProcessWebMentionJobTest extends TestCase
     /** @test */
     public function webmentionReplyGetsDeletedWhenReplyToValueChanges(): void
     {
-        $parser = new Parser();
+        $parser = new Parser;
 
         $html = <<<'HTML'
         <div class="h-entry">
@@ -139,7 +139,7 @@ class ProcessWebMentionJobTest extends TestCase
 
         $note = Note::factory()->create();
         $source = 'https://example.org/reply/1';
-        $webmention = new WebMention();
+        $webmention = new WebMention;
         $webmention->source = $source;
         $webmention->target = config('app.url') . '/notes/E';
         $webmention->type = 'in-reply-to';
@@ -160,7 +160,7 @@ class ProcessWebMentionJobTest extends TestCase
     /** @test */
     public function webmentionLikeGetsDeletedWhenLikeOfValueChanges(): void
     {
-        $parser = new Parser();
+        $parser = new Parser;
 
         $html = <<<'HTML'
         <div class="h-entry">
@@ -176,7 +176,7 @@ class ProcessWebMentionJobTest extends TestCase
 
         $note = Note::factory()->create();
         $source = 'https://example.org/reply/1';
-        $webmention = new WebMention();
+        $webmention = new WebMention;
         $webmention->source = $source;
         $webmention->target = config('app.url') . '/notes/E';
         $webmention->type = 'like-of';
@@ -197,7 +197,7 @@ class ProcessWebMentionJobTest extends TestCase
     /** @test */
     public function webmentionRepostGetsDeletedWhenRepostOfValueChanges(): void
     {
-        $parser = new Parser();
+        $parser = new Parser;
 
         $html = <<<'HTML'
         <div class="h-entry">
@@ -213,7 +213,7 @@ class ProcessWebMentionJobTest extends TestCase
 
         $note = Note::factory()->create();
         $source = 'https://example.org/reply/1';
-        $webmention = new WebMention();
+        $webmention = new WebMention;
         $webmention->source = $source;
         $webmention->target = config('app.url') . '/notes/E';
         $webmention->type = 'repost-of';

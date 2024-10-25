@@ -40,7 +40,7 @@ class ContactsController extends Controller
      */
     public function store(): RedirectResponse
     {
-        $contact = new Contact();
+        $contact = new Contact;
         $contact->name = request()->input('name');
         $contact->nick = request()->input('nick');
         $contact->homepage = request()->input('homepage');
@@ -79,7 +79,7 @@ class ContactsController extends Controller
         if (request()->hasFile('avatar') && (request()->input('homepage') != '')) {
             $dir = parse_url(request()->input('homepage'), PHP_URL_HOST);
             $destination = public_path() . '/assets/profile-images/' . $dir;
-            $filesystem = new Filesystem();
+            $filesystem = new Filesystem;
             if ($filesystem->isDirectory($destination) === false) {
                 $filesystem->makeDirectory($destination);
             }
@@ -139,7 +139,7 @@ class ContactsController extends Controller
             }
             if ($avatar !== null) {
                 $directory = public_path() . '/assets/profile-images/' . parse_url($contact->homepage, PHP_URL_HOST);
-                $filesystem = new Filesystem();
+                $filesystem = new Filesystem;
                 if ($filesystem->isDirectory($directory) === false) {
                     $filesystem->makeDirectory($directory);
                 }

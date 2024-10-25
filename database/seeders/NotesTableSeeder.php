@@ -154,7 +154,7 @@ class NotesTableSeeder extends Seeder
             ->update(['updated_at' => $now->toDateTimeString()]);
 
         $now = Carbon::now()->subHours(5);
-        $noteJustCheckin = new Note();
+        $noteJustCheckin = new Note;
         $noteJustCheckin->setCreatedAt($now);
         $place = Place::find(1);
         $noteJustCheckin->place()->associate($place);
@@ -164,12 +164,12 @@ class NotesTableSeeder extends Seeder
             ->update(['updated_at' => $now->toDateTimeString()]);
 
         $now = Carbon::now()->subHours(4);
-        $media = new Media();
+        $media = new Media;
         $media->path = 'media/f1bc8faa-1a8f-45b8-a9b1-57282fa73f87.jpg';
         $media->type = 'image';
         $media->image_widths = '3648';
         $media->save();
-        $noteWithOnlyImage = new Note();
+        $noteWithOnlyImage = new Note;
         $noteWithOnlyImage->setCreatedAt($now);
         $noteWithOnlyImage->setUpdatedAt($now);
         $noteWithOnlyImage->save();

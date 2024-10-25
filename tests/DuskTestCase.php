@@ -32,7 +32,7 @@ abstract class DuskTestCase extends BaseTestCase
     {
         $desiredCapabilities = DesiredCapabilities::chrome();
 
-        $options = new ChromeOptions();
+        $options = new ChromeOptions;
         $options->addArguments([
             'headless',
             'disable-gpu',

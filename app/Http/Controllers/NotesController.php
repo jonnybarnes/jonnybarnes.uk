@@ -67,7 +67,7 @@ class NotesController extends Controller
      */
     public function redirect(int $decId): RedirectResponse
     {
-        return redirect(config('app.url') . '/notes/' . (new Numbers())->numto60($decId));
+        return redirect(config('app.url') . '/notes/' . (new Numbers)->numto60($decId));
     }
 
     /**

@@ -271,7 +271,7 @@ class Note extends Model
             ]);
 
             if ($oEmbed->httpstatus >= 400) {
-                throw new Exception();
+                throw new Exception;
             }
         } catch (Exception $e) {
             return null;
@@ -388,18 +388,18 @@ class Note extends Model
                 'mentions_handle' => [
                     'prefix' => '@',
                     'pattern' => '([\w@.])+(\b)',
-                    'generator' => new MentionGenerator(),
+                    'generator' => new MentionGenerator,
                 ],
             ],
         ];
 
         $environment = new Environment($config);
-        $environment->addExtension(new CommonMarkCoreExtension());
-        $environment->addExtension(new AutolinkExtension());
-        $environment->addExtension(new MentionExtension());
-        $environment->addRenderer(Mention::class, new MentionRenderer());
-        $environment->addRenderer(FencedCode::class, new FencedCodeRenderer());
-        $environment->addRenderer(IndentedCode::class, new IndentedCodeRenderer());
+        $environment->addExtension(new CommonMarkCoreExtension);
+        $environment->addExtension(new AutolinkExtension);
+        $environment->addExtension(new MentionExtension);
+        $environment->addRenderer(Mention::class, new MentionRenderer);
+        $environment->addRenderer(FencedCode::class, new FencedCodeRenderer);
+        $environment->addRenderer(IndentedCode::class, new IndentedCodeRenderer);
         $markdownConverter = new MarkdownConverter($environment);
 
         return $markdownConverter->convert($note)->getContent();

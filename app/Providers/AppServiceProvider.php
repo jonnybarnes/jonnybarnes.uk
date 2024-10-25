@@ -88,9 +88,9 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind('Lcobucci\JWT\Configuration', function () {
             $key = InMemory::plainText(config('app.key'));
 
-            $config = Configuration::forSymmetricSigner(new Sha256(), $key);
+            $config = Configuration::forSymmetricSigner(new Sha256, $key);
 
-            $config->setValidationConstraints(new SignedWith(new Sha256(), $key));
+            $config->setValidationConstraints(new SignedWith(new Sha256, $key));
 
             return $config;
         });
@@ -98,7 +98,7 @@ class AppServiceProvider extends ServiceProvider
         // Configure HtmlSanitizer
         $this->app->bind(HtmlSanitizer::class, function () {
             return new HtmlSanitizer(
-                (new HtmlSanitizerConfig())
+                (new HtmlSanitizerConfig)
                     ->allowSafeElements()
                     ->forceAttribute('a', 'rel', 'noopener nofollow')
             );

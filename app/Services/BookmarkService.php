@@ -62,7 +62,7 @@ class BookmarkService extends Service
             $response = $client->request('GET', 'https://web.archive.org/save/' . $url);
         } catch (ClientException $e) {
             //throw an exception to be caught
-            throw new InternetArchiveException();
+            throw new InternetArchiveException;
         }
         if ($response->hasHeader('Content-Location')) {
             if (Str::startsWith(Arr::get($response->getHeader('Content-Location'), 0), '/web')) {
@@ -71,6 +71,6 @@ class BookmarkService extends Service
         }
 
         //throw an exception to be caught
-        throw new InternetArchiveException();
+        throw new InternetArchiveException;
     }
 }

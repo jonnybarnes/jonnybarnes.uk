@@ -291,7 +291,7 @@ class MicropubControllerTest extends TestCase
      */
     public function micropubClientApiRequestCreatesNewNoteWithExistingPlaceInLocationData(): void
     {
-        $place = new Place();
+        $place = new Place;
         $place->name = 'Test Place';
         $place->latitude = 1.23;
         $place->longitude = 4.56;

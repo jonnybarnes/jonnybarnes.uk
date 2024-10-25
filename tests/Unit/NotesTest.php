@@ -82,7 +82,7 @@ class NotesTest extends TestCase
             'twitter' => null,
             'facebook' => 123456,
         ]);
-        $fileSystem = new Filesystem();
+        $fileSystem = new Filesystem;
         $fileSystem->ensureDirectoryExists(public_path('/assets/profile-images/aaronparecki.com'));
         if (! $fileSystem->exists(public_path('/assets/profile-images/aaronparecki.com/image'))) {
             $fileSystem->copy('./tests/aaron.png', public_path('/assets/profile-images/aaronparecki.com/image'));
@@ -201,7 +201,7 @@ class NotesTest extends TestCase
 
         $this->app->instance(Client::class, $client);
 
-        $note = new Note();
+        $note = new Note;
         $address = $note->reverseGeoCode(51.50084, -0.14264);
 
         $this->assertEquals(
@@ -226,7 +226,7 @@ class NotesTest extends TestCase
 
         $this->app->instance(Client::class, $client);
 
-        $note = new Note();
+        $note = new Note;
         $address = $note->reverseGeoCode(51.02, 0.91);
 
         $this->assertEquals(
@@ -253,7 +253,7 @@ class NotesTest extends TestCase
 
         $this->app->instance(Client::class, $client);
 
-        $note = new Note();
+        $note = new Note;
         $address = $note->reverseGeoCode(53.466277988406, -2.2304474827445);
 
         $this->assertEquals(
@@ -280,7 +280,7 @@ class NotesTest extends TestCase
 
         $this->app->instance(Client::class, $client);
 
-        $note = new Note();
+        $note = new Note;
         $address = $note->reverseGeoCode(51.1, 0.61);
 
         $this->assertEquals('<span class="p-region">Kent</span>, <span class="p-country-name">UK</span>', $address);
@@ -304,7 +304,7 @@ class NotesTest extends TestCase
 
         $this->app->instance(Client::class, $client);
 
-        $note = new Note();
+        $note = new Note;
         $address = $note->reverseGeoCode(54.3, 9.4);
 
         $this->assertEquals('<span class="p-country-name">Ireland</span>', $address);
@@ -323,7 +323,7 @@ class NotesTest extends TestCase
         $note->media()->save($media);
 
         $expected = 'A nice image
-<img src="' . config('filesystems.disks.s3.url') . '/test.png" alt="">';
+<img src="' . config('app.url') . '/test.png" alt="">';
         $this->assertEquals($expected, $note->content);
     }
 
@@ -340,7 +340,7 @@ class NotesTest extends TestCase
         $note->media()->save($media);
 
         $expected = 'A nice video
-<video src="' . config('filesystems.disks.s3.url') . '/test.mkv">';
+<video src="' . config('app.url') . '/test.mkv">';
         $this->assertEquals($expected, $note->content);
     }
 
@@ -357,7 +357,7 @@ class NotesTest extends TestCase
         $note->media()->save($media);
 
         $expected = 'Some nice audio
-<audio src="' . config('filesystems.disks.s3.url') . '/test.flac">';
+<audio src="' . config('app.url') . '/test.flac">';
         $this->assertEquals($expected, $note->content);
     }
 
@@ -368,7 +368,7 @@ class NotesTest extends TestCase
      */
     public function provideTextForBlankContent(): void
     {
-        $note = new Note();
+        $note = new Note;
 
         $this->assertEquals('A blank note', $note->content);
     }

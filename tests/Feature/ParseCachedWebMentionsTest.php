@@ -60,7 +60,7 @@ class ParseCachedWebMentionsTest extends TestCase
 
     protected function tearDown(): void
     {
-        $fs = new FileSystem();
+        $fs = new FileSystem;
         if ($fs->exists(storage_path() . '/HTML/https')) {
             $fs->deleteDirectory(storage_path() . '/HTML/https');
         }

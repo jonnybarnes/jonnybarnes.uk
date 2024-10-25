@@ -19,7 +19,7 @@ class TokenService
         $config = resolve(Configuration::class);
 
         $token = $config->builder()
-            ->issuedAt(new DateTimeImmutable())
+            ->issuedAt(new DateTimeImmutable)
             ->withClaim('client_id', $data['client_id'])
             ->withClaim('me', $data['me'])
             ->withClaim('scope', $data['scope'])

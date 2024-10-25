@@ -21,7 +21,7 @@ class TokenServiceTest extends TestCase
      */
     public function tokenserviceCreatesAndValidatesTokens(): void
     {
-        $tokenService = new TokenService();
+        $tokenService = new TokenService;
         $data = [
             'me' => 'https://example.org',
             'client_id' => 'https://quill.p3k.io',
@@ -55,7 +55,7 @@ class TokenServiceTest extends TestCase
         $config = resolve(Configuration::class);
 
         $token = $config->builder()
-            ->issuedAt(new DateTimeImmutable())
+            ->issuedAt(new DateTimeImmutable)
             ->withClaim('client_id', $data['client_id'])
             ->withClaim('me', $data['me'])
             ->withClaim('scope', $data['scope'])
@@ -63,7 +63,7 @@ class TokenServiceTest extends TestCase
             ->getToken($config->signer(), InMemory::plainText(random_bytes(32)))
             ->toString();
 
-        $service = new TokenService();
+        $service = new TokenService;
         $service->validateToken($token);
     }
 }

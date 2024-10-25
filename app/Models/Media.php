@@ -33,7 +33,7 @@ class Media extends Model
                     return $attributes['path'];
                 }
 
-                return config('filesystems.disks.s3.url') . '/' . $attributes['path'];
+                return config('app.url') . '/storage/' . $attributes['path'];
             }
         );
     }
@@ -78,7 +78,7 @@ class Media extends Model
         $basename = $this->getBasename($path);
         $extension = $this->getExtension($path);
 
-        return config('filesystems.disks.s3.url') . '/' . $basename . '-' . $size . '.' . $extension;
+        return config('app.url') . '/storage/' . $basename . '-' . $size . '.' . $extension;
     }
 
     private function getBasename(string $path): string

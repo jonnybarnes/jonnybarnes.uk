@@ -14,7 +14,7 @@ class PlacesTableSeeder extends Seeder
      */
     public function run(): void
     {
-        $place = new Place();
+        $place = new Place;
         $place->name = 'The Bridgewater Pub';
         $place->description = 'A lovely local pub with a decent selection of cask ales';
         $place->latitude = 53.4983;

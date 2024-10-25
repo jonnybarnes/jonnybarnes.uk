@@ -16,7 +16,7 @@ class ArticlesTest extends TestCase
     /** @test */
     public function titleSlugIsGeneratedAutomatically(): void
     {
-        $article = new Article();
+        $article = new Article;
         $article->title = 'My Title';
         $article->main = 'Content';
         $article->save();
@@ -27,7 +27,7 @@ class ArticlesTest extends TestCase
     /** @test */
     public function markdownContentIsConverted(): void
     {
-        $article = new Article();
+        $article = new Article;
         $article->main = 'Some *markdown*';
 
         $this->assertEquals('<p>Some <em>markdown</em></p>' . PHP_EOL, $article->html);

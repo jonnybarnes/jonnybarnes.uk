@@ -116,8 +116,8 @@ class PasskeysController extends Controller
             throw new WebAuthnException('No public key credential request options found');
         }
 
-        $attestationStatementSupportManager = new AttestationStatementSupportManager();
-        $attestationStatementSupportManager->add(new NoneAttestationStatementSupport());
+        $attestationStatementSupportManager = new AttestationStatementSupportManager;
+        $attestationStatementSupportManager->add(new NoneAttestationStatementSupport);
 
         $webauthnSerializer = (new WebauthnSerializerFactory(
             $attestationStatementSupportManager
@@ -133,12 +133,12 @@ class PasskeysController extends Controller
             throw new WebAuthnException('Invalid response type');
         }
 
-        $algorithmManager = new Manager();
-        $algorithmManager->add(new Ed25519());
-        $algorithmManager->add(new ES256());
-        $algorithmManager->add(new RS256());
+        $algorithmManager = new Manager;
+        $algorithmManager->add(new Ed25519);
+        $algorithmManager->add(new ES256);
+        $algorithmManager->add(new RS256);
 
-        $ceremonyStepManagerFactory = new CeremonyStepManagerFactory();
+        $ceremonyStepManagerFactory = new CeremonyStepManagerFactory;
         $ceremonyStepManagerFactory->setAlgorithmManager($algorithmManager);
         $ceremonyStepManagerFactory->setAttestationStatementSupportManager(
             $attestationStatementSupportManager
@@ -206,8 +206,8 @@ class PasskeysController extends Controller
             ], 400);
         }
 
-        $attestationStatementSupportManager = new AttestationStatementSupportManager();
-        $attestationStatementSupportManager->add(new NoneAttestationStatementSupport());
+        $attestationStatementSupportManager = new AttestationStatementSupportManager;
+        $attestationStatementSupportManager->add(new NoneAttestationStatementSupport);
 
         $webauthnSerializer = (new WebauthnSerializerFactory(
             $attestationStatementSupportManager
@@ -240,15 +240,15 @@ class PasskeysController extends Controller
             'json'
         );
 
-        $algorithmManager = new Manager();
-        $algorithmManager->add(new Ed25519());
-        $algorithmManager->add(new ES256());
-        $algorithmManager->add(new RS256());
+        $algorithmManager = new Manager;
+        $algorithmManager->add(new Ed25519);
+        $algorithmManager->add(new ES256);
+        $algorithmManager->add(new RS256);
 
-        $attestationStatementSupportManager = new AttestationStatementSupportManager();
-        $attestationStatementSupportManager->add(new NoneAttestationStatementSupport());
+        $attestationStatementSupportManager = new AttestationStatementSupportManager;
+        $attestationStatementSupportManager->add(new NoneAttestationStatementSupport);
 
-        $ceremonyStepManagerFactory = new CeremonyStepManagerFactory();
+        $ceremonyStepManagerFactory = new CeremonyStepManagerFactory;
         $ceremonyStepManagerFactory->setAlgorithmManager($algorithmManager);
         $ceremonyStepManagerFactory->setAttestationStatementSupportManager(
             $attestationStatementSupportManager

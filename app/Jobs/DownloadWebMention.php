@@ -38,7 +38,7 @@ class DownloadWebMention implements ShouldQueue
         //4XX and 5XX responses should get Guzzle to throw an exception,
         //Laravel should catch and retry these automatically.
         if ($response->getStatusCode() === 200) {
-            $filesystem = new FileSystem();
+            $filesystem = new FileSystem;
             $filename = storage_path('HTML') . '/' . $this->createFilenameFromURL($this->source);
             //backup file first
             $filenameBackup = $filename . '.' . date('Y-m-d') . '.backup';
