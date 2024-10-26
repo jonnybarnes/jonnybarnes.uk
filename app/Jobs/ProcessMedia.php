@@ -32,35 +32,35 @@ class ProcessMedia implements ShouldQueue
      */
     public function handle(ImageManager $manager): void
     {
-        //open file
+        // Open file
         try {
-            $image = $manager->read(storage_path('app') . '/' . $this->filename);
+            $image = $manager->read(storage_path('app/media/') . $this->filename);
         } catch (DecoderException) {
             // not an image; delete file and end job
-            unlink(storage_path('app') . '/' . $this->filename);
+            unlink(storage_path('app/media/') . $this->filename);
 
             return;
         }
-        //create smaller versions if necessary
+
+        // Save the file publicly
+        Storage::disk('local')->copy('media/' . $this->filename, 'public/media/' . $this->filename);
+
+        // Create smaller versions if necessary
         if ($image->width() > 1000) {
             $filenameParts = explode('.', $this->filename);
             $extension = array_pop($filenameParts);
             // the following achieves this data flow
             // foo.bar.png => ['foo', 'bar', 'png'] => ['foo', 'bar'] => foo.bar
-            $basename = ltrim(array_reduce($filenameParts, function ($carry, $item) {
-                return $carry . '.' . $item;
-            }, ''), '.');
-            $medium = $image->resize(1000, null, function ($constraint) {
-                $constraint->aspectRatio();
-            });
-            Storage::disk('s3')->put('media/' . $basename . '-medium.' . $extension, (string) $medium->encode());
-            $small = $image->resize(500, null, function ($constraint) {
-                $constraint->aspectRatio();
-            });
-            Storage::disk('s3')->put('media/' . $basename . '-small.' . $extension, (string) $small->encode());
+            $basename = trim(implode('.', $filenameParts), '.');
+
+            $medium = $image->resize(width: 1000);
+            Storage::disk('local')->put('public/media/' . $basename . '-medium.' . $extension, (string) $medium->encode());
+
+            $small = $image->resize(width: 500);
+            Storage::disk('local')->put('public/media/' . $basename . '-small.' . $extension, (string) $small->encode());
         }
 
-        // now we can delete the locally saved image
-        unlink(storage_path('app') . '/' . $this->filename);
+        // Now we can delete the locally saved image
+        unlink(storage_path('app/media/') . $this->filename);
     }
 }

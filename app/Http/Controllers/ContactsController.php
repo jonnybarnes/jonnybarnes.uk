@@ -18,7 +18,7 @@ class ContactsController extends Controller
      */
     public function index(): View
     {
-        $filesystem = new Filesystem();
+        $filesystem = new Filesystem;
         $contacts = Contact::all();
         foreach ($contacts as $contact) {
             $contact->homepageHost = parse_url($contact->homepage, PHP_URL_HOST);
@@ -40,7 +40,7 @@ class ContactsController extends Controller
         $contact->homepageHost = parse_url($contact->homepage, PHP_URL_HOST);
         $file = public_path() . '/assets/profile-images/' . $contact->homepageHost . '/image';
 
-        $filesystem = new Filesystem();
+        $filesystem = new Filesystem;
         $image = ($filesystem->exists($file)) ?
             '/assets/profile-images/' . $contact->homepageHost . '/image'
         :

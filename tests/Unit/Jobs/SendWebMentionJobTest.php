@@ -17,7 +17,7 @@ class SendWebMentionJobTest extends TestCase
     /** @test */
     public function discoverWebmentionEndpointOnOwnDomain(): void
     {
-        $note = new Note();
+        $note = new Note;
         $job = new SendWebMentions($note);
         $this->assertNull($job->discoverWebmentionEndpoint(config('app.url')));
         $this->assertNull($job->discoverWebmentionEndpoint('/notes/tagged/test'));
@@ -34,7 +34,7 @@ class SendWebMentionJobTest extends TestCase
         $client = new Client(['handler' => $handler]);
         $this->app->instance(Client::class, $client);
 
-        $job = new SendWebMentions(new Note());
+        $job = new SendWebMentions(new Note);
         $this->assertEquals($url, $job->discoverWebmentionEndpoint('https://example.org'));
     }
 
@@ -49,7 +49,7 @@ class SendWebMentionJobTest extends TestCase
         $client = new Client(['handler' => $handler]);
         $this->app->instance(Client::class, $client);
 
-        $job = new SendWebMentions(new Note());
+        $job = new SendWebMentions(new Note);
         $this->assertEquals(
             'https://example.org/webmention',
             $job->discoverWebmentionEndpoint('https://example.org')
@@ -67,7 +67,7 @@ class SendWebMentionJobTest extends TestCase
         $client = new Client(['handler' => $handler]);
         $this->app->instance(Client::class, $client);
 
-        $job = new SendWebMentions(new Note());
+        $job = new SendWebMentions(new Note);
         $this->assertEquals(
             'https://example.org/webmention',
             $job->discoverWebmentionEndpoint('https://example.org')
@@ -77,7 +77,7 @@ class SendWebMentionJobTest extends TestCase
     /** @test */
     public function ensureEmptyNoteDoesNotTriggerAnyActions(): void
     {
-        $job = new SendWebMentions(new Note());
+        $job = new SendWebMentions(new Note);
         $this->assertNull($job->handle());
     }
 
@@ -86,7 +86,7 @@ class SendWebMentionJobTest extends TestCase
     {
         $uri = '/blog/post';
         $base = 'https://example.org/';
-        $job = new SendWebMentions(new Note());
+        $job = new SendWebMentions(new Note);
         $this->assertEquals('https://example.org/blog/post', $job->resolveUri($uri, $base));
     }
 
@@ -102,7 +102,7 @@ class SendWebMentionJobTest extends TestCase
         $client = new Client(['handler' => $handler]);
         $this->app->instance(Client::class, $client);
 
-        $note = new Note();
+        $note = new Note;
         $note->note = 'Hi [Aaron](https://aaronparecki.com)';
         $note->save();
         $job = new SendWebMentions($note);
@@ -121,7 +121,7 @@ class SendWebMentionJobTest extends TestCase
         $client = new Client(['handler' => $handler]);
         $this->app->instance(Client::class, $client);
 
-        $job = new SendWebMentions(new Note());
+        $job = new SendWebMentions(new Note);
         $this->assertNull($job->discoverWebmentionEndpoint('https://example.org'));
     }
 }

@@ -12,7 +12,7 @@ trait TestToken
         $config = $this->app->make(Configuration::class);
 
         return $config->builder()
-            ->issuedAt(new DateTimeImmutable())
+            ->issuedAt(new DateTimeImmutable)
             ->withClaim('client_id', 'https://quill.p3k.io')
             ->withClaim('me', 'http://jonnybarnes.localhost')
             ->withClaim('scope', ['create', 'update'])
@@ -25,7 +25,7 @@ trait TestToken
         $config = $this->app->make(Configuration::class);
 
         return $config->builder()
-            ->issuedAt(new DateTimeImmutable())
+            ->issuedAt(new DateTimeImmutable)
             ->withClaim('client_id', 'https://quill.p3k.io')
             ->withClaim('me', 'https://jonnybarnes.localhost')
             ->withClaim('scope', 'view')
@@ -38,7 +38,7 @@ trait TestToken
         $config = $this->app->make(Configuration::class);
 
         return $config->builder()
-            ->issuedAt(new DateTimeImmutable())
+            ->issuedAt(new DateTimeImmutable)
             ->withClaim('client_id', 'https://quill.p3k.io')
             ->withClaim('me', 'https://jonnybarnes.localhost')
             ->getToken($config->signer(), $config->signingKey())

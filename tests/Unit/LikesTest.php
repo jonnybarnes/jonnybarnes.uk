@@ -15,7 +15,7 @@ class LikesTest extends TestCase
     /** @test */
     public function weCanSetTheAuthorUrl(): void
     {
-        $like = new Like();
+        $like = new Like;
         $like->author_url = 'https://joe.bloggs/';
         $this->assertEquals('https://joe.bloggs', $like->author_url);
     }
@@ -23,7 +23,7 @@ class LikesTest extends TestCase
     /** @test */
     public function weDoNotModifyPlainTextContent(): void
     {
-        $like = new Like();
+        $like = new Like;
         $like->url = 'https://example.org/post/123';
         $like->content = 'some plaintext content';
         $like->save();
@@ -34,7 +34,7 @@ class LikesTest extends TestCase
     /** @test */
     public function weCanHandleBlankContent(): void
     {
-        $like = new Like();
+        $like = new Like;
         $like->url = 'https://example.org/post/123';
         $like->content = null;
         $like->save();
@@ -57,7 +57,7 @@ class LikesTest extends TestCase
         <p>Hello</p>
                 <img />
         HTML;
-        $like = new Like();
+        $like = new Like;
         $like->url = 'https://example.org/post/123';
         $like->content = $htmlEvil;
         $like->save();

@@ -71,13 +71,13 @@ class PlacesTest extends TestCase
     {
         Place::factory(10)->create();
 
-        $place = new Place();
+        $place = new Place;
         $place->name = 'Temp Place';
         $place->latitude = 37.422009;
         $place->longitude = -122.084047;
         $place->external_urls = 'https://www.openstreetmap.org/way/1234';
         $place->save();
-        $service = new PlaceService();
+        $service = new PlaceService;
         $ret = $service->createPlaceFromCheckin([
             'properties' => [
                 'url' => ['https://www.openstreetmap.org/way/1234'],
@@ -92,7 +92,7 @@ class PlacesTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Missing required name');
 
-        $service = new PlaceService();
+        $service = new PlaceService;
         $service->createPlaceFromCheckin(['foo' => 'bar']);
     }
 
@@ -102,7 +102,7 @@ class PlacesTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Missing required longitude/latitude');
 
-        $service = new PlaceService();
+        $service = new PlaceService;
         $service->createPlaceFromCheckin(['properties' => ['name' => 'bar']]);
     }
 

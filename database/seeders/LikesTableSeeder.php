@@ -20,7 +20,7 @@ class LikesTableSeeder extends Seeder
         Like::factory(10)->create();
 
         $now = Carbon::now()->subDays(rand(3, 6));
-        $faker = new Generator();
+        $faker = new Generator;
         $faker->addProvider(new \Faker\Provider\en_US\Person($faker));
         $faker->addProvider(new \Faker\Provider\Lorem($faker));
         $faker->addProvider(new \Faker\Provider\Internet($faker));

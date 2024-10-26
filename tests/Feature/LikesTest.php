@@ -78,7 +78,7 @@ class LikesTest extends TestCase
     /** @test */
     public function likeWithSimpleAuthor(): void
     {
-        $like = new Like();
+        $like = new Like;
         $like->url = 'http://example.org/note/id';
         $like->save();
         $id = $like->id;
@@ -107,7 +107,7 @@ class LikesTest extends TestCase
         $this->app->bind(Client::class, function () use ($client) {
             return $client;
         });
-        $authorship = new Authorship();
+        $authorship = new Authorship;
 
         $job->handle($client, $authorship);
 
@@ -117,7 +117,7 @@ class LikesTest extends TestCase
     /** @test */
     public function likeWithHCard(): void
     {
-        $like = new Like();
+        $like = new Like;
         $like->url = 'http://example.org/note/id';
         $like->save();
         $id = $like->id;
@@ -150,7 +150,7 @@ class LikesTest extends TestCase
         $this->app->bind(Client::class, function () use ($client) {
             return $client;
         });
-        $authorship = new Authorship();
+        $authorship = new Authorship;
 
         $job->handle($client, $authorship);
 
@@ -160,7 +160,7 @@ class LikesTest extends TestCase
     /** @test */
     public function likeWithoutMicroformats(): void
     {
-        $like = new Like();
+        $like = new Like;
         $like->url = 'http://example.org/note/id';
         $like->save();
         $id = $like->id;
@@ -186,7 +186,7 @@ class LikesTest extends TestCase
         $this->app->bind(Client::class, function () use ($client) {
             return $client;
         });
-        $authorship = new Authorship();
+        $authorship = new Authorship;
 
         $job->handle($client, $authorship);
 
@@ -196,7 +196,7 @@ class LikesTest extends TestCase
     /** @test */
     public function likeThatIsATweet(): void
     {
-        $like = new Like();
+        $like = new Like;
         $like->url = 'https://twitter.com/jonnybarnes/status/1050823255123251200';
         $like->save();
         $id = $like->id;
@@ -226,7 +226,7 @@ class LikesTest extends TestCase
             ->willReturn($info);
         $this->app->instance(Codebird::class, $codebirdMock);
 
-        $authorship = new Authorship();
+        $authorship = new Authorship;
 
         $job->handle($client, $authorship);
 
@@ -236,7 +236,7 @@ class LikesTest extends TestCase
     /** @test */
     public function noErrorForFailureToPosseWithBridgy(): void
     {
-        $like = new Like();
+        $like = new Like;
         $like->url = 'https://twitter.com/jonnybarnes/status/1050823255123251200';
         $like->save();
         $id = $like->id;
@@ -264,7 +264,7 @@ class LikesTest extends TestCase
             ->willReturn($info);
         $this->app->instance(Codebird::class, $codebirdMock);
 
-        $authorship = new Authorship();
+        $authorship = new Authorship;
 
         $job->handle($client, $authorship);
 

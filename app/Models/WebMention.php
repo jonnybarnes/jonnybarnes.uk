@@ -42,7 +42,7 @@ class WebMention extends Model
                     return null;
                 }
 
-                $authorship = new Authorship();
+                $authorship = new Authorship;
                 $hCard = $authorship->findAuthor(json_decode($attributes['mf2'], true));
 
                 if ($hCard === false) {
@@ -140,7 +140,7 @@ class WebMention extends Model
             return $profile_image;
         }
 
-        $filesystem = new Filesystem();
+        $filesystem = new Filesystem;
         if ($filesystem->exists(public_path() . '/assets/profile-images/' . $host . '/image')) {
             return '/assets/profile-images/' . $host . '/image';
         }

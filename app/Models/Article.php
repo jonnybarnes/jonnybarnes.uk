@@ -58,10 +58,10 @@ class Article extends Model
     {
         return Attribute::get(
             get: function () {
-                $environment = new Environment();
-                $environment->addExtension(new CommonMarkCoreExtension());
-                $environment->addRenderer(FencedCode::class, new FencedCodeRenderer());
-                $environment->addRenderer(IndentedCode::class, new IndentedCodeRenderer());
+                $environment = new Environment;
+                $environment->addExtension(new CommonMarkCoreExtension);
+                $environment->addRenderer(FencedCode::class, new FencedCodeRenderer);
+                $environment->addRenderer(IndentedCode::class, new IndentedCodeRenderer);
                 $markdownConverter = new MarkdownConverter($environment);
 
                 return $markdownConverter->convert($this->main)->getContent();

@@ -34,7 +34,7 @@ class BookmarksTest extends TestCase
         $handler = HandlerStack::create($mock);
         $client = new Client(['handler' => $handler]);
         $this->app->instance(Client::class, $client);
-        $url = (new BookmarkService())->getArchiveLink('https://example.org');
+        $url = (new BookmarkService)->getArchiveLink('https://example.org');
         $this->assertEquals('/web/1234/example.org', $url);
     }
 
@@ -49,7 +49,7 @@ class BookmarksTest extends TestCase
         $handler = HandlerStack::create($mock);
         $client = new Client(['handler' => $handler]);
         $this->app->instance(Client::class, $client);
-        (new BookmarkService())->getArchiveLink('https://example.org');
+        (new BookmarkService)->getArchiveLink('https://example.org');
     }
 
     /** @test */
@@ -63,6 +63,6 @@ class BookmarksTest extends TestCase
         $handler = HandlerStack::create($mock);
         $client = new Client(['handler' => $handler]);
         $this->app->instance(Client::class, $client);
-        (new BookmarkService())->getArchiveLink('https://example.org');
+        (new BookmarkService)->getArchiveLink('https://example.org');
     }
 }

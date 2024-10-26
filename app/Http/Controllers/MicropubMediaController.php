@@ -39,13 +39,13 @@ class MicropubMediaController extends Controller
         try {
             $tokenData = $this->tokenService->validateToken($request->input('access_token'));
         } catch (RequiredConstraintsViolated|InvalidTokenStructure) {
-            $micropubResponses = new MicropubResponses();
+            $micropubResponses = new MicropubResponses;
 
             return $micropubResponses->invalidTokenResponse();
         }
 
         if ($tokenData->claims()->has('scope') === false) {
-            $micropubResponses = new MicropubResponses();
+            $micropubResponses = new MicropubResponses;
 
             return $micropubResponses->tokenHasNoScopeResponse();
         }
@@ -55,7 +55,7 @@ class MicropubMediaController extends Controller
             $scopes = explode(' ', $scopes);
         }
         if (! in_array('create', $scopes)) {
-            $micropubResponses = new MicropubResponses();
+            $micropubResponses = new MicropubResponses;
 
             return $micropubResponses->insufficientScopeResponse();
         }
@@ -111,13 +111,13 @@ class MicropubMediaController extends Controller
         try {
             $tokenData = $this->tokenService->validateToken($request->input('access_token'));
         } catch (RequiredConstraintsViolated|InvalidTokenStructure) {
-            $micropubResponses = new MicropubResponses();
+            $micropubResponses = new MicropubResponses;
 
             return $micropubResponses->invalidTokenResponse();
         }
 
         if ($tokenData->claims()->has('scope') === false) {
-            $micropubResponses = new MicropubResponses();
+            $micropubResponses = new MicropubResponses;
 
             return $micropubResponses->tokenHasNoScopeResponse();
         }
@@ -127,7 +127,7 @@ class MicropubMediaController extends Controller
             $scopes = explode(' ', $scopes);
         }
         if (! in_array('create', $scopes)) {
-            $micropubResponses = new MicropubResponses();
+            $micropubResponses = new MicropubResponses;
 
             return $micropubResponses->insufficientScopeResponse();
         }
@@ -140,7 +140,10 @@ class MicropubMediaController extends Controller
             ], 400);
         }
 
-        if ($request->file('file')->isValid() === false) {
+        /** @var UploadedFile $file */
+        $file = $request->file('file');
+
+        if ($file->isValid() === false) {
             return response()->json([
                 'response' => 'error',
                 'error' => 'invalid_request',
@@ -148,7 +151,7 @@ class MicropubMediaController extends Controller
             ], 400);
         }
 
-        $filename = $this->saveFile($request->file('file'));
+        $filename = Storage::disk('local')->putFile('media', $file);
 
         /** @var ImageManager $manager */
         $manager = resolve(ImageManager::class);
@@ -162,17 +165,10 @@ class MicropubMediaController extends Controller
 
         $media = Media::create([
             'token' => $request->bearerToken(),
-            'path' => 'media/' . $filename,
+            'path' => $filename,
             'type' => $this->getFileTypeFromMimeType($request->file('file')->getMimeType()),
             'image_widths' => $width,
         ]);
-
-        // put the file on S3 initially, the ProcessMedia job may edit this
-        Storage::disk('s3')->putFileAs(
-            'media',
-            new File(storage_path('app') . '/' . $filename),
-            $filename
-        );
 
         ProcessMedia::dispatch($filename);
 
@@ -237,7 +233,7 @@ class MicropubMediaController extends Controller
      *
      * @throws Exception
      */
-    private function saveFile(UploadedFile $file): string
+    private function saveFileToLocal(UploadedFile $file): string
     {
         $filename = Uuid::uuid4()->toString() . '.' . $file->extension();
         Storage::disk('local')->putFileAs('', $file, $filename);

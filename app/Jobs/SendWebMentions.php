@@ -108,7 +108,7 @@ class SendWebMentions implements ShouldQueue
         }
 
         $urls = [];
-        $dom = new \DOMDocument();
+        $dom = new \DOMDocument;
         $dom->loadHTML($html);
         $anchors = $dom->getElementsByTagName('a');
         foreach ($anchors as $anchor) {

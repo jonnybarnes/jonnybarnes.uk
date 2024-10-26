@@ -44,7 +44,7 @@ class ProcessWebMention implements ShouldQueue
         try {
             $response = $guzzle->request('GET', $this->source);
         } catch (RequestException $e) {
-            throw new RemoteContentNotFoundException();
+            throw new RemoteContentNotFoundException;
         }
         $this->saveRemoteContent((string) $response->getBody(), $this->source);
         $microformats = Mf2\parse((string) $response->getBody(), $this->source);
@@ -85,7 +85,7 @@ class ProcessWebMention implements ShouldQueue
         }// foreach
 
         // no webmention in the db so create new one
-        $webmention = new WebMention();
+        $webmention = new WebMention;
         $type = $parser->getMentionType($microformats); // throw error here?
         dispatch(new SaveProfileImage($microformats));
         $webmention->source = $this->source;

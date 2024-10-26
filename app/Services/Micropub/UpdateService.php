@@ -83,7 +83,7 @@ class UpdateService
                 if ($property === 'photo') {
                     foreach ($value as $photoURL) {
                         if (Str::startsWith($photoURL, 'https://')) {
-                            $media = new Media();
+                            $media = new Media;
                             $media->path = $photoURL;
                             $media->type = 'image';
                             $media->save();

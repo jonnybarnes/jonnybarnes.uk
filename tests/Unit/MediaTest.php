@@ -25,7 +25,7 @@ class MediaTest extends TestCase
     public function absoluteUrlsAreReturnedUnmodified(): void
     {
         $absoluteUrl = 'https://instagram-cdn.com/image/uuid';
-        $media = new Media();
+        $media = new Media;
         $media->path = $absoluteUrl;
 
         $this->assertEquals($absoluteUrl, $media->url);

@@ -53,13 +53,13 @@ class MicropubController extends Controller
         try {
             $tokenData = $this->tokenService->validateToken($request->input('access_token'));
         } catch (RequiredConstraintsViolated|InvalidTokenStructure|CannotDecodeContent) {
-            $micropubResponses = new MicropubResponses();
+            $micropubResponses = new MicropubResponses;
 
             return $micropubResponses->invalidTokenResponse();
         }
 
         if ($tokenData->claims()->has('scope') === false) {
-            $micropubResponses = new MicropubResponses();
+            $micropubResponses = new MicropubResponses;
 
             return $micropubResponses->tokenHasNoScopeResponse();
         }
@@ -73,7 +73,7 @@ class MicropubController extends Controller
             }
 
             if (! in_array('create', $scopes)) {
-                $micropubResponses = new MicropubResponses();
+                $micropubResponses = new MicropubResponses;
 
                 return $micropubResponses->insufficientScopeResponse();
             }
@@ -91,7 +91,7 @@ class MicropubController extends Controller
                 $scopes = explode(' ', $scopes);
             }
             if (! in_array('create', $scopes)) {
-                $micropubResponses = new MicropubResponses();
+                $micropubResponses = new MicropubResponses;
 
                 return $micropubResponses->insufficientScopeResponse();
             }
@@ -109,7 +109,7 @@ class MicropubController extends Controller
                 $scopes = explode(' ', $scopes);
             }
             if (! in_array('update', $scopes)) {
-                $micropubResponses = new MicropubResponses();
+                $micropubResponses = new MicropubResponses;
 
                 return $micropubResponses->insufficientScopeResponse();
             }
@@ -136,7 +136,7 @@ class MicropubController extends Controller
         try {
             $tokenData = $this->tokenService->validateToken($request->input('access_token'));
         } catch (RequiredConstraintsViolated|InvalidTokenStructure) {
-            return (new MicropubResponses())->invalidTokenResponse();
+            return (new MicropubResponses)->invalidTokenResponse();
         }
 
         if ($request->input('q') === 'syndicate-to') {
