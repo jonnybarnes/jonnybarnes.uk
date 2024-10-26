@@ -93,7 +93,7 @@ class MicropubMediaTest extends TestCase
         );
 
         $path = parse_url($response->headers->get('Location'), PHP_URL_PATH);
-        $filename = Str::chopStart($path, '/media/');
+        $filename = Str::chopStart($path, '/storage/media/');
 
         $lastUploadResponse = $this->get(
             '/api/media?q=last',
@@ -122,7 +122,7 @@ class MicropubMediaTest extends TestCase
         );
 
         $path = parse_url($response->headers->get('Location'), PHP_URL_PATH);
-        $filename = Str::chopStart($path, '/media/');
+        $filename = Str::chopStart($path, '/storage/media/');
 
         $sourceUploadResponse = $this->get(
             '/api/media?q=source',
@@ -154,7 +154,7 @@ class MicropubMediaTest extends TestCase
         );
 
         $path = parse_url($response->headers->get('Location'), PHP_URL_PATH);
-        $filename = Str::chopStart($path, '/media/');
+        $filename = Str::chopStart($path, '/storage/media/');
 
         $sourceUploadResponse = $this->get(
             '/api/media?q=source&limit=1',
@@ -261,11 +261,12 @@ class MicropubMediaTest extends TestCase
         );
 
         $path = parse_url($response->headers->get('Location'), PHP_URL_PATH);
-        $filename = Str::chopStart($path, '/media/');
+        dump($path);
+        $filename = Str::chopStart($path, '/storage/');
         Queue::assertPushed(ProcessMedia::class);
-        Storage::disk('local')->assertExists($path);
+        Storage::disk('local')->assertExists($filename);
         // now remove file
-        unlink(storage_path('app/media/') . $filename);
+        unlink(storage_path('app/') . $filename);
         $this->removeDirIfEmpty(storage_path('app/media'));
     }
 
@@ -284,11 +285,11 @@ class MicropubMediaTest extends TestCase
         );
 
         $path = parse_url($response->headers->get('Location'), PHP_URL_PATH);
-        $filename = Str::chopStart($path, '/media/');
+        $filename = Str::chopStart($path, '/storage/');
         Queue::assertPushed(ProcessMedia::class);
-        Storage::disk('local')->assertExists($path);
+        Storage::disk('local')->assertExists($filename);
         // now remove file
-        unlink(storage_path('app/media/') . $filename);
+        unlink(storage_path('app/') . $filename);
         $this->removeDirIfEmpty(storage_path('app/media'));
     }
 
@@ -307,11 +308,11 @@ class MicropubMediaTest extends TestCase
         );
 
         $path = parse_url($response->headers->get('Location'), PHP_URL_PATH);
-        $filename = Str::chopStart($path, '/media/');
+        $filename = Str::chopStart($path, '/storage/');
         Queue::assertPushed(ProcessMedia::class);
-        Storage::disk('local')->assertExists($path);
+        Storage::disk('local')->assertExists($filename);
         // now remove file
-        unlink(storage_path('app/media/') . $filename);
+        unlink(storage_path('app/') . $filename);
         $this->removeDirIfEmpty(storage_path('app/media'));
     }
 
@@ -329,11 +330,11 @@ class MicropubMediaTest extends TestCase
         );
 
         $path = parse_url($response->headers->get('Location'), PHP_URL_PATH);
-        $filename = Str::chopStart($path, '/media/');
+        $filename = Str::chopStart($path, '/storage/');
         Queue::assertPushed(ProcessMedia::class);
-        Storage::disk('local')->assertExists($path);
+        Storage::disk('local')->assertExists($filename);
         // now remove file
-        unlink(storage_path('app/media/') . $filename);
+        unlink(storage_path('app/') . $filename);
         $this->removeDirIfEmpty(storage_path('app/media'));
     }
 
