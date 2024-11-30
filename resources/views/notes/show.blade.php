@@ -13,7 +13,7 @@
                             @if (array_key_exists('photo', $reply['author']['properties']))
                                 <img src="{{ $reply['author']['properties']['photo'][0] }}" alt="" class="photo u-photo logo">
                             @endif
-                            <span class="fn">{{ $reply['author']['properties']['name'][0] }}</span>
+                            <span class="fn">{{ $reply['author']['properties']['name'][0] ?? $reply['author']['properties']['nickname'][0] ?? 'unknown' }}</span>
                         </a>
                     @else
                         Unknown author
@@ -47,7 +47,7 @@
             return ($webmention->type == 'repost-of');
         }) as $repost)
             <a href="{{ $repost['source'] }}">
-                <img src="{{ $repost['author']['properties']['photo'][0] }}" alt="{{ $repost['author']['properties']['name'][0] }} reposted this at {{ $repost['published'] }}">
+                <img src="{{ $repost['author']['properties']['photo'][0] }}" alt="{{ $repost['author']['properties']['name'][0] ?? $repost['author']['properties']['nickname'][0] ?? 'unknown' }} reposted this at {{ $repost['published'] }}">
             </a>
         @endforeach
     </div>
