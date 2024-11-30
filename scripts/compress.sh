@@ -1,16 +1,13 @@
 #!/usr/bin/env zsh
 
+if ! type fd &> /dev/null; then
+    echo "fd not installed"
+    exit 1
+fi
+
 if ! type brotli &> /dev/null; then
     echo "brotli not installed"
     exit 1
 fi
 
-for file in ./public/assets/css/*.css
-do
-    brotli --force --quality=11 --output=$file.br -- $file
-done
-
-for file in ./public/assets/js/*.js
-do
-    brotli --force --quality=11 --output=$file.br -- $file
-done
+fd -e css -e js --search-path ./public/assets --type f -x brotli --force --best --output={}.br {}
