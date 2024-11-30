@@ -72,6 +72,16 @@
         <!--scripts go here when needed-->
         @section('scripts')
             <script type="module" src="/assets/js/app.js"></script>
+
+            <!-- Snow fall -->
+            <script type="module" src="/assets/frontend/is-land.js"></script>
+            <script type="module" src="/assets/frontend/snow-fall.js"></script>
+            <is-land on:media="(prefers-reduced-motion: no-preference)">
+                <snow-fall
+                    count="240"
+                    style="--snow-fall-color: rebeccapurple; --snow-fall-size: 8px"
+                ></snow-fall>
+            </is-land>
         @show
     </body>
 </html>
