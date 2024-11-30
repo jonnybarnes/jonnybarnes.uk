@@ -261,7 +261,6 @@ class MicropubMediaTest extends TestCase
         );
 
         $path = parse_url($response->headers->get('Location'), PHP_URL_PATH);
-        dump($path);
         $filename = Str::chopStart($path, '/storage/');
         Queue::assertPushed(ProcessMedia::class);
         Storage::disk('local')->assertExists($filename);

@@ -33,7 +33,7 @@
             return ($webmention->type === 'like-of');
         }) as $like)
             <a href="{{ $like['author']['properties']['url'][0] }}">
-                <img src="{{ $like['author']['properties']['photo'][0] }}" alt="profile picture of {{ $like['author']['properties']['name'][0] }}" class="like-photo">
+                <img src="{{ $like['author']['properties']['photo'][0] }}" alt="profile picture of {{ $like['author']['properties']['name'][0] ?? $like['author']['properties']['nickname'][0] ?? 'unknown' }}" class="like-photo">
             </a>
         @endforeach
     </div>
