@@ -1,7 +1,7 @@
 {
     "name": "jonnybarnes/jonnybarnes.uk",
     "type": "project",
-    "description": "The code for jonnybarnes.uk, based on Laravel 10",
+    "description": "The code for jonnybarnes.uk, based on Laravel 11",
     "keywords": ["laravel", "framework", "indieweb"],
     "license": "CC0-1.0",
     "require": {
@@ -40,6 +40,7 @@
         "barryvdh/laravel-ide-helper": "^3.0",
         "fakerphp/faker": "^1.9.2",
         "laravel/dusk": "^8.0",
+        "laravel/pail": "^1.2",
         "laravel/pint": "^1.0",
         "laravel/sail": "^1.18",
         "mockery/mockery": "^1.4.4",
