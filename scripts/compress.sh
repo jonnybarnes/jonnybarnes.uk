@@ -34,7 +34,7 @@ for file; do
       file_size=$(stat -c%s "$file")
       src_size=$(stat -c%s "$src")
     fi
-    # Compare sizes and conditionally echo rm command
+    # Compare sizes and rm compressed file if larger than the source
     [ "$file_size" -ge "$src_size" ] && rm "$file"
   fi
 done
