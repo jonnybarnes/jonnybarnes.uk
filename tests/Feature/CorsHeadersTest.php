@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Feature;
 
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Tests\TestToken;
 
@@ -11,7 +12,7 @@ class CorsHeadersTest extends TestCase
 {
     use TestToken;
 
-    /** @test */
+    #[Test]
     public function checkCorsHeadersOnMediaEndpoint(): void
     {
         $response = $this->call(
@@ -25,7 +26,7 @@ class CorsHeadersTest extends TestCase
         $response->assertHeader('Access-Control-Allow-Origin', '*');
     }
 
-    /** @test */
+    #[Test]
     public function checkForNoCorsHeaderOnNonMediaEndpointLinks(): void
     {
         $response = $this->get('/blog');

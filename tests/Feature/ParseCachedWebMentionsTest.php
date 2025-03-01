@@ -9,6 +9,7 @@ use Illuminate\FileSystem\FileSystem;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Artisan;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class ParseCachedWebMentionsTest extends TestCase
@@ -25,7 +26,7 @@ class ParseCachedWebMentionsTest extends TestCase
         copy(__DIR__ . '/../tantek.html', storage_path('HTML') . '/http/tantek.com/index.html');
     }
 
-    /** @test */
+    #[Test]
     public function parseWebmentionHtml(): void
     {
         $webmentionAaron = WebMention::factory()->create([

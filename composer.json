@@ -1,4 +1,5 @@
 {
+    "$schema": "https://getcomposer.org/schema.json",
     "name": "jonnybarnes/jonnybarnes.uk",
     "type": "project",
     "description": "The code for jonnybarnes.uk, based on Laravel 11",
@@ -11,14 +12,14 @@
         "ext-json": "*",
         "ext-pgsql": "*",
         "ext-sodium": "*",
-        "cviebrock/eloquent-sluggable": "^11.0",
+        "cviebrock/eloquent-sluggable": "^12.0",
         "guzzlehttp/guzzle": "^7.2",
         "indieauth/client": "^1.1",
         "intervention/image": "^3",
         "jonnybarnes/indieweb": "~0.2",
         "jonnybarnes/webmentions-parser": "~0.5",
         "jublonet/codebird-php": "4.0.0-beta.1",
-        "laravel/framework": "^11.0",
+        "laravel/framework": "^12.0",
         "laravel/horizon": "^5.0",
         "laravel/sanctum": "^4.0",
         "laravel/scout": "^10.1",
@@ -46,11 +47,9 @@
         "mockery/mockery": "^1.4.4",
         "nunomaduro/collision": "^8.1",
         "openai-php/client": "^0.10.1",
-        "phpunit/php-code-coverage": "^10.0",
-        "phpunit/phpunit": "^10.1",
-        "psalm/plugin-laravel": "^2.8",
-        "spatie/laravel-ray": "^1.12",
-        "vimeo/psalm": "^5.0"
+        "phpunit/php-code-coverage": "^11.0",
+        "phpunit/phpunit": "^11.0",
+        "spatie/laravel-ray": "^1.12"
     },
     "autoload": {
         "psr-4": {
@@ -79,7 +78,13 @@
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
         ],
         "post-create-project-cmd": [
-            "@php artisan key:generate --ansi"
+            "@php artisan key:generate --ansi",
+            "@php -r \"file_exists('database/database.sqlite') || touch('database/database.sqlite');\"",
+            "@php artisan migrate --graceful --ansi"
+        ],
+        "dev": [
+            "Composer\\Config::disableProcessTimeout",
+            "npx concurrently -c \"#93c5fd,#c4b5fd,#fb7185,#fdba74\" \"php artisan serve\" \"php artisan queue:listen --tries=1\" \"php artisan pail --timeout=0\" \"npm run dev\" --names=server,queue,logs,vite"
         ]
     },
     "extra": {

@@ -17,6 +17,7 @@ use Illuminate\FileSystem\FileSystem;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Queue;
 use Jonnybarnes\WebmentionsParser\Parser;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class ProcessWebMentionJobTest extends TestCase
@@ -32,7 +33,7 @@ class ProcessWebMentionJobTest extends TestCase
         parent::tearDown();
     }
 
-    /** @test */
+    #[Test]
     public function failureGettingWebmentionThrowsAnException(): void
     {
         $this->expectException(RemoteContentNotFoundException::class);
@@ -51,7 +52,7 @@ class ProcessWebMentionJobTest extends TestCase
         $job->handle($parser, $client);
     }
 
-    /** @test */
+    #[Test]
     public function newWebmentionGetsSavedByJob(): void
     {
         Queue::fake();
@@ -83,7 +84,7 @@ class ProcessWebMentionJobTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function existingWebmentionGetsUpdatedByJob(): void
     {
         Queue::fake();
@@ -120,7 +121,7 @@ class ProcessWebMentionJobTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function webmentionReplyGetsDeletedWhenReplyToValueChanges(): void
     {
         $parser = new Parser;
@@ -157,7 +158,7 @@ class ProcessWebMentionJobTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function webmentionLikeGetsDeletedWhenLikeOfValueChanges(): void
     {
         $parser = new Parser;
@@ -194,7 +195,7 @@ class ProcessWebMentionJobTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function webmentionRepostGetsDeletedWhenRepostOfValueChanges(): void
     {
         $parser = new Parser;

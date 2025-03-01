@@ -7,11 +7,12 @@ namespace Tests\Unit\Jobs;
 use App\Jobs\ProcessMedia;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\ImageManager;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class ProcessMediaJobTest extends TestCase
 {
-    /** @test */
+    #[Test]
     public function nonMediaFilesAreNotSaved(): void
     {
         $manager = app()->make(ImageManager::class);
@@ -22,7 +23,7 @@ class ProcessMediaJobTest extends TestCase
         $this->assertFileDoesNotExist(storage_path('app/media/') . 'file.txt');
     }
 
-    /** @test */
+    #[Test]
     public function smallImagesAreNotResized(): void
     {
         $manager = app()->make(ImageManager::class);
@@ -37,7 +38,7 @@ class ProcessMediaJobTest extends TestCase
         Storage::disk('local')->delete('public/media');
     }
 
-    /** @test */
+    #[Test]
     public function largeImagesHaveSmallerImagesCreated(): void
     {
         $manager = app()->make(ImageManager::class);
@@ -45,16 +46,17 @@ class ProcessMediaJobTest extends TestCase
         $job = new ProcessMedia('test-image.jpg');
         $job->handle($manager);
 
-        Storage::disk('local')->assertExists('public/media/test-image.jpg');
-        Storage::disk('local')->assertExists('public/media/test-image-small.jpg');
-        Storage::disk('local')->assertExists('public/media/test-image-medium.jpg');
+        // These need to look in public disk
+        Storage::disk('public')->assertExists('media/test-image.jpg');
+        Storage::disk('public')->assertExists('media/test-image-small.jpg');
+        Storage::disk('public')->assertExists('media/test-image-medium.jpg');
 
         $this->assertFileDoesNotExist(storage_path('app/media/') . 'test-image.jpg');
 
         // Tidy up files created by the job
-        Storage::disk('local')->delete('public/media/test-image.jpg');
-        Storage::disk('local')->delete('public/media/test-image-small.jpg');
-        Storage::disk('local')->delete('public/media/test-image-medium.jpg');
+        Storage::disk('public')->delete('media/test-image.jpg');
+        Storage::disk('public')->delete('media/test-image-small.jpg');
+        Storage::disk('public')->delete('media/test-image-medium.jpg');
         $this->removeDirIfEmpty(storage_path('app/public/media'));
         $this->removeDirIfEmpty(storage_path('app/media'));
     }

@@ -14,6 +14,7 @@ use GuzzleHttp\Psr7\Response;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Queue;
 use Jonnybarnes\WebmentionsParser\Authorship;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Tests\TestToken;
 
@@ -22,14 +23,14 @@ class LikesTest extends TestCase
     use RefreshDatabase;
     use TestToken;
 
-    /** @test */
+    #[Test]
     public function likesPageHasCorrectView(): void
     {
         $response = $this->get('/likes');
         $response->assertViewIs('likes.index');
     }
 
-    /** @test */
+    #[Test]
     public function singleLikePageHasCorrectView(): void
     {
         $like = Like::factory()->create();
@@ -37,7 +38,7 @@ class LikesTest extends TestCase
         $response->assertViewIs('likes.show');
     }
 
-    /** @test */
+    #[Test]
     public function checkLikeCreatedFromMicropubApiRequests(): void
     {
         Queue::fake();
@@ -57,7 +58,7 @@ class LikesTest extends TestCase
         $this->assertDatabaseHas('likes', ['url' => 'https://example.org/blog-post']);
     }
 
-    /** @test */
+    #[Test]
     public function checkLikeCreatedFromMicropubWebRequests(): void
     {
         Queue::fake();
@@ -75,7 +76,7 @@ class LikesTest extends TestCase
         $this->assertDatabaseHas('likes', ['url' => 'https://example.org/blog-post']);
     }
 
-    /** @test */
+    #[Test]
     public function likeWithSimpleAuthor(): void
     {
         $like = new Like;
@@ -114,7 +115,7 @@ class LikesTest extends TestCase
         $this->assertEquals('Fred Bloggs', Like::find($id)->author_name);
     }
 
-    /** @test */
+    #[Test]
     public function likeWithHCard(): void
     {
         $like = new Like;
@@ -157,7 +158,7 @@ class LikesTest extends TestCase
         $this->assertEquals('Fred Bloggs', Like::find($id)->author_name);
     }
 
-    /** @test */
+    #[Test]
     public function likeWithoutMicroformats(): void
     {
         $like = new Like;
@@ -193,7 +194,7 @@ class LikesTest extends TestCase
         $this->assertNull(Like::find($id)->author_name);
     }
 
-    /** @test */
+    #[Test]
     public function likeThatIsATweet(): void
     {
         $like = new Like;
@@ -219,10 +220,9 @@ class LikesTest extends TestCase
             'author_url' => 'https://twitter.com/jonnybarnes',
             'html' => '<div>HTML of the tweet embed</div>',
         ];
-        $codebirdMock = $this->getMockBuilder(Codebird::class)
-            ->addMethods(['statuses_oembed'])
-            ->getMock();
-        $codebirdMock->method('statuses_oembed')
+        $codebirdMock = $this->createPartialMock(Codebird::class, ['__call']);
+        $codebirdMock->method('__call')
+            ->with('statuses_oembed', $this->anything())
             ->willReturn($info);
         $this->app->instance(Codebird::class, $codebirdMock);
 
@@ -233,7 +233,7 @@ class LikesTest extends TestCase
         $this->assertEquals('Jonny Barnes', Like::find($id)->author_name);
     }
 
-    /** @test */
+    #[Test]
     public function noErrorForFailureToPosseWithBridgy(): void
     {
         $like = new Like;
@@ -257,10 +257,9 @@ class LikesTest extends TestCase
             'author_url' => 'https://twitter.com/jonnybarnes',
             'html' => '<div>HTML of the tweet embed</div>',
         ];
-        $codebirdMock = $this->getMockBuilder(Codebird::class)
-            ->addMethods(['statuses_oembed'])
-            ->getMock();
-        $codebirdMock->method('statuses_oembed')
+        $codebirdMock = $this->createPartialMock(Codebird::class, ['__call']);
+        $codebirdMock->method('__call')
+            ->with('statuses_oembed', $this->anything())
             ->willReturn($info);
         $this->app->instance(Codebird::class, $codebirdMock);
 
@@ -271,7 +270,7 @@ class LikesTest extends TestCase
         $this->assertEquals('Jonny Barnes', Like::find($id)->author_name);
     }
 
-    /** @test */
+    #[Test]
     public function unknownLikeGivesNotFoundResponse(): void
     {
         $response = $this->get('/likes/202');

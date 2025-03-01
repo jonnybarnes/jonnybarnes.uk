@@ -7,13 +7,14 @@ namespace Tests\Unit;
 use App\Models\MicropubClient;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class MicropubClientsTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
+    #[Test]
     public function weCanGetNotesRelatingToClient(): void
     {
         $client = MicropubClient::factory()->make();

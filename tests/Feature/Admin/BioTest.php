@@ -7,13 +7,14 @@ namespace Tests\Feature\Admin;
 use App\Models\Bio;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class BioTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
+    #[Test]
     public function adminBiosPageLoads(): void
     {
         $user = User::factory()->make();
@@ -23,7 +24,7 @@ class BioTest extends TestCase
         $response->assertSeeText('Edit bio');
     }
 
-    /** @test */
+    #[Test]
     public function adminCanCreateBio(): void
     {
         $user = User::factory()->make();
@@ -36,7 +37,7 @@ class BioTest extends TestCase
         $this->assertDatabaseHas('bios', ['content' => 'Bio content']);
     }
 
-    /** @test */
+    #[Test]
     public function adminCanLoadExistingBio(): void
     {
         $user = User::factory()->make();
@@ -49,7 +50,7 @@ class BioTest extends TestCase
         $response->assertSeeText('This is <em>my</em> bio. It uses <strong>HTML</strong>.');
     }
 
-    /** @test */
+    #[Test]
     public function adminCanEditBio(): void
     {
         $user = User::factory()->make();

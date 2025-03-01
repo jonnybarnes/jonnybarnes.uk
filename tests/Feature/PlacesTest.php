@@ -6,6 +6,7 @@ namespace Tests\Feature;
 
 use App\Models\Place;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class PlacesTest extends TestCase
@@ -14,9 +15,8 @@ class PlacesTest extends TestCase
 
     /**
      * Test the `/places` page for OK response.
-     *
-     * @test
      */
+    #[Test]
     public function placesPageLoads(): void
     {
         $response = $this->get('/places');
@@ -25,9 +25,8 @@ class PlacesTest extends TestCase
 
     /**
      * Test a specific place.
-     *
-     * @test
      */
+    #[Test]
     public function singlePlacePageLoads(): void
     {
         $place = Place::factory()->create();
@@ -35,7 +34,7 @@ class PlacesTest extends TestCase
         $response->assertViewHas('place', $place);
     }
 
-    /** @test */
+    #[Test]
     public function unknownPlaceGives404()
     {
         $response = $this->get('/places/unknown');

@@ -13,13 +13,14 @@ use GuzzleHttp\Middleware;
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Storage;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class SaveScreenshotJobTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
+    #[Test]
     public function screenshotIsSavedByJob(): void
     {
         Storage::fake('public');
@@ -84,7 +85,7 @@ class SaveScreenshotJobTest extends TestCase
         Storage::disk('public')->assertExists('/assets/img/bookmarks/' . $bookmark->screenshot . '.png');
     }
 
-    /** @test */
+    #[Test]
     public function screenshotJobHandlesUnfinishedTasks(): void
     {
         Storage::fake('public');

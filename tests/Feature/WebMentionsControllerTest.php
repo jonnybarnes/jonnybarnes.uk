@@ -8,13 +8,14 @@ use App\Jobs\ProcessWebMention;
 use App\Models\Note;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Queue;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class WebMentionsControllerTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
+    #[Test]
     public function webmentionEndpointCanServeBrowserRequest(): void
     {
         $response = $this->get('/webmention');
@@ -23,9 +24,8 @@ class WebMentionsControllerTest extends TestCase
 
     /**
      * Test webmentions without source and target are rejected.
-     *
-     * @test
      */
+    #[Test]
     public function webmentionsWithoutSourceAndTargetAreRejected(): void
     {
         $response = $this->call('POST', '/webmention', ['source' => 'https://example.org/post/123']);
@@ -36,9 +36,8 @@ class WebMentionsControllerTest extends TestCase
      * Test invalid target gives a 400 response.
      *
      * In this case an invalid target is a URL that doesn’t exist on our domain.
-     *
-     * @test
      */
+    #[Test]
     public function invalidTargetReturnsErrorResponse(): void
     {
         $response = $this->call('POST', '/webmention', [
@@ -50,9 +49,8 @@ class WebMentionsControllerTest extends TestCase
 
     /**
      * Test blog target gets a 501 response due to our not supporting it.
-     *
-     * @test
      */
+    #[Test]
     public function blogTargetReturns501Response(): void
     {
         $response = $this->call('POST', '/webmention', [
@@ -64,9 +62,8 @@ class WebMentionsControllerTest extends TestCase
 
     /**
      * Test that a non-existent note gives a 400 response.
-     *
-     * @test
      */
+    #[Test]
     public function nonexistentNoteReturnsErrorResponse(): void
     {
         $response = $this->call('POST', '/webmention', [
@@ -76,7 +73,7 @@ class WebMentionsControllerTest extends TestCase
         $response->assertStatus(400);
     }
 
-    /** @test */
+    #[Test]
     public function legitimateWebmentionTriggersProcessWebmentionJob(): void
     {
         Queue::fake();

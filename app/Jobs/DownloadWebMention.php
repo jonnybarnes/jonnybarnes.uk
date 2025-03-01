@@ -35,30 +35,30 @@ class DownloadWebMention implements ShouldQueue
     public function handle(Client $guzzle): void
     {
         $response = $guzzle->request('GET', $this->source);
-        //4XX and 5XX responses should get Guzzle to throw an exception,
-        //Laravel should catch and retry these automatically.
+        // 4XX and 5XX responses should get Guzzle to throw an exception,
+        // Laravel should catch and retry these automatically.
         if ($response->getStatusCode() === 200) {
             $filesystem = new FileSystem;
             $filename = storage_path('HTML') . '/' . $this->createFilenameFromURL($this->source);
-            //backup file first
+            // backup file first
             $filenameBackup = $filename . '.' . date('Y-m-d') . '.backup';
             if ($filesystem->exists($filename)) {
                 $filesystem->copy($filename, $filenameBackup);
             }
-            //check if base directory exists
+            // check if base directory exists
             if (! $filesystem->exists($filesystem->dirname($filename))) {
                 $filesystem->makeDirectory(
                     $filesystem->dirname($filename),
-                    0755,  //mode
-                    true //recursive
+                    0755,  // mode
+                    true // recursive
                 );
             }
-            //save new HTML
+            // save new HTML
             $filesystem->put(
                 $filename,
                 (string) $response->getBody()
             );
-            //remove backup if the same
+            // remove backup if the same
             if ($filesystem->exists($filenameBackup)) {
                 if ($filesystem->get($filename) === $filesystem->get($filenameBackup)) {
                     $filesystem->delete($filenameBackup);

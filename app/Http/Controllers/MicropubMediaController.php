@@ -191,7 +191,7 @@ class MicropubMediaController extends Controller
      */
     private function getFileTypeFromMimeType(string $mimeType): string
     {
-        //try known images
+        // try known images
         $imageMimeTypes = [
             'image/gif',
             'image/jpeg',
@@ -203,7 +203,7 @@ class MicropubMediaController extends Controller
         if (in_array($mimeType, $imageMimeTypes)) {
             return 'image';
         }
-        //try known video
+        // try known video
         $videoMimeTypes = [
             'video/mp4',
             'video/mpeg',
@@ -214,7 +214,7 @@ class MicropubMediaController extends Controller
         if (in_array($mimeType, $videoMimeTypes)) {
             return 'video';
         }
-        //try known audio types
+        // try known audio types
         $audioMimeTypes = [
             'audio/midi',
             'audio/mpeg',

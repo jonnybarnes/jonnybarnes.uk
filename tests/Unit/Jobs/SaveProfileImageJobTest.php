@@ -11,6 +11,7 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
 use Jonnybarnes\WebmentionsParser\Authorship;
 use Jonnybarnes\WebmentionsParser\Exceptions\AuthorshipParserException;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class SaveProfileImageJobTest extends TestCase
@@ -24,7 +25,7 @@ class SaveProfileImageJobTest extends TestCase
         parent::tearDown();
     }
 
-    /** @test */
+    #[Test]
     public function authorshipAlgorithmReturnsNullOnException(): void
     {
         $mf = ['items' => []];
@@ -36,7 +37,7 @@ class SaveProfileImageJobTest extends TestCase
         $this->assertNull($job->handle($authorship));
     }
 
-    /** @test */
+    #[Test]
     public function weDoNotProcessTwitterImages(): void
     {
         $mf = ['items' => []];
@@ -54,7 +55,7 @@ class SaveProfileImageJobTest extends TestCase
         $this->assertNull($job->handle($authorship));
     }
 
-    /** @test */
+    #[Test]
     public function remoteAuthorImagesAreSavedLocally(): void
     {
         $mock = new MockHandler([
@@ -79,7 +80,7 @@ class SaveProfileImageJobTest extends TestCase
         $this->assertFileExists(public_path() . '/assets/profile-images/example.org/image');
     }
 
-    /** @test */
+    #[Test]
     public function localDefaultAuthorImageIsUsedAsFallback(): void
     {
         $mock = new MockHandler([
@@ -107,7 +108,7 @@ class SaveProfileImageJobTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function weGetUrlFromPhotoObjectIfAltTextIsProvided(): void
     {
         $mock = new MockHandler([
@@ -135,7 +136,7 @@ class SaveProfileImageJobTest extends TestCase
         $this->assertFileExists(public_path() . '/assets/profile-images/example.org/image');
     }
 
-    /** @test */
+    #[Test]
     public function useFirstUrlIfMultipleHomepagesAreProvided(): void
     {
         $mock = new MockHandler([

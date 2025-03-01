@@ -8,6 +8,7 @@ use App\Models\Article;
 use App\Models\Note;
 use App\Models\Place;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class FeedsTest extends TestCase
@@ -16,9 +17,8 @@ class FeedsTest extends TestCase
 
     /**
      * Test the blog RSS feed.
-     *
-     * @test
      */
+    #[Test]
     public function blogRssFeedIsPresent(): void
     {
         Article::factory()->count(3)->create();
@@ -29,9 +29,8 @@ class FeedsTest extends TestCase
 
     /**
      * Test the notes RSS feed.
-     *
-     * @test
      */
+    #[Test]
     public function notesRssFeedIsPresent(): void
     {
         Note::factory()->count(3)->create();
@@ -42,9 +41,8 @@ class FeedsTest extends TestCase
 
     /**
      * Test the blog RSS feed.
-     *
-     * @test
      */
+    #[Test]
     public function blogAtomFeedIsPresent(): void
     {
         Article::factory()->count(3)->create();
@@ -53,7 +51,7 @@ class FeedsTest extends TestCase
         $response->assertOk();
     }
 
-    /** @test */
+    #[Test]
     public function blogJf2FeedIsPresent(): void
     {
         Article::factory()->count(3)->create();
@@ -77,9 +75,8 @@ class FeedsTest extends TestCase
 
     /**
      * Test the notes RSS feed.
-     *
-     * @test
      */
+    #[Test]
     public function notesAtomFeedIsPresent(): void
     {
         Note::factory()->count(3)->create();
@@ -90,9 +87,8 @@ class FeedsTest extends TestCase
 
     /**
      * Test the blog JSON feed.
-     *
-     * @test
      */
+    #[Test]
     public function blogJsonFeedIsPresent(): void
     {
         Article::factory()->count(3)->create();
@@ -103,9 +99,8 @@ class FeedsTest extends TestCase
 
     /**
      * Test the notes JSON feed.
-     *
-     * @test
      */
+    #[Test]
     public function notesJsonFeedIsPresent(): void
     {
         Note::factory()->count(3)->create();
@@ -114,7 +109,7 @@ class FeedsTest extends TestCase
         $response->assertOk();
     }
 
-    /** @test */
+    #[Test]
     public function notesJf2FeedIsPresent(): void
     {
         Note::factory()->count(3)->create();
@@ -139,9 +134,8 @@ class FeedsTest extends TestCase
     /**
      * Each JSON feed item must have one of `content_text` or `content_html`,
      * and whichever one they have can’t be `null`.
-     *
-     * @test
      */
+    #[Test]
     public function jsonFeedsHaveRequiredAttributes(): void
     {
         Note::factory()->count(3)->create();
@@ -161,7 +155,7 @@ class FeedsTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function jsonNoteFeedLoadsPlaceDataWithoutLazyLoading(): void
     {
         $place = Place::factory()->create();

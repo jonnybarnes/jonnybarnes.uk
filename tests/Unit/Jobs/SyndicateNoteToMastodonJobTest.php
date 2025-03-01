@@ -11,13 +11,14 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class SyndicateNoteToMastodonJobTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
+    #[Test]
     public function weSyndicateNotesToMastodon(): void
     {
         config(['bridgy.mastodon_token' => 'test']);
@@ -38,7 +39,7 @@ class SyndicateNoteToMastodonJobTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function weSyndicateTheOriginalMarkdown(): void
     {
         config(['bridgy.mastodon_token' => 'test']);

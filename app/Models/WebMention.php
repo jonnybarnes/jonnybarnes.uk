@@ -123,7 +123,7 @@ class WebMention extends Model
         $host = parse_url($url, PHP_URL_HOST);
 
         if ($host === 'pbs.twimg.com') {
-            //make sure we use HTTPS, we know twitter supports it
+            // make sure we use HTTPS, we know twitter supports it
             return str_replace('http://', 'https://', $url);
         }
 
@@ -135,7 +135,7 @@ class WebMention extends Model
             $codebird = resolve(Codebird::class);
             $info = $codebird->users_show(['screen_name' => $username]);
             $profile_image = $info->profile_image_url_https;
-            Cache::put($url, $profile_image, 10080); //1 week
+            Cache::put($url, $profile_image, 10080); // 1 week
 
             return $profile_image;
         }

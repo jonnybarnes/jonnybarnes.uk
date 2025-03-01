@@ -10,11 +10,12 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class SendWebMentionJobTest extends TestCase
 {
-    /** @test */
+    #[Test]
     public function discoverWebmentionEndpointOnOwnDomain(): void
     {
         $note = new Note;
@@ -23,7 +24,7 @@ class SendWebMentionJobTest extends TestCase
         $this->assertNull($job->discoverWebmentionEndpoint('/notes/tagged/test'));
     }
 
-    /** @test */
+    #[Test]
     public function discoverWebmentionEndpointFromHeaderLinks(): void
     {
         $url = 'https://example.org/webmention';
@@ -38,7 +39,7 @@ class SendWebMentionJobTest extends TestCase
         $this->assertEquals($url, $job->discoverWebmentionEndpoint('https://example.org'));
     }
 
-    /** @test */
+    #[Test]
     public function discoverWebmentionEndpointFromHtmlLinkTags(): void
     {
         $html = '<link rel="webmention" href="https://example.org/webmention">';
@@ -56,7 +57,7 @@ class SendWebMentionJobTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function discoverWebmentionEndpointFromLegacyHtmlMarkup(): void
     {
         $html = '<link rel="http://webmention.org/" href="https://example.org/webmention">';
@@ -74,14 +75,14 @@ class SendWebMentionJobTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function ensureEmptyNoteDoesNotTriggerAnyActions(): void
     {
         $job = new SendWebMentions(new Note);
         $this->assertNull($job->handle());
     }
 
-    /** @test */
+    #[Test]
     public function weResolveRelativeUris(): void
     {
         $uri = '/blog/post';
@@ -90,7 +91,7 @@ class SendWebMentionJobTest extends TestCase
         $this->assertEquals('https://example.org/blog/post', $job->resolveUri($uri, $base));
     }
 
-    /** @test */
+    #[Test]
     public function weSendAWebmentionForANote(): void
     {
         $html = '<link rel="http://webmention.org/" href="https://example.org/webmention">';
@@ -110,7 +111,7 @@ class SendWebMentionJobTest extends TestCase
         $this->assertTrue(true);
     }
 
-    /** @test */
+    #[Test]
     public function linksInNotesCanNotSupportWebmentions(): void
     {
         $mock = new MockHandler([

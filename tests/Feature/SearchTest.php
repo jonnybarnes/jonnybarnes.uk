@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace Tests\Feature;
 
 use App\Models\Note;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class SearchTest extends TestCase
 {
-    /** @test */
+    #[Test]
     public function searchEndpointReturnsResults(): void
     {
         Note::factory(10)->create();

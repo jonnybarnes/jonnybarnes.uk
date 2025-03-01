@@ -7,20 +7,21 @@ namespace Tests\Feature;
 use App\Models\Article;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Jonnybarnes\IndieWeb\Numbers;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class ArticlesTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
+    #[Test]
     public function articlesPageLoads(): void
     {
         $response = $this->get('/blog');
         $response->assertViewIs('articles.index');
     }
 
-    /** @test */
+    #[Test]
     public function singleArticlePageLoads()
     {
         $article = Article::factory()->create();
@@ -28,7 +29,7 @@ class ArticlesTest extends TestCase
         $response->assertViewIs('articles.show');
     }
 
-    /** @test */
+    #[Test]
     public function wrongDateInUrlRedirectsToCorrectDate()
     {
         $article = Article::factory()->create();
@@ -36,7 +37,7 @@ class ArticlesTest extends TestCase
         $response->assertRedirect('/blog/' . date('Y') . '/' . date('m') . '/' . $article->titleurl);
     }
 
-    /** @test */
+    #[Test]
     public function oldUrlsWithIdAreRedirected()
     {
         $article = Article::factory()->create();
@@ -45,21 +46,21 @@ class ArticlesTest extends TestCase
         $response->assertRedirect($article->link);
     }
 
-    /** @test  */
+    #[Test]
     public function unknownSlugGetsNotFoundResponse()
     {
         $response = $this->get('/blog/' . date('Y') . '/' . date('m') . '/unknown-slug');
         $response->assertNotFound();
     }
 
-    /** @test */
+    #[Test]
     public function unknownArticleIdGetsNotFoundResponse()
     {
         $response = $this->get('/blog/s/22');
         $response->assertNotFound();
     }
 
-    /** @test */
+    #[Test]
     public function someUrlsDoNotParseCorrectly(): void
     {
         $response = $this->get('/blog/feed.js');

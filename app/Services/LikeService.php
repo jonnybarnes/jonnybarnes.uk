@@ -16,7 +16,7 @@ class LikeService extends Service
     public function create(array $request, ?string $client = null): Like
     {
         if (Arr::get($request, 'properties.like-of.0')) {
-            //micropub request
+            // micropub request
             $url = normalize_url(Arr::get($request, 'properties.like-of.0'));
         }
         if (Arr::get($request, 'like-of')) {

@@ -8,13 +8,15 @@ use App\Models\Bookmark;
 use App\Models\Note;
 use App\Models\Tag;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class TagsTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
+    #[Test]
     public function canGetAssociatedNotes(): void
     {
         $note = Note::factory()->create();
@@ -23,7 +25,7 @@ class TagsTest extends TestCase
         $this->assertCount(1, $tag->notes);
     }
 
-    /** @test */
+    #[Test]
     public function canGetAssociatedBookmarks(): void
     {
         $bookmark = Bookmark::factory()->create();
@@ -32,11 +34,8 @@ class TagsTest extends TestCase
         $this->assertCount(1, $tag->bookmarks);
     }
 
-    /**
-     * @test
-     *
-     * @dataProvider tagsProvider
-     */
+    #[Test]
+    #[DataProvider('tagsProvider')]
     public function canNormalize(string $input, string $expected): void
     {
         $this->assertSame($expected, Tag::normalize($input));

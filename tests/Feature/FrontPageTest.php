@@ -7,13 +7,14 @@ use App\Models\Bookmark;
 use App\Models\Like;
 use App\Models\Note;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class FrontPageTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
+    #[Test]
     public function frontPageLoadsAllContent(): void
     {
         Note::factory()->create(['note' => 'Note 1']);

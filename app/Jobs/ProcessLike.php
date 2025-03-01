@@ -49,7 +49,7 @@ class ProcessLike implements ShouldQueue
             $this->like->content = $tweet->html;
             $this->like->save();
 
-            //POSSE like
+            // POSSE like
             try {
                 $client->request(
                     'POST',

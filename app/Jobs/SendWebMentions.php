@@ -72,7 +72,7 @@ class SendWebMentions implements ShouldQueue
 
         $guzzle = resolve(Client::class);
         $response = $guzzle->get($url);
-        //check HTTP Headers for webmention endpoint
+        // check HTTP Headers for webmention endpoint
         $links = Header::parse($response->getHeader('Link'));
         foreach ($links as $link) {
             if (array_key_exists('rel', $link) && mb_stristr($link['rel'], 'webmention')) {
@@ -80,7 +80,7 @@ class SendWebMentions implements ShouldQueue
             }
         }
 
-        //failed to find a header so parse HTML
+        // failed to find a header so parse HTML
         $html = (string) $response->getBody();
 
         $mf2 = new \Mf2\Parser($html, $url);

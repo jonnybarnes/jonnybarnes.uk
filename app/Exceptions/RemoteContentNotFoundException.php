@@ -6,5 +6,5 @@ use Exception;
 
 class RemoteContentNotFoundException extends Exception
 {
-    //used when guzzle can’t find the remote content
+    // used when guzzle can’t find the remote content
 }

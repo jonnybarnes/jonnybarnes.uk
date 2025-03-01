@@ -8,6 +8,7 @@ use App\Jobs\ProcessBookmark;
 use App\Models\Bookmark;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Queue;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Tests\TestToken;
 
@@ -15,14 +16,14 @@ class BookmarksTest extends TestCase
 {
     use RefreshDatabase, TestToken;
 
-    /** @test */
+    #[Test]
     public function bookmarksPageLoadsWithoutError(): void
     {
         $response = $this->get('/bookmarks');
         $response->assertViewIs('bookmarks.index');
     }
 
-    /** @test */
+    #[Test]
     public function singleBookmarkPageLoadsWithoutError(): void
     {
         $bookmark = Bookmark::factory()->create();
@@ -30,7 +31,7 @@ class BookmarksTest extends TestCase
         $response->assertViewIs('bookmarks.show');
     }
 
-    /** @test */
+    #[Test]
     public function whenBookmarkIsAddedUsingHttpSyntaxCheckJobToTakeScreenshotIsInvoked(): void
     {
         Queue::fake();
@@ -48,7 +49,7 @@ class BookmarksTest extends TestCase
         $this->assertDatabaseHas('bookmarks', ['url' => 'https://example.org/blog-post']);
     }
 
-    /** @test */
+    #[Test]
     public function whenBookmarkIsAddedUsingJsonSyntaxCheckJobToTakeScreenshotIsInvoked(): void
     {
         Queue::fake();
@@ -68,7 +69,7 @@ class BookmarksTest extends TestCase
         $this->assertDatabaseHas('bookmarks', ['url' => 'https://example.org/blog-post']);
     }
 
-    /** @test */
+    #[Test]
     public function whenTheBookmarkIsCreatedCheckNecessaryTagsAreAlsoCreated(): void
     {
         Queue::fake();

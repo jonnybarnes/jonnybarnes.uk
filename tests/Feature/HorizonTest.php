@@ -3,15 +3,15 @@
 namespace Tests\Feature;
 
 use App\Models\User;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class HorizonTest extends TestCase
 {
     /**
      * Horizon has its own test suite, here we just test it has been installed successfully.
-     *
-     * @test
      */
+    #[Test]
     public function horizonIsInstalled(): void
     {
         $user = User::factory()->create([

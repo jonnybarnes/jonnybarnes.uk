@@ -12,6 +12,7 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class ContactsTest extends TestCase
@@ -27,7 +28,7 @@ class ContactsTest extends TestCase
         parent::tearDown();
     }
 
-    /** @test */
+    #[Test]
     public function contactIndexPageLoads(): void
     {
         $user = User::factory()->make();
@@ -36,7 +37,7 @@ class ContactsTest extends TestCase
         $response->assertViewIs('admin.contacts.index');
     }
 
-    /** @test */
+    #[Test]
     public function contactCreatePageLoads(): void
     {
         $user = User::factory()->make();
@@ -45,7 +46,7 @@ class ContactsTest extends TestCase
         $response->assertViewIs('admin.contacts.create');
     }
 
-    /** @test */
+    #[Test]
     public function adminCanCreateNewContact(): void
     {
         $user = User::factory()->make();
@@ -62,7 +63,7 @@ class ContactsTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function adminCanSeeFormToEditContact(): void
     {
         $user = User::factory()->make();
@@ -72,7 +73,7 @@ class ContactsTest extends TestCase
         $response->assertViewIs('admin.contacts.edit');
     }
 
-    /** @test */
+    #[Test]
     public function adminCanUpdateContact(): void
     {
         $user = User::factory()->make();
@@ -91,7 +92,7 @@ class ContactsTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function adminCanEditContactAndUploadAvatar(): void
     {
         copy(__DIR__ . '/../../aaron.png', sys_get_temp_dir() . '/tantek.png');
@@ -114,7 +115,7 @@ class ContactsTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function adminCanDeleteContact(): void
     {
         $user = User::factory()->make();
@@ -132,7 +133,7 @@ class ContactsTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function adminCanTriggerRetrievalOfRemoteAvatar(): void
     {
         $html = <<<'HTML'
@@ -161,7 +162,7 @@ class ContactsTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function gettingRemoteAvatarFailsGracefullyWithRemoteNotFound(): void
     {
         $mock = new MockHandler([
@@ -178,7 +179,7 @@ class ContactsTest extends TestCase
         $response->assertRedirect('/admin/contacts/' . $contact->id . '/edit');
     }
 
-    /** @test */
+    #[Test]
     public function gettingRemoteAvatarFailsGracefullyWithRemoteError(): void
     {
         $html = <<<'HTML'
@@ -201,7 +202,7 @@ class ContactsTest extends TestCase
         $response->assertRedirect('/admin/contacts/' . $contact->id . '/edit');
     }
 
-    /** @test */
+    #[Test]
     public function gettingRemoteAvatarFailsGracefullyForContactWithNoHompage(): void
     {
         $contact = Contact::create([

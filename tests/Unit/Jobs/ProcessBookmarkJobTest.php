@@ -11,13 +11,14 @@ use App\Models\Bookmark;
 use App\Services\BookmarkService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Queue;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class ProcessBookmarkJobTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
+    #[Test]
     public function archiveLinkIsSavedByJobAndScreenshotJobIsQueued(): void
     {
         Queue::fake();
@@ -38,7 +39,7 @@ class ProcessBookmarkJobTest extends TestCase
         Queue::assertPushed(SaveScreenshot::class);
     }
 
-    /** @test */
+    #[Test]
     public function archiveLinkSavedAsNullWhenExceptionThrown(): void
     {
         Queue::fake();

@@ -37,7 +37,7 @@ class ParseCachedWebMentions extends Command
     {
         $htmlFiles = $filesystem->allFiles(storage_path() . '/HTML');
         foreach ($htmlFiles as $file) {
-            if ($file->getExtension() !== 'backup') { //we don’t want to parse `.backup` files
+            if ($file->getExtension() !== 'backup') { // we don’t want to parse `.backup` files
                 $filepath = $file->getPathname();
                 $this->info('Loading HTML from: ' . $filepath);
                 $html = $filesystem->get($filepath);

@@ -59,7 +59,7 @@ class Place extends Model
                      * sin(radians(places.latitude))))";
 
         return $query
-            ->select() //pick the columns you want here.
+            ->select() // pick the columns you want here.
             ->selectRaw("{$haversine} AS distance")
             ->whereRaw("{$haversine} < ?", [$distance]);
     }

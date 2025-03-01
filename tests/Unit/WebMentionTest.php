@@ -10,13 +10,14 @@ use Codebird\Codebird;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class WebMentionTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
+    #[Test]
     public function commentableMethodLinksToNotes(): void
     {
         $note = Note::factory()->create();
@@ -27,7 +28,7 @@ class WebMentionTest extends TestCase
         $this->assertInstanceOf(Note::class, $webmention->commentable);
     }
 
-    /** @test */
+    #[Test]
     public function publishedAttributeUsesUpdatedAtWhenNoRelevantMf2Data(): void
     {
         $webmention = new WebMention;
@@ -36,7 +37,7 @@ class WebMentionTest extends TestCase
         $this->assertEquals($updated_at->toDayDateTimeString(), $webmention->published);
     }
 
-    /** @test */
+    #[Test]
     public function publishedAttributeUsesUpdatedAtWhenErrorParsingMf2Data(): void
     {
         $webmention = new WebMention;
@@ -54,7 +55,7 @@ class WebMentionTest extends TestCase
         $this->assertEquals($updated_at->toDayDateTimeString(), $webmention->published);
     }
 
-    /** @test */
+    #[Test]
     public function createPhotoLinkDoesNothingWithGenericUrlAndNoLocallySavedImage(): void
     {
         $webmention = new WebMention;
@@ -63,7 +64,7 @@ class WebMentionTest extends TestCase
         $this->assertEquals($expected, $webmention->createPhotoLink($homepage));
     }
 
-    /** @test */
+    #[Test]
     public function createPhotoLinkReturnsLocallySavedImageUrlIfItExists(): void
     {
         $webmention = new WebMention;
@@ -72,7 +73,7 @@ class WebMentionTest extends TestCase
         $this->assertEquals($expected, $webmention->createPhotoLink($homepage));
     }
 
-    /** @test */
+    #[Test]
     public function createPhotoLinkDealsWithSpecialCaseOfDirectTwitterPhotoLinks(): void
     {
         $webmention = new WebMention;
@@ -81,7 +82,7 @@ class WebMentionTest extends TestCase
         $this->assertEquals($expected, $webmention->createPhotoLink($twitterProfileImage));
     }
 
-    /** @test */
+    #[Test]
     public function createPhotoLinkReturnsCachedTwitterPhotoLinks(): void
     {
         $webmention = new WebMention;
@@ -91,16 +92,15 @@ class WebMentionTest extends TestCase
         $this->assertEquals($expected, $webmention->createPhotoLink($twitterURL));
     }
 
-    /** @test */
+    #[Test]
     public function createPhotoLinkResolvesTwitterPhotoLinks(): void
     {
         $info = (object) [
             'profile_image_url_https' => 'https://pbs.twimg.com/static_profile_link.jpg',
         ];
-        $codebirdMock = $this->getMockBuilder(Codebird::class)
-            ->addMethods(['users_show'])
-            ->getMock();
-        $codebirdMock->method('users_show')
+        $codebirdMock = $this->createPartialMock(Codebird::class, ['__call']);
+        $codebirdMock->method('__call')
+            ->with('users_show', $this->anything())
             ->willReturn($info);
         $this->app->instance(Codebird::class, $codebirdMock);
 
@@ -117,14 +117,14 @@ class WebMentionTest extends TestCase
         $this->assertEquals($expected, $webmention->createPhotoLink($twitterURL));
     }
 
-    /** @test */
+    #[Test]
     public function getReplyAttributeDefaultsToNull(): void
     {
         $webmention = new WebMention;
         $this->assertNull($webmention->reply);
     }
 
-    /** @test */
+    #[Test]
     public function getReplyAttributeWithMf2WithoutHtmlReturnsNull(): void
     {
         $webmention = new WebMention;

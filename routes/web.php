@@ -64,7 +64,7 @@ Route::domain(config('url.longurl'))->group(function () {
     Route::middleware(MyAuthMiddleware::class)->prefix('admin')->group(function () {
         Route::get('/', [HomeController::class, 'welcome']);
 
-        //Articles
+        // Articles
         Route::prefix('blog')->group(function () {
             Route::get('/', [AdminArticlesController::class, 'index']);
             Route::get('/create', [AdminArticlesController::class, 'create']);

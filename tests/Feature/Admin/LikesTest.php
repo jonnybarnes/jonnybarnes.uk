@@ -9,13 +9,14 @@ use App\Models\Like;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Queue;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class LikesTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
+    #[Test]
     public function likesPageLoads(): void
     {
         $user = User::factory()->make();
@@ -25,7 +26,7 @@ class LikesTest extends TestCase
         $response->assertSeeText('Likes');
     }
 
-    /** @test */
+    #[Test]
     public function likeCreateFormLoads(): void
     {
         $user = User::factory()->make();
@@ -35,7 +36,7 @@ class LikesTest extends TestCase
         $response->assertSeeText('New Like');
     }
 
-    /** @test */
+    #[Test]
     public function adminCanCreateLike(): void
     {
         Queue::fake();
@@ -51,7 +52,7 @@ class LikesTest extends TestCase
         Queue::assertPushed(ProcessLike::class);
     }
 
-    /** @test */
+    #[Test]
     public function likeEditFormLoads(): void
     {
         $user = User::factory()->make();
@@ -62,7 +63,7 @@ class LikesTest extends TestCase
         $response->assertSee('Edit Like');
     }
 
-    /** @test */
+    #[Test]
     public function adminCanEditLike(): void
     {
         Queue::fake();
@@ -80,7 +81,7 @@ class LikesTest extends TestCase
         Queue::assertPushed(ProcessLike::class);
     }
 
-    /** @test */
+    #[Test]
     public function adminCanDeleteLike(): void
     {
         $like = Like::factory()->create();
