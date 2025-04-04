@@ -33,7 +33,7 @@ class WebMentionsController extends Controller
      */
     public function receive(Request $request): Response
     {
-        //first we trivially reject requests that lack all required inputs
+        // first we trivially reject requests that lack all required inputs
         if (($request->has('target') !== true) || ($request->has('source') !== true)) {
             return response(
                 'You need both the target and source parameters',
@@ -41,12 +41,12 @@ class WebMentionsController extends Controller
             );
         }
 
-        //next check the $target is valid
+        // next check the $target is valid
         $path = parse_url($request->input('target'), PHP_URL_PATH);
         $pathParts = explode('/', $path);
 
         if ($pathParts[1] === 'notes') {
-            //we have a note
+            // we have a note
             $noteId = $pathParts[2];
             try {
                 $note = Note::findOrFail(resolve(Numbers::class)->b60tonum($noteId));

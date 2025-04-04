@@ -9,13 +9,14 @@ use App\Models\Note;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Queue;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class NotesTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
+    #[Test]
     public function notesPageLoads(): void
     {
         $user = User::factory()->make();
@@ -24,7 +25,7 @@ class NotesTest extends TestCase
         $response->assertViewIs('admin.notes.index');
     }
 
-    /** @test */
+    #[Test]
     public function noteCreatePageLoads(): void
     {
         $user = User::factory()->make();
@@ -33,7 +34,7 @@ class NotesTest extends TestCase
         $response->assertViewIs('admin.notes.create');
     }
 
-    /** @test */
+    #[Test]
     public function adminCanCreateNewNote(): void
     {
         $user = User::factory()->make();
@@ -47,7 +48,7 @@ class NotesTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function noteEditFormLoads(): void
     {
         $user = User::factory()->make();
@@ -57,7 +58,7 @@ class NotesTest extends TestCase
         $response->assertViewIs('admin.notes.edit');
     }
 
-    /** @test */
+    #[Test]
     public function adminCanEditNote(): void
     {
         Queue::fake();
@@ -76,7 +77,7 @@ class NotesTest extends TestCase
         Queue::assertPushed(SendWebMentions::class);
     }
 
-    /** @test */
+    #[Test]
     public function adminCanDeleteNote(): void
     {
         $user = User::factory()->make();

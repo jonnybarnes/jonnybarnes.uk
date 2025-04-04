@@ -11,13 +11,14 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class SyndicateNoteToBlueskyJobTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
+    #[Test]
     public function weSyndicateNotesToBluesky(): void
     {
         config(['bridgy.bluesky_token' => 'test']);
@@ -38,7 +39,7 @@ class SyndicateNoteToBlueskyJobTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function weSyndicateTheOriginalMarkdownToBluesky(): void
     {
         config(['bridgy.bluesky_token' => 'test']);

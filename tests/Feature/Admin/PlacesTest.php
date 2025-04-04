@@ -7,13 +7,14 @@ namespace Tests\Feature\Admin;
 use App\Models\Place;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class PlacesTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
+    #[Test]
     public function placesPageLoads(): void
     {
         $user = User::factory()->make();
@@ -22,7 +23,7 @@ class PlacesTest extends TestCase
         $response->assertViewIs('admin.places.index');
     }
 
-    /** @test */
+    #[Test]
     public function createPlacePageLoads(): void
     {
         $user = User::factory()->make();
@@ -31,7 +32,7 @@ class PlacesTest extends TestCase
         $response->assertViewIs('admin.places.create');
     }
 
-    /** @test */
+    #[Test]
     public function adminCanCreateNewPlace(): void
     {
         $user = User::factory()->make();
@@ -48,7 +49,7 @@ class PlacesTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function editPlacePageLoads(): void
     {
         $user = User::factory()->make();
@@ -58,7 +59,7 @@ class PlacesTest extends TestCase
         $response->assertViewIs('admin.places.edit');
     }
 
-    /** @test */
+    #[Test]
     public function adminCanUpdatePlace(): void
     {
         $user = User::factory()->make();

@@ -49,7 +49,7 @@ class SaveProfileImage implements ShouldQueue
             $home = array_shift($home);
         }
 
-        //dont save pbs.twimg.com links
+        // dont save pbs.twimg.com links
         if (
             $photo
             && parse_url($photo, PHP_URL_HOST) !== 'pbs.twimg.com'

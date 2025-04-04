@@ -31,8 +31,8 @@ class IndieAuthTest extends TestCase
             'authorization_endpoint' => route('indieauth.start'),
             'token_endpoint' => route('indieauth.token'),
             'code_challenge_methods_supported' => ['S256'],
-            //'introspection_endpoint' => 'introspection_endpoint',
-            //'introspection_endpoint_auth_methods_supported' => ['none'],
+            // 'introspection_endpoint' => 'introspection_endpoint',
+            // 'introspection_endpoint_auth_methods_supported' => ['none'],
         ]);
     }
 

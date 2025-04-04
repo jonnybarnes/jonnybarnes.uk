@@ -8,6 +8,7 @@ use App\Jobs\SendWebMentions;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Queue;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Tests\TestToken;
 
@@ -18,9 +19,8 @@ class SwarmTest extends TestCase
 
     /**
      * Given a check in to Foursquare, this is the content Ownyourswarm will post to us.
-     *
-     * @test
      */
+    #[Test]
     public function mockedOwnyourswarmRequestWithFoursquare(): void
     {
         Queue::fake();
@@ -66,9 +66,8 @@ class SwarmTest extends TestCase
     /**
      * This request would actually come from another client than OwnYourSwarm, but we’re testing
      * OpenStreetMap data.
-     *
-     * @test
      */
+    #[Test]
     public function mockedOwnyourswarmRequestWithOsm(): void
     {
         Queue::fake();
@@ -109,9 +108,8 @@ class SwarmTest extends TestCase
 
     /**
      * This request would actually come from another client than OwnYourSwarm, as that would include a Foursquare URL
-     *
-     * @test
      */
+    #[Test]
     public function mockedOwnyourswarmRequestWithoutKnownExternalUrl(): void
     {
         Queue::fake();
@@ -150,7 +148,7 @@ class SwarmTest extends TestCase
         Queue::assertPushed(SendWebMentions::class);
     }
 
-    /** @test */
+    #[Test]
     public function mockedOwnyourswarmRequestWithNoTextContent(): void
     {
         $response = $this->json(
@@ -187,7 +185,7 @@ class SwarmTest extends TestCase
         $this->get($response->__get('headers')->get('location'))->assertSee('📍');
     }
 
-    /** @test */
+    #[Test]
     public function mockedOwnyourswarmRequestSavesJustThePostWhenAnErrorOccursInTheCheckinData(): void
     {
         Queue::fake();
@@ -225,7 +223,7 @@ class SwarmTest extends TestCase
         Queue::assertPushed(SendWebMentions::class);
     }
 
-    /** @test */
+    #[Test]
     public function mockedOwnyourswarmRequestWithHAdrLocation(): void
     {
         Queue::fake();
@@ -271,7 +269,7 @@ class SwarmTest extends TestCase
         Queue::assertPushed(SendWebMentions::class);
     }
 
-    /** @test */
+    #[Test]
     public function ownyourswarmCheckinTestUsingRealData(): void
     {
         $response = $this->json(

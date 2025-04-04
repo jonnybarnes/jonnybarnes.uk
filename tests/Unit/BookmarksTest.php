@@ -10,14 +10,15 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class BookmarksTest extends TestCase
 {
-    /**
-     * @test
+    /*
+     * @\test
      *
-     * @group puppeteer
+     * @\group puppeteer
      *
     public function takeScreenshotOfDuckDuckGo()
     {
@@ -25,7 +26,7 @@ class BookmarksTest extends TestCase
         $this->assertTrue(file_exists(public_path() . '/assets/img/bookmarks/' . $uuid . '.png'));
     }*/
 
-    /** @test */
+    #[Test]
     public function archiveLinkMethodCallsArchiveService(): void
     {
         $mock = new MockHandler([
@@ -38,7 +39,7 @@ class BookmarksTest extends TestCase
         $this->assertEquals('/web/1234/example.org', $url);
     }
 
-    /** @test */
+    #[Test]
     public function archiveLinkMethodThrowsAnExceptionOnError(): void
     {
         $this->expectException(InternetArchiveException::class);
@@ -52,7 +53,7 @@ class BookmarksTest extends TestCase
         (new BookmarkService)->getArchiveLink('https://example.org');
     }
 
-    /** @test */
+    #[Test]
     public function archiveLinkMethodThrowsAnExceptionIfNoLocationReturned(): void
     {
         $this->expectException(InternetArchiveException::class);

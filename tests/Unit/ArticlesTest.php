@@ -7,13 +7,14 @@ namespace Tests\Unit;
 use App\Models\Article;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Carbon;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class ArticlesTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
+    #[Test]
     public function titleSlugIsGeneratedAutomatically(): void
     {
         $article = new Article;
@@ -24,7 +25,7 @@ class ArticlesTest extends TestCase
         $this->assertEquals('my-title', $article->titleurl);
     }
 
-    /** @test */
+    #[Test]
     public function markdownContentIsConverted(): void
     {
         $article = new Article;
@@ -33,7 +34,7 @@ class ArticlesTest extends TestCase
         $this->assertEquals('<p>Some <em>markdown</em></p>' . PHP_EOL, $article->html);
     }
 
-    /** @test */
+    #[Test]
     public function weGenerateTheDifferentTimeAttributes(): void
     {
         $article = Article::create([
@@ -47,7 +48,7 @@ class ArticlesTest extends TestCase
         $this->assertEquals($article->pubdate, $article->updated_at->toRSSString());
     }
 
-    /** @test */
+    #[Test]
     public function weGenerateTheArticleLinkFromTheSlug(): void
     {
         $article = Article::create([
@@ -62,7 +63,7 @@ class ArticlesTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function dateScopeReturnsExpectedArticles(): void
     {
         Article::factory()->create([
@@ -81,7 +82,7 @@ class ArticlesTest extends TestCase
         $this->assertCount(2, $emptyScope);
     }
 
-    /** @test */
+    #[Test]
     public function dateScopeReturnsExpectedArticlesForDecember(): void
     {
         Article::factory()->create([

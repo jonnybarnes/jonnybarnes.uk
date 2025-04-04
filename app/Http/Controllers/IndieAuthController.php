@@ -26,8 +26,8 @@ class IndieAuthController extends Controller
             'authorization_endpoint' => route('indieauth.start'),
             'token_endpoint' => route('indieauth.token'),
             'code_challenge_methods_supported' => ['S256'],
-            //'introspection_endpoint' => route('indieauth.introspection'),
-            //'introspection_endpoint_auth_methods_supported' => ['none'],
+            // 'introspection_endpoint' => route('indieauth.introspection'),
+            // 'introspection_endpoint_auth_methods_supported' => ['none'],
         ]);
     }
 

@@ -32,18 +32,21 @@ class ProcessMedia implements ShouldQueue
      */
     public function handle(ImageManager $manager): void
     {
+        // Load file
+        $file = Storage::disk('local')->get('media/' . $this->filename);
+
         // Open file
         try {
-            $image = $manager->read(storage_path('app/media/') . $this->filename);
+            $image = $manager->read($file);
         } catch (DecoderException) {
             // not an image; delete file and end job
-            unlink(storage_path('app/media/') . $this->filename);
+            Storage::disk('local')->delete('media/' . $this->filename);
 
             return;
         }
 
         // Save the file publicly
-        Storage::disk('local')->copy('media/' . $this->filename, 'public/media/' . $this->filename);
+        Storage::disk('public')->put('media/' . $this->filename, $file);
 
         // Create smaller versions if necessary
         if ($image->width() > 1000) {
@@ -54,13 +57,13 @@ class ProcessMedia implements ShouldQueue
             $basename = trim(implode('.', $filenameParts), '.');
 
             $medium = $image->resize(width: 1000);
-            Storage::disk('local')->put('public/media/' . $basename . '-medium.' . $extension, (string) $medium->encode());
+            Storage::disk('public')->put('media/' . $basename . '-medium.' . $extension, (string) $medium->encode());
 
             $small = $image->resize(width: 500);
-            Storage::disk('local')->put('public/media/' . $basename . '-small.' . $extension, (string) $small->encode());
+            Storage::disk('public')->put('media/' . $basename . '-small.' . $extension, (string) $small->encode());
         }
 
         // Now we can delete the locally saved image
-        unlink(storage_path('app/media/') . $this->filename);
+        Storage::disk('local')->delete('media/' . $this->filename);
     }
 }

@@ -21,7 +21,7 @@ class BookmarkService extends Service
     public function create(array $request, ?string $client = null): Bookmark
     {
         if (Arr::get($request, 'properties.bookmark-of.0')) {
-            //micropub request
+            // micropub request
             $url = normalize_url(Arr::get($request, 'properties.bookmark-of.0'));
             $name = Arr::get($request, 'properties.name.0');
             $content = Arr::get($request, 'properties.content.0');
@@ -61,7 +61,7 @@ class BookmarkService extends Service
         try {
             $response = $client->request('GET', 'https://web.archive.org/save/' . $url);
         } catch (ClientException $e) {
-            //throw an exception to be caught
+            // throw an exception to be caught
             throw new InternetArchiveException;
         }
         if ($response->hasHeader('Content-Location')) {
@@ -70,7 +70,7 @@ class BookmarkService extends Service
             }
         }
 
-        //throw an exception to be caught
+        // throw an exception to be caught
         throw new InternetArchiveException;
     }
 }

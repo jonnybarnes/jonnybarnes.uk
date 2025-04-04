@@ -10,6 +10,7 @@ use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
 use Illuminate\FileSystem\FileSystem;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class DownloadWebMentionJobTest extends TestCase
@@ -23,7 +24,7 @@ class DownloadWebMentionJobTest extends TestCase
         parent::tearDown();
     }
 
-    /** @test */
+    #[Test]
     public function htmlIsSavedByJob(): void
     {
         $this->assertFileDoesNotExist(storage_path('HTML/https'));
@@ -51,7 +52,7 @@ class DownloadWebMentionJobTest extends TestCase
         $this->assertFileDoesNotExist(storage_path('HTML/https/example.org/reply') . '/1.' . date('Y-m-d') . '.backup');
     }
 
-    /** @test */
+    #[Test]
     public function htmlAndBackupSavedByJob(): void
     {
         $this->assertFileDoesNotExist(storage_path('HTML/https'));
@@ -86,7 +87,7 @@ class DownloadWebMentionJobTest extends TestCase
         $this->assertFileExists(storage_path('HTML/https/example.org/reply') . '/1.' . date('Y-m-d') . '.backup');
     }
 
-    /** @test */
+    #[Test]
     public function indexHtmlFileIsSavedByJobForUrlsEndingWithSlash(): void
     {
         $this->assertFileDoesNotExist(storage_path('HTML/https'));

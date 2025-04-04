@@ -4,28 +4,27 @@ declare(strict_types=1);
 
 namespace Tests\Unit;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class HelpersTest extends TestCase
 {
-    /** @test */
+    #[Test]
     public function normalizeUrlIsIdempotent(): void
     {
         $input = 'http://example.org:80/index.php?foo=bar&baz=1';
         $this->assertEquals(normalize_url(normalize_url($input)), normalize_url($input));
     }
 
-    /**
-     * @test
-     *
-     * @dataProvider urlProvider
-     */
+    #[Test]
+    #[DataProvider('urlProvider')]
     public function normalizeUrlOnDataProvider(string $input, string $output): void
     {
         $this->assertEquals($output, normalize_url($input));
     }
 
-    /** @test */
+    #[Test]
     public function prettyPrintJson(): void
     {
         // phpcs:disable Generic.Files.LineLength.TooLong

@@ -111,7 +111,7 @@ class Note extends Model
     {
         if ($value !== null) {
             $normalized = normalizer_normalize($value, Normalizer::FORM_C);
-            if ($normalized === '') { //we don’t want to save empty strings to the db
+            if ($normalized === '') { // we don’t want to save empty strings to the db
                 $normalized = null;
             }
             $this->attributes['note'] = $normalized;

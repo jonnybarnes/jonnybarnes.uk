@@ -6,13 +6,14 @@ namespace Tests\Unit;
 
 use App\Models\Like;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class LikesTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
+    #[Test]
     public function weCanSetTheAuthorUrl(): void
     {
         $like = new Like;
@@ -20,7 +21,7 @@ class LikesTest extends TestCase
         $this->assertEquals('https://joe.bloggs', $like->author_url);
     }
 
-    /** @test */
+    #[Test]
     public function weDoNotModifyPlainTextContent(): void
     {
         $like = new Like;
@@ -31,7 +32,7 @@ class LikesTest extends TestCase
         $this->assertEquals('some plaintext content', $like->content);
     }
 
-    /** @test */
+    #[Test]
     public function weCanHandleBlankContent(): void
     {
         $like = new Like;
@@ -42,7 +43,7 @@ class LikesTest extends TestCase
         $this->assertNull($like->content);
     }
 
-    /** @test */
+    #[Test]
     public function htmlLikeContentIsFiltered(): void
     {
         $htmlEvil = <<<'HTML'

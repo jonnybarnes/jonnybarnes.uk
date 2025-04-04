@@ -7,13 +7,14 @@ namespace Tests\Feature\Admin;
 use App\Models\MicropubClient;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class ClientsTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
+    #[Test]
     public function clientsPageLoads(): void
     {
         $user = User::factory()->make();
@@ -23,7 +24,7 @@ class ClientsTest extends TestCase
         $response->assertSeeText('Clients');
     }
 
-    /** @test */
+    #[Test]
     public function adminCanLoadFormToCreateClient(): void
     {
         $user = User::factory()->make();
@@ -33,7 +34,7 @@ class ClientsTest extends TestCase
         $response->assertSeeText('New Client');
     }
 
-    /** @test */
+    #[Test]
     public function adminCanCreateNewClient(): void
     {
         $user = User::factory()->make();
@@ -49,7 +50,7 @@ class ClientsTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function adminCanLoadEditFormForClient(): void
     {
         $user = User::factory()->make();
@@ -62,7 +63,7 @@ class ClientsTest extends TestCase
         $response->assertSee('https://jbl5.dev/notes/new');
     }
 
-    /** @test */
+    #[Test]
     public function adminCanEditClient(): void
     {
         $user = User::factory()->make();
@@ -80,7 +81,7 @@ class ClientsTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function adminCanDeleteClient(): void
     {
         $user = User::factory()->make();

@@ -30,7 +30,7 @@ class ArticlesController extends Controller
 
     public function store(): RedirectResponse
     {
-        //if a `.md` is attached use that for the main content.
+        // if a `.md` is attached use that for the main content.
         if (request()->hasFile('article')) {
             $file = request()->file('article')->openFile();
             $content = $file->fread($file->getSize());

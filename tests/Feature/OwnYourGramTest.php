@@ -6,6 +6,7 @@ namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Carbon;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Tests\TestToken;
 
@@ -14,7 +15,7 @@ class OwnYourGramTest extends TestCase
     use RefreshDatabase;
     use TestToken;
 
-    /** @test */
+    #[Test]
     public function postingInstagramUrlSavesMediaPath(): void
     {
         $response = $this->json(

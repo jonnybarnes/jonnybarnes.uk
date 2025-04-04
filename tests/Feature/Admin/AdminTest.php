@@ -5,25 +5,26 @@ declare(strict_types=1);
 namespace Tests\Feature\Admin;
 
 use App\Models\User;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class AdminTest extends TestCase
 {
-    /** @test */
+    #[Test]
     public function adminPageRedirectsUnauthorisedUsersToLoginPage(): void
     {
         $response = $this->get('/admin');
         $response->assertRedirect('/login');
     }
 
-    /** @test */
+    #[Test]
     public function loginPageLoads(): void
     {
         $response = $this->get('/login');
         $response->assertViewIs('login');
     }
 
-    /** @test */
+    #[Test]
     public function loginAttemptWithBadCredentialsFails(): void
     {
         $response = $this->post('/login', [
@@ -33,7 +34,7 @@ class AdminTest extends TestCase
         $response->assertRedirect('/login');
     }
 
-    /** @test */
+    #[Test]
     public function loginSucceeds(): void
     {
         User::factory([
@@ -49,7 +50,7 @@ class AdminTest extends TestCase
         $response->assertRedirect('/admin');
     }
 
-    /** @test */
+    #[Test]
     public function whenLoggedInRedirectsToAdminPage(): void
     {
         $user = User::factory()->create();
@@ -57,14 +58,14 @@ class AdminTest extends TestCase
         $response->assertRedirect('/');
     }
 
-    /** @test */
+    #[Test]
     public function loggedOutUsersSimplyRedirected(): void
     {
         $response = $this->get('/logout');
         $response->assertRedirect('/');
     }
 
-    /** @test */
+    #[Test]
     public function loggedInUsersShownLogoutForm(): void
     {
         $user = User::factory()->create();
@@ -72,7 +73,7 @@ class AdminTest extends TestCase
         $response->assertViewIs('logout');
     }
 
-    /** @test */
+    #[Test]
     public function loggedInUsersCanLogout(): void
     {
         $user = User::factory()->create();

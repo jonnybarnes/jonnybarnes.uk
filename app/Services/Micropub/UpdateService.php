@@ -20,7 +20,7 @@ class UpdateService
     {
         $urlPath = parse_url(Arr::get($request, 'url'), PHP_URL_PATH);
 
-        //is it a note we are updating?
+        // is it a note we are updating?
         if (mb_substr($urlPath, 1, 5) !== 'notes') {
             return response()->json([
                 'error' => 'invalid',
@@ -37,7 +37,7 @@ class UpdateService
             ], 404);
         }
 
-        //got the note, are we dealing with a “replace” request?
+        // got the note, are we dealing with a “replace” request?
         if (Arr::get($request, 'replace')) {
             foreach (Arr::get($request, 'replace') as $property => $value) {
                 if ($property === 'content') {
@@ -64,7 +64,7 @@ class UpdateService
             ]);
         }
 
-        //how about “add”
+        // how about “add”
         if (Arr::get($request, 'add')) {
             foreach (Arr::get($request, 'add') as $property => $value) {
                 if ($property === 'syndication') {

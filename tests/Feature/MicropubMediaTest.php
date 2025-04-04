@@ -11,6 +11,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Tests\TestToken;
 
@@ -19,7 +20,7 @@ class MicropubMediaTest extends TestCase
     use RefreshDatabase;
     use TestToken;
 
-    /** @test */
+    #[Test]
     public function emptyResponseForLastUploadWhenNoneFound(): void
     {
         // Make sure there’s no media
@@ -33,7 +34,7 @@ class MicropubMediaTest extends TestCase
         $response->assertJson(['url' => null]);
     }
 
-    /** @test */
+    #[Test]
     public function getRequestWithInvalidTokenReturnsErrorResponse(): void
     {
         $response = $this->get(
@@ -44,7 +45,7 @@ class MicropubMediaTest extends TestCase
         $response->assertJsonFragment(['error_description' => 'The provided token did not pass validation']);
     }
 
-    /** @test */
+    #[Test]
     public function getRequestWithTokenWithoutScopeReturnsErrorResponse(): void
     {
         $response = $this->get(
@@ -55,7 +56,7 @@ class MicropubMediaTest extends TestCase
         $response->assertJsonFragment(['error_description' => 'The provided token has no scopes']);
     }
 
-    /** @test */
+    #[Test]
     public function getRequestWithTokenWithInsufficientScopeReturnsErrorResponse(): void
     {
         $response = $this->get(
@@ -66,7 +67,7 @@ class MicropubMediaTest extends TestCase
         $response->assertJsonFragment(['error_description' => 'The token’s scope does not have the necessary requirements.']);
     }
 
-    /** @test */
+    #[Test]
     public function emptyGetRequestWithTokenReceivesOkResponse(): void
     {
         $response = $this->get(
@@ -77,7 +78,7 @@ class MicropubMediaTest extends TestCase
         $response->assertJson(['status' => 'OK']);
     }
 
-    /** @test */
+    #[Test]
     public function clientCanListLastUpload(): void
     {
         Queue::fake();
@@ -102,11 +103,11 @@ class MicropubMediaTest extends TestCase
         $lastUploadResponse->assertJson(['url' => $response->headers->get('Location')]);
 
         // now remove file
-        unlink(storage_path('app/media/') . $filename);
-        $this->removeDirIfEmpty(storage_path('app/media'));
+        unlink(storage_path('app/private/media/') . $filename);
+        $this->removeDirIfEmpty(storage_path('app/private/media'));
     }
 
-    /** @test */
+    #[Test]
     public function clientCanSourceUploads(): void
     {
         Queue::fake();
@@ -134,11 +135,11 @@ class MicropubMediaTest extends TestCase
         ]]]);
 
         // now remove file
-        unlink(storage_path('app/media/') . $filename);
-        $this->removeDirIfEmpty(storage_path('app/media'));
+        unlink(storage_path('app/private/media/') . $filename);
+        $this->removeDirIfEmpty(storage_path('app/private/media'));
     }
 
-    /** @test */
+    #[Test]
     public function clientCanSourceUploadsWithLimit(): void
     {
         Queue::fake();
@@ -168,11 +169,11 @@ class MicropubMediaTest extends TestCase
         $this->assertCount(1, json_decode($sourceUploadResponse->getContent(), true)['items']);
 
         // now remove file
-        unlink(storage_path('app/media/') . $filename);
-        $this->removeDirIfEmpty(storage_path('app/media'));
+        unlink(storage_path('app/private/media/') . $filename);
+        $this->removeDirIfEmpty(storage_path('app/private/media'));
     }
 
-    /** @test */
+    #[Test]
     public function mediaEndpointUploadRequiresFile(): void
     {
         $response = $this->post(
@@ -188,7 +189,7 @@ class MicropubMediaTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function errorResponseForUnknownQValue(): void
     {
         $response = $this->get(
@@ -199,7 +200,7 @@ class MicropubMediaTest extends TestCase
         $response->assertJson(['error' => 'invalid_request']);
     }
 
-    /** @test */
+    #[Test]
     public function optionsRequestReturnsCorsResponse(): void
     {
         $response = $this->options('/api/media');
@@ -208,7 +209,7 @@ class MicropubMediaTest extends TestCase
         $response->assertHeader('access-control-allow-origin', '*');
     }
 
-    /** @test */
+    #[Test]
     public function mediaEndpointRequestWithInvalidTokenReturns400Response(): void
     {
         $response = $this->post(
@@ -220,7 +221,7 @@ class MicropubMediaTest extends TestCase
         $response->assertJsonFragment(['error_description' => 'The provided token did not pass validation']);
     }
 
-    /** @test */
+    #[Test]
     public function mediaEndpointRequestWithTokenWithNoScopeReturns400Response(): void
     {
         $response = $this->post(
@@ -232,7 +233,7 @@ class MicropubMediaTest extends TestCase
         $response->assertJsonFragment(['error_description' => 'The provided token has no scopes']);
     }
 
-    /** @test */
+    #[Test]
     public function mediaEndpointRequestWithInsufficientTokenScopesReturns401Response(): void
     {
         $response = $this->post(
@@ -246,7 +247,7 @@ class MicropubMediaTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function mediaEndpointUploadFile(): void
     {
         Queue::fake();
@@ -265,11 +266,11 @@ class MicropubMediaTest extends TestCase
         Queue::assertPushed(ProcessMedia::class);
         Storage::disk('local')->assertExists($filename);
         // now remove file
-        unlink(storage_path('app/') . $filename);
-        $this->removeDirIfEmpty(storage_path('app/media'));
+        unlink(storage_path('app/private/') . $filename);
+        $this->removeDirIfEmpty(storage_path('app/private/media'));
     }
 
-    /** @test */
+    #[Test]
     public function mediaEndpointUploadAudioFile(): void
     {
         Queue::fake();
@@ -288,11 +289,11 @@ class MicropubMediaTest extends TestCase
         Queue::assertPushed(ProcessMedia::class);
         Storage::disk('local')->assertExists($filename);
         // now remove file
-        unlink(storage_path('app/') . $filename);
-        $this->removeDirIfEmpty(storage_path('app/media'));
+        unlink(storage_path('app/private/') . $filename);
+        $this->removeDirIfEmpty(storage_path('app/private/media'));
     }
 
-    /** @test */
+    #[Test]
     public function mediaEndpointUploadVideoFile(): void
     {
         Queue::fake();
@@ -311,11 +312,11 @@ class MicropubMediaTest extends TestCase
         Queue::assertPushed(ProcessMedia::class);
         Storage::disk('local')->assertExists($filename);
         // now remove file
-        unlink(storage_path('app/') . $filename);
-        $this->removeDirIfEmpty(storage_path('app/media'));
+        unlink(storage_path('app/private/') . $filename);
+        $this->removeDirIfEmpty(storage_path('app/private/media'));
     }
 
-    /** @test */
+    #[Test]
     public function mediaEndpointUploadDocumentFile(): void
     {
         Queue::fake();
@@ -333,11 +334,11 @@ class MicropubMediaTest extends TestCase
         Queue::assertPushed(ProcessMedia::class);
         Storage::disk('local')->assertExists($filename);
         // now remove file
-        unlink(storage_path('app/') . $filename);
-        $this->removeDirIfEmpty(storage_path('app/media'));
+        unlink(storage_path('app/private/') . $filename);
+        $this->removeDirIfEmpty(storage_path('app/private/media'));
     }
 
-    /** @test */
+    #[Test]
     public function mediaEndpointUploadInvalidFileReturnsError(): void
     {
         Queue::fake();

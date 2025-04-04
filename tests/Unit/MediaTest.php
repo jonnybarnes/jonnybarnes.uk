@@ -7,13 +7,14 @@ namespace Tests\Unit;
 use App\Models\Media;
 use App\Models\Note;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class MediaTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
+    #[Test]
     public function getTheNoteThatMediaInstanceBelongsTo(): void
     {
         $media = Media::factory()->for(Note::factory())->create();
@@ -21,7 +22,7 @@ class MediaTest extends TestCase
         $this->assertInstanceOf(Note::class, $media->note);
     }
 
-    /** @test */
+    #[Test]
     public function absoluteUrlsAreReturnedUnmodified(): void
     {
         $absoluteUrl = 'https://instagram-cdn.com/image/uuid';

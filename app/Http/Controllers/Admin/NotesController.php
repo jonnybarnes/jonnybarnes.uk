@@ -67,7 +67,7 @@ class NotesController extends Controller
      */
     public function update(int $noteId): RedirectResponse
     {
-        //update note data
+        // update note data
         $note = Note::findOrFail($noteId);
         $note->note = request()->input('content');
         $note->in_reply_to = request()->input('in-reply-to');

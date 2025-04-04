@@ -83,7 +83,7 @@ class NotesTableSeeder extends Seeder
             ->where('id', $noteWithoutContact->id)
             ->update(['updated_at' => $now->toDateTimeString()]);
 
-        //copy aaron’s profile pic in place
+        // copy aaron’s profile pic in place
         $spl = new SplFileInfo(public_path() . '/assets/profile-images/aaronparecki.com');
         if ($spl->isDir() === false) {
             mkdir(public_path() . '/assets/profile-images/aaronparecki.com', 0755);

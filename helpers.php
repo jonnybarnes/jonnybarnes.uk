@@ -138,7 +138,7 @@ if (! function_exists('normalize_url')) {
             $url['query'] = '';
             sort($queries);
             foreach ($queries as $query) {
-                //lets drop query params we don’t want
+                // lets drop query params we don’t want
                 $key = stristr($query, '=', true);
                 if (queryKeyIsBanned($key) === false) {
                     $url['query'] .= "{$query}&";
@@ -197,7 +197,7 @@ if (! function_exists('prettyPrintJson')) {
                     case '{':
                     case '[':
                         $level++;
-                        //no break
+                        // no break
                     case ',':
                         $ends_line_level = $level;
                         break;

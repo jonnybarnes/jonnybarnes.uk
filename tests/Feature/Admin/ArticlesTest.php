@@ -9,13 +9,14 @@ use App\Models\User;
 use Faker\Factory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class ArticlesTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
+    #[Test]
     public function adminArticlesPageLoads(): void
     {
         $user = User::factory()->make();
@@ -25,7 +26,7 @@ class ArticlesTest extends TestCase
         $response->assertSeeText('Select article to edit:');
     }
 
-    /** @test */
+    #[Test]
     public function adminCanLoadFormToCreateArticle(): void
     {
         $user = User::factory()->make();
@@ -35,7 +36,7 @@ class ArticlesTest extends TestCase
         $response->assertSeeText('Title (URL)');
     }
 
-    /** @test */
+    #[Test]
     public function admiNCanCreateNewArticle(): void
     {
         $user = User::factory()->make();
@@ -48,7 +49,7 @@ class ArticlesTest extends TestCase
         $this->assertDatabaseHas('articles', ['title' => 'Test Title']);
     }
 
-    /** @test */
+    #[Test]
     public function adminCanCreateNewArticleWithFile(): void
     {
         $user = User::factory()->make();
@@ -73,7 +74,7 @@ class ArticlesTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function articleCanLoadFormToEditArticle(): void
     {
         $user = User::factory()->make();
@@ -86,7 +87,7 @@ class ArticlesTest extends TestCase
         $response->assertSeeText('This is *my* new blog. It uses `Markdown`.');
     }
 
-    /** @test */
+    #[Test]
     public function adminCanEditArticle(): void
     {
         $user = User::factory()->make();
@@ -104,7 +105,7 @@ class ArticlesTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function adminCanDeleteArticle(): void
     {
         $user = User::factory()->make();

@@ -10,13 +10,14 @@ use App\Services\PlaceService;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class PlacesTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
+    #[Test]
     public function canRetrieveAssociatedNotes(): void
     {
         $place = Place::factory()->create();
@@ -27,7 +28,7 @@ class PlacesTest extends TestCase
         $this->assertCount(5, $place->notes);
     }
 
-    /** @test */
+    #[Test]
     public function nearMethodReturnsCollection(): void
     {
         Place::factory()->create([
@@ -39,7 +40,7 @@ class PlacesTest extends TestCase
         $this->assertEquals('the-bridgewater-pub', $nearby[0]->slug);
     }
 
-    /** @test */
+    #[Test]
     public function getLongurl(): void
     {
         $place = Place::factory()->create([
@@ -48,7 +49,7 @@ class PlacesTest extends TestCase
         $this->assertEquals(config('app.url') . '/places/the-bridgewater-pub', $place->longurl);
     }
 
-    /** @test */
+    #[Test]
     public function getShorturl()
     {
         $place = Place::factory()->create([
@@ -57,7 +58,7 @@ class PlacesTest extends TestCase
         $this->assertEquals(config('url.shorturl') . '/places/the-bridgewater-pub', $place->shorturl);
     }
 
-    /** @test */
+    #[Test]
     public function getUri(): void
     {
         $place = Place::factory()->create([
@@ -66,7 +67,7 @@ class PlacesTest extends TestCase
         $this->assertEquals(config('app.url') . '/places/the-bridgewater-pub', $place->uri);
     }
 
-    /** @test */
+    #[Test]
     public function placeServiceReturnsExistingPlaceBasedOnExternalUrlsSearch(): void
     {
         Place::factory(10)->create();
@@ -86,7 +87,7 @@ class PlacesTest extends TestCase
         $this->assertCount(11, Place::all());
     }
 
-    /** @test */
+    #[Test]
     public function placeServiceRequiresNameWhenCreatingNewPlace(): void
     {
         $this->expectException(InvalidArgumentException::class);
@@ -96,7 +97,7 @@ class PlacesTest extends TestCase
         $service->createPlaceFromCheckin(['foo' => 'bar']);
     }
 
-    /** @test */
+    #[Test]
     public function placeServiceRequiresLatitudeWhenCreatingNewPlace(): void
     {
         $this->expectException(InvalidArgumentException::class);
@@ -106,7 +107,7 @@ class PlacesTest extends TestCase
         $service->createPlaceFromCheckin(['properties' => ['name' => 'bar']]);
     }
 
-    /** @test */
+    #[Test]
     public function placeServiceCanUpdateExternalUrls(): void
     {
         $place = Place::factory()->create([

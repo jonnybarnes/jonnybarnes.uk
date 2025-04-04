@@ -7,11 +7,11 @@
     "license": "CC0-1.0",
     "devDependencies": {
         "@eslint/js": "^9.6.0",
-        "@stylistic/eslint-plugin": "^2.3.0",
+        "@stylistic/eslint-plugin": "^3.0.0",
         "eslint": "^9.7.0",
         "globals": "^15.8.0",
         "stylelint": "^16.7.0",
-        "stylelint-config-standard": "^36.0.1"
+        "stylelint-config-standard": "^37.0.0"
     },
     "scripts": {
         "eslint": "eslint public/assets/js/*.js",
