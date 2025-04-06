@@ -60,7 +60,7 @@ class PasskeysController extends Controller
         // RP Entity i.e. the application
         $rpEntity = PublicKeyCredentialRpEntity::create(
             config('app.name'),
-            config('url.longurl'),
+            config('app.url'),
         );
 
         // User Entity
@@ -148,7 +148,7 @@ class PasskeysController extends Controller
         );
         $securedRelyingPartyId = [];
         if (App::environment('local', 'development')) {
-            $securedRelyingPartyId = [config('url.longurl')];
+            $securedRelyingPartyId = [config('app.url')];
         }
         $ceremonyStepManagerFactory->setSecuredRelyingPartyId($securedRelyingPartyId);
 
@@ -165,7 +165,7 @@ class PasskeysController extends Controller
         $publicKeyCredentialSource = $authenticatorAttestationResponseValidator->check(
             authenticatorAttestationResponse: $publicKeyCredential->response,
             publicKeyCredentialCreationOptions: $publicKeyCredentialCreationOptions,
-            request: config('url.longurl'),
+            request: config('app.url'),
             securedRelyingPartyId: $securedRelyingPartyId,
         );
 
@@ -258,7 +258,7 @@ class PasskeysController extends Controller
         );
         $securedRelyingPartyId = [];
         if (App::environment('local', 'development')) {
-            $securedRelyingPartyId = [config('url.longurl')];
+            $securedRelyingPartyId = [config('app.url')];
         }
         $ceremonyStepManagerFactory->setSecuredRelyingPartyId($securedRelyingPartyId);
 
@@ -277,7 +277,7 @@ class PasskeysController extends Controller
                 credentialId: $publicKeyCredentialSource,
                 authenticatorAssertionResponse: $publicKeyCredential->response,
                 publicKeyCredentialRequestOptions: $publicKeyCredentialRequestOptions,
-                request: config('url.longurl'),
+                request: config('app.url'),
                 userHandle: null,
                 securedRelyingPartyId: $securedRelyingPartyId,
             );

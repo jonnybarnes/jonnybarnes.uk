@@ -30,7 +30,7 @@ class PlacesTest extends TestCase
     public function singlePlacePageLoads(): void
     {
         $place = Place::factory()->create();
-        $response = $this->get($place->longurl);
+        $response = $this->get($place->uri);
         $response->assertViewHas('place', $place);
     }
 

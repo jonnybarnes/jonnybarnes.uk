@@ -124,7 +124,7 @@ class Note extends Model
     public function getNoteAttribute(?string $value): ?string
     {
         if ($value === null && $this->place !== null) {
-            $value = '📍: <a href="' . $this->place->longurl . '">' . $this->place->name . '</a>';
+            $value = '📍: <a href="' . $this->place->uri . '">' . $this->place->name . '</a>';
         }
 
         // if $value is still null, just return null
@@ -172,14 +172,9 @@ class Note extends Model
         return (string) resolve(Numbers::class)->numto60($this->id);
     }
 
-    public function getLongurlAttribute(): string
+    public function getUriAttribute(): string
     {
         return config('app.url') . '/notes/' . $this->nb60id;
-    }
-
-    public function getShorturlAttribute(): string
-    {
-        return config('url.shorturl') . '/notes/' . $this->nb60id;
     }
 
     public function getIso8601Attribute(): string

@@ -41,24 +41,6 @@ class PlacesTest extends TestCase
     }
 
     #[Test]
-    public function getLongurl(): void
-    {
-        $place = Place::factory()->create([
-            'name' => 'The Bridgewater Pub',
-        ]);
-        $this->assertEquals(config('app.url') . '/places/the-bridgewater-pub', $place->longurl);
-    }
-
-    #[Test]
-    public function getShorturl()
-    {
-        $place = Place::factory()->create([
-            'name' => 'The Bridgewater Pub',
-        ]);
-        $this->assertEquals(config('url.shorturl') . '/places/the-bridgewater-pub', $place->shorturl);
-    }
-
-    #[Test]
     public function getUri(): void
     {
         $place = Place::factory()->create([

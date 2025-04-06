@@ -3,7 +3,7 @@
     <channel>
         <title>{{ config('user.display_name') }}</title>
         <atom:link href="{{ config('app.url') }}/notes/feed.rss" rel="self" type="application/rss+xml" />
-        <description>An RSS feed of the notes found on {{ config('url.longurl') }}</description>
+        <description>An RSS feed of the notes found on {{ config('app.url') }}</description>
         <link>{{ config('app.url') }}/notes</link>
         <lastBuildDate>{{ $buildDate }}</lastBuildDate>
         <ttl>1800</ttl>
@@ -16,8 +16,8 @@
                     {!! $note->note !!}
                 ]]>
             </description>
-            <link>{{ $note->longurl }}</link>
-            <guid>{{ $note->longurl}}</guid>
+            <link>{{ $note->uri }}</link>
+            <guid>{{ $note->uri}}</guid>
             <pubDate>{{ $note->pubdate }}</pubDate>
         </item>
 @endforeach

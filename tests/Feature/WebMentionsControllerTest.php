@@ -82,7 +82,7 @@ class WebMentionsControllerTest extends TestCase
 
         $response = $this->call('POST', '/webmention', [
             'source' => 'https://example.org/post/123',
-            'target' => $note->longurl,
+            'target' => $note->uri,
         ]);
         $response->assertStatus(202);
 

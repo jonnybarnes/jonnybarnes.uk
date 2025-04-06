@@ -18,17 +18,17 @@ class HEntryService
     public function process(array $request, ?string $client = null): ?string
     {
         if (Arr::get($request, 'properties.like-of') || Arr::get($request, 'like-of')) {
-            return resolve(LikeService::class)->create($request)->longurl;
+            return resolve(LikeService::class)->create($request)->url;
         }
 
         if (Arr::get($request, 'properties.bookmark-of') || Arr::get($request, 'bookmark-of')) {
-            return resolve(BookmarkService::class)->create($request)->longurl;
+            return resolve(BookmarkService::class)->create($request)->uri;
         }
 
         if (Arr::get($request, 'properties.name') || Arr::get($request, 'name')) {
-            return resolve(ArticleService::class)->create($request)->longurl;
+            return resolve(ArticleService::class)->create($request)->link;
         }
 
-        return resolve(NoteService::class)->create($request, $client)->longurl;
+        return resolve(NoteService::class)->create($request, $client)->uri;
     }
 }

@@ -53,7 +53,7 @@ class ProcessWebMention implements ShouldQueue
             // check webmention still references target
             // we try each type of mention (reply/like/repost)
             if ($webmention->type === 'in-reply-to') {
-                if ($parser->checkInReplyTo($microformats, $this->note->longurl) === false) {
+                if ($parser->checkInReplyTo($microformats, $this->note->uri) === false) {
                     // it doesn’t so delete
                     $webmention->delete();
 
@@ -67,7 +67,7 @@ class ProcessWebMention implements ShouldQueue
                 return;
             }
             if ($webmention->type === 'like-of') {
-                if ($parser->checkLikeOf($microformats, $this->note->longurl) === false) {
+                if ($parser->checkLikeOf($microformats, $this->note->uri) === false) {
                     // it doesn’t so delete
                     $webmention->delete();
 
@@ -75,7 +75,7 @@ class ProcessWebMention implements ShouldQueue
                 } // note we don’t need to do anything if it still is a like
             }
             if ($webmention->type === 'repost-of') {
-                if ($parser->checkRepostOf($microformats, $this->note->longurl) === false) {
+                if ($parser->checkRepostOf($microformats, $this->note->uri) === false) {
                     // it doesn’t so delete
                     $webmention->delete();
 
@@ -89,7 +89,7 @@ class ProcessWebMention implements ShouldQueue
         $type = $parser->getMentionType($microformats); // throw error here?
         dispatch(new SaveProfileImage($microformats));
         $webmention->source = $this->source;
-        $webmention->target = $this->note->longurl;
+        $webmention->target = $this->note->uri;
         $webmention->commentable_id = $this->note->id;
         $webmention->commentable_type = Note::class;
         $webmention->type = $type;

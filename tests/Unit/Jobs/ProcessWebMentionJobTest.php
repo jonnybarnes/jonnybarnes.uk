@@ -94,12 +94,12 @@ class ProcessWebMentionJobTest extends TestCase
         $source = 'https://aaronpk.localhost/reply/1';
         WebMention::factory()->create([
             'source' => $source,
-            'target' => $note->longurl,
+            'target' => $note->uri,
         ]);
 
         $html = <<<HTML
         <div class="h-entry">
-            <p>In reply to <a class="u-in-reply-to" href="{$note->longurl}">a note</a></p>
+            <p>In reply to <a class="u-in-reply-to" href="{$note->uri}">a note</a></p>
             <div class="e-content">Updated reply</div>
         </div>
         HTML;
@@ -117,7 +117,7 @@ class ProcessWebMentionJobTest extends TestCase
             'source' => $source,
             'type' => 'in-reply-to',
             // phpcs:ignore Generic.Files.LineLength.TooLong
-            'mf2' => '{"rels": [], "items": [{"type": ["h-entry"], "properties": {"content": [{"html": "Updated reply", "value": "Updated reply"}], "in-reply-to": ["' . $note->longurl . '"]}}], "rel-urls": []}',
+            'mf2' => '{"rels": [], "items": [{"type": ["h-entry"], "properties": {"content": [{"html": "Updated reply", "value": "Updated reply"}], "in-reply-to": ["' . $note->uri . '"]}}], "rel-urls": []}',
         ]);
     }
 

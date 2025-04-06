@@ -8,8 +8,8 @@
 @foreach($notes as $note)
     <entry>
         <title>{{ strip_tags($note->note) }}</title>
-        <link href="{{ $note->longurl }}" />
-        <id>{{ $note->longurl }}</id>
+        <link href="{{ $note->uri }}" />
+        <id>{{ $note->uri }}</id>
         <updated>{{ $note->updated_at->toAtomString() }}</updated>
         <content type="html">{{ $note->note }}</content>
         <author>

@@ -299,7 +299,7 @@ class MicropubControllerTest extends TestCase
                 'type' => ['h-entry'],
                 'properties' => [
                     'content' => [$note],
-                    'location' => [$place->longurl],
+                    'location' => [$place->uri],
                 ],
             ],
             ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
@@ -499,7 +499,7 @@ class MicropubControllerTest extends TestCase
             '/api/post',
             [
                 'action' => 'update',
-                'url' => $note->longurl,
+                'url' => $note->uri,
                 'replace' => [
                     'content' => ['replaced content'],
                 ],
@@ -519,7 +519,7 @@ class MicropubControllerTest extends TestCase
             '/api/post',
             [
                 'action' => 'update',
-                'url' => $note->longurl,
+                'url' => $note->uri,
                 'add' => [
                     'syndication' => [
                         'https://www.swarmapp.com/checkin/123',
@@ -546,7 +546,7 @@ class MicropubControllerTest extends TestCase
             '/api/post',
             [
                 'action' => 'update',
-                'url' => $note->longurl,
+                'url' => $note->uri,
                 'add' => [
                     'photo' => ['https://example.org/photo.jpg'],
                 ],
@@ -607,7 +607,7 @@ class MicropubControllerTest extends TestCase
             '/api/post',
             [
                 'action' => 'update',
-                'url' => $note->longurl,
+                'url' => $note->uri,
                 'morph' => [ // or any other unsupported update type
                     'syndication' => ['https://www.swarmapp.com/checkin/123'],
                 ],
@@ -646,7 +646,7 @@ class MicropubControllerTest extends TestCase
             '/api/post',
             [
                 'action' => 'update',
-                'url' => $note->longurl,
+                'url' => $note->uri,
                 'replace' => [
                     'syndication' => [
                         'https://www.swarmapp.com/checkin/the-id',

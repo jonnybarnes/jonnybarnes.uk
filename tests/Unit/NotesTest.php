@@ -116,14 +116,6 @@ class NotesTest extends TestCase
     }
 
     #[Test]
-    public function shorturlMethodReturnsExpectedValue(): void
-    {
-        $note = Note::factory()->make();
-        $note->id = 14;
-        $this->assertEquals(config('url.shorturl') . '/notes/E', $note->shorturl);
-    }
-
-    #[Test]
     public function weGetLatitudeLongitudeValuesOfAssociatedPlaceOfNote(): void
     {
         $place = Place::factory()->create([
@@ -382,11 +374,11 @@ class NotesTest extends TestCase
     public function markdown_content_gets_converted(): void
     {
         $note = Note::factory()->create([
-            'note' => 'The best search engine? https://duckduckgo.com',
+            'note' => 'The best search engine? https://kagi.com',
         ]);
 
         $this->assertSame(
-            '<p>The best search engine? <a href="https://duckduckgo.com">https://duckduckgo.com</a></p>' . PHP_EOL,
+            '<p>The best search engine? <a href="https://kagi.com">https://kagi.com</a></p>' . PHP_EOL,
             $note->note
         );
     }

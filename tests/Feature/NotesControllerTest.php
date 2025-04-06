@@ -31,7 +31,7 @@ class NotesControllerTest extends TestCase
     public function specificNotePageLoads(): void
     {
         $note = Note::factory()->create();
-        $response = $this->get($note->longurl);
+        $response = $this->get($note->uri);
         $response->assertViewHas('note');
     }
 
@@ -51,7 +51,7 @@ class NotesControllerTest extends TestCase
     {
         $note = Note::factory()->create();
         $response = $this->get('/note/' . $note->id);
-        $response->assertRedirect($note->longurl);
+        $response->assertRedirect($note->uri);
     }
 
     /**

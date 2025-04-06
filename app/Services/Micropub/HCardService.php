@@ -27,6 +27,6 @@ class HCardService
             $data['longitude'] = Arr::get($request, 'longitude');
         }
 
-        return resolve(PlaceService::class)->createPlace($data)->longurl;
+        return resolve(PlaceService::class)->createPlace($data)->uri;
     }
 }
