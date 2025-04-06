@@ -27,7 +27,7 @@ class BookmarksTest extends TestCase
     }*/
 
     #[Test]
-    public function archiveLinkMethodCallsArchiveService(): void
+    public function archive_link_method_calls_archive_service(): void
     {
         $mock = new MockHandler([
             new Response(200, ['Content-Location' => '/web/1234/example.org']),
@@ -40,7 +40,7 @@ class BookmarksTest extends TestCase
     }
 
     #[Test]
-    public function archiveLinkMethodThrowsAnExceptionOnError(): void
+    public function archive_link_method_throws_an_exception_on_error(): void
     {
         $this->expectException(InternetArchiveException::class);
 
@@ -54,7 +54,7 @@ class BookmarksTest extends TestCase
     }
 
     #[Test]
-    public function archiveLinkMethodThrowsAnExceptionIfNoLocationReturned(): void
+    public function archive_link_method_throws_an_exception_if_no_location_returned(): void
     {
         $this->expectException(InternetArchiveException::class);
 

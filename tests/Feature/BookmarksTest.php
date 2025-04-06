@@ -17,14 +17,14 @@ class BookmarksTest extends TestCase
     use RefreshDatabase, TestToken;
 
     #[Test]
-    public function bookmarksPageLoadsWithoutError(): void
+    public function bookmarks_page_loads_without_error(): void
     {
         $response = $this->get('/bookmarks');
         $response->assertViewIs('bookmarks.index');
     }
 
     #[Test]
-    public function singleBookmarkPageLoadsWithoutError(): void
+    public function single_bookmark_page_loads_without_error(): void
     {
         $bookmark = Bookmark::factory()->create();
         $response = $this->get('/bookmarks/' . $bookmark->id);
@@ -32,7 +32,7 @@ class BookmarksTest extends TestCase
     }
 
     #[Test]
-    public function whenBookmarkIsAddedUsingHttpSyntaxCheckJobToTakeScreenshotIsInvoked(): void
+    public function when_bookmark_is_added_using_http_syntax_check_job_to_take_screenshot_is_invoked(): void
     {
         Queue::fake();
 
@@ -50,7 +50,7 @@ class BookmarksTest extends TestCase
     }
 
     #[Test]
-    public function whenBookmarkIsAddedUsingJsonSyntaxCheckJobToTakeScreenshotIsInvoked(): void
+    public function when_bookmark_is_added_using_json_syntax_check_job_to_take_screenshot_is_invoked(): void
     {
         Queue::fake();
 
@@ -70,7 +70,7 @@ class BookmarksTest extends TestCase
     }
 
     #[Test]
-    public function whenTheBookmarkIsCreatedCheckNecessaryTagsAreAlsoCreated(): void
+    public function when_the_bookmark_is_created_check_necessary_tags_are_also_created(): void
     {
         Queue::fake();
 

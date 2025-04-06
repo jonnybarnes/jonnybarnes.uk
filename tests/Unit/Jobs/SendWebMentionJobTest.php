@@ -16,7 +16,7 @@ use Tests\TestCase;
 class SendWebMentionJobTest extends TestCase
 {
     #[Test]
-    public function discoverWebmentionEndpointOnOwnDomain(): void
+    public function discover_webmention_endpoint_on_own_domain(): void
     {
         $note = new Note;
         $job = new SendWebMentions($note);
@@ -25,7 +25,7 @@ class SendWebMentionJobTest extends TestCase
     }
 
     #[Test]
-    public function discoverWebmentionEndpointFromHeaderLinks(): void
+    public function discover_webmention_endpoint_from_header_links(): void
     {
         $url = 'https://example.org/webmention';
         $mock = new MockHandler([
@@ -40,7 +40,7 @@ class SendWebMentionJobTest extends TestCase
     }
 
     #[Test]
-    public function discoverWebmentionEndpointFromHtmlLinkTags(): void
+    public function discover_webmention_endpoint_from_html_link_tags(): void
     {
         $html = '<link rel="webmention" href="https://example.org/webmention">';
         $mock = new MockHandler([
@@ -58,7 +58,7 @@ class SendWebMentionJobTest extends TestCase
     }
 
     #[Test]
-    public function discoverWebmentionEndpointFromLegacyHtmlMarkup(): void
+    public function discover_webmention_endpoint_from_legacy_html_markup(): void
     {
         $html = '<link rel="http://webmention.org/" href="https://example.org/webmention">';
         $mock = new MockHandler([
@@ -76,14 +76,14 @@ class SendWebMentionJobTest extends TestCase
     }
 
     #[Test]
-    public function ensureEmptyNoteDoesNotTriggerAnyActions(): void
+    public function ensure_empty_note_does_not_trigger_any_actions(): void
     {
         $job = new SendWebMentions(new Note);
         $this->assertNull($job->handle());
     }
 
     #[Test]
-    public function weResolveRelativeUris(): void
+    public function we_resolve_relative_uris(): void
     {
         $uri = '/blog/post';
         $base = 'https://example.org/';
@@ -92,7 +92,7 @@ class SendWebMentionJobTest extends TestCase
     }
 
     #[Test]
-    public function weSendAWebmentionForANote(): void
+    public function we_send_a_webmention_for_a_note(): void
     {
         $html = '<link rel="http://webmention.org/" href="https://example.org/webmention">';
         $mock = new MockHandler([
@@ -112,7 +112,7 @@ class SendWebMentionJobTest extends TestCase
     }
 
     #[Test]
-    public function linksInNotesCanNotSupportWebmentions(): void
+    public function links_in_notes_can_not_support_webmentions(): void
     {
         $mock = new MockHandler([
             // URLs with commas currently break the parse function I’m using

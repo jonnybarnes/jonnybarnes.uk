@@ -17,7 +17,7 @@ class ArticlesTest extends TestCase
     use RefreshDatabase;
 
     #[Test]
-    public function adminArticlesPageLoads(): void
+    public function admin_articles_page_loads(): void
     {
         $user = User::factory()->make();
 
@@ -27,7 +27,7 @@ class ArticlesTest extends TestCase
     }
 
     #[Test]
-    public function adminCanLoadFormToCreateArticle(): void
+    public function admin_can_load_form_to_create_article(): void
     {
         $user = User::factory()->make();
 
@@ -37,7 +37,7 @@ class ArticlesTest extends TestCase
     }
 
     #[Test]
-    public function admiNCanCreateNewArticle(): void
+    public function admi_n_can_create_new_article(): void
     {
         $user = User::factory()->make();
 
@@ -50,7 +50,7 @@ class ArticlesTest extends TestCase
     }
 
     #[Test]
-    public function adminCanCreateNewArticleWithFile(): void
+    public function admin_can_create_new_article_with_file(): void
     {
         $user = User::factory()->make();
         $faker = Factory::create();
@@ -75,7 +75,7 @@ class ArticlesTest extends TestCase
     }
 
     #[Test]
-    public function articleCanLoadFormToEditArticle(): void
+    public function article_can_load_form_to_edit_article(): void
     {
         $user = User::factory()->make();
         $article = Article::factory()->create([
@@ -88,7 +88,7 @@ class ArticlesTest extends TestCase
     }
 
     #[Test]
-    public function adminCanEditArticle(): void
+    public function admin_can_edit_article(): void
     {
         $user = User::factory()->make();
         $article = Article::factory()->create();
@@ -106,7 +106,7 @@ class ArticlesTest extends TestCase
     }
 
     #[Test]
-    public function adminCanDeleteArticle(): void
+    public function admin_can_delete_article(): void
     {
         $user = User::factory()->make();
         $article = Article::factory()->create();

@@ -24,14 +24,14 @@ class LikesTest extends TestCase
     use TestToken;
 
     #[Test]
-    public function likesPageHasCorrectView(): void
+    public function likes_page_has_correct_view(): void
     {
         $response = $this->get('/likes');
         $response->assertViewIs('likes.index');
     }
 
     #[Test]
-    public function singleLikePageHasCorrectView(): void
+    public function single_like_page_has_correct_view(): void
     {
         $like = Like::factory()->create();
         $response = $this->get('/likes/' . $like->id);
@@ -39,7 +39,7 @@ class LikesTest extends TestCase
     }
 
     #[Test]
-    public function checkLikeCreatedFromMicropubApiRequests(): void
+    public function check_like_created_from_micropub_api_requests(): void
     {
         Queue::fake();
 
@@ -59,7 +59,7 @@ class LikesTest extends TestCase
     }
 
     #[Test]
-    public function checkLikeCreatedFromMicropubWebRequests(): void
+    public function check_like_created_from_micropub_web_requests(): void
     {
         Queue::fake();
 
@@ -77,7 +77,7 @@ class LikesTest extends TestCase
     }
 
     #[Test]
-    public function likeWithSimpleAuthor(): void
+    public function like_with_simple_author(): void
     {
         $like = new Like;
         $like->url = 'http://example.org/note/id';
@@ -116,7 +116,7 @@ class LikesTest extends TestCase
     }
 
     #[Test]
-    public function likeWithHCard(): void
+    public function like_with_h_card(): void
     {
         $like = new Like;
         $like->url = 'http://example.org/note/id';
@@ -159,7 +159,7 @@ class LikesTest extends TestCase
     }
 
     #[Test]
-    public function likeWithoutMicroformats(): void
+    public function like_without_microformats(): void
     {
         $like = new Like;
         $like->url = 'http://example.org/note/id';
@@ -195,7 +195,7 @@ class LikesTest extends TestCase
     }
 
     #[Test]
-    public function likeThatIsATweet(): void
+    public function like_that_is_a_tweet(): void
     {
         $like = new Like;
         $like->url = 'https://twitter.com/jonnybarnes/status/1050823255123251200';
@@ -234,7 +234,7 @@ class LikesTest extends TestCase
     }
 
     #[Test]
-    public function noErrorForFailureToPosseWithBridgy(): void
+    public function no_error_for_failure_to_posse_with_bridgy(): void
     {
         $like = new Like;
         $like->url = 'https://twitter.com/jonnybarnes/status/1050823255123251200';
@@ -271,7 +271,7 @@ class LikesTest extends TestCase
     }
 
     #[Test]
-    public function unknownLikeGivesNotFoundResponse(): void
+    public function unknown_like_gives_not_found_response(): void
     {
         $response = $this->get('/likes/202');
         $response->assertNotFound();

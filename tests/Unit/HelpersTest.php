@@ -11,7 +11,7 @@ use Tests\TestCase;
 class HelpersTest extends TestCase
 {
     #[Test]
-    public function normalizeUrlIsIdempotent(): void
+    public function normalize_url_is_idempotent(): void
     {
         $input = 'http://example.org:80/index.php?foo=bar&baz=1';
         $this->assertEquals(normalize_url(normalize_url($input)), normalize_url($input));
@@ -19,13 +19,13 @@ class HelpersTest extends TestCase
 
     #[Test]
     #[DataProvider('urlProvider')]
-    public function normalizeUrlOnDataProvider(string $input, string $output): void
+    public function normalize_url_on_data_provider(string $input, string $output): void
     {
         $this->assertEquals($output, normalize_url($input));
     }
 
     #[Test]
-    public function prettyPrintJson(): void
+    public function pretty_print_json(): void
     {
         // phpcs:disable Generic.Files.LineLength.TooLong
         $json = <<<'JSON'

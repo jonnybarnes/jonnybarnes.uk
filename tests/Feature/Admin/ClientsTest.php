@@ -15,7 +15,7 @@ class ClientsTest extends TestCase
     use RefreshDatabase;
 
     #[Test]
-    public function clientsPageLoads(): void
+    public function clients_page_loads(): void
     {
         $user = User::factory()->make();
 
@@ -25,7 +25,7 @@ class ClientsTest extends TestCase
     }
 
     #[Test]
-    public function adminCanLoadFormToCreateClient(): void
+    public function admin_can_load_form_to_create_client(): void
     {
         $user = User::factory()->make();
 
@@ -35,7 +35,7 @@ class ClientsTest extends TestCase
     }
 
     #[Test]
-    public function adminCanCreateNewClient(): void
+    public function admin_can_create_new_client(): void
     {
         $user = User::factory()->make();
 
@@ -51,7 +51,7 @@ class ClientsTest extends TestCase
     }
 
     #[Test]
-    public function adminCanLoadEditFormForClient(): void
+    public function admin_can_load_edit_form_for_client(): void
     {
         $user = User::factory()->make();
         $client = MicropubClient::factory()->create([
@@ -64,7 +64,7 @@ class ClientsTest extends TestCase
     }
 
     #[Test]
-    public function adminCanEditClient(): void
+    public function admin_can_edit_client(): void
     {
         $user = User::factory()->make();
         $client = MicropubClient::factory()->create();
@@ -82,7 +82,7 @@ class ClientsTest extends TestCase
     }
 
     #[Test]
-    public function adminCanDeleteClient(): void
+    public function admin_can_delete_client(): void
     {
         $user = User::factory()->make();
         $client = MicropubClient::factory()->create([

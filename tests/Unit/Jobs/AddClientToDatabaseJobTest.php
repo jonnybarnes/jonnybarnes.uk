@@ -14,7 +14,7 @@ class AddClientToDatabaseJobTest extends TestCase
     use RefreshDatabase;
 
     #[Test]
-    public function clientIsAddedToDatabaseByJob(): void
+    public function client_is_added_to_database_by_job(): void
     {
         $job = new AddClientToDatabase('https://example.org/client');
         $job->handle();

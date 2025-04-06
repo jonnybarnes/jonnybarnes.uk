@@ -16,7 +16,7 @@ class OwnYourGramTest extends TestCase
     use TestToken;
 
     #[Test]
-    public function postingInstagramUrlSavesMediaPath(): void
+    public function posting_instagram_url_saves_media_path(): void
     {
         $response = $this->json(
             'POST',

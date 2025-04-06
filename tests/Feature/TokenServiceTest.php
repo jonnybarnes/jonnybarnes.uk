@@ -19,7 +19,7 @@ class TokenServiceTest extends TestCase
      * the APP_KEY, to test, we shall create a token, and then verify it.
      */
     #[Test]
-    public function tokenserviceCreatesAndValidatesTokens(): void
+    public function tokenservice_creates_and_validates_tokens(): void
     {
         $tokenService = new TokenService;
         $data = [
@@ -38,7 +38,7 @@ class TokenServiceTest extends TestCase
     }
 
     #[Test]
-    public function tokensWithDifferentSigningKeyThrowsException(): void
+    public function tokens_with_different_signing_key_throws_exception(): void
     {
         $this->expectException(RequiredConstraintsViolated::class);
 

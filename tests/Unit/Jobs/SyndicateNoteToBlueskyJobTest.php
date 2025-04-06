@@ -19,7 +19,7 @@ class SyndicateNoteToBlueskyJobTest extends TestCase
     use RefreshDatabase;
 
     #[Test]
-    public function weSyndicateNotesToBluesky(): void
+    public function we_syndicate_notes_to_bluesky(): void
     {
         config(['bridgy.bluesky_token' => 'test']);
         $faker = Factory::create();
@@ -40,7 +40,7 @@ class SyndicateNoteToBlueskyJobTest extends TestCase
     }
 
     #[Test]
-    public function weSyndicateTheOriginalMarkdownToBluesky(): void
+    public function we_syndicate_the_original_markdown_to_bluesky(): void
     {
         config(['bridgy.bluesky_token' => 'test']);
         $faker = Factory::create();

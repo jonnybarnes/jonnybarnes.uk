@@ -21,7 +21,7 @@ class IndieAuthTest extends TestCase
     use RefreshDatabase;
 
     #[Test]
-    public function itShouldReturnIndieAuthMetadata(): void
+    public function it_should_return_indie_auth_metadata(): void
     {
         $response = $this->get('/.well-known/indieauth-server');
 
@@ -37,7 +37,7 @@ class IndieAuthTest extends TestCase
     }
 
     #[Test]
-    public function itShouldRequireAdminLoginToShowAuthoriseForm(): void
+    public function it_should_require_admin_login_to_show_authorise_form(): void
     {
         $response = $this->get('/auth', [
             'response_type' => 'code',
@@ -59,7 +59,7 @@ class IndieAuthTest extends TestCase
      * same domain, later test will check the flow when they are different.
      */
     #[Test]
-    public function itShouldReturnApprovalViewWhenTheRequestIsValid(): void
+    public function it_should_return_approval_view_when_the_request_is_valid(): void
     {
         $user = User::factory()->make();
         $url = url()->query('/auth', [
@@ -80,7 +80,7 @@ class IndieAuthTest extends TestCase
     }
 
     #[Test]
-    public function itShouldReturnErrorViewWhenResponeTypeIsWrong(): void
+    public function it_should_return_error_view_when_respone_type_is_wrong(): void
     {
         $user = User::factory()->make();
         $url = url()->query('/auth', [
@@ -102,7 +102,7 @@ class IndieAuthTest extends TestCase
     }
 
     #[Test]
-    public function itShouldReturnErrorViewWhenResponeTypeIsMissing(): void
+    public function it_should_return_error_view_when_respone_type_is_missing(): void
     {
         $user = User::factory()->make();
         $url = url()->query('/auth', [
@@ -123,7 +123,7 @@ class IndieAuthTest extends TestCase
     }
 
     #[Test]
-    public function itShouldReturnErrorViewWhenClientIdIsMissing(): void
+    public function it_should_return_error_view_when_client_id_is_missing(): void
     {
         $user = User::factory()->make();
         $url = url()->query('/auth', [
@@ -144,7 +144,7 @@ class IndieAuthTest extends TestCase
     }
 
     #[Test]
-    public function itShouldReturnErrorViewWhenRedirectUriIsMissing(): void
+    public function it_should_return_error_view_when_redirect_uri_is_missing(): void
     {
         $user = User::factory()->make();
         $url = url()->query('/auth', [
@@ -165,7 +165,7 @@ class IndieAuthTest extends TestCase
     }
 
     #[Test]
-    public function itShouldReturnErrorViewWhenStateIsMissing(): void
+    public function it_should_return_error_view_when_state_is_missing(): void
     {
         $user = User::factory()->make();
         $url = url()->query('/auth', [
@@ -186,7 +186,7 @@ class IndieAuthTest extends TestCase
     }
 
     #[Test]
-    public function itShouldReturnErrorViewWhenCodeChallengeIsMissing(): void
+    public function it_should_return_error_view_when_code_challenge_is_missing(): void
     {
         $user = User::factory()->make();
         $url = url()->query('/auth', [
@@ -207,7 +207,7 @@ class IndieAuthTest extends TestCase
     }
 
     #[Test]
-    public function itShouldReturnErrorViewWhenCodeChallengeMethodIsMissing(): void
+    public function it_should_return_error_view_when_code_challenge_method_is_missing(): void
     {
         $user = User::factory()->make();
         $url = url()->query('/auth', [
@@ -228,7 +228,7 @@ class IndieAuthTest extends TestCase
     }
 
     #[Test]
-    public function itShouldReturnErrorViewWhenCodeChallengeMethodIsUnsupportedValue(): void
+    public function it_should_return_error_view_when_code_challenge_method_is_unsupported_value(): void
     {
         $user = User::factory()->make();
         $url = url()->query('/auth', [
@@ -250,7 +250,7 @@ class IndieAuthTest extends TestCase
     }
 
     #[Test]
-    public function itShouldCheckClientIdForValidRedirect(): void
+    public function it_should_check_client_id_for_valid_redirect(): void
     {
         // Mock Guzzle request for client_id
         $appPageHtml = <<<'HTML'
@@ -295,7 +295,7 @@ class IndieAuthTest extends TestCase
     }
 
     #[Test]
-    public function itShouldErrorIfClientIdPageHasNoValidRedirect(): void
+    public function it_should_error_if_client_id_page_has_no_valid_redirect(): void
     {
         // Mock Guzzle request for client_id
         $appPageHtml = <<<'HTML'
@@ -340,7 +340,7 @@ class IndieAuthTest extends TestCase
     }
 
     #[Test]
-    public function itShouldRedirectToAppOnApproval(): void
+    public function it_should_redirect_to_app_on_approval(): void
     {
         $user = User::factory()->make();
         $response = $this->actingAs($user)->post('/auth/confirm', [
@@ -373,7 +373,7 @@ class IndieAuthTest extends TestCase
     }
 
     #[Test]
-    public function itShouldShowErrorResponseWhenApprovalRequestIsMissingGrantType(): void
+    public function it_should_show_error_response_when_approval_request_is_missing_grant_type(): void
     {
         $response = $this->post('/auth', [
             'code' => '123456',
@@ -393,7 +393,7 @@ class IndieAuthTest extends TestCase
     }
 
     #[Test]
-    public function itShouldShowErrorResponseWhenApprovalRequestIsMissingCode(): void
+    public function it_should_show_error_response_when_approval_request_is_missing_code(): void
     {
         $response = $this->post('/auth', [
             'grant_type' => 'authorization_code',
@@ -413,7 +413,7 @@ class IndieAuthTest extends TestCase
     }
 
     #[Test]
-    public function itShouldShowErrorResponseWhenApprovalRequestIsMissingClientId(): void
+    public function it_should_show_error_response_when_approval_request_is_missing_client_id(): void
     {
         $response = $this->post('/auth', [
             'grant_type' => 'authorization_code',
@@ -433,7 +433,7 @@ class IndieAuthTest extends TestCase
     }
 
     #[Test]
-    public function itShouldShowErrorResponseWhenApprovalRequestIsMissingRedirectUri(): void
+    public function it_should_show_error_response_when_approval_request_is_missing_redirect_uri(): void
     {
         $response = $this->post('/auth', [
             'grant_type' => 'authorization_code',
@@ -453,7 +453,7 @@ class IndieAuthTest extends TestCase
     }
 
     #[Test]
-    public function itShouldShowErrorResponseWhenApprovalRequestIsMissingCodeVerifier(): void
+    public function it_should_show_error_response_when_approval_request_is_missing_code_verifier(): void
     {
         $response = $this->post('/auth', [
             'grant_type' => 'authorization_code',
@@ -473,7 +473,7 @@ class IndieAuthTest extends TestCase
     }
 
     #[Test]
-    public function itShouldShowErrorResponseWhenApprovalRequestGrantTypeIsUnsupported(): void
+    public function it_should_show_error_response_when_approval_request_grant_type_is_unsupported(): void
     {
         $response = $this->post('/auth', [
             'grant_type' => 'unsupported',
@@ -494,7 +494,7 @@ class IndieAuthTest extends TestCase
     }
 
     #[Test]
-    public function itShouldReturnErrorForUnknownCode(): void
+    public function it_should_return_error_for_unknown_code(): void
     {
         $response = $this->post('/auth', [
             'grant_type' => 'authorization_code',
@@ -515,7 +515,7 @@ class IndieAuthTest extends TestCase
     }
 
     #[Test]
-    public function itShouldReturnErrorForInvalidCode(): void
+    public function it_should_return_error_for_invalid_code(): void
     {
         Cache::shouldReceive('pull')
             ->once()
@@ -541,7 +541,7 @@ class IndieAuthTest extends TestCase
     }
 
     #[Test]
-    public function itShouldReturnErrorForInvalidCodeVerifier(): void
+    public function it_should_return_error_for_invalid_code_verifier(): void
     {
         Cache::shouldReceive('pull')
             ->once()
@@ -570,7 +570,7 @@ class IndieAuthTest extends TestCase
     }
 
     #[Test]
-    public function itShouldReturnMeDataForValidRequest(): void
+    public function it_should_return_me_data_for_valid_request(): void
     {
         Cache::shouldReceive('pull')
             ->once()
@@ -600,7 +600,7 @@ class IndieAuthTest extends TestCase
     }
 
     #[Test]
-    public function itShouldReturnErrorWhenNoScopesGivenToTokenEndpoint(): void
+    public function it_should_return_error_when_no_scopes_given_to_token_endpoint(): void
     {
         Cache::shouldReceive('pull')
             ->once()
@@ -635,7 +635,7 @@ class IndieAuthTest extends TestCase
     }
 
     #[Test]
-    public function itShouldReturnErrorWhenClientIdDoesNotMatchDuringTokenRequest(): void
+    public function it_should_return_error_when_client_id_does_not_match_during_token_request(): void
     {
         Cache::shouldReceive('pull')
             ->once()
@@ -670,7 +670,7 @@ class IndieAuthTest extends TestCase
     }
 
     #[Test]
-    public function itShouldReturnAnAccessTokenIfValidationPasses(): void
+    public function it_should_return_an_access_token_if_validation_passes(): void
     {
         Cache::shouldReceive('pull')
             ->once()

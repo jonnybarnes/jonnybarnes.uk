@@ -16,7 +16,7 @@ class WebMentionsControllerTest extends TestCase
     use RefreshDatabase;
 
     #[Test]
-    public function webmentionEndpointCanServeBrowserRequest(): void
+    public function webmention_endpoint_can_serve_browser_request(): void
     {
         $response = $this->get('/webmention');
         $response->assertViewIs('webmention-endpoint');
@@ -26,7 +26,7 @@ class WebMentionsControllerTest extends TestCase
      * Test webmentions without source and target are rejected.
      */
     #[Test]
-    public function webmentionsWithoutSourceAndTargetAreRejected(): void
+    public function webmentions_without_source_and_target_are_rejected(): void
     {
         $response = $this->call('POST', '/webmention', ['source' => 'https://example.org/post/123']);
         $response->assertStatus(400);
@@ -38,7 +38,7 @@ class WebMentionsControllerTest extends TestCase
      * In this case an invalid target is a URL that doesn’t exist on our domain.
      */
     #[Test]
-    public function invalidTargetReturnsErrorResponse(): void
+    public function invalid_target_returns_error_response(): void
     {
         $response = $this->call('POST', '/webmention', [
             'source' => 'https://example.org/post/123',
@@ -51,7 +51,7 @@ class WebMentionsControllerTest extends TestCase
      * Test blog target gets a 501 response due to our not supporting it.
      */
     #[Test]
-    public function blogTargetReturns501Response(): void
+    public function blog_target_returns501_response(): void
     {
         $response = $this->call('POST', '/webmention', [
             'source' => 'https://example.org/post/123',
@@ -64,7 +64,7 @@ class WebMentionsControllerTest extends TestCase
      * Test that a non-existent note gives a 400 response.
      */
     #[Test]
-    public function nonexistentNoteReturnsErrorResponse(): void
+    public function nonexistent_note_returns_error_response(): void
     {
         $response = $this->call('POST', '/webmention', [
             'source' => 'https://example.org/post/123',
@@ -74,7 +74,7 @@ class WebMentionsControllerTest extends TestCase
     }
 
     #[Test]
-    public function legitimateWebmentionTriggersProcessWebmentionJob(): void
+    public function legitimate_webmention_triggers_process_webmention_job(): void
     {
         Queue::fake();
 

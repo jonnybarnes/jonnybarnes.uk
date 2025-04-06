@@ -12,7 +12,7 @@ class HorizonTest extends TestCase
      * Horizon has its own test suite, here we just test it has been installed successfully.
      */
     #[Test]
-    public function horizonIsInstalled(): void
+    public function horizon_is_installed(): void
     {
         $user = User::factory()->create([
             'name' => 'jonny',

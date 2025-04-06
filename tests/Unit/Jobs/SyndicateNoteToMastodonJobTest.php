@@ -19,7 +19,7 @@ class SyndicateNoteToMastodonJobTest extends TestCase
     use RefreshDatabase;
 
     #[Test]
-    public function weSyndicateNotesToMastodon(): void
+    public function we_syndicate_notes_to_mastodon(): void
     {
         config(['bridgy.mastodon_token' => 'test']);
         $faker = Factory::create();
@@ -40,7 +40,7 @@ class SyndicateNoteToMastodonJobTest extends TestCase
     }
 
     #[Test]
-    public function weSyndicateTheOriginalMarkdown(): void
+    public function we_syndicate_the_original_markdown(): void
     {
         config(['bridgy.mastodon_token' => 'test']);
         $faker = Factory::create();

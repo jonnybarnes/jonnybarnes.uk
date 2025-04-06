@@ -17,7 +17,7 @@ class ContactsTest extends TestCase
      * Check the `/contacts` page gives a good response.
      */
     #[Test]
-    public function contactsPageLoadsWithoutError(): void
+    public function contacts_page_loads_without_error(): void
     {
         $response = $this->get('/contacts');
         $response->assertStatus(200);
@@ -27,7 +27,7 @@ class ContactsTest extends TestCase
      * Test an individual contact page with default profile image.
      */
     #[Test]
-    public function contactPageShouldFallbackToDefaultProfilePic(): void
+    public function contact_page_should_fallback_to_default_profile_pic(): void
     {
         Contact::factory()->create([
             'nick' => 'tantek',
@@ -40,7 +40,7 @@ class ContactsTest extends TestCase
      * Test an individual contact page with a specific profile image.
      */
     #[Test]
-    public function contactPageShouldUseSpecificProfilePicIfPresent(): void
+    public function contact_page_should_use_specific_profile_pic_if_present(): void
     {
         Contact::factory()->create([
             'nick' => 'aaron',
@@ -51,7 +51,7 @@ class ContactsTest extends TestCase
     }
 
     #[Test]
-    public function unknownContactReturnsNotFoundResponse(): void
+    public function unknown_contact_returns_not_found_response(): void
     {
         $response = $this->get('/contacts/unknown');
         $response->assertNotFound();

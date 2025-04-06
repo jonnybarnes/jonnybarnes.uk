@@ -27,7 +27,7 @@ class ParseCachedWebMentionsTest extends TestCase
     }
 
     #[Test]
-    public function parseWebmentionHtml(): void
+    public function parse_webmention_html(): void
     {
         $webmentionAaron = WebMention::factory()->create([
             'source' => 'https://aaronpk.localhost/reply/1',

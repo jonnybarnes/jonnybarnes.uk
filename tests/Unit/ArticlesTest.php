@@ -15,7 +15,7 @@ class ArticlesTest extends TestCase
     use RefreshDatabase;
 
     #[Test]
-    public function titleSlugIsGeneratedAutomatically(): void
+    public function title_slug_is_generated_automatically(): void
     {
         $article = new Article;
         $article->title = 'My Title';
@@ -26,7 +26,7 @@ class ArticlesTest extends TestCase
     }
 
     #[Test]
-    public function markdownContentIsConverted(): void
+    public function markdown_content_is_converted(): void
     {
         $article = new Article;
         $article->main = 'Some *markdown*';
@@ -35,7 +35,7 @@ class ArticlesTest extends TestCase
     }
 
     #[Test]
-    public function weGenerateTheDifferentTimeAttributes(): void
+    public function we_generate_the_different_time_attributes(): void
     {
         $article = Article::create([
             'title' => 'Test',
@@ -49,7 +49,7 @@ class ArticlesTest extends TestCase
     }
 
     #[Test]
-    public function weGenerateTheArticleLinkFromTheSlug(): void
+    public function we_generate_the_article_link_from_the_slug(): void
     {
         $article = Article::create([
             'title' => 'Test',
@@ -64,7 +64,7 @@ class ArticlesTest extends TestCase
     }
 
     #[Test]
-    public function dateScopeReturnsExpectedArticles(): void
+    public function date_scope_returns_expected_articles(): void
     {
         Article::factory()->create([
             'created_at' => Carbon::now()->subYear()->toDateTimeString(),
@@ -83,7 +83,7 @@ class ArticlesTest extends TestCase
     }
 
     #[Test]
-    public function dateScopeReturnsExpectedArticlesForDecember(): void
+    public function date_scope_returns_expected_articles_for_december(): void
     {
         Article::factory()->create([
             'created_at' => Carbon::now()->setDay(11)->setMonth(11)->toDateTimeString(),

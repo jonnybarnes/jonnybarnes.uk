@@ -17,7 +17,7 @@ class LikesTest extends TestCase
     use RefreshDatabase;
 
     #[Test]
-    public function likesPageLoads(): void
+    public function likes_page_loads(): void
     {
         $user = User::factory()->make();
 
@@ -27,7 +27,7 @@ class LikesTest extends TestCase
     }
 
     #[Test]
-    public function likeCreateFormLoads(): void
+    public function like_create_form_loads(): void
     {
         $user = User::factory()->make();
 
@@ -37,7 +37,7 @@ class LikesTest extends TestCase
     }
 
     #[Test]
-    public function adminCanCreateLike(): void
+    public function admin_can_create_like(): void
     {
         Queue::fake();
         $user = User::factory()->make();
@@ -53,7 +53,7 @@ class LikesTest extends TestCase
     }
 
     #[Test]
-    public function likeEditFormLoads(): void
+    public function like_edit_form_loads(): void
     {
         $user = User::factory()->make();
         $like = Like::factory()->create();
@@ -64,7 +64,7 @@ class LikesTest extends TestCase
     }
 
     #[Test]
-    public function adminCanEditLike(): void
+    public function admin_can_edit_like(): void
     {
         Queue::fake();
         $user = User::factory()->make();
@@ -82,7 +82,7 @@ class LikesTest extends TestCase
     }
 
     #[Test]
-    public function adminCanDeleteLike(): void
+    public function admin_can_delete_like(): void
     {
         $like = Like::factory()->create();
         $url = $like->url;

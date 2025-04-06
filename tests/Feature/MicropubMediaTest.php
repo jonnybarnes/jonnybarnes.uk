@@ -21,7 +21,7 @@ class MicropubMediaTest extends TestCase
     use TestToken;
 
     #[Test]
-    public function emptyResponseForLastUploadWhenNoneFound(): void
+    public function empty_response_for_last_upload_when_none_found(): void
     {
         // Make sure there’s no media
         $this->assertCount(0, Media::all());
@@ -35,7 +35,7 @@ class MicropubMediaTest extends TestCase
     }
 
     #[Test]
-    public function getRequestWithInvalidTokenReturnsErrorResponse(): void
+    public function get_request_with_invalid_token_returns_error_response(): void
     {
         $response = $this->get(
             '/api/media?q=last',
@@ -46,7 +46,7 @@ class MicropubMediaTest extends TestCase
     }
 
     #[Test]
-    public function getRequestWithTokenWithoutScopeReturnsErrorResponse(): void
+    public function get_request_with_token_without_scope_returns_error_response(): void
     {
         $response = $this->get(
             '/api/media?q=last',
@@ -57,7 +57,7 @@ class MicropubMediaTest extends TestCase
     }
 
     #[Test]
-    public function getRequestWithTokenWithInsufficientScopeReturnsErrorResponse(): void
+    public function get_request_with_token_with_insufficient_scope_returns_error_response(): void
     {
         $response = $this->get(
             '/api/media?q=last',
@@ -68,7 +68,7 @@ class MicropubMediaTest extends TestCase
     }
 
     #[Test]
-    public function emptyGetRequestWithTokenReceivesOkResponse(): void
+    public function empty_get_request_with_token_receives_ok_response(): void
     {
         $response = $this->get(
             '/api/media',
@@ -79,7 +79,7 @@ class MicropubMediaTest extends TestCase
     }
 
     #[Test]
-    public function clientCanListLastUpload(): void
+    public function client_can_list_last_upload(): void
     {
         Queue::fake();
         $file = __DIR__ . '/../aaron.png';
@@ -108,7 +108,7 @@ class MicropubMediaTest extends TestCase
     }
 
     #[Test]
-    public function clientCanSourceUploads(): void
+    public function client_can_source_uploads(): void
     {
         Queue::fake();
         $file = __DIR__ . '/../aaron.png';
@@ -140,7 +140,7 @@ class MicropubMediaTest extends TestCase
     }
 
     #[Test]
-    public function clientCanSourceUploadsWithLimit(): void
+    public function client_can_source_uploads_with_limit(): void
     {
         Queue::fake();
         $file = __DIR__ . '/../aaron.png';
@@ -174,7 +174,7 @@ class MicropubMediaTest extends TestCase
     }
 
     #[Test]
-    public function mediaEndpointUploadRequiresFile(): void
+    public function media_endpoint_upload_requires_file(): void
     {
         $response = $this->post(
             '/api/media',
@@ -190,7 +190,7 @@ class MicropubMediaTest extends TestCase
     }
 
     #[Test]
-    public function errorResponseForUnknownQValue(): void
+    public function error_response_for_unknown_q_value(): void
     {
         $response = $this->get(
             '/api/media?q=unknown',
@@ -201,7 +201,7 @@ class MicropubMediaTest extends TestCase
     }
 
     #[Test]
-    public function optionsRequestReturnsCorsResponse(): void
+    public function options_request_returns_cors_response(): void
     {
         $response = $this->options('/api/media');
 
@@ -210,7 +210,7 @@ class MicropubMediaTest extends TestCase
     }
 
     #[Test]
-    public function mediaEndpointRequestWithInvalidTokenReturns400Response(): void
+    public function media_endpoint_request_with_invalid_token_returns400_response(): void
     {
         $response = $this->post(
             '/api/media',
@@ -222,7 +222,7 @@ class MicropubMediaTest extends TestCase
     }
 
     #[Test]
-    public function mediaEndpointRequestWithTokenWithNoScopeReturns400Response(): void
+    public function media_endpoint_request_with_token_with_no_scope_returns400_response(): void
     {
         $response = $this->post(
             '/api/media',
@@ -234,7 +234,7 @@ class MicropubMediaTest extends TestCase
     }
 
     #[Test]
-    public function mediaEndpointRequestWithInsufficientTokenScopesReturns401Response(): void
+    public function media_endpoint_request_with_insufficient_token_scopes_returns401_response(): void
     {
         $response = $this->post(
             '/api/media',
@@ -248,7 +248,7 @@ class MicropubMediaTest extends TestCase
     }
 
     #[Test]
-    public function mediaEndpointUploadFile(): void
+    public function media_endpoint_upload_file(): void
     {
         Queue::fake();
         $file = __DIR__ . '/../aaron.png';
@@ -271,7 +271,7 @@ class MicropubMediaTest extends TestCase
     }
 
     #[Test]
-    public function mediaEndpointUploadAudioFile(): void
+    public function media_endpoint_upload_audio_file(): void
     {
         Queue::fake();
         $file = __DIR__ . '/../audio.mp3';
@@ -294,7 +294,7 @@ class MicropubMediaTest extends TestCase
     }
 
     #[Test]
-    public function mediaEndpointUploadVideoFile(): void
+    public function media_endpoint_upload_video_file(): void
     {
         Queue::fake();
         $file = __DIR__ . '/../video.ogv';
@@ -317,7 +317,7 @@ class MicropubMediaTest extends TestCase
     }
 
     #[Test]
-    public function mediaEndpointUploadDocumentFile(): void
+    public function media_endpoint_upload_document_file(): void
     {
         Queue::fake();
 
@@ -339,7 +339,7 @@ class MicropubMediaTest extends TestCase
     }
 
     #[Test]
-    public function mediaEndpointUploadInvalidFileReturnsError(): void
+    public function media_endpoint_upload_invalid_file_returns_error(): void
     {
         Queue::fake();
         Storage::fake('local');

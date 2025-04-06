@@ -15,7 +15,7 @@ class MediaTest extends TestCase
     use RefreshDatabase;
 
     #[Test]
-    public function getTheNoteThatMediaInstanceBelongsTo(): void
+    public function get_the_note_that_media_instance_belongs_to(): void
     {
         $media = Media::factory()->for(Note::factory())->create();
 
@@ -23,7 +23,7 @@ class MediaTest extends TestCase
     }
 
     #[Test]
-    public function absoluteUrlsAreReturnedUnmodified(): void
+    public function absolute_urls_are_returned_unmodified(): void
     {
         $absoluteUrl = 'https://instagram-cdn.com/image/uuid';
         $media = new Media;

@@ -10,7 +10,7 @@ use Tests\TestCase;
 class HeaderLinkTest extends TestCase
 {
     #[Test]
-    public function itShouldSeeTheIndiewebRelatedLinkHeaders(): void
+    public function it_should_see_the_indieweb_related_link_headers(): void
     {
         $response = $this->get('/');
 

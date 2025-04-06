@@ -19,7 +19,7 @@ class FeedsTest extends TestCase
      * Test the blog RSS feed.
      */
     #[Test]
-    public function blogRssFeedIsPresent(): void
+    public function blog_rss_feed_is_present(): void
     {
         Article::factory()->count(3)->create();
         $response = $this->get('/blog/feed.rss');
@@ -31,7 +31,7 @@ class FeedsTest extends TestCase
      * Test the notes RSS feed.
      */
     #[Test]
-    public function notesRssFeedIsPresent(): void
+    public function notes_rss_feed_is_present(): void
     {
         Note::factory()->count(3)->create();
         $response = $this->get('/notes/feed.rss');
@@ -43,7 +43,7 @@ class FeedsTest extends TestCase
      * Test the blog RSS feed.
      */
     #[Test]
-    public function blogAtomFeedIsPresent(): void
+    public function blog_atom_feed_is_present(): void
     {
         Article::factory()->count(3)->create();
         $response = $this->get('/blog/feed.atom');
@@ -52,7 +52,7 @@ class FeedsTest extends TestCase
     }
 
     #[Test]
-    public function blogJf2FeedIsPresent(): void
+    public function blog_jf2_feed_is_present(): void
     {
         Article::factory()->count(3)->create();
         $response = $this->get('/blog/feed.jf2');
@@ -77,7 +77,7 @@ class FeedsTest extends TestCase
      * Test the notes RSS feed.
      */
     #[Test]
-    public function notesAtomFeedIsPresent(): void
+    public function notes_atom_feed_is_present(): void
     {
         Note::factory()->count(3)->create();
         $response = $this->get('/notes/feed.atom');
@@ -89,7 +89,7 @@ class FeedsTest extends TestCase
      * Test the blog JSON feed.
      */
     #[Test]
-    public function blogJsonFeedIsPresent(): void
+    public function blog_json_feed_is_present(): void
     {
         Article::factory()->count(3)->create();
         $response = $this->get('/blog/feed.json');
@@ -101,7 +101,7 @@ class FeedsTest extends TestCase
      * Test the notes JSON feed.
      */
     #[Test]
-    public function notesJsonFeedIsPresent(): void
+    public function notes_json_feed_is_present(): void
     {
         Note::factory()->count(3)->create();
         $response = $this->get('/notes/feed.json');
@@ -110,7 +110,7 @@ class FeedsTest extends TestCase
     }
 
     #[Test]
-    public function notesJf2FeedIsPresent(): void
+    public function notes_jf2_feed_is_present(): void
     {
         Note::factory()->count(3)->create();
         $response = $this->get('/notes/feed.jf2');
@@ -136,7 +136,7 @@ class FeedsTest extends TestCase
      * and whichever one they have can’t be `null`.
      */
     #[Test]
-    public function jsonFeedsHaveRequiredAttributes(): void
+    public function json_feeds_have_required_attributes(): void
     {
         Note::factory()->count(3)->create();
         $response = $this->get('/notes/feed.json');
@@ -156,7 +156,7 @@ class FeedsTest extends TestCase
     }
 
     #[Test]
-    public function jsonNoteFeedLoadsPlaceDataWithoutLazyLoading(): void
+    public function json_note_feed_loads_place_data_without_lazy_loading(): void
     {
         $place = Place::factory()->create();
         Note::factory()->create(['note' => null, 'place_id' => $place->id]);
