@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use ParagonIE\ConstantTime\Base64UrlSafe;
+use Random\RandomException;
 use Throwable;
 use Webauthn\AttestationStatement\AttestationStatementSupportManager;
 use Webauthn\AttestationStatement\NoneAttestationStatementSupport;
@@ -52,22 +53,26 @@ class PasskeysController extends Controller
         return view('admin.passkeys.index', compact('passkeys'));
     }
 
-    public function getCreateOptions(): JsonResponse
+    /**
+     * @throws RandomException
+     * @throws \JsonException
+     */
+    public function getCreateOptions(Request $request): JsonResponse
     {
         /** @var User $user */
         $user = auth()->user();
 
         // RP Entity i.e. the application
         $rpEntity = PublicKeyCredentialRpEntity::create(
-            config('app.name'),
-            config('app.url'),
+            name: config('app.name'),
+            id: config('app.url'),
         );
 
         // User Entity
         $userEntity = PublicKeyCredentialUserEntity::create(
-            $user->name,
-            (string) $user->id,
-            $user->name,
+            name: $user->name,
+            id: (string) $user->id,
+            displayName: $user->name,
         );
 
         // Challenge
@@ -85,25 +90,38 @@ class PasskeysController extends Controller
         $authenticatorSelectionCriteria = AuthenticatorSelectionCriteria::create(
             userVerification: AuthenticatorSelectionCriteria::USER_VERIFICATION_REQUIREMENT_REQUIRED,
             residentKey: AuthenticatorSelectionCriteria::RESIDENT_KEY_REQUIREMENT_REQUIRED,
-            requireResidentKey: true,
         );
 
-        $options = PublicKeyCredentialCreationOptions::create(
-            $rpEntity,
-            $userEntity,
-            $challenge,
-            $pubKeyCredParams,
+        $publicKeyCredentialCreationOptions = PublicKeyCredentialCreationOptions::create(
+            rp: $rpEntity,
+            user: $userEntity,
+            challenge: $challenge,
+            pubKeyCredParams: $pubKeyCredParams,
             authenticatorSelection: $authenticatorSelectionCriteria,
             attestation: PublicKeyCredentialCreationOptions::ATTESTATION_CONVEYANCE_PREFERENCE_NONE
         );
 
-        $options = json_encode($options, JSON_THROW_ON_ERROR);
+        $attestationStatementSupportManager = new AttestationStatementSupportManager;
+        $attestationStatementSupportManager->add(new NoneAttestationStatementSupport);
+        $webauthnSerializerFactory = new WebauthnSerializerFactory(
+            attestationStatementSupportManager: $attestationStatementSupportManager
+        );
+        $webauthnSerializer = $webauthnSerializerFactory->create();
+        $publicKeyCredentialCreationOptions = $webauthnSerializer->serialize(
+            data: $publicKeyCredentialCreationOptions,
+            format: 'json'
+        );
 
-        session(['create_options' => $options]);
+        $request->session()->put('create_options', $publicKeyCredentialCreationOptions);
 
-        return JsonResponse::fromJsonString($options);
+        return JsonResponse::fromJsonString($publicKeyCredentialCreationOptions);
     }
 
+    /**
+     * @throws Throwable
+     * @throws WebauthnException
+     * @throws \JsonException
+     */
     public function create(Request $request): JsonResponse
     {
         /** @var User $user */
@@ -111,17 +129,17 @@ class PasskeysController extends Controller
 
         $publicKeyCredentialCreationOptionsData = session('create_options');
         // Unset session data to mitigate replay attacks
-        session()->forget('create_options');
+        $request->session()->forget('create_options');
         if (empty($publicKeyCredentialCreationOptionsData)) {
             throw new WebAuthnException('No public key credential request options found');
         }
 
         $attestationStatementSupportManager = new AttestationStatementSupportManager;
         $attestationStatementSupportManager->add(new NoneAttestationStatementSupport);
-
-        $webauthnSerializer = (new WebauthnSerializerFactory(
-            $attestationStatementSupportManager
-        ))->create();
+        $webauthnSerializerFactory = new WebauthnSerializerFactory(
+            attestationStatementSupportManager: $attestationStatementSupportManager
+        );
+        $webauthnSerializer = $webauthnSerializerFactory->create();
 
         $publicKeyCredential = $webauthnSerializer->deserialize(
             json_encode($request->all(), JSON_THROW_ON_ERROR),
@@ -146,11 +164,11 @@ class PasskeysController extends Controller
         $ceremonyStepManagerFactory->setExtensionOutputCheckerHandler(
             ExtensionOutputCheckerHandler::create()
         );
-        $securedRelyingPartyId = [];
+        $allowedOrigins = [];
         if (App::environment('local', 'development')) {
-            $securedRelyingPartyId = [config('app.url')];
+            $allowedOrigins = [config('app.url')];
         }
-        $ceremonyStepManagerFactory->setSecuredRelyingPartyId($securedRelyingPartyId);
+        $ceremonyStepManagerFactory->setAllowedOrigins($allowedOrigins);
 
         $authenticatorAttestationResponseValidator = AuthenticatorAttestationResponseValidator::create(
             ceremonyStepManager: $ceremonyStepManagerFactory->creationCeremony()
@@ -165,8 +183,7 @@ class PasskeysController extends Controller
         $publicKeyCredentialSource = $authenticatorAttestationResponseValidator->check(
             authenticatorAttestationResponse: $publicKeyCredential->response,
             publicKeyCredentialCreationOptions: $publicKeyCredentialCreationOptions,
-            request: config('app.url'),
-            securedRelyingPartyId: $securedRelyingPartyId,
+            host: config('app.url')
         );
 
         $user->passkey()->create([
@@ -180,24 +197,37 @@ class PasskeysController extends Controller
         ]);
     }
 
-    public function getRequestOptions(): JsonResponse
+    /**
+     * @throws RandomException
+     * @throws \JsonException
+     */
+    public function getRequestOptions(Request $request): JsonResponse
     {
         $publicKeyCredentialRequestOptions = PublicKeyCredentialRequestOptions::create(
             challenge: random_bytes(16),
             userVerification: PublicKeyCredentialRequestOptions::USER_VERIFICATION_REQUIREMENT_REQUIRED
         );
 
-        $publicKeyCredentialRequestOptions = json_encode($publicKeyCredentialRequestOptions, JSON_THROW_ON_ERROR);
+        $attestationStatementSupportManager = AttestationStatementSupportManager::create();
+        $attestationStatementSupportManager->add(NoneAttestationStatementSupport::create());
+        $factory = new WebauthnSerializerFactory(
+            attestationStatementSupportManager: $attestationStatementSupportManager
+        );
+        $serializer = $factory->create();
+        $publicKeyCredentialRequestOptions = $serializer->serialize(data: $publicKeyCredentialRequestOptions, format: 'json');
 
-        session(['request_options' => $publicKeyCredentialRequestOptions]);
+        $request->session()->put('request_options', $publicKeyCredentialRequestOptions);
 
         return JsonResponse::fromJsonString($publicKeyCredentialRequestOptions);
     }
 
+    /**
+     * @throws \JsonException
+     */
     public function login(Request $request): JsonResponse
     {
         $requestOptions = session('request_options');
-        session()->forget('request_options');
+        $request->session()->forget('request_options');
 
         if (empty($requestOptions)) {
             return response()->json([
@@ -209,9 +239,10 @@ class PasskeysController extends Controller
         $attestationStatementSupportManager = new AttestationStatementSupportManager;
         $attestationStatementSupportManager->add(new NoneAttestationStatementSupport);
 
-        $webauthnSerializer = (new WebauthnSerializerFactory(
-            $attestationStatementSupportManager
-        ))->create();
+        $webauthnSerializerFactory = new WebauthnSerializerFactory(
+            attestationStatementSupportManager: $attestationStatementSupportManager
+        );
+        $webauthnSerializer = $webauthnSerializerFactory->create();
 
         $publicKeyCredential = $webauthnSerializer->deserialize(
             json_encode($request->all(), JSON_THROW_ON_ERROR),
@@ -256,11 +287,11 @@ class PasskeysController extends Controller
         $ceremonyStepManagerFactory->setExtensionOutputCheckerHandler(
             ExtensionOutputCheckerHandler::create()
         );
-        $securedRelyingPartyId = [];
+        $allowedOrigins = [];
         if (App::environment('local', 'development')) {
-            $securedRelyingPartyId = [config('app.url')];
+            $allowedOrigins = [config('app.url')];
         }
-        $ceremonyStepManagerFactory->setSecuredRelyingPartyId($securedRelyingPartyId);
+        $ceremonyStepManagerFactory->setAllowedOrigins($allowedOrigins);
 
         $authenticatorAssertionResponseValidator = AuthenticatorAssertionResponseValidator::create(
             ceremonyStepManager: $ceremonyStepManagerFactory->requestCeremony()
@@ -274,12 +305,11 @@ class PasskeysController extends Controller
 
         try {
             $authenticatorAssertionResponseValidator->check(
-                credentialId: $publicKeyCredentialSource,
+                publicKeyCredentialSource: $publicKeyCredentialSource,
                 authenticatorAssertionResponse: $publicKeyCredential->response,
                 publicKeyCredentialRequestOptions: $publicKeyCredentialRequestOptions,
-                request: config('app.url'),
+                host: config('app.url'),
                 userHandle: null,
-                securedRelyingPartyId: $securedRelyingPartyId,
             );
         } catch (Throwable) {
             return response()->json([
