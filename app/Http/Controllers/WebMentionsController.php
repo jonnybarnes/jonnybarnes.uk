@@ -12,9 +12,6 @@ use Illuminate\Http\Response;
 use Illuminate\View\View;
 use Jonnybarnes\IndieWeb\Numbers;
 
-/**
- * @psalm-suppress UnusedClass
- */
 class WebMentionsController extends Controller
 {
     /**

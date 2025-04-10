@@ -10,8 +10,6 @@ class ContactsTableSeeder extends Seeder
 {
     /**
      * Seed the contacts table.
-     *
-     * @psalm-suppress PossiblyUnusedMethod
      */
     public function run(): void
     {

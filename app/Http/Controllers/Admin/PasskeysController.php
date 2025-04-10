@@ -39,9 +39,6 @@ use Webauthn\PublicKeyCredentialRpEntity;
 use Webauthn\PublicKeyCredentialSource;
 use Webauthn\PublicKeyCredentialUserEntity;
 
-/**
- * @psalm-suppress UnusedClass
- */
 class PasskeysController extends Controller
 {
     public function index(): View

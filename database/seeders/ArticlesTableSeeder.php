@@ -11,8 +11,6 @@ class ArticlesTableSeeder extends Seeder
 {
     /**
      * Seed the articles table.
-     *
-     * @psalm-suppress PossiblyUnusedMethod
      */
     public function run(): void
     {

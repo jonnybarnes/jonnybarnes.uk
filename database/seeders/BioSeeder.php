@@ -5,9 +5,6 @@ namespace Database\Seeders;
 use App\Models\Bio;
 use Illuminate\Database\Seeder;
 
-/**
- * @psalm-suppress UnusedClass
- */
 class BioSeeder extends Seeder
 {
     /**

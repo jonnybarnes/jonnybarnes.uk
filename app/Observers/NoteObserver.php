@@ -9,15 +9,10 @@ use App\Models\Tag;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 
-/**
- * @todo Do we need psalm-suppress for these observer methods?
- */
 class NoteObserver
 {
     /**
-     * Listen to the Note created event.
-     *
-     * @psalm-suppress PossiblyUnusedMethod
+     * Listen to the Note created event.=
      */
     public function created(Note $note): void
     {
@@ -39,9 +34,7 @@ class NoteObserver
     }
 
     /**
-     * Listen to the Note updated event.
-     *
-     * @psalm-suppress PossiblyUnusedMethod
+     * Listen to the Note updated event.=
      */
     public function updated(Note $note): void
     {
@@ -65,9 +58,7 @@ class NoteObserver
     }
 
     /**
-     * Listen to the Note deleting event.
-     *
-     * @psalm-suppress PossiblyUnusedMethod
+     * Listen to the Note deleting event.=
      */
     public function deleting(Note $note): void
     {
