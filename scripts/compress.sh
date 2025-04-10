@@ -16,6 +16,6 @@ if ! (( $+commands[zstd] )) &> /dev/null; then
 fi
 
 # Make .br files
-fd --extension css --extension js --extension map --search-path ./public/assets --type f --exec brotli --force --best --output={}.br {}
+fd --extension css --extension js --search-path ./public/assets --type f --exec brotli --force --best --output={}.br {}
 # Make .zst files
-fd --extension css --extension js --extension map --search-path ./public/assets --type f --exec zstd --quiet --force --ultra -22 --exclude-compressed {} -o {}.zst
+fd --extension css --extension js --search-path ./public/assets --type f --exec zstd --quiet --force --ultra -22 --exclude-compressed {} -o {}.zst

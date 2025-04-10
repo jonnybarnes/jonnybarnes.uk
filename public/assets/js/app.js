@@ -1,15 +1,2 @@
-import { Auth } from './auth.js';
-
-let auth = new Auth();
-
-document.querySelectorAll('.add-passkey').forEach((el) => {
-  el.addEventListener('click', () => {
-    auth.register();
-  });
-});
-
-document.querySelectorAll('.login-passkey').forEach((el) => {
-  el.addEventListener('click', () => {
-    auth.login();
-  });
-});
+(()=>{var i=class{constructor(){}async register(){let n=await this.getCreateOptions(),e={challenge:this.base64URLStringToBuffer(n.challenge),rp:{id:n.rp.id,name:n.rp.name},user:{id:new TextEncoder().encode(window.atob(n.user.id)),name:n.user.name,displayName:n.user.displayName},pubKeyCredParams:n.pubKeyCredParams,excludeCredentials:[],authenticatorSelection:n.authenticatorSelection,timeout:6e4},t=await navigator.credentials.create({publicKey:e});if(!t)throw new Error("Error generating a passkey");let r={id:t.id?t.id:null,type:t.type?t.type:null,rawId:t.rawId?this.bufferToBase64URLString(t.rawId):null,response:{attestationObject:t.response.attestationObject?this.bufferToBase64URLString(t.response.attestationObject):null,clientDataJSON:t.response.clientDataJSON?this.bufferToBase64URLString(t.response.clientDataJSON):null}};if(!(await window.fetch("/admin/passkeys/register",{method:"POST",body:JSON.stringify(r),cache:"no-cache",headers:{"Content-Type":"application/json","X-CSRF-TOKEN":document.querySelector('meta[name="csrf-token"]').getAttribute("content")}})).ok)throw new Error("Error saving the passkey");window.location.reload()}async getCreateOptions(){return await(await fetch("/admin/passkeys/register",{method:"GET"})).json()}async login(){let n=await this.getLoginData(),e=await navigator.credentials.get({publicKey:{challenge:this.base64URLStringToBuffer(n.challenge),userVerification:n.userVerification,timeout:6e4}});if(!e)throw new Error("Authentication failed");let t={id:e.id?e.id:"",type:e.type?e.type:"",rawId:e.rawId?this.bufferToBase64URLString(e.rawId):"",response:{authenticatorData:e.response.authenticatorData?this.bufferToBase64URLString(e.response.authenticatorData):"",clientDataJSON:e.response.clientDataJSON?this.bufferToBase64URLString(e.response.clientDataJSON):"",signature:e.response.signature?this.bufferToBase64URLString(e.response.signature):"",userHandle:e.response.userHandle?this.bufferToBase64URLString(e.response.userHandle):""}};if(!(await window.fetch("/login/passkey",{method:"POST",body:JSON.stringify(t),headers:{"Content-Type":"application/json","X-CSRF-TOKEN":document.querySelector('meta[name="csrf-token"]').getAttribute("content")}})).ok)throw new Error("Login failed");window.location.assign("/admin")}async getLoginData(){return await(await fetch("/login/passkey",{method:"GET"})).json()}base64URLStringToBuffer(n){let e=n.replace(/-/g,"+").replace(/_/g,"/"),t=(4-e.length%4)%4,r=e.padEnd(e.length+t,"="),a=window.atob(r),c=new ArrayBuffer(a.length),d=new Uint8Array(c);for(let o=0;o<a.length;o++)d[o]=a.charCodeAt(o);return c}bufferToBase64URLString(n){let e=new Uint8Array(n),t="";for(let a of e)t+=String.fromCharCode(a);return btoa(t).replace(/\+/g,"-").replace(/\//g,"_").replace(/=/g,"")}};var l=new i;document.querySelectorAll(".add-passkey").forEach(s=>{s.addEventListener("click",()=>{l.register()})});document.querySelectorAll(".login-passkey").forEach(s=>{s.addEventListener("click",()=>{l.login()})});})();
+//# sourceMappingURL=app.js.map
