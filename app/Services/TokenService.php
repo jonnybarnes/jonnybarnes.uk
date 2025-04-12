@@ -7,7 +7,6 @@ namespace App\Services;
 use App\Jobs\AddClientToDatabase;
 use DateTimeImmutable;
 use Lcobucci\JWT\Configuration;
-use Lcobucci\JWT\Token;
 
 class TokenService
 {
@@ -29,21 +28,5 @@ class TokenService
         dispatch(new AddClientToDatabase($data['client_id']));
 
         return $token->toString();
-    }
-
-    /**
-     * Check the token signature is valid.
-     */
-    public function validateToken(string $bearerToken): Token
-    {
-        $config = resolve('Lcobucci\JWT\Configuration');
-
-        $token = $config->parser()->parse($bearerToken);
-
-        $constraints = $config->validationConstraints();
-
-        $config->validator()->assert($token, ...$constraints);
-
-        return $token;
     }
 }
