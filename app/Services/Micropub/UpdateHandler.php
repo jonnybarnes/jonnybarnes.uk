@@ -4,21 +4,33 @@ declare(strict_types=1);
 
 namespace App\Services\Micropub;
 
+use App\Exceptions\InvalidTokenScopeException;
 use App\Models\Media;
 use App\Models\Note;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
-class UpdateService
+/*
+ * @todo Implement this properly
+ */
+class UpdateHandler implements MicropubHandlerInterface
 {
     /**
-     * Process a micropub request to update an entry.
+     * @throws InvalidTokenScopeException
      */
-    public function process(array $request): JsonResponse
+    public function handle(array $data)
     {
-        $urlPath = parse_url(Arr::get($request, 'url'), PHP_URL_PATH);
+        $scopes = $data['token_data']['scope'];
+        if (is_string($scopes)) {
+            $scopes = explode(' ', $scopes);
+        }
+
+        if (! in_array('update', $scopes, true)) {
+            throw new InvalidTokenScopeException;
+        }
+
+        $urlPath = parse_url(Arr::get($data, 'url'), PHP_URL_PATH);
 
         // is it a note we are updating?
         if (mb_substr($urlPath, 1, 5) !== 'notes') {
@@ -30,7 +42,7 @@ class UpdateService
 
         try {
             $note = Note::nb60(basename($urlPath))->firstOrFail();
-        } catch (ModelNotFoundException $exception) {
+        } catch (ModelNotFoundException) {
             return response()->json([
                 'error' => 'invalid_request',
                 'error_description' => 'No known note with given ID',
@@ -38,8 +50,8 @@ class UpdateService
         }
 
         // got the note, are we dealing with a “replace” request?
-        if (Arr::get($request, 'replace')) {
-            foreach (Arr::get($request, 'replace') as $property => $value) {
+        if (Arr::get($data, 'replace')) {
+            foreach (Arr::get($data, 'replace') as $property => $value) {
                 if ($property === 'content') {
                     $note->note = $value[0];
                 }
@@ -59,14 +71,14 @@ class UpdateService
             }
             $note->save();
 
-            return response()->json([
+            return [
                 'response' => 'updated',
-            ]);
+            ];
         }
 
         // how about “add”
-        if (Arr::get($request, 'add')) {
-            foreach (Arr::get($request, 'add') as $property => $value) {
+        if (Arr::get($data, 'add')) {
+            foreach (Arr::get($data, 'add') as $property => $value) {
                 if ($property === 'syndication') {
                     foreach ($value as $syndicationURL) {
                         if (Str::startsWith($syndicationURL, 'https://www.facebook.com')) {

@@ -25,6 +25,7 @@ use App\Http\Controllers\PlacesController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\WebMentionsController;
 use App\Http\Middleware\CorsHeaders;
+use App\Http\Middleware\LogMicropubRequest;
 use App\Http\Middleware\MyAuthMiddleware;
 use App\Http\Middleware\VerifyMicropubToken;
 use Illuminate\Support\Facades\Route;
@@ -197,7 +198,9 @@ Route::post('token', [IndieAuthController::class, 'processTokenRequest'])->name(
 
 // Micropub Endpoints
 Route::get('api/post', [MicropubController::class, 'get'])->middleware(VerifyMicropubToken::class);
-Route::post('api/post', [MicropubController::class, 'post'])->middleware(VerifyMicropubToken::class)->name('micropub-endpoint');
+Route::post('api/post', [MicropubController::class, 'post'])
+    ->middleware([LogMicropubRequest::class, VerifyMicropubToken::class])
+    ->name('micropub-endpoint');
 Route::get('api/media', [MicropubMediaController::class, 'getHandler'])->middleware(VerifyMicropubToken::class);
 Route::post('api/media', [MicropubMediaController::class, 'media'])
     ->middleware([VerifyMicropubToken::class, CorsHeaders::class])

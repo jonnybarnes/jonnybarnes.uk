@@ -4,103 +4,73 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Http\Responses\MicropubResponses;
+use App\Exceptions\InvalidTokenScopeException;
+use App\Exceptions\MicropubHandlerException;
+use App\Http\Requests\MicropubRequest;
 use App\Models\Place;
 use App\Models\SyndicationTarget;
-use App\Services\Micropub\HCardService;
-use App\Services\Micropub\HEntryService;
-use App\Services\Micropub\UpdateService;
+use App\Services\Micropub\MicropubHandlerRegistry;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Lcobucci\JWT\Token;
-use Monolog\Handler\StreamHandler;
-use Monolog\Logger;
 
 class MicropubController extends Controller
 {
-    protected HEntryService $hentryService;
+    protected MicropubHandlerRegistry $handlerRegistry;
 
-    protected HCardService $hcardService;
-
-    protected UpdateService $updateService;
-
-    public function __construct(
-        HEntryService $hentryService,
-        HCardService $hcardService,
-        UpdateService $updateService
-    ) {
-        $this->hentryService = $hentryService;
-        $this->hcardService = $hcardService;
-        $this->updateService = $updateService;
+    public function __construct(MicropubHandlerRegistry $handlerRegistry)
+    {
+        $this->handlerRegistry = $handlerRegistry;
     }
 
     /**
-     * This function receives an API request, verifies the authenticity
-     * then passes over the info to the relevant Service class.
+     * Respond to a POST request to the micropub endpoint.
+     *
+     * The request is initially processed by the MicropubRequest form request
+     * class. The normalizes the data, so we can pass it into the handlers for
+     * the different micropub requests, h-entry or h-card, for example.
      */
-    public function post(Request $request): JsonResponse
+    public function post(MicropubRequest $request): JsonResponse
     {
-        $this->logMicropubRequest($request->except('token_data'));
+        $type = $request->getType();
 
-        /** @var Token $tokenData */
-        $tokenData = $request->input('token_data');
-
-        if (($request->input('h') === 'entry') || ($request->input('type.0') === 'h-entry')) {
-            $scopes = $tokenData['scope'];
-            if (is_string($scopes)) {
-                $scopes = explode(' ', $scopes);
-            }
-
-            if (! in_array('create', $scopes, true)) {
-                $micropubResponses = new MicropubResponses;
-
-                return $micropubResponses->insufficientScopeResponse();
-            }
-
-            $location = $this->hentryService->process($request->all(), $tokenData['client_id']);
-
+        if (! $type) {
             return response()->json([
-                'response' => 'created',
-                'location' => $location,
-            ], 201)->header('Location', $location);
+                'error' => 'invalid_request',
+                'error_description' => 'Microformat object type is missing, for example: h-entry or h-card',
+            ], 400);
         }
 
-        if ($request->input('h') === 'card' || $request->input('type.0') === 'h-card') {
-            $scopes = $tokenData['scope'];
-            if (is_string($scopes)) {
-                $scopes = explode(' ', $scopes);
-            }
-            if (! in_array('create', $scopes)) {
-                $micropubResponses = new MicropubResponses;
+        try {
+            $handler = $this->handlerRegistry->getHandler($type);
+            $result = $handler->handle($request->getMicropubData());
 
-                return $micropubResponses->insufficientScopeResponse();
-            }
-            $location = $this->hcardService->process($request->all());
-
+            // Return appropriate response based on the handler result
             return response()->json([
-                'response' => 'created',
-                'location' => $location,
-            ], 201)->header('Location', $location);
+                'response' => $result['response'],
+                'location' => $result['url'] ?? null,
+            ], 201)->header('Location', $result['url']);
+        } catch (\InvalidArgumentException $e) {
+            return response()->json([
+                'error' => 'invalid_request',
+                'error_description' => $e->getMessage(),
+            ], 400);
+        } catch (MicropubHandlerException) {
+            return response()->json([
+                'error' => 'Unknown Micropub type',
+                'error_description' => 'The request could not be processed by this server',
+            ], 500);
+        } catch (InvalidTokenScopeException) {
+            return response()->json([
+                'error' => 'invalid_scope',
+                'error_description' => 'The token does not have the required scope for this request',
+            ], 403);
+        } catch (\Exception) {
+            return response()->json([
+                'error' => 'server_error',
+                'error_description' => 'An error occurred processing the request',
+            ], 500);
         }
-
-        if ($request->input('action') === 'update') {
-            $scopes = $tokenData['scope'];
-            if (is_string($scopes)) {
-                $scopes = explode(' ', $scopes);
-            }
-            if (! in_array('update', $scopes)) {
-                $micropubResponses = new MicropubResponses;
-
-                return $micropubResponses->insufficientScopeResponse();
-            }
-
-            return $this->updateService->process($request->all());
-        }
-
-        return response()->json([
-            'response' => 'error',
-            'error_description' => 'unsupported_request_type',
-        ], 500);
     }
 
     /**
@@ -144,9 +114,10 @@ class MicropubController extends Controller
             ]);
         }
 
-        // default response is just to return the token data
+        // the default response is just to return the token data
         /** @var Token $tokenData */
         $tokenData = $request->input('token_data');
+
         return response()->json([
             'response' => 'token',
             'token' => [
@@ -155,15 +126,5 @@ class MicropubController extends Controller
                 'client_id' => $tokenData['client_id'],
             ],
         ]);
-    }
-
-    /**
-     * Save the details of the micropub request to a log file.
-     */
-    private function logMicropubRequest(array $request): void
-    {
-        $logger = new Logger('micropub');
-        $logger->pushHandler(new StreamHandler(storage_path('logs/micropub.log')));
-        $logger->debug('MicropubLog', $request);
     }
 }

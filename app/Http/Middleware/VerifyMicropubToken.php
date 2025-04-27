@@ -7,19 +7,19 @@ namespace App\Http\Middleware;
 use App\Http\Responses\MicropubResponses;
 use Closure;
 use Illuminate\Http\Request;
+use Lcobucci\JWT\Configuration;
 use Lcobucci\JWT\Encoding\CannotDecodeContent;
 use Lcobucci\JWT\Token;
 use Lcobucci\JWT\Token\InvalidTokenStructure;
 use Lcobucci\JWT\Validation\RequiredConstraintsViolated;
 use Symfony\Component\HttpFoundation\Response;
-use Lcobucci\JWT\Configuration;
 
 class VerifyMicropubToken
 {
     /**
      * Handle an incoming request.
      *
-     * @param Closure(Request): (Response) $next
+     * @param  Closure(Request): (Response)  $next
      */
     public function handle(Request $request, Closure $next): Response
     {

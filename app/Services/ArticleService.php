@@ -6,13 +6,13 @@ namespace App\Services;
 
 use App\Models\Article;
 
-class ArticleService extends Service
+class ArticleService
 {
-    public function create(array $request, ?string $client = null): Article
+    public function create(array $data): Article
     {
         return Article::create([
-            'title' => $this->getDataByKey($request, 'name'),
-            'main' => $this->getDataByKey($request, 'content'),
+            'title' => $data['name'],
+            'main' => $data['content'],
             'published' => true,
         ]);
     }

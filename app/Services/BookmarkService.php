@@ -10,28 +10,29 @@ use App\Models\Bookmark;
 use App\Models\Tag;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
-class BookmarkService extends Service
+class BookmarkService
 {
     /**
      * Create a new Bookmark.
      */
-    public function create(array $request, ?string $client = null): Bookmark
+    public function create(array $data): Bookmark
     {
-        if (Arr::get($request, 'properties.bookmark-of.0')) {
+        if (Arr::get($data, 'properties.bookmark-of.0')) {
             // micropub request
-            $url = normalize_url(Arr::get($request, 'properties.bookmark-of.0'));
-            $name = Arr::get($request, 'properties.name.0');
-            $content = Arr::get($request, 'properties.content.0');
-            $categories = Arr::get($request, 'properties.category');
+            $url = normalize_url(Arr::get($data, 'properties.bookmark-of.0'));
+            $name = Arr::get($data, 'properties.name.0');
+            $content = Arr::get($data, 'properties.content.0');
+            $categories = Arr::get($data, 'properties.category');
         }
-        if (Arr::get($request, 'bookmark-of')) {
-            $url = normalize_url(Arr::get($request, 'bookmark-of'));
-            $name = Arr::get($request, 'name');
-            $content = Arr::get($request, 'content');
-            $categories = Arr::get($request, 'category');
+        if (Arr::get($data, 'bookmark-of')) {
+            $url = normalize_url(Arr::get($data, 'bookmark-of'));
+            $name = Arr::get($data, 'name');
+            $content = Arr::get($data, 'content');
+            $categories = Arr::get($data, 'category');
         }
 
         $bookmark = Bookmark::create([
@@ -54,6 +55,7 @@ class BookmarkService extends Service
      * Given a URL, attempt to save it to the Internet Archive.
      *
      * @throws InternetArchiveException
+     * @throws GuzzleException
      */
     public function getArchiveLink(string $url): string
     {
