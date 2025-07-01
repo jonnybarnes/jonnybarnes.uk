@@ -34,7 +34,7 @@ class ProcessWebMentionJobTest extends TestCase
     }
 
     #[Test]
-    public function failureGettingWebmentionThrowsAnException(): void
+    public function failure_getting_webmention_throws_an_exception(): void
     {
         $this->expectException(RemoteContentNotFoundException::class);
 
@@ -53,7 +53,7 @@ class ProcessWebMentionJobTest extends TestCase
     }
 
     #[Test]
-    public function newWebmentionGetsSavedByJob(): void
+    public function new_webmention_gets_saved_by_job(): void
     {
         Queue::fake();
 
@@ -85,7 +85,7 @@ class ProcessWebMentionJobTest extends TestCase
     }
 
     #[Test]
-    public function existingWebmentionGetsUpdatedByJob(): void
+    public function existing_webmention_gets_updated_by_job(): void
     {
         Queue::fake();
 
@@ -94,12 +94,12 @@ class ProcessWebMentionJobTest extends TestCase
         $source = 'https://aaronpk.localhost/reply/1';
         WebMention::factory()->create([
             'source' => $source,
-            'target' => $note->longurl,
+            'target' => $note->uri,
         ]);
 
         $html = <<<HTML
         <div class="h-entry">
-            <p>In reply to <a class="u-in-reply-to" href="{$note->longurl}">a note</a></p>
+            <p>In reply to <a class="u-in-reply-to" href="{$note->uri}">a note</a></p>
             <div class="e-content">Updated reply</div>
         </div>
         HTML;
@@ -117,12 +117,12 @@ class ProcessWebMentionJobTest extends TestCase
             'source' => $source,
             'type' => 'in-reply-to',
             // phpcs:ignore Generic.Files.LineLength.TooLong
-            'mf2' => '{"rels": [], "items": [{"type": ["h-entry"], "properties": {"content": [{"html": "Updated reply", "value": "Updated reply"}], "in-reply-to": ["' . $note->longurl . '"]}}], "rel-urls": []}',
+            'mf2' => '{"rels": [], "items": [{"type": ["h-entry"], "properties": {"content": [{"html": "Updated reply", "value": "Updated reply"}], "in-reply-to": ["' . $note->uri . '"]}}], "rel-urls": []}',
         ]);
     }
 
     #[Test]
-    public function webmentionReplyGetsDeletedWhenReplyToValueChanges(): void
+    public function webmention_reply_gets_deleted_when_reply_to_value_changes(): void
     {
         $parser = new Parser;
 
@@ -159,7 +159,7 @@ class ProcessWebMentionJobTest extends TestCase
     }
 
     #[Test]
-    public function webmentionLikeGetsDeletedWhenLikeOfValueChanges(): void
+    public function webmention_like_gets_deleted_when_like_of_value_changes(): void
     {
         $parser = new Parser;
 
@@ -196,7 +196,7 @@ class ProcessWebMentionJobTest extends TestCase
     }
 
     #[Test]
-    public function webmentionRepostGetsDeletedWhenRepostOfValueChanges(): void
+    public function webmention_repost_gets_deleted_when_repost_of_value_changes(): void
     {
         $parser = new Parser;
 

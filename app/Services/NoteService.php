@@ -14,49 +14,52 @@ use App\Models\SyndicationTarget;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
-class NoteService extends Service
+class NoteService
 {
     /**
      * Create a new note.
      */
-    public function create(array $request, ?string $client = null): Note
+    public function create(array $data): Note
     {
+        // Get the content we want to save
+        if (is_string($data['content'])) {
+            $content = $data['content'];
+        } elseif (isset($data['content']['html'])) {
+            $content = $data['content']['html'];
+        } else {
+            $content = null;
+        }
+
         $note = Note::create(
             [
-                'note' => $this->getDataByKey($request, 'content'),
-                'in_reply_to' => $this->getDataByKey($request, 'in-reply-to'),
-                'client_id' => $client,
+                'note' => $content,
+                'in_reply_to' => $data['in-reply-to'],
+                'client_id' => $data['token_data']['client_id'],
             ]
         );
 
-        if ($this->getPublished($request)) {
-            $note->created_at = $note->updated_at = $this->getPublished($request);
+        if ($published = $this->getPublished($data)) {
+            $note->created_at = $note->updated_at = $published;
         }
 
-        $note->location = $this->getLocation($request);
+        $note->location = $this->getLocation($data);
 
-        if ($this->getCheckin($request)) {
-            $note->place()->associate($this->getCheckin($request));
-            $note->swarm_url = $this->getSwarmUrl($request);
+        if ($this->getCheckin($data)) {
+            $note->place()->associate($this->getCheckin($data));
+            $note->swarm_url = $this->getSwarmUrl($data);
         }
-
-        $note->instagram_url = $this->getInstagramUrl($request);
-
-        foreach ($this->getMedia($request) as $media) {
-            $note->media()->save($media);
-        }
+        //
+        //        $note->instagram_url = $this->getInstagramUrl($request);
+        //
+        //        foreach ($this->getMedia($request) as $media) {
+        //            $note->media()->save($media);
+        //        }
 
         $note->save();
 
         dispatch(new SendWebMentions($note));
 
-        if (in_array('mastodon', $this->getSyndicationTargets($request), true)) {
-            dispatch(new SyndicateNoteToMastodon($note));
-        }
-
-        if (in_array('bluesky', $this->getSyndicationTargets($request), true)) {
-            dispatch(new SyndicateNoteToBluesky($note));
-        }
+        $this->dispatchSyndicationJobs($note, $data);
 
         return $note;
     }
@@ -64,14 +67,10 @@ class NoteService extends Service
     /**
      * Get the published time from the request to create a new note.
      */
-    private function getPublished(array $request): ?string
+    private function getPublished(array $data): ?string
     {
-        if (Arr::get($request, 'properties.published.0')) {
-            return carbon(Arr::get($request, 'properties.published.0'))
-                ->toDateTimeString();
-        }
-        if (Arr::get($request, 'published')) {
-            return carbon(Arr::get($request, 'published'))->toDateTimeString();
+        if ($data['published']) {
+            return carbon($data['published'])->toDateTimeString();
         }
 
         return null;
@@ -80,12 +79,13 @@ class NoteService extends Service
     /**
      * Get the location data from the request to create a new note.
      */
-    private function getLocation(array $request): ?string
+    private function getLocation(array $data): ?string
     {
-        $location = Arr::get($request, 'properties.location.0') ?? Arr::get($request, 'location');
+        $location = Arr::get($data, 'location');
+
         if (is_string($location) && str_starts_with($location, 'geo:')) {
             preg_match_all(
-                '/([0-9\.\-]+)/',
+                '/([0-9.\-]+)/',
                 $location,
                 $matches
             );
@@ -99,9 +99,9 @@ class NoteService extends Service
     /**
      * Get the checkin data from the request to create a new note. This will be a Place.
      */
-    private function getCheckin(array $request): ?Place
+    private function getCheckin(array $data): ?Place
     {
-        $location = Arr::get($request, 'location');
+        $location = Arr::get($data, 'location');
         if (is_string($location) && Str::startsWith($location, config('app.url'))) {
             return Place::where(
                 'slug',
@@ -113,12 +113,12 @@ class NoteService extends Service
                 )
             )->first();
         }
-        if (Arr::get($request, 'checkin')) {
+        if (Arr::get($data, 'checkin')) {
             try {
                 $place = resolve(PlaceService::class)->createPlaceFromCheckin(
-                    Arr::get($request, 'checkin')
+                    Arr::get($data, 'checkin')
                 );
-            } catch (\InvalidArgumentException $e) {
+            } catch (\InvalidArgumentException) {
                 return null;
             }
 
@@ -142,34 +142,47 @@ class NoteService extends Service
     /**
      * Get the Swarm URL from the syndication data in the request to create a new note.
      */
-    private function getSwarmUrl(array $request): ?string
+    private function getSwarmUrl(array $data): ?string
     {
-        if (str_contains(Arr::get($request, 'properties.syndication.0', ''), 'swarmapp')) {
-            return Arr::get($request, 'properties.syndication.0');
+        $syndication = Arr::get($data, 'syndication');
+        if ($syndication === null) {
+            return null;
+        }
+
+        if (str_contains($syndication, 'swarmapp')) {
+            return $syndication;
         }
 
         return null;
     }
 
     /**
-     * Get the syndication targets from the request to create a new note.
+     * Dispatch syndication jobs based on the request data.
      */
-    private function getSyndicationTargets(array $request): array
+    private function dispatchSyndicationJobs(Note $note, array $request): void
     {
-        $syndication = [];
-        $mpSyndicateTo = Arr::get($request, 'mp-syndicate-to') ?? Arr::get($request, 'properties.mp-syndicate-to');
-        $mpSyndicateTo = Arr::wrap($mpSyndicateTo);
-        foreach ($mpSyndicateTo as $uid) {
-            $target = SyndicationTarget::where('uid', $uid)->first();
-            if ($target && $target->service_name === 'Mastodon') {
-                $syndication[] = 'mastodon';
-            }
-            if ($target && $target->service_name === 'Bluesky') {
-                $syndication[] = 'bluesky';
-            }
+        // If no syndication targets are specified, return early
+        if (empty($request['mp-syndicate-to'])) {
+            return;
         }
 
-        return $syndication;
+        // Get the configured syndication targets
+        $syndicationTargets = SyndicationTarget::all();
+
+        foreach ($syndicationTargets as $target) {
+            // Check if the target is in the request data
+            if (in_array($target->uid, $request['mp-syndicate-to'], true)) {
+                // Dispatch the appropriate job based on the target service name
+                switch ($target->service_name) {
+                    case 'Mastodon':
+                        dispatch(new SyndicateNoteToMastodon($note));
+                        break;
+                    case 'Bluesky':
+                        dispatch(new SyndicateNoteToBluesky($note));
+                        break;
+                }
+            }
+        }
     }
 
     /**

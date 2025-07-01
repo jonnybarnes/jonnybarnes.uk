@@ -18,7 +18,7 @@ class WebMentionTest extends TestCase
     use RefreshDatabase;
 
     #[Test]
-    public function commentableMethodLinksToNotes(): void
+    public function commentable_method_links_to_notes(): void
     {
         $note = Note::factory()->create();
         $webmention = WebMention::factory()->make([
@@ -29,7 +29,7 @@ class WebMentionTest extends TestCase
     }
 
     #[Test]
-    public function publishedAttributeUsesUpdatedAtWhenNoRelevantMf2Data(): void
+    public function published_attribute_uses_updated_at_when_no_relevant_mf2_data(): void
     {
         $webmention = new WebMention;
         $updated_at = Carbon::now();
@@ -38,7 +38,7 @@ class WebMentionTest extends TestCase
     }
 
     #[Test]
-    public function publishedAttributeUsesUpdatedAtWhenErrorParsingMf2Data(): void
+    public function published_attribute_uses_updated_at_when_error_parsing_mf2_data(): void
     {
         $webmention = new WebMention;
         $updated_at = Carbon::now();
@@ -56,7 +56,7 @@ class WebMentionTest extends TestCase
     }
 
     #[Test]
-    public function createPhotoLinkDoesNothingWithGenericUrlAndNoLocallySavedImage(): void
+    public function create_photo_link_does_nothing_with_generic_url_and_no_locally_saved_image(): void
     {
         $webmention = new WebMention;
         $homepage = 'https://example.org/profile.png';
@@ -65,7 +65,7 @@ class WebMentionTest extends TestCase
     }
 
     #[Test]
-    public function createPhotoLinkReturnsLocallySavedImageUrlIfItExists(): void
+    public function create_photo_link_returns_locally_saved_image_url_if_it_exists(): void
     {
         $webmention = new WebMention;
         $homepage = 'https://aaronparecki.com/profile.png';
@@ -74,7 +74,7 @@ class WebMentionTest extends TestCase
     }
 
     #[Test]
-    public function createPhotoLinkDealsWithSpecialCaseOfDirectTwitterPhotoLinks(): void
+    public function create_photo_link_deals_with_special_case_of_direct_twitter_photo_links(): void
     {
         $webmention = new WebMention;
         $twitterProfileImage = 'http://pbs.twimg.com/1234';
@@ -83,7 +83,7 @@ class WebMentionTest extends TestCase
     }
 
     #[Test]
-    public function createPhotoLinkReturnsCachedTwitterPhotoLinks(): void
+    public function create_photo_link_returns_cached_twitter_photo_links(): void
     {
         $webmention = new WebMention;
         $twitterURL = 'https://twitter.com/example';
@@ -93,7 +93,7 @@ class WebMentionTest extends TestCase
     }
 
     #[Test]
-    public function createPhotoLinkResolvesTwitterPhotoLinks(): void
+    public function create_photo_link_resolves_twitter_photo_links(): void
     {
         $info = (object) [
             'profile_image_url_https' => 'https://pbs.twimg.com/static_profile_link.jpg',
@@ -118,14 +118,14 @@ class WebMentionTest extends TestCase
     }
 
     #[Test]
-    public function getReplyAttributeDefaultsToNull(): void
+    public function get_reply_attribute_defaults_to_null(): void
     {
         $webmention = new WebMention;
         $this->assertNull($webmention->reply);
     }
 
     #[Test]
-    public function getReplyAttributeWithMf2WithoutHtmlReturnsNull(): void
+    public function get_reply_attribute_with_mf2_without_html_returns_null(): void
     {
         $webmention = new WebMention;
         $webmention->mf2 = json_encode(['no_html' => 'found_here']);

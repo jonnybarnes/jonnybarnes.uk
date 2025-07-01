@@ -8,8 +8,6 @@ use Illuminate\Support\Facades\DB;
 
 /**
  * @codeCoverageIgnore
- *
- * @psalm-suppress UnusedClass
  */
 class MigratePlaceDataFromPostgis extends Command
 {

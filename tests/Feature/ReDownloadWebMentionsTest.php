@@ -17,7 +17,7 @@ class ReDownloadWebMentionsTest extends TestCase
     use RefreshDatabase;
 
     #[Test]
-    public function downloadJobGetsQueued(): void
+    public function download_job_gets_queued(): void
     {
         Queue::fake();
 

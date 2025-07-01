@@ -18,7 +18,7 @@ class PlacesTest extends TestCase
     use RefreshDatabase;
 
     #[Test]
-    public function canRetrieveAssociatedNotes(): void
+    public function can_retrieve_associated_notes(): void
     {
         $place = Place::factory()->create();
         Note::factory(5)->create([
@@ -29,7 +29,7 @@ class PlacesTest extends TestCase
     }
 
     #[Test]
-    public function nearMethodReturnsCollection(): void
+    public function near_method_returns_collection(): void
     {
         Place::factory()->create([
             'name' => 'The Bridgewater Pub',
@@ -41,25 +41,7 @@ class PlacesTest extends TestCase
     }
 
     #[Test]
-    public function getLongurl(): void
-    {
-        $place = Place::factory()->create([
-            'name' => 'The Bridgewater Pub',
-        ]);
-        $this->assertEquals(config('app.url') . '/places/the-bridgewater-pub', $place->longurl);
-    }
-
-    #[Test]
-    public function getShorturl()
-    {
-        $place = Place::factory()->create([
-            'name' => 'The Bridgewater Pub',
-        ]);
-        $this->assertEquals(config('url.shorturl') . '/places/the-bridgewater-pub', $place->shorturl);
-    }
-
-    #[Test]
-    public function getUri(): void
+    public function get_uri(): void
     {
         $place = Place::factory()->create([
             'name' => 'The Bridgewater Pub',
@@ -68,7 +50,7 @@ class PlacesTest extends TestCase
     }
 
     #[Test]
-    public function placeServiceReturnsExistingPlaceBasedOnExternalUrlsSearch(): void
+    public function place_service_returns_existing_place_based_on_external_urls_search(): void
     {
         Place::factory(10)->create();
 
@@ -88,7 +70,7 @@ class PlacesTest extends TestCase
     }
 
     #[Test]
-    public function placeServiceRequiresNameWhenCreatingNewPlace(): void
+    public function place_service_requires_name_when_creating_new_place(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Missing required name');
@@ -98,7 +80,7 @@ class PlacesTest extends TestCase
     }
 
     #[Test]
-    public function placeServiceRequiresLatitudeWhenCreatingNewPlace(): void
+    public function place_service_requires_latitude_when_creating_new_place(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Missing required longitude/latitude');
@@ -108,7 +90,7 @@ class PlacesTest extends TestCase
     }
 
     #[Test]
-    public function placeServiceCanUpdateExternalUrls(): void
+    public function place_service_can_update_external_urls(): void
     {
         $place = Place::factory()->create([
             'name' => 'The Bridgewater Pub',

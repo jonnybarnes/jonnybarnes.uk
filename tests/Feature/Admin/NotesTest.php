@@ -17,7 +17,7 @@ class NotesTest extends TestCase
     use RefreshDatabase;
 
     #[Test]
-    public function notesPageLoads(): void
+    public function notes_page_loads(): void
     {
         $user = User::factory()->make();
 
@@ -26,7 +26,7 @@ class NotesTest extends TestCase
     }
 
     #[Test]
-    public function noteCreatePageLoads(): void
+    public function note_create_page_loads(): void
     {
         $user = User::factory()->make();
 
@@ -35,7 +35,7 @@ class NotesTest extends TestCase
     }
 
     #[Test]
-    public function adminCanCreateNewNote(): void
+    public function admin_can_create_new_note(): void
     {
         $user = User::factory()->make();
 
@@ -49,7 +49,7 @@ class NotesTest extends TestCase
     }
 
     #[Test]
-    public function noteEditFormLoads(): void
+    public function note_edit_form_loads(): void
     {
         $user = User::factory()->make();
         $note = Note::factory()->create();
@@ -59,7 +59,7 @@ class NotesTest extends TestCase
     }
 
     #[Test]
-    public function adminCanEditNote(): void
+    public function admin_can_edit_note(): void
     {
         Queue::fake();
         $user = User::factory()->make();
@@ -78,7 +78,7 @@ class NotesTest extends TestCase
     }
 
     #[Test]
-    public function adminCanDeleteNote(): void
+    public function admin_can_delete_note(): void
     {
         $user = User::factory()->make();
         $note = Note::factory()->create();

@@ -17,7 +17,7 @@ class PlacesTest extends TestCase
      * Test the `/places` page for OK response.
      */
     #[Test]
-    public function placesPageLoads(): void
+    public function places_page_loads(): void
     {
         $response = $this->get('/places');
         $response->assertStatus(200);
@@ -27,15 +27,15 @@ class PlacesTest extends TestCase
      * Test a specific place.
      */
     #[Test]
-    public function singlePlacePageLoads(): void
+    public function single_place_page_loads(): void
     {
         $place = Place::factory()->create();
-        $response = $this->get($place->longurl);
+        $response = $this->get($place->uri);
         $response->assertViewHas('place', $place);
     }
 
     #[Test]
-    public function unknownPlaceGives404()
+    public function unknown_place_gives404()
     {
         $response = $this->get('/places/unknown');
         $response->assertNotFound();

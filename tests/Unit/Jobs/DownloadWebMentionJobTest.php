@@ -25,7 +25,7 @@ class DownloadWebMentionJobTest extends TestCase
     }
 
     #[Test]
-    public function htmlIsSavedByJob(): void
+    public function html_is_saved_by_job(): void
     {
         $this->assertFileDoesNotExist(storage_path('HTML/https'));
         $source = 'https://example.org/reply/1';
@@ -53,7 +53,7 @@ class DownloadWebMentionJobTest extends TestCase
     }
 
     #[Test]
-    public function htmlAndBackupSavedByJob(): void
+    public function html_and_backup_saved_by_job(): void
     {
         $this->assertFileDoesNotExist(storage_path('HTML/https'));
         $source = 'https://example.org/reply/1';
@@ -88,7 +88,7 @@ class DownloadWebMentionJobTest extends TestCase
     }
 
     #[Test]
-    public function indexHtmlFileIsSavedByJobForUrlsEndingWithSlash(): void
+    public function index_html_file_is_saved_by_job_for_urls_ending_with_slash(): void
     {
         $this->assertFileDoesNotExist(storage_path('HTML/https'));
         $source = 'https://example.org/reply-one/';

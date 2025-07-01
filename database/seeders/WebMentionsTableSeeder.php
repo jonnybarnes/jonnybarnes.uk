@@ -9,8 +9,6 @@ class WebMentionsTableSeeder extends Seeder
 {
     /**
      * Seed the webmentions table.
-     *
-     * @psalm-suppress PossiblyUnusedMethod
      */
     public function run(): void
     {

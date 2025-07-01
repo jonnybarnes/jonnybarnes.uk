@@ -45,7 +45,7 @@ class SendWebMentions implements ShouldQueue
                 $guzzle = resolve(Client::class);
                 $guzzle->post($endpoint, [
                     'form_params' => [
-                        'source' => $this->note->longurl,
+                        'source' => $this->note->uri,
                         'target' => $url,
                     ],
                 ]);
@@ -61,7 +61,7 @@ class SendWebMentions implements ShouldQueue
     public function discoverWebmentionEndpoint(string $url): ?string
     {
         // let’s not send webmentions to myself
-        if (parse_url($url, PHP_URL_HOST) === config('url.longurl')) {
+        if (parse_url($url, PHP_URL_HOST) === parse_url(config('app.url'), PHP_URL_HOST)) {
             return null;
         }
         if (Str::startsWith($url, '/notes/tagged/')) {

@@ -13,8 +13,6 @@ class MyAuthMiddleware
 {
     /**
      * Check the user is logged in.
-     *
-     * @psalm-suppress PossiblyUnusedMethod
      */
     public function handle(Request $request, Closure $next): Response
     {

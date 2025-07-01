@@ -4,7 +4,6 @@
 /public/coverage
 /public/hot
 /public/files
-/public/fonts
 /public/storage
 /storage/*.key
 /vendor

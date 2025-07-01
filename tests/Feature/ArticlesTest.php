@@ -15,14 +15,14 @@ class ArticlesTest extends TestCase
     use RefreshDatabase;
 
     #[Test]
-    public function articlesPageLoads(): void
+    public function articles_page_loads(): void
     {
         $response = $this->get('/blog');
         $response->assertViewIs('articles.index');
     }
 
     #[Test]
-    public function singleArticlePageLoads()
+    public function single_article_page_loads()
     {
         $article = Article::factory()->create();
         $response = $this->get($article->link);
@@ -30,7 +30,7 @@ class ArticlesTest extends TestCase
     }
 
     #[Test]
-    public function wrongDateInUrlRedirectsToCorrectDate()
+    public function wrong_date_in_url_redirects_to_correct_date()
     {
         $article = Article::factory()->create();
         $response = $this->get('/blog/1900/01/' . $article->titleurl);
@@ -38,7 +38,7 @@ class ArticlesTest extends TestCase
     }
 
     #[Test]
-    public function oldUrlsWithIdAreRedirected()
+    public function old_urls_with_id_are_redirected()
     {
         $article = Article::factory()->create();
         $num60Id = resolve(Numbers::class)->numto60($article->id);
@@ -47,21 +47,21 @@ class ArticlesTest extends TestCase
     }
 
     #[Test]
-    public function unknownSlugGetsNotFoundResponse()
+    public function unknown_slug_gets_not_found_response()
     {
         $response = $this->get('/blog/' . date('Y') . '/' . date('m') . '/unknown-slug');
         $response->assertNotFound();
     }
 
     #[Test]
-    public function unknownArticleIdGetsNotFoundResponse()
+    public function unknown_article_id_gets_not_found_response()
     {
         $response = $this->get('/blog/s/22');
         $response->assertNotFound();
     }
 
     #[Test]
-    public function someUrlsDoNotParseCorrectly(): void
+    public function some_urls_do_not_parse_correctly(): void
     {
         $response = $this->get('/blog/feed.js');
         $response->assertNotFound();

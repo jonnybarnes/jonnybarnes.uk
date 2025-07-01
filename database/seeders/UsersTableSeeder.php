@@ -9,8 +9,6 @@ class UsersTableSeeder extends Seeder
 {
     /**
      * Seed the users table.
-     *
-     * @psalm-suppress PossiblyUnusedMethod
      */
     public function run(): void
     {

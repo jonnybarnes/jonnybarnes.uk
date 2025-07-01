@@ -2,7 +2,7 @@
 services:
     laravel.test:
         build:
-            context: ./vendor/laravel/sail/runtimes/8.3
+            context: ./vendor/laravel/sail/runtimes/8.4
             dockerfile: Dockerfile
             args:
                 WWWGROUP: '${WWWGROUP}'
@@ -26,7 +26,7 @@ services:
             - pgsql
             - redis
     pgsql:
-        image: 'postgres:16'
+        image: 'postgres:17'
         ports:
             - '${FORWARD_DB_PORT:-5432}:5432'
         environment:

@@ -19,7 +19,7 @@ class ProcessBookmarkJobTest extends TestCase
     use RefreshDatabase;
 
     #[Test]
-    public function archiveLinkIsSavedByJobAndScreenshotJobIsQueued(): void
+    public function archive_link_is_saved_by_job_and_screenshot_job_is_queued(): void
     {
         Queue::fake();
 
@@ -40,7 +40,7 @@ class ProcessBookmarkJobTest extends TestCase
     }
 
     #[Test]
-    public function archiveLinkSavedAsNullWhenExceptionThrown(): void
+    public function archive_link_saved_as_null_when_exception_thrown(): void
     {
         Queue::fake();
 

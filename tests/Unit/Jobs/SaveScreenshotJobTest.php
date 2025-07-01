@@ -21,7 +21,7 @@ class SaveScreenshotJobTest extends TestCase
     use RefreshDatabase;
 
     #[Test]
-    public function screenshotIsSavedByJob(): void
+    public function screenshot_is_saved_by_job(): void
     {
         Storage::fake('public');
         $guzzleMock = new MockHandler([
@@ -86,7 +86,7 @@ class SaveScreenshotJobTest extends TestCase
     }
 
     #[Test]
-    public function screenshotJobHandlesUnfinishedTasks(): void
+    public function screenshot_job_handles_unfinished_tasks(): void
     {
         Storage::fake('public');
         $guzzleMock = new MockHandler([

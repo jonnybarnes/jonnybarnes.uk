@@ -8,7 +8,6 @@ use App\Services\TokenService;
 use DateTimeImmutable;
 use Lcobucci\JWT\Configuration;
 use Lcobucci\JWT\Signer\Key\InMemory;
-use Lcobucci\JWT\Validation\RequiredConstraintsViolated;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
@@ -19,7 +18,7 @@ class TokenServiceTest extends TestCase
      * the APP_KEY, to test, we shall create a token, and then verify it.
      */
     #[Test]
-    public function tokenserviceCreatesAndValidatesTokens(): void
+    public function tokenservice_creates_valid_tokens(): void
     {
         $tokenService = new TokenService;
         $data = [
@@ -28,20 +27,22 @@ class TokenServiceTest extends TestCase
             'scope' => 'post',
         ];
         $token = $tokenService->getNewToken($data);
-        $valid = $tokenService->validateToken($token);
-        $validData = [
-            'me' => $valid->claims()->get('me'),
-            'client_id' => $valid->claims()->get('client_id'),
-            'scope' => $valid->claims()->get('scope'),
-        ];
-        $this->assertSame($data, $validData);
+
+        $response = $this->get('/api/post', ['HTTP_Authorization' => 'Bearer ' . $token]);
+
+        $response->assertJson([
+            'response' => 'token',
+            'token' => [
+                'me' => $data['me'],
+                'client_id' => $data['client_id'],
+                'scope' => $data['scope'],
+            ],
+        ]);
     }
 
     #[Test]
-    public function tokensWithDifferentSigningKeyThrowsException(): void
+    public function tokens_with_different_signing_key_are_not_valid(): void
     {
-        $this->expectException(RequiredConstraintsViolated::class);
-
         $data = [
             'me' => 'https://example.org',
             'client_id' => 'https://quill.p3k.io',
@@ -59,7 +60,12 @@ class TokenServiceTest extends TestCase
             ->getToken($config->signer(), InMemory::plainText(random_bytes(32)))
             ->toString();
 
-        $service = new TokenService;
-        $service->validateToken($token);
+        $response = $this->get('/api/post', ['HTTP_Authorization' => 'Bearer ' . $token]);
+
+        $response->assertJson([
+            'response' => 'error',
+            'error' => 'invalid_token',
+            'error_description' => 'The provided token did not pass validation',
+        ]);
     }
 }

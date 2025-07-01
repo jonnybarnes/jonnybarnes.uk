@@ -15,7 +15,7 @@ class PlacesTest extends TestCase
     use RefreshDatabase;
 
     #[Test]
-    public function placesPageLoads(): void
+    public function places_page_loads(): void
     {
         $user = User::factory()->make();
 
@@ -24,7 +24,7 @@ class PlacesTest extends TestCase
     }
 
     #[Test]
-    public function createPlacePageLoads(): void
+    public function create_place_page_loads(): void
     {
         $user = User::factory()->make();
 
@@ -33,7 +33,7 @@ class PlacesTest extends TestCase
     }
 
     #[Test]
-    public function adminCanCreateNewPlace(): void
+    public function admin_can_create_new_place(): void
     {
         $user = User::factory()->make();
 
@@ -50,7 +50,7 @@ class PlacesTest extends TestCase
     }
 
     #[Test]
-    public function editPlacePageLoads(): void
+    public function edit_place_page_loads(): void
     {
         $user = User::factory()->make();
         $place = Place::factory()->create();
@@ -60,7 +60,7 @@ class PlacesTest extends TestCase
     }
 
     #[Test]
-    public function adminCanUpdatePlace(): void
+    public function admin_can_update_place(): void
     {
         $user = User::factory()->make();
         $place = Place::factory()->create([

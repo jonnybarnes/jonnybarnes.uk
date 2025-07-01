@@ -17,7 +17,7 @@ class TagsTest extends TestCase
     use RefreshDatabase;
 
     #[Test]
-    public function canGetAssociatedNotes(): void
+    public function can_get_associated_notes(): void
     {
         $note = Note::factory()->create();
         $tag = Tag::factory()->create();
@@ -26,7 +26,7 @@ class TagsTest extends TestCase
     }
 
     #[Test]
-    public function canGetAssociatedBookmarks(): void
+    public function can_get_associated_bookmarks(): void
     {
         $bookmark = Bookmark::factory()->create();
         $tag = Tag::factory()->create();
@@ -36,7 +36,7 @@ class TagsTest extends TestCase
 
     #[Test]
     #[DataProvider('tagsProvider')]
-    public function canNormalize(string $input, string $expected): void
+    public function can_normalize(string $input, string $expected): void
     {
         $this->assertSame($expected, Tag::normalize($input));
     }

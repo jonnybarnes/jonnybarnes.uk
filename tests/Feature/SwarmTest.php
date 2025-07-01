@@ -21,7 +21,7 @@ class SwarmTest extends TestCase
      * Given a check in to Foursquare, this is the content Ownyourswarm will post to us.
      */
     #[Test]
-    public function mockedOwnyourswarmRequestWithFoursquare(): void
+    public function mocked_ownyourswarm_request_with_foursquare(): void
     {
         Queue::fake();
 
@@ -68,7 +68,7 @@ class SwarmTest extends TestCase
      * OpenStreetMap data.
      */
     #[Test]
-    public function mockedOwnyourswarmRequestWithOsm(): void
+    public function mocked_ownyourswarm_request_with_osm(): void
     {
         Queue::fake();
 
@@ -110,7 +110,7 @@ class SwarmTest extends TestCase
      * This request would actually come from another client than OwnYourSwarm, as that would include a Foursquare URL
      */
     #[Test]
-    public function mockedOwnyourswarmRequestWithoutKnownExternalUrl(): void
+    public function mocked_ownyourswarm_request_without_known_external_url(): void
     {
         Queue::fake();
 
@@ -149,7 +149,7 @@ class SwarmTest extends TestCase
     }
 
     #[Test]
-    public function mockedOwnyourswarmRequestWithNoTextContent(): void
+    public function mocked_ownyourswarm_request_with_no_text_content(): void
     {
         $response = $this->json(
             'POST',
@@ -186,7 +186,7 @@ class SwarmTest extends TestCase
     }
 
     #[Test]
-    public function mockedOwnyourswarmRequestSavesJustThePostWhenAnErrorOccursInTheCheckinData(): void
+    public function mocked_ownyourswarm_request_saves_just_the_post_when_an_error_occurs_in_the_checkin_data(): void
     {
         Queue::fake();
 
@@ -224,7 +224,7 @@ class SwarmTest extends TestCase
     }
 
     #[Test]
-    public function mockedOwnyourswarmRequestWithHAdrLocation(): void
+    public function mocked_ownyourswarm_request_with_h_adr_location(): void
     {
         Queue::fake();
 
@@ -270,7 +270,7 @@ class SwarmTest extends TestCase
     }
 
     #[Test]
-    public function ownyourswarmCheckinTestUsingRealData(): void
+    public function ownyourswarm_checkin_test_using_real_data(): void
     {
         $response = $this->json(
             'POST',

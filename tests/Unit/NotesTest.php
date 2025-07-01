@@ -28,7 +28,7 @@ class NotesTest extends TestCase
      * relevant sub-methods.
      */
     #[Test]
-    public function getNoteAttributeMethodCallsSubMethods(): void
+    public function get_note_attribute_method_calls_sub_methods(): void
     {
         // phpcs:ignore
         $expected = '<p>Having a <a rel="tag" class="p-category" href="/notes/tagged/beer">#beer</a> at the local. 🍺</p>' . PHP_EOL;
@@ -42,7 +42,7 @@ class NotesTest extends TestCase
      * Look for a default image in the contact’s h-card for the makeHCards method.
      */
     #[Test]
-    public function defaultImageUsedAsFallbackInMakehcardsMethod(): void
+    public function default_image_used_as_fallback_in_makehcards_method(): void
     {
         // phpcs:ignore
         $expected = '<p>Hi <span class="u-category h-card mini-h-card">
@@ -71,7 +71,7 @@ class NotesTest extends TestCase
      * Look for a specific profile image in the contact’s h-card.
      */
     #[Test]
-    public function specificProfileImageUsedInMakehcardsMethod(): void
+    public function specific_profile_image_used_in_makehcards_method(): void
     {
         Contact::factory()->create([
             'nick' => 'aaron',
@@ -106,7 +106,7 @@ class NotesTest extends TestCase
      * Look for twitter URL when there’s no associated contact.
      */
     #[Test]
-    public function twitterLinkIsCreatedWhenNoContactFound(): void
+    public function twitter_link_is_created_when_no_contact_found(): void
     {
         $expected = '<p>Hi <a href="https://twitter.com/bob">@bob</a></p>' . PHP_EOL;
         $note = Note::factory()->create([
@@ -116,15 +116,7 @@ class NotesTest extends TestCase
     }
 
     #[Test]
-    public function shorturlMethodReturnsExpectedValue(): void
-    {
-        $note = Note::factory()->make();
-        $note->id = 14;
-        $this->assertEquals(config('url.shorturl') . '/notes/E', $note->shorturl);
-    }
-
-    #[Test]
-    public function weGetLatitudeLongitudeValuesOfAssociatedPlaceOfNote(): void
+    public function we_get_latitude_longitude_values_of_associated_place_of_note(): void
     {
         $place = Place::factory()->create([
             'latitude' => '53.4983',
@@ -138,7 +130,7 @@ class NotesTest extends TestCase
     }
 
     #[Test]
-    public function whenNoAssociatedPlaceWeGetNullForLatitudeLongitudeValues(): void
+    public function when_no_associated_place_we_get_null_for_latitude_longitude_values(): void
     {
         $note = Note::factory()->create();
         $this->assertNull($note->latitude);
@@ -146,7 +138,7 @@ class NotesTest extends TestCase
     }
 
     #[Test]
-    public function weCanGetAddressAttributeForAssociatedPlace(): void
+    public function we_can_get_address_attribute_for_associated_place(): void
     {
         $place = Place::factory()->create([
             'name' => 'The Bridgewater Pub',
@@ -160,7 +152,7 @@ class NotesTest extends TestCase
     }
 
     #[Test]
-    public function deletingNotesAlsoDeletesTagsViaTheEventObserver(): void
+    public function deleting_notes_also_deletes_tags_via_the_event_observer(): void
     {
         // first we’ll create a temporary note to delete
         $note = Note::create(['note' => 'temporary #temp']);
@@ -175,7 +167,7 @@ class NotesTest extends TestCase
     }
 
     #[Test]
-    public function saveBlankNotesAsNull(): void
+    public function save_blank_notes_as_null(): void
     {
         $note = new Note(['note' => '']);
 
@@ -183,7 +175,7 @@ class NotesTest extends TestCase
     }
 
     #[Test]
-    public function reverseGeocodeAnAttraction(): void
+    public function reverse_geocode_an_attraction(): void
     {
         // phpcs:disable Generic.Files.LineLength.TooLong
         $json = <<<JSON
@@ -208,7 +200,7 @@ class NotesTest extends TestCase
     }
 
     #[Test]
-    public function reverseGeocodeASuburb(): void
+    public function reverse_geocode_a_suburb(): void
     {
         // phpcs:disable Generic.Files.LineLength.TooLong
         $json = <<<JSON
@@ -233,7 +225,7 @@ class NotesTest extends TestCase
     }
 
     #[Test]
-    public function reverseGeocodeACity(): void
+    public function reverse_geocode_a_city(): void
     {
         // Note I’ve modified this JSON response so it only contains the
         // city the Uni is in
@@ -260,7 +252,7 @@ class NotesTest extends TestCase
     }
 
     #[Test]
-    public function reverseGeocodeACounty(): void
+    public function reverse_geocode_a_county(): void
     {
         // Note I’ve removed everything below county to test for queries where
         // that’s all that is returned
@@ -284,7 +276,7 @@ class NotesTest extends TestCase
     }
 
     #[Test]
-    public function reverseGeocodeACountry(): void
+    public function reverse_geocode_a_country(): void
     {
         // Note I’ve removed everything below country to test for querires where
         // that’s all that is returned
@@ -308,7 +300,7 @@ class NotesTest extends TestCase
     }
 
     #[Test]
-    public function addImageElementToNoteContentWhenMediaAssociated(): void
+    public function add_image_element_to_note_content_when_media_associated(): void
     {
         $media = Media::factory()->create([
             'type' => 'image',
@@ -325,7 +317,7 @@ class NotesTest extends TestCase
     }
 
     #[Test]
-    public function addVideoElementToNoteContentWhenMediaAssociated(): void
+    public function add_video_element_to_note_content_when_media_associated(): void
     {
         $media = Media::factory()->create([
             'type' => 'video',
@@ -342,7 +334,7 @@ class NotesTest extends TestCase
     }
 
     #[Test]
-    public function addAudioElementToNoteContentWhenMediaAssociated(): void
+    public function add_audio_element_to_note_content_when_media_associated(): void
     {
         $media = Media::factory()->create([
             'type' => 'audio',
@@ -362,7 +354,7 @@ class NotesTest extends TestCase
      * @todo Why do we need to provide text?
      */
     #[Test]
-    public function provideTextForBlankContent(): void
+    public function provide_text_for_blank_content(): void
     {
         $note = new Note;
 
@@ -382,11 +374,11 @@ class NotesTest extends TestCase
     public function markdown_content_gets_converted(): void
     {
         $note = Note::factory()->create([
-            'note' => 'The best search engine? https://duckduckgo.com',
+            'note' => 'The best search engine? https://kagi.com',
         ]);
 
         $this->assertSame(
-            '<p>The best search engine? <a href="https://duckduckgo.com">https://duckduckgo.com</a></p>' . PHP_EOL,
+            '<p>The best search engine? <a href="https://kagi.com">https://kagi.com</a></p>' . PHP_EOL,
             $note->note
         );
     }
@@ -395,7 +387,7 @@ class NotesTest extends TestCase
      * For now, just reply on a cached object instead of actually querying Twitter.
      */
     #[Test]
-    public function checkInReplyToIsTwitterLink(): void
+    public function check_in_reply_to_is_twitter_link(): void
     {
         $tempContent = (object) [
             'html' => 'something random',
@@ -410,7 +402,7 @@ class NotesTest extends TestCase
     }
 
     #[Test]
-    public function latitudeAndLongitudeCanBeParsedFromPlainLocation(): void
+    public function latitude_and_longitude_can_be_parsed_from_plain_location(): void
     {
         $note = Note::factory()->create([
             'location' => '1.23,4.56',
@@ -421,7 +413,7 @@ class NotesTest extends TestCase
     }
 
     #[Test]
-    public function addressAttributeCanBeRetrievedFromPlainLocation(): void
+    public function address_attribute_can_be_retrieved_from_plain_location(): void
     {
         Cache::put('1.23,4.56', '<span class="p-country-name">Antarctica</span>');
 
@@ -433,7 +425,7 @@ class NotesTest extends TestCase
     }
 
     #[Test]
-    public function mastodonUsernamesAreParsedCorrectly(): void
+    public function mastodon_usernames_are_parsed_correctly(): void
     {
         $expected = '<p>Hi <a href="https://phpc.social/@freekmurze">@freekmurze@phpc.social</a> how are you?</p>' . PHP_EOL;
         $note = Note::factory()->create([

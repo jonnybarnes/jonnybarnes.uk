@@ -34,7 +34,7 @@
                 @if($note->client) via <a class="client" href="{{ $note->client->client_url }}">{{ $note->client->client_name }}</a>@endif
                 @if($note->place)
                     @if($note->getOriginal('note'))
-                        in <span class="p-location h-card"><a class="p-name u-url" href="{{ $note->place->longurl }}">{{ $note->address }}</a><data class="p-latitude" value="{{ $note->place->latitude }}"></data><data class="p-longitude" value="{{ $note->place->longitude }}"></data></span>
+                        in <span class="p-location h-card"><a class="p-name u-url" href="{{ $note->place->uri }}">{{ $note->address }}</a><data class="p-latitude" value="{{ $note->place->latitude }}"></data><data class="p-longitude" value="{{ $note->place->longitude }}"></data></span>
                     @endif
                 @elseif($note->address)
                     in <span class="p-location h-adr">{!! $note->address !!}<data class="p-latitude" value="{{ $note->latitude }}"></data><data class="p-longitude" value="{{ $note->longitude }}"></data></span>

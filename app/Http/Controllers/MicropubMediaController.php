@@ -7,10 +7,8 @@ namespace App\Http\Controllers;
 use App\Http\Responses\MicropubResponses;
 use App\Jobs\ProcessMedia;
 use App\Models\Media;
-use App\Services\TokenService;
 use Exception;
 use Illuminate\Contracts\Container\BindingResolutionException;
-use Illuminate\Http\File;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -18,46 +16,20 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\ImageManager;
-use Lcobucci\JWT\Token\InvalidTokenStructure;
-use Lcobucci\JWT\Validation\RequiredConstraintsViolated;
 use Ramsey\Uuid\Uuid;
 
-/**
- * @psalm-suppress UnusedClass
- */
 class MicropubMediaController extends Controller
 {
-    protected TokenService $tokenService;
-
-    public function __construct(TokenService $tokenService)
-    {
-        $this->tokenService = $tokenService;
-    }
-
     public function getHandler(Request $request): JsonResponse
     {
-        try {
-            $tokenData = $this->tokenService->validateToken($request->input('access_token'));
-        } catch (RequiredConstraintsViolated|InvalidTokenStructure) {
-            $micropubResponses = new MicropubResponses;
+        $tokenData = $request->input('token_data');
 
-            return $micropubResponses->invalidTokenResponse();
-        }
-
-        if ($tokenData->claims()->has('scope') === false) {
-            $micropubResponses = new MicropubResponses;
-
-            return $micropubResponses->tokenHasNoScopeResponse();
-        }
-
-        $scopes = $tokenData->claims()->get('scope');
+        $scopes = $tokenData['scope'];
         if (is_string($scopes)) {
             $scopes = explode(' ', $scopes);
         }
-        if (! in_array('create', $scopes)) {
-            $micropubResponses = new MicropubResponses;
-
-            return $micropubResponses->insufficientScopeResponse();
+        if (! in_array('create', $scopes, true)) {
+            return (new MicropubResponses)->insufficientScopeResponse();
         }
 
         if ($request->input('q') === 'last') {
@@ -108,28 +80,14 @@ class MicropubMediaController extends Controller
      */
     public function media(Request $request): JsonResponse
     {
-        try {
-            $tokenData = $this->tokenService->validateToken($request->input('access_token'));
-        } catch (RequiredConstraintsViolated|InvalidTokenStructure) {
-            $micropubResponses = new MicropubResponses;
+        $tokenData = $request->input('token_data');
 
-            return $micropubResponses->invalidTokenResponse();
-        }
-
-        if ($tokenData->claims()->has('scope') === false) {
-            $micropubResponses = new MicropubResponses;
-
-            return $micropubResponses->tokenHasNoScopeResponse();
-        }
-
-        $scopes = $tokenData->claims()->get('scope');
+        $scopes = $tokenData['scope'];
         if (is_string($scopes)) {
             $scopes = explode(' ', $scopes);
         }
-        if (! in_array('create', $scopes)) {
-            $micropubResponses = new MicropubResponses;
-
-            return $micropubResponses->insufficientScopeResponse();
+        if (! in_array('create', $scopes, true)) {
+            return (new MicropubResponses)->insufficientScopeResponse();
         }
 
         if ($request->hasFile('file') === false) {
@@ -164,7 +122,7 @@ class MicropubMediaController extends Controller
         }
 
         $media = Media::create([
-            'token' => $request->bearerToken(),
+            'token' => $request->input('access_token'),
             'path' => $filename,
             'type' => $this->getFileTypeFromMimeType($request->file('file')->getMimeType()),
             'image_widths' => $width,

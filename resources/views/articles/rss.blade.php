@@ -3,7 +3,7 @@
     <channel>
         <title>{{ config('user.display_name') }}</title>
         <atom:link href="{{ config('app.url') }}/blog/feed.rss" rel="self" type="application/rss+xml" />
-        <description>An RSS feed of the blog posts found on {{ config('url.longurl') }}</description>
+        <description>An RSS feed of the blog posts found on {{ config('app.url') }}</description>
         <link>{{ config('app.url') }}/blog</link>
         <lastBuildDate>{{ $buildDate }}</lastBuildDate>
         <ttl>1800</ttl>

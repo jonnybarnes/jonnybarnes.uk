@@ -9,9 +9,6 @@ use App\Models\Note;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 
-/**
- * @psalm-suppress UnusedClass
- */
 class FeedsController extends Controller
 {
     /**
@@ -122,8 +119,8 @@ class FeedsController extends Controller
 
         foreach ($notes as $key => $note) {
             $data['items'][$key] = [
-                'id' => $note->longurl,
-                'url' => $note->longurl,
+                'id' => $note->uri,
+                'url' => $note->uri,
                 'content_text' => $note->content,
                 'date_published' => $note->created_at->tz('UTC')->toRfc3339String(),
                 'date_modified' => $note->updated_at->tz('UTC')->toRfc3339String(),
@@ -164,7 +161,7 @@ class FeedsController extends Controller
             'author' => [
                 'type' => 'card',
                 'name' => config('user.display_name'),
-                'url' => config('url.longurl'),
+                'url' => config('app.url'),
             ],
             'children' => $items,
         ], 200, [
@@ -183,8 +180,8 @@ class FeedsController extends Controller
             $items[] = [
                 'type' => 'entry',
                 'published' => $note->created_at,
-                'uid' => $note->longurl,
-                'url' => $note->longurl,
+                'uid' => $note->uri,
+                'url' => $note->uri,
                 'content' => [
                     'text' => $note->getRawOriginal('note'),
                     'html' => $note->note,
@@ -200,7 +197,7 @@ class FeedsController extends Controller
             'author' => [
                 'type' => 'card',
                 'name' => config('user.display_name'),
-                'url' => config('url.longurl'),
+                'url' => config('app.url'),
             ],
             'children' => $items,
         ], 200, [

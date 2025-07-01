@@ -13,7 +13,7 @@ class CorsHeadersTest extends TestCase
     use TestToken;
 
     #[Test]
-    public function checkCorsHeadersOnMediaEndpoint(): void
+    public function check_cors_headers_on_media_endpoint(): void
     {
         $response = $this->call(
             'OPTIONS',
@@ -27,7 +27,7 @@ class CorsHeadersTest extends TestCase
     }
 
     #[Test]
-    public function checkForNoCorsHeaderOnNonMediaEndpointLinks(): void
+    public function check_for_no_cors_header_on_non_media_endpoint_links(): void
     {
         $response = $this->get('/blog');
         $response->assertHeaderMissing('Access-Control-Allow-Origin');

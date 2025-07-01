@@ -12,9 +12,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Arr;
 use Illuminate\View\View;
 
-/**
- * @psalm-suppress UnusedClass
- */
 class ContactsController extends Controller
 {
     /**

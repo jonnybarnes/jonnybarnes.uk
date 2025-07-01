@@ -14,8 +14,6 @@ use Jonnybarnes\IndieWeb\Numbers;
 
 /**
  * @todo Need to sort out Twitter and webmentions!
- *
- * @psalm-suppress UnusedClass
  */
 class NotesController extends Controller
 {

@@ -15,7 +15,7 @@ class BioTest extends TestCase
     use RefreshDatabase;
 
     #[Test]
-    public function adminBiosPageLoads(): void
+    public function admin_bios_page_loads(): void
     {
         $user = User::factory()->make();
 
@@ -25,7 +25,7 @@ class BioTest extends TestCase
     }
 
     #[Test]
-    public function adminCanCreateBio(): void
+    public function admin_can_create_bio(): void
     {
         $user = User::factory()->make();
 
@@ -38,7 +38,7 @@ class BioTest extends TestCase
     }
 
     #[Test]
-    public function adminCanLoadExistingBio(): void
+    public function admin_can_load_existing_bio(): void
     {
         $user = User::factory()->make();
         $bio = Bio::factory()->create([
@@ -51,7 +51,7 @@ class BioTest extends TestCase
     }
 
     #[Test]
-    public function adminCanEditBio(): void
+    public function admin_can_edit_bio(): void
     {
         $user = User::factory()->make();
         $bio = Bio::factory()->create();

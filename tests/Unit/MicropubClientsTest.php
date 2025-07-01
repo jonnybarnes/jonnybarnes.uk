@@ -15,7 +15,7 @@ class MicropubClientsTest extends TestCase
     use RefreshDatabase;
 
     #[Test]
-    public function weCanGetNotesRelatingToClient(): void
+    public function we_can_get_notes_relating_to_client(): void
     {
         $client = MicropubClient::factory()->make();
 

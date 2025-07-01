@@ -15,7 +15,7 @@ class FrontPageTest extends TestCase
     use RefreshDatabase;
 
     #[Test]
-    public function frontPageLoadsAllContent(): void
+    public function front_page_loads_all_content(): void
     {
         Note::factory()->create(['note' => 'Note 1']);
         Article::factory()->create(['title' => 'Article 1']);

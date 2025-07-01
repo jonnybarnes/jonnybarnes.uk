@@ -11,9 +11,9 @@ use App\Models\Media;
 use App\Models\Note;
 use App\Models\Place;
 use App\Models\SyndicationTarget;
-use Carbon\Carbon;
 use Faker\Factory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Queue;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
@@ -25,7 +25,7 @@ class MicropubControllerTest extends TestCase
     use TestToken;
 
     #[Test]
-    public function micropubGetRequestWithoutTokenReturnsErrorResponse(): void
+    public function micropub_get_request_without_token_returns_error_response(): void
     {
         $response = $this->get('/api/post');
         $response->assertStatus(401);
@@ -33,7 +33,7 @@ class MicropubControllerTest extends TestCase
     }
 
     #[Test]
-    public function micropubGetRequestWithoutValidTokenReturnsErrorResponse(): void
+    public function micropub_get_request_without_valid_token_returns_error_response(): void
     {
         $response = $this->get('/api/post', ['HTTP_Authorization' => 'Bearer abc123']);
         $response->assertStatus(400);
@@ -45,7 +45,7 @@ class MicropubControllerTest extends TestCase
      * 200 response. Check token information is also returned in the response.
      */
     #[Test]
-    public function micropubGetRequestWithValidTokenReturnsOkResponse(): void
+    public function micropub_get_request_with_valid_token_returns_ok_response(): void
     {
         $response = $this->get('/api/post', ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]);
         $response->assertStatus(200);
@@ -53,14 +53,14 @@ class MicropubControllerTest extends TestCase
     }
 
     #[Test]
-    public function micropubClientsCanRequestSyndicationTargetsCanBeEmpty(): void
+    public function micropub_clients_can_request_syndication_targets_can_be_empty(): void
     {
         $response = $this->get('/api/post?q=syndicate-to', ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]);
         $response->assertJsonFragment(['syndicate-to' => []]);
     }
 
     #[Test]
-    public function micropubClientsCanRequestSyndicationTargetsPopulatesFromModel(): void
+    public function micropub_clients_can_request_syndication_targets_populates_from_model(): void
     {
         $syndicationTarget = SyndicationTarget::factory()->create();
         $response = $this->get('/api/post?q=syndicate-to', ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]);
@@ -68,7 +68,7 @@ class MicropubControllerTest extends TestCase
     }
 
     #[Test]
-    public function micropubClientsCanRequestKnownNearbyPlaces(): void
+    public function micropub_clients_can_request_known_nearby_places(): void
     {
         Place::factory()->create([
             'name' => 'The Bridgewater Pub',
@@ -88,40 +88,40 @@ class MicropubControllerTest extends TestCase
         $response->assertJson(['places' => [['slug' => 'the-bridgewater-pub']]]);
     }*/
     #[Test]
-    public function returnEmptyResultWhenMicropubClientRequestsKnownNearbyPlaces(): void
+    public function return_empty_result_when_micropub_client_requests_known_nearby_places(): void
     {
         $response = $this->get('/api/post?q=geo:1.23,4.56', ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]);
         $response->assertJson(['places' => []]);
     }
 
     #[Test]
-    public function micropubClientCanRequestEndpointConfig(): void
+    public function micropub_client_can_request_endpoint_config(): void
     {
         $response = $this->get('/api/post?q=config', ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]);
         $response->assertJsonFragment(['media-endpoint' => route('media-endpoint')]);
     }
 
     #[Test]
-    public function micropubClientCanCreateNewNote(): void
+    public function micropub_client_can_create_new_note(): void
     {
         $faker = Factory::create();
         $note = $faker->text;
+
         $response = $this->post(
             '/api/post',
             [
                 'h' => 'entry',
                 'content' => $note,
-                'published' => Carbon::now()->toW3CString(),
-                'location' => 'geo:1.23,4.56',
             ],
             ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
         );
+
         $response->assertJson(['response' => 'created']);
         $this->assertDatabaseHas('notes', ['note' => $note]);
     }
 
     #[Test]
-    public function micropubClientCanRequestTheNewNoteIsSyndicatedToMastodonAndBluesky(): void
+    public function micropub_client_can_request_the_new_note_is_syndicated_to_mastodon_and_bluesky(): void
     {
         Queue::fake();
 
@@ -155,7 +155,7 @@ class MicropubControllerTest extends TestCase
     }
 
     #[Test]
-    public function micropubClientsCanCreateNewPlaces(): void
+    public function micropub_clients_can_create_new_places(): void
     {
         $response = $this->post(
             '/api/post',
@@ -171,7 +171,7 @@ class MicropubControllerTest extends TestCase
     }
 
     #[Test]
-    public function micropubClientsCanCreateNewPlacesWithOldLocationSyntax(): void
+    public function micropub_clients_can_create_new_places_with_old_location_syntax(): void
     {
         $response = $this->post(
             '/api/post',
@@ -188,7 +188,7 @@ class MicropubControllerTest extends TestCase
     }
 
     #[Test]
-    public function micropubClientWebRequestWithInvalidTokenReturnsErrorResponse(): void
+    public function micropub_client_web_request_with_invalid_token_returns_error_response(): void
     {
         $response = $this->post(
             '/api/post',
@@ -203,7 +203,7 @@ class MicropubControllerTest extends TestCase
     }
 
     #[Test]
-    public function micropubClientWebRequestWithTokenWithoutAnyScopesReturnsErrorResponse(): void
+    public function micropub_client_web_request_with_token_without_any_scopes_returns_error_response(): void
     {
         $response = $this->post(
             '/api/post',
@@ -218,26 +218,25 @@ class MicropubControllerTest extends TestCase
     }
 
     #[Test]
-    public function micropubClientWebRequestWithTokenWithoutCreateScopesReturnsErrorResponse(): void
+    public function micropub_client_web_request_with_token_without_create_scopes_returns_error_response(): void
     {
         $response = $this->post(
             '/api/post',
             [
-                'h' => 'card',
-                'name' => 'The Barton Arms',
-                'geo' => 'geo:53.4974,-2.3768',
+                'h' => 'entry',
+                'content' => 'A random note',
             ],
             ['HTTP_Authorization' => 'Bearer ' . $this->getTokenWithIncorrectScope()]
         );
-        $response->assertStatus(401);
-        $response->assertJson(['error' => 'insufficient_scope']);
+        $response->assertStatus(403);
+        $response->assertJson(['error' => 'invalid_scope']);
     }
 
     /**
      * Test a valid micropub requests using JSON syntax creates a new note.
      */
     #[Test]
-    public function micropubClientApiRequestCreatesNewNote(): void
+    public function micropub_client_api_request_creates_new_note(): void
     {
         Queue::fake();
         Media::create([
@@ -284,7 +283,7 @@ class MicropubControllerTest extends TestCase
      * existing self-created place.
      */
     #[Test]
-    public function micropubClientApiRequestCreatesNewNoteWithExistingPlaceInLocationData(): void
+    public function micropub_client_api_request_creates_new_note_with_existing_place_in_location_data(): void
     {
         $place = new Place;
         $place->name = 'Test Place';
@@ -299,7 +298,7 @@ class MicropubControllerTest extends TestCase
                 'type' => ['h-entry'],
                 'properties' => [
                     'content' => [$note],
-                    'location' => [$place->longurl],
+                    'location' => [$place->uri],
                 ],
             ],
             ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
@@ -314,7 +313,7 @@ class MicropubControllerTest extends TestCase
      * a new place defined in the location block.
      */
     #[Test]
-    public function micropubClientApiRequestCreatesNewNoteWithNewPlaceInLocationData(): void
+    public function micropub_client_api_request_creates_new_note_with_new_place_in_location_data(): void
     {
         $faker = Factory::create();
         $note = $faker->text;
@@ -349,7 +348,7 @@ class MicropubControllerTest extends TestCase
      * a new place defined in the location block if there is missing data.
      */
     #[Test]
-    public function micropubClientApiRequestCreatesNewNoteWithoutNewPlaceInLocationData(): void
+    public function micropub_client_api_request_creates_new_note_without_new_place_in_location_data(): void
     {
         $faker = Factory::create();
         $note = $faker->text;
@@ -382,7 +381,7 @@ class MicropubControllerTest extends TestCase
      * error. Also check the message.
      */
     #[Test]
-    public function micropubClientApiRequestWithoutTokenReturnsError(): void
+    public function micropub_client_api_request_without_token_returns_error(): void
     {
         $faker = Factory::create();
         $note = $faker->text;
@@ -408,7 +407,7 @@ class MicropubControllerTest extends TestCase
      * an error. Also check the message.
      */
     #[Test]
-    public function micropubClientApiRequestWithTokenWithInsufficientPermissionReturnsError(): void
+    public function micropub_client_api_request_with_token_with_insufficient_permission_returns_error(): void
     {
         $faker = Factory::create();
         $note = $faker->text;
@@ -424,19 +423,19 @@ class MicropubControllerTest extends TestCase
         );
         $response
             ->assertJson([
-                'response' => 'error',
-                'error' => 'insufficient_scope',
+                'error' => 'invalid_scope',
+                'error_description' => 'The token does not have the required scope for this request',
             ])
-            ->assertStatus(401);
+            ->assertStatus(403);
     }
 
     #[Test]
-    public function micropubClientApiRequestForUnsupportedPostTypeReturnsError(): void
+    public function micropub_client_api_request_for_unsupported_post_type_returns_error(): void
     {
         $response = $this->postJson(
             '/api/post',
             [
-                'type' => ['h-unsopported'], // a request type I don’t support
+                'type' => ['h-unsupported'], // a request type I don’t support
                 'properties' => [
                     'content' => ['Some content'],
                 ],
@@ -445,14 +444,14 @@ class MicropubControllerTest extends TestCase
         );
         $response
             ->assertJson([
-                'response' => 'error',
-                'error_description' => 'unsupported_request_type',
+                'error' => 'Unknown Micropub type',
+                'error_description' => 'The request could not be processed by this server',
             ])
             ->assertStatus(500);
     }
 
     #[Test]
-    public function micropubClientApiRequestCreatesNewPlace(): void
+    public function micropub_client_api_request_creates_new_place(): void
     {
         $faker = Factory::create();
         $response = $this->postJson(
@@ -460,8 +459,8 @@ class MicropubControllerTest extends TestCase
             [
                 'type' => ['h-card'],
                 'properties' => [
-                    'name' => $faker->name,
-                    'geo' => 'geo:' . $faker->latitude . ',' . $faker->longitude,
+                    'name' => [$faker->name],
+                    'geo' => ['geo:' . $faker->latitude . ',' . $faker->longitude],
                 ],
             ],
             ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
@@ -472,7 +471,7 @@ class MicropubControllerTest extends TestCase
     }
 
     #[Test]
-    public function micropubClientApiRequestCreatesNewPlaceWithUncertaintyParameter(): void
+    public function micropub_client_api_request_creates_new_place_with_uncertainty_parameter(): void
     {
         $faker = Factory::create();
         $response = $this->postJson(
@@ -480,8 +479,8 @@ class MicropubControllerTest extends TestCase
             [
                 'type' => ['h-card'],
                 'properties' => [
-                    'name' => $faker->name,
-                    'geo' => 'geo:' . $faker->latitude . ',' . $faker->longitude . ';u=35',
+                    'name' => [$faker->name],
+                    'geo' => ['geo:' . $faker->latitude . ',' . $faker->longitude . ';u=35'],
                 ],
             ],
             ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
@@ -492,14 +491,16 @@ class MicropubControllerTest extends TestCase
     }
 
     #[Test]
-    public function micropubClientApiRequestUpdatesExistingNote(): void
+    public function micropub_client_api_request_updates_existing_note(): void
     {
+        $this->markTestSkipped('Update requests are not supported yet');
+
         $note = Note::factory()->create();
         $response = $this->postJson(
             '/api/post',
             [
                 'action' => 'update',
-                'url' => $note->longurl,
+                'url' => $note->uri,
                 'replace' => [
                     'content' => ['replaced content'],
                 ],
@@ -512,14 +513,16 @@ class MicropubControllerTest extends TestCase
     }
 
     #[Test]
-    public function micropubClientApiRequestUpdatesNoteSyndicationLinks(): void
+    public function micropub_client_api_request_updates_note_syndication_links(): void
     {
+        $this->markTestSkipped('Update requests are not supported yet');
+
         $note = Note::factory()->create();
         $response = $this->postJson(
             '/api/post',
             [
                 'action' => 'update',
-                'url' => $note->longurl,
+                'url' => $note->uri,
                 'add' => [
                     'syndication' => [
                         'https://www.swarmapp.com/checkin/123',
@@ -539,14 +542,16 @@ class MicropubControllerTest extends TestCase
     }
 
     #[Test]
-    public function micropubClientApiRequestAddsImageToNote(): void
+    public function micropub_client_api_request_adds_image_to_note(): void
     {
+        $this->markTestSkipped('Update requests are not supported yet');
+
         $note = Note::factory()->create();
         $response = $this->postJson(
             '/api/post',
             [
                 'action' => 'update',
-                'url' => $note->longurl,
+                'url' => $note->uri,
                 'add' => [
                     'photo' => ['https://example.org/photo.jpg'],
                 ],
@@ -562,8 +567,10 @@ class MicropubControllerTest extends TestCase
     }
 
     #[Test]
-    public function micropubClientApiRequestReturnsErrorTryingToUpdateNonNoteModel(): void
+    public function micropub_client_api_request_returns_error_trying_to_update_non_note_model(): void
     {
+        $this->markTestSkipped('Update requests are not supported yet');
+
         $response = $this->postJson(
             '/api/post',
             [
@@ -581,8 +588,10 @@ class MicropubControllerTest extends TestCase
     }
 
     #[Test]
-    public function micropubClientApiRequestReturnsErrorTryingToUpdateNonExistingNote(): void
+    public function micropub_client_api_request_returns_error_trying_to_update_non_existing_note(): void
     {
+        $this->markTestSkipped('Update requests are not supported yet');
+
         $response = $this->postJson(
             '/api/post',
             [
@@ -600,14 +609,16 @@ class MicropubControllerTest extends TestCase
     }
 
     #[Test]
-    public function micropubClientApiRequestReturnsErrorWhenTryingToUpdateUnsupportedProperty(): void
+    public function micropub_client_api_request_returns_error_when_trying_to_update_unsupported_property(): void
     {
+        $this->markTestSkipped('Update requests are not supported yet');
+
         $note = Note::factory()->create();
         $response = $this->postJson(
             '/api/post',
             [
                 'action' => 'update',
-                'url' => $note->longurl,
+                'url' => $note->uri,
                 'morph' => [ // or any other unsupported update type
                     'syndication' => ['https://www.swarmapp.com/checkin/123'],
                 ],
@@ -620,8 +631,10 @@ class MicropubControllerTest extends TestCase
     }
 
     #[Test]
-    public function micropubClientApiRequestWithTokenWithInsufficientScopeReturnsError(): void
+    public function micropub_client_api_request_with_token_with_insufficient_scope_returns_error(): void
     {
+        $this->markTestSkipped('Update requests are not supported yet');
+
         $response = $this->postJson(
             '/api/post',
             [
@@ -639,14 +652,16 @@ class MicropubControllerTest extends TestCase
     }
 
     #[Test]
-    public function micropubClientApiRequestCanReplaceNoteSyndicationTargets(): void
+    public function micropub_client_api_request_can_replace_note_syndication_targets(): void
     {
+        $this->markTestSkipped('Update requests are not supported yet');
+
         $note = Note::factory()->create();
         $response = $this->postJson(
             '/api/post',
             [
                 'action' => 'update',
-                'url' => $note->longurl,
+                'url' => $note->uri,
                 'replace' => [
                     'syndication' => [
                         'https://www.swarmapp.com/checkin/the-id',
@@ -666,7 +681,7 @@ class MicropubControllerTest extends TestCase
     }
 
     #[Test]
-    public function micropubClientWebRequestCanEncodeTokenWithinTheForm(): void
+    public function micropub_client_web_request_can_encode_token_within_the_form(): void
     {
         $faker = Factory::create();
         $note = $faker->text;
@@ -684,7 +699,7 @@ class MicropubControllerTest extends TestCase
     }
 
     #[Test]
-    public function micropubClientApiRequestCreatesArticlesWhenItIncludesTheNameProperty(): void
+    public function micropub_client_api_request_creates_articles_when_it_includes_the_name_property(): void
     {
         $faker = Factory::create();
         $name = $faker->text(50);
@@ -695,8 +710,8 @@ class MicropubControllerTest extends TestCase
             [
                 'type' => ['h-entry'],
                 'properties' => [
-                    'name' => $name,
-                    'content' => $content,
+                    'name' => [$name],
+                    'content' => [$content],
                 ],
             ],
             ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]

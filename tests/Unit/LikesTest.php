@@ -14,7 +14,7 @@ class LikesTest extends TestCase
     use RefreshDatabase;
 
     #[Test]
-    public function weCanSetTheAuthorUrl(): void
+    public function we_can_set_the_author_url(): void
     {
         $like = new Like;
         $like->author_url = 'https://joe.bloggs/';
@@ -22,7 +22,7 @@ class LikesTest extends TestCase
     }
 
     #[Test]
-    public function weDoNotModifyPlainTextContent(): void
+    public function we_do_not_modify_plain_text_content(): void
     {
         $like = new Like;
         $like->url = 'https://example.org/post/123';
@@ -33,7 +33,7 @@ class LikesTest extends TestCase
     }
 
     #[Test]
-    public function weCanHandleBlankContent(): void
+    public function we_can_handle_blank_content(): void
     {
         $like = new Like;
         $like->url = 'https://example.org/post/123';
@@ -44,7 +44,7 @@ class LikesTest extends TestCase
     }
 
     #[Test]
-    public function htmlLikeContentIsFiltered(): void
+    public function html_like_content_is_filtered(): void
     {
         $htmlEvil = <<<'HTML'
         <div class="h-entry">

@@ -11,7 +11,7 @@ use Tests\TestCase;
 class SearchTest extends TestCase
 {
     #[Test]
-    public function searchEndpointReturnsResults(): void
+    public function search_endpoint_returns_results(): void
     {
         Note::factory(10)->create();
         Note::Factory()->create(['note' => 'hello world']);

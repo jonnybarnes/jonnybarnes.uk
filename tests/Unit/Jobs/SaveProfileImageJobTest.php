@@ -26,7 +26,7 @@ class SaveProfileImageJobTest extends TestCase
     }
 
     #[Test]
-    public function authorshipAlgorithmReturnsNullOnException(): void
+    public function authorship_algorithm_returns_null_on_exception(): void
     {
         $mf = ['items' => []];
         $authorship = $this->createMock(Authorship::class);
@@ -38,7 +38,7 @@ class SaveProfileImageJobTest extends TestCase
     }
 
     #[Test]
-    public function weDoNotProcessTwitterImages(): void
+    public function we_do_not_process_twitter_images(): void
     {
         $mf = ['items' => []];
         $author = [
@@ -56,7 +56,7 @@ class SaveProfileImageJobTest extends TestCase
     }
 
     #[Test]
-    public function remoteAuthorImagesAreSavedLocally(): void
+    public function remote_author_images_are_saved_locally(): void
     {
         $mock = new MockHandler([
             new Response(200, ['Content-Type' => 'image/jpeg'], 'fake jpeg image'),
@@ -81,7 +81,7 @@ class SaveProfileImageJobTest extends TestCase
     }
 
     #[Test]
-    public function localDefaultAuthorImageIsUsedAsFallback(): void
+    public function local_default_author_image_is_used_as_fallback(): void
     {
         $mock = new MockHandler([
             new Response(404),
@@ -109,7 +109,7 @@ class SaveProfileImageJobTest extends TestCase
     }
 
     #[Test]
-    public function weGetUrlFromPhotoObjectIfAltTextIsProvided(): void
+    public function we_get_url_from_photo_object_if_alt_text_is_provided(): void
     {
         $mock = new MockHandler([
             new Response(200, ['Content-Type' => 'image/jpeg'], 'fake jpeg image'),
@@ -137,7 +137,7 @@ class SaveProfileImageJobTest extends TestCase
     }
 
     #[Test]
-    public function useFirstUrlIfMultipleHomepagesAreProvided(): void
+    public function use_first_url_if_multiple_homepages_are_provided(): void
     {
         $mock = new MockHandler([
             new Response(200, ['Content-Type' => 'image/jpeg'], 'fake jpeg image'),

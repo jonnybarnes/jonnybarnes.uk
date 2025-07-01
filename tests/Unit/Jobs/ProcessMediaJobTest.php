@@ -13,7 +13,7 @@ use Tests\TestCase;
 class ProcessMediaJobTest extends TestCase
 {
     #[Test]
-    public function nonMediaFilesAreNotSaved(): void
+    public function non_media_files_are_not_saved(): void
     {
         $manager = app()->make(ImageManager::class);
         Storage::disk('local')->put('media/file.txt', 'This is not an image');
@@ -24,7 +24,7 @@ class ProcessMediaJobTest extends TestCase
     }
 
     #[Test]
-    public function smallImagesAreNotResized(): void
+    public function small_images_are_not_resized(): void
     {
         $manager = app()->make(ImageManager::class);
         Storage::disk('local')->put('media/aaron.png', file_get_contents(__DIR__ . '/../../aaron.png'));
@@ -39,7 +39,7 @@ class ProcessMediaJobTest extends TestCase
     }
 
     #[Test]
-    public function largeImagesHaveSmallerImagesCreated(): void
+    public function large_images_have_smaller_images_created(): void
     {
         $manager = app()->make(ImageManager::class);
         Storage::disk('local')->put('media/test-image.jpg', file_get_contents(__DIR__.'/../../test-image.jpg'));

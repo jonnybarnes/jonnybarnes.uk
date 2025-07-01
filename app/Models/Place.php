@@ -74,24 +74,10 @@ class Place extends Model
         ]));
     }
 
-    protected function longurl(): Attribute
-    {
-        return Attribute::get(
-            get: fn ($value, $attributes) => config('app.url') . '/places/' . $attributes['slug'],
-        );
-    }
-
-    protected function shorturl(): Attribute
-    {
-        return Attribute::get(
-            get: fn ($value, $attributes) => config('url.shorturl') . '/places/' . $attributes['slug'],
-        );
-    }
-
     protected function uri(): Attribute
     {
         return Attribute::get(
-            get: fn () => $this->longurl,
+            get: static fn ($value, $attributes) => config('app.url') . '/places/' . $attributes['slug'],
         );
     }
 

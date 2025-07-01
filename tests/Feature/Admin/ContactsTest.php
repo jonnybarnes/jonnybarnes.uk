@@ -29,7 +29,7 @@ class ContactsTest extends TestCase
     }
 
     #[Test]
-    public function contactIndexPageLoads(): void
+    public function contact_index_page_loads(): void
     {
         $user = User::factory()->make();
 
@@ -38,7 +38,7 @@ class ContactsTest extends TestCase
     }
 
     #[Test]
-    public function contactCreatePageLoads(): void
+    public function contact_create_page_loads(): void
     {
         $user = User::factory()->make();
 
@@ -47,7 +47,7 @@ class ContactsTest extends TestCase
     }
 
     #[Test]
-    public function adminCanCreateNewContact(): void
+    public function admin_can_create_new_contact(): void
     {
         $user = User::factory()->make();
 
@@ -64,7 +64,7 @@ class ContactsTest extends TestCase
     }
 
     #[Test]
-    public function adminCanSeeFormToEditContact(): void
+    public function admin_can_see_form_to_edit_contact(): void
     {
         $user = User::factory()->make();
         $contact = Contact::factory()->create();
@@ -74,7 +74,7 @@ class ContactsTest extends TestCase
     }
 
     #[Test]
-    public function adminCanUpdateContact(): void
+    public function admin_can_update_contact(): void
     {
         $user = User::factory()->make();
         $contact = Contact::factory()->create();
@@ -93,7 +93,7 @@ class ContactsTest extends TestCase
     }
 
     #[Test]
-    public function adminCanEditContactAndUploadAvatar(): void
+    public function admin_can_edit_contact_and_upload_avatar(): void
     {
         copy(__DIR__ . '/../../aaron.png', sys_get_temp_dir() . '/tantek.png');
         $path = sys_get_temp_dir() . '/tantek.png';
@@ -116,7 +116,7 @@ class ContactsTest extends TestCase
     }
 
     #[Test]
-    public function adminCanDeleteContact(): void
+    public function admin_can_delete_contact(): void
     {
         $user = User::factory()->make();
         $contact = Contact::factory()->create(['nick' => 'tantek']);
@@ -134,7 +134,7 @@ class ContactsTest extends TestCase
     }
 
     #[Test]
-    public function adminCanTriggerRetrievalOfRemoteAvatar(): void
+    public function admin_can_trigger_retrieval_of_remote_avatar(): void
     {
         $html = <<<'HTML'
         <div class="h-card">
@@ -163,7 +163,7 @@ class ContactsTest extends TestCase
     }
 
     #[Test]
-    public function gettingRemoteAvatarFailsGracefullyWithRemoteNotFound(): void
+    public function getting_remote_avatar_fails_gracefully_with_remote_not_found(): void
     {
         $mock = new MockHandler([
             new Response(404),
@@ -180,7 +180,7 @@ class ContactsTest extends TestCase
     }
 
     #[Test]
-    public function gettingRemoteAvatarFailsGracefullyWithRemoteError(): void
+    public function getting_remote_avatar_fails_gracefully_with_remote_error(): void
     {
         $html = <<<'HTML'
         <div class="h-card">
@@ -203,7 +203,7 @@ class ContactsTest extends TestCase
     }
 
     #[Test]
-    public function gettingRemoteAvatarFailsGracefullyForContactWithNoHompage(): void
+    public function getting_remote_avatar_fails_gracefully_for_contact_with_no_hompage(): void
     {
         $contact = Contact::create([
             'nick' => 'fred',

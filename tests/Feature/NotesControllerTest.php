@@ -18,7 +18,7 @@ class NotesControllerTest extends TestCase
      * mean the database is being hit.
      */
     #[Test]
-    public function notesPageLoads(): void
+    public function notes_page_loads(): void
     {
         $response = $this->get('/notes');
         $response->assertStatus(200);
@@ -28,10 +28,10 @@ class NotesControllerTest extends TestCase
      * Test a specific note.
      */
     #[Test]
-    public function specificNotePageLoads(): void
+    public function specific_note_page_loads(): void
     {
         $note = Note::factory()->create();
-        $response = $this->get($note->longurl);
+        $response = $this->get($note->uri);
         $response->assertViewHas('note');
     }
 
@@ -47,32 +47,32 @@ class NotesControllerTest extends TestCase
      * Test that `/note/{decID}` redirects to `/notes/{nb60id}`.
      */
     #[Test]
-    public function oldNoteUrlsRedirect(): void
+    public function old_note_urls_redirect(): void
     {
         $note = Note::factory()->create();
         $response = $this->get('/note/' . $note->id);
-        $response->assertRedirect($note->longurl);
+        $response->assertRedirect($note->uri);
     }
 
     /**
      * Visit the tagged page and check the tag view data.
      */
     #[Test]
-    public function taggedNotesPageLoads(): void
+    public function tagged_notes_page_loads(): void
     {
         $response = $this->get('/notes/tagged/beer');
         $response->assertViewHas('tag', 'beer');
     }
 
     #[Test]
-    public function unknownNoteGives404(): void
+    public function unknown_note_gives404(): void
     {
         $response = $this->get('/notes/112233');
         $response->assertNotFound();
     }
 
     #[Test]
-    public function checkNoteIdNotOutOfRange(): void
+    public function check_note_id_not_out_of_range(): void
     {
         $response = $this->get('/notes/photou-photologo');
         $response->assertNotFound();

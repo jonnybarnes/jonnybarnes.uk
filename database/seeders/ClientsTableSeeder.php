@@ -11,8 +11,6 @@ class ClientsTableSeeder extends Seeder
 {
     /**
      * Seed the clients table.
-     *
-     * @psalm-suppress PossiblyUnusedMethod
      */
     public function run(): void
     {

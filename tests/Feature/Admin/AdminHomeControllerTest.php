@@ -14,7 +14,7 @@ class AdminHomeControllerTest extends TestCase
     use RefreshDatabase;
 
     #[Test]
-    public function adminHomepageLoads(): void
+    public function admin_homepage_loads(): void
     {
         $user = User::factory()->make();
 
