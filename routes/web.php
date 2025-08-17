@@ -137,6 +137,16 @@ Route::middleware(MyAuthMiddleware::class)->prefix('admin')->group(function () {
         Route::delete('/{syndicationTarget}', [SyndicationTargetsController::class, 'destroy']);
     });
 
+    // Clients
+    Route::prefix('clients')->group(function () {
+        Route::get('/', [ClientsController::class, 'index']);
+        Route::get('/create', [ClientsController::class, 'create']);
+        Route::post('/', [ClientsController::class, 'store']);
+        Route::get('/{clientId}/edit', [ClientsController::class, 'edit']);
+        Route::put('/{clientId}', [ClientsController::class, 'update']);
+        Route::delete('/{clientId}', [ClientsController::class, 'destroy']);
+    });
+
     // Bio
     Route::prefix('bio')->group(function () {
         Route::get('/', [BioController::class, 'show'])->name('admin.bio.show');

@@ -13,6 +13,6 @@
     @endforeach
     </ul>
     <p>
-        Create a <a href="/admin/clients/new">new entry</a>?
+        Create a <a href="/admin/clients/create">new entry</a>?
     </p>
 @stop

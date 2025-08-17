@@ -51,7 +51,7 @@ class MicropubRequest extends FormRequest
         // Convert JSON type (h-entry) to simple type (entry)
         if (isset($data['type']) && is_array($data['type'])) {
             $type = current($data['type']);
-            if (strpos($type, 'h-') === 0) {
+            if (str_starts_with($type, 'h-')) {
                 $this->micropubData['type'] = substr($type, 2);
             }
         }
@@ -67,7 +67,7 @@ class MicropubRequest extends FormRequest
         $this->micropubData['content'] = Arr::get($data, 'properties.content.0');
         $this->micropubData['in-reply-to'] = Arr::get($data, 'properties.in-reply-to.0');
         $this->micropubData['published'] = Arr::get($data, 'properties.published.0');
-        $this->micropubData['location'] = Arr::get($data, 'location');
+        $this->micropubData['location'] = $this->getLocationData($data);
         $this->micropubData['bookmark-of'] = Arr::get($data, 'properties.bookmark-of.0');
         $this->micropubData['like-of'] = Arr::get($data, 'properties.like-of.0');
         $this->micropubData['mp-syndicate-to'] = Arr::get($data, 'properties.mp-syndicate-to');
@@ -102,5 +102,18 @@ class MicropubRequest extends FormRequest
         foreach ($this->except(['h', 'access_token']) as $key => $value) {
             $this->micropubData[$key] = $value;
         }
+    }
+
+    private function getLocationData(array $data): array|string|null
+    {
+        if (! Arr::has($data, 'properties.location')) {
+            return null;
+        }
+
+        if (Arr::has($data, 'properties.location.0')) {
+            return Arr::get($data, 'properties.location.0');
+        }
+
+        return Arr::get($data, 'properties.location');
     }
 }
