@@ -14,7 +14,7 @@
         "lightningcss": "^1.29.3",
         "lightningcss-cli": "^1.29.3",
         "stylelint": "^16.7.0",
-        "stylelint-config-standard": "^38.0.0"
+        "stylelint-config-standard": "^39.0.0"
     },
     "scripts": {
         "eslint": "eslint public/assets/js/*.js",

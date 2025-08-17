@@ -278,6 +278,31 @@ class MicropubControllerTest extends TestCase
         Queue::assertPushed(SyndicateNoteToBluesky::class);
     }
 
+    #[Test]
+    public function micropub_client_api_request_creates_new_note_with_geo_location(): void
+    {
+        $faker = Factory::create();
+        $note = $faker->text;
+        $response = $this->postJson(
+            '/api/post',
+            [
+                'type' => ['h-entry'],
+                'properties' => [
+                    'content' => [$note],
+                    'location' => ['geo:1.23,4.56'],
+                ],
+            ],
+            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+        );
+        $response
+            ->assertStatus(201)
+            ->assertJson(['response' => 'created']);
+        $this->assertDatabaseHas('notes', [
+            'note' => $note,
+            'location' => '1.23, 4.56',
+        ]);
+    }
+
     /**
      * Test a valid micropub requests using JSON syntax creates a new note with
      * existing self-created place.
@@ -323,13 +348,13 @@ class MicropubControllerTest extends TestCase
                 'type' => ['h-entry'],
                 'properties' => [
                     'content' => [$note],
-                ],
-                'location' => [
-                    'type' => ['h-card'],
-                    'properties' => [
-                        'name' => ['Awesome Venue'],
-                        'latitude' => ['1.23'],
-                        'longitude' => ['4.56'],
+                    'location' => [
+                        'type' => ['h-card'],
+                        'properties' => [
+                            'name' => ['Awesome Venue'],
+                            'latitude' => ['1.23'],
+                            'longitude' => ['4.56'],
+                        ],
                     ],
                 ],
             ],
