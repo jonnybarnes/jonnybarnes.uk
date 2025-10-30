@@ -111,7 +111,6 @@ return [
 
     'report_error_levels' => null,
 
-
     /*
     |--------------------------------------------------------------------------
     | Share button
@@ -139,7 +138,7 @@ return [
     */
 
     'overridden_groupings' => [
-//        Illuminate\Http\Client\ConnectionException::class => Spatie\FlareClient\Enums\OverriddenGrouping::ExceptionMessageAndClass,
+        //        Illuminate\Http\Client\ConnectionException::class => Spatie\FlareClient\Enums\OverriddenGrouping::ExceptionMessageAndClass,
     ],
 
     /*
@@ -158,7 +157,6 @@ return [
             'timeout' => 10,
         ],
     ],
-
 
     /*
     |--------------------------------------------------------------------------
