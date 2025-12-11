@@ -9,7 +9,7 @@
 
   body {
     display: grid;
-    grid-template-columns: 1fr min(80ch, 95vw) 1fr;
+    grid-template-columns: 1fr min(80ch, 80vw) 1fr;
     grid-template-rows: min-content 1fr min-content;
     padding-inline: 4vw;
 
@@ -30,6 +30,10 @@
         flex-direction: row;
         align-items: center;
         gap: 1ex;
+
+        input {
+          min-width: 0;
+        }
       }
     }
   }
