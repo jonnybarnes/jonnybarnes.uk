@@ -1,0 +1,96 @@
+@layer components {
+  #theme-selector {
+    button {
+      appearance: none;
+      border: none;
+      background: none;
+
+      &:hover {
+        cursor: pointer;
+      }
+    }
+
+    /* This is the element with the [popover] attribute */
+    #theme-selector-dropdown {
+      position: absolute;
+      position-area: block-end span-inline-start;
+      margin: 0;
+      border: 2px solid var(--clr-border);
+      background-color: var(--clr-background);
+      color: var(--clr-text);
+
+      fieldset {
+        border: 0;
+        display: flex;
+        flex-direction: row;
+        gap: 1ch;
+
+        input {
+          display: none;
+        }
+      }
+    }
+
+    /*
+     * This is the element with the [popover] attribute
+     * Here we are styling the open and closing animations
+     */
+    @media (prefers-reduced-motion: no-preference) {
+      #theme-selector-dropdown {
+        &:popover-open {
+          transform: translateY(0) scale(1);
+          opacity: 1;
+
+          /*
+           * Start styles for the opening transition.
+           * Added to :popover-open, but after the opened styles.
+           */
+          @starting-style {
+            transform: translateY(30px) scale(0);
+            opacity: 0;
+          }
+        }
+
+        /*
+         * End styles for the closing transition.
+         */
+        transform: translateY(0) scale(0);
+        opacity: 0;
+
+        /*
+         * Enumerate transitioning properties, including display and overlay.
+         */
+        transition: transform, opacity, display allow-discrete, overlay allow-discrete;
+        transition-duration: 0.5s;
+        transform-origin: top right;
+      }
+    }
+  }
+
+  ::view-transition-group(changing-theme) {
+    animation-duration: 1.25s;
+  }
+
+  ::view-transition-new(changing-theme),
+  ::view-transition-old(changing-theme) {
+    mix-blend-mode: normal;
+  }
+
+  ::view-transition-new(changing-theme) {
+    animation-name: reveal;
+  }
+
+  ::view-transition-old(changing-theme) {
+    animation: none;
+  }
+
+  @keyframes reveal {
+    from {
+      clip-path: polygon(-30% 0, -30% 0, -15% 100%, -10% 115%);
+    }
+
+    to {
+      clip-path: polygon(-30% 0, 130% 0, 115% 100%, -10% 115%);
+    }
+  }
+}

@@ -8,7 +8,7 @@
     "devDependencies": {
         "@eslint/js": "^9.6.0",
         "@stylistic/eslint-plugin": "^5.1.0",
-        "esbuild": "^0.25.2",
+        "esbuild": "^0.27.1",
         "eslint": "^9.7.0",
         "globals": "^16.0.0",
         "lightningcss": "^1.29.3",
@@ -17,13 +17,18 @@
         "stylelint-config-standard": "^39.0.0"
     },
     "scripts": {
-        "eslint": "eslint public/assets/js/*.js",
+        "eslint": "eslint resources/js/*.js",
         "stylelint": "stylelint resources/css/*.css",
         "lint": "npm run eslint && npm run stylelint",
         "lightningcss": "lightningcss --output-dir public/assets/css --sourcemap --bundle --minify resources/css/app.css",
         "fix-sourcemap": "./scripts/fix-sourcemap.sh",
         "build-css": "npm run lightningcss && npm run fix-sourcemap",
+        "build-js": "esbuild resources/js/app.js --bundle --minify --sourcemap --outfile=public/assets/js/app.js",
         "compress": "./scripts/compress.sh",
-        "build": "npm run lint && npm run compress"
+        "build": "npm run lint && npm run build-css && npm run build-js && npm run compress"
+    },
+    "dependencies": {
+        "@11ty/is-land": "^5.0.0",
+        "@zachleat/snow-fall": "^1.0.3"
     }
 }

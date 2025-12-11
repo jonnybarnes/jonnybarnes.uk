@@ -1,28 +1,30 @@
-body {
-  background-color: var(--color-secondary);
-  color: var(--color-primary);
-}
+@layer base {
+  :root {
+    color-scheme: light dark;
 
-a {
-  color: var(--color-link);
+    --primary-hue: 307;
+    --clr-text: light-dark(
+      oklch(5% 0.1 var(--primary-hue)),
+      oklch(100% 0.1 var(--primary-hue))
+    );
+    --clr-background: light-dark(
+      oklch(100% 0.1 var(--primary-hue)),
+      oklch(15% 0.15 var(--primary-hue))
+    );
+    --clr-border: light-dark(
+      oklch(90% 0.2 var(--primary-hue)),
+      oklch(25% 0.1 var(--primary-hue))
+    );
 
-  &:visited {
-    color: var(--color-link-visited);
+    /* Adding snow fall colour whilst we are using it */
+    --clr-snow-fall: light-dark(
+      oklch(25% 0.15 var(--primary-hue)),
+      oklch(85% 0.2 var(--primary-hue))
+    );
   }
 
-  &.auth:visited {
-    color: var(--color-link);
-  }
-}
-
-#site-header {
-  & a:visited {
-    color: var(--color-link);
-  }
-
-  & .rss-icon {
-    & svg {
-      color: var(--rss-color-link);
-    }
+  body {
+    background-color: var(--clr-background);
+    color: var(--clr-text);
   }
 }
