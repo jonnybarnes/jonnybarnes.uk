@@ -46,21 +46,18 @@
                         <div class="replies">
                             @include('icons.reply')
                             {{ $note->replies }}
-                            <span class="sr-only">replies</span>
                         </div>
                     @endif
                     @if($note->likes > 0)
                         <div class="likes">
                             @include('icons.like')
                             {{ $note->likes }}
-                            <span class="sr-only">likes</span>
                         </div>
                     @endif
                     @if($note->reposts > 0)
                         <div class="reposts">
                             @include('icons.repost')
                             {{ $note->reposts }}
-                            <span class="sr-only">reposts</span>
                         </div>
                     @endif
                 </div>
