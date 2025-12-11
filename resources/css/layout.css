@@ -1,55 +1,42 @@
-.grid {
-  display: grid;
-  grid-template-columns: 5vw 1fr 5vw;
-  grid-template-rows: min-content 1fr min-content;
-  row-gap: 1rem;
-}
+@layer base {
+  :root {
+    --border-radius: 8px;
+  }
 
-#site-header {
-  grid-column: 2 / 3;
-  grid-row: 1 / 2;
+  html {
+    font-size: 125%;
+  }
 
-  & .rss-icon {
-    & svg {
-      width: auto;
-      height: 1rem;
+  body {
+    display: grid;
+    grid-template-columns: 1fr min(80ch, 95vw) 1fr;
+    grid-template-rows: min-content 1fr min-content;
+    padding-inline: 4vw;
+
+    > header {
+      grid-column: 1/-1;
+    }
+
+    > main {
+      grid-column: 2/3;
+    }
+
+    > footer {
+      grid-column: 1/-1;
+      margin-block-start: 2ex;
+
+      search form {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 1ex;
+      }
     }
   }
-}
 
-main {
-  grid-column: 2 / 3;
-  grid-row: 2 / 3;
-}
-
-.h-feed {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-}
-
-.h-entry {
-  & p:first-of-type,
-  & h1:first-of-type {
-    margin-block-start: 0;
-  }
-}
-
-.pagination {
-  margin-block-start: 1rem;
-}
-
-footer {
-  grid-column: 2 / 3;
-  grid-row: 3 / 4;
-
-  & .iwc-logo {
-    max-width: 85vw;
-  }
-
-  & .footer-actions {
+  .h-feed {
     display: flex;
-    flex-direction: row;
-    gap: 1rem;
+    flex-direction: column;
+    gap: 2ex;
   }
 }
