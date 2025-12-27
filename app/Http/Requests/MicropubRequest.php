@@ -80,6 +80,9 @@ class MicropubRequest extends FormRequest
         // Add checkin value
         $this->micropubData['checkin'] = Arr::get($data, 'checkin');
         $this->micropubData['syndication'] = Arr::get($data, 'properties.syndication.0');
+
+        // Add photos
+        $this->micropubData['photos'] = Arr::get($data, 'properties.photo');
     }
 
     private function normalizeMicropubForm(): void

@@ -48,12 +48,12 @@ class NoteService
             $note->place()->associate($this->getCheckin($data));
             $note->swarm_url = $this->getSwarmUrl($data);
         }
-        //
-        //        $note->instagram_url = $this->getInstagramUrl($request);
-        //
-        //        foreach ($this->getMedia($request) as $media) {
-        //            $note->media()->save($media);
-        //        }
+
+        // $note->instagram_url = $this->getInstagramUrl($request);
+
+        foreach ($this->getMedia($data) as $media) {
+            $note->media()->save($media);
+        }
 
         $note->save();
 
@@ -188,16 +188,16 @@ class NoteService
     /**
      * Get the media URLs from the request to create a new note.
      */
-    private function getMedia(array $request): array
+    private function getMedia(array $data): array
     {
         $media = [];
-        $photos = Arr::get($request, 'photo') ?? Arr::get($request, 'properties.photo');
+        $photos = Arr::get($data, 'photos');
 
         if (isset($photos)) {
             foreach ((array) $photos as $photo) {
                 // check the media was uploaded to my endpoint, and use path
-                if (Str::startsWith($photo, config('filesystems.disks.s3.url'))) {
-                    $path = substr($photo, strlen(config('filesystems.disks.s3.url')));
+                if (Str::startsWith($photo, config('filesystems.disks.public.url'))) {
+                    $path = substr($photo, strlen(config('filesystems.disks.public.url')));
                     $media[] = Media::where('path', ltrim($path, '/'))->firstOrFail();
                 } else {
                     $newMedia = Media::firstOrNew(['path' => $photo]);
