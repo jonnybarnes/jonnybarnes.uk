@@ -53,7 +53,7 @@ class NoteService
 
         foreach ($this->getMedia($data) as $index => $media) {
             $note->media()->attach($media['value']->id, [
-                'alt_text' => $media['alt_text'],
+                'alt_text' => $media['alt'],
                 'order' => $index,
             ]);
         }
