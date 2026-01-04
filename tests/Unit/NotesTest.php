@@ -434,4 +434,21 @@ class NotesTest extends TestCase
 
         $this->assertSame($expected, $note->note);
     }
+
+    #[Test]
+    public function note_can_have_media_with_alt_text(): void
+    {
+        $note = Note::factory()->create();
+        $media = Media::factory()->create();
+
+        $note->media()->attach($media->id, [
+            'alt_text' => 'Test alt text',
+            'order' => 0,
+        ]);
+
+        $note->refresh();
+
+        $this->assertCount(1, $note->media);
+        $this->assertEquals('Test alt text', $note->media->first()->pivot->alt_text);
+    }
 }

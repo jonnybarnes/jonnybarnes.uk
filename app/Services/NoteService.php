@@ -51,8 +51,11 @@ class NoteService
 
         // $note->instagram_url = $this->getInstagramUrl($request);
 
-        foreach ($this->getMedia($data) as $media) {
-            $note->media()->save($media);
+        foreach ($this->getMedia($data) as $index => $media) {
+            $note->media()->attach($media['value']->id, [
+                'alt_text' => $media['alt_text'],
+                'order' => $index,
+            ]);
         }
 
         $note->save();
@@ -195,16 +198,37 @@ class NoteService
 
         if (isset($photos)) {
             foreach ((array) $photos as $photo) {
+                // $photo can be a string of the URL opf the photo
+                // or it can be an object with a `value` and `alt`
+                $photoUrl = null;
+                $photoAlt = null;
+                if (is_string($photo)) {
+                    $photoUrl = $photo;
+                } elseif (is_array($photo)) {
+                    $photoUrl = $photo['value'];
+                    $photoAlt = $photo['alt'];
+                }
+
+                if (empty($photoUrl)) {
+                    continue;
+                }
+
                 // check the media was uploaded to my endpoint, and use path
-                if (Str::startsWith($photo, config('filesystems.disks.public.url'))) {
-                    $path = substr($photo, strlen(config('filesystems.disks.public.url')));
-                    $media[] = Media::where('path', ltrim($path, '/'))->firstOrFail();
+                if (Str::startsWith($photoUrl, config('filesystems.disks.public.url'))) {
+                    $path = substr($photoUrl, strlen(config('filesystems.disks.public.url')));
+                    $media[] = [
+                        'value' => Media::where('path', ltrim($path, '/'))->firstOrFail(),
+                        'alt' => $photoAlt,
+                    ];
                 } else {
-                    $newMedia = Media::firstOrNew(['path' => $photo]);
+                    $newMedia = Media::firstOrNew(['path' => $photoUrl]);
                     // currently assuming this is a photo from Swarm or OwnYourGram
                     $newMedia->type = 'image';
                     $newMedia->save();
-                    $media[] = $newMedia;
+                    $media[] = [
+                        'value' => $newMedia,
+                        'alt' => $photoAlt,
+                    ];
                 }
             }
         }

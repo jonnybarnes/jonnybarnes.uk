@@ -15,11 +15,18 @@ class MediaTest extends TestCase
     use RefreshDatabase;
 
     #[Test]
-    public function get_the_note_that_media_instance_belongs_to(): void
+    public function media_can_belong_to_multiple_notes(): void
     {
-        $media = Media::factory()->for(Note::factory())->create();
+        $media = Media::factory()->create();
+        $note1 = Note::factory()->create();
+        $note2 = Note::factory()->create();
 
-        $this->assertInstanceOf(Note::class, $media->note);
+        $note1->media()->attach($media->id, ['alt_text' => 'Alt text for note 1']);
+        $note2->media()->attach($media->id, ['alt_text' => 'Alt text for note 2']);
+
+        $this->assertCount(2, $media->notes);
+        $this->assertTrue($media->notes->contains($note1));
+        $this->assertTrue($media->notes->contains($note2));
     }
 
     #[Test]
