@@ -84,7 +84,9 @@ class NotesTableSeeder extends Seeder
         // copy aaron’s profile pic in place
         $spl = new SplFileInfo(public_path() . '/assets/profile-images/aaronparecki.com');
         if ($spl->isDir() === false) {
-            mkdir(public_path() . '/assets/profile-images/aaronparecki.com', 0755);
+            if (! mkdir($concurrentDirectory = public_path() . '/assets/profile-images/aaronparecki.com', 0755) && ! is_dir($concurrentDirectory)) {
+                throw new \RuntimeException(sprintf('Directory "%s" was not created', $concurrentDirectory));
+            }
             copy(base_path() . '/tests/aaron.png', public_path() . '/assets/profile-images/aaronparecki.com/image');
         }
 
@@ -171,7 +173,9 @@ class NotesTableSeeder extends Seeder
         $noteWithOnlyImage->setCreatedAt($now);
         $noteWithOnlyImage->setUpdatedAt($now);
         $noteWithOnlyImage->save();
-        $noteWithOnlyImage->media()->save($media);
+        $noteWithOnlyImage->media()->attach($media->id, [
+            'alt_text' => 'Test alt text',
+        ]);
         DB::table('notes')
             ->where('id', $noteWithOnlyImage->id)
             ->update(['updated_at' => $now->toDateTimeString()]);

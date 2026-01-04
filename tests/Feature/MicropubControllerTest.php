@@ -236,11 +236,11 @@ class MicropubControllerTest extends TestCase
      * Test a valid micropub requests using JSON syntax creates a new note.
      */
     #[Test]
-    public function micropub_client_api_request_creates_new_note(): void
+    public function micropub_client_api_request_creates_new_note_with_photo(): void
     {
         Queue::fake();
         Media::create([
-            'path' => 'test-photo.jpg',
+            'path' => 'media/test-photo.jpg',
             'type' => 'image',
         ]);
         SyndicationTarget::factory()->create([
@@ -265,12 +265,13 @@ class MicropubControllerTest extends TestCase
                         'https://mastodon.social/@jonnybarnes',
                         'https://bsky.app/profile/jonnybarnes.uk',
                     ],
-                    'photo' => [config('filesystems.disks.s3.url') . '/test-photo.jpg'],
+                    'photo' => [config('filesystems.disks.public.url') . '/media/test-photo.jpg'],
                 ],
             ],
             ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
         );
         $response
+            ->dump()
             ->assertStatus(201)
             ->assertJson(['response' => 'created']);
         Queue::assertPushed(SendWebMentions::class);

@@ -7,7 +7,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Str;
 
 class Media extends Model
@@ -20,9 +20,11 @@ class Media extends Model
     /** @var array<int, string> */
     protected $fillable = ['token', 'path', 'type', 'image_widths'];
 
-    public function note(): BelongsTo
+    public function notes(): BelongsToMany
     {
-        return $this->belongsTo(Note::class);
+        return $this->belongsToMany(Note::class)
+            ->withPivot('alt_text', 'order')
+            ->withTimestamps();
     }
 
     protected function url(): Attribute

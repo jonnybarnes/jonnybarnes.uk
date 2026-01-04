@@ -12,7 +12,7 @@
             @foreach($note->media as $media)
                 @if($media->type === 'image')
                     <a class="naked-link" href="{{ $media->url }}">
-                        <img class="u-photo" src="{{ $media->url }}" alt="" @if($media->image_widths !== null) srcset="{{ $media->url }} {{ $media->image_widths }}w, {{ $media->mediumurl }} 1000w, {{ $media->smallurl }} 500w" sizes="80vh"@endif>
+                        <img class="u-photo" alt="{{ $media->pivot->alt_text }}" @if($media->image_widths !== null) srcset="{{ $media->url }} {{ $media->image_widths }}w, {{ $media->mediumurl }} 1000w, {{ $media->smallurl }} 500w" sizes="min(80ch,80vw)" @else src="{{ $media->url }}" @endif>
                     </a>
                 @endif
                 @if($media->type === 'audio')

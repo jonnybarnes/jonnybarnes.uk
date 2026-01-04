@@ -14,7 +14,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Cache;
@@ -92,9 +91,12 @@ class Note extends Model
         return $this->belongsTo(Place::class);
     }
 
-    public function media(): HasMany
+    public function media(): BelongsToMany
     {
-        return $this->hasMany(Media::class);
+        return $this->BelongsToMany(Media::class)
+            ->withPivot('alt_text', 'order')
+            ->withTimestamps()
+            ->orderBy('order');
     }
 
     /**

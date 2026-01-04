@@ -43,7 +43,7 @@ class ProcessMediaJobTest extends TestCase
     {
         $manager = app()->make(ImageManager::class);
         Storage::disk('local')->put('media/test-image.jpg', file_get_contents(__DIR__.'/../../test-image.jpg'));
-        $job = new ProcessMedia('test-image.jpg');
+        $job = new ProcessMedia('media/test-image.jpg');
         $job->handle($manager);
 
         // These need to look in public disk
