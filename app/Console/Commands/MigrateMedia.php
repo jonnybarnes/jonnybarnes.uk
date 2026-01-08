@@ -71,17 +71,26 @@ class MigrateMedia extends Command
 
                 continue;
             }
-            // Copy the file
-            Storage::disk('public')->writeStream('media'.DIRECTORY_SEPARATOR.$oldMediaItem->file_name, Storage::disk('s3')->readStream($oldMediaItem->id.DIRECTORY_SEPARATOR.$oldMediaItem->file_name));
 
             // Save relationship based on `media.model_id`
             // I have already checked they are all notes
-            $note = $oldMediaItem->model_id;
+            $noteId = $oldMediaItem->model_id;
+            $note = Note::find($noteId);
+            if (! $note) {
+                $this->warn('Note no longer exists');
+
+                continue;
+            }
+
+            // Create media entry in database and attach to note
             $newMediaItem = Media::create([
                 'path' => 'media'.DIRECTORY_SEPARATOR.$oldMediaItem->file_name,
                 'type' => 'image',
             ]);
             $note->media()->attach($newMediaItem->id);
+
+            // Copy the file
+            Storage::disk('public')->writeStream('media'.DIRECTORY_SEPARATOR.$oldMediaItem->file_name, Storage::disk('s3')->readStream($oldMediaItem->id.DIRECTORY_SEPARATOR.$oldMediaItem->file_name));
 
             $this->info('Media item migrated from S3');
         }
