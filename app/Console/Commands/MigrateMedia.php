@@ -43,7 +43,7 @@ class MigrateMedia extends Command
         $this->withProgressBar($mediaEndpointMedia, function (Media $mediaEndpointMediaItem) {
             $note = Note::find($mediaEndpointMediaItem->note_id);
             if ($note) {
-                $note->media()->attach($mediaEndpointMediaItem->id);
+                $note->media()->syncWithoutDetaching($mediaEndpointMediaItem->id);
             }
         });
 
@@ -87,7 +87,7 @@ class MigrateMedia extends Command
                 'path' => 'media'.DIRECTORY_SEPARATOR.$oldMediaItem->file_name,
                 'type' => 'image',
             ]);
-            $note->media()->attach($newMediaItem->id);
+            $note->media()->syncWithoutDetaching($newMediaItem->id);
 
             // Copy the file
             Storage::disk('public')->writeStream('media'.DIRECTORY_SEPARATOR.$oldMediaItem->file_name, Storage::disk('s3')->readStream($oldMediaItem->id.DIRECTORY_SEPARATOR.$oldMediaItem->file_name));
