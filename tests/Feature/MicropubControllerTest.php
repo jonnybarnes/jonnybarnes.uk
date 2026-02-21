@@ -271,7 +271,6 @@ class MicropubControllerTest extends TestCase
             ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
         );
         $response
-            ->dump()
             ->assertStatus(201)
             ->assertJson(['response' => 'created']);
         Queue::assertPushed(SendWebMentions::class);
