@@ -6,15 +6,15 @@
     "repository": "https://github.com/jonnybarnes/jonnybarnes.uk",
     "license": "CC0-1.0",
     "devDependencies": {
-        "@eslint/js": "^9.6.0",
+        "@eslint/js": "^10.0.1",
         "@stylistic/eslint-plugin": "^5.1.0",
         "esbuild": "^0.27.1",
-        "eslint": "^9.7.0",
-        "globals": "^16.0.0",
+        "eslint": "^10.0.1",
+        "globals": "^17.3.0",
         "lightningcss": "^1.29.3",
         "lightningcss-cli": "^1.29.3",
-        "stylelint": "^16.7.0",
-        "stylelint-config-standard": "^39.0.0"
+        "stylelint": "^17.3.0",
+        "stylelint-config-standard": "^40.0.0"
     },
     "scripts": {
         "eslint": "eslint resources/js/*.js",
