@@ -2,26 +2,34 @@
 
 declare(strict_types=1);
 
-namespace App\Services\Micropub;
+namespace App\Services\Micropub\Handlers;
 
 use App\Exceptions\InvalidTokenScopeException;
 use App\Exceptions\MicropubHandlerException;
 use App\Exceptions\MicropubUnsupportedModelException;
 use App\Models\Media;
 use App\Models\Note;
-use Illuminate\Support\Arr;
+use App\Services\Micropub\Data\MicropubData;
+use App\Services\Micropub\Data\UpdateData;
 use Illuminate\Support\Str;
 
 class UpdateHandler implements MicropubHandlerInterface
 {
+    public function dataClass(): string
+    {
+        return UpdateData::class;
+    }
+
     /**
      * @throws InvalidTokenScopeException
      * @throws MicropubUnsupportedModelException
      * @throws MicropubHandlerException
      */
-    public function handle(array $data): array
+    public function handle(MicropubData $data): array
     {
-        $scopes = $data['token_data']['scope'];
+        assert($data instanceof UpdateData);
+
+        $scopes = $data->tokenData['scope'];
         if (is_string($scopes)) {
             $scopes = explode(' ', $scopes);
         }
@@ -30,7 +38,7 @@ class UpdateHandler implements MicropubHandlerInterface
             throw new InvalidTokenScopeException;
         }
 
-        $urlPath = parse_url(Arr::get($data, 'update_url'), PHP_URL_PATH);
+        $urlPath = parse_url($data->updateUrl, PHP_URL_PATH);
 
         if (mb_substr($urlPath, 1, 5) !== 'notes') {
             throw new MicropubUnsupportedModelException('This implementation currently only supports the updating of notes');
@@ -38,8 +46,8 @@ class UpdateHandler implements MicropubHandlerInterface
 
         $note = Note::nb60(basename($urlPath))->firstOrFail();
 
-        if (Arr::get($data, 'update_replace')) {
-            foreach (Arr::get($data, 'update_replace') as $property => $value) {
+        if ($data->updateReplace !== null) {
+            foreach ($data->updateReplace as $property => $value) {
                 if ($property === 'content') {
                     $note->note = $value[0];
                 }
@@ -55,8 +63,8 @@ class UpdateHandler implements MicropubHandlerInterface
             ];
         }
 
-        if (Arr::get($data, 'update_add')) {
-            foreach (Arr::get($data, 'update_add') as $property => $value) {
+        if ($data->updateAdd !== null) {
+            foreach ($data->updateAdd as $property => $value) {
                 if ($property === 'syndication') {
                     $this->applySyndication($note, $value);
                 }

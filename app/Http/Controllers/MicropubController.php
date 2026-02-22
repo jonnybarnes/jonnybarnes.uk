@@ -45,7 +45,9 @@ class MicropubController extends Controller
 
         try {
             $handler = $this->handlerRegistry->getHandler($type);
-            $result = $handler->handle($request->getMicropubData());
+            $dataClass = $handler->dataClass();
+            $data = $dataClass::fromArray($request->getMicropubData());
+            $result = $handler->handle($data);
 
             if ($result['response'] === 'updated') {
                 return response()->json([

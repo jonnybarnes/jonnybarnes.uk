@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
-use App\Services\Micropub\CardHandler;
-use App\Services\Micropub\EntryHandler;
+use App\Services\Micropub\Handlers\CardHandler;
+use App\Services\Micropub\Handlers\EntryHandler;
+use App\Services\Micropub\Handlers\UpdateHandler;
 use App\Services\Micropub\MicropubHandlerRegistry;
-use App\Services\Micropub\UpdateHandler;
 use Illuminate\Support\ServiceProvider;
 
 class MicropubServiceProvider extends ServiceProvider
