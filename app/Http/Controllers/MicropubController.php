@@ -6,10 +6,12 @@ namespace App\Http\Controllers;
 
 use App\Exceptions\InvalidTokenScopeException;
 use App\Exceptions\MicropubHandlerException;
+use App\Exceptions\MicropubUnsupportedModelException;
 use App\Http\Requests\MicropubRequest;
 use App\Models\Place;
 use App\Models\SyndicationTarget;
 use App\Services\Micropub\MicropubHandlerRegistry;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Lcobucci\JWT\Token;
@@ -45,11 +47,31 @@ class MicropubController extends Controller
             $handler = $this->handlerRegistry->getHandler($type);
             $result = $handler->handle($request->getMicropubData());
 
-            // Return appropriate response based on the handler result
+            if ($result['response'] === 'updated') {
+                return response()->json([
+                    'response' => $result['response'],
+                ], 200)->header('Location', $result['url']);
+            }
+
             return response()->json([
                 'response' => $result['response'],
                 'location' => $result['url'] ?? null,
             ], 201)->header('Location', $result['url']);
+        } catch (InvalidTokenScopeException) {
+            return response()->json([
+                'error' => 'insufficient_scope',
+                'error_description' => 'The token does not have the required scope for this request',
+            ], 401);
+        } catch (ModelNotFoundException) {
+            return response()->json([
+                'error' => 'invalid_request',
+                'error_description' => 'No known note with given ID',
+            ], 404);
+        } catch (MicropubUnsupportedModelException) {
+            return response()->json([
+                'error' => 'invalid',
+                'error_description' => 'This implementation currently only supports the updating of notes',
+            ], 500);
         } catch (\InvalidArgumentException $e) {
             return response()->json([
                 'error' => 'invalid_request',
@@ -57,15 +79,10 @@ class MicropubController extends Controller
             ], 400);
         } catch (MicropubHandlerException) {
             return response()->json([
-                'error' => 'Unknown Micropub type',
+                'error' => 'unsupported_operation',
                 'error_description' => 'The request could not be processed by this server',
             ], 500);
-        } catch (InvalidTokenScopeException) {
-            return response()->json([
-                'error' => 'invalid_scope',
-                'error_description' => 'The token does not have the required scope for this request',
-            ], 403);
-        } catch (\Exception) {
+        } catch (\Exception $e) {
             return response()->json([
                 'error' => 'server_error',
                 'error_description' => 'An error occurred processing the request',

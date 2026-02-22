@@ -228,8 +228,8 @@ class MicropubControllerTest extends TestCase
             ],
             ['HTTP_Authorization' => 'Bearer ' . $this->getTokenWithIncorrectScope()]
         );
-        $response->assertStatus(403);
-        $response->assertJson(['error' => 'invalid_scope']);
+        $response->assertStatus(401);
+        $response->assertJson(['error' => 'insufficient_scope']);
     }
 
     /**
@@ -448,10 +448,10 @@ class MicropubControllerTest extends TestCase
         );
         $response
             ->assertJson([
-                'error' => 'invalid_scope',
+                'error' => 'insufficient_scope',
                 'error_description' => 'The token does not have the required scope for this request',
             ])
-            ->assertStatus(403);
+            ->assertStatus(401);
     }
 
     #[Test]
@@ -469,7 +469,7 @@ class MicropubControllerTest extends TestCase
         );
         $response
             ->assertJson([
-                'error' => 'Unknown Micropub type',
+                'error' => 'unsupported_operation',
                 'error_description' => 'The request could not be processed by this server',
             ])
             ->assertStatus(500);
@@ -518,8 +518,6 @@ class MicropubControllerTest extends TestCase
     #[Test]
     public function micropub_client_api_request_updates_existing_note(): void
     {
-        $this->markTestSkipped('Update requests are not supported yet');
-
         $note = Note::factory()->create();
         $response = $this->postJson(
             '/api/post',
@@ -534,14 +532,15 @@ class MicropubControllerTest extends TestCase
         );
         $response
             ->assertJson(['response' => 'updated'])
-            ->assertStatus(200);
+            ->assertSuccessful();
+
+        $note->refresh();
+        $this->assertSame('replaced content', $note->content);
     }
 
     #[Test]
     public function micropub_client_api_request_updates_note_syndication_links(): void
     {
-        $this->markTestSkipped('Update requests are not supported yet');
-
         $note = Note::factory()->create();
         $response = $this->postJson(
             '/api/post',
@@ -559,7 +558,8 @@ class MicropubControllerTest extends TestCase
         );
         $response
             ->assertJson(['response' => 'updated'])
-            ->assertStatus(200);
+            ->assertSuccessful();
+
         $this->assertDatabaseHas('notes', [
             'swarm_url' => 'https://www.swarmapp.com/checkin/123',
             'facebook_url' => 'https://www.facebook.com/checkin/123',
@@ -569,8 +569,6 @@ class MicropubControllerTest extends TestCase
     #[Test]
     public function micropub_client_api_request_adds_image_to_note(): void
     {
-        $this->markTestSkipped('Update requests are not supported yet');
-
         $note = Note::factory()->create();
         $response = $this->postJson(
             '/api/post',
@@ -585,7 +583,7 @@ class MicropubControllerTest extends TestCase
         );
         $response
             ->assertJson(['response' => 'updated'])
-            ->assertStatus(200);
+            ->assertSuccessful();
         $this->assertDatabaseHas('media_endpoint', [
             'path' => 'https://example.org/photo.jpg',
         ]);
@@ -594,8 +592,6 @@ class MicropubControllerTest extends TestCase
     #[Test]
     public function micropub_client_api_request_returns_error_trying_to_update_non_note_model(): void
     {
-        $this->markTestSkipped('Update requests are not supported yet');
-
         $response = $this->postJson(
             '/api/post',
             [
@@ -615,8 +611,6 @@ class MicropubControllerTest extends TestCase
     #[Test]
     public function micropub_client_api_request_returns_error_trying_to_update_non_existing_note(): void
     {
-        $this->markTestSkipped('Update requests are not supported yet');
-
         $response = $this->postJson(
             '/api/post',
             [
@@ -636,8 +630,6 @@ class MicropubControllerTest extends TestCase
     #[Test]
     public function micropub_client_api_request_returns_error_when_trying_to_update_unsupported_property(): void
     {
-        $this->markTestSkipped('Update requests are not supported yet');
-
         $note = Note::factory()->create();
         $response = $this->postJson(
             '/api/post',
@@ -651,15 +643,13 @@ class MicropubControllerTest extends TestCase
             ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
         );
         $response
-            ->assertJson(['response' => 'error'])
+            ->assertJson(['error' => 'unsupported_operation'])
             ->assertStatus(500);
     }
 
     #[Test]
     public function micropub_client_api_request_with_token_with_insufficient_scope_returns_error(): void
     {
-        $this->markTestSkipped('Update requests are not supported yet');
-
         $response = $this->postJson(
             '/api/post',
             [
@@ -679,8 +669,6 @@ class MicropubControllerTest extends TestCase
     #[Test]
     public function micropub_client_api_request_can_replace_note_syndication_targets(): void
     {
-        $this->markTestSkipped('Update requests are not supported yet');
-
         $note = Note::factory()->create();
         $response = $this->postJson(
             '/api/post',
@@ -698,7 +686,7 @@ class MicropubControllerTest extends TestCase
         );
         $response
             ->assertJson(['response' => 'updated'])
-            ->assertStatus(200);
+            ->assertSuccessful();
         $this->assertDatabaseHas('notes', [
             'swarm_url' => 'https://www.swarmapp.com/checkin/the-id',
             'facebook_url' => 'https://www.facebook.com/post/the-id',

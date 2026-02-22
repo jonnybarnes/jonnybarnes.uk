@@ -7,6 +7,7 @@ namespace App\Providers;
 use App\Services\Micropub\CardHandler;
 use App\Services\Micropub\EntryHandler;
 use App\Services\Micropub\MicropubHandlerRegistry;
+use App\Services\Micropub\UpdateHandler;
 use Illuminate\Support\ServiceProvider;
 
 class MicropubServiceProvider extends ServiceProvider
@@ -19,6 +20,7 @@ class MicropubServiceProvider extends ServiceProvider
             // Register handlers
             $registry->register('card', new CardHandler);
             $registry->register('entry', new EntryHandler);
+            $registry->register('update', new UpdateHandler);
 
             return $registry;
         });

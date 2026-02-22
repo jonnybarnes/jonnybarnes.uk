@@ -5,21 +5,21 @@ declare(strict_types=1);
 namespace App\Services\Micropub;
 
 use App\Exceptions\InvalidTokenScopeException;
+use App\Exceptions\MicropubHandlerException;
+use App\Exceptions\MicropubUnsupportedModelException;
 use App\Models\Media;
 use App\Models\Note;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
-/*
- * @todo Implement this properly
- */
 class UpdateHandler implements MicropubHandlerInterface
 {
     /**
      * @throws InvalidTokenScopeException
+     * @throws MicropubUnsupportedModelException
+     * @throws MicropubHandlerException
      */
-    public function handle(array $data)
+    public function handle(array $data): array
     {
         $scopes = $data['token_data']['scope'];
         if (is_string($scopes)) {
@@ -30,67 +30,35 @@ class UpdateHandler implements MicropubHandlerInterface
             throw new InvalidTokenScopeException;
         }
 
-        $urlPath = parse_url(Arr::get($data, 'url'), PHP_URL_PATH);
+        $urlPath = parse_url(Arr::get($data, 'update_url'), PHP_URL_PATH);
 
-        // is it a note we are updating?
         if (mb_substr($urlPath, 1, 5) !== 'notes') {
-            return response()->json([
-                'error' => 'invalid',
-                'error_description' => 'This implementation currently only support the updating of notes',
-            ], 500);
+            throw new MicropubUnsupportedModelException('This implementation currently only supports the updating of notes');
         }
 
-        try {
-            $note = Note::nb60(basename($urlPath))->firstOrFail();
-        } catch (ModelNotFoundException) {
-            return response()->json([
-                'error' => 'invalid_request',
-                'error_description' => 'No known note with given ID',
-            ], 404);
-        }
+        $note = Note::nb60(basename($urlPath))->firstOrFail();
 
-        // got the note, are we dealing with a “replace” request?
-        if (Arr::get($data, 'replace')) {
-            foreach (Arr::get($data, 'replace') as $property => $value) {
+        if (Arr::get($data, 'update_replace')) {
+            foreach (Arr::get($data, 'update_replace') as $property => $value) {
                 if ($property === 'content') {
                     $note->note = $value[0];
                 }
                 if ($property === 'syndication') {
-                    foreach ($value as $syndicationURL) {
-                        if (Str::startsWith($syndicationURL, 'https://www.facebook.com')) {
-                            $note->facebook_url = $syndicationURL;
-                        }
-                        if (Str::startsWith($syndicationURL, 'https://www.swarmapp.com')) {
-                            $note->swarm_url = $syndicationURL;
-                        }
-                        if (Str::startsWith($syndicationURL, 'https://twitter.com')) {
-                            $note->tweet_id = basename(parse_url($syndicationURL, PHP_URL_PATH));
-                        }
-                    }
+                    $this->applySyndication($note, $value);
                 }
             }
             $note->save();
 
             return [
                 'response' => 'updated',
+                'url' => $note->uri,
             ];
         }
 
-        // how about “add”
-        if (Arr::get($data, 'add')) {
-            foreach (Arr::get($data, 'add') as $property => $value) {
+        if (Arr::get($data, 'update_add')) {
+            foreach (Arr::get($data, 'update_add') as $property => $value) {
                 if ($property === 'syndication') {
-                    foreach ($value as $syndicationURL) {
-                        if (Str::startsWith($syndicationURL, 'https://www.facebook.com')) {
-                            $note->facebook_url = $syndicationURL;
-                        }
-                        if (Str::startsWith($syndicationURL, 'https://www.swarmapp.com')) {
-                            $note->swarm_url = $syndicationURL;
-                        }
-                        if (Str::startsWith($syndicationURL, 'https://twitter.com')) {
-                            $note->tweet_id = basename(parse_url($syndicationURL, PHP_URL_PATH));
-                        }
-                    }
+                    $this->applySyndication($note, $value);
                 }
                 if ($property === 'photo') {
                     foreach ($value as $photoURL) {
@@ -106,14 +74,25 @@ class UpdateHandler implements MicropubHandlerInterface
             }
             $note->save();
 
-            return response()->json([
+            return [
                 'response' => 'updated',
-            ]);
+                'url' => $note->uri,
+            ];
         }
 
-        return response()->json([
-            'response' => 'error',
-            'error_description' => 'unsupported request',
-        ], 500);
+        throw new MicropubHandlerException('Unsupported update operation');
+    }
+
+    private function applySyndication(Note $note, array $urls): void
+    {
+        foreach ($urls as $url) {
+            if (Str::startsWith($url, 'https://www.facebook.com')) {
+                $note->facebook_url = $url;
+            } elseif (Str::startsWith($url, 'https://www.swarmapp.com')) {
+                $note->swarm_url = $url;
+            } elseif (Str::startsWith($url, 'https://twitter.com')) {
+                $note->tweet_id = basename(parse_url($url, PHP_URL_PATH));
+            }
+        }
     }
 }

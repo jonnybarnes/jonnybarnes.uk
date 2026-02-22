@@ -48,20 +48,25 @@ class MicropubRequest extends FormRequest
 
         $data = $json->all();
 
-        // Convert JSON type (h-entry) to simple type (entry)
+        $this->micropubData['token_data'] = $data['token_data'];
+
+        if (isset($data['action']) && $data['action'] === 'update') {
+            $this->micropubData['type'] = 'update';
+            $this->micropubData['update_url'] = $data['url'] ?? null;
+            $this->micropubData['update_replace'] = $data['replace'] ?? null;
+            $this->micropubData['update_add'] = $data['add'] ?? null;
+            $this->micropubData['update_delete'] = $data['delete'] ?? null;
+
+            return;
+        }
+
+        // Create request — normalize h-type and properties
         if (isset($data['type']) && is_array($data['type'])) {
             $type = current($data['type']);
             if (str_starts_with($type, 'h-')) {
                 $this->micropubData['type'] = substr($type, 2);
             }
         }
-        // Or set the type to update
-        elseif (isset($data['action']) && $data['action'] === 'update') {
-            $this->micropubData['type'] = 'update';
-        }
-
-        // Add in the token data
-        $this->micropubData['token_data'] = $data['token_data'];
 
         // Add h-entry values
         $this->micropubData['content'] = Arr::get($data, 'properties.content.0');
