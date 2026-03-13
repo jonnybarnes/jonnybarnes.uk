@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace App\Services\Micropub\Data;
 
+use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
+
 class EntryData extends MicropubData
 {
     public function __construct(
@@ -22,6 +25,63 @@ class EntryData extends MicropubData
         public readonly mixed $syndication,
         public readonly ?array $photos,
     ) {}
+
+    public static function fromRequest(Request $request): static
+    {
+        if ($request->isJson()) {
+            $data = $request->json()->all();
+
+            $rawContent = Arr::get($data, 'properties.content.0');
+            $content = is_array($rawContent) ? ($rawContent['html'] ?? $rawContent['value'] ?? null) : $rawContent;
+
+            return new static(
+                tokenData: $data['token_data'],
+                content: $content,
+                inReplyTo: Arr::get($data, 'properties.in-reply-to.0'),
+                published: Arr::get($data, 'properties.published.0'),
+                location: self::extractLocationData($data),
+                bookmarkOf: Arr::get($data, 'properties.bookmark-of.0'),
+                likeOf: Arr::get($data, 'properties.like-of.0'),
+                mpSyndicateTo: Arr::get($data, 'properties.mp-syndicate-to'),
+                name: Arr::get($data, 'properties.name.0'),
+                description: Arr::get($data, 'properties.description.0'),
+                geo: Arr::get($data, 'properties.geo.0'),
+                checkin: Arr::get($data, 'checkin'),
+                syndication: Arr::get($data, 'properties.syndication.0'),
+                photos: Arr::get($data, 'properties.photo'),
+            );
+        }
+
+        return new static(
+            tokenData: $request->input('token_data'),
+            content: $request->input('content'),
+            inReplyTo: $request->input('in-reply-to'),
+            published: $request->input('published'),
+            location: $request->input('location'),
+            bookmarkOf: $request->input('bookmark-of'),
+            likeOf: $request->input('like-of'),
+            mpSyndicateTo: $request->input('mp-syndicate-to'),
+            name: $request->input('name'),
+            description: $request->input('description'),
+            geo: $request->input('geo'),
+            checkin: $request->input('checkin'),
+            syndication: $request->input('syndication'),
+            photos: $request->input('photos'),
+        );
+    }
+
+    private static function extractLocationData(array $data): array|string|null
+    {
+        if (! Arr::has($data, 'properties.location')) {
+            return null;
+        }
+
+        if (Arr::has($data, 'properties.location.0')) {
+            return Arr::get($data, 'properties.location.0');
+        }
+
+        return Arr::get($data, 'properties.location');
+    }
 
     public static function fromArray(array $data): static
     {

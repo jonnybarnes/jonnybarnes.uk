@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Services\Micropub\Data;
 
+use Illuminate\Http\Request;
+
 class UpdateData extends MicropubData
 {
     public function __construct(
@@ -13,6 +15,29 @@ class UpdateData extends MicropubData
         public readonly ?array $updateAdd,
         public readonly ?array $updateDelete,
     ) {}
+
+    public static function fromRequest(Request $request): static
+    {
+        if ($request->isJson()) {
+            $data = $request->json()->all();
+
+            return new static(
+                tokenData: $data['token_data'],
+                updateUrl: $data['url'] ?? null,
+                updateReplace: $data['replace'] ?? null,
+                updateAdd: $data['add'] ?? null,
+                updateDelete: $data['delete'] ?? null,
+            );
+        }
+
+        return new static(
+            tokenData: $request->input('token_data'),
+            updateUrl: $request->input('url'),
+            updateReplace: $request->input('replace'),
+            updateAdd: $request->input('add'),
+            updateDelete: $request->input('delete'),
+        );
+    }
 
     public static function fromArray(array $data): static
     {

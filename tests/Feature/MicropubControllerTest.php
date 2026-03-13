@@ -712,6 +712,116 @@ class MicropubControllerTest extends TestCase
     }
 
     #[Test]
+    public function micropub_client_api_request_can_combine_replace_and_add_in_single_update(): void
+    {
+        $note = Note::factory()->create();
+        $response = $this->postJson(
+            '/api/post',
+            [
+                'action' => 'update',
+                'url' => $note->uri,
+                'replace' => [
+                    'content' => ['replaced content'],
+                ],
+                'add' => [
+                    'syndication' => ['https://www.swarmapp.com/checkin/123'],
+                ],
+            ],
+            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+        );
+        $response
+            ->assertJson(['response' => 'updated'])
+            ->assertSuccessful();
+
+        $note->refresh();
+        $this->assertSame('replaced content', $note->content);
+        $this->assertDatabaseHas('notes', [
+            'swarm_url' => 'https://www.swarmapp.com/checkin/123',
+        ]);
+    }
+
+    #[Test]
+    public function micropub_client_api_request_can_delete_entire_property(): void
+    {
+        $note = Note::factory()->create([
+            'swarm_url' => 'https://www.swarmapp.com/checkin/123',
+            'facebook_url' => 'https://www.facebook.com/post/123',
+        ]);
+        $response = $this->postJson(
+            '/api/post',
+            [
+                'action' => 'update',
+                'url' => $note->uri,
+                'delete' => ['syndication'],
+            ],
+            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+        );
+        $response
+            ->assertJson(['response' => 'updated'])
+            ->assertSuccessful();
+
+        $note->refresh();
+        $this->assertNull($note->swarm_url);
+        $this->assertNull($note->facebook_url);
+        $this->assertNull($note->tweet_id);
+    }
+
+    #[Test]
+    public function micropub_client_api_request_can_delete_specific_syndication_value(): void
+    {
+        $note = Note::factory()->create([
+            'swarm_url' => 'https://www.swarmapp.com/checkin/123',
+            'facebook_url' => 'https://www.facebook.com/post/123',
+        ]);
+        $response = $this->postJson(
+            '/api/post',
+            [
+                'action' => 'update',
+                'url' => $note->uri,
+                'delete' => [
+                    'syndication' => ['https://www.swarmapp.com/checkin/123'],
+                ],
+            ],
+            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+        );
+        $response
+            ->assertJson(['response' => 'updated'])
+            ->assertSuccessful();
+
+        $note->refresh();
+        $this->assertNull($note->swarm_url);
+        $this->assertSame('https://www.facebook.com/post/123', $note->facebook_url);
+    }
+
+    #[Test]
+    public function micropub_client_api_request_can_delete_photo(): void
+    {
+        $note = Note::factory()->create();
+        $media = new \App\Models\Media;
+        $media->path = 'https://example.org/photo.jpg';
+        $media->type = 'image';
+        $media->save();
+        $note->media()->save($media);
+
+        $response = $this->postJson(
+            '/api/post',
+            [
+                'action' => 'update',
+                'url' => $note->uri,
+                'delete' => ['photo'],
+            ],
+            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+        );
+        $response
+            ->assertJson(['response' => 'updated'])
+            ->assertSuccessful();
+
+        $this->assertDatabaseMissing('media_endpoint', [
+            'path' => 'https://example.org/photo.jpg',
+        ]);
+    }
+
+    #[Test]
     public function micropub_client_api_request_creates_articles_when_it_includes_the_name_property(): void
     {
         $faker = Factory::create();

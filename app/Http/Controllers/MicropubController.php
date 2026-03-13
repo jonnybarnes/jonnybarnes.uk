@@ -10,6 +10,7 @@ use App\Exceptions\MicropubUnsupportedModelException;
 use App\Http\Requests\MicropubRequest;
 use App\Models\Place;
 use App\Models\SyndicationTarget;
+use App\Services\Micropub\Data\MicropubData;
 use App\Services\Micropub\MicropubHandlerRegistry;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
@@ -28,9 +29,9 @@ class MicropubController extends Controller
     /**
      * Respond to a POST request to the micropub endpoint.
      *
-     * The request is initially processed by the MicropubRequest form request
-     * class. The normalizes the data, so we can pass it into the handlers for
-     * the different micropub requests, h-entry or h-card, for example.
+     * MicropubRequest detects the request type (e.g. entry, card, update).
+     * The handler registry resolves the appropriate handler, whose DTO
+     * extracts the relevant fields from the request via fromRequest().
      */
     public function post(MicropubRequest $request): JsonResponse
     {
@@ -46,7 +47,8 @@ class MicropubController extends Controller
         try {
             $handler = $this->handlerRegistry->getHandler($type);
             $dataClass = $handler->dataClass();
-            $data = $dataClass::fromArray($request->getMicropubData());
+            /** @var MicropubData $data */
+            $data = $dataClass::fromRequest($request);
             $result = $handler->handle($data);
 
             if ($result['response'] === 'updated') {
@@ -95,10 +97,9 @@ class MicropubController extends Controller
     /**
      * Respond to a GET request to the micropub endpoint.
      *
-     * A GET request has been made to `api/post` with an accompanying
-     * token, here we check whether the token is valid and respond
-     * appropriately. Further if the request has the query parameter
-     * syndicate-to we respond with the known syndication endpoints.
+     * Token validation is handled by the VerifyMicropubToken middleware.
+     * Supports q=syndicate-to, q=config, and q=geo:<lat>,<lng> queries.
+     * The default response returns the token metadata.
      */
     public function get(Request $request): JsonResponse
     {

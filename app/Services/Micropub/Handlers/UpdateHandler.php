@@ -46,21 +46,18 @@ class UpdateHandler implements MicropubHandlerInterface
 
         $note = Note::nb60(basename($urlPath))->firstOrFail();
 
+        if ($data->updateReplace === null && $data->updateAdd === null && $data->updateDelete === null) {
+            throw new MicropubHandlerException('Unsupported update operation');
+        }
+
         if ($data->updateReplace !== null) {
             foreach ($data->updateReplace as $property => $value) {
-                if ($property === 'content') {
-                    $note->note = $value[0];
-                }
-                if ($property === 'syndication') {
-                    $this->applySyndication($note, $value);
-                }
+                match ($property) {
+                    'content'     => $note->note = $value[0],
+                    'syndication' => $this->applySyndication($note, $value),
+                    default       => null,
+                };
             }
-            $note->save();
-
-            return [
-                'response' => 'updated',
-                'url' => $note->uri,
-            ];
         }
 
         if ($data->updateAdd !== null) {
@@ -80,15 +77,62 @@ class UpdateHandler implements MicropubHandlerInterface
                     }
                 }
             }
-            $note->save();
-
-            return [
-                'response' => 'updated',
-                'url' => $note->uri,
-            ];
         }
 
-        throw new MicropubHandlerException('Unsupported update operation');
+        if ($data->updateDelete !== null) {
+            $this->applyDelete($note, $data->updateDelete);
+        }
+
+        $note->save();
+
+        return [
+            'response' => 'updated',
+            'url' => $note->uri,
+        ];
+    }
+
+    private function applyDelete(Note $note, array $delete): void
+    {
+        if (array_is_list($delete)) {
+            foreach ($delete as $property) {
+                match ($property) {
+                    'syndication' => $this->clearSyndication($note),
+                    'photo'       => $note->media()->delete(),
+                    default       => null,
+                };
+            }
+
+            return;
+        }
+
+        foreach ($delete as $property => $values) {
+            if ($property === 'syndication') {
+                $this->removeSyndicationValues($note, $values);
+            }
+            if ($property === 'photo') {
+                $note->media()->whereIn('path', $values)->delete();
+            }
+        }
+    }
+
+    private function clearSyndication(Note $note): void
+    {
+        $note->facebook_url = null;
+        $note->swarm_url = null;
+        $note->tweet_id = null;
+    }
+
+    private function removeSyndicationValues(Note $note, array $urls): void
+    {
+        foreach ($urls as $url) {
+            if (Str::startsWith($url, 'https://www.facebook.com') && $note->facebook_url === $url) {
+                $note->facebook_url = null;
+            } elseif (Str::startsWith($url, 'https://www.swarmapp.com') && $note->swarm_url === $url) {
+                $note->swarm_url = null;
+            } elseif (Str::startsWith($url, 'https://twitter.com')) {
+                $note->tweet_id = null;
+            }
+        }
     }
 
     private function applySyndication(Note $note, array $urls): void
