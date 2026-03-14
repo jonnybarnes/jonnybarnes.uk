@@ -46,7 +46,7 @@ class EntryData extends MicropubData
                 name: Arr::get($data, 'properties.name.0'),
                 description: Arr::get($data, 'properties.description.0'),
                 geo: Arr::get($data, 'properties.geo.0'),
-                checkin: Arr::get($data, 'checkin'),
+                checkin: Arr::get($data, 'properties.checkin.0'),
                 syndication: Arr::get($data, 'properties.syndication.0'),
                 photos: Arr::get($data, 'properties.photo'),
             );
