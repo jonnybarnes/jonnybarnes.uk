@@ -6,10 +6,13 @@ namespace App\Http\Controllers;
 
 use App\Exceptions\InvalidTokenScopeException;
 use App\Exceptions\MicropubHandlerException;
+use App\Exceptions\MicropubUnsupportedModelException;
 use App\Http\Requests\MicropubRequest;
 use App\Models\Place;
 use App\Models\SyndicationTarget;
+use App\Services\Micropub\Data\MicropubData;
 use App\Services\Micropub\MicropubHandlerRegistry;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Lcobucci\JWT\Token;
@@ -26,9 +29,9 @@ class MicropubController extends Controller
     /**
      * Respond to a POST request to the micropub endpoint.
      *
-     * The request is initially processed by the MicropubRequest form request
-     * class. The normalizes the data, so we can pass it into the handlers for
-     * the different micropub requests, h-entry or h-card, for example.
+     * MicropubRequest detects the request type (e.g. entry, card, update).
+     * The handler registry resolves the appropriate handler, whose DTO
+     * extracts the relevant fields from the request via fromRequest().
      */
     public function post(MicropubRequest $request): JsonResponse
     {
@@ -43,13 +46,36 @@ class MicropubController extends Controller
 
         try {
             $handler = $this->handlerRegistry->getHandler($type);
-            $result = $handler->handle($request->getMicropubData());
+            $dataClass = $handler->dataClass();
+            /** @var MicropubData $data */
+            $data = $dataClass::fromRequest($request);
+            $result = $handler->handle($data);
 
-            // Return appropriate response based on the handler result
+            if ($result['response'] === 'updated') {
+                return response()->json([
+                    'response' => $result['response'],
+                ], 200)->header('Location', $result['url']);
+            }
+
             return response()->json([
                 'response' => $result['response'],
                 'location' => $result['url'] ?? null,
             ], 201)->header('Location', $result['url']);
+        } catch (InvalidTokenScopeException) {
+            return response()->json([
+                'error' => 'insufficient_scope',
+                'error_description' => 'The token does not have the required scope for this request',
+            ], 401);
+        } catch (ModelNotFoundException) {
+            return response()->json([
+                'error' => 'invalid_request',
+                'error_description' => 'No known note with given ID',
+            ], 404);
+        } catch (MicropubUnsupportedModelException) {
+            return response()->json([
+                'error' => 'invalid',
+                'error_description' => 'This implementation currently only supports the updating of notes',
+            ], 500);
         } catch (\InvalidArgumentException $e) {
             return response()->json([
                 'error' => 'invalid_request',
@@ -57,15 +83,10 @@ class MicropubController extends Controller
             ], 400);
         } catch (MicropubHandlerException) {
             return response()->json([
-                'error' => 'Unknown Micropub type',
+                'error' => 'unsupported_operation',
                 'error_description' => 'The request could not be processed by this server',
             ], 500);
-        } catch (InvalidTokenScopeException) {
-            return response()->json([
-                'error' => 'invalid_scope',
-                'error_description' => 'The token does not have the required scope for this request',
-            ], 403);
-        } catch (\Exception) {
+        } catch (\Exception $e) {
             return response()->json([
                 'error' => 'server_error',
                 'error_description' => 'An error occurred processing the request',
@@ -76,10 +97,9 @@ class MicropubController extends Controller
     /**
      * Respond to a GET request to the micropub endpoint.
      *
-     * A GET request has been made to `api/post` with an accompanying
-     * token, here we check whether the token is valid and respond
-     * appropriately. Further if the request has the query parameter
-     * syndicate-to we respond with the known syndication endpoints.
+     * Token validation is handled by the VerifyMicropubToken middleware.
+     * Supports q=syndicate-to, q=config, and q=geo:<lat>,<lng> queries.
+     * The default response returns the token metadata.
      */
     public function get(Request $request): JsonResponse
     {

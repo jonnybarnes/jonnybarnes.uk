@@ -196,6 +196,38 @@ class ProcessWebMentionJobTest extends TestCase
     }
 
     #[Test]
+    public function webmention_with_long_source_url_gets_saved(): void
+    {
+        Queue::fake();
+
+        $parser = new Parser;
+
+        $html = <<<'HTML'
+        <div class="h-entry">
+            I liked <a class="u-like-of" href="/notes/1">a note</a>.
+        </div>
+        HTML;
+        $html = str_replace('href="', 'href="' . config('app.url'), $html);
+        $mock = new MockHandler([
+            new Response(200, [], $html),
+        ]);
+        $handler = HandlerStack::create($mock);
+        $client = new Client(['handler' => $handler]);
+
+        $note = Note::factory()->create();
+        // Simulate a long brid.gy Bluesky source URL (well over 255 characters)
+        $source = 'https://brid.gy/comment/bluesky/did:plc:n3jhgiq2ykctnpgzlm6p6b25/at%253A%252F%252Fdid%253Aplc%253An3jhgiq2ykctnpgzlm6p6b25%252Fapp.bsky.feed.post%252F3mfekjuhykb2k/at%253A%252F%252Fdid%253Aplc%253Afsfuwigo5juzdwp23hyianzg%252Fapp.bsky.feed.post%252F3mfemw4rrvs2t';
+
+        $job = new ProcessWebMention($note, $source);
+        $job->handle($parser, $client);
+
+        $this->assertGreaterThan(255, strlen($source));
+        $this->assertDatabaseHas('webmentions', [
+            'source' => $source,
+        ]);
+    }
+
+    #[Test]
     public function webmention_repost_gets_deleted_when_repost_of_value_changes(): void
     {
         $parser = new Parser;

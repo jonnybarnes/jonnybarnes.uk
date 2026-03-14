@@ -2,20 +2,28 @@
 
 declare(strict_types=1);
 
-namespace App\Services\Micropub;
+namespace App\Services\Micropub\Handlers;
 
 use App\Exceptions\InvalidTokenScopeException;
+use App\Services\Micropub\Data\CardData;
+use App\Services\Micropub\Data\MicropubData;
 use App\Services\PlaceService;
 
 class CardHandler implements MicropubHandlerInterface
 {
+    public function dataClass(): string
+    {
+        return CardData::class;
+    }
+
     /**
      * @throws InvalidTokenScopeException
      */
-    public function handle(array $data): array
+    public function handle(MicropubData $data): array
     {
-        // Handle h-card requests
-        $scopes = $data['token_data']['scope'];
+        assert($data instanceof CardData);
+
+        $scopes = $data->tokenData['scope'];
         if (is_string($scopes)) {
             $scopes = explode(' ', $scopes);
         }
@@ -24,7 +32,7 @@ class CardHandler implements MicropubHandlerInterface
             throw new InvalidTokenScopeException;
         }
 
-        $location = resolve(PlaceService::class)->createPlace($data)->uri;
+        $location = resolve(PlaceService::class)->createPlace($data->toArray())->uri;
 
         return [
             'response' => 'created',

@@ -723,8 +723,8 @@ ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
 
 CREATE TABLE public.webmentions (
     id integer NOT NULL,
-    source character varying(255) NOT NULL,
-    target character varying(255) NOT NULL,
+    source text NOT NULL,
+    target text NOT NULL,
     commentable_id integer,
     commentable_type character varying(255),
     type character varying(255),
