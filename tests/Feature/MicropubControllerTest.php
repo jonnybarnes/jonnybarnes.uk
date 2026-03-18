@@ -539,6 +539,29 @@ class MicropubControllerTest extends TestCase
     }
 
     #[Test]
+    public function micropub_client_api_request_updates_existing_note_with_rich_text_content(): void
+    {
+        $note = Note::factory()->create();
+        $response = $this->postJson(
+            '/api/post',
+            [
+                'action' => 'update',
+                'url' => $note->uri,
+                'replace' => [
+                    'content' => [['value' => 'plain text', 'html' => 'html version']],
+                ],
+            ],
+            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+        );
+        $response
+            ->assertJson(['response' => 'updated'])
+            ->assertSuccessful();
+
+        $note->refresh();
+        $this->assertSame('html version', $note->content);
+    }
+
+    #[Test]
     public function micropub_client_api_request_updates_note_syndication_links(): void
     {
         $note = Note::factory()->create();
