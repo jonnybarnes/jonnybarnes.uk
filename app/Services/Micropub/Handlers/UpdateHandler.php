@@ -53,7 +53,7 @@ class UpdateHandler implements MicropubHandlerInterface
         if ($data->updateReplace !== null) {
             foreach ($data->updateReplace as $property => $value) {
                 match ($property) {
-                    'content'     => $note->note = $value[0],
+                    'content'     => $note->note = is_array($value[0]) ? ($value[0]['html'] ?? $value[0]['value'] ?? null) : $value[0],
                     'syndication' => $this->applySyndication($note, $value),
                     default       => null,
                 };
