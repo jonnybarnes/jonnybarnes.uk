@@ -4,39 +4,19 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Appends;
+use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\Visible;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+#[Fillable(['uid', 'name', 'service_name', 'service_url', 'service_photo', 'user_name', 'user_url', 'user_photo'])]
+#[Visible(['uid', 'name', 'service', 'user'])]
+#[Appends(['service', 'user'])]
 class SyndicationTarget extends Model
 {
     use HasFactory;
-
-    /** @var array<int, string> */
-    protected $fillable = [
-        'uid',
-        'name',
-        'service_name',
-        'service_url',
-        'service_photo',
-        'user_name',
-        'user_url',
-        'user_photo',
-    ];
-
-    /** @var array<int, string> */
-    protected $visible = [
-        'uid',
-        'name',
-        'service',
-        'user',
-    ];
-
-    /** @var array<int, string> */
-    protected $appends = [
-        'service',
-        'user',
-    ];
 
     protected function service(): Attribute
     {

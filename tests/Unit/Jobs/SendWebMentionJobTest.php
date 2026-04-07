@@ -29,7 +29,7 @@ class SendWebMentionJobTest extends TestCase
     {
         $url = 'https://example.org/webmention';
         $mock = new MockHandler([
-            new Response(200, ['Link' => '<' . $url . '>; rel="webmention"']),
+            new Response(200, ['Link' => '<'.$url.'>; rel="webmention"']),
         ]);
         $handler = HandlerStack::create($mock);
         $client = new Client(['handler' => $handler]);

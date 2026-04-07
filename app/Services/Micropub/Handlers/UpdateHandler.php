@@ -53,9 +53,9 @@ class UpdateHandler implements MicropubHandlerInterface
         if ($data->updateReplace !== null) {
             foreach ($data->updateReplace as $property => $value) {
                 match ($property) {
-                    'content'     => $note->note = is_array($value[0]) ? ($value[0]['html'] ?? $value[0]['value'] ?? null) : $value[0],
+                    'content' => $note->note = is_array($value[0]) ? ($value[0]['html'] ?? $value[0]['value'] ?? null) : $value[0],
                     'syndication' => $this->applySyndication($note, $value),
-                    default       => null,
+                    default => null,
                 };
             }
         }
@@ -97,8 +97,8 @@ class UpdateHandler implements MicropubHandlerInterface
             foreach ($delete as $property) {
                 match ($property) {
                     'syndication' => $this->clearSyndication($note),
-                    'photo'       => $note->media()->delete(),
-                    default       => null,
+                    'photo' => $note->media()->delete(),
+                    default => null,
                 };
             }
 

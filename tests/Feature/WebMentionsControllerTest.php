@@ -42,7 +42,7 @@ class WebMentionsControllerTest extends TestCase
     {
         $response = $this->call('POST', '/webmention', [
             'source' => 'https://example.org/post/123',
-            'target' => config('app.url') . '/invalid/target',
+            'target' => config('app.url').'/invalid/target',
         ]);
         $response->assertStatus(400);
     }
@@ -55,7 +55,7 @@ class WebMentionsControllerTest extends TestCase
     {
         $response = $this->call('POST', '/webmention', [
             'source' => 'https://example.org/post/123',
-            'target' => config('app.url') . '/blog/target',
+            'target' => config('app.url').'/blog/target',
         ]);
         $response->assertStatus(501);
     }
@@ -68,7 +68,7 @@ class WebMentionsControllerTest extends TestCase
     {
         $response = $this->call('POST', '/webmention', [
             'source' => 'https://example.org/post/123',
-            'target' => config('app.url') . '/notes/ZZZZZ',
+            'target' => config('app.url').'/notes/ZZZZZ',
         ]);
         $response->assertStatus(400);
     }

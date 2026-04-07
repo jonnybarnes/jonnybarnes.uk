@@ -41,7 +41,7 @@ class SaveScreenshot implements ShouldQueue
         // First request that CloudConvert takes a screenshot of the URL
         $takeScreenshotJobResponse = $client->request('POST', 'https://api.cloudconvert.com/v2/capture-website', [
             'headers' => [
-                'Authorization' => 'Bearer ' . config('services.cloudconvert.token'),
+                'Authorization' => 'Bearer '.config('services.cloudconvert.token'),
             ],
             'json' => [
                 'url' => $this->bookmark->url,
@@ -56,9 +56,9 @@ class SaveScreenshot implements ShouldQueue
         $taskId = json_decode($takeScreenshotJobResponse->getBody()->getContents(), false, 512, JSON_THROW_ON_ERROR)->data->id;
 
         // Now wait till the status job is finished
-        $screenshotJobStatusResponse = $retryClient->request('GET', 'https://api.cloudconvert.com/v2/tasks/' . $taskId, [
+        $screenshotJobStatusResponse = $retryClient->request('GET', 'https://api.cloudconvert.com/v2/tasks/'.$taskId, [
             'headers' => [
-                'Authorization' => 'Bearer ' . config('services.cloudconvert.token'),
+                'Authorization' => 'Bearer '.config('services.cloudconvert.token'),
             ],
             'query' => [
                 'include' => 'payload',
@@ -70,7 +70,7 @@ class SaveScreenshot implements ShouldQueue
         // Now we can create a new job to request thst the screenshot is exported to a temporary URL we can download the screenshot from
         $exportImageJob = $client->request('POST', 'https://api.cloudconvert.com/v2/export/url', [
             'headers' => [
-                'Authorization' => 'Bearer ' . config('services.cloudconvert.token'),
+                'Authorization' => 'Bearer '.config('services.cloudconvert.token'),
             ],
             'json' => [
                 'input' => $finishedCaptureId,
@@ -81,9 +81,9 @@ class SaveScreenshot implements ShouldQueue
         $exportImageJobId = json_decode($exportImageJob->getBody()->getContents(), false, 512, JSON_THROW_ON_ERROR)->data->id;
 
         // Again, wait till the status of this export job is finished
-        $finalImageUrlResponse = $retryClient->request('GET', 'https://api.cloudconvert.com/v2/tasks/' . $exportImageJobId, [
+        $finalImageUrlResponse = $retryClient->request('GET', 'https://api.cloudconvert.com/v2/tasks/'.$exportImageJobId, [
             'headers' => [
-                'Authorization' => 'Bearer ' . config('services.cloudconvert.token'),
+                'Authorization' => 'Bearer '.config('services.cloudconvert.token'),
             ],
             'query' => [
                 'include' => 'payload',
@@ -95,7 +95,7 @@ class SaveScreenshot implements ShouldQueue
 
         $finalImageUrlContent = $client->request('GET', $finalImageUrl);
 
-        Storage::disk('public')->put('/assets/img/bookmarks/' . $taskId . '.png', $finalImageUrlContent->getBody()->getContents());
+        Storage::disk('public')->put('/assets/img/bookmarks/'.$taskId.'.png', $finalImageUrlContent->getBody()->getContents());
 
         $this->bookmark->screenshot = $taskId;
         $this->bookmark->save();

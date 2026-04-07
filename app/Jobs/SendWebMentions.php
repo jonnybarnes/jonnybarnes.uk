@@ -15,6 +15,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Str;
+use Mf2\Parser;
 
 class SendWebMentions implements ShouldQueue
 {
@@ -83,7 +84,11 @@ class SendWebMentions implements ShouldQueue
         // failed to find a header so parse HTML
         $html = (string) $response->getBody();
 
-        $mf2 = new \Mf2\Parser($html, $url);
+        if ($html === '') {
+            return null;
+        }
+
+        $mf2 = new Parser($html, $url);
         $rels = $mf2->parseRelsAndAlternates();
         if (array_key_exists('webmention', $rels[0])) {
             $endpoint = $rels[0]['webmention'][0];

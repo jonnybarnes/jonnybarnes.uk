@@ -25,7 +25,7 @@ class SyndicateNoteToBlueskyJobTest extends TestCase
         $faker = Factory::create();
         $randomNumber = $faker->randomNumber();
         $mock = new MockHandler([
-            new Response(201, ['Location' => 'https://bsky.app/profile/jonnybarnes.uk/' . $randomNumber]),
+            new Response(201, ['Location' => 'https://bsky.app/profile/jonnybarnes.uk/'.$randomNumber]),
         ]);
         $handler = HandlerStack::create($mock);
         $client = new Client(['handler' => $handler]);
@@ -35,7 +35,7 @@ class SyndicateNoteToBlueskyJobTest extends TestCase
         $job->handle($client);
 
         $this->assertDatabaseHas('notes', [
-            'bluesky_url' => 'https://bsky.app/profile/jonnybarnes.uk/' . $randomNumber,
+            'bluesky_url' => 'https://bsky.app/profile/jonnybarnes.uk/'.$randomNumber,
         ]);
     }
 
@@ -49,7 +49,7 @@ class SyndicateNoteToBlueskyJobTest extends TestCase
         $container = [];
         $history = Middleware::history($container);
         $mock = new MockHandler([
-            new Response(201, ['Location' => 'https://bsky.app/profile/jonnybarnes.uk/' . $randomNumber]),
+            new Response(201, ['Location' => 'https://bsky.app/profile/jonnybarnes.uk/'.$randomNumber]),
         ]);
         $handler = HandlerStack::create($mock);
         $handler->push($history);
@@ -60,7 +60,7 @@ class SyndicateNoteToBlueskyJobTest extends TestCase
         $job->handle($client);
 
         $this->assertDatabaseHas('notes', [
-            'bluesky_url' => 'https://bsky.app/profile/jonnybarnes.uk/' . $randomNumber,
+            'bluesky_url' => 'https://bsky.app/profile/jonnybarnes.uk/'.$randomNumber,
         ]);
 
         $expectedRequestContent = '{"type":["h-entry"],"properties":{"content":["This is a **test**"]}}';

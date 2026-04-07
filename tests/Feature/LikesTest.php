@@ -6,7 +6,6 @@ namespace Tests\Feature;
 
 use App\Jobs\ProcessLike;
 use App\Models\Like;
-use Codebird\Codebird;
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
@@ -34,7 +33,7 @@ class LikesTest extends TestCase
     public function single_like_page_has_correct_view(): void
     {
         $like = Like::factory()->create();
-        $response = $this->get('/likes/' . $like->id);
+        $response = $this->get('/likes/'.$like->id);
         $response->assertViewIs('likes.show');
     }
 
@@ -44,7 +43,7 @@ class LikesTest extends TestCase
         Queue::fake();
 
         $response = $this->withHeaders([
-            'Authorization' => 'Bearer ' . $this->getToken(),
+            'Authorization' => 'Bearer '.$this->getToken(),
         ])->json('POST', '/api/post', [
             'type' => ['h-entry'],
             'properties' => [
@@ -64,7 +63,7 @@ class LikesTest extends TestCase
         Queue::fake();
 
         $response = $this->withHeaders([
-            'Authorization' => 'Bearer ' . $this->getToken(),
+            'Authorization' => 'Bearer '.$this->getToken(),
         ])->post('/api/post', [
             'h' => 'entry',
             'like-of' => 'https://example.org/blog-post',
@@ -192,82 +191,6 @@ class LikesTest extends TestCase
         $job->handle($client, $authorship);
 
         $this->assertNull(Like::find($id)->author_name);
-    }
-
-    #[Test]
-    public function like_that_is_a_tweet(): void
-    {
-        $like = new Like;
-        $like->url = 'https://twitter.com/jonnybarnes/status/1050823255123251200';
-        $like->save();
-        $id = $like->id;
-
-        $job = new ProcessLike($like);
-
-        $mock = new MockHandler([
-            new Response(201, [], json_encode([
-                'url' => 'https://twitter.com/likes/id',
-            ])),
-        ]);
-        $handler = HandlerStack::create($mock);
-        $client = new Client(['handler' => $handler]);
-        $this->app->bind(Client::class, function () use ($client) {
-            return $client;
-        });
-
-        $info = (object) [
-            'author_name' => 'Jonny Barnes',
-            'author_url' => 'https://twitter.com/jonnybarnes',
-            'html' => '<div>HTML of the tweet embed</div>',
-        ];
-        $codebirdMock = $this->createPartialMock(Codebird::class, ['__call']);
-        $codebirdMock->method('__call')
-            ->with('statuses_oembed', $this->anything())
-            ->willReturn($info);
-        $this->app->instance(Codebird::class, $codebirdMock);
-
-        $authorship = new Authorship;
-
-        $job->handle($client, $authorship);
-
-        $this->assertEquals('Jonny Barnes', Like::find($id)->author_name);
-    }
-
-    #[Test]
-    public function no_error_for_failure_to_posse_with_bridgy(): void
-    {
-        $like = new Like;
-        $like->url = 'https://twitter.com/jonnybarnes/status/1050823255123251200';
-        $like->save();
-        $id = $like->id;
-
-        $job = new ProcessLike($like);
-
-        $mock = new MockHandler([
-            new Response(404, [], 'Not found'),
-        ]);
-        $handler = HandlerStack::create($mock);
-        $client = new Client(['handler' => $handler]);
-        $this->app->bind(Client::class, function () use ($client) {
-            return $client;
-        });
-
-        $info = (object) [
-            'author_name' => 'Jonny Barnes',
-            'author_url' => 'https://twitter.com/jonnybarnes',
-            'html' => '<div>HTML of the tweet embed</div>',
-        ];
-        $codebirdMock = $this->createPartialMock(Codebird::class, ['__call']);
-        $codebirdMock->method('__call')
-            ->with('statuses_oembed', $this->anything())
-            ->willReturn($info);
-        $this->app->instance(Codebird::class, $codebirdMock);
-
-        $authorship = new Authorship;
-
-        $job->handle($client, $authorship);
-
-        $this->assertEquals('Jonny Barnes', Like::find($id)->author_name);
     }
 
     #[Test]

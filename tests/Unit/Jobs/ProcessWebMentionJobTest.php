@@ -27,8 +27,8 @@ class ProcessWebMentionJobTest extends TestCase
     protected function tearDown(): void
     {
         $fs = new FileSystem;
-        if ($fs->exists(storage_path() . '/HTML/https')) {
-            $fs->deleteDirectory(storage_path() . '/HTML/https');
+        if ($fs->exists(storage_path().'/HTML/https')) {
+            $fs->deleteDirectory(storage_path().'/HTML/https');
         }
         parent::tearDown();
     }
@@ -64,7 +64,7 @@ class ProcessWebMentionJobTest extends TestCase
             I liked <a class="u-like-of" href="/notes/1">a note</a>.
         </div>
         HTML;
-        $html = str_replace('href="', 'href="' . config('app.url'), $html);
+        $html = str_replace('href="', 'href="'.config('app.url'), $html);
         $mock = new MockHandler([
             new Response(200, [], $html),
         ]);
@@ -117,7 +117,7 @@ class ProcessWebMentionJobTest extends TestCase
             'source' => $source,
             'type' => 'in-reply-to',
             // phpcs:ignore Generic.Files.LineLength.TooLong
-            'mf2' => '{"rels": [], "items": [{"type": ["h-entry"], "properties": {"content": [{"html": "Updated reply", "value": "Updated reply"}], "in-reply-to": ["' . $note->uri . '"]}}], "rel-urls": []}',
+            'mf2' => '{"rels": [], "items": [{"type": ["h-entry"], "properties": {"content": [{"html": "Updated reply", "value": "Updated reply"}], "in-reply-to": ["'.$note->uri.'"]}}], "rel-urls": []}',
         ]);
     }
 
@@ -142,7 +142,7 @@ class ProcessWebMentionJobTest extends TestCase
         $source = 'https://example.org/reply/1';
         $webmention = new WebMention;
         $webmention->source = $source;
-        $webmention->target = config('app.url') . '/notes/E';
+        $webmention->target = config('app.url').'/notes/E';
         $webmention->type = 'in-reply-to';
         $webmention->save();
 
@@ -179,7 +179,7 @@ class ProcessWebMentionJobTest extends TestCase
         $source = 'https://example.org/reply/1';
         $webmention = new WebMention;
         $webmention->source = $source;
-        $webmention->target = config('app.url') . '/notes/E';
+        $webmention->target = config('app.url').'/notes/E';
         $webmention->type = 'like-of';
         $webmention->save();
 
@@ -207,7 +207,7 @@ class ProcessWebMentionJobTest extends TestCase
             I liked <a class="u-like-of" href="/notes/1">a note</a>.
         </div>
         HTML;
-        $html = str_replace('href="', 'href="' . config('app.url'), $html);
+        $html = str_replace('href="', 'href="'.config('app.url'), $html);
         $mock = new MockHandler([
             new Response(200, [], $html),
         ]);
@@ -248,7 +248,7 @@ class ProcessWebMentionJobTest extends TestCase
         $source = 'https://example.org/reply/1';
         $webmention = new WebMention;
         $webmention->source = $source;
-        $webmention->target = config('app.url') . '/notes/E';
+        $webmention->target = config('app.url').'/notes/E';
         $webmention->type = 'repost-of';
         $webmention->save();
 

@@ -20,18 +20,18 @@ class ProcessMediaJobTest extends TestCase
         $job = new ProcessMedia('file.txt');
         $job->handle($manager);
 
-        $this->assertFileDoesNotExist(storage_path('app/media/') . 'file.txt');
+        $this->assertFileDoesNotExist(storage_path('app/media/').'file.txt');
     }
 
     #[Test]
     public function small_images_are_not_resized(): void
     {
         $manager = app()->make(ImageManager::class);
-        Storage::disk('local')->put('media/aaron.png', file_get_contents(__DIR__ . '/../../aaron.png'));
+        Storage::disk('local')->put('media/aaron.png', file_get_contents(__DIR__.'/../../aaron.png'));
         $job = new ProcessMedia('aaron.png');
         $job->handle($manager);
 
-        $this->assertFileDoesNotExist(storage_path('app/media/') . 'aaron.png');
+        $this->assertFileDoesNotExist(storage_path('app/media/').'aaron.png');
 
         // Tidy up files created by the job
         Storage::disk('local')->delete('public/media/aaron.png');
@@ -51,7 +51,7 @@ class ProcessMediaJobTest extends TestCase
         Storage::disk('public')->assertExists('media/test-image-small.jpg');
         Storage::disk('public')->assertExists('media/test-image-medium.jpg');
 
-        $this->assertFileDoesNotExist(storage_path('app/media/') . 'test-image.jpg');
+        $this->assertFileDoesNotExist(storage_path('app/media/').'test-image.jpg');
 
         // Tidy up files created by the job
         Storage::disk('public')->delete('media/test-image.jpg');

@@ -6,6 +6,7 @@ namespace Tests\Feature;
 
 use App\Jobs\ProcessBookmark;
 use App\Models\Bookmark;
+use App\Models\Tag;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Queue;
 use PHPUnit\Framework\Attributes\Test;
@@ -27,7 +28,7 @@ class BookmarksTest extends TestCase
     public function single_bookmark_page_loads_without_error(): void
     {
         $bookmark = Bookmark::factory()->create();
-        $response = $this->get('/bookmarks/' . $bookmark->id);
+        $response = $this->get('/bookmarks/'.$bookmark->id);
         $response->assertViewIs('bookmarks.show');
     }
 
@@ -37,7 +38,7 @@ class BookmarksTest extends TestCase
         Queue::fake();
 
         $response = $this->withHeaders([
-            'Authorization' => 'Bearer ' . $this->getToken(),
+            'Authorization' => 'Bearer '.$this->getToken(),
         ])->post('/api/post', [
             'h' => 'entry',
             'bookmark-of' => 'https://example.org/blog-post',
@@ -55,7 +56,7 @@ class BookmarksTest extends TestCase
         Queue::fake();
 
         $response = $this->withHeaders([
-            'Authorization' => 'Bearer ' . $this->getToken(),
+            'Authorization' => 'Bearer '.$this->getToken(),
         ])->json('POST', '/api/post', [
             'type' => ['h-entry'],
             'properties' => [
@@ -70,12 +71,33 @@ class BookmarksTest extends TestCase
     }
 
     #[Test]
+    public function tagged_bookmarks_page_only_shows_bookmarks_with_that_tag(): void
+    {
+        $tag = Tag::factory()->create(['tag' => 'php']);
+        $tagged = Bookmark::factory()->create();
+        $tagged->tags()->attach($tag);
+        $untagged = Bookmark::factory()->create();
+
+        $response = $this->get('/bookmarks/tagged/php');
+        $response->assertViewIs('bookmarks.tagged');
+        $response->assertSee($tagged->url);
+        $response->assertDontSee($untagged->url);
+    }
+
+    #[Test]
+    public function bookmark_local_uri_attribute_returns_correct_url(): void
+    {
+        $bookmark = Bookmark::factory()->create();
+        $this->assertEquals(config('app.url').'/bookmarks/'.$bookmark->id, $bookmark->local_uri);
+    }
+
+    #[Test]
     public function when_the_bookmark_is_created_check_necessary_tags_are_also_created(): void
     {
         Queue::fake();
 
         $response = $this->withHeaders([
-            'Authorization' => 'Bearer ' . $this->getToken(),
+            'Authorization' => 'Bearer '.$this->getToken(),
         ])->json('POST', '/api/post', [
             'type' => ['h-entry'],
             'properties' => [

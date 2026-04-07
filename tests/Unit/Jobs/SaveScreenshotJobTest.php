@@ -7,6 +7,7 @@ namespace Tests\Unit\Jobs;
 use App\Jobs\SaveScreenshot;
 use App\Models\Bookmark;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
@@ -27,7 +28,7 @@ class SaveScreenshotJobTest extends TestCase
         $guzzleMock = new MockHandler([
             new Response(201, ['Content-Type' => 'application/json'], '{"data":{"id":"68d52633-e170-465e-b13e-746c97d01ffb","job_id":null,"status":"finished","credits":null,"code":null,"message":null,"percent":100,"operation":"capture-website","engine":"chrome","engine_version":"107","result":null,"created_at":"2023-01-07T21:05:48+00:00","started_at":null,"ended_at":null,"retry_of_task_id":null,"copy_of_task_id":null,"user_id":61485254,"priority":-10,"host_name":null,"storage":"ceph-fra","depends_on_task_ids":[],"links":{"self":"https:\/\/api.cloudconvert.com\/v2\/tasks\/68d52633-e170-465e-b13e-746c97d01ffb"}}}'),
             new Response(201, ['Content-Type' => 'application/json'], '{"data":{"id":"27f33137-cc03-4468-aba4-1e1aa8c096fb","job_id":null,"status":"finished","credits":null,"code":null,"message":null,"percent":100,"operation":"export\/url","result":null,"created_at":"2023-01-07T21:10:02+00:00","started_at":null,"ended_at":null,"retry_of_task_id":null,"copy_of_task_id":null,"user_id":61485254,"priority":-10,"host_name":null,"storage":"ceph-fra","depends_on_task_ids":["68d52633-e170-465e-b13e-746c97d01ffb"],"links":{"self":"https:\/\/api.cloudconvert.com\/v2\/tasks\/27f33137-cc03-4468-aba4-1e1aa8c096fb"}}}'),
-            new Response(200, ['Content-Type' => 'image/png'], fopen(__DIR__ . '/../../theverge.com.png', 'rb')),
+            new Response(200, ['Content-Type' => 'image/png'], fopen(__DIR__.'/../../theverge.com.png', 'rb')),
         ]);
         $guzzleHandler = HandlerStack::create($guzzleMock);
         $guzzleClient = new Client(['handler' => $guzzleHandler]);
@@ -45,7 +46,7 @@ class SaveScreenshotJobTest extends TestCase
                 }
 
                 // Retry connection exceptions
-                if ($exception instanceof \GuzzleHttp\Exception\ConnectException) {
+                if ($exception instanceof ConnectException) {
                     return true;
                 }
 
@@ -82,7 +83,7 @@ class SaveScreenshotJobTest extends TestCase
         $bookmark->refresh();
 
         $this->assertEquals('68d52633-e170-465e-b13e-746c97d01ffb', $bookmark->screenshot);
-        Storage::disk('public')->assertExists('/assets/img/bookmarks/' . $bookmark->screenshot . '.png');
+        Storage::disk('public')->assertExists('/assets/img/bookmarks/'.$bookmark->screenshot.'.png');
     }
 
     #[Test]
@@ -92,7 +93,7 @@ class SaveScreenshotJobTest extends TestCase
         $guzzleMock = new MockHandler([
             new Response(201, ['Content-Type' => 'application/json'], '{"id":1,"data":{"id":"68d52633-e170-465e-b13e-746c97d01ffb","job_id":null,"status":"waiting","credits":null,"code":null,"message":null,"percent":100,"operation":"capture-website","engine":"chrome","engine_version":"107","result":null,"created_at":"2023-01-07T21:05:48+00:00","started_at":null,"ended_at":null,"retry_of_task_id":null,"copy_of_task_id":null,"user_id":61485254,"priority":-10,"host_name":null,"storage":"ceph-fra","depends_on_task_ids":[],"links":{"self":"https:\/\/api.cloudconvert.com\/v2\/tasks\/68d52633-e170-465e-b13e-746c97d01ffb"}}}'),
             new Response(201, ['Content-Type' => 'application/json'], '{"id":2,"data":{"id":"27f33137-cc03-4468-aba4-1e1aa8c096fb","job_id":null,"status":"waiting","credits":null,"code":null,"message":null,"percent":100,"operation":"export\/url","result":null,"created_at":"2023-01-07T21:10:02+00:00","started_at":null,"ended_at":null,"retry_of_task_id":null,"copy_of_task_id":null,"user_id":61485254,"priority":-10,"host_name":null,"storage":"ceph-fra","depends_on_task_ids":["68d52633-e170-465e-b13e-746c97d01ffb"],"links":{"self":"https:\/\/api.cloudconvert.com\/v2\/tasks\/27f33137-cc03-4468-aba4-1e1aa8c096fb"}}}'),
-            new Response(200, ['Content-Type' => 'image/png'], fopen(__DIR__ . '/../../theverge.com.png', 'rb')),
+            new Response(200, ['Content-Type' => 'image/png'], fopen(__DIR__.'/../../theverge.com.png', 'rb')),
         ]);
         $guzzleHandler = HandlerStack::create($guzzleMock);
         $guzzleClient = new Client(['handler' => $guzzleHandler]);
@@ -115,7 +116,7 @@ class SaveScreenshotJobTest extends TestCase
                 }
 
                 // Retry connection exceptions
-                if ($exception instanceof \GuzzleHttp\Exception\ConnectException) {
+                if ($exception instanceof ConnectException) {
                     return true;
                 }
 
@@ -152,7 +153,7 @@ class SaveScreenshotJobTest extends TestCase
         $bookmark->refresh();
 
         $this->assertEquals('68d52633-e170-465e-b13e-746c97d01ffb', $bookmark->screenshot);
-        Storage::disk('public')->assertExists('/assets/img/bookmarks/' . $bookmark->screenshot . '.png');
+        Storage::disk('public')->assertExists('/assets/img/bookmarks/'.$bookmark->screenshot.'.png');
         // Also assert we made the correct number of requests
         $this->assertCount(2, $container);
         // However with retries there should be more than 4 responses for the 2 requests

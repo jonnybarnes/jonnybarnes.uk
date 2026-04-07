@@ -50,7 +50,7 @@ class NotesControllerTest extends TestCase
     public function old_note_urls_redirect(): void
     {
         $note = Note::factory()->create();
-        $response = $this->get('/note/' . $note->id);
+        $response = $this->get('/note/'.$note->id);
         $response->assertRedirect($note->uri);
     }
 

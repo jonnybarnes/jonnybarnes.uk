@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Models;
 
 use Cviebrock\EloquentSluggable\Sluggable;
+use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -18,22 +20,13 @@ use League\CommonMark\MarkdownConverter;
 use Spatie\CommonMarkHighlighter\FencedCodeRenderer;
 use Spatie\CommonMarkHighlighter\IndentedCodeRenderer;
 
+#[Table('articles')]
+#[Fillable(['url', 'title', 'main', 'published'])]
 class Article extends Model
 {
     use HasFactory;
     use Sluggable;
     use SoftDeletes;
-
-    /** @var string */
-    protected $table = 'articles';
-
-    /** @var array<int, string> */
-    protected $fillable = [
-        'url',
-        'title',
-        'main',
-        'published',
-    ];
 
     /** @var array<string, string> */
     protected $casts = [
@@ -100,7 +93,7 @@ class Article extends Model
     protected function link(): Attribute
     {
         return Attribute::get(
-            get: fn () => '/blog/' . $this->updated_at->year . '/' . $this->updated_at->format('m') . '/' . $this->titleurl,
+            get: fn () => '/blog/'.$this->updated_at->year.'/'.$this->updated_at->format('m').'/'.$this->titleurl,
         );
     }
 
@@ -112,15 +105,15 @@ class Article extends Model
         if ($year === null) {
             return $query;
         }
-        $start = $year . '-01-01 00:00:00';
-        $end = ($year + 1) . '-01-01 00:00:00';
+        $start = $year.'-01-01 00:00:00';
+        $end = ($year + 1).'-01-01 00:00:00';
         if (($month !== null) && ($month !== 12)) {
-            $start = $year . '-' . $month . '-01 00:00:00';
-            $end = $year . '-' . ($month + 1) . '-01 00:00:00';
+            $start = $year.'-'.$month.'-01 00:00:00';
+            $end = $year.'-'.($month + 1).'-01 00:00:00';
         }
         if ($month === 12) {
-            $start = $year . '-12-01 00:00:00';
-            $end = ($year + 1) . '-01-01 00:00:00';
+            $start = $year.'-12-01 00:00:00';
+            $end = ($year + 1).'-01-01 00:00:00';
         }
 
         return $query->where([

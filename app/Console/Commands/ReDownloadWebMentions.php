@@ -31,7 +31,7 @@ class ReDownloadWebMentions extends Command
     {
         $webmentions = WebMention::all();
         foreach ($webmentions as $webmention) {
-            $this->info('Initiation re-download of ' . $webmention->source);
+            $this->info('Initiation re-download of '.$webmention->source);
             dispatch(new DownloadWebMention($webmention->source));
         }
     }

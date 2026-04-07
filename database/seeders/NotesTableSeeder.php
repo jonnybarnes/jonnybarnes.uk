@@ -82,12 +82,12 @@ class NotesTableSeeder extends Seeder
             ->update(['updated_at' => $now->toDateTimeString()]);
 
         // copy aaron’s profile pic in place
-        $spl = new SplFileInfo(public_path() . '/assets/profile-images/aaronparecki.com');
+        $spl = new SplFileInfo(public_path().'/assets/profile-images/aaronparecki.com');
         if ($spl->isDir() === false) {
-            if (! mkdir($concurrentDirectory = public_path() . '/assets/profile-images/aaronparecki.com', 0755) && ! is_dir($concurrentDirectory)) {
+            if (! mkdir($concurrentDirectory = public_path().'/assets/profile-images/aaronparecki.com', 0755) && ! is_dir($concurrentDirectory)) {
                 throw new \RuntimeException(sprintf('Directory "%s" was not created', $concurrentDirectory));
             }
-            copy(base_path() . '/tests/aaron.png', public_path() . '/assets/profile-images/aaronparecki.com/image');
+            copy(base_path().'/tests/aaron.png', public_path().'/assets/profile-images/aaronparecki.com/image');
         }
 
         $now = Carbon::now()->subDays(rand(3, 7));

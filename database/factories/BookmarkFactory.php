@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Bookmark>
+ * @extends Factory<Bookmark>
  */
 class BookmarkFactory extends Factory
 {

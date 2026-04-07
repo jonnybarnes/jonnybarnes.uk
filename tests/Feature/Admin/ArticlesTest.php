@@ -55,11 +55,11 @@ class ArticlesTest extends TestCase
         $user = User::factory()->make();
         $faker = Factory::create();
         $text = $faker->text;
-        if ($fh = fopen(sys_get_temp_dir() . '/article.md', 'w')) {
+        if ($fh = fopen(sys_get_temp_dir().'/article.md', 'w')) {
             fwrite($fh, $text);
             fclose($fh);
         }
-        $path = sys_get_temp_dir() . '/article.md';
+        $path = sys_get_temp_dir().'/article.md';
         $file = new UploadedFile($path, 'article.md', 'text/plain', null, true);
 
         $this->actingAs($user)
@@ -83,7 +83,7 @@ class ArticlesTest extends TestCase
         ]);
 
         $response = $this->actingAs($user)
-            ->get('/admin/blog/' . $article->id . '/edit');
+            ->get('/admin/blog/'.$article->id.'/edit');
         $response->assertSeeText('This is *my* new blog. It uses `Markdown`.');
     }
 
@@ -94,7 +94,7 @@ class ArticlesTest extends TestCase
         $article = Article::factory()->create();
 
         $this->actingAs($user)
-            ->post('/admin/blog/' . $article->id, [
+            ->post('/admin/blog/'.$article->id, [
                 '_method' => 'PUT',
                 'title' => 'My New Blog',
                 'main' => 'This article has been edited',
@@ -112,7 +112,7 @@ class ArticlesTest extends TestCase
         $article = Article::factory()->create();
 
         $this->actingAs($user)
-            ->post('/admin/blog/' . $article->id, [
+            ->post('/admin/blog/'.$article->id, [
                 '_method' => 'DELETE',
             ]);
         $this->assertSoftDeleted('articles', [

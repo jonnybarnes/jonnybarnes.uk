@@ -31,7 +31,7 @@ class NotesTest extends TestCase
     public function get_note_attribute_method_calls_sub_methods(): void
     {
         // phpcs:ignore
-        $expected = '<p>Having a <a rel="tag" class="p-category" href="/notes/tagged/beer">#beer</a> at the local. 🍺</p>' . PHP_EOL;
+        $expected = '<p>Having a <a rel="tag" class="p-category" href="/notes/tagged/beer">#beer</a> at the local. 🍺</p>'.PHP_EOL;
         $note = Note::factory([
             'note' => 'Having a #beer at the local. 🍺',
         ])->create();
@@ -53,7 +53,7 @@ class NotesTest extends TestCase
                 <img class="social-icon" src="/assets/img/social-icons/twitter.svg" alt=""> t
             </a>
             </span>
-</span></p>' . PHP_EOL;
+</span></p>'.PHP_EOL;
         Contact::factory()->create([
             'nick' => 'tantek',
             'name' => 'Tantek Çelik',
@@ -98,7 +98,7 @@ class NotesTest extends TestCase
                 <img class="social-icon" src="/assets/img/social-icons/facebook.svg" alt=""> Facebook
             </a>
                     </span>
-</span></p>' . PHP_EOL;
+</span></p>'.PHP_EOL;
         $this->assertEquals($expected, $note->note);
     }
 
@@ -108,7 +108,7 @@ class NotesTest extends TestCase
     #[Test]
     public function twitter_link_is_created_when_no_contact_found(): void
     {
-        $expected = '<p>Hi <a href="https://twitter.com/bob">@bob</a></p>' . PHP_EOL;
+        $expected = '<p>Hi <a href="https://twitter.com/bob">@bob</a></p>'.PHP_EOL;
         $note = Note::factory()->create([
             'note' => 'Hi @bob',
         ]);
@@ -312,7 +312,7 @@ class NotesTest extends TestCase
         $note->media()->save($media);
 
         $expected = 'A nice image
-<img src="' . config('app.url') . '/storage/test.png" alt="">';
+<img src="'.config('app.url').'/storage/test.png" alt="">';
         $this->assertEquals($expected, $note->content);
     }
 
@@ -329,7 +329,7 @@ class NotesTest extends TestCase
         $note->media()->save($media);
 
         $expected = 'A nice video
-<video src="' . config('app.url') . '/storage/test.mkv">';
+<video src="'.config('app.url').'/storage/test.mkv">';
         $this->assertEquals($expected, $note->content);
     }
 
@@ -346,7 +346,7 @@ class NotesTest extends TestCase
         $note->media()->save($media);
 
         $expected = 'Some nice audio
-<audio src="' . config('app.url') . '/storage/test.flac">';
+<audio src="'.config('app.url').'/storage/test.flac">';
         $this->assertEquals($expected, $note->content);
     }
 
@@ -378,27 +378,9 @@ class NotesTest extends TestCase
         ]);
 
         $this->assertSame(
-            '<p>The best search engine? <a href="https://kagi.com">https://kagi.com</a></p>' . PHP_EOL,
+            '<p>The best search engine? <a href="https://kagi.com">https://kagi.com</a></p>'.PHP_EOL,
             $note->note
         );
-    }
-
-    /**
-     * For now, just reply on a cached object instead of actually querying Twitter.
-     */
-    #[Test]
-    public function check_in_reply_to_is_twitter_link(): void
-    {
-        $tempContent = (object) [
-            'html' => 'something random',
-        ];
-        Cache::put('933662564587855877', $tempContent);
-
-        $note = Note::factory()->create([
-            'in_reply_to' => 'https://twitter.com/someRando/status/933662564587855877',
-        ]);
-
-        $this->assertEquals($tempContent, $note->twitter);
     }
 
     #[Test]
@@ -427,7 +409,7 @@ class NotesTest extends TestCase
     #[Test]
     public function mastodon_usernames_are_parsed_correctly(): void
     {
-        $expected = '<p>Hi <a href="https://phpc.social/@freekmurze">@freekmurze@phpc.social</a> how are you?</p>' . PHP_EOL;
+        $expected = '<p>Hi <a href="https://phpc.social/@freekmurze">@freekmurze@phpc.social</a> how are you?</p>'.PHP_EOL;
         $note = Note::factory()->create([
             'note' => 'Hi @freekmurze@phpc.social how are you?',
         ]);

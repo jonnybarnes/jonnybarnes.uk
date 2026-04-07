@@ -28,7 +28,7 @@ class TokenServiceTest extends TestCase
         ];
         $token = $tokenService->getNewToken($data);
 
-        $response = $this->get('/api/post', ['HTTP_Authorization' => 'Bearer ' . $token]);
+        $response = $this->get('/api/post', ['HTTP_Authorization' => 'Bearer '.$token]);
 
         $response->assertJson([
             'response' => 'token',
@@ -60,7 +60,7 @@ class TokenServiceTest extends TestCase
             ->getToken($config->signer(), InMemory::plainText(random_bytes(32)))
             ->toString();
 
-        $response = $this->get('/api/post', ['HTTP_Authorization' => 'Bearer ' . $token]);
+        $response = $this->get('/api/post', ['HTTP_Authorization' => 'Bearer '.$token]);
 
         $response->assertJson([
             'response' => 'error',

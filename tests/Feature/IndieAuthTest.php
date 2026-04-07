@@ -369,7 +369,7 @@ class IndieAuthTest extends TestCase
         $this->assertCount(3, $parts);
         $this->assertStringContainsString('code=', $parts[0]);
         $this->assertSame('state=123456', $parts[1]);
-        $this->assertSame('iss=' . config('app.url'), $parts[2]);
+        $this->assertSame('iss='.config('app.url'), $parts[2]);
     }
 
     #[Test]

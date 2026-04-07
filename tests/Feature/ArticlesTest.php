@@ -33,8 +33,8 @@ class ArticlesTest extends TestCase
     public function wrong_date_in_url_redirects_to_correct_date()
     {
         $article = Article::factory()->create();
-        $response = $this->get('/blog/1900/01/' . $article->titleurl);
-        $response->assertRedirect('/blog/' . date('Y') . '/' . date('m') . '/' . $article->titleurl);
+        $response = $this->get('/blog/1900/01/'.$article->titleurl);
+        $response->assertRedirect('/blog/'.date('Y').'/'.date('m').'/'.$article->titleurl);
     }
 
     #[Test]
@@ -42,14 +42,14 @@ class ArticlesTest extends TestCase
     {
         $article = Article::factory()->create();
         $num60Id = resolve(Numbers::class)->numto60($article->id);
-        $response = $this->get('/blog/s/' . $num60Id);
+        $response = $this->get('/blog/s/'.$num60Id);
         $response->assertRedirect($article->link);
     }
 
     #[Test]
     public function unknown_slug_gets_not_found_response()
     {
-        $response = $this->get('/blog/' . date('Y') . '/' . date('m') . '/unknown-slug');
+        $response = $this->get('/blog/'.date('Y').'/'.date('m').'/unknown-slug');
         $response->assertNotFound();
     }
 

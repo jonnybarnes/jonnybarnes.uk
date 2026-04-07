@@ -42,7 +42,7 @@ class SyndicateNoteToMastodon implements ShouldQueue
             'https://brid.gy/micropub',
             [
                 'headers' => [
-                    'Authorization' => 'Bearer ' . config('bridgy.mastodon_token'),
+                    'Authorization' => 'Bearer '.config('bridgy.mastodon_token'),
                 ],
                 'json' => [
                     'type' => ['h-entry'],

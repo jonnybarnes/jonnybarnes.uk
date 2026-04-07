@@ -6,7 +6,7 @@ use App\Models\Passkey;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Passkey>
+ * @extends Factory<Passkey>
  */
 class PasskeyFactory extends Factory
 {

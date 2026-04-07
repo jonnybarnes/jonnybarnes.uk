@@ -128,7 +128,7 @@ class PasskeysController extends Controller
         // Unset session data to mitigate replay attacks
         $request->session()->forget('create_options');
         if (empty($publicKeyCredentialCreationOptionsData)) {
-            throw new WebAuthnException('No public key credential request options found');
+            throw new WebauthnException('No public key credential request options found');
         }
 
         $attestationStatementSupportManager = new AttestationStatementSupportManager;
@@ -145,7 +145,7 @@ class PasskeysController extends Controller
         );
 
         if (! $publicKeyCredential->response instanceof AuthenticatorAttestationResponse) {
-            throw new WebAuthnException('Invalid response type');
+            throw new WebauthnException('Invalid response type');
         }
 
         $algorithmManager = new Manager;

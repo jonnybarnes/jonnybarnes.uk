@@ -21,9 +21,9 @@ class ContactsTest extends TestCase
 
     protected function tearDown(): void
     {
-        if (file_exists(public_path() . '/assets/profile-images/tantek.com/image')) {
-            unlink(public_path() . '/assets/profile-images/tantek.com/image');
-            rmdir(public_path() . '/assets/profile-images/tantek.com');
+        if (file_exists(public_path().'/assets/profile-images/tantek.com/image')) {
+            unlink(public_path().'/assets/profile-images/tantek.com/image');
+            rmdir(public_path().'/assets/profile-images/tantek.com');
         }
         parent::tearDown();
     }
@@ -69,7 +69,7 @@ class ContactsTest extends TestCase
         $user = User::factory()->make();
         $contact = Contact::factory()->create();
 
-        $response = $this->actingAs($user)->get('/admin/contacts/' . $contact->id . '/edit');
+        $response = $this->actingAs($user)->get('/admin/contacts/'.$contact->id.'/edit');
         $response->assertViewIs('admin.contacts.edit');
     }
 
@@ -79,7 +79,7 @@ class ContactsTest extends TestCase
         $user = User::factory()->make();
         $contact = Contact::factory()->create();
 
-        $this->actingAs($user)->post('/admin/contacts/' . $contact->id, [
+        $this->actingAs($user)->post('/admin/contacts/'.$contact->id, [
             '_method' => 'PUT',
             'name' => 'Tantek Celik',
             'nick' => 'tantek',
@@ -95,13 +95,13 @@ class ContactsTest extends TestCase
     #[Test]
     public function admin_can_edit_contact_and_upload_avatar(): void
     {
-        copy(__DIR__ . '/../../aaron.png', sys_get_temp_dir() . '/tantek.png');
-        $path = sys_get_temp_dir() . '/tantek.png';
+        copy(__DIR__.'/../../aaron.png', sys_get_temp_dir().'/tantek.png');
+        $path = sys_get_temp_dir().'/tantek.png';
         $file = new UploadedFile($path, 'tantek.png', 'image/png', null, true);
         $user = User::factory()->make();
         $contact = Contact::factory()->create();
 
-        $this->actingAs($user)->post('/admin/contacts/' . $contact->id, [
+        $this->actingAs($user)->post('/admin/contacts/'.$contact->id, [
             '_method' => 'PUT',
             'name' => 'Tantek Celik',
             'nick' => 'tantek',
@@ -110,8 +110,8 @@ class ContactsTest extends TestCase
             'avatar' => $file,
         ]);
         $this->assertFileEquals(
-            __DIR__ . '/../../aaron.png',
-            public_path() . '/assets/profile-images/tantek.com/image'
+            __DIR__.'/../../aaron.png',
+            public_path().'/assets/profile-images/tantek.com/image'
         );
     }
 
@@ -125,7 +125,7 @@ class ContactsTest extends TestCase
             'nick' => 'tantek',
         ]);
 
-        $this->actingAs($user)->post('/admin/contacts/' . $contact->id, [
+        $this->actingAs($user)->post('/admin/contacts/'.$contact->id, [
             '_method' => 'DELETE',
         ]);
         $this->assertDatabaseMissing('contacts', [
@@ -141,7 +141,7 @@ class ContactsTest extends TestCase
             <img class="u-photo" alt="" src="http://tantek.com/tantek.png">
         </div>
         HTML;
-        $file = fopen(__DIR__ . '/../../aaron.png', 'rb');
+        $file = fopen(__DIR__.'/../../aaron.png', 'rb');
         $mock = new MockHandler([
             new Response(200, ['Content-Type' => 'text/html'], $html),
             new Response(200, ['Content-Type' => 'image/png'], $file),
@@ -154,11 +154,11 @@ class ContactsTest extends TestCase
             'homepage' => 'https://tantek.com',
         ]);
 
-        $this->actingAs($user)->get('/admin/contacts/' . $contact->id . '/getavatar');
+        $this->actingAs($user)->get('/admin/contacts/'.$contact->id.'/getavatar');
 
         $this->assertFileEquals(
-            __DIR__ . '/../../aaron.png',
-            public_path() . '/assets/profile-images/tantek.com/image'
+            __DIR__.'/../../aaron.png',
+            public_path().'/assets/profile-images/tantek.com/image'
         );
     }
 
@@ -174,9 +174,9 @@ class ContactsTest extends TestCase
         $user = User::factory()->make();
         $contact = Contact::factory()->create();
 
-        $response = $this->actingAs($user)->get('/admin/contacts/' . $contact->id . '/getavatar');
+        $response = $this->actingAs($user)->get('/admin/contacts/'.$contact->id.'/getavatar');
 
-        $response->assertRedirect('/admin/contacts/' . $contact->id . '/edit');
+        $response->assertRedirect('/admin/contacts/'.$contact->id.'/edit');
     }
 
     #[Test]
@@ -197,9 +197,9 @@ class ContactsTest extends TestCase
         $user = User::factory()->make();
         $contact = Contact::factory()->create();
 
-        $response = $this->actingAs($user)->get('/admin/contacts/' . $contact->id . '/getavatar');
+        $response = $this->actingAs($user)->get('/admin/contacts/'.$contact->id.'/getavatar');
 
-        $response->assertRedirect('/admin/contacts/' . $contact->id . '/edit');
+        $response->assertRedirect('/admin/contacts/'.$contact->id.'/edit');
     }
 
     #[Test]
@@ -211,8 +211,8 @@ class ContactsTest extends TestCase
         ]);
         $user = User::factory()->make();
 
-        $response = $this->actingAs($user)->get('/admin/contacts/' . $contact->id . '/getavatar');
+        $response = $this->actingAs($user)->get('/admin/contacts/'.$contact->id.'/getavatar');
 
-        $response->assertRedirect('/admin/contacts/' . $contact->id . '/edit');
+        $response->assertRedirect('/admin/contacts/'.$contact->id.'/edit');
     }
 }

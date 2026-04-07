@@ -4,17 +4,16 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
+#[Fillable(['url', 'name', 'content'])]
 class Bookmark extends Model
 {
     use HasFactory;
-
-    /** @var array<int, string> */
-    protected $fillable = ['url', 'name', 'content'];
 
     /** @var array<string, string> */
     protected $casts = [
@@ -26,10 +25,10 @@ class Bookmark extends Model
         return $this->belongsToMany('App\Models\Tag');
     }
 
-    protected function local_uri(): Attribute
+    protected function localUri(): Attribute
     {
         return Attribute::get(
-            get: fn () => config('app.url') . '/bookmarks/' . $this->id,
+            get: fn () => config('app.url').'/bookmarks/'.$this->id,
         );
     }
 }

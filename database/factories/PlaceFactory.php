@@ -6,7 +6,7 @@ use App\Models\Place;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Place>
+ * @extends Factory<Place>
  */
 class PlaceFactory extends Factory
 {

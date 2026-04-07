@@ -63,7 +63,7 @@ class MigratePlaceDataFromPostgis extends Command
         $places = Place::all();
 
         $places->each(function ($place) {
-            $this->info('Extracting Postgis data for place: ' . $place->name);
+            $this->info('Extracting Postgis data for place: '.$place->name);
 
             $place->latitude = $place->location->getLat();
             $place->longitude = $place->location->getLng();

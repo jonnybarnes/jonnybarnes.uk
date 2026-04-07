@@ -110,7 +110,7 @@ class ProcessWebMention implements ShouldQueue
         if (str_ends_with($url, '/')) {
             $filenameFromURL .= 'index.html';
         }
-        $path = storage_path() . '/HTML/' . $filenameFromURL;
+        $path = storage_path().'/HTML/'.$filenameFromURL;
         $parts = explode('/', $path);
         $name = array_pop($parts);
         $dir = implode('/', $parts);

@@ -4,21 +4,19 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Str;
 
+#[Table('media_endpoint')]
+#[Fillable(['token', 'path', 'type', 'image_widths'])]
 class Media extends Model
 {
     use HasFactory;
-
-    /** @var string */
-    protected $table = 'media_endpoint';
-
-    /** @var array<int, string> */
-    protected $fillable = ['token', 'path', 'type', 'image_widths'];
 
     public function notes(): BelongsToMany
     {
@@ -35,7 +33,7 @@ class Media extends Model
                     return $attributes['path'];
                 }
 
-                return config('app.url') . '/storage/' . $attributes['path'];
+                return config('app.url').'/storage/'.$attributes['path'];
             }
         );
     }
@@ -80,7 +78,7 @@ class Media extends Model
         $basename = $this->getBasename($path);
         $extension = $this->getExtension($path);
 
-        return config('app.url') . '/storage/' . $basename . '-' . $size . '.' . $extension;
+        return config('app.url').'/storage/'.$basename.'-'.$size.'.'.$extension;
     }
 
     private function getBasename(string $path): string
@@ -91,7 +89,7 @@ class Media extends Model
         array_pop($filenameParts);
 
         return ltrim(array_reduce($filenameParts, static function ($carry, $item) {
-            return $carry . '.' . $item;
+            return $carry.'.'.$item;
         }, ''), '.');
     }
 

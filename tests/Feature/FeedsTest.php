@@ -59,7 +59,7 @@ class FeedsTest extends TestCase
         $response->assertHeader('Content-Type', 'application/jf2feed+json');
         $response->assertJson([
             'type' => 'feed',
-            'name' => 'Blog feed for ' . config('app.name'),
+            'name' => 'Blog feed for '.config('app.name'),
             'url' => url('/blog'),
             'author' => [
                 'type' => 'card',
@@ -117,7 +117,7 @@ class FeedsTest extends TestCase
         $response->assertHeader('Content-Type', 'application/jf2feed+json');
         $response->assertJson([
             'type' => 'feed',
-            'name' => 'Notes feed for ' . config('app.name'),
+            'name' => 'Notes feed for '.config('app.name'),
             'url' => url('/notes'),
             'author' => [
                 'type' => 'card',

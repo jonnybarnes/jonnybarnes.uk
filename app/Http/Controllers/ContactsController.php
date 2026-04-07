@@ -19,9 +19,9 @@ class ContactsController extends Controller
         $contacts = Contact::all();
         foreach ($contacts as $contact) {
             $contact->homepageHost = parse_url($contact->homepage, PHP_URL_HOST);
-            $file = public_path() . '/assets/profile-images/' . $contact->homepageHost . '/image';
+            $file = public_path().'/assets/profile-images/'.$contact->homepageHost.'/image';
             $contact->image = ($filesystem->exists($file)) ?
-                '/assets/profile-images/' . $contact->homepageHost . '/image'
+                '/assets/profile-images/'.$contact->homepageHost.'/image'
             :
                 '/assets/profile-images/default-image';
         }
@@ -35,11 +35,11 @@ class ContactsController extends Controller
     public function show(Contact $contact): View
     {
         $contact->homepageHost = parse_url($contact->homepage, PHP_URL_HOST);
-        $file = public_path() . '/assets/profile-images/' . $contact->homepageHost . '/image';
+        $file = public_path().'/assets/profile-images/'.$contact->homepageHost.'/image';
 
         $filesystem = new Filesystem;
         $image = ($filesystem->exists($file)) ?
-            '/assets/profile-images/' . $contact->homepageHost . '/image'
+            '/assets/profile-images/'.$contact->homepageHost.'/image'
         :
             '/assets/profile-images/default-image';
 

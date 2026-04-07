@@ -93,7 +93,7 @@ class NoteService
                 $matches
             );
 
-            return $matches[0][0] . ', ' . $matches[0][1];
+            return $matches[0][0].', '.$matches[0][1];
         }
 
         return null;

@@ -21,7 +21,7 @@ class CorsHeadersTest extends TestCase
             [],
             [],
             [],
-            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+            ['HTTP_Authorization' => 'Bearer '.$this->getToken()]
         );
         $response->assertHeader('Access-Control-Allow-Origin', '*');
     }

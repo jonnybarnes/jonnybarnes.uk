@@ -120,6 +120,7 @@ class PlacesController extends Controller
             foreach ($place1->notes as $note) {
                 $note->place()->dissociate();
                 $note->place()->associate($place2->id);
+                $note->save();
             }
             $place1->delete();
         }
@@ -127,6 +128,7 @@ class PlacesController extends Controller
             foreach ($place2->notes as $note) {
                 $note->place()->dissociate();
                 $note->place()->associate($place1->id);
+                $note->save();
             }
             $place2->delete();
         }

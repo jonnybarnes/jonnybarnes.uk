@@ -47,7 +47,7 @@ class MicropubControllerTest extends TestCase
     #[Test]
     public function micropub_get_request_with_valid_token_returns_ok_response(): void
     {
-        $response = $this->get('/api/post', ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]);
+        $response = $this->get('/api/post', ['HTTP_Authorization' => 'Bearer '.$this->getToken()]);
         $response->assertStatus(200);
         $response->assertJsonFragment(['response' => 'token']);
     }
@@ -55,7 +55,7 @@ class MicropubControllerTest extends TestCase
     #[Test]
     public function micropub_clients_can_request_syndication_targets_can_be_empty(): void
     {
-        $response = $this->get('/api/post?q=syndicate-to', ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]);
+        $response = $this->get('/api/post?q=syndicate-to', ['HTTP_Authorization' => 'Bearer '.$this->getToken()]);
         $response->assertJsonFragment(['syndicate-to' => []]);
     }
 
@@ -63,7 +63,7 @@ class MicropubControllerTest extends TestCase
     public function micropub_clients_can_request_syndication_targets_populates_from_model(): void
     {
         $syndicationTarget = SyndicationTarget::factory()->create();
-        $response = $this->get('/api/post?q=syndicate-to', ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]);
+        $response = $this->get('/api/post?q=syndicate-to', ['HTTP_Authorization' => 'Bearer '.$this->getToken()]);
         $response->assertJsonFragment(['uid' => $syndicationTarget->uid]);
     }
 
@@ -75,7 +75,7 @@ class MicropubControllerTest extends TestCase
             'latitude' => '53.5',
             'longitude' => '-2.38',
         ]);
-        $response = $this->get('/api/post?q=geo:53.5,-2.38', ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]);
+        $response = $this->get('/api/post?q=geo:53.5,-2.38', ['HTTP_Authorization' => 'Bearer '.$this->getToken()]);
         $response->assertJson(['places' => [['slug' => 'the-bridgewater-pub']]]);
     }
 
@@ -90,14 +90,14 @@ class MicropubControllerTest extends TestCase
     #[Test]
     public function return_empty_result_when_micropub_client_requests_known_nearby_places(): void
     {
-        $response = $this->get('/api/post?q=geo:1.23,4.56', ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]);
+        $response = $this->get('/api/post?q=geo:1.23,4.56', ['HTTP_Authorization' => 'Bearer '.$this->getToken()]);
         $response->assertJson(['places' => []]);
     }
 
     #[Test]
     public function micropub_client_can_request_endpoint_config(): void
     {
-        $response = $this->get('/api/post?q=config', ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]);
+        $response = $this->get('/api/post?q=config', ['HTTP_Authorization' => 'Bearer '.$this->getToken()]);
         $response->assertJsonFragment(['media-endpoint' => route('media-endpoint')]);
     }
 
@@ -113,7 +113,7 @@ class MicropubControllerTest extends TestCase
                 'h' => 'entry',
                 'content' => $note,
             ],
-            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+            ['HTTP_Authorization' => 'Bearer '.$this->getToken()]
         );
 
         $response->assertJson(['response' => 'created']);
@@ -146,7 +146,7 @@ class MicropubControllerTest extends TestCase
                     'https://bsky.app/profile/jonnybarnes.uk',
                 ],
             ],
-            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+            ['HTTP_Authorization' => 'Bearer '.$this->getToken()]
         );
         $response->assertJson(['response' => 'created']);
         $this->assertDatabaseHas('notes', ['note' => $note]);
@@ -164,7 +164,7 @@ class MicropubControllerTest extends TestCase
                 'name' => 'The Barton Arms',
                 'geo' => 'geo:53.4974,-2.3768',
             ],
-            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+            ['HTTP_Authorization' => 'Bearer '.$this->getToken()]
         );
         $response->assertJson(['response' => 'created']);
         $this->assertDatabaseHas('places', ['slug' => 'the-barton-arms']);
@@ -181,7 +181,7 @@ class MicropubControllerTest extends TestCase
                 'latitude' => '53.4974',
                 'longitude' => '-2.3768',
             ],
-            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+            ['HTTP_Authorization' => 'Bearer '.$this->getToken()]
         );
         $response->assertJson(['response' => 'created']);
         $this->assertDatabaseHas('places', ['slug' => 'the-barton-arms']);
@@ -196,7 +196,7 @@ class MicropubControllerTest extends TestCase
                 'h' => 'entry',
                 'content' => 'A random note',
             ],
-            ['HTTP_Authorization' => 'Bearer ' . $this->getInvalidToken()]
+            ['HTTP_Authorization' => 'Bearer '.$this->getInvalidToken()]
         );
         $response->assertStatus(400);
         $response->assertJson(['error' => 'invalid_token']);
@@ -211,7 +211,7 @@ class MicropubControllerTest extends TestCase
                 'h' => 'entry',
                 'content' => 'A random note',
             ],
-            ['HTTP_Authorization' => 'Bearer ' . $this->getTokenWithNoScope()]
+            ['HTTP_Authorization' => 'Bearer '.$this->getTokenWithNoScope()]
         );
         $response->assertStatus(400);
         $response->assertJson(['error_description' => 'The provided token has no scopes']);
@@ -226,7 +226,7 @@ class MicropubControllerTest extends TestCase
                 'h' => 'entry',
                 'content' => 'A random note',
             ],
-            ['HTTP_Authorization' => 'Bearer ' . $this->getTokenWithIncorrectScope()]
+            ['HTTP_Authorization' => 'Bearer '.$this->getTokenWithIncorrectScope()]
         );
         $response->assertStatus(401);
         $response->assertJson(['error' => 'insufficient_scope']);
@@ -265,10 +265,10 @@ class MicropubControllerTest extends TestCase
                         'https://mastodon.social/@jonnybarnes',
                         'https://bsky.app/profile/jonnybarnes.uk',
                     ],
-                    'photo' => [config('filesystems.disks.public.url') . '/media/test-photo.jpg'],
+                    'photo' => [config('filesystems.disks.public.url').'/media/test-photo.jpg'],
                 ],
             ],
-            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+            ['HTTP_Authorization' => 'Bearer '.$this->getToken()]
         );
         $response
             ->assertStatus(201)
@@ -292,7 +292,7 @@ class MicropubControllerTest extends TestCase
                     'location' => ['geo:1.23,4.56'],
                 ],
             ],
-            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+            ['HTTP_Authorization' => 'Bearer '.$this->getToken()]
         );
         $response
             ->assertStatus(201)
@@ -326,7 +326,7 @@ class MicropubControllerTest extends TestCase
                     'location' => [$place->uri],
                 ],
             ],
-            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+            ['HTTP_Authorization' => 'Bearer '.$this->getToken()]
         );
         $response
             ->assertStatus(201)
@@ -358,7 +358,7 @@ class MicropubControllerTest extends TestCase
                     ],
                 ],
             ],
-            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+            ['HTTP_Authorization' => 'Bearer '.$this->getToken()]
         );
         $response
             ->assertStatus(201)
@@ -391,7 +391,7 @@ class MicropubControllerTest extends TestCase
                     ]],
                 ],
             ],
-            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+            ['HTTP_Authorization' => 'Bearer '.$this->getToken()]
         );
         $response
             ->assertStatus(201)
@@ -444,7 +444,7 @@ class MicropubControllerTest extends TestCase
                     'content' => [$note],
                 ],
             ],
-            ['HTTP_Authorization' => 'Bearer ' . $this->getTokenWithIncorrectScope()]
+            ['HTTP_Authorization' => 'Bearer '.$this->getTokenWithIncorrectScope()]
         );
         $response
             ->assertJson([
@@ -465,7 +465,7 @@ class MicropubControllerTest extends TestCase
                     'content' => ['Some content'],
                 ],
             ],
-            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+            ['HTTP_Authorization' => 'Bearer '.$this->getToken()]
         );
         $response
             ->assertJson([
@@ -485,10 +485,10 @@ class MicropubControllerTest extends TestCase
                 'type' => ['h-card'],
                 'properties' => [
                     'name' => [$faker->name],
-                    'geo' => ['geo:' . $faker->latitude . ',' . $faker->longitude],
+                    'geo' => ['geo:'.$faker->latitude.','.$faker->longitude],
                 ],
             ],
-            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+            ['HTTP_Authorization' => 'Bearer '.$this->getToken()]
         );
         $response
             ->assertJson(['response' => 'created'])
@@ -505,10 +505,10 @@ class MicropubControllerTest extends TestCase
                 'type' => ['h-card'],
                 'properties' => [
                     'name' => [$faker->name],
-                    'geo' => ['geo:' . $faker->latitude . ',' . $faker->longitude . ';u=35'],
+                    'geo' => ['geo:'.$faker->latitude.','.$faker->longitude.';u=35'],
                 ],
             ],
-            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+            ['HTTP_Authorization' => 'Bearer '.$this->getToken()]
         );
         $response
             ->assertJson(['response' => 'created'])
@@ -528,7 +528,7 @@ class MicropubControllerTest extends TestCase
                     'content' => ['replaced content'],
                 ],
             ],
-            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+            ['HTTP_Authorization' => 'Bearer '.$this->getToken()]
         );
         $response
             ->assertJson(['response' => 'updated'])
@@ -551,7 +551,7 @@ class MicropubControllerTest extends TestCase
                     'content' => [['value' => 'plain text', 'html' => 'html version']],
                 ],
             ],
-            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+            ['HTTP_Authorization' => 'Bearer '.$this->getToken()]
         );
         $response
             ->assertJson(['response' => 'updated'])
@@ -577,7 +577,7 @@ class MicropubControllerTest extends TestCase
                     ],
                 ],
             ],
-            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+            ['HTTP_Authorization' => 'Bearer '.$this->getToken()]
         );
         $response
             ->assertJson(['response' => 'updated'])
@@ -602,7 +602,7 @@ class MicropubControllerTest extends TestCase
                     'photo' => ['https://example.org/photo.jpg'],
                 ],
             ],
-            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+            ['HTTP_Authorization' => 'Bearer '.$this->getToken()]
         );
         $response
             ->assertJson(['response' => 'updated'])
@@ -619,12 +619,12 @@ class MicropubControllerTest extends TestCase
             '/api/post',
             [
                 'action' => 'update',
-                'url' => config('app.url') . '/blog/A',
+                'url' => config('app.url').'/blog/A',
                 'add' => [
                     'syndication' => ['https://www.swarmapp.com/checkin/123'],
                 ],
             ],
-            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+            ['HTTP_Authorization' => 'Bearer '.$this->getToken()]
         );
         $response
             ->assertJson(['error' => 'invalid'])
@@ -638,12 +638,12 @@ class MicropubControllerTest extends TestCase
             '/api/post',
             [
                 'action' => 'update',
-                'url' => config('app.url') . '/notes/ZZZZ',
+                'url' => config('app.url').'/notes/ZZZZ',
                 'add' => [
                     'syndication' => ['https://www.swarmapp.com/checkin/123'],
                 ],
             ],
-            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+            ['HTTP_Authorization' => 'Bearer '.$this->getToken()]
         );
         $response
             ->assertJson(['error' => 'invalid_request'])
@@ -663,7 +663,7 @@ class MicropubControllerTest extends TestCase
                     'syndication' => ['https://www.swarmapp.com/checkin/123'],
                 ],
             ],
-            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+            ['HTTP_Authorization' => 'Bearer '.$this->getToken()]
         );
         $response
             ->assertJson(['error' => 'unsupported_operation'])
@@ -677,12 +677,12 @@ class MicropubControllerTest extends TestCase
             '/api/post',
             [
                 'action' => 'update',
-                'url' => config('app.url') . '/notes/B',
+                'url' => config('app.url').'/notes/B',
                 'add' => [
                     'syndication' => ['https://www.swarmapp.com/checkin/123'],
                 ],
             ],
-            ['HTTP_Authorization' => 'Bearer ' . $this->getTokenWithIncorrectScope()]
+            ['HTTP_Authorization' => 'Bearer '.$this->getTokenWithIncorrectScope()]
         );
         $response
             ->assertStatus(401)
@@ -705,7 +705,7 @@ class MicropubControllerTest extends TestCase
                     ],
                 ],
             ],
-            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+            ['HTTP_Authorization' => 'Bearer '.$this->getToken()]
         );
         $response
             ->assertJson(['response' => 'updated'])
@@ -750,7 +750,7 @@ class MicropubControllerTest extends TestCase
                     'syndication' => ['https://www.swarmapp.com/checkin/123'],
                 ],
             ],
-            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+            ['HTTP_Authorization' => 'Bearer '.$this->getToken()]
         );
         $response
             ->assertJson(['response' => 'updated'])
@@ -777,7 +777,7 @@ class MicropubControllerTest extends TestCase
                 'url' => $note->uri,
                 'delete' => ['syndication'],
             ],
-            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+            ['HTTP_Authorization' => 'Bearer '.$this->getToken()]
         );
         $response
             ->assertJson(['response' => 'updated'])
@@ -805,7 +805,7 @@ class MicropubControllerTest extends TestCase
                     'syndication' => ['https://www.swarmapp.com/checkin/123'],
                 ],
             ],
-            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+            ['HTTP_Authorization' => 'Bearer '.$this->getToken()]
         );
         $response
             ->assertJson(['response' => 'updated'])
@@ -820,7 +820,7 @@ class MicropubControllerTest extends TestCase
     public function micropub_client_api_request_can_delete_photo(): void
     {
         $note = Note::factory()->create();
-        $media = new \App\Models\Media;
+        $media = new Media;
         $media->path = 'https://example.org/photo.jpg';
         $media->type = 'image';
         $media->save();
@@ -833,7 +833,7 @@ class MicropubControllerTest extends TestCase
                 'url' => $note->uri,
                 'delete' => ['photo'],
             ],
-            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+            ['HTTP_Authorization' => 'Bearer '.$this->getToken()]
         );
         $response
             ->assertJson(['response' => 'updated'])
@@ -860,7 +860,7 @@ class MicropubControllerTest extends TestCase
                     'content' => [$content],
                 ],
             ],
-            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+            ['HTTP_Authorization' => 'Bearer '.$this->getToken()]
         );
 
         $response

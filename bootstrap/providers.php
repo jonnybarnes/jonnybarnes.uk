@@ -1,7 +1,11 @@
 <?php
 
+use App\Providers\AppServiceProvider;
+use App\Providers\HorizonServiceProvider;
+use App\Providers\MicropubServiceProvider;
+
 return [
-    App\Providers\AppServiceProvider::class,
-    App\Providers\HorizonServiceProvider::class,
-    App\Providers\MicropubServiceProvider::class,
+    AppServiceProvider::class,
+    HorizonServiceProvider::class,
+    MicropubServiceProvider::class,
 ];

@@ -5,19 +5,18 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Traits\FilterHtml;
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Mf2;
 
+#[Fillable(['url'])]
 class Like extends Model
 {
     use FilterHtml;
     use HasFactory;
-
-    /** @var array<int, string> */
-    protected $fillable = ['url'];
 
     protected function url(): Attribute
     {
