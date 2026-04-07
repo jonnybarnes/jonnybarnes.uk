@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Media>
+ * @extends Factory<Media>
  */
 class MediaFactory extends Factory
 {
@@ -26,7 +26,7 @@ class MediaFactory extends Factory
     public function definition(): array
     {
         return [
-            'path' => 'media/' . $this->faker->uuid . '.jpg',
+            'path' => 'media/'.$this->faker->uuid.'.jpg',
             'type' => 'image',
             'created_at' => Carbon::now()->toDateTimeString(),
             'updated_at' => Carbon::now()->toDateTimeString(),

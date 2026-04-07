@@ -54,7 +54,7 @@ class NotesTest extends TestCase
         $user = User::factory()->make();
         $note = Note::factory()->create();
 
-        $response = $this->actingAs($user)->get('/admin/notes/' . $note->id . '/edit');
+        $response = $this->actingAs($user)->get('/admin/notes/'.$note->id.'/edit');
         $response->assertViewIs('admin.notes.edit');
     }
 
@@ -65,7 +65,7 @@ class NotesTest extends TestCase
         $user = User::factory()->make();
         $note = Note::factory()->create();
 
-        $this->actingAs($user)->post('/admin/notes/' . $note->id, [
+        $this->actingAs($user)->post('/admin/notes/'.$note->id, [
             '_method' => 'PUT',
             'content' => 'An edited note',
             'webmentions' => true,
@@ -83,7 +83,7 @@ class NotesTest extends TestCase
         $user = User::factory()->make();
         $note = Note::factory()->create();
 
-        $this->actingAs($user)->post('/admin/notes/' . $note->id, [
+        $this->actingAs($user)->post('/admin/notes/'.$note->id, [
             '_method' => 'DELETE',
         ]);
         $this->assertSoftDeleted('notes', [

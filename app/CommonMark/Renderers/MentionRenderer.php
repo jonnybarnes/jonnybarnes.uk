@@ -28,10 +28,10 @@ class MentionRenderer implements NodeRendererInterface
 
         // This is not [@]handle@instance, so return a Twitter link
         if (count($parts) === 1) {
-            return new HtmlElement('a', ['href' => 'https://twitter.com/' . $parts[0]], '@' . $mentionText);
+            return new HtmlElement('a', ['href' => 'https://twitter.com/'.$parts[0]], '@'.$mentionText);
         }
 
         // Render the Mastodon profile link
-        return new HtmlElement('a', ['href' => 'https://' . $parts[1] . '/@' . $parts[0]], '@' . $mentionText);
+        return new HtmlElement('a', ['href' => 'https://'.$parts[1].'/@'.$parts[0]], '@'.$mentionText);
     }
 }

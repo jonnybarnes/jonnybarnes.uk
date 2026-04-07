@@ -7,15 +7,15 @@
         @foreach($bookmarks as $bookmark)
             <div class="h-entry">
                 <div class="bookmark-link">
-                    <a class="u-bookmark-of<?php if ($bookmark->name !== null) { echo ' h-cite'; } ?>" href="{{ $bookmark->uri }}">
+                    <a class="u-bookmark-of<?php if ($bookmark->name !== null) { echo ' h-cite'; } ?>" href="{{ $bookmark->url }}">
                         @isset($bookmark->name)
                             {{ $bookmark->name }}
                         @endisset
 
                         @empty($bookmark->name)
-                            {{ $bookmark->uri }}
+                            {{ $bookmark->url }}
                         @endempty
-                    </a> &nbsp; <a href="{{ $bookmark->uri }}">🔗</a>
+                    </a> &nbsp; <a href="{{ $bookmark->url }}">🔗</a>
                 </div>
                 @isset($bookmark->content)
                     <p>{{ $bookmark->content }}</p>

@@ -32,11 +32,11 @@ class ParseCachedWebMentions extends Command
      */
     public function handle(FileSystem $filesystem): void
     {
-        $htmlFiles = $filesystem->allFiles(storage_path() . '/HTML');
+        $htmlFiles = $filesystem->allFiles(storage_path().'/HTML');
         foreach ($htmlFiles as $file) {
             if ($file->getExtension() !== 'backup') { // we don’t want to parse `.backup` files
                 $filepath = $file->getPathname();
-                $this->info('Loading HTML from: ' . $filepath);
+                $this->info('Loading HTML from: '.$filepath);
                 $html = $filesystem->get($filepath);
                 $url = $this->urlFromFilename($filepath);
                 $webmention = WebMention::where('source', $url)->firstOrFail();
@@ -53,7 +53,7 @@ class ParseCachedWebMentions extends Command
      */
     private function urlFromFilename(string $filepath): string
     {
-        $dir = mb_substr($filepath, mb_strlen(storage_path() . '/HTML/'));
+        $dir = mb_substr($filepath, mb_strlen(storage_path().'/HTML/'));
         $url = str_replace(['http/', 'https/'], ['http://', 'https://'], $dir);
         if (mb_substr($url, -10) === 'index.html') {
             $url = mb_substr($url, 0, -10);

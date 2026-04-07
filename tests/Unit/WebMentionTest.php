@@ -6,10 +6,8 @@ namespace Tests\Unit;
 
 use App\Models\Note;
 use App\Models\WebMention;
-use Codebird\Codebird;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Cache;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
@@ -83,41 +81,6 @@ class WebMentionTest extends TestCase
     }
 
     #[Test]
-    public function create_photo_link_returns_cached_twitter_photo_links(): void
-    {
-        $webmention = new WebMention;
-        $twitterURL = 'https://twitter.com/example';
-        $expected = 'https://pbs.twimg.com/static_profile_link.jpg';
-        Cache::put($twitterURL, $expected, 1);
-        $this->assertEquals($expected, $webmention->createPhotoLink($twitterURL));
-    }
-
-    #[Test]
-    public function create_photo_link_resolves_twitter_photo_links(): void
-    {
-        $info = (object) [
-            'profile_image_url_https' => 'https://pbs.twimg.com/static_profile_link.jpg',
-        ];
-        $codebirdMock = $this->createPartialMock(Codebird::class, ['__call']);
-        $codebirdMock->method('__call')
-            ->with('users_show', $this->anything())
-            ->willReturn($info);
-        $this->app->instance(Codebird::class, $codebirdMock);
-
-        Cache::shouldReceive('has')
-            ->once()
-            ->andReturn(false);
-        Cache::shouldReceive('put')
-            ->once()
-            ->andReturn(true);
-
-        $webmention = new WebMention;
-        $twitterURL = 'https://twitter.com/example';
-        $expected = 'https://pbs.twimg.com/static_profile_link.jpg';
-        $this->assertEquals($expected, $webmention->createPhotoLink($twitterURL));
-    }
-
-    #[Test]
     public function get_reply_attribute_defaults_to_null(): void
     {
         $webmention = new WebMention;
@@ -130,5 +93,38 @@ class WebMentionTest extends TestCase
         $webmention = new WebMention;
         $webmention->mf2 = json_encode(['no_html' => 'found_here']);
         $this->assertNull($webmention->reply);
+    }
+
+    #[Test]
+    public function author_attribute_returns_null_when_mf2_is_null(): void
+    {
+        $webmention = new WebMention;
+        $webmention->mf2 = null;
+        $this->assertNull($webmention->author);
+    }
+
+    #[Test]
+    public function author_attribute_returns_hcard_without_photo_key_when_no_photo_present(): void
+    {
+        $webmention = new WebMention;
+        $webmention->mf2 = json_encode([
+            'items' => [[
+                'type' => ['h-entry'],
+                'properties' => [
+                    'author' => [[
+                        'type' => ['h-card'],
+                        'properties' => [
+                            'name' => ['Test Person'],
+                            'url' => ['https://example.com'],
+                        ],
+                    ]],
+                    'content' => ['hello'],
+                ],
+            ]],
+        ]);
+
+        $hCard = $webmention->author;
+        $this->assertNotNull($hCard);
+        $this->assertArrayNotHasKey('photo', $hCard['properties'] ?? []);
     }
 }

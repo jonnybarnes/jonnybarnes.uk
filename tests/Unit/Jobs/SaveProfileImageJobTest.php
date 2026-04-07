@@ -18,9 +18,9 @@ class SaveProfileImageJobTest extends TestCase
 {
     protected function tearDown(): void
     {
-        if (file_exists(public_path() . '/assets/profile-images/example.org/image')) {
-            unlink(public_path() . '/assets/profile-images/example.org/image');
-            rmdir(public_path() . '/assets/profile-images/example.org');
+        if (file_exists(public_path().'/assets/profile-images/example.org/image')) {
+            unlink(public_path().'/assets/profile-images/example.org/image');
+            rmdir(public_path().'/assets/profile-images/example.org');
         }
         parent::tearDown();
     }
@@ -77,7 +77,7 @@ class SaveProfileImageJobTest extends TestCase
 
         $job = new SaveProfileImage($mf);
         $job->handle($authorship);
-        $this->assertFileExists(public_path() . '/assets/profile-images/example.org/image');
+        $this->assertFileExists(public_path().'/assets/profile-images/example.org/image');
     }
 
     #[Test]
@@ -103,8 +103,8 @@ class SaveProfileImageJobTest extends TestCase
         $job = new SaveProfileImage($mf);
         $job->handle($authorship);
         $this->assertFileEquals(
-            public_path() . '/assets/profile-images/default-image',
-            public_path() . '/assets/profile-images/example.org/image'
+            public_path().'/assets/profile-images/default-image',
+            public_path().'/assets/profile-images/example.org/image'
         );
     }
 
@@ -133,7 +133,7 @@ class SaveProfileImageJobTest extends TestCase
 
         $job = new SaveProfileImage($mf);
         $job->handle($authorship);
-        $this->assertFileExists(public_path() . '/assets/profile-images/example.org/image');
+        $this->assertFileExists(public_path().'/assets/profile-images/example.org/image');
     }
 
     #[Test]
@@ -164,6 +164,6 @@ class SaveProfileImageJobTest extends TestCase
 
         $job = new SaveProfileImage($mf);
         $job->handle($authorship);
-        $this->assertFileExists(public_path() . '/assets/profile-images/example.org/image');
+        $this->assertFileExists(public_path().'/assets/profile-images/example.org/image');
     }
 }

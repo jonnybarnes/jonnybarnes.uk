@@ -71,9 +71,9 @@ class FeedsController extends Controller
         $articles = Article::where('published', '1')->latest('updated_at')->take(20)->get();
         $data = [
             'version' => 'https://jsonfeed.org/version/1.1',
-            'title' => 'The JSON Feed for ' . config('user.display_name') . '’s blog',
-            'home_page_url' => config('app.url') . '/blog',
-            'feed_url' => config('app.url') . '/blog/feed.json',
+            'title' => 'The JSON Feed for '.config('user.display_name').'’s blog',
+            'home_page_url' => config('app.url').'/blog',
+            'feed_url' => config('app.url').'/blog/feed.json',
             'authors' => [
                 [
                     'name' => config('user.display_name'),
@@ -85,9 +85,9 @@ class FeedsController extends Controller
 
         foreach ($articles as $key => $article) {
             $data['items'][$key] = [
-                'id' => config('app.url') . $article->link,
+                'id' => config('app.url').$article->link,
                 'title' => $article->title,
-                'url' => config('app.url') . $article->link,
+                'url' => config('app.url').$article->link,
                 'content_html' => $article->main,
                 'date_published' => $article->created_at->tz('UTC')->toRfc3339String(),
                 'date_modified' => $article->updated_at->tz('UTC')->toRfc3339String(),
@@ -105,9 +105,9 @@ class FeedsController extends Controller
         $notes = Note::latest()->with('media', 'place', 'tags')->take(20)->get();
         $data = [
             'version' => 'https://jsonfeed.org/version/1.1',
-            'title' => 'The JSON Feed for ' . config('user.display_name') . '’s notes',
-            'home_page_url' => config('app.url') . '/notes',
-            'feed_url' => config('app.url') . '/notes/feed.json',
+            'title' => 'The JSON Feed for '.config('user.display_name').'’s notes',
+            'home_page_url' => config('app.url').'/notes',
+            'feed_url' => config('app.url').'/notes/feed.json',
             'authors' => [
                 [
                     'name' => config('user.display_name'),
@@ -144,8 +144,8 @@ class FeedsController extends Controller
             $items[] = [
                 'type' => 'entry',
                 'published' => $article->created_at,
-                'uid' => config('app.url') . $article->link,
-                'url' => config('app.url') . $article->link,
+                'uid' => config('app.url').$article->link,
+                'url' => config('app.url').$article->link,
                 'content' => [
                     'text' => $article->main,
                     'html' => $article->html,
@@ -156,7 +156,7 @@ class FeedsController extends Controller
 
         return response()->json([
             'type' => 'feed',
-            'name' => 'Blog feed for ' . config('app.name'),
+            'name' => 'Blog feed for '.config('app.name'),
             'url' => url('/blog'),
             'author' => [
                 'type' => 'card',
@@ -192,7 +192,7 @@ class FeedsController extends Controller
 
         return response()->json([
             'type' => 'feed',
-            'name' => 'Notes feed for ' . config('app.name'),
+            'name' => 'Notes feed for '.config('app.name'),
             'url' => url('/notes'),
             'author' => [
                 'type' => 'card',

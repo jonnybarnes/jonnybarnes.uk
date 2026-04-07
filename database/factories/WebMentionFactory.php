@@ -6,7 +6,7 @@ use App\Models\WebMention;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\WebMention>
+ * @extends Factory<WebMention>
  */
 class WebMentionFactory extends Factory
 {

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Like>
+ * @extends Factory<Like>
  */
 class LikeFactory extends Factory
 {
@@ -31,7 +31,7 @@ class LikeFactory extends Factory
             'url' => $this->faker->url,
             'author_name' => $this->faker->name,
             'author_url' => $this->faker->url,
-            'content' => '<html><body><div class="h-entry"><div class="e-content">' . $this->faker->realtext() . '</div></div></body></html>',
+            'content' => '<html><body><div class="h-entry"><div class="e-content">'.$this->faker->realtext().'</div></div></body></html>',
             'created_at' => $now->toDateTimeString(),
             'updated_at' => $now->toDateTimeString(),
         ];

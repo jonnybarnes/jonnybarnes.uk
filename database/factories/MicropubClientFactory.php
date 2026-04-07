@@ -6,7 +6,7 @@ use App\Models\MicropubClient;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\MicropubClient>
+ * @extends Factory<MicropubClient>
  */
 class MicropubClientFactory extends Factory
 {

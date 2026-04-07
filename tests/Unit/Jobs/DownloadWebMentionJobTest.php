@@ -18,8 +18,8 @@ class DownloadWebMentionJobTest extends TestCase
     protected function tearDown(): void
     {
         $fs = new FileSystem;
-        if ($fs->exists(storage_path() . '/HTML/https')) {
-            $fs->deleteDirectory(storage_path() . '/HTML/https');
+        if ($fs->exists(storage_path().'/HTML/https')) {
+            $fs->deleteDirectory(storage_path().'/HTML/https');
         }
         parent::tearDown();
     }
@@ -34,7 +34,7 @@ class DownloadWebMentionJobTest extends TestCase
             <a class="u-like-of" href=""></a>
         </div>
         HTML;
-        $html = str_replace('href=""', 'href="' . config('app.url') . '/notes/A"', $html);
+        $html = str_replace('href=""', 'href="'.config('app.url').'/notes/A"', $html);
         $mock = new MockHandler([
             new Response(200, ['X-Foo' => 'Bar'], $html),
             new Response(200, ['X-Foo' => 'Bar'], $html),
@@ -49,7 +49,7 @@ class DownloadWebMentionJobTest extends TestCase
 
         $job->handle($client);
 
-        $this->assertFileDoesNotExist(storage_path('HTML/https/example.org/reply') . '/1.' . date('Y-m-d') . '.backup');
+        $this->assertFileDoesNotExist(storage_path('HTML/https/example.org/reply').'/1.'.date('Y-m-d').'.backup');
     }
 
     #[Test]
@@ -68,8 +68,8 @@ class DownloadWebMentionJobTest extends TestCase
             <a class="u-repost-of" href=""></a>
         </div>
         HTML;
-        $html = str_replace('href=""', 'href="' . config('app.url') . '/notes/A"', $html);
-        $html2 = str_replace('href=""', 'href="' . config('app.url') . '/notes/A"', $html2);
+        $html = str_replace('href=""', 'href="'.config('app.url').'/notes/A"', $html);
+        $html2 = str_replace('href=""', 'href="'.config('app.url').'/notes/A"', $html2);
         $mock = new MockHandler([
             new Response(200, ['X-Foo' => 'Bar'], $html),
             new Response(200, ['X-Foo' => 'Bar'], $html2),
@@ -84,7 +84,7 @@ class DownloadWebMentionJobTest extends TestCase
 
         $job->handle($client);
 
-        $this->assertFileExists(storage_path('HTML/https/example.org/reply') . '/1.' . date('Y-m-d') . '.backup');
+        $this->assertFileExists(storage_path('HTML/https/example.org/reply').'/1.'.date('Y-m-d').'.backup');
     }
 
     #[Test]
@@ -97,7 +97,7 @@ class DownloadWebMentionJobTest extends TestCase
             <a class="u-like-of" href=""></a>
         </div>
         HTML;
-        $html = str_replace('href=""', 'href="' . config('app.url') . '/notes/A"', $html);
+        $html = str_replace('href=""', 'href="'.config('app.url').'/notes/A"', $html);
         $mock = new MockHandler([
             new Response(200, ['X-Foo' => 'Bar'], $html),
         ]);

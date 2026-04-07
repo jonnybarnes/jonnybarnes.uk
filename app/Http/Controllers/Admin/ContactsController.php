@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Contact;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\BadResponseException;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Arr;
@@ -75,7 +76,7 @@ class ContactsController extends Controller
 
         if (request()->hasFile('avatar') && (request()->input('homepage') != '')) {
             $dir = parse_url(request()->input('homepage'), PHP_URL_HOST);
-            $destination = public_path() . '/assets/profile-images/' . $dir;
+            $destination = public_path().'/assets/profile-images/'.$dir;
             $filesystem = new Filesystem;
             if ($filesystem->isDirectory($destination) === false) {
                 $filesystem->makeDirectory($destination);
@@ -103,7 +104,7 @@ class ContactsController extends Controller
      * This method attempts to find the microformat marked-up profile image
      * from a given homepage and save it accordingly
      *
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\View\View
+     * @return RedirectResponse|View
      */
     public function getAvatar(int $contactId)
     {
@@ -115,8 +116,8 @@ class ContactsController extends Controller
             $client = resolve(Client::class);
             try {
                 $response = $client->get($contact->homepage);
-            } catch (\GuzzleHttp\Exception\BadResponseException $e) {
-                return redirect('/admin/contacts/' . $contactId . '/edit')
+            } catch (BadResponseException $e) {
+                return redirect('/admin/contacts/'.$contactId.'/edit')
                     ->with('error', 'Bad resposne from contact’s homepage');
             }
             $mf2 = \Mf2\parse((string) $response->getBody(), $contact->homepage);
@@ -129,18 +130,18 @@ class ContactsController extends Controller
             if ($avatarURL !== null) {
                 try {
                     $avatar = $client->get($avatarURL);
-                } catch (\GuzzleHttp\Exception\BadResponseException $e) {
-                    return redirect('/admin/contacts/' . $contactId . '/edit')
+                } catch (BadResponseException $e) {
+                    return redirect('/admin/contacts/'.$contactId.'/edit')
                         ->with('error', 'Unable to download avatar');
                 }
             }
             if ($avatar !== null) {
-                $directory = public_path() . '/assets/profile-images/' . parse_url($contact->homepage, PHP_URL_HOST);
+                $directory = public_path().'/assets/profile-images/'.parse_url($contact->homepage, PHP_URL_HOST);
                 $filesystem = new Filesystem;
                 if ($filesystem->isDirectory($directory) === false) {
                     $filesystem->makeDirectory($directory);
                 }
-                $filesystem->put($directory . '/image', $avatar->getBody());
+                $filesystem->put($directory.'/image', $avatar->getBody());
 
                 return view('admin.contacts.getavatarsuccess', [
                     'homepage' => parse_url($contact->homepage, PHP_URL_HOST),
@@ -148,6 +149,6 @@ class ContactsController extends Controller
             }
         }
 
-        return redirect('/admin/contacts/' . $contactId . '/edit');
+        return redirect('/admin/contacts/'.$contactId.'/edit');
     }
 }

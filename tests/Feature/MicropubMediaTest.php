@@ -28,7 +28,7 @@ class MicropubMediaTest extends TestCase
 
         $response = $this->get(
             '/api/media?q=last',
-            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+            ['HTTP_Authorization' => 'Bearer '.$this->getToken()]
         );
         $response->assertStatus(200);
         $response->assertJson(['url' => null]);
@@ -50,7 +50,7 @@ class MicropubMediaTest extends TestCase
     {
         $response = $this->get(
             '/api/media?q=last',
-            ['HTTP_Authorization' => 'Bearer ' . $this->getTokenWithNoScope()]
+            ['HTTP_Authorization' => 'Bearer '.$this->getTokenWithNoScope()]
         );
         $response->assertStatus(400);
         $response->assertJsonFragment(['error_description' => 'The provided token has no scopes']);
@@ -61,7 +61,7 @@ class MicropubMediaTest extends TestCase
     {
         $response = $this->get(
             '/api/media?q=last',
-            ['HTTP_Authorization' => 'Bearer ' . $this->getTokenWithIncorrectScope()]
+            ['HTTP_Authorization' => 'Bearer '.$this->getTokenWithIncorrectScope()]
         );
         $response->assertStatus(401);
         $response->assertJsonFragment(['error_description' => 'The token’s scope does not have the necessary requirements.']);
@@ -72,7 +72,7 @@ class MicropubMediaTest extends TestCase
     {
         $response = $this->get(
             '/api/media',
-            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+            ['HTTP_Authorization' => 'Bearer '.$this->getToken()]
         );
         $response->assertStatus(200);
         $response->assertJson(['status' => 'OK']);
@@ -82,7 +82,7 @@ class MicropubMediaTest extends TestCase
     public function client_can_list_last_upload(): void
     {
         Queue::fake();
-        $file = __DIR__ . '/../aaron.png';
+        $file = __DIR__.'/../aaron.png';
         $token = $this->getToken();
 
         $response = $this->post(
@@ -90,7 +90,7 @@ class MicropubMediaTest extends TestCase
             [
                 'file' => new UploadedFile($file, 'aaron.png', 'image/png', null, true),
             ],
-            ['HTTP_Authorization' => 'Bearer ' . $token]
+            ['HTTP_Authorization' => 'Bearer '.$token]
         );
 
         $path = parse_url($response->headers->get('Location'), PHP_URL_PATH);
@@ -98,12 +98,12 @@ class MicropubMediaTest extends TestCase
 
         $lastUploadResponse = $this->get(
             '/api/media?q=last',
-            ['HTTP_Authorization' => 'Bearer ' . $token]
+            ['HTTP_Authorization' => 'Bearer '.$token]
         );
         $lastUploadResponse->assertJson(['url' => $response->headers->get('Location')]);
 
         // now remove file
-        unlink(storage_path('app/private/media/') . $filename);
+        unlink(storage_path('app/private/media/').$filename);
         $this->removeDirIfEmpty(storage_path('app/private/media'));
     }
 
@@ -111,7 +111,7 @@ class MicropubMediaTest extends TestCase
     public function client_can_source_uploads(): void
     {
         Queue::fake();
-        $file = __DIR__ . '/../aaron.png';
+        $file = __DIR__.'/../aaron.png';
         $token = $this->getToken();
 
         $response = $this->post(
@@ -119,7 +119,7 @@ class MicropubMediaTest extends TestCase
             [
                 'file' => new UploadedFile($file, 'aaron.png', 'image/png', null, true),
             ],
-            ['HTTP_Authorization' => 'Bearer ' . $token]
+            ['HTTP_Authorization' => 'Bearer '.$token]
         );
 
         $path = parse_url($response->headers->get('Location'), PHP_URL_PATH);
@@ -127,7 +127,7 @@ class MicropubMediaTest extends TestCase
 
         $sourceUploadResponse = $this->get(
             '/api/media?q=source',
-            ['HTTP_Authorization' => 'Bearer ' . $token]
+            ['HTTP_Authorization' => 'Bearer '.$token]
         );
         $sourceUploadResponse->assertJson(['items' => [[
             'url' => $response->headers->get('Location'),
@@ -135,7 +135,7 @@ class MicropubMediaTest extends TestCase
         ]]]);
 
         // now remove file
-        unlink(storage_path('app/private/media/') . $filename);
+        unlink(storage_path('app/private/media/').$filename);
         $this->removeDirIfEmpty(storage_path('app/private/media'));
     }
 
@@ -143,7 +143,7 @@ class MicropubMediaTest extends TestCase
     public function client_can_source_uploads_with_limit(): void
     {
         Queue::fake();
-        $file = __DIR__ . '/../aaron.png';
+        $file = __DIR__.'/../aaron.png';
         $token = $this->getToken();
 
         $response = $this->post(
@@ -151,7 +151,7 @@ class MicropubMediaTest extends TestCase
             [
                 'file' => new UploadedFile($file, 'aaron.png', 'image/png', null, true),
             ],
-            ['HTTP_Authorization' => 'Bearer ' . $token]
+            ['HTTP_Authorization' => 'Bearer '.$token]
         );
 
         $path = parse_url($response->headers->get('Location'), PHP_URL_PATH);
@@ -159,7 +159,7 @@ class MicropubMediaTest extends TestCase
 
         $sourceUploadResponse = $this->get(
             '/api/media?q=source&limit=1',
-            ['HTTP_Authorization' => 'Bearer ' . $token]
+            ['HTTP_Authorization' => 'Bearer '.$token]
         );
         $sourceUploadResponse->assertJson(['items' => [[
             'url' => $response->headers->get('Location'),
@@ -169,7 +169,7 @@ class MicropubMediaTest extends TestCase
         $this->assertCount(1, json_decode($sourceUploadResponse->getContent(), true)['items']);
 
         // now remove file
-        unlink(storage_path('app/private/media/') . $filename);
+        unlink(storage_path('app/private/media/').$filename);
         $this->removeDirIfEmpty(storage_path('app/private/media'));
     }
 
@@ -179,7 +179,7 @@ class MicropubMediaTest extends TestCase
         $response = $this->post(
             '/api/media',
             [],
-            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+            ['HTTP_Authorization' => 'Bearer '.$this->getToken()]
         );
         $response->assertStatus(400);
         $response->assertJson([
@@ -194,7 +194,7 @@ class MicropubMediaTest extends TestCase
     {
         $response = $this->get(
             '/api/media?q=unknown',
-            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+            ['HTTP_Authorization' => 'Bearer '.$this->getToken()]
         );
         $response->assertStatus(400);
         $response->assertJson(['error' => 'invalid_request']);
@@ -227,7 +227,7 @@ class MicropubMediaTest extends TestCase
         $response = $this->post(
             '/api/media',
             [],
-            ['HTTP_Authorization' => 'Bearer ' . $this->getTokenWithNoScope()]
+            ['HTTP_Authorization' => 'Bearer '.$this->getTokenWithNoScope()]
         );
         $response->assertStatus(400);
         $response->assertJsonFragment(['error_description' => 'The provided token has no scopes']);
@@ -239,7 +239,7 @@ class MicropubMediaTest extends TestCase
         $response = $this->post(
             '/api/media',
             [],
-            ['HTTP_Authorization' => 'Bearer ' . $this->getTokenWithIncorrectScope()]
+            ['HTTP_Authorization' => 'Bearer '.$this->getTokenWithIncorrectScope()]
         );
         $response->assertStatus(401);
         $response->assertJsonFragment([
@@ -251,14 +251,14 @@ class MicropubMediaTest extends TestCase
     public function media_endpoint_upload_file(): void
     {
         Queue::fake();
-        $file = __DIR__ . '/../aaron.png';
+        $file = __DIR__.'/../aaron.png';
 
         $response = $this->post(
             '/api/media',
             [
                 'file' => new UploadedFile($file, 'aaron.png', 'image/png', null, true),
             ],
-            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+            ['HTTP_Authorization' => 'Bearer '.$this->getToken()]
         );
 
         $path = parse_url($response->headers->get('Location'), PHP_URL_PATH);
@@ -266,7 +266,7 @@ class MicropubMediaTest extends TestCase
         Queue::assertPushed(ProcessMedia::class);
         Storage::disk('local')->assertExists($filename);
         // now remove file
-        unlink(storage_path('app/private/') . $filename);
+        unlink(storage_path('app/private/').$filename);
         $this->removeDirIfEmpty(storage_path('app/private/media'));
     }
 
@@ -274,14 +274,14 @@ class MicropubMediaTest extends TestCase
     public function media_endpoint_upload_audio_file(): void
     {
         Queue::fake();
-        $file = __DIR__ . '/../audio.mp3';
+        $file = __DIR__.'/../audio.mp3';
 
         $response = $this->post(
             '/api/media',
             [
                 'file' => new UploadedFile($file, 'audio.mp3', 'audio/mpeg', null, true),
             ],
-            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+            ['HTTP_Authorization' => 'Bearer '.$this->getToken()]
         );
 
         $path = parse_url($response->headers->get('Location'), PHP_URL_PATH);
@@ -289,7 +289,7 @@ class MicropubMediaTest extends TestCase
         Queue::assertPushed(ProcessMedia::class);
         Storage::disk('local')->assertExists($filename);
         // now remove file
-        unlink(storage_path('app/private/') . $filename);
+        unlink(storage_path('app/private/').$filename);
         $this->removeDirIfEmpty(storage_path('app/private/media'));
     }
 
@@ -297,14 +297,14 @@ class MicropubMediaTest extends TestCase
     public function media_endpoint_upload_video_file(): void
     {
         Queue::fake();
-        $file = __DIR__ . '/../video.ogv';
+        $file = __DIR__.'/../video.ogv';
 
         $response = $this->post(
             '/api/media',
             [
                 'file' => new UploadedFile($file, 'video.ogv', 'video/ogg', null, true),
             ],
-            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+            ['HTTP_Authorization' => 'Bearer '.$this->getToken()]
         );
 
         $path = parse_url($response->headers->get('Location'), PHP_URL_PATH);
@@ -312,7 +312,7 @@ class MicropubMediaTest extends TestCase
         Queue::assertPushed(ProcessMedia::class);
         Storage::disk('local')->assertExists($filename);
         // now remove file
-        unlink(storage_path('app/private/') . $filename);
+        unlink(storage_path('app/private/').$filename);
         $this->removeDirIfEmpty(storage_path('app/private/media'));
     }
 
@@ -326,7 +326,7 @@ class MicropubMediaTest extends TestCase
             [
                 'file' => UploadedFile::fake()->create('document.pdf', 100),
             ],
-            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+            ['HTTP_Authorization' => 'Bearer '.$this->getToken()]
         );
 
         $path = parse_url($response->headers->get('Location'), PHP_URL_PATH);
@@ -334,7 +334,7 @@ class MicropubMediaTest extends TestCase
         Queue::assertPushed(ProcessMedia::class);
         Storage::disk('local')->assertExists($filename);
         // now remove file
-        unlink(storage_path('app/private/') . $filename);
+        unlink(storage_path('app/private/').$filename);
         $this->removeDirIfEmpty(storage_path('app/private/media'));
     }
 
@@ -348,14 +348,14 @@ class MicropubMediaTest extends TestCase
             '/api/media',
             [
                 'file' => new UploadedFile(
-                    __DIR__ . '/../aaron.png',
+                    __DIR__.'/../aaron.png',
                     'aaron.png',
                     'image/png',
                     UPLOAD_ERR_INI_SIZE,
                     true
                 ),
             ],
-            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+            ['HTTP_Authorization' => 'Bearer '.$this->getToken()]
         );
         $response->assertStatus(400);
         $response->assertJson(['error_description' => 'The uploaded file failed validation']);

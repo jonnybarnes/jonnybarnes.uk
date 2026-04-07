@@ -1,8 +1,10 @@
 <?php
 
 use Spatie\FlareClient\Api;
+use Spatie\FlareClient\Sampling\RateSampler;
 use Spatie\LaravelFlare\AttributesProviders\LaravelUserAttributesProvider;
 use Spatie\LaravelFlare\FlareConfig;
+use Spatie\LaravelFlare\Senders\LaravelHttpSender;
 
 return [
     /*
@@ -152,7 +154,7 @@ return [
     */
 
     'sender' => [
-        'class' => \Spatie\LaravelFlare\Senders\LaravelHttpSender::class,
+        'class' => LaravelHttpSender::class,
         'config' => [
             'timeout' => 10,
         ],
@@ -182,7 +184,7 @@ return [
     |
     */
     'sampler' => [
-        'class' => \Spatie\FlareClient\Sampling\RateSampler::class,
+        'class' => RateSampler::class,
         'config' => [
             'rate' => 0.1,
         ],

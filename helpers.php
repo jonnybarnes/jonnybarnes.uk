@@ -68,7 +68,7 @@ if (! function_exists('normalize_url')) {
             $url['path'] = preg_replace_callback(
                 array_map(
                     function ($str) {
-                        return '/%' . strtoupper($str) . '/x';
+                        return '/%'.strtoupper($str).'/x';
                     },
                     $u
                 ),
@@ -106,9 +106,9 @@ if (! function_exists('normalize_url')) {
                     preg_match('!^(/\./)!x', $url['path'], $matches)
                     || preg_match('!^(/\.)$!x', $url['path'], $matches)
                 ) {
-                    $url['path'] = preg_replace('!^' . $matches[1] . '!', '/', $url['path']);
+                    $url['path'] = preg_replace('!^'.$matches[1].'!', '/', $url['path']);
                 } elseif (preg_match('!^(/\.\./|/\.\.)!x', $url['path'], $matches)) {
-                    $url['path'] = preg_replace('!^' . preg_quote($matches[1], '!') . '!x', '/', $url['path']);
+                    $url['path'] = preg_replace('!^'.preg_quote($matches[1], '!').'!x', '/', $url['path']);
                     $new_path = preg_replace('!/([^/]+)$!x', '', $new_path);
                 } elseif (preg_match('!^(\.|\.\.)$!x', $url['path'])) {
                     $url['path'] = preg_replace('!^(\.|\.\.)$!x', '', $url['path']);
@@ -116,7 +116,7 @@ if (! function_exists('normalize_url')) {
                     if (preg_match('!(/*[^/]*)!x', $url['path'], $matches)) {
                         $first_path_segment = $matches[1];
                         $url['path'] = preg_replace(
-                            '/^' . preg_quote($first_path_segment, '/') . '/',
+                            '/^'.preg_quote($first_path_segment, '/').'/',
                             '',
                             $url['path'],
                             1
@@ -217,9 +217,9 @@ if (! function_exists('prettyPrintJson')) {
                 $in_escape = true;
             }
             if ($new_line_level !== null) {
-                $result .= "\n" . str_repeat("\t", $new_line_level);
+                $result .= "\n".str_repeat("\t", $new_line_level);
             }
-            $result .= $char . $post;
+            $result .= $char.$post;
         }
 
         return str_replace("\t", '    ', $result);

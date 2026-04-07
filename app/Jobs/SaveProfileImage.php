@@ -62,13 +62,13 @@ class SaveProfileImage implements ShouldQueue
                 $image = $response->getBody();
             } catch (RequestException) {
                 // we are opening and reading the default image so that
-                $default = public_path() . '/assets/profile-images/default-image';
+                $default = public_path().'/assets/profile-images/default-image';
                 $handle = fopen($default, 'rb');
                 $image = fread($handle, filesize($default));
                 fclose($handle);
             }
 
-            $path = public_path() . '/assets/profile-images/' . parse_url($home, PHP_URL_HOST) . '/image';
+            $path = public_path().'/assets/profile-images/'.parse_url($home, PHP_URL_HOST).'/image';
             $parts = explode('/', $path);
             $name = array_pop($parts);
             $dir = implode('/', $parts);

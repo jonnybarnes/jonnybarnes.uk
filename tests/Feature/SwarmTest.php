@@ -48,7 +48,7 @@ class SwarmTest extends TestCase
                     ]],
                 ],
             ],
-            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+            ['HTTP_Authorization' => 'Bearer '.$this->getToken()]
         );
         $response
             ->assertStatus(201)
@@ -94,7 +94,7 @@ class SwarmTest extends TestCase
                     ]],
                 ],
             ],
-            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+            ['HTTP_Authorization' => 'Bearer '.$this->getToken()]
         );
         $response
             ->assertStatus(201)
@@ -136,7 +136,7 @@ class SwarmTest extends TestCase
                     ]],
                 ],
             ],
-            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+            ['HTTP_Authorization' => 'Bearer '.$this->getToken()]
         );
         $response
             ->assertStatus(201)
@@ -170,7 +170,7 @@ class SwarmTest extends TestCase
                     ]],
                 ],
             ],
-            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+            ['HTTP_Authorization' => 'Bearer '.$this->getToken()]
         );
         $response
             ->assertStatus(201)
@@ -211,7 +211,7 @@ class SwarmTest extends TestCase
                     ]],
                 ],
             ],
-            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+            ['HTTP_Authorization' => 'Bearer '.$this->getToken()]
         );
         $response
             ->assertStatus(201)
@@ -257,7 +257,7 @@ class SwarmTest extends TestCase
                     ]],
                 ],
             ],
-            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+            ['HTTP_Authorization' => 'Bearer '.$this->getToken()]
         );
         $response
             ->assertStatus(201)
@@ -309,7 +309,7 @@ class SwarmTest extends TestCase
                     ]],
                 ],
             ],
-            ['HTTP_Authorization' => 'Bearer ' . $this->getToken()]
+            ['HTTP_Authorization' => 'Bearer '.$this->getToken()]
         );
         $this->assertDatabaseHas('places', [
             'name' => 'Forbidden Planet',

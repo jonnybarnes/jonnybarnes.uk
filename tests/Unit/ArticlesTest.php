@@ -31,7 +31,7 @@ class ArticlesTest extends TestCase
         $article = new Article;
         $article->main = 'Some *markdown*';
 
-        $this->assertEquals('<p>Some <em>markdown</em></p>' . PHP_EOL, $article->html);
+        $this->assertEquals('<p>Some <em>markdown</em></p>'.PHP_EOL, $article->html);
     }
 
     #[Test]
@@ -58,7 +58,7 @@ class ArticlesTest extends TestCase
         $article->title = 'Test Title';
 
         $this->assertEquals(
-            '/blog/' . date('Y') . '/' . date('m') . '/test',
+            '/blog/'.date('Y').'/'.date('m').'/test',
             $article->link
         );
     }

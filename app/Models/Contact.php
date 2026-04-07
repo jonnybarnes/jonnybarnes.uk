@@ -4,19 +4,17 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+#[Table('contacts')]
+#[Fillable(['nick', 'name', 'homepage', 'twitter', 'facebook'])]
 class Contact extends Model
 {
     use HasFactory;
-
-    /** @var string */
-    protected $table = 'contacts';
-
-    /** @var array<int, string> */
-    protected $fillable = ['nick', 'name', 'homepage', 'twitter', 'facebook'];
 
     protected function photo(): Attribute
     {
@@ -24,8 +22,8 @@ class Contact extends Model
 
         if (array_key_exists('homepage', $this->attributes) && ! empty($this->attributes['homepage'])) {
             $host = parse_url($this->attributes['homepage'], PHP_URL_HOST);
-            if (file_exists(public_path() . '/assets/profile-images/' . $host . '/image')) {
-                $photo = '/assets/profile-images/' . $host . '/image';
+            if (file_exists(public_path().'/assets/profile-images/'.$host.'/image')) {
+                $photo = '/assets/profile-images/'.$host.'/image';
             }
         }
 

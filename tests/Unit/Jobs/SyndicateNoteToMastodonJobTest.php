@@ -25,7 +25,7 @@ class SyndicateNoteToMastodonJobTest extends TestCase
         $faker = Factory::create();
         $randomNumber = $faker->randomNumber();
         $mock = new MockHandler([
-            new Response(201, ['Location' => 'https://mastodon.example/@jonny/' . $randomNumber]),
+            new Response(201, ['Location' => 'https://mastodon.example/@jonny/'.$randomNumber]),
         ]);
         $handler = HandlerStack::create($mock);
         $client = new Client(['handler' => $handler]);
@@ -35,7 +35,7 @@ class SyndicateNoteToMastodonJobTest extends TestCase
         $job->handle($client);
 
         $this->assertDatabaseHas('notes', [
-            'mastodon_url' => 'https://mastodon.example/@jonny/' . $randomNumber,
+            'mastodon_url' => 'https://mastodon.example/@jonny/'.$randomNumber,
         ]);
     }
 
@@ -49,7 +49,7 @@ class SyndicateNoteToMastodonJobTest extends TestCase
         $container = [];
         $history = Middleware::history($container);
         $mock = new MockHandler([
-            new Response(201, ['Location' => 'https://mastodon.example/@jonny/' . $randomNumber]),
+            new Response(201, ['Location' => 'https://mastodon.example/@jonny/'.$randomNumber]),
         ]);
         $handler = HandlerStack::create($mock);
         $handler->push($history);
@@ -60,7 +60,7 @@ class SyndicateNoteToMastodonJobTest extends TestCase
         $job->handle($client);
 
         $this->assertDatabaseHas('notes', [
-            'mastodon_url' => 'https://mastodon.example/@jonny/' . $randomNumber,
+            'mastodon_url' => 'https://mastodon.example/@jonny/'.$randomNumber,
         ]);
 
         $expectedRequestContent = '{"type":["h-entry"],"properties":{"content":["This is a **test**"]}}';

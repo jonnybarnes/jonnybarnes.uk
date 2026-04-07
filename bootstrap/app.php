@@ -15,14 +15,17 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         $middleware
             ->append(LinkHeadersMiddleware::class)
-            ->validateCsrfTokens(except: [
-                'auth',  // This is the IndieAuth auth endpoint
-                'token', // This is the IndieAuth token endpoint
-                'api/post',
-                'api/media',
-                'micropub/places',
-                'webmention',
-            ]);
+            ->preventRequestForgery(
+                except: [
+                    'auth',  // This is the IndieAuth auth endpoint
+                    'token', // This is the IndieAuth token endpoint
+                    'api/post',
+                    'api/media',
+                    'micropub/places',
+                    'webmention',
+                ],
+                originOnly: true
+            );
     })
     ->withExceptions(function (Exceptions $exceptions) {
         Flare::handles($exceptions);

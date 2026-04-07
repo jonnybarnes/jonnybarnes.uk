@@ -193,7 +193,7 @@ class MicropubMediaController extends Controller
      */
     private function saveFileToLocal(UploadedFile $file): string
     {
-        $filename = Uuid::uuid4()->toString() . '.' . $file->extension();
+        $filename = Uuid::uuid4()->toString().'.'.$file->extension();
         Storage::disk('local')->putFileAs('', $file, $filename);
 
         return $filename;

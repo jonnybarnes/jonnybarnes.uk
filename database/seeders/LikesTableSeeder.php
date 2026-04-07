@@ -4,6 +4,9 @@ namespace Database\Seeders;
 
 use App\Models\Like;
 use Faker\Generator;
+use Faker\Provider\en_US\Person;
+use Faker\Provider\Internet;
+use Faker\Provider\Lorem;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -19,9 +22,9 @@ class LikesTableSeeder extends Seeder
 
         $now = Carbon::now()->subDays(rand(3, 6));
         $faker = new Generator;
-        $faker->addProvider(new \Faker\Provider\en_US\Person($faker));
-        $faker->addProvider(new \Faker\Provider\Lorem($faker));
-        $faker->addProvider(new \Faker\Provider\Internet($faker));
+        $faker->addProvider(new Person($faker));
+        $faker->addProvider(new Lorem($faker));
+        $faker->addProvider(new Internet($faker));
         $likeFromAuthor = Like::create([
             'url' => $faker->url,
             'author_url' => $faker->url,

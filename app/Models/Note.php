@@ -6,9 +6,12 @@ namespace App\Models;
 
 use App\CommonMark\Generators\MentionGenerator;
 use App\CommonMark\Renderers\MentionRenderer;
-use Codebird\Codebird;
-use Exception;
+use App\Observers\NoteObserver;
 use GuzzleHttp\Client;
+use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\Hidden;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -31,6 +34,10 @@ use Normalizer;
 use Spatie\CommonMarkHighlighter\FencedCodeRenderer;
 use Spatie\CommonMarkHighlighter\IndentedCodeRenderer;
 
+#[Table('notes')]
+#[Fillable(['note', 'in_reply_to', 'client_id'])]
+#[Hidden(['searchable'])]
+#[ObservedBy(NoteObserver::class)]
 class Note extends Model
 {
     use HasFactory;
@@ -60,16 +67,6 @@ class Note extends Model
 
     /** @var string */
     protected $table = 'notes';
-
-    /** @var array<int, string> */
-    protected $fillable = [
-        'note',
-        'in_reply_to',
-        'client_id',
-    ];
-
-    /** @var array<int, string> */
-    protected $hidden = ['searchable'];
 
     public function tags(): BelongsToMany
     {
@@ -126,7 +123,7 @@ class Note extends Model
     public function getNoteAttribute(?string $value): ?string
     {
         if ($value === null && $this->place !== null) {
-            $value = '📍: <a href="' . $this->place->uri . '">' . $this->place->name . '</a>';
+            $value = '📍: <a href="'.$this->place->uri.'">'.$this->place->name.'</a>';
         }
 
         // if $value is still null, just return null
@@ -150,13 +147,13 @@ class Note extends Model
 
         foreach ($this->media as $media) {
             if ($media->type === 'image') {
-                $note .= PHP_EOL . '<img src="' . $media->url . '" alt="">';
+                $note .= PHP_EOL.'<img src="'.$media->url.'" alt="">';
             }
             if ($media->type === 'audio') {
-                $note .= PHP_EOL . '<audio src="' . $media->url . '">';
+                $note .= PHP_EOL.'<audio src="'.$media->url.'">';
             }
             if ($media->type === 'video') {
-                $note .= PHP_EOL . '<video src="' . $media->url . '">';
+                $note .= PHP_EOL.'<video src="'.$media->url.'">';
             }
         }
 
@@ -176,7 +173,7 @@ class Note extends Model
 
     public function getUriAttribute(): string
     {
-        return config('app.url') . '/notes/' . $this->nb60id;
+        return config('app.url').'/notes/'.$this->nb60id;
     }
 
     public function getIso8601Attribute(): string
@@ -242,43 +239,6 @@ class Note extends Model
     }
 
     /**
-     * Get the OEmbed html for a tweet the note is a reply to.
-     */
-    public function getTwitterAttribute(): ?object
-    {
-        if (
-            $this->in_reply_to === null ||
-            ! $this->isTwitterLink($this->in_reply_to)
-        ) {
-            return null;
-        }
-
-        $tweetId = basename($this->in_reply_to);
-        if (Cache::has($tweetId)) {
-            return Cache::get($tweetId);
-        }
-
-        try {
-            $codebird = resolve(Codebird::class);
-            $oEmbed = $codebird->statuses_oembed([
-                'url' => $this->in_reply_to,
-                'dnt' => true,
-                'align' => 'center',
-                'maxwidth' => 512,
-            ]);
-
-            if ($oEmbed->httpstatus >= 400) {
-                throw new Exception;
-            }
-        } catch (Exception $e) {
-            return null;
-        }
-        Cache::put($tweetId, $oEmbed, ($oEmbed->cache_age));
-
-        return $oEmbed;
-    }
-
-    /**
      * Scope a query to select a note via a NewBase60 id.
      */
     public function scopeNb60(Builder $query, string $nb60id): Builder
@@ -313,14 +273,14 @@ class Note extends Model
             self::USERNAMES_REGEX,
             function ($matches) {
                 if (is_null($this->contacts[$matches[1]])) {
-                    return '<a href="https://twitter.com/' . $matches[1] . '">' . $matches[0] . '</a>';
+                    return '<a href="https://twitter.com/'.$matches[1].'">'.$matches[0].'</a>';
                 }
 
                 $contact = $this->contacts[$matches[1]]; // easier to read the following code
                 $host = parse_url($contact->homepage, PHP_URL_HOST);
                 $contact->photo = '/assets/profile-images/default-image';
-                if (file_exists(public_path() . '/assets/profile-images/' . $host . '/image')) {
-                    $contact->photo = '/assets/profile-images/' . $host . '/image';
+                if (file_exists(public_path().'/assets/profile-images/'.$host.'/image')) {
+                    $contact->photo = '/assets/profile-images/'.$host.'/image';
                 }
 
                 return trim(view('templates.mini-hcard', ['contact' => $contact])->render());
@@ -371,8 +331,8 @@ class Note extends Model
             '/#([^\s[:punct:]]+)/',
             function ($matches) {
                 return '<a rel="tag" class="p-category" href="/notes/tagged/'
-                . Tag::normalize($matches[1]) . '">#'
-                . $matches[1] . '</a>';
+                .Tag::normalize($matches[1]).'">#'
+                .$matches[1].'</a>';
             },
             $note
         );
@@ -404,7 +364,7 @@ class Note extends Model
 
     public function reverseGeoCode(float $latitude, float $longitude): string
     {
-        $latLng = $latitude . ',' . $longitude;
+        $latLng = $latitude.','.$longitude;
 
         return Cache::get($latLng, function () use ($latLng, $latitude, $longitude) {
             $guzzle = resolve(Client::class);
@@ -422,46 +382,41 @@ class Note extends Model
             if (isset($json->address->suburb)) {
                 $locality = $json->address->suburb;
                 if (isset($json->address->city)) {
-                    $locality .= ', ' . $json->address->city;
+                    $locality .= ', '.$json->address->city;
                 }
                 $address = '<span class="p-locality">'
-                    . $locality
-                    . '</span>, <span class="p-country-name">'
-                    . $json->address->country
-                    . '</span>';
+                    .$locality
+                    .'</span>, <span class="p-country-name">'
+                    .$json->address->country
+                    .'</span>';
                 Cache::forever($latLng, $address);
 
                 return $address;
             }
             if (isset($json->address->city)) {
                 $address = '<span class="p-locality">'
-                    . $json->address->city
-                    . '</span>, <span class="p-country-name">'
-                    . $json->address->country
-                    . '</span>';
+                    .$json->address->city
+                    .'</span>, <span class="p-country-name">'
+                    .$json->address->country
+                    .'</span>';
                 Cache::forever($latLng, $address);
 
                 return $address;
             }
             if (isset($json->address->county)) {
                 $address = '<span class="p-region">'
-                    . $json->address->county
-                    . '</span>, <span class="p-country-name">'
-                    . $json->address->country
-                    . '</span>';
+                    .$json->address->county
+                    .'</span>, <span class="p-country-name">'
+                    .$json->address->country
+                    .'</span>';
                 Cache::forever($latLng, $address);
 
                 return $address;
             }
-            $address = '<span class="p-country-name">' . $json->address->country . '</span>';
+            $address = '<span class="p-country-name">'.$json->address->country.'</span>';
             Cache::forever($latLng, $address);
 
             return $address;
         });
-    }
-
-    private function isTwitterLink(string $inReplyTo): bool
-    {
-        return str_starts_with($inReplyTo, 'https://twitter.com/');
     }
 }

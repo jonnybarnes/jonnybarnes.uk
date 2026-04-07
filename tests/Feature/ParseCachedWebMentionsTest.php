@@ -20,10 +20,10 @@ class ParseCachedWebMentionsTest extends TestCase
     {
         parent::setUp();
 
-        mkdir(storage_path('HTML') . '/https/aaronpk.localhost/reply', 0777, true);
-        mkdir(storage_path('HTML') . '/http/tantek.com', 0777, true);
-        copy(__DIR__ . '/../aaron.html', storage_path('HTML') . '/https/aaronpk.localhost/reply/1');
-        copy(__DIR__ . '/../tantek.html', storage_path('HTML') . '/http/tantek.com/index.html');
+        mkdir(storage_path('HTML').'/https/aaronpk.localhost/reply', 0777, true);
+        mkdir(storage_path('HTML').'/http/tantek.com', 0777, true);
+        copy(__DIR__.'/../aaron.html', storage_path('HTML').'/https/aaronpk.localhost/reply/1');
+        copy(__DIR__.'/../tantek.html', storage_path('HTML').'/http/tantek.com/index.html');
     }
 
     #[Test]
@@ -39,16 +39,16 @@ class ParseCachedWebMentionsTest extends TestCase
             'created_at' => Carbon::now()->subDays(5),
             'updated_at' => Carbon::now()->subDays(5),
         ]);
-        $this->assertFileExists(storage_path('HTML') . '/https/aaronpk.localhost/reply/1');
-        $this->assertFileExists(storage_path('HTML') . '/http/tantek.com/index.html');
-        $htmlAaron = file_get_contents(storage_path('HTML') . '/https/aaronpk.localhost/reply/1');
-        $htmlAaron = str_replace('href="/notes', 'href="' . config('app.url') . '/notes', $htmlAaron);
-        $htmlAaron = str_replace('datetime=""', 'dateime="' . carbon()->now()->toIso8601String() . '"', $htmlAaron);
-        file_put_contents(storage_path('HTML') . '/https/aaronpk.localhost/reply/1', $htmlAaron);
-        $htmlTantek = file_get_contents(storage_path('HTML') . '/http/tantek.com/index.html');
-        $htmlTantek = str_replace('href="/notes', 'href="' . config('app.url') . '/notes', $htmlTantek);
-        $htmlTantek = str_replace('datetime=""', 'dateime="' . carbon()->now()->toIso8601String() . '"', $htmlTantek);
-        file_put_contents(storage_path('HTML') . '/http/tantek.com/index.html', $htmlTantek);
+        $this->assertFileExists(storage_path('HTML').'/https/aaronpk.localhost/reply/1');
+        $this->assertFileExists(storage_path('HTML').'/http/tantek.com/index.html');
+        $htmlAaron = file_get_contents(storage_path('HTML').'/https/aaronpk.localhost/reply/1');
+        $htmlAaron = str_replace('href="/notes', 'href="'.config('app.url').'/notes', $htmlAaron);
+        $htmlAaron = str_replace('datetime=""', 'dateime="'.carbon()->now()->toIso8601String().'"', $htmlAaron);
+        file_put_contents(storage_path('HTML').'/https/aaronpk.localhost/reply/1', $htmlAaron);
+        $htmlTantek = file_get_contents(storage_path('HTML').'/http/tantek.com/index.html');
+        $htmlTantek = str_replace('href="/notes', 'href="'.config('app.url').'/notes', $htmlTantek);
+        $htmlTantek = str_replace('datetime=""', 'dateime="'.carbon()->now()->toIso8601String().'"', $htmlTantek);
+        file_put_contents(storage_path('HTML').'/http/tantek.com/index.html', $htmlTantek);
 
         Artisan::call('webmentions:parsecached');
 
@@ -62,11 +62,11 @@ class ParseCachedWebMentionsTest extends TestCase
     protected function tearDown(): void
     {
         $fs = new FileSystem;
-        if ($fs->exists(storage_path() . '/HTML/https')) {
-            $fs->deleteDirectory(storage_path() . '/HTML/https');
+        if ($fs->exists(storage_path().'/HTML/https')) {
+            $fs->deleteDirectory(storage_path().'/HTML/https');
         }
-        if ($fs->exists(storage_path() . '/HTML/http')) {
-            $fs->deleteDirectory(storage_path() . '/HTML/http');
+        if ($fs->exists(storage_path().'/HTML/http')) {
+            $fs->deleteDirectory(storage_path().'/HTML/http');
         }
 
         parent::tearDown();

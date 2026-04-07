@@ -61,7 +61,7 @@ class BookmarkService
     {
         $client = resolve(Client::class);
         try {
-            $response = $client->request('GET', 'https://web.archive.org/save/' . $url);
+            $response = $client->request('GET', 'https://web.archive.org/save/'.$url);
         } catch (ClientException $e) {
             // throw an exception to be caught
             throw new InternetArchiveException;

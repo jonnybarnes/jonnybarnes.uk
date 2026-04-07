@@ -59,7 +59,7 @@ class ClientsTest extends TestCase
         ]);
 
         $response = $this->actingAs($user)
-            ->get('/admin/clients/' . $client->id . '/edit');
+            ->get('/admin/clients/'.$client->id.'/edit');
         $response->assertSee('https://jbl5.dev/notes/new');
     }
 
@@ -70,7 +70,7 @@ class ClientsTest extends TestCase
         $client = MicropubClient::factory()->create();
 
         $this->actingAs($user)
-            ->post('/admin/clients/' . $client->id, [
+            ->post('/admin/clients/'.$client->id, [
                 '_method' => 'PUT',
                 'client_url' => 'https://jbl5.dev/notes/new',
                 'client_name' => 'JBL5dev',
@@ -90,7 +90,7 @@ class ClientsTest extends TestCase
         ]);
 
         $this->actingAs($user)
-            ->post('/admin/clients/' . $client->id, [
+            ->post('/admin/clients/'.$client->id, [
                 '_method' => 'DELETE',
             ]);
         $this->assertDatabaseMissing('clients', [

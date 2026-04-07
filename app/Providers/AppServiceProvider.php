@@ -2,15 +2,15 @@
 
 namespace App\Providers;
 
-use App\Models\Note;
-use App\Observers\NoteObserver;
-use Codebird\Codebird;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ConnectException;
+use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\ServiceProvider;
+use Intervention\Image\ImageManager;
 use Lcobucci\JWT\Configuration;
 use Lcobucci\JWT\Signer\Hmac\Sha256;
 use Lcobucci\JWT\Signer\Key\InMemory;
@@ -33,32 +33,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Note::observe(NoteObserver::class);
-
         // configure Intervention/Image
         $this->app->bind('Intervention\Image\ImageManager', function () {
-            return \Intervention\Image\ImageManager::withDriver(config('image.driver'));
+            return ImageManager::withDriver(config('image.driver'));
         });
-
-        // Bind the Codebird client
-        // Codebird gets mocked in tests
-        // @codeCoverageIgnoreStart
-        $this->app->bind('Codebird\Codebird', function () {
-            Codebird::setConsumerKey(
-                env('TWITTER_CONSUMER_KEY'),
-                env('TWITTER_CONSUMER_SECRET')
-            );
-
-            $cb = Codebird::getInstance();
-
-            $cb->setToken(
-                env('TWITTER_ACCESS_TOKEN'),
-                env('TWITTER_ACCESS_TOKEN_SECRET')
-            );
-
-            return $cb;
-        });
-        // @codeCoverageIgnoreEnd
 
         /**
          * Paginate a standard Laravel Collection.
@@ -106,7 +84,7 @@ class AppServiceProvider extends ServiceProvider
 
         // Configure Guzzle
         $this->app->bind('RetryGuzzle', function () {
-            $handlerStack = \GuzzleHttp\HandlerStack::create();
+            $handlerStack = HandlerStack::create();
             $handlerStack->push(Middleware::retry(
                 function ($retries, $request, $response, $exception) {
                     // Limit the number of retries to 5
@@ -115,7 +93,7 @@ class AppServiceProvider extends ServiceProvider
                     }
 
                     // Retry connection exceptions
-                    if ($exception instanceof \GuzzleHttp\Exception\ConnectException) {
+                    if ($exception instanceof ConnectException) {
                         return true;
                     }
 

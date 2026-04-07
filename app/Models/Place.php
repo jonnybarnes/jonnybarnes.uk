@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use Cviebrock\EloquentSluggable\Sluggable;
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -12,6 +13,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 
+#[Fillable(['name', 'slug'])]
 class Place extends Model
 {
     use HasFactory;
@@ -21,9 +23,6 @@ class Place extends Model
     {
         return 'slug';
     }
-
-    /** @var array<int, string> */
-    protected $fillable = ['name', 'slug'];
 
     /** @var array<string, string> */
     protected $casts = [
@@ -77,7 +76,7 @@ class Place extends Model
     protected function uri(): Attribute
     {
         return Attribute::get(
-            get: static fn ($value, $attributes) => config('app.url') . '/places/' . $attributes['slug'],
+            get: static fn ($value, $attributes) => config('app.url').'/places/'.$attributes['slug'],
         );
     }
 

@@ -38,9 +38,9 @@ class ArticlesController extends Controller
 
         if ($article->updated_at->year != $year || $article->updated_at->month != $month) {
             return redirect('/blog/'
-                            . $article->updated_at->year
-                            . '/' . $article->updated_at->format('m')
-                            . '/' . $slug);
+                            .$article->updated_at->year
+                            .'/'.$article->updated_at->format('m')
+                            .'/'.$slug);
         }
 
         return view('articles.show', compact('article'));

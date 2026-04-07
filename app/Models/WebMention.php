@@ -5,26 +5,22 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Traits\FilterHtml;
-use Codebird\Codebird;
 use Exception;
+use Illuminate\Database\Eloquent\Attributes\Guarded;
+use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Filesystem\Filesystem;
-use Illuminate\Support\Facades\Cache;
 use Jonnybarnes\WebmentionsParser\Authorship;
 
+#[Table('webmentions')]
+#[Guarded(['id'])]
 class WebMention extends Model
 {
     use FilterHtml;
     use HasFactory;
-
-    /** @var string */
-    protected $table = 'webmentions';
-
-    /** @var array<int, string> */
-    protected $guarded = ['id'];
 
     public function commentable(): MorphTo
     {
@@ -127,22 +123,9 @@ class WebMention extends Model
             return str_replace('http://', 'https://', $url);
         }
 
-        if ($host === 'twitter.com') {
-            if (Cache::has($url)) {
-                return Cache::get($url);
-            }
-            $username = ltrim(parse_url($url, PHP_URL_PATH), '/');
-            $codebird = resolve(Codebird::class);
-            $info = $codebird->users_show(['screen_name' => $username]);
-            $profile_image = $info->profile_image_url_https;
-            Cache::put($url, $profile_image, 10080); // 1 week
-
-            return $profile_image;
-        }
-
         $filesystem = new Filesystem;
-        if ($filesystem->exists(public_path() . '/assets/profile-images/' . $host . '/image')) {
-            return '/assets/profile-images/' . $host . '/image';
+        if ($filesystem->exists(public_path().'/assets/profile-images/'.$host.'/image')) {
+            return '/assets/profile-images/'.$host.'/image';
         }
 
         return $url;

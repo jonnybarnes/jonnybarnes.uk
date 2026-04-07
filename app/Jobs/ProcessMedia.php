@@ -57,10 +57,10 @@ class ProcessMedia implements ShouldQueue
             $basename = trim(implode('.', $filenameParts), '.');
 
             $medium = $image->resize(width: 1000);
-            Storage::disk('public')->put($basename . '-medium.' . $extension, (string) $medium->encode());
+            Storage::disk('public')->put($basename.'-medium.'.$extension, (string) $medium->encode());
 
             $small = $image->resize(width: 500);
-            Storage::disk('public')->put($basename . '-small.' . $extension, (string) $small->encode());
+            Storage::disk('public')->put($basename.'-small.'.$extension, (string) $small->encode());
         }
 
         // Now we can delete the locally saved image

@@ -42,7 +42,7 @@ class SyndicateNoteToBluesky implements ShouldQueue
             'https://brid.gy/micropub',
             [
                 'headers' => [
-                    'Authorization' => 'Bearer ' . config('bridgy.bluesky_token'),
+                    'Authorization' => 'Bearer '.config('bridgy.bluesky_token'),
                 ],
                 'json' => [
                     'type' => ['h-entry'],
