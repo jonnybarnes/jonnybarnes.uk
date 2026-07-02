@@ -56,10 +56,10 @@ class ProcessMedia implements ShouldQueue
             // foo.bar.png => ['foo', 'bar', 'png'] => ['foo', 'bar'] => foo.bar
             $basename = trim(implode('.', $filenameParts), '.');
 
-            $medium = $image->resize(width: 1000);
+            $medium = $image->scale(width: 1000);
             Storage::disk('public')->put($basename.'-medium.'.$extension, (string) $medium->encode());
 
-            $small = $image->resize(width: 500);
+            $small = $image->scale(width: 500);
             Storage::disk('public')->put($basename.'-small.'.$extension, (string) $small->encode());
         }
 
