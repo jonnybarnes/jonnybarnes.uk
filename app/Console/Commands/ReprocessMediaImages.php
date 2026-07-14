@@ -25,18 +25,20 @@ class ReprocessMediaImages extends Command
 
         $dryRun = $this->option('dry-run');
 
-        $this->info("Found {$media->count()} images to reprocess." . ($dryRun ? ' (dry run)' : ''));
+        $this->info("Found {$media->count()} images to reprocess.".($dryRun ? ' (dry run)' : ''));
 
         foreach ($media as $item) {
             $path = $item->path;
 
             if (! Storage::disk('public')->exists($path)) {
                 $this->warn("{$path}: original not found on public disk, skipping.");
+
                 continue;
             }
 
             if ($dryRun) {
                 $this->line("{$path} ({$item->image_widths}px wide)");
+
                 continue;
             }
 
@@ -46,7 +48,8 @@ class ReprocessMediaImages extends Command
                 $file = Storage::disk('public')->get($path);
                 $image = $manager->read($file);
             } catch (DecoderException) {
-                $this->warn("  Could not decode image, skipping.");
+                $this->warn('  Could not decode image, skipping.');
+
                 continue;
             }
 
@@ -60,9 +63,9 @@ class ReprocessMediaImages extends Command
             $small = $image->scale(width: 500);
             Storage::disk('public')->put($basename.'-small.'.$extension, (string) $small->encode());
 
-            $this->info("  Done.");
+            $this->info('  Done.');
         }
 
-        $this->info('Reprocessing complete.' . ($dryRun ? ' (dry run — no files were changed)' : ''));
+        $this->info('Reprocessing complete.'.($dryRun ? ' (dry run — no files were changed)' : ''));
     }
 }

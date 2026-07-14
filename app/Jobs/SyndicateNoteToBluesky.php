@@ -18,6 +18,11 @@ class SyndicateNoteToBluesky implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     /**
+     * Only try once — retrying would send Bridgy a duplicate publish webmention.
+     */
+    public int $tries = 1;
+
+    /**
      * Create a new job instance.
      */
     public function __construct(
@@ -31,32 +36,32 @@ class SyndicateNoteToBluesky implements ShouldQueue
      */
     public function handle(Client $guzzle): void
     {
-        // We can only make the request if we have an access token
-        if (config('bridgy.bluesky_token') === null) {
-            return;
-        }
-
-        // Make micropub request
         $response = $guzzle->request(
             'POST',
-            'https://brid.gy/micropub',
+            'https://brid.gy/publish/webmention',
             [
                 'headers' => [
-                    'Authorization' => 'Bearer '.config('bridgy.bluesky_token'),
+                    'Accept' => 'application/json',
                 ],
-                'json' => [
-                    'type' => ['h-entry'],
-                    'properties' => [
-                        'content' => [$this->note->getRawOriginal('note')],
-                    ],
+                'form_params' => [
+                    'source' => $this->note->uri,
+                    'target' => 'https://brid.gy/publish/bluesky',
                 ],
+                'http_errors' => false,
             ]
         );
 
-        // Parse for syndication URL
+        $body = json_decode((string) $response->getBody(), true);
+
         if ($response->getStatusCode() === 201) {
-            $this->note->bluesky_url = $response->getHeader('Location')[0];
+            $this->note->bluesky_url = $body['url'];
             $this->note->save();
+
+            return;
         }
+
+        throw new \RuntimeException(
+            'Bridgy publish to Bluesky failed: '.($body['error'] ?? (string) $response->getBody())
+        );
     }
 }
