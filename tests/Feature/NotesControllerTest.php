@@ -77,4 +77,38 @@ class NotesControllerTest extends TestCase
         $response = $this->get('/notes/photou-photologo');
         $response->assertNotFound();
     }
+
+    /**
+     * Notes not yet syndicated should carry the hidden Bridgy publish
+     * verification links, so Bridgy can confirm intent when it re-fetches
+     * the page after receiving our webmention.
+     */
+    #[Test]
+    public function note_page_includes_bridgy_verification_links_when_not_yet_syndicated(): void
+    {
+        $note = Note::factory()->create();
+
+        $response = $this->get($note->uri);
+
+        $response->assertSee('https://brid.gy/publish/mastodon', false);
+        $response->assertSee('https://brid.gy/publish/bluesky', false);
+    }
+
+    /**
+     * Once a note has been syndicated to a silo, the hidden verification
+     * link for that silo should no longer be rendered.
+     */
+    #[Test]
+    public function note_page_omits_bridgy_verification_link_once_syndicated(): void
+    {
+        $note = Note::factory()->create();
+        $note->mastodon_url = 'https://mastodon.example/@jonny/1';
+        $note->bluesky_url = 'https://bsky.app/profile/jonnybarnes.uk/1';
+        $note->save();
+
+        $response = $this->get($note->uri);
+
+        $response->assertDontSee('https://brid.gy/publish/mastodon', false);
+        $response->assertDontSee('https://brid.gy/publish/bluesky', false);
+    }
 }

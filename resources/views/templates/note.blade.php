@@ -1,4 +1,10 @@
 <div class="h-entry">
+    @unless($note->mastodon_url)
+        <a href="https://brid.gy/publish/mastodon" style="display:none"></a>
+    @endunless
+    @unless($note->bluesky_url)
+        <a href="https://brid.gy/publish/bluesky" style="display:none"></a>
+    @endunless
     @if ($note->in_reply_to)
         <div class="u-in-reply-to h-cite reply-to">
             In reply to <a href="{{ $note->in_reply_to }}" class="u-url">{{ $note->in_reply_to }}</a>
