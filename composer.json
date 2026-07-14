@@ -10,8 +10,8 @@
         "ext-dom": "*",
         "ext-intl": "*",
         "ext-json": "*",
-        "ext-pgsql": "*",
         "ext-pdo": "*",
+        "ext-pgsql": "*",
         "ext-sodium": "*",
         "cviebrock/eloquent-sluggable": "^13.0",
         "guzzlehttp/guzzle": "^7.2",
@@ -27,9 +27,9 @@
         "league/commonmark": "^2.0",
         "league/flysystem-aws-s3-v3": "^3.0",
         "mf2/mf2": "~0.3",
-        "spatie/commonmark-highlighter": "^3.0",
         "spatie/laravel-flare": "^2.2",
         "symfony/html-sanitizer": "^8.0",
+        "tempest/highlight": "^2.27",
         "web-auth/webauthn-lib": "^5.0"
     },
     "require-dev": {

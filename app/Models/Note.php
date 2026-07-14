@@ -25,14 +25,11 @@ use Laravel\Scout\Searchable;
 use League\CommonMark\Environment\Environment;
 use League\CommonMark\Extension\Autolink\AutolinkExtension;
 use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
-use League\CommonMark\Extension\CommonMark\Node\Block\FencedCode;
-use League\CommonMark\Extension\CommonMark\Node\Block\IndentedCode;
 use League\CommonMark\Extension\Mention\Mention;
 use League\CommonMark\Extension\Mention\MentionExtension;
 use League\CommonMark\MarkdownConverter;
 use Normalizer;
-use Spatie\CommonMarkHighlighter\FencedCodeRenderer;
-use Spatie\CommonMarkHighlighter\IndentedCodeRenderer;
+use Tempest\Highlight\CommonMark\HighlightExtension;
 
 #[Table('notes')]
 #[Fillable(['note', 'in_reply_to', 'client_id'])]
@@ -354,9 +351,8 @@ class Note extends Model
         $environment->addExtension(new CommonMarkCoreExtension);
         $environment->addExtension(new AutolinkExtension);
         $environment->addExtension(new MentionExtension);
+        $environment->addExtension(new HighlightExtension);
         $environment->addRenderer(Mention::class, new MentionRenderer);
-        $environment->addRenderer(FencedCode::class, new FencedCodeRenderer);
-        $environment->addRenderer(IndentedCode::class, new IndentedCodeRenderer);
         $markdownConverter = new MarkdownConverter($environment);
 
         return $markdownConverter->convert($note)->getContent();

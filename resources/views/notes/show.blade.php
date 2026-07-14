@@ -56,5 +56,5 @@
 
 @section('scripts')
     @parent
-    <link rel="stylesheet" href="/assets/highlight/zenburn.css">
+    <link rel="stylesheet" href="/assets/highlight/nord.css">
 @stop

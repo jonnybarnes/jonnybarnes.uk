@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <title>@yield('title'){{ config('app.name') }}</title>
-        <link rel="stylesheet" href="/assets/highlight/zenburn.css">
+        <link rel="stylesheet" href="/assets/highlight/nord.css">
         <link rel="stylesheet" href="/assets/css/app.css">
         <link rel="alternate" type="application/rss+xml" title="Blog RSS Feed" href="{{ route('feed.blog.rss') }}">
         <link rel="alternate" type="application/atom+xml" title="Blog Atom Feed" href="{{ route('feed.blog.atom') }}">
