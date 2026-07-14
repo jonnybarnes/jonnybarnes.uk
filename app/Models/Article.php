@@ -14,11 +14,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use League\CommonMark\Environment\Environment;
 use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
-use League\CommonMark\Extension\CommonMark\Node\Block\FencedCode;
-use League\CommonMark\Extension\CommonMark\Node\Block\IndentedCode;
 use League\CommonMark\MarkdownConverter;
-use Spatie\CommonMarkHighlighter\FencedCodeRenderer;
-use Spatie\CommonMarkHighlighter\IndentedCodeRenderer;
+use Tempest\Highlight\CommonMark\HighlightExtension;
 
 #[Table('articles')]
 #[Fillable(['url', 'title', 'main', 'published'])]
@@ -53,8 +50,7 @@ class Article extends Model
             get: function () {
                 $environment = new Environment;
                 $environment->addExtension(new CommonMarkCoreExtension);
-                $environment->addRenderer(FencedCode::class, new FencedCodeRenderer);
-                $environment->addRenderer(IndentedCode::class, new IndentedCodeRenderer);
+                $environment->addExtension(new HighlightExtension);
                 $markdownConverter = new MarkdownConverter($environment);
 
                 return $markdownConverter->convert($this->main)->getContent();

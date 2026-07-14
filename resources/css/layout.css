@@ -44,3 +44,12 @@
     gap: 2ex;
   }
 }
+
+@layer components {
+  .h-entry {
+    pre {
+      padding: 1rem;
+    }
+  }
+}
+
