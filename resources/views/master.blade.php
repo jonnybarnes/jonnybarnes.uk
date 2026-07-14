@@ -107,7 +107,7 @@
             <script type="module" src="/assets/js/app.js"></script>
 
             <script type="module" src="/assets/js/is-land.min.js"></script>
-            <script type="module" src="/assets/js/snow-fall.js"></script>
+            <script type="module" src="/assets/js/winter.js"></script>
             <is-land on:media="(prefers-reduced-motion: no-preference)">
                 <snow-fall
                     count="150"
