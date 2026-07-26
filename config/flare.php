@@ -1,11 +1,5 @@
 <?php
 
-use Spatie\FlareClient\Api;
-use Spatie\FlareClient\Sampling\RateSampler;
-use Spatie\LaravelFlare\AttributesProviders\LaravelUserAttributesProvider;
-use Spatie\LaravelFlare\FlareConfig;
-use Spatie\LaravelFlare\Senders\LaravelHttpSender;
-
 return [
     /*
     |
@@ -22,17 +16,6 @@ return [
     'key' => env('FLARE_KEY'),
 
     /*
-    |
-    |--------------------------------------------------------------------------
-    | Flare Base URL
-    |--------------------------------------------------------------------------
-    |
-    | Which server should be used to send the reports/traces to.
-    |
-    */
-    'base_url' => env('FLARE_BASE_URL', Api::BASE_URL),
-
-    /*
     |--------------------------------------------------------------------------
     | Collects
     |--------------------------------------------------------------------------
@@ -42,26 +25,10 @@ return [
     |
     */
 
-    'collects' => FlareConfig::defaultCollects(
+    'collects' => \Spatie\LaravelFlare\FlareConfig::defaultCollects(
         ignore: [],
         extra: []
     ),
-
-    /*
-    |--------------------------------------------------------------------------
-    | Attribute providers
-    |--------------------------------------------------------------------------
-    |
-    | When sending an error report or trace to Flare attributes can be added to
-    | the report or trace for common entries. An example of such an entry is
-    | the currently authenticated user. In an attribute provider you can
-    | specify which attributes should be sent.
-    |
-    */
-
-    'attribute_providers' => [
-        'user' => LaravelUserAttributesProvider::class,
-    ],
 
     /*
     |--------------------------------------------------------------------------
@@ -88,19 +55,49 @@ return [
             'X-XSRF-TOKEN',
         ],
         'client_ips' => false,
+        'cookies' => false,
+        'session' => false,
     ],
 
     /*
     |--------------------------------------------------------------------------
-    | Reporting log statements
+    | Sender
     |--------------------------------------------------------------------------
     |
-    | If this setting is `false` log statements won't be sent as events to Flare,
-    | no matter which error level you specified in the Flare log channel.
+    | The sender is responsible for sending the error reports and traces to
+    | Flare. By default, Laravel Flare sends them over HTTP. To use the local
+    | Flare daemon, switch the sender class to
+    | `Spatie\FlareClient\Senders\DaemonSender::class` and set `daemon_url`.
+    | The daemon sender defaults to localhost on port 8787 and uses its own
+    | default timeouts and fallback sender config unless you override them.
     |
     */
 
-    'send_logs_as_events' => true,
+    'sender' => [
+        'class' => \Spatie\LaravelFlare\Senders\LaravelHttpSender::class,
+        'config' => [
+            'timeout' => 10,
+        ],
+    ],
+
+    // Daemon sender example
+    // 'sender' => [
+    //     'class' => \Spatie\FlareClient\Senders\DaemonSender::class,
+    //     'config' => [
+    //         'daemon_url' => env('FLARE_DAEMON_URL', 'http://127.0.0.1:8787'),
+    //     ],
+    // ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Report
+    |--------------------------------------------------------------------------
+    |
+    | Flare reports errors and exceptions happening within your application.
+    |
+    */
+
+    'report' => env('FLARE_REPORT', true),
 
     /*
     |--------------------------------------------------------------------------
@@ -109,9 +106,26 @@ return [
     | When reporting errors, you can specify which error levels should be
     | reported. By default, all error levels are reported by setting
     | this value to `null`.
-     */
+    */
 
     'report_error_levels' => null,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Override grouping
+    |--------------------------------------------------------------------------
+    |
+    | Flare will try to group errors and exceptions as best as possible, that
+    | being said, sometimes you might want to override the grouping. You can
+    | do this by adding exception classes to this array which should always
+    | be grouped by exception class, exception message or exception class
+    | and message.
+    |
+    */
+
+    'overridden_groupings' => [
+        // Illuminate\Http\Client\ConnectionException::class => Spatie\FlareClient\Enums\OverriddenGrouping::ExceptionMessageAndClass,
+    ],
 
     /*
     |--------------------------------------------------------------------------
@@ -128,40 +142,6 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Override grouping
-    |--------------------------------------------------------------------------
-    |
-    | Flare will try to group errors and exceptions as best as possible, that
-    | being said, sometimes you might want to override the grouping. You can
-    | do this by adding exception classes to this array which should always
-    | be grouped by exception class, exception message or exception class
-    | and message.
-    |
-    */
-
-    'overridden_groupings' => [
-        //        Illuminate\Http\Client\ConnectionException::class => Spatie\FlareClient\Enums\OverriddenGrouping::ExceptionMessageAndClass,
-    ],
-
-    /*
-    |--------------------------------------------------------------------------
-    | Sender
-    |--------------------------------------------------------------------------
-    |
-    | The sender is responsible for sending the error reports and traces to
-    | Flare it can be configured if needed.
-    |
-    */
-
-    'sender' => [
-        'class' => LaravelHttpSender::class,
-        'config' => [
-            'timeout' => 10,
-        ],
-    ],
-
-    /*
-    |--------------------------------------------------------------------------
     | Trace
     |--------------------------------------------------------------------------
     |
@@ -170,7 +150,7 @@ return [
     |
     */
 
-    'trace' => env('FLARE_TRACE', false),
+    'trace' => env('FLARE_TRACE', true),
 
     /*
     |--------------------------------------------------------------------------
@@ -183,26 +163,35 @@ return [
     | which means that 10% of the traces will be recorded.
     |
     */
+
     'sampler' => [
-        'class' => RateSampler::class,
+        'class' => \Spatie\FlareClient\Sampling\RateSampler::class,
         'config' => [
-            'rate' => 0.1,
+            'rate' => env('FLARE_SAMPLER_RATE', 0.1),
         ],
     ],
 
     /*
     |--------------------------------------------------------------------------
-    | Trace limits
+    | Log
     |--------------------------------------------------------------------------
     |
-    | Limits for the tracing data. These limits are used to prevent
-    | the tracing data from growing too large.
+    | Logging show you an overview of log entries within your application.
     |
     */
-    'trace_limits' => [
-        'max_spans' => 512,
-        'max_attributes_per_span' => 128,
-        'max_span_events_per_span' => 128,
-        'max_attributes_per_span_event' => 128,
-    ],
+
+    'log' => env('FLARE_LOG', false),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Minimal log level
+    |--------------------------------------------------------------------------
+    |
+    | You can specify the minimal (Monolog) log level that should be sent to Flare.
+    | Log levels lower than the specified level will be ignored.
+    | If null all log levels will be sent to Flare.
+    |
+    */
+
+    'minimal_log_level' => null,
 ];
