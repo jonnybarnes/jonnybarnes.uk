@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace App\Jobs;
 
 use App\Models\Note;
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Psr7\Header;
 use GuzzleHttp\Psr7\UriResolver;
 use GuzzleHttp\Psr7\Utils;
@@ -14,6 +12,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 use Mf2\Parser;
 
@@ -32,8 +31,6 @@ class SendWebMentions implements ShouldQueue
 
     /**
      * Execute the job.
-     *
-     * @throws GuzzleException
      */
     public function handle(): void
     {
@@ -43,12 +40,9 @@ class SendWebMentions implements ShouldQueue
         foreach ($urls as $url) {
             $endpoint = $this->discoverWebmentionEndpoint($url);
             if ($endpoint !== null) {
-                $guzzle = resolve(Client::class);
-                $guzzle->post($endpoint, [
-                    'form_params' => [
-                        'source' => $this->note->uri,
-                        'target' => $url,
-                    ],
+                Http::asForm()->post($endpoint, [
+                    'source' => $this->note->uri,
+                    'target' => $url,
                 ]);
             }
         }
@@ -56,8 +50,6 @@ class SendWebMentions implements ShouldQueue
 
     /**
      * Discover if a URL has a webmention endpoint.
-     *
-     * @throws GuzzleException
      */
     public function discoverWebmentionEndpoint(string $url): ?string
     {
@@ -71,10 +63,9 @@ class SendWebMentions implements ShouldQueue
 
         $endpoint = null;
 
-        $guzzle = resolve(Client::class);
-        $response = $guzzle->get($url);
+        $response = Http::get($url);
         // check HTTP Headers for webmention endpoint
-        $links = Header::parse($response->getHeader('Link'));
+        $links = Header::parse($response->header('Link'));
         foreach ($links as $link) {
             if (array_key_exists('rel', $link) && mb_stristr($link['rel'], 'webmention')) {
                 return $this->resolveUri(trim($link[0], '<>'), $url);
@@ -82,7 +73,7 @@ class SendWebMentions implements ShouldQueue
         }
 
         // failed to find a header so parse HTML
-        $html = (string) $response->getBody();
+        $html = $response->body();
 
         if ($html === '') {
             return null;

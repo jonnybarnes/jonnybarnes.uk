@@ -6,10 +6,7 @@ namespace Tests\Unit;
 
 use App\Exceptions\InternetArchiveException;
 use App\Services\BookmarkService;
-use GuzzleHttp\Client;
-use GuzzleHttp\Handler\MockHandler;
-use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Psr7\Response;
+use Illuminate\Support\Facades\Http;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
@@ -29,12 +26,9 @@ class BookmarksTest extends TestCase
     #[Test]
     public function archive_link_method_calls_archive_service(): void
     {
-        $mock = new MockHandler([
-            new Response(200, ['Content-Location' => '/web/1234/example.org']),
+        Http::fake([
+            'web.archive.org/*' => Http::response('', 200, ['Content-Location' => '/web/1234/example.org']),
         ]);
-        $handler = HandlerStack::create($mock);
-        $client = new Client(['handler' => $handler]);
-        $this->app->instance(Client::class, $client);
         $url = (new BookmarkService)->getArchiveLink('https://example.org');
         $this->assertEquals('/web/1234/example.org', $url);
     }
@@ -44,12 +38,9 @@ class BookmarksTest extends TestCase
     {
         $this->expectException(InternetArchiveException::class);
 
-        $mock = new MockHandler([
-            new Response(403),
+        Http::fake([
+            'web.archive.org/*' => Http::response('', 403),
         ]);
-        $handler = HandlerStack::create($mock);
-        $client = new Client(['handler' => $handler]);
-        $this->app->instance(Client::class, $client);
         (new BookmarkService)->getArchiveLink('https://example.org');
     }
 
@@ -58,12 +49,9 @@ class BookmarksTest extends TestCase
     {
         $this->expectException(InternetArchiveException::class);
 
-        $mock = new MockHandler([
-            new Response(200),
+        Http::fake([
+            'web.archive.org/*' => Http::response('', 200),
         ]);
-        $handler = HandlerStack::create($mock);
-        $client = new Client(['handler' => $handler]);
-        $this->app->instance(Client::class, $client);
         (new BookmarkService)->getArchiveLink('https://example.org');
     }
 }

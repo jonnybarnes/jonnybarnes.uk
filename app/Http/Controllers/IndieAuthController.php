@@ -5,13 +5,12 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Services\TokenService;
-use Exception;
-use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Uri;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\View\View;
 use Random\RandomException;
@@ -199,15 +198,13 @@ class IndieAuthController extends Controller
         }
 
         // Otherwise we need to check the redirect_uri is in the client_id's redirect_uris
-        $guzzle = resolve(Client::class);
-
         try {
-            $clientInfo = $guzzle->get($clientId);
-        } catch (Exception) {
+            $clientInfo = Http::throw()->get($clientId);
+        } catch (\Throwable) {
             return false;
         }
 
-        $clientInfoParsed = \Mf2\parse($clientInfo->getBody()->getContents(), $clientId);
+        $clientInfoParsed = \Mf2\parse($clientInfo->body(), $clientId);
 
         $redirectUris = $clientInfoParsed['rels']['redirect_uri'] ?? [];
 

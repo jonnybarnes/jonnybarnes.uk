@@ -9,12 +9,9 @@ use App\Jobs\ProcessWebMention;
 use App\Jobs\SaveProfileImage;
 use App\Models\Note;
 use App\Models\WebMention;
-use GuzzleHttp\Client;
-use GuzzleHttp\Handler\MockHandler;
-use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Psr7\Response;
 use Illuminate\FileSystem\FileSystem;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Queue;
 use Jonnybarnes\WebmentionsParser\Parser;
 use PHPUnit\Framework\Attributes\Test;
@@ -39,17 +36,15 @@ class ProcessWebMentionJobTest extends TestCase
         $this->expectException(RemoteContentNotFoundException::class);
 
         $parser = new Parser;
-        $mock = new MockHandler([
-            new Response(404),
+        Http::fake([
+            '*' => Http::response('', 404),
         ]);
-        $handler = HandlerStack::create($mock);
-        $client = new Client(['handler' => $handler]);
 
         $note = Note::factory()->create();
         $source = 'https://example.org/mention/1/';
 
         $job = new ProcessWebMention($note, $source);
-        $job->handle($parser, $client);
+        $job->handle($parser);
     }
 
     #[Test]
@@ -65,17 +60,15 @@ class ProcessWebMentionJobTest extends TestCase
         </div>
         HTML;
         $html = str_replace('href="', 'href="'.config('app.url'), $html);
-        $mock = new MockHandler([
-            new Response(200, [], $html),
+        Http::fake([
+            '*' => Http::response($html, 200),
         ]);
-        $handler = HandlerStack::create($mock);
-        $client = new Client(['handler' => $handler]);
 
         $note = Note::factory()->create();
         $source = 'https://example.org/mention/1/';
 
         $job = new ProcessWebMention($note, $source);
-        $job->handle($parser, $client);
+        $job->handle($parser);
 
         Queue::assertPushed(SaveProfileImage::class);
         $this->assertDatabaseHas('webmentions', [
@@ -103,14 +96,12 @@ class ProcessWebMentionJobTest extends TestCase
             <div class="e-content">Updated reply</div>
         </div>
         HTML;
-        $mock = new MockHandler([
-            new Response(200, [], $html),
+        Http::fake([
+            '*' => Http::response($html, 200),
         ]);
-        $handler = HandlerStack::create($mock);
-        $client = new Client(['handler' => $handler]);
 
         $job = new ProcessWebMention($note, $source);
-        $job->handle($parser, $client);
+        $job->handle($parser);
 
         Queue::assertPushed(SaveProfileImage::class);
         $this->assertDatabaseHas('webmentions', [
@@ -132,11 +123,9 @@ class ProcessWebMentionJobTest extends TestCase
             <div class="e-content">Replying to someone else</div>
         </div>
         HTML;
-        $mock = new MockHandler([
-            new Response(200, [], $html),
+        Http::fake([
+            '*' => Http::response($html, 200),
         ]);
-        $handler = HandlerStack::create($mock);
-        $client = new Client(['handler' => $handler]);
 
         $note = Note::factory()->create();
         $source = 'https://example.org/reply/1';
@@ -151,7 +140,7 @@ class ProcessWebMentionJobTest extends TestCase
         ]);
 
         $job = new ProcessWebMention($note, $source);
-        $job->handle($parser, $client);
+        $job->handle($parser);
 
         $this->assertDatabaseMissing('webmentions', [
             'source' => $source,
@@ -169,11 +158,9 @@ class ProcessWebMentionJobTest extends TestCase
             <div class="e-content">I like someone else now</div>
         </div>
         HTML;
-        $mock = new MockHandler([
-            new Response(200, [], $html),
+        Http::fake([
+            '*' => Http::response($html, 200),
         ]);
-        $handler = HandlerStack::create($mock);
-        $client = new Client(['handler' => $handler]);
 
         $note = Note::factory()->create();
         $source = 'https://example.org/reply/1';
@@ -188,7 +175,7 @@ class ProcessWebMentionJobTest extends TestCase
         ]);
 
         $job = new ProcessWebMention($note, $source);
-        $job->handle($parser, $client);
+        $job->handle($parser);
 
         $this->assertDatabaseMissing('webmentions', [
             'source' => $source,
@@ -208,18 +195,16 @@ class ProcessWebMentionJobTest extends TestCase
         </div>
         HTML;
         $html = str_replace('href="', 'href="'.config('app.url'), $html);
-        $mock = new MockHandler([
-            new Response(200, [], $html),
+        Http::fake([
+            '*' => Http::response($html, 200),
         ]);
-        $handler = HandlerStack::create($mock);
-        $client = new Client(['handler' => $handler]);
 
         $note = Note::factory()->create();
         // Simulate a long brid.gy Bluesky source URL (well over 255 characters)
         $source = 'https://brid.gy/comment/bluesky/did:plc:n3jhgiq2ykctnpgzlm6p6b25/at%253A%252F%252Fdid%253Aplc%253An3jhgiq2ykctnpgzlm6p6b25%252Fapp.bsky.feed.post%252F3mfekjuhykb2k/at%253A%252F%252Fdid%253Aplc%253Afsfuwigo5juzdwp23hyianzg%252Fapp.bsky.feed.post%252F3mfemw4rrvs2t';
 
         $job = new ProcessWebMention($note, $source);
-        $job->handle($parser, $client);
+        $job->handle($parser);
 
         $this->assertGreaterThan(255, strlen($source));
         $this->assertDatabaseHas('webmentions', [
@@ -238,11 +223,9 @@ class ProcessWebMentionJobTest extends TestCase
             <div class="e-content">Reposting someone else</div>
         </div>
         HTML;
-        $mock = new MockHandler([
-            new Response(200, [], $html),
+        Http::fake([
+            '*' => Http::response($html, 200),
         ]);
-        $handler = HandlerStack::create($mock);
-        $client = new Client(['handler' => $handler]);
 
         $note = Note::factory()->create();
         $source = 'https://example.org/reply/1';
@@ -257,7 +240,7 @@ class ProcessWebMentionJobTest extends TestCase
         ]);
 
         $job = new ProcessWebMention($note, $source);
-        $job->handle($parser, $client);
+        $job->handle($parser);
 
         $this->assertDatabaseMissing('webmentions', [
             'source' => $source,

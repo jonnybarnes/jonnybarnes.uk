@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace App\Jobs;
 
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\FileSystem\FileSystem;
+use Illuminate\Http\Client\RequestException;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Http;
 
 class DownloadWebMention implements ShouldQueue
 {
@@ -29,15 +29,15 @@ class DownloadWebMention implements ShouldQueue
     /**
      * Execute the job.
      *
-     * @throws GuzzleException
+     * @throws RequestException
      * @throws FileNotFoundException
      */
-    public function handle(Client $guzzle): void
+    public function handle(): void
     {
-        $response = $guzzle->request('GET', $this->source);
-        // 4XX and 5XX responses should get Guzzle to throw an exception,
-        // Laravel should catch and retry these automatically.
-        if ($response->getStatusCode() === 200) {
+        // 4XX and 5XX responses should throw so Laravel can catch and
+        // retry these automatically.
+        $response = Http::throw()->get($this->source);
+        if ($response->status() === 200) {
             $filesystem = new FileSystem;
             $filename = storage_path('HTML').'/'.$this->createFilenameFromURL($this->source);
             // backup file first
@@ -56,7 +56,7 @@ class DownloadWebMention implements ShouldQueue
             // save new HTML
             $filesystem->put(
                 $filename,
-                (string) $response->getBody()
+                $response->body()
             );
             // remove backup if the same
             if ($filesystem->exists($filenameBackup)) {

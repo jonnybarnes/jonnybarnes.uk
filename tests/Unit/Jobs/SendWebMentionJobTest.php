@@ -6,10 +6,7 @@ namespace Tests\Unit\Jobs;
 
 use App\Jobs\SendWebMentions;
 use App\Models\Note;
-use GuzzleHttp\Client;
-use GuzzleHttp\Handler\MockHandler;
-use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Psr7\Response;
+use Illuminate\Support\Facades\Http;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
@@ -28,12 +25,9 @@ class SendWebMentionJobTest extends TestCase
     public function discover_webmention_endpoint_from_header_links(): void
     {
         $url = 'https://example.org/webmention';
-        $mock = new MockHandler([
-            new Response(200, ['Link' => '<'.$url.'>; rel="webmention"']),
+        Http::fake([
+            '*' => Http::response('', 200, ['Link' => '<'.$url.'>; rel="webmention"']),
         ]);
-        $handler = HandlerStack::create($mock);
-        $client = new Client(['handler' => $handler]);
-        $this->app->instance(Client::class, $client);
 
         $job = new SendWebMentions(new Note);
         $this->assertEquals($url, $job->discoverWebmentionEndpoint('https://example.org'));
@@ -43,12 +37,9 @@ class SendWebMentionJobTest extends TestCase
     public function discover_webmention_endpoint_from_html_link_tags(): void
     {
         $html = '<link rel="webmention" href="https://example.org/webmention">';
-        $mock = new MockHandler([
-            new Response(200, [], $html),
+        Http::fake([
+            '*' => Http::response($html, 200),
         ]);
-        $handler = HandlerStack::create($mock);
-        $client = new Client(['handler' => $handler]);
-        $this->app->instance(Client::class, $client);
 
         $job = new SendWebMentions(new Note);
         $this->assertEquals(
@@ -61,12 +52,9 @@ class SendWebMentionJobTest extends TestCase
     public function discover_webmention_endpoint_from_legacy_html_markup(): void
     {
         $html = '<link rel="http://webmention.org/" href="https://example.org/webmention">';
-        $mock = new MockHandler([
-            new Response(200, [], $html),
+        Http::fake([
+            '*' => Http::response($html, 200),
         ]);
-        $handler = HandlerStack::create($mock);
-        $client = new Client(['handler' => $handler]);
-        $this->app->instance(Client::class, $client);
 
         $job = new SendWebMentions(new Note);
         $this->assertEquals(
@@ -95,13 +83,10 @@ class SendWebMentionJobTest extends TestCase
     public function we_send_a_webmention_for_a_note(): void
     {
         $html = '<link rel="http://webmention.org/" href="https://example.org/webmention">';
-        $mock = new MockHandler([
-            new Response(200, [], $html),
-            new Response(202),
+        Http::fake([
+            'example.org/webmention' => Http::response('', 202),
+            '*' => Http::response($html, 200),
         ]);
-        $handler = HandlerStack::create($mock);
-        $client = new Client(['handler' => $handler]);
-        $this->app->instance(Client::class, $client);
 
         $note = new Note;
         $note->note = 'Hi [Aaron](https://aaronparecki.com)';
@@ -114,13 +99,10 @@ class SendWebMentionJobTest extends TestCase
     #[Test]
     public function links_in_notes_can_not_support_webmentions(): void
     {
-        $mock = new MockHandler([
+        Http::fake([
             // URLs with commas currently break the parse function I’m using
-            new Response(200, ['Link' => '<https://example.org/foo,bar>; rel="preconnect"']),
+            '*' => Http::response('', 200, ['Link' => '<https://example.org/foo,bar>; rel="preconnect"']),
         ]);
-        $handler = HandlerStack::create($mock);
-        $client = new Client(['handler' => $handler]);
-        $this->app->instance(Client::class, $client);
 
         $job = new SendWebMentions(new Note);
         $this->assertNull($job->discoverWebmentionEndpoint('https://example.org'));

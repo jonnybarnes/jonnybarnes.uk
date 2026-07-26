@@ -8,10 +8,8 @@ use App\Exceptions\InternetArchiveException;
 use App\Jobs\ProcessBookmark;
 use App\Models\Bookmark;
 use App\Models\Tag;
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 
 class BookmarkService
@@ -55,21 +53,19 @@ class BookmarkService
      * Given a URL, attempt to save it to the Internet Archive.
      *
      * @throws InternetArchiveException
-     * @throws GuzzleException
      */
     public function getArchiveLink(string $url): string
     {
-        $client = resolve(Client::class);
-        try {
-            $response = $client->request('GET', 'https://web.archive.org/save/'.$url);
-        } catch (ClientException $e) {
+        $response = Http::get('https://web.archive.org/save/'.$url);
+
+        if ($response->clientError()) {
             // throw an exception to be caught
             throw new InternetArchiveException;
         }
-        if ($response->hasHeader('Content-Location')) {
-            if (Str::startsWith(Arr::get($response->getHeader('Content-Location'), 0), '/web')) {
-                return $response->getHeader('Content-Location')[0];
-            }
+
+        $contentLocation = $response->header('Content-Location');
+        if ($contentLocation !== '' && Str::startsWith($contentLocation, '/web')) {
+            return $contentLocation;
         }
 
         // throw an exception to be caught

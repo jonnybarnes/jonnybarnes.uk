@@ -6,12 +6,9 @@ namespace Tests\Feature\Admin;
 
 use App\Models\Contact;
 use App\Models\User;
-use GuzzleHttp\Client;
-use GuzzleHttp\Handler\MockHandler;
-use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Psr7\Response;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Http;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
@@ -141,14 +138,12 @@ class ContactsTest extends TestCase
             <img class="u-photo" alt="" src="http://tantek.com/tantek.png">
         </div>
         HTML;
-        $file = fopen(__DIR__.'/../../aaron.png', 'rb');
-        $mock = new MockHandler([
-            new Response(200, ['Content-Type' => 'text/html'], $html),
-            new Response(200, ['Content-Type' => 'image/png'], $file),
+        $file = file_get_contents(__DIR__.'/../../aaron.png');
+        Http::fake([
+            '*' => Http::sequence()
+                ->push($html, 200, ['Content-Type' => 'text/html'])
+                ->push($file, 200, ['Content-Type' => 'image/png']),
         ]);
-        $handler = HandlerStack::create($mock);
-        $client = new Client(['handler' => $handler]);
-        $this->app->instance(Client::class, $client);
         $user = User::factory()->make();
         $contact = Contact::factory()->create([
             'homepage' => 'https://tantek.com',
@@ -165,12 +160,9 @@ class ContactsTest extends TestCase
     #[Test]
     public function getting_remote_avatar_fails_gracefully_with_remote_not_found(): void
     {
-        $mock = new MockHandler([
-            new Response(404),
+        Http::fake([
+            '*' => Http::response('', 404),
         ]);
-        $handler = HandlerStack::create($mock);
-        $client = new Client(['handler' => $handler]);
-        $this->app->instance(Client::class, $client);
         $user = User::factory()->make();
         $contact = Contact::factory()->create();
 
@@ -187,13 +179,11 @@ class ContactsTest extends TestCase
             <img class="u-photo" src="http://tantek.com/tantek.png">
         </div>
         HTML;
-        $mock = new MockHandler([
-            new Response(200, ['Content-Type' => 'text/html'], $html),
-            new Response(404),
+        Http::fake([
+            '*' => Http::sequence()
+                ->push($html, 200, ['Content-Type' => 'text/html'])
+                ->push('', 404),
         ]);
-        $handler = HandlerStack::create($mock);
-        $client = new Client(['handler' => $handler]);
-        $this->app->instance(Client::class, $client);
         $user = User::factory()->make();
         $contact = Contact::factory()->create();
 

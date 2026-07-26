@@ -5,10 +5,7 @@ declare(strict_types=1);
 namespace Tests\Unit\Jobs;
 
 use App\Jobs\SaveProfileImage;
-use GuzzleHttp\Client;
-use GuzzleHttp\Handler\MockHandler;
-use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Psr7\Response;
+use Illuminate\Support\Facades\Http;
 use Jonnybarnes\WebmentionsParser\Authorship;
 use Jonnybarnes\WebmentionsParser\Exceptions\AuthorshipParserException;
 use PHPUnit\Framework\Attributes\Test;
@@ -58,12 +55,9 @@ class SaveProfileImageJobTest extends TestCase
     #[Test]
     public function remote_author_images_are_saved_locally(): void
     {
-        $mock = new MockHandler([
-            new Response(200, ['Content-Type' => 'image/jpeg'], 'fake jpeg image'),
+        Http::fake([
+            '*' => Http::response('fake jpeg image', 200, ['Content-Type' => 'image/jpeg']),
         ]);
-        $handler = HandlerStack::create($mock);
-        $client = new Client(['handler' => $handler]);
-        $this->app->instance(Client::class, $client);
         $mf = ['items' => []];
         $author = [
             'properties' => [
@@ -83,12 +77,9 @@ class SaveProfileImageJobTest extends TestCase
     #[Test]
     public function local_default_author_image_is_used_as_fallback(): void
     {
-        $mock = new MockHandler([
-            new Response(404),
+        Http::fake([
+            '*' => Http::response('', 404),
         ]);
-        $handler = HandlerStack::create($mock);
-        $client = new Client(['handler' => $handler]);
-        $this->app->instance(Client::class, $client);
         $mf = ['items' => []];
         $author = [
             'properties' => [
@@ -111,12 +102,9 @@ class SaveProfileImageJobTest extends TestCase
     #[Test]
     public function we_get_url_from_photo_object_if_alt_text_is_provided(): void
     {
-        $mock = new MockHandler([
-            new Response(200, ['Content-Type' => 'image/jpeg'], 'fake jpeg image'),
+        Http::fake([
+            '*' => Http::response('fake jpeg image', 200, ['Content-Type' => 'image/jpeg']),
         ]);
-        $handler = HandlerStack::create($mock);
-        $client = new Client(['handler' => $handler]);
-        $this->app->instance(Client::class, $client);
         $mf = ['items' => []];
         $author = [
             'properties' => [
@@ -139,12 +127,9 @@ class SaveProfileImageJobTest extends TestCase
     #[Test]
     public function use_first_url_if_multiple_homepages_are_provided(): void
     {
-        $mock = new MockHandler([
-            new Response(200, ['Content-Type' => 'image/jpeg'], 'fake jpeg image'),
+        Http::fake([
+            '*' => Http::response('fake jpeg image', 200, ['Content-Type' => 'image/jpeg']),
         ]);
-        $handler = HandlerStack::create($mock);
-        $client = new Client(['handler' => $handler]);
-        $this->app->instance(Client::class, $client);
         $mf = ['items' => []];
         $author = [
             'properties' => [
