@@ -5,6 +5,7 @@ namespace App\Providers;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 use Intervention\Image\ImageManager;
 use Lcobucci\JWT\Configuration;
@@ -80,5 +81,8 @@ class AppServiceProvider extends ServiceProvider
 
         // Turn on Eloquent strict mode when developing
         Model::shouldBeStrict(! $this->app->isProduction());
+
+        // Force HTTPS URL generation in production
+        URL::forceHttps($this->app->isProduction());
     }
 }
