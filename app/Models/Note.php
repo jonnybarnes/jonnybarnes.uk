@@ -7,7 +7,6 @@ namespace App\Models;
 use App\CommonMark\Generators\MentionGenerator;
 use App\CommonMark\Renderers\MentionRenderer;
 use App\Observers\NoteObserver;
-use GuzzleHttp\Client;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
@@ -20,6 +19,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Http;
 use Jonnybarnes\IndieWeb\Numbers;
 use Laravel\Scout\Searchable;
 use League\CommonMark\Environment\Environment;
@@ -363,18 +363,15 @@ class Note extends Model
         $latLng = $latitude.','.$longitude;
 
         return Cache::get($latLng, function () use ($latLng, $latitude, $longitude) {
-            $guzzle = resolve(Client::class);
-            $response = $guzzle->request('GET', 'https://nominatim.openstreetmap.org/reverse', [
-                'query' => [
+            $response = Http::withHeaders(['User-Agent' => 'jonnybarnes.uk, email jonny@jonnybarnes.uk'])
+                ->get('https://nominatim.openstreetmap.org/reverse', [
                     'format' => 'json',
                     'lat' => $latitude,
                     'lon' => $longitude,
                     'zoom' => 18,
                     'addressdetails' => 1,
-                ],
-                'headers' => ['User-Agent' => 'jonnybarnes.uk via Guzzle, email jonny@jonnybarnes.uk'],
-            ]);
-            $json = json_decode((string) $response->getBody());
+                ]);
+            $json = $response->object();
             if (isset($json->address->suburb)) {
                 $locality = $json->address->suburb;
                 if (isset($json->address->city)) {

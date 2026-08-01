@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace App\Jobs;
 
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\RequestException;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Http\Client\ConnectionException;
+use Illuminate\Http\Client\RequestException;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Http;
 use Jonnybarnes\WebmentionsParser\Authorship;
 use Jonnybarnes\WebmentionsParser\Exceptions\AuthorshipParserException;
 
@@ -55,12 +56,10 @@ class SaveProfileImage implements ShouldQueue
             && parse_url($photo, PHP_URL_HOST) !== 'pbs.twimg.com'
             && parse_url($photo, PHP_URL_HOST) !== 'twitter.com'
         ) {
-            $client = resolve(Client::class);
-
             try {
-                $response = $client->get($photo);
-                $image = $response->getBody();
-            } catch (RequestException) {
+                $response = Http::throw()->get($photo);
+                $image = $response->body();
+            } catch (ConnectionException|RequestException) {
                 // we are opening and reading the default image so that
                 $default = public_path().'/assets/profile-images/default-image';
                 $handle = fopen($default, 'rb');

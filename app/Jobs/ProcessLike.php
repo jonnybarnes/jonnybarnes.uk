@@ -5,14 +5,13 @@ declare(strict_types=1);
 namespace App\Jobs;
 
 use App\Models\Like;
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Http;
 use Jonnybarnes\WebmentionsParser\Authorship;
 use Jonnybarnes\WebmentionsParser\Exceptions\AuthorshipParserException;
 
@@ -32,13 +31,11 @@ class ProcessLike implements ShouldQueue
 
     /**
      * Execute the job.
-     *
-     * @throws GuzzleException
      */
-    public function handle(Client $client, Authorship $authorship): int
+    public function handle(Authorship $authorship): int
     {
-        $response = $client->request('GET', $this->like->url);
-        $mf2 = \Mf2\parse((string) $response->getBody(), $this->like->url);
+        $response = Http::throw()->get($this->like->url);
+        $mf2 = \Mf2\parse($response->body(), $this->like->url);
         if (Arr::has($mf2, 'items.0.properties.content')) {
             $this->like->content = $mf2['items'][0]['properties']['content'][0]['html'];
         }

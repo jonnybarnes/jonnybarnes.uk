@@ -6,11 +6,11 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Contact;
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\BadResponseException;
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Http\Client\RequestException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Http;
 use Illuminate\View\View;
 
 class ContactsController extends Controller
@@ -113,14 +113,13 @@ class ContactsController extends Controller
         $avatar = null;
         $contact = Contact::findOrFail($contactId);
         if ($contact->homepage !== null && mb_strlen($contact->homepage) !== 0) {
-            $client = resolve(Client::class);
             try {
-                $response = $client->get($contact->homepage);
-            } catch (BadResponseException $e) {
+                $response = Http::throw()->get($contact->homepage);
+            } catch (RequestException $e) {
                 return redirect('/admin/contacts/'.$contactId.'/edit')
                     ->with('error', 'Bad resposne from contact’s homepage');
             }
-            $mf2 = \Mf2\parse((string) $response->getBody(), $contact->homepage);
+            $mf2 = \Mf2\parse($response->body(), $contact->homepage);
             foreach ($mf2['items'] as $microformat) {
                 if (Arr::get($microformat, 'type.0') === 'h-card') {
                     $avatarURL = Arr::get($microformat, 'properties.photo.0.value');
@@ -129,8 +128,8 @@ class ContactsController extends Controller
             }
             if ($avatarURL !== null) {
                 try {
-                    $avatar = $client->get($avatarURL);
-                } catch (BadResponseException $e) {
+                    $avatar = Http::throw()->get($avatarURL);
+                } catch (RequestException $e) {
                     return redirect('/admin/contacts/'.$contactId.'/edit')
                         ->with('error', 'Unable to download avatar');
                 }
@@ -141,7 +140,7 @@ class ContactsController extends Controller
                 if ($filesystem->isDirectory($directory) === false) {
                     $filesystem->makeDirectory($directory);
                 }
-                $filesystem->put($directory.'/image', $avatar->getBody());
+                $filesystem->put($directory.'/image', $avatar->body());
 
                 return view('admin.contacts.getavatarsuccess', [
                     'homepage' => parse_url($contact->homepage, PHP_URL_HOST),

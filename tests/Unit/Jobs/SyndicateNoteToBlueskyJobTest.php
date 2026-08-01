@@ -5,12 +5,9 @@ namespace Tests\Unit\Jobs;
 use App\Jobs\SyndicateNoteToBluesky;
 use App\Models\Note;
 use Faker\Factory;
-use GuzzleHttp\Client;
-use GuzzleHttp\Handler\MockHandler;
-use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Middleware;
-use GuzzleHttp\Psr7\Response;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\Client\Request;
+use Illuminate\Support\Facades\Http;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
@@ -24,19 +21,17 @@ class SyndicateNoteToBlueskyJobTest extends TestCase
         $faker = Factory::create();
         $randomNumber = $faker->randomNumber();
         $blueskyUrl = 'https://bsky.app/profile/jonnybarnes.uk/'.$randomNumber;
-        $mock = new MockHandler([
-            new Response(201, ['Content-Type' => 'application/json'], json_encode([
+        Http::fake([
+            'brid.gy/*' => Http::response([
                 'url' => $blueskyUrl,
                 'id' => (string) $randomNumber,
                 'type' => ['h-entry'],
-            ])),
+            ], 201),
         ]);
-        $handler = HandlerStack::create($mock);
-        $client = new Client(['handler' => $handler]);
 
         $note = Note::factory()->create();
         $job = new SyndicateNoteToBluesky($note);
-        $job->handle($client);
+        $job->handle();
 
         $this->assertDatabaseHas('notes', [
             'bluesky_url' => $blueskyUrl,
@@ -46,39 +41,31 @@ class SyndicateNoteToBlueskyJobTest extends TestCase
     #[Test]
     public function we_post_the_correct_source_and_target(): void
     {
-        $container = [];
-        $history = Middleware::history($container);
-        $mock = new MockHandler([
-            new Response(201, ['Content-Type' => 'application/json'], json_encode([
+        Http::fake([
+            'brid.gy/*' => Http::response([
                 'url' => 'https://bsky.app/profile/jonnybarnes.uk/1',
-            ])),
+            ], 201),
         ]);
-        $handler = HandlerStack::create($mock);
-        $handler->push($history);
-        $client = new Client(['handler' => $handler]);
 
         $note = Note::factory()->create(['note' => 'This is a **test**']);
         $job = new SyndicateNoteToBluesky($note);
-        $job->handle($client);
+        $job->handle();
 
-        $request = $container[0]['request'];
-        $body = [];
-        parse_str((string) $request->getBody(), $body);
-
-        $this->assertSame('https://brid.gy/publish/webmention', (string) $request->getUri());
-        $this->assertSame($note->uri, $body['source']);
-        $this->assertSame('https://brid.gy/publish/bluesky', $body['target']);
+        Http::assertSent(function (Request $request) use ($note) {
+            return $request->url() === 'https://brid.gy/publish/webmention'
+                && $request['source'] === $note->uri
+                && $request['target'] === 'https://brid.gy/publish/bluesky';
+        });
     }
 
     #[Test]
     public function a_bridgy_failure_throws_and_does_not_set_bluesky_url(): void
     {
-        $mock = new MockHandler([
-            new Response(400, ['Content-Type' => 'application/json'], json_encode([
+        Http::fake([
+            'brid.gy/*' => Http::response([
                 'error' => 'Could not find target link',
-            ])),
+            ], 400),
         ]);
-        $client = new Client(['handler' => HandlerStack::create($mock)]);
 
         $note = Note::factory()->create();
         $job = new SyndicateNoteToBluesky($note);
@@ -86,7 +73,7 @@ class SyndicateNoteToBlueskyJobTest extends TestCase
         $this->expectException(\RuntimeException::class);
 
         try {
-            $job->handle($client);
+            $job->handle();
         } finally {
             $this->assertDatabaseHas('notes', [
                 'id' => $note->id,

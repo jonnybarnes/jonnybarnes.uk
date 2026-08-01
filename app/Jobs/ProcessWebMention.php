@@ -7,13 +7,12 @@ namespace App\Jobs;
 use App\Exceptions\RemoteContentNotFoundException;
 use App\Models\Note;
 use App\Models\WebMention;
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\GuzzleException;
-use GuzzleHttp\Exception\RequestException;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Http;
 use Jonnybarnes\WebmentionsParser\Exceptions\InvalidMentionException;
 use Jonnybarnes\WebmentionsParser\Parser;
 use Mf2;
@@ -36,18 +35,20 @@ class ProcessWebMention implements ShouldQueue
      * Execute the job.
      *
      * @throws RemoteContentNotFoundException
-     * @throws GuzzleException
      * @throws InvalidMentionException
      */
-    public function handle(Parser $parser, Client $guzzle): void
+    public function handle(Parser $parser): void
     {
         try {
-            $response = $guzzle->request('GET', $this->source);
-        } catch (RequestException $e) {
+            $response = Http::get($this->source);
+        } catch (ConnectionException) {
             throw new RemoteContentNotFoundException;
         }
-        $this->saveRemoteContent((string) $response->getBody(), $this->source);
-        $microformats = Mf2\parse((string) $response->getBody(), $this->source);
+        if ($response->failed()) {
+            throw new RemoteContentNotFoundException;
+        }
+        $this->saveRemoteContent($response->body(), $this->source);
+        $microformats = Mf2\parse($response->body(), $this->source);
         $webmentions = WebMention::where('source', $this->source)->get();
         foreach ($webmentions as $webmention) {
             // check webmention still references target

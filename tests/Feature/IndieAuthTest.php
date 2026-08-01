@@ -5,14 +5,11 @@ declare(strict_types=1);
 namespace Tests\Feature;
 
 use App\Models\User;
-use GuzzleHttp\Client;
-use GuzzleHttp\Handler\MockHandler;
-use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\Uri;
 use GuzzleHttp\Psr7\UriResolver;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Http;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
@@ -269,12 +266,9 @@ class IndieAuthTest extends TestCase
         </html>
         HTML;
 
-        $mockHandler = new MockHandler([
-            new Response(200, [], $appPageHtml),
+        Http::fake([
+            '*' => Http::response($appPageHtml, 200),
         ]);
-        $handlerStack = HandlerStack::create($mockHandler);
-        $mockGuzzleClient = new Client(['handler' => $handlerStack]);
-        $this->app->instance(Client::class, $mockGuzzleClient);
 
         $user = User::factory()->make();
         $url = url()->query('/auth', [
@@ -313,12 +307,9 @@ class IndieAuthTest extends TestCase
         </html>
         HTML;
 
-        $mockHandler = new MockHandler([
-            new Response(200, [], $appPageHtml),
+        Http::fake([
+            '*' => Http::response($appPageHtml, 200),
         ]);
-        $handlerStack = HandlerStack::create($mockHandler);
-        $mockGuzzleClient = new Client(['handler' => $handlerStack]);
-        $this->app->instance(Client::class, $mockGuzzleClient);
 
         $user = User::factory()->make();
         $url = url()->query('/auth', [

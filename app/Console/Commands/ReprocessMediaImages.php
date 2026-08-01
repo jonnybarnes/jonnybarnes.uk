@@ -6,9 +6,9 @@ namespace App\Console\Commands;
 
 use App\Models\Media;
 use Illuminate\Console\Command;
+use Illuminate\Image\ImageException;
+use Illuminate\Support\Facades\Image;
 use Illuminate\Support\Facades\Storage;
-use Intervention\Image\Exceptions\DecoderException;
-use Intervention\Image\ImageManager;
 
 class ReprocessMediaImages extends Command
 {
@@ -16,7 +16,7 @@ class ReprocessMediaImages extends Command
 
     protected $description = 'Regenerate medium and small image variants using correct aspect-ratio scaling';
 
-    public function handle(ImageManager $manager): void
+    public function handle(): void
     {
         $media = Media::where('type', 'image')
             ->whereNotNull('image_widths')
@@ -44,10 +44,10 @@ class ReprocessMediaImages extends Command
 
             $this->info("Processing: {$path}");
 
+            $image = Image::fromStorage($path, 'public');
             try {
-                $file = Storage::disk('public')->get($path);
-                $image = $manager->read($file);
-            } catch (DecoderException) {
+                $image->width();
+            } catch (ImageException) {
                 $this->warn('  Could not decode image, skipping.');
 
                 continue;
@@ -57,11 +57,8 @@ class ReprocessMediaImages extends Command
             $extension = array_pop($filenameParts);
             $basename = trim(implode('.', $filenameParts), '.');
 
-            $medium = $image->scale(width: 1000);
-            Storage::disk('public')->put($basename.'-medium.'.$extension, (string) $medium->encode());
-
-            $small = $image->scale(width: 500);
-            Storage::disk('public')->put($basename.'-small.'.$extension, (string) $small->encode());
+            Storage::disk('public')->put($basename.'-medium.'.$extension, $image->scale(width: 1000)->toBytes());
+            Storage::disk('public')->put($basename.'-small.'.$extension, $image->scale(width: 500)->toBytes());
 
             $this->info('  Done.');
         }

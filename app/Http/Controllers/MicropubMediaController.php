@@ -13,9 +13,10 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Image\ImageException;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Image;
 use Illuminate\Support\Facades\Storage;
-use Intervention\Image\ImageManager;
 use Ramsey\Uuid\Uuid;
 
 class MicropubMediaController extends Controller
@@ -111,12 +112,9 @@ class MicropubMediaController extends Controller
 
         $filename = Storage::disk('local')->putFile('media', $file);
 
-        /** @var ImageManager $manager */
-        $manager = resolve(ImageManager::class);
         try {
-            $image = $manager->read($request->file('file'));
-            $width = $image->width();
-        } catch (Exception) {
+            $width = Image::fromUpload($request->file('file'))->width();
+        } catch (ImageException) {
             // not an image
             $width = null;
         }

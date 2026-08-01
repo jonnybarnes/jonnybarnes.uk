@@ -2,15 +2,11 @@
 
 namespace App\Providers;
 
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\ConnectException;
-use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Middleware;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
-use Intervention\Image\ImageManager;
 use Lcobucci\JWT\Configuration;
 use Lcobucci\JWT\Signer\Hmac\Sha256;
 use Lcobucci\JWT\Signer\Key\InMemory;
@@ -33,11 +29,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // configure Intervention/Image
-        $this->app->bind('Intervention\Image\ImageManager', function () {
-            return ImageManager::withDriver(config('image.driver'));
-        });
-
         /**
          * Paginate a standard Laravel Collection.
          *
@@ -82,39 +73,10 @@ class AppServiceProvider extends ServiceProvider
             );
         });
 
-        // Configure Guzzle
-        $this->app->bind('RetryGuzzle', function () {
-            $handlerStack = HandlerStack::create();
-            $handlerStack->push(Middleware::retry(
-                function ($retries, $request, $response, $exception) {
-                    // Limit the number of retries to 5
-                    if ($retries >= 5) {
-                        return false;
-                    }
-
-                    // Retry connection exceptions
-                    if ($exception instanceof ConnectException) {
-                        return true;
-                    }
-
-                    // Retry on server errors
-                    if ($response && $response->getStatusCode() >= 500) {
-                        return true;
-                    }
-
-                    // Finally for CloudConvert, retry if status is not final
-                    return json_decode($response, false, 512, JSON_THROW_ON_ERROR)->data->status !== 'finished';
-                },
-                function () {
-                    // Retry after 1 second
-                    return 1000;
-                }
-            ));
-
-            return new Client(['handler' => $handlerStack]);
-        });
-
         // Turn on Eloquent strict mode when developing
         Model::shouldBeStrict(! $this->app->isProduction());
+
+        // Force HTTPS URL generation in production
+        URL::forceHttps($this->app->isProduction());
     }
 }

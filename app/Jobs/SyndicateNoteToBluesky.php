@@ -5,13 +5,12 @@ declare(strict_types=1);
 namespace App\Jobs;
 
 use App\Models\Note;
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Http;
 
 class SyndicateNoteToBluesky implements ShouldQueue
 {
@@ -31,29 +30,18 @@ class SyndicateNoteToBluesky implements ShouldQueue
 
     /**
      * Execute the job.
-     *
-     * @throws GuzzleException
      */
-    public function handle(Client $guzzle): void
+    public function handle(): void
     {
-        $response = $guzzle->request(
-            'POST',
-            'https://brid.gy/publish/webmention',
-            [
-                'headers' => [
-                    'Accept' => 'application/json',
-                ],
-                'form_params' => [
-                    'source' => $this->note->uri,
-                    'target' => 'https://brid.gy/publish/bluesky',
-                ],
-                'http_errors' => false,
-            ]
-        );
+        // no ->throw()/->retry() here — Bridgy would duplicate-publish on retry, see $tries above
+        $response = Http::acceptJson()->asForm()->post('https://brid.gy/publish/webmention', [
+            'source' => $this->note->uri,
+            'target' => 'https://brid.gy/publish/bluesky',
+        ]);
 
-        $body = json_decode((string) $response->getBody(), true);
+        $body = $response->json();
 
-        if ($response->getStatusCode() === 201) {
+        if ($response->status() === 201) {
             $this->note->bluesky_url = $body['url'];
             $this->note->save();
 
@@ -61,7 +49,7 @@ class SyndicateNoteToBluesky implements ShouldQueue
         }
 
         throw new \RuntimeException(
-            'Bridgy publish to Bluesky failed: '.($body['error'] ?? (string) $response->getBody())
+            'Bridgy publish to Bluesky failed: '.($body['error'] ?? $response->body())
         );
     }
 }

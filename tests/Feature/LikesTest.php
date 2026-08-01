@@ -6,11 +6,8 @@ namespace Tests\Feature;
 
 use App\Jobs\ProcessLike;
 use App\Models\Like;
-use GuzzleHttp\Client;
-use GuzzleHttp\Handler\MockHandler;
-use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Psr7\Response;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Queue;
 use Jonnybarnes\WebmentionsParser\Authorship;
 use PHPUnit\Framework\Attributes\Test;
@@ -98,18 +95,12 @@ class LikesTest extends TestCase
         </html>
         END;
 
-        $mock = new MockHandler([
-            new Response(200, [], $content),
-            new Response(200, [], $content),
+        Http::fake([
+            '*' => Http::response($content, 200),
         ]);
-        $handler = HandlerStack::create($mock);
-        $client = new Client(['handler' => $handler]);
-        $this->app->bind(Client::class, function () use ($client) {
-            return $client;
-        });
         $authorship = new Authorship;
 
-        $job->handle($client, $authorship);
+        $job->handle($authorship);
 
         $this->assertEquals('Fred Bloggs', Like::find($id)->author_name);
     }
@@ -141,18 +132,12 @@ class LikesTest extends TestCase
         </html>
         END;
 
-        $mock = new MockHandler([
-            new Response(200, [], $content),
-            new Response(200, [], $content),
+        Http::fake([
+            '*' => Http::response($content, 200),
         ]);
-        $handler = HandlerStack::create($mock);
-        $client = new Client(['handler' => $handler]);
-        $this->app->bind(Client::class, function () use ($client) {
-            return $client;
-        });
         $authorship = new Authorship;
 
-        $job->handle($client, $authorship);
+        $job->handle($authorship);
 
         $this->assertEquals('Fred Bloggs', Like::find($id)->author_name);
     }
@@ -177,18 +162,12 @@ class LikesTest extends TestCase
         </html>
         END;
 
-        $mock = new MockHandler([
-            new Response(200, [], $content),
-            new Response(200, [], $content),
+        Http::fake([
+            '*' => Http::response($content, 200),
         ]);
-        $handler = HandlerStack::create($mock);
-        $client = new Client(['handler' => $handler]);
-        $this->app->bind(Client::class, function () use ($client) {
-            return $client;
-        });
         $authorship = new Authorship;
 
-        $job->handle($client, $authorship);
+        $job->handle($authorship);
 
         $this->assertNull(Like::find($id)->author_name);
     }
