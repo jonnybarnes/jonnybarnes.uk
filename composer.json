@@ -15,7 +15,7 @@
         "ext-sodium": "*",
         "cviebrock/eloquent-sluggable": "^13.0",
         "indieauth/client": "^1.1",
-        "intervention/image": "^3",
+        "intervention/image": "^4.0",
         "jonnybarnes/indieweb": "~0.2",
         "jonnybarnes/webmentions-parser": "~0.5",
         "laravel/framework": "^13.0",

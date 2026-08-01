@@ -7,11 +7,11 @@ namespace App\Jobs;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Image\ImageException;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Image;
 use Illuminate\Support\Facades\Storage;
-use Intervention\Image\Exceptions\DecoderException;
-use Intervention\Image\ImageManager;
 
 class ProcessMedia implements ShouldQueue
 {
@@ -30,15 +30,16 @@ class ProcessMedia implements ShouldQueue
     /**
      * Execute the job.
      */
-    public function handle(ImageManager $manager): void
+    public function handle(): void
     {
         // Load file
         $file = Storage::disk('local')->get($this->filename);
 
         // Open file
+        $image = Image::fromStorage($this->filename, 'local');
         try {
-            $image = $manager->read($file);
-        } catch (DecoderException) {
+            $width = $image->width();
+        } catch (ImageException) {
             // not an image; delete file and end job
             Storage::disk('local')->delete($this->filename);
 
@@ -49,18 +50,15 @@ class ProcessMedia implements ShouldQueue
         Storage::disk('public')->put($this->filename, $file);
 
         // Create smaller versions if necessary
-        if ($image->width() > 1000) {
+        if ($width > 1000) {
             $filenameParts = explode('.', $this->filename);
             $extension = array_pop($filenameParts);
             // the following achieves this data flow
             // foo.bar.png => ['foo', 'bar', 'png'] => ['foo', 'bar'] => foo.bar
             $basename = trim(implode('.', $filenameParts), '.');
 
-            $medium = $image->scale(width: 1000);
-            Storage::disk('public')->put($basename.'-medium.'.$extension, (string) $medium->encode());
-
-            $small = $image->scale(width: 500);
-            Storage::disk('public')->put($basename.'-small.'.$extension, (string) $small->encode());
+            Storage::disk('public')->put($basename.'-medium.'.$extension, $image->scale(width: 1000)->toBytes());
+            Storage::disk('public')->put($basename.'-small.'.$extension, $image->scale(width: 500)->toBytes());
         }
 
         // Now we can delete the locally saved image

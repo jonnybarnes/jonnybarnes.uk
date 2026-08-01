@@ -7,7 +7,6 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
-use Intervention\Image\ImageManager;
 use Lcobucci\JWT\Configuration;
 use Lcobucci\JWT\Signer\Hmac\Sha256;
 use Lcobucci\JWT\Signer\Key\InMemory;
@@ -30,11 +29,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // configure Intervention/Image
-        $this->app->bind('Intervention\Image\ImageManager', function () {
-            return ImageManager::withDriver(config('image.driver'));
-        });
-
         /**
          * Paginate a standard Laravel Collection.
          *

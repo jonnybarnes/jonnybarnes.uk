@@ -6,7 +6,6 @@ namespace Tests\Unit\Jobs;
 
 use App\Jobs\ProcessMedia;
 use Illuminate\Support\Facades\Storage;
-use Intervention\Image\ImageManager;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
@@ -15,10 +14,9 @@ class ProcessMediaJobTest extends TestCase
     #[Test]
     public function non_media_files_are_not_saved(): void
     {
-        $manager = app()->make(ImageManager::class);
         Storage::disk('local')->put('media/file.txt', 'This is not an image');
-        $job = new ProcessMedia('file.txt');
-        $job->handle($manager);
+        $job = new ProcessMedia('media/file.txt');
+        $job->handle();
 
         $this->assertFileDoesNotExist(storage_path('app/media/').'file.txt');
     }
@@ -26,10 +24,9 @@ class ProcessMediaJobTest extends TestCase
     #[Test]
     public function small_images_are_not_resized(): void
     {
-        $manager = app()->make(ImageManager::class);
         Storage::disk('local')->put('media/aaron.png', file_get_contents(__DIR__.'/../../aaron.png'));
-        $job = new ProcessMedia('aaron.png');
-        $job->handle($manager);
+        $job = new ProcessMedia('media/aaron.png');
+        $job->handle();
 
         $this->assertFileDoesNotExist(storage_path('app/media/').'aaron.png');
 
@@ -41,10 +38,9 @@ class ProcessMediaJobTest extends TestCase
     #[Test]
     public function large_images_have_smaller_images_created(): void
     {
-        $manager = app()->make(ImageManager::class);
         Storage::disk('local')->put('media/test-image.jpg', file_get_contents(__DIR__.'/../../test-image.jpg'));
         $job = new ProcessMedia('media/test-image.jpg');
-        $job->handle($manager);
+        $job->handle();
 
         // These need to look in public disk
         Storage::disk('public')->assertExists('media/test-image.jpg');
