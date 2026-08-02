@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Unit\Jobs;
 
 use App\Exceptions\RemoteContentNotFoundException;
+use App\Jobs\NotifyBrrrOfWebMention;
 use App\Jobs\ProcessWebMention;
 use App\Jobs\SaveProfileImage;
 use App\Models\Note;
@@ -71,6 +72,7 @@ class ProcessWebMentionJobTest extends TestCase
         $job->handle($parser);
 
         Queue::assertPushed(SaveProfileImage::class);
+        Queue::assertPushed(NotifyBrrrOfWebMention::class);
         $this->assertDatabaseHas('webmentions', [
             'source' => $source,
             'type' => 'like-of',
@@ -104,6 +106,7 @@ class ProcessWebMentionJobTest extends TestCase
         $job->handle($parser);
 
         Queue::assertPushed(SaveProfileImage::class);
+        Queue::assertNotPushed(NotifyBrrrOfWebMention::class);
         $this->assertDatabaseHas('webmentions', [
             'source' => $source,
             'type' => 'in-reply-to',
@@ -206,6 +209,7 @@ class ProcessWebMentionJobTest extends TestCase
         $job = new ProcessWebMention($note, $source);
         $job->handle($parser);
 
+        Queue::assertPushed(NotifyBrrrOfWebMention::class);
         $this->assertGreaterThan(255, strlen($source));
         $this->assertDatabaseHas('webmentions', [
             'source' => $source,
