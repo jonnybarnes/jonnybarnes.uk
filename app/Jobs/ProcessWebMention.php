@@ -96,6 +96,7 @@ class ProcessWebMention implements ShouldQueue
         $webmention->type = $type;
         $webmention->mf2 = json_encode($microformats);
         $webmention->save();
+        dispatch(new NotifyBrrrOfWebMention($webmention));
     }
 
     /**

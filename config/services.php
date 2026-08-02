@@ -39,4 +39,8 @@ return [
         'token' => env('CLOUDCONVERT_API_TOKEN'),
     ],
 
+    'brrr' => [
+        'webhook_url' => env('BRRR_WEBHOOK_URL'),
+    ],
+
 ];
