@@ -35,9 +35,7 @@ class VerifyMicropubToken
             ], 401);
         }
 
-        $token = MicropubToken::where('token_hash', hash('sha256', $rawToken))
-            ->whereNull('revoked_at')
-            ->first();
+        $token = MicropubToken::findActive($rawToken);
 
         if (! $token) {
             $micropubResponses = new MicropubResponses;

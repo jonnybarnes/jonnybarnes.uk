@@ -26,9 +26,9 @@ class IndieAuthController extends Controller
             'authorization_endpoint' => route('indieauth.start'),
             'token_endpoint' => route('indieauth.token'),
             'revocation_endpoint' => route('indieauth.revocation'),
+            'introspection_endpoint' => route('indieauth.introspection'),
+            'introspection_endpoint_auth_methods_supported' => ['Bearer'],
             'code_challenge_methods_supported' => ['S256'],
-            // 'introspection_endpoint' => route('indieauth.introspection'),
-            // 'introspection_endpoint_auth_methods_supported' => ['none'],
         ]);
     }
 
@@ -188,16 +188,40 @@ class IndieAuthController extends Controller
      */
     public function processRevocationRequest(Request $request): JsonResponse
     {
-        $token = $request->get('token', '');
-
-        if ($token !== '') {
-            MicropubToken::where('token_hash', hash('sha256', $token))
-                ->whereNull('revoked_at')
-                ->first()
-                ?->revoke();
-        }
+        MicropubToken::findActive($request->get('token', ''))?->revoke();
 
         return response()->json([], 200);
+    }
+
+    /**
+     * Process a POST request to the IndieAuth token introspection endpoint
+     * (RFC 7662, extended by IndieAuth to require the `me` property).
+     *
+     * The caller must itself present a currently-active token as a Bearer
+     * credential to use this endpoint, per spec ("MUST also require some
+     * form of authorization"). Per spec, an inactive token being introspected
+     * still gets a 200 response containing only `active: false` - no other
+     * information about why it's inactive is given.
+     */
+    public function processIntrospectionRequest(Request $request): JsonResponse
+    {
+        if (! MicropubToken::findActive((string) $request->bearerToken())) {
+            return response()->json([], 401);
+        }
+
+        $token = MicropubToken::findActive((string) $request->get('token', ''));
+
+        if (! $token) {
+            return response()->json(['active' => false]);
+        }
+
+        return response()->json([
+            'active' => true,
+            'me' => $token->me,
+            'client_id' => $token->client_id,
+            'scope' => $token->scope,
+            'iat' => $token->created_at->timestamp,
+        ]);
     }
 
     protected function isValidRedirectUri(string $clientId, string $redirectUri): bool

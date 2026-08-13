@@ -719,4 +719,80 @@ class IndieAuthTest extends TestCase
 
         $response->assertStatus(200);
     }
+
+    #[Test]
+    public function introspection_requires_a_bearer_token(): void
+    {
+        $response = $this->post('/introspect', ['token' => 'irrelevant']);
+
+        $response->assertStatus(401);
+    }
+
+    #[Test]
+    public function introspection_rejects_a_revoked_bearer_token(): void
+    {
+        $callerToken = resolve(TokenService::class)->getNewToken([
+            'me' => config('app.url'),
+            'client_id' => 'https://app.example.com',
+            'scope' => 'create',
+        ]);
+        MicropubToken::where('token_hash', hash('sha256', $callerToken))->firstOrFail()->revoke();
+
+        $response = $this->post(
+            '/introspect',
+            ['token' => 'irrelevant'],
+            ['HTTP_Authorization' => 'Bearer '.$callerToken]
+        );
+
+        $response->assertStatus(401);
+    }
+
+    #[Test]
+    public function introspection_returns_active_details_for_a_valid_token(): void
+    {
+        $callerToken = resolve(TokenService::class)->getNewToken([
+            'me' => config('app.url'),
+            'client_id' => 'https://app.example.com',
+            'scope' => 'create',
+        ]);
+        $subjectToken = resolve(TokenService::class)->getNewToken([
+            'me' => 'https://someone-else.example.com',
+            'client_id' => 'https://quill.p3k.io',
+            'scope' => 'create update',
+        ]);
+
+        $response = $this->post(
+            '/introspect',
+            ['token' => $subjectToken],
+            ['HTTP_Authorization' => 'Bearer '.$callerToken]
+        );
+
+        $response->assertStatus(200);
+        $response->assertJson([
+            'active' => true,
+            'me' => 'https://someone-else.example.com',
+            'client_id' => 'https://quill.p3k.io',
+            'scope' => 'create update',
+        ]);
+        $response->assertJsonStructure(['iat']);
+    }
+
+    #[Test]
+    public function introspection_returns_only_active_false_for_an_unknown_token(): void
+    {
+        $callerToken = resolve(TokenService::class)->getNewToken([
+            'me' => config('app.url'),
+            'client_id' => 'https://app.example.com',
+            'scope' => 'create',
+        ]);
+
+        $response = $this->post(
+            '/introspect',
+            ['token' => bin2hex(random_bytes(32))],
+            ['HTTP_Authorization' => 'Bearer '.$callerToken]
+        );
+
+        $response->assertStatus(200);
+        $response->assertExactJson(['active' => false]);
+    }
 }

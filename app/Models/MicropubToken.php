@@ -25,6 +25,20 @@ class MicropubToken extends Model
         $this->forceFill(['revoked_at' => now()])->save();
     }
 
+    /**
+     * Find the active (non-revoked) token matching a raw bearer token string.
+     */
+    public static function findActive(string $rawToken): ?self
+    {
+        if ($rawToken === '') {
+            return null;
+        }
+
+        return self::where('token_hash', hash('sha256', $rawToken))
+            ->whereNull('revoked_at')
+            ->first();
+    }
+
     protected function isRevoked(): Attribute
     {
         return Attribute::make(
