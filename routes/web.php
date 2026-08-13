@@ -205,6 +205,7 @@ Route::get('auth', [IndieAuthController::class, 'start'])->middleware(MyAuthMidd
 Route::post('auth/confirm', [IndieAuthController::class, 'confirm'])->middleware(MyAuthMiddleware::class);
 Route::post('auth', [IndieAuthController::class, 'processCodeExchange']);
 Route::post('token', [IndieAuthController::class, 'processTokenRequest'])->name('indieauth.token');
+Route::post('revocation', [IndieAuthController::class, 'processRevocationRequest'])->name('indieauth.revocation');
 
 // Micropub Endpoints
 Route::get('api/post', [MicropubController::class, 'get'])->middleware(VerifyMicropubToken::class);

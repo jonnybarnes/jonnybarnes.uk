@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Models\MicropubToken;
 use App\Services\TokenService;
 use GuzzleHttp\Psr7\Uri;
 use Illuminate\Http\JsonResponse;
@@ -24,6 +25,7 @@ class IndieAuthController extends Controller
             'issuer' => config('app.url'),
             'authorization_endpoint' => route('indieauth.start'),
             'token_endpoint' => route('indieauth.token'),
+            'revocation_endpoint' => route('indieauth.revocation'),
             'code_challenge_methods_supported' => ['S256'],
             // 'introspection_endpoint' => route('indieauth.introspection'),
             // 'introspection_endpoint_auth_methods_supported' => ['none'],
@@ -176,6 +178,26 @@ class IndieAuthController extends Controller
             'scope' => $indieAuthData['scope'],
             'me' => config('app.url'),
         ]);
+    }
+
+    /**
+     * Process a POST request to the IndieAuth revocation endpoint (RFC 7009).
+     *
+     * Per spec this always returns HTTP 200, whether the token was revoked,
+     * unknown, or already revoked, so callers can't probe token validity.
+     */
+    public function processRevocationRequest(Request $request): JsonResponse
+    {
+        $token = $request->get('token', '');
+
+        if ($token !== '') {
+            MicropubToken::where('token_hash', hash('sha256', $token))
+                ->whereNull('revoked_at')
+                ->first()
+                ?->revoke();
+        }
+
+        return response()->json([], 200);
     }
 
     protected function isValidRedirectUri(string $clientId, string $redirectUri): bool

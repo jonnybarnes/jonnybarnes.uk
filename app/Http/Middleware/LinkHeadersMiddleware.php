@@ -17,6 +17,7 @@ class LinkHeadersMiddleware
         $response->header('Link', '<'.route('indieauth.metadata').'>; rel="indieauth-metadata"', false);
         $response->header('Link', '<'.route('indieauth.start').'>; rel="authorization_endpoint"', false);
         $response->header('Link', '<'.route('indieauth.token').'>; rel="token_endpoint"', false);
+        $response->header('Link', '<'.route('indieauth.revocation').'>; rel="revocation_endpoint"', false);
         $response->header('Link', '<'.route('micropub-endpoint').'>; rel="micropub"', false);
         $response->header('Link', '<'.route('webmention-endpoint').'>; rel="webmention"', false);
 

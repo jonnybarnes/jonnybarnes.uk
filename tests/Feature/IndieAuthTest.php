@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Tests\Feature;
 
+use App\Models\MicropubToken;
 use App\Models\User;
+use App\Services\TokenService;
 use GuzzleHttp\Psr7\Uri;
 use GuzzleHttp\Psr7\UriResolver;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -691,5 +693,30 @@ class IndieAuthTest extends TestCase
             'scope' => 'create update',
             'me' => config('app.url'),
         ]);
+    }
+
+    #[Test]
+    public function it_should_revoke_a_known_token(): void
+    {
+        $token = resolve(TokenService::class)->getNewToken([
+            'me' => config('app.url'),
+            'client_id' => 'https://app.example.com',
+            'scope' => 'create',
+        ]);
+
+        $response = $this->post('/revocation', ['token' => $token]);
+        $response->assertStatus(200);
+
+        $this->assertTrue(
+            MicropubToken::where('token_hash', hash('sha256', $token))->firstOrFail()->isRevoked
+        );
+    }
+
+    #[Test]
+    public function it_should_return200_for_an_unknown_token(): void
+    {
+        $response = $this->post('/revocation', ['token' => bin2hex(random_bytes(32))]);
+
+        $response->assertStatus(200);
     }
 }
