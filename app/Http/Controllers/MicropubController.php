@@ -15,7 +15,6 @@ use App\Services\Micropub\MicropubHandlerRegistry;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Lcobucci\JWT\Token;
 
 class MicropubController extends Controller
 {
@@ -135,7 +134,7 @@ class MicropubController extends Controller
         }
 
         // the default response is just to return the token data
-        /** @var Token $tokenData */
+        /** @var array $tokenData */
         $tokenData = $request->input('token_data');
 
         return response()->json([

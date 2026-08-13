@@ -22,7 +22,6 @@
         "laravel/horizon": "^5.0",
         "laravel/scout": "^10.1",
         "laravel/tinker": "^3.0",
-        "lcobucci/jwt": "^5.0",
         "league/commonmark": "^2.0",
         "league/flysystem-aws-s3-v3": "^3.0",
         "mf2/mf2": "~0.3",
