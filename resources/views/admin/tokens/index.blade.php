@@ -14,7 +14,7 @@
                 @if($token->isRevoked)
                     — revoked {{ $token->revoked_at->diffForHumans() }}
                 @else
-                    <form action="/admin/tokens/{{ $token->id }}/revoke" method="post" style="display:inline">
+                    <form action="/admin/tokens/{{ $token->id }}/revoke" method="post">
                         {{ csrf_field() }}
                         {{ method_field('PUT') }}
                         <button type="submit" name="revoke">Revoke</button>

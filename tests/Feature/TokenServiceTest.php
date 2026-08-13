@@ -71,4 +71,18 @@ class TokenServiceTest extends TestCase
             'error_description' => 'The provided token did not pass validation',
         ]);
     }
+
+    /**
+     * Request input for a "string" field can be sent as an array
+     * (e.g. token[]=a&token[]=b). Casting that to string throws in this app
+     * (warnings are promoted to exceptions), so findActive() must guard
+     * against it rather than assume its caller already validated the type.
+     */
+    #[Test]
+    public function find_active_treats_non_string_input_as_absent(): void
+    {
+        $this->assertNull(MicropubToken::findActive(['a', 'b']));
+        $this->assertNull(MicropubToken::findActive(null));
+        $this->assertNull(MicropubToken::findActive(123));
+    }
 }

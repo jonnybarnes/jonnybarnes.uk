@@ -188,7 +188,7 @@ class IndieAuthController extends Controller
      */
     public function processRevocationRequest(Request $request): JsonResponse
     {
-        MicropubToken::findActive($request->get('token', ''))?->revoke();
+        MicropubToken::findActive($request->get('token'))?->revoke();
 
         return response()->json([], 200);
     }
@@ -205,11 +205,11 @@ class IndieAuthController extends Controller
      */
     public function processIntrospectionRequest(Request $request): JsonResponse
     {
-        if (! MicropubToken::findActive((string) $request->bearerToken())) {
+        if (! MicropubToken::findActive($request->bearerToken())) {
             return response()->json([], 401);
         }
 
-        $token = MicropubToken::findActive((string) $request->get('token', ''));
+        $token = MicropubToken::findActive($request->get('token'));
 
         if (! $token) {
             return response()->json(['active' => false]);

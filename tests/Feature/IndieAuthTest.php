@@ -29,9 +29,10 @@ class IndieAuthTest extends TestCase
             'issuer' => config('app.url'),
             'authorization_endpoint' => route('indieauth.start'),
             'token_endpoint' => route('indieauth.token'),
+            'revocation_endpoint' => route('indieauth.revocation'),
+            'introspection_endpoint' => route('indieauth.introspection'),
+            'introspection_endpoint_auth_methods_supported' => ['Bearer'],
             'code_challenge_methods_supported' => ['S256'],
-            // 'introspection_endpoint' => 'introspection_endpoint',
-            // 'introspection_endpoint_auth_methods_supported' => ['none'],
         ]);
     }
 
@@ -789,6 +790,33 @@ class IndieAuthTest extends TestCase
         $response = $this->post(
             '/introspect',
             ['token' => bin2hex(random_bytes(32))],
+            ['HTTP_Authorization' => 'Bearer '.$callerToken]
+        );
+
+        $response->assertStatus(200);
+        $response->assertExactJson(['active' => false]);
+    }
+
+    #[Test]
+    public function revocation_does_not_error_on_an_array_shaped_token_param(): void
+    {
+        $response = $this->post('/revocation', ['token' => ['a', 'b']]);
+
+        $response->assertStatus(200);
+    }
+
+    #[Test]
+    public function introspection_does_not_error_on_an_array_shaped_token_param(): void
+    {
+        $callerToken = resolve(TokenService::class)->getNewToken([
+            'me' => config('app.url'),
+            'client_id' => 'https://app.example.com',
+            'scope' => 'create',
+        ]);
+
+        $response = $this->post(
+            '/introspect',
+            ['token' => ['a', 'b']],
             ['HTTP_Authorization' => 'Bearer '.$callerToken]
         );
 
