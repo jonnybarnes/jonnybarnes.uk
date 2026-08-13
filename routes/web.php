@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\NotesController as AdminNotesController;
 use App\Http\Controllers\Admin\PasskeysController;
 use App\Http\Controllers\Admin\PlacesController as AdminPlacesController;
 use App\Http\Controllers\Admin\SyndicationTargetsController;
+use App\Http\Controllers\Admin\TokensController;
 use App\Http\Controllers\ArticlesController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BookmarksController;
@@ -145,6 +146,12 @@ Route::middleware(MyAuthMiddleware::class)->prefix('admin')->group(function () {
         Route::get('/{clientId}/edit', [ClientsController::class, 'edit']);
         Route::put('/{clientId}', [ClientsController::class, 'update']);
         Route::delete('/{clientId}', [ClientsController::class, 'destroy']);
+    });
+
+    // Micropub Tokens
+    Route::prefix('tokens')->group(function () {
+        Route::get('/', [TokensController::class, 'index']);
+        Route::put('/{token}/revoke', [TokensController::class, 'revoke']);
     });
 
     // Bio
