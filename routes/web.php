@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\NotesController as AdminNotesController;
 use App\Http\Controllers\Admin\PasskeysController;
 use App\Http\Controllers\Admin\PlacesController as AdminPlacesController;
 use App\Http\Controllers\Admin\SyndicationTargetsController;
+use App\Http\Controllers\Admin\TokensController;
 use App\Http\Controllers\ArticlesController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BookmarksController;
@@ -147,6 +148,12 @@ Route::middleware(MyAuthMiddleware::class)->prefix('admin')->group(function () {
         Route::delete('/{clientId}', [ClientsController::class, 'destroy']);
     });
 
+    // Micropub Tokens
+    Route::prefix('tokens')->group(function () {
+        Route::get('/', [TokensController::class, 'index']);
+        Route::put('/{token}/revoke', [TokensController::class, 'revoke']);
+    });
+
     // Bio
     Route::prefix('bio')->group(function () {
         Route::get('/', [BioController::class, 'show'])->name('admin.bio.show');
@@ -205,6 +212,8 @@ Route::get('auth', [IndieAuthController::class, 'start'])->middleware(MyAuthMidd
 Route::post('auth/confirm', [IndieAuthController::class, 'confirm'])->middleware(MyAuthMiddleware::class);
 Route::post('auth', [IndieAuthController::class, 'processCodeExchange']);
 Route::post('token', [IndieAuthController::class, 'processTokenRequest'])->name('indieauth.token');
+Route::post('revocation', [IndieAuthController::class, 'processRevocationRequest'])->name('indieauth.revocation');
+Route::post('introspect', [IndieAuthController::class, 'processIntrospectionRequest'])->name('indieauth.introspection');
 
 // Micropub Endpoints
 Route::get('api/post', [MicropubController::class, 'get'])->middleware(VerifyMicropubToken::class);

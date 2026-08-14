@@ -27,9 +27,7 @@ class EntryHandler implements MicropubHandlerInterface
         assert($data instanceof EntryData);
 
         $scopes = $data->tokenData['scope'];
-        if (is_string($scopes)) {
-            $scopes = explode(' ', $scopes);
-        }
+        $scopes = explode(' ', $scopes);
 
         if (! in_array('create', $scopes, true)) {
             throw new InvalidTokenScopeException;

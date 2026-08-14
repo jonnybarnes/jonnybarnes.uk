@@ -2,53 +2,39 @@
 
 namespace Tests;
 
-use DateTimeImmutable;
-use Lcobucci\JWT\Configuration;
+use App\Services\TokenService;
 
 trait TestToken
 {
     public function getToken(): string
     {
-        $config = $this->app->make(Configuration::class);
-
-        return $config->builder()
-            ->issuedAt(new DateTimeImmutable)
-            ->withClaim('client_id', 'https://quill.p3k.io')
-            ->withClaim('me', 'http://jonnybarnes.localhost')
-            ->withClaim('scope', ['create', 'update'])
-            ->getToken($config->signer(), $config->signingKey())
-            ->toString();
+        return $this->app->make(TokenService::class)->getNewToken([
+            'client_id' => 'https://quill.p3k.io',
+            'me' => 'http://jonnybarnes.localhost',
+            'scope' => 'create update',
+        ]);
     }
 
     public function getTokenWithIncorrectScope(): string
     {
-        $config = $this->app->make(Configuration::class);
-
-        return $config->builder()
-            ->issuedAt(new DateTimeImmutable)
-            ->withClaim('client_id', 'https://quill.p3k.io')
-            ->withClaim('me', 'https://jonnybarnes.localhost')
-            ->withClaim('scope', 'view')
-            ->getToken($config->signer(), $config->signingKey())
-            ->toString();
+        return $this->app->make(TokenService::class)->getNewToken([
+            'client_id' => 'https://quill.p3k.io',
+            'me' => 'https://jonnybarnes.localhost',
+            'scope' => 'view',
+        ]);
     }
 
-    public function getTokenWithNoScope()
+    public function getTokenWithNoScope(): string
     {
-        $config = $this->app->make(Configuration::class);
-
-        return $config->builder()
-            ->issuedAt(new DateTimeImmutable)
-            ->withClaim('client_id', 'https://quill.p3k.io')
-            ->withClaim('me', 'https://jonnybarnes.localhost')
-            ->getToken($config->signer(), $config->signingKey())
-            ->toString();
+        return $this->app->make(TokenService::class)->getNewToken([
+            'client_id' => 'https://quill.p3k.io',
+            'me' => 'https://jonnybarnes.localhost',
+            'scope' => '',
+        ]);
     }
 
-    public function getInvalidToken()
+    public function getInvalidToken(): string
     {
-        $token = $this->getToken();
-
-        return substr($token, 0, -5);
+        return bin2hex(random_bytes(32));
     }
 }

@@ -7,10 +7,6 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
-use Lcobucci\JWT\Configuration;
-use Lcobucci\JWT\Signer\Hmac\Sha256;
-use Lcobucci\JWT\Signer\Key\InMemory;
-use Lcobucci\JWT\Validation\Constraint\SignedWith;
 use Symfony\Component\HtmlSanitizer\HtmlSanitizer;
 use Symfony\Component\HtmlSanitizer\HtmlSanitizerConfig;
 
@@ -51,17 +47,6 @@ class AppServiceProvider extends ServiceProvider
                     'pageName' => $pageName,
                 ]
             );
-        });
-
-        // Configure JWT builder
-        $this->app->bind('Lcobucci\JWT\Configuration', function () {
-            $key = InMemory::plainText(config('app.key'));
-
-            $config = Configuration::forSymmetricSigner(new Sha256, $key);
-
-            $config->setValidationConstraints(new SignedWith(new Sha256, $key));
-
-            return $config;
         });
 
         // Configure HtmlSanitizer

@@ -5,13 +5,9 @@ declare(strict_types=1);
 namespace App\Http\Middleware;
 
 use App\Http\Responses\MicropubResponses;
+use App\Models\MicropubToken;
 use Closure;
 use Illuminate\Http\Request;
-use Lcobucci\JWT\Configuration;
-use Lcobucci\JWT\Encoding\CannotDecodeContent;
-use Lcobucci\JWT\Token;
-use Lcobucci\JWT\Token\InvalidTokenStructure;
-use Lcobucci\JWT\Validation\RequiredConstraintsViolated;
 use Symfony\Component\HttpFoundation\Response;
 
 class VerifyMicropubToken
@@ -39,15 +35,15 @@ class VerifyMicropubToken
             ], 401);
         }
 
-        try {
-            $tokenData = $this->validateToken($rawToken);
-        } catch (RequiredConstraintsViolated|InvalidTokenStructure|CannotDecodeContent) {
+        $token = MicropubToken::findActive($rawToken);
+
+        if (! $token) {
             $micropubResponses = new MicropubResponses;
 
             return $micropubResponses->invalidTokenResponse();
         }
 
-        if ($tokenData->claims()->has('scope') === false) {
+        if ($token->scope === '') {
             $micropubResponses = new MicropubResponses;
 
             return $micropubResponses->tokenHasNoScopeResponse();
@@ -56,26 +52,10 @@ class VerifyMicropubToken
         return $next($request->merge([
             'access_token' => $rawToken,
             'token_data' => [
-                'me' => $tokenData->claims()->get('me'),
-                'scope' => $tokenData->claims()->get('scope'),
-                'client_id' => $tokenData->claims()->get('client_id'),
+                'me' => $token->me,
+                'scope' => $token->scope,
+                'client_id' => $token->client_id,
             ],
         ]));
-    }
-
-    /**
-     * Check the token signature is valid.
-     */
-    private function validateToken(string $bearerToken): Token
-    {
-        $config = resolve(Configuration::class);
-
-        $token = $config->parser()->parse($bearerToken);
-
-        $constraints = $config->validationConstraints();
-
-        $config->validator()->assert($token, ...$constraints);
-
-        return $token;
     }
 }

@@ -17,8 +17,10 @@ return Application::configure(basePath: dirname(__DIR__))
             ->append(LinkHeadersMiddleware::class)
             ->preventRequestForgery(
                 except: [
-                    'auth',  // This is the IndieAuth auth endpoint
-                    'token', // This is the IndieAuth token endpoint
+                    'auth',       // This is the IndieAuth auth endpoint
+                    'token',      // This is the IndieAuth token endpoint
+                    'revocation', // This is the IndieAuth revocation endpoint
+                    'introspect', // This is the IndieAuth introspection endpoint
                     'api/post',
                     'api/media',
                     'micropub/places',

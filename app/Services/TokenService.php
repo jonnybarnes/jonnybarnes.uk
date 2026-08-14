@@ -5,28 +5,26 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Jobs\AddClientToDatabase;
-use DateTimeImmutable;
-use Lcobucci\JWT\Configuration;
+use App\Models\MicropubToken;
 
 class TokenService
 {
     /**
-     * Generate a JWT token.
+     * Generate a new bearer token.
      */
     public function getNewToken(array $data): string
     {
-        $config = resolve(Configuration::class);
+        $token = rtrim(strtr(base64_encode(random_bytes(32)), '+/', '-_'), '=');
 
-        $token = $config->builder()
-            ->issuedAt(new DateTimeImmutable)
-            ->withClaim('client_id', $data['client_id'])
-            ->withClaim('me', $data['me'])
-            ->withClaim('scope', $data['scope'])
-            ->withClaim('nonce', bin2hex(random_bytes(8)))
-            ->getToken($config->signer(), $config->signingKey());
+        MicropubToken::create([
+            'token_hash' => hash('sha256', $token),
+            'client_id' => $data['client_id'],
+            'me' => $data['me'],
+            'scope' => $data['scope'],
+        ]);
 
         dispatch(new AddClientToDatabase($data['client_id']));
 
-        return $token->toString();
+        return $token;
     }
 }

@@ -26,9 +26,7 @@ class MicropubMediaController extends Controller
         $tokenData = $request->input('token_data');
 
         $scopes = $tokenData['scope'];
-        if (is_string($scopes)) {
-            $scopes = explode(' ', $scopes);
-        }
+        $scopes = explode(' ', $scopes);
         if (! in_array('create', $scopes, true)) {
             return (new MicropubResponses)->insufficientScopeResponse();
         }
@@ -84,9 +82,7 @@ class MicropubMediaController extends Controller
         $tokenData = $request->input('token_data');
 
         $scopes = $tokenData['scope'];
-        if (is_string($scopes)) {
-            $scopes = explode(' ', $scopes);
-        }
+        $scopes = explode(' ', $scopes);
         if (! in_array('create', $scopes, true)) {
             return (new MicropubResponses)->insufficientScopeResponse();
         }

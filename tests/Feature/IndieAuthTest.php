@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Tests\Feature;
 
+use App\Models\MicropubToken;
 use App\Models\User;
+use App\Services\TokenService;
 use GuzzleHttp\Psr7\Uri;
 use GuzzleHttp\Psr7\UriResolver;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -27,9 +29,10 @@ class IndieAuthTest extends TestCase
             'issuer' => config('app.url'),
             'authorization_endpoint' => route('indieauth.start'),
             'token_endpoint' => route('indieauth.token'),
+            'revocation_endpoint' => route('indieauth.revocation'),
+            'introspection_endpoint' => route('indieauth.introspection'),
+            'introspection_endpoint_auth_methods_supported' => ['Bearer'],
             'code_challenge_methods_supported' => ['S256'],
-            // 'introspection_endpoint' => 'introspection_endpoint',
-            // 'introspection_endpoint_auth_methods_supported' => ['none'],
         ]);
     }
 
@@ -691,5 +694,133 @@ class IndieAuthTest extends TestCase
             'scope' => 'create update',
             'me' => config('app.url'),
         ]);
+    }
+
+    #[Test]
+    public function it_should_revoke_a_known_token(): void
+    {
+        $token = resolve(TokenService::class)->getNewToken([
+            'me' => config('app.url'),
+            'client_id' => 'https://app.example.com',
+            'scope' => 'create',
+        ]);
+
+        $response = $this->post('/revocation', ['token' => $token]);
+        $response->assertStatus(200);
+
+        $this->assertTrue(
+            MicropubToken::where('token_hash', hash('sha256', $token))->firstOrFail()->isRevoked
+        );
+    }
+
+    #[Test]
+    public function it_should_return200_for_an_unknown_token(): void
+    {
+        $response = $this->post('/revocation', ['token' => bin2hex(random_bytes(32))]);
+
+        $response->assertStatus(200);
+    }
+
+    #[Test]
+    public function introspection_requires_a_bearer_token(): void
+    {
+        $response = $this->post('/introspect', ['token' => 'irrelevant']);
+
+        $response->assertStatus(401);
+    }
+
+    #[Test]
+    public function introspection_rejects_a_revoked_bearer_token(): void
+    {
+        $callerToken = resolve(TokenService::class)->getNewToken([
+            'me' => config('app.url'),
+            'client_id' => 'https://app.example.com',
+            'scope' => 'create',
+        ]);
+        MicropubToken::where('token_hash', hash('sha256', $callerToken))->firstOrFail()->revoke();
+
+        $response = $this->post(
+            '/introspect',
+            ['token' => 'irrelevant'],
+            ['HTTP_Authorization' => 'Bearer '.$callerToken]
+        );
+
+        $response->assertStatus(401);
+    }
+
+    #[Test]
+    public function introspection_returns_active_details_for_a_valid_token(): void
+    {
+        $callerToken = resolve(TokenService::class)->getNewToken([
+            'me' => config('app.url'),
+            'client_id' => 'https://app.example.com',
+            'scope' => 'create',
+        ]);
+        $subjectToken = resolve(TokenService::class)->getNewToken([
+            'me' => 'https://someone-else.example.com',
+            'client_id' => 'https://quill.p3k.io',
+            'scope' => 'create update',
+        ]);
+
+        $response = $this->post(
+            '/introspect',
+            ['token' => $subjectToken],
+            ['HTTP_Authorization' => 'Bearer '.$callerToken]
+        );
+
+        $response->assertStatus(200);
+        $response->assertJson([
+            'active' => true,
+            'me' => 'https://someone-else.example.com',
+            'client_id' => 'https://quill.p3k.io',
+            'scope' => 'create update',
+        ]);
+        $response->assertJsonStructure(['iat']);
+    }
+
+    #[Test]
+    public function introspection_returns_only_active_false_for_an_unknown_token(): void
+    {
+        $callerToken = resolve(TokenService::class)->getNewToken([
+            'me' => config('app.url'),
+            'client_id' => 'https://app.example.com',
+            'scope' => 'create',
+        ]);
+
+        $response = $this->post(
+            '/introspect',
+            ['token' => bin2hex(random_bytes(32))],
+            ['HTTP_Authorization' => 'Bearer '.$callerToken]
+        );
+
+        $response->assertStatus(200);
+        $response->assertExactJson(['active' => false]);
+    }
+
+    #[Test]
+    public function revocation_does_not_error_on_an_array_shaped_token_param(): void
+    {
+        $response = $this->post('/revocation', ['token' => ['a', 'b']]);
+
+        $response->assertStatus(200);
+    }
+
+    #[Test]
+    public function introspection_does_not_error_on_an_array_shaped_token_param(): void
+    {
+        $callerToken = resolve(TokenService::class)->getNewToken([
+            'me' => config('app.url'),
+            'client_id' => 'https://app.example.com',
+            'scope' => 'create',
+        ]);
+
+        $response = $this->post(
+            '/introspect',
+            ['token' => ['a', 'b']],
+            ['HTTP_Authorization' => 'Bearer '.$callerToken]
+        );
+
+        $response->assertStatus(200);
+        $response->assertExactJson(['active' => false]);
     }
 }

@@ -30,9 +30,7 @@ class UpdateHandler implements MicropubHandlerInterface
         assert($data instanceof UpdateData);
 
         $scopes = $data->tokenData['scope'];
-        if (is_string($scopes)) {
-            $scopes = explode(' ', $scopes);
-        }
+        $scopes = explode(' ', $scopes);
 
         if (! in_array('update', $scopes, true)) {
             throw new InvalidTokenScopeException;

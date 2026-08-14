@@ -19,7 +19,9 @@ class HeaderLinkTest extends TestCase
         $this->assertSame('<'.config('app.url').'/.well-known/indieauth-server>; rel="indieauth-metadata"', $linkHeaders[0]);
         $this->assertSame('<'.config('app.url').'/auth>; rel="authorization_endpoint"', $linkHeaders[1]);
         $this->assertSame('<'.config('app.url').'/token>; rel="token_endpoint"', $linkHeaders[2]);
-        $this->assertSame('<'.config('app.url').'/api/post>; rel="micropub"', $linkHeaders[3]);
-        $this->assertSame('<'.config('app.url').'/webmention>; rel="webmention"', $linkHeaders[4]);
+        $this->assertSame('<'.config('app.url').'/revocation>; rel="revocation_endpoint"', $linkHeaders[3]);
+        $this->assertSame('<'.config('app.url').'/introspect>; rel="introspection_endpoint"', $linkHeaders[4]);
+        $this->assertSame('<'.config('app.url').'/api/post>; rel="micropub"', $linkHeaders[5]);
+        $this->assertSame('<'.config('app.url').'/webmention>; rel="webmention"', $linkHeaders[6]);
     }
 }

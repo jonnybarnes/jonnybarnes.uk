@@ -47,6 +47,11 @@
         or <a href="/admin/syndication">edit</a> them.
     </p>
 
+    <h2>Tokens</h2>
+    <p>
+        View and <a href="/admin/tokens">revoke</a> issued Micropub tokens.
+    </p>
+
     <h2>Bio</h2>
     <p>
         Edit your <a href="/admin/bio">bio</a>.
