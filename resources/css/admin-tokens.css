@@ -1,0 +1,65 @@
+@layer components {
+  .token-list {
+    width: 100%;
+    border-collapse: collapse;
+    margin-block-start: 1em;
+
+    th,
+    td {
+      text-align: left;
+      padding: 0.6em 0.8em;
+      border-bottom: 1px solid var(--clr-border);
+      vertical-align: middle;
+    }
+
+    th {
+      font-size: 0.85em;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      opacity: 0.7;
+    }
+
+    tr.is-revoked {
+      opacity: 0.6;
+    }
+
+    a {
+      word-break: break-all;
+    }
+  }
+
+  .badge,
+  .token-list button.revoke {
+    display: inline-block;
+    padding: 0.2em 0.7em;
+    border-radius: 999px;
+    font-size: 0.85em;
+    line-height: 1.5;
+    white-space: nowrap;
+  }
+
+  .badge {
+    background: transparent;
+    border: 1px solid currentcolor;
+  }
+
+  .badge-active {
+    color: light-dark(oklch(35% 0.16 145deg), oklch(75% 0.16 145deg));
+  }
+
+  .badge-revoked {
+    color: var(--clr-text);
+  }
+
+  .token-list button.revoke {
+    background: light-dark(oklch(92% 0.15 25deg), oklch(30% 0.12 25deg));
+    color: light-dark(oklch(30% 0.15 25deg), oklch(92% 0.12 25deg));
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: background-color 150ms ease;
+  }
+
+  .token-list button.revoke:hover {
+    background: light-dark(oklch(80% 0.2 25deg), oklch(45% 0.18 25deg));
+  }
+}
