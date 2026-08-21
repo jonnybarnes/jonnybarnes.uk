@@ -1,0 +1,137 @@
+@layer components {
+  .token-list-wrapper {
+    margin-block-start: 1em;
+    border: 1px solid var(--clr-border);
+    border-radius: 16px;
+    overflow: auto hidden;
+    background: light-dark(
+      oklch(99% 0.02 var(--primary-hue)),
+      oklch(22% 0.05 var(--primary-hue))
+    );
+  }
+
+  .token-list {
+    width: 100%;
+    min-width: 640px;
+    table-layout: fixed;
+    border-collapse: collapse;
+
+    th,
+    td {
+      text-align: left;
+      padding: 0.9em 1.2em;
+      border-bottom: 1px solid var(--clr-border);
+      vertical-align: middle;
+    }
+
+    th {
+      font-size: 0.8em;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      opacity: 0.7;
+    }
+
+    tr.is-revoked {
+      opacity: 0.6;
+    }
+
+    a {
+      word-break: break-all;
+    }
+
+    th:nth-child(1),
+    td:nth-child(1) {
+      width: 31%;
+    }
+
+    th:nth-child(2),
+    td:nth-child(2) {
+      width: 24%;
+    }
+
+    th:nth-child(3),
+    td:nth-child(3) {
+      width: 15%;
+    }
+
+    th:nth-child(4),
+    td:nth-child(4) {
+      width: 16%;
+    }
+
+    th:nth-child(5),
+    td:nth-child(5) {
+      width: 14%;
+      text-align: right;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+  }
+
+  .scope-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4em;
+  }
+
+  .scope-chip {
+    display: inline-block;
+    padding: 0.2em 0.7em;
+    border-radius: 999px;
+    background: light-dark(
+      oklch(92% 0.05 var(--primary-hue)),
+      oklch(35% 0.08 var(--primary-hue))
+    );
+    font-size: 0.85em;
+    white-space: nowrap;
+  }
+
+  .badge,
+  .token-list button.revoke {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    padding: 0.3em 0.8em;
+    border-radius: 999px;
+    font-size: 0.85em;
+    font-weight: 600;
+    line-height: 1.5;
+    white-space: nowrap;
+  }
+
+  .badge {
+    background: transparent;
+    border: 1px solid currentcolor;
+  }
+
+  .badge-active {
+    color: light-dark(oklch(35% 0.16 145deg), oklch(75% 0.16 145deg));
+
+    .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentcolor;
+    }
+  }
+
+  .badge-revoked {
+    color: var(--clr-text);
+    opacity: 0.7;
+  }
+
+  .token-list button.revoke {
+    background: light-dark(oklch(92% 0.15 25deg), oklch(30% 0.12 25deg));
+    color: light-dark(oklch(30% 0.15 25deg), oklch(92% 0.12 25deg));
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: background-color 150ms ease;
+  }
+
+  .token-list button.revoke:hover {
+    background: light-dark(oklch(80% 0.2 25deg), oklch(45% 0.18 25deg));
+  }
+}

@@ -254,7 +254,7 @@ class PasskeysController extends Controller
             ], 400);
         }
 
-        $passkey = Passkey::firstWhere('passkey_id', $publicKeyCredential->id);
+        $passkey = Passkey::firstWhere('passkey_id', Base64UrlSafe::encodeUnpadded($publicKeyCredential->rawId));
         if (! $passkey) {
             return response()->json([
                 'success' => false,
