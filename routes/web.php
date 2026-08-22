@@ -170,8 +170,6 @@ Route::middleware(MyAuthMiddleware::class)->prefix('admin')->group(function () {
 
 // Blog pages using ArticlesController
 Route::prefix('blog')->group(function () {
-    Route::get('/feed.rss', [FeedsController::class, 'blogRss'])->name('feed.blog.rss');
-    Route::get('/feed.atom', [FeedsController::class, 'blogAtom'])->name('feed.blog.atom');
     Route::get('/feed.json', [FeedsController::class, 'blogJson'])->name('feed.blog.json');
     Route::get('/feed.jf2', [FeedsController::class, 'blogJf2'])->name('feed.blog.jf2');
     Route::get('/s/{id}', [ArticlesController::class, 'onlyIdInURL']);
@@ -182,8 +180,6 @@ Route::prefix('blog')->group(function () {
 // Notes pages using NotesController
 Route::prefix('notes')->group(function () {
     Route::get('/', [NotesController::class, 'index']);
-    Route::get('/feed.rss', [FeedsController::class, 'notesRss'])->name('feed.notes.rss');
-    Route::get('/feed.atom', [FeedsController::class, 'notesAtom'])->name('feed.notes.atom');
     Route::get('/feed.json', [FeedsController::class, 'notesJson'])->name('feed.notes.json');
     Route::get('/feed.jf2', [FeedsController::class, 'notesJf2'])->name('feed.notes.jf2');
     Route::get('/new', [NotesController::class, 'create']);

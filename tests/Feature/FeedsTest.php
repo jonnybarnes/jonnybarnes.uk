@@ -15,42 +15,6 @@ class FeedsTest extends TestCase
 {
     use RefreshDatabase;
 
-    /**
-     * Test the blog RSS feed.
-     */
-    #[Test]
-    public function blog_rss_feed_is_present(): void
-    {
-        Article::factory()->count(3)->create();
-        $response = $this->get('/blog/feed.rss');
-        $response->assertHeader('Content-Type', 'application/rss+xml; charset=utf-8');
-        $response->assertOk();
-    }
-
-    /**
-     * Test the notes RSS feed.
-     */
-    #[Test]
-    public function notes_rss_feed_is_present(): void
-    {
-        Note::factory()->count(3)->create();
-        $response = $this->get('/notes/feed.rss');
-        $response->assertHeader('Content-Type', 'application/rss+xml; charset=utf-8');
-        $response->assertOk();
-    }
-
-    /**
-     * Test the blog RSS feed.
-     */
-    #[Test]
-    public function blog_atom_feed_is_present(): void
-    {
-        Article::factory()->count(3)->create();
-        $response = $this->get('/blog/feed.atom');
-        $response->assertHeader('Content-Type', 'application/atom+xml; charset=utf-8');
-        $response->assertOk();
-    }
-
     #[Test]
     public function blog_jf2_feed_is_present(): void
     {
@@ -74,18 +38,6 @@ class FeedsTest extends TestCase
     }
 
     /**
-     * Test the notes RSS feed.
-     */
-    #[Test]
-    public function notes_atom_feed_is_present(): void
-    {
-        Note::factory()->count(3)->create();
-        $response = $this->get('/notes/feed.atom');
-        $response->assertHeader('Content-Type', 'application/atom+xml; charset=utf-8');
-        $response->assertOk();
-    }
-
-    /**
      * Test the blog JSON feed.
      */
     #[Test]
@@ -93,7 +45,7 @@ class FeedsTest extends TestCase
     {
         Article::factory()->count(3)->create();
         $response = $this->get('/blog/feed.json');
-        $response->assertHeader('Content-Type', 'application/json');
+        $response->assertHeader('Content-Type', 'application/feed+json');
         $response->assertOk();
     }
 
@@ -105,7 +57,7 @@ class FeedsTest extends TestCase
     {
         Note::factory()->count(3)->create();
         $response = $this->get('/notes/feed.json');
-        $response->assertHeader('Content-Type', 'application/json');
+        $response->assertHeader('Content-Type', 'application/feed+json');
         $response->assertOk();
     }
 

@@ -7,66 +7,13 @@ namespace App\Http\Controllers;
 use App\Models\Article;
 use App\Models\Note;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Response;
 
 class FeedsController extends Controller
 {
     /**
-     * Returns the blog RSS feed.
-     */
-    public function blogRss(): Response
-    {
-        $articles = Article::where('published', '1')->latest('updated_at')->take(20)->get();
-        $buildDate = $articles->first()->updated_at->toRssString();
-
-        return response()
-            ->view('articles.rss', compact('articles', 'buildDate'))
-            ->header('Content-Type', 'application/rss+xml; charset=utf-8');
-    }
-
-    /**
-     * Returns the blog Atom feed.
-     */
-    public function blogAtom(): Response
-    {
-        $articles = Article::where('published', '1')->latest('updated_at')->take(20)->get();
-
-        return response()
-            ->view('articles.atom', compact('articles'))
-            ->header('Content-Type', 'application/atom+xml; charset=utf-8');
-    }
-
-    /**
-     * Returns the notes RSS feed.
-     */
-    public function notesRss(): Response
-    {
-        $notes = Note::latest()->take(20)->get();
-        $buildDate = $notes->first()->updated_at->toRssString();
-
-        return response()
-            ->view('notes.rss', compact('notes', 'buildDate'))
-            ->header('Content-Type', 'application/rss+xml; charset=utf-8');
-    }
-
-    /**
-     * Returns the notes Atom feed.
-     */
-    public function notesAtom(): Response
-    {
-        $notes = Note::latest()->take(20)->get();
-
-        return response()
-            ->view('notes.atom', compact('notes'))
-            ->header('Content-Type', 'application/atom+xml; charset=utf-8');
-    }
-
-    /** @todo sort out return type for json responses */
-
-    /**
      * Returns the blog JSON feed.
      */
-    public function blogJson(): array
+    public function blogJson(): JsonResponse
     {
         $articles = Article::where('published', '1')->latest('updated_at')->take(20)->get();
         $data = [
@@ -94,13 +41,15 @@ class FeedsController extends Controller
             ];
         }
 
-        return $data;
+        return response()->json($data, 200, [
+            'Content-Type' => 'application/feed+json',
+        ]);
     }
 
     /**
      * Returns the notes JSON feed.
      */
-    public function notesJson(): array
+    public function notesJson(): JsonResponse
     {
         $notes = Note::latest()->with('media', 'place', 'tags')->take(20)->get();
         $data = [
@@ -130,7 +79,9 @@ class FeedsController extends Controller
             }
         }
 
-        return $data;
+        return response()->json($data, 200, [
+            'Content-Type' => 'application/feed+json',
+        ]);
     }
 
     /**

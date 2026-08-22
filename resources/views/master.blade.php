@@ -7,13 +7,9 @@
         <title>@yield('title'){{ config('app.name') }}</title>
         <link rel="stylesheet" href="/assets/highlight/nord.css">
         <link rel="stylesheet" href="/assets/css/app.css">
-        <link rel="alternate" type="application/rss+xml" title="Blog RSS Feed" href="{{ route('feed.blog.rss') }}">
-        <link rel="alternate" type="application/atom+xml" title="Blog Atom Feed" href="{{ route('feed.blog.atom') }}">
-        <link rel="alternate" type="application/json" title="Blog JSON Feed" href="{{ route('feed.blog.json') }}">
+        <link rel="alternate" type="application/feed+json" title="Blog JSON Feed" href="{{ route('feed.blog.json') }}">
         <link rel="alternate" type="application/jf2feed+json" title="Blog JF2 Feed" href="{{ route('feed.blog.jf2') }}">
-        <link rel="alternate" type="application/rss+xml" title="Notes RSS Feed" href="{{ route('feed.notes.rss') }}">
-        <link rel="alternate" type="application/atom+xml" title="Notes Atom Feed" href="{{ route('feed.notes.atom') }}">
-        <link rel="alternate" type="application/json" title="Notes JSON Feed" href="{{ route('feed.notes.json') }}">
+        <link rel="alternate" type="application/feed+json" title="Notes JSON Feed" href="{{ route('feed.notes.json') }}">
         <link rel="alternate" type="application/jf2feed+json" title="Notes JF2 Feed" href="{{ route('feed.notes.jf2') }}">
         <link rel="indieauth-metadata" href="{{ route('indieauth.metadata') }}">
         <link rel="authorization_endpoint" href="{{ route('indieauth.start') }}">
