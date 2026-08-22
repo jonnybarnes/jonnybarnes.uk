@@ -36,7 +36,7 @@
                 <a href="/likes">Likes</a>
                 <a href="/contacts">Contacts</a>
                 <a href="/projects">Projects</a>
-                <a href="{{ route('feed.notes.json') }}" class="rss-icon">@include('icons.rss', ['title' => 'RSS Feed'])</a>
+                <a href="{{ route('feed.notes.json') }}" class="rss-icon">@include('icons.json-feed', ['title' => 'JSON Feed'])</a>
             </nav>
             <div id="theme-selector">
                 <button class="toggle" popovertarget="theme-selector-dropdown">
