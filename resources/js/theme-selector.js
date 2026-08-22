@@ -1,69 +1,60 @@
 class ThemeSelector {
   constructor() {
     this.widget = document.querySelector('#theme-selector');
+    this.btnLight = this.widget.querySelector('#btn-light');
+    this.btnDark = this.widget.querySelector('#btn-dark');
+    this.status = this.widget.querySelector('#theme-status');
+    this.currentTheme = 'system';
   }
 
   setupEventListeners() {
-    this.widget.querySelectorAll('#theme-selector-dropdown input').forEach((radioInput) => radioInput.addEventListener('input', (e) => {
-      let theme = e.target.value;
+    this.btnLight.addEventListener('click', () => {
+      this.applyTheme(this.currentTheme === 'light' ? 'system' : 'light');
+    });
 
-      // Update current icon
-      this.widget.querySelectorAll('.toggle svg').forEach((svg) => {
-        if (svg.classList.contains(theme)) {
-          svg.style.display = '';
-        } else {
-          svg.style.display = 'none';
-        }
-      });
+    this.btnDark.addEventListener('click', () => {
+      this.applyTheme(this.currentTheme === 'dark' ? 'system' : 'dark');
+    });
+  }
 
-      // Set the theme
-      let selectedTheme;
-      switch (theme) {
-        case 'dark':
-        case 'light':
-          selectedTheme = theme;
-          break;
-        default:
-          selectedTheme = 'light dark';
-      }
+  applyTheme(theme) {
+    const selectedTheme = (theme === 'light' || theme === 'dark') ? theme : 'light dark';
 
-      const systemTheme = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
-      const html = document.querySelector('html');
-      let currentTheme = html.style.getPropertyValue('color-scheme');
-      if (currentTheme === '') {
-        currentTheme = 'light dark';
-      }
+    const systemTheme = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+    const html = document.documentElement;
+    let currentColorScheme = html.style.getPropertyValue('color-scheme');
+    if (currentColorScheme === '') {
+      currentColorScheme = 'light dark';
+    }
 
-      /* do we need to transition */
-      let doTransition = false;
+    /* do we need to transition */
+    let doTransition = false;
 
-      if (selectedTheme !== currentTheme) {
-        if (selectedTheme === 'light dark') {
-          doTransition = currentTheme !== systemTheme;
-        } else if (currentTheme === 'light dark') {
-          doTransition = selectedTheme !== systemTheme;
-        } else {
-          doTransition = true;
-        }
-      }
-
-      html.style.viewTransitionName = 'changing-theme';
-      if (doTransition && document.startViewTransition) {
-        document.startViewTransition(() => {
-          // Close the popover
-          document.querySelector('#theme-selector-dropdown').togglePopover();
-
-          // Set the colour theme
-          html.style.setProperty('color-scheme', selectedTheme);
-        });
+    if (selectedTheme !== currentColorScheme) {
+      if (selectedTheme === 'light dark') {
+        doTransition = currentColorScheme !== systemTheme;
+      } else if (currentColorScheme === 'light dark') {
+        doTransition = selectedTheme !== systemTheme;
       } else {
-        // Close the popover
-        document.querySelector('#theme-selector-dropdown').togglePopover();
-
-        // Set the colour theme
-        html.style.setProperty('color-scheme', selectedTheme);
+        doTransition = true;
       }
-    }));
+    }
+
+    const applyChange = () => {
+      this.currentTheme = theme;
+      html.style.setProperty('color-scheme', selectedTheme);
+
+      this.btnLight.setAttribute('aria-pressed', String(theme === 'light'));
+      this.btnDark.setAttribute('aria-pressed', String(theme === 'dark'));
+      this.status.textContent = theme === 'system' ? 'Theme set to system default' : '';
+    };
+
+    html.style.viewTransitionName = 'changing-theme';
+    if (doTransition && document.startViewTransition) {
+      document.startViewTransition(applyChange);
+    } else {
+      applyChange();
+    }
   }
 }
 

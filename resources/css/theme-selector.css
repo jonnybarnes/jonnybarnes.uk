@@ -1,70 +1,66 @@
 @layer components {
   #theme-selector {
+    display: flex;
+    justify-self: start;
+    align-items: center;
+    gap: .25rem;
+    padding: .25rem;
+    border-radius: 999px;
+    background-color: color-mix(in oklch, var(--clr-border) 40%, transparent);
+
     button {
+      display: grid;
+      place-items: center;
       appearance: none;
       border: none;
-      background: none;
+      border-radius: 999px;
+      padding: .375rem;
+      background: transparent;
+      color: inherit;
+      transition: background-color .2s, color .2s;
 
       &:hover {
         cursor: pointer;
       }
-    }
 
-    /* This is the element with the [popover] attribute */
-    #theme-selector-dropdown {
-      position: absolute;
-      position-area: block-end span-inline-start;
-      margin: 0;
-      border: 2px solid var(--clr-border);
-      background-color: var(--clr-background);
-      color: var(--clr-text);
-
-      fieldset {
-        border: 0;
-        display: flex;
-        flex-direction: row;
-        gap: 1ch;
-
-        input {
-          display: none;
-        }
+      &:focus-visible {
+        outline: 2px solid var(--clr-text);
+        outline-offset: 2px;
       }
-    }
 
-    /*
-     * This is the element with the [popover] attribute
-     * Here we are styling the open and closing animations
-     */
-    @media (prefers-reduced-motion: no-preference) {
-      #theme-selector-dropdown {
-        &:popover-open {
-          transform: translateY(0) scale(1);
-          opacity: 1;
+      svg {
+        width: 1.5rem;
+        height: 1.5rem;
+        fill: currentcolor;
+      }
 
-          /*
-           * Start styles for the opening transition.
-           * Added to :popover-open, but after the opened styles.
-           */
-          @starting-style {
-            transform: translateY(30px) scale(0);
-            opacity: 0;
-          }
+      @media (hover: hover) {
+        &:hover {
+          background-color: color-mix(in oklch, var(--clr-border) 70%, transparent);
         }
 
-        /*
-         * End styles for the closing transition.
-         */
-        transform: translateY(0) scale(0);
-        opacity: 0;
+        &[aria-pressed="true"]:hover {
+          background-color: var(--clr-text);
+        }
+      }
 
-        /*
-         * Enumerate transitioning properties, including display and overlay.
-         */
-        transition: transform, opacity, display allow-discrete, overlay allow-discrete;
-        transition-duration: 0.5s;
-        transform-origin: top right;
+      &[aria-pressed="true"] {
+        background-color: var(--clr-text);
+        color: var(--clr-background);
       }
     }
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
   }
 
   ::view-transition-group(changing-theme) {
