@@ -24,6 +24,7 @@ class EntryData extends MicropubData
         public readonly mixed $checkin,
         public readonly mixed $syndication,
         public readonly ?array $photos,
+        public readonly ?string $postStatus,
     ) {}
 
     public static function fromRequest(Request $request): static
@@ -49,6 +50,7 @@ class EntryData extends MicropubData
                 checkin: Arr::get($data, 'properties.checkin.0'),
                 syndication: Arr::get($data, 'properties.syndication.0'),
                 photos: Arr::get($data, 'properties.photo'),
+                postStatus: Arr::get($data, 'properties.post-status.0'),
             );
         }
 
@@ -67,6 +69,7 @@ class EntryData extends MicropubData
             checkin: $request->input('checkin'),
             syndication: $request->input('syndication'),
             photos: $request->input('photos'),
+            postStatus: $request->input('post-status'),
         );
     }
 
@@ -100,6 +103,7 @@ class EntryData extends MicropubData
             checkin: $data['checkin'] ?? null,
             syndication: $data['syndication'] ?? null,
             photos: $data['photos'] ?? null,
+            postStatus: $data['post-status'] ?? null,
         );
     }
 
@@ -120,6 +124,7 @@ class EntryData extends MicropubData
             'checkin' => $this->checkin,
             'syndication' => $this->syndication,
             'photos' => $this->photos,
+            'post-status' => $this->postStatus,
         ];
     }
 }

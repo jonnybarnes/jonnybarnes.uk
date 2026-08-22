@@ -869,6 +869,37 @@ class MicropubControllerTest extends TestCase
         $this->assertDatabaseHas('articles', [
             'title' => $name,
             'main' => $content,
+            'published' => true,
+        ]);
+    }
+
+    #[Test]
+    public function micropub_client_api_request_creates_an_unpublished_article_when_post_status_is_draft(): void
+    {
+        $faker = Factory::create();
+        $name = $faker->text(50);
+        $content = $faker->paragraphs(5, true);
+
+        $response = $this->postJson(
+            '/api/post',
+            [
+                'type' => ['h-entry'],
+                'properties' => [
+                    'name' => [$name],
+                    'content' => [$content],
+                    'post-status' => ['draft'],
+                ],
+            ],
+            ['HTTP_Authorization' => 'Bearer '.$this->getToken()]
+        );
+
+        $response
+            ->assertJson(['response' => 'created'])
+            ->assertStatus(201);
+        $this->assertDatabaseHas('articles', [
+            'title' => $name,
+            'main' => $content,
+            'published' => false,
         ]);
     }
 }
