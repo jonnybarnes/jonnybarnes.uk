@@ -13,7 +13,7 @@ class ArticleService
         return Article::create([
             'title' => $data['name'],
             'main' => $data['content'],
-            'published' => true,
+            'published' => ($data['post-status'] ?? null) !== 'draft',
         ]);
     }
 }
