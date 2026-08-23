@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\LikesController as AdminLikesController;
 use App\Http\Controllers\Admin\NotesController as AdminNotesController;
 use App\Http\Controllers\Admin\PasskeysController;
 use App\Http\Controllers\Admin\PlacesController as AdminPlacesController;
+use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\SyndicationTargetsController;
 use App\Http\Controllers\Admin\TokensController;
 use App\Http\Controllers\ArticlesController;
@@ -158,6 +159,12 @@ Route::middleware(MyAuthMiddleware::class)->prefix('admin')->group(function () {
     Route::prefix('bio')->group(function () {
         Route::get('/', [BioController::class, 'show'])->name('admin.bio.show');
         Route::put('/', [BioController::class, 'update']);
+    });
+
+    // Settings
+    Route::prefix('settings')->group(function () {
+        Route::get('/', [SettingsController::class, 'show'])->name('admin.settings.show');
+        Route::put('/', [SettingsController::class, 'update']);
     });
 
     // Passkeys

@@ -80,6 +80,17 @@
         <!--scripts go here when needed-->
         @section('scripts')
             <script type="module" src="/assets/js/app.js"></script>
+
+            @if($winterEffectEnabled ?? false)
+                <script type="module" src="/assets/js/is-land.min.js"></script>
+                <script type="module" src="/assets/js/winter.js"></script>
+                <is-land on:media="(prefers-reduced-motion: no-preference)">
+                    <snow-fall
+                        count="150"
+                        style="--snow-fall-color: var(--clr-snow-fall)"
+                    ></snow-fall>
+                </is-land>
+            @endif
         @show
     </body>
 </html>

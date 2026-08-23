@@ -61,4 +61,9 @@
     <p>
         Manager <a href="/admin/passkeys">your passkeys</a>.
     </p>
+
+    <h2>Settings</h2>
+    <p>
+        Edit <a href="/admin/settings">site settings</a>.
+    </p>
 @stop
