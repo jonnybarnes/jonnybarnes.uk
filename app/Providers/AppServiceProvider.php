@@ -2,10 +2,12 @@
 
 namespace App\Providers;
 
+use App\Models\Setting;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Symfony\Component\HtmlSanitizer\HtmlSanitizer;
 use Symfony\Component\HtmlSanitizer\HtmlSanitizerConfig;
@@ -63,5 +65,10 @@ class AppServiceProvider extends ServiceProvider
 
         // Force HTTPS URL generation in production
         URL::forceHttps($this->app->isProduction());
+
+        // Share whether the winter snow effect is enabled with the base layout
+        View::composer('master', function ($view) {
+            $view->with('winterEffectEnabled', Setting::first()?->winter_effect_enabled ?? false);
+        });
     }
 }
