@@ -57,6 +57,11 @@
         Edit your <a href="/admin/bio">bio</a>.
     </p>
 
+    <h2>About</h2>
+    <p>
+        Edit your <a href="/admin/about">about page</a>.
+    </p>
+
     <h2>Passkeys</h2>
     <p>
         Manager <a href="/admin/passkeys">your passkeys</a>.

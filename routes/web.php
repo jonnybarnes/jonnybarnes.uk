@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\AboutPageController;
+use App\Http\Controllers\Admin\AboutController;
 use App\Http\Controllers\Admin\ArticlesController as AdminArticlesController;
 use App\Http\Controllers\Admin\BioController;
 use App\Http\Controllers\Admin\ClientsController;
@@ -50,6 +52,9 @@ Route::view('projects', 'projects');
 
 // Static colophon page
 Route::view('colophon', 'colophon');
+
+// About page
+Route::get('about', [AboutPageController::class, 'show']);
 
 // The login routes to get auth’d for admin
 Route::get('login', [AuthController::class, 'showLogin'])->name('login');
@@ -165,6 +170,12 @@ Route::middleware(MyAuthMiddleware::class)->prefix('admin')->group(function () {
     Route::prefix('settings')->group(function () {
         Route::get('/', [SettingsController::class, 'show'])->name('admin.settings.show');
         Route::put('/', [SettingsController::class, 'update']);
+    });
+
+    // About
+    Route::prefix('about')->group(function () {
+        Route::get('/', [AboutController::class, 'show'])->name('admin.about.show');
+        Route::put('/', [AboutController::class, 'update']);
     });
 
     // Passkeys
