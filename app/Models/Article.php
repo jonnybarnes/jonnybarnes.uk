@@ -93,6 +93,13 @@ class Article extends Model
         );
     }
 
+    protected function uri(): Attribute
+    {
+        return Attribute::get(
+            get: fn () => config('app.url').$this->link,
+        );
+    }
+
     /**
      * Scope a query to only include articles from a particular year/month.
      */
