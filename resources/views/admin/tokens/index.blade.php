@@ -4,6 +4,15 @@
 
 @section('content')
     <h1>Micropub Tokens</h1>
+    <p><a href="/admin/tokens/create">Generate new token</a></p>
+
+    @if(session('new_token'))
+        <div class="token-reveal">
+            <p>Here's your new token. <strong>Copy it now</strong> — it won't be shown again.</p>
+            <input type="text" readonly value="{{ session('new_token') }}" onclick="this.select()">
+        </div>
+    @endif
+
     @if($tokens->isEmpty())
         <p>No tokens have been issued.</p>
     @else

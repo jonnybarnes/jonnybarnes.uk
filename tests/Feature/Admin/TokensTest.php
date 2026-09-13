@@ -38,6 +38,73 @@ class TokensTest extends TestCase
     }
 
     #[Test]
+    public function create_requires_authentication(): void
+    {
+        $response = $this->get('/admin/tokens/create');
+        $response->assertRedirect();
+    }
+
+    #[Test]
+    public function create_shows_form(): void
+    {
+        $user = User::factory()->make();
+
+        $response = $this->actingAs($user)->get('/admin/tokens/create');
+
+        $response->assertOk();
+        $response->assertSee('name="client_id"', false);
+    }
+
+    #[Test]
+    public function store_requires_authentication(): void
+    {
+        $response = $this->post('/admin/tokens', [
+            'client_id' => 'https://ia.net/writer',
+            'scope' => ['create'],
+        ]);
+
+        $response->assertRedirect();
+        $this->assertDatabaseCount('micropub_tokens', 0);
+    }
+
+    #[Test]
+    public function store_creates_a_new_token_and_redirects_with_it_flashed(): void
+    {
+        $user = User::factory()->make();
+
+        $response = $this->actingAs($user)->post('/admin/tokens', [
+            'client_id' => 'https://ia.net/writer',
+            'scope' => ['create', 'update'],
+        ]);
+
+        $response->assertRedirect('/admin/tokens');
+        $response->assertSessionHas('new_token');
+
+        $this->assertDatabaseHas('micropub_tokens', [
+            'client_id' => 'https://ia.net/writer',
+            'scope' => 'create update',
+            'me' => config('app.url'),
+        ]);
+
+        $token = $response->getSession()->get('new_token');
+        $this->assertNotNull(MicropubToken::findActive($token));
+    }
+
+    #[Test]
+    public function store_requires_at_least_one_scope(): void
+    {
+        $user = User::factory()->make();
+
+        $response = $this->actingAs($user)->post('/admin/tokens', [
+            'client_id' => 'https://ia.net/writer',
+            'scope' => [],
+        ]);
+
+        $response->assertSessionHasErrors('scope');
+        $this->assertDatabaseCount('micropub_tokens', 0);
+    }
+
+    #[Test]
     public function revoke_requires_authentication(): void
     {
         $token = MicropubToken::create([

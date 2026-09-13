@@ -134,4 +134,30 @@
   .token-list button.revoke:hover {
     background: light-dark(oklch(80% 0.2 25deg), oklch(45% 0.18 25deg));
   }
+
+  .token-reveal {
+    margin-block-end: 1em;
+    padding: 1em 1.2em;
+    border: 1px solid var(--clr-border);
+    border-radius: 16px;
+    background: light-dark(
+      oklch(96% 0.08 145deg),
+      oklch(28% 0.08 145deg)
+    );
+
+    input {
+      width: 100%;
+      font-family: monospace;
+      padding: 0.5em 0.7em;
+      border-radius: 8px;
+      border: 1px solid var(--clr-border);
+    }
+  }
+
+  .scope-checkboxes {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1em;
+  }
 }
