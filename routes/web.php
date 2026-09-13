@@ -157,6 +157,8 @@ Route::middleware(MyAuthMiddleware::class)->prefix('admin')->group(function () {
     // Micropub Tokens
     Route::prefix('tokens')->group(function () {
         Route::get('/', [TokensController::class, 'index']);
+        Route::get('/create', [TokensController::class, 'create']);
+        Route::post('/', [TokensController::class, 'store']);
         Route::put('/{token}/revoke', [TokensController::class, 'revoke']);
     });
 
