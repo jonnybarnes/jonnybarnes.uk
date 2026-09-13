@@ -64,6 +64,17 @@ class ArticlesTest extends TestCase
     }
 
     #[Test]
+    public function uri_is_the_absolute_form_of_the_link(): void
+    {
+        $article = Article::create([
+            'title' => 'Test',
+            'main' => 'Test',
+        ]);
+
+        $this->assertEquals(config('app.url').$article->link, $article->uri);
+    }
+
+    #[Test]
     public function date_scope_returns_expected_articles(): void
     {
         Article::factory()->create([
