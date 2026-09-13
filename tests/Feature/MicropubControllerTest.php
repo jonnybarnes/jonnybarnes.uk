@@ -871,6 +871,8 @@ class MicropubControllerTest extends TestCase
             'main' => $content,
             'published' => true,
         ]);
+        $response->assertHeader('Location');
+        $this->assertStringStartsWith(config('app.url').'/blog/', $response->headers->get('Location'));
     }
 
     #[Test]
