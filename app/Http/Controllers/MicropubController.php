@@ -70,7 +70,9 @@ class MicropubController extends Controller
                 'error' => 'invalid_request',
                 'error_description' => 'No known note with given ID',
             ], 404);
-        } catch (MicropubUnsupportedModelException) {
+        } catch (MicropubUnsupportedModelException $e) {
+            report($e);
+
             return response()->json([
                 'error' => 'invalid',
                 'error_description' => 'This implementation currently only supports the updating of notes',
@@ -80,12 +82,16 @@ class MicropubController extends Controller
                 'error' => 'invalid_request',
                 'error_description' => $e->getMessage(),
             ], 400);
-        } catch (MicropubHandlerException) {
+        } catch (MicropubHandlerException $e) {
+            report($e);
+
             return response()->json([
                 'error' => 'unsupported_operation',
                 'error_description' => 'The request could not be processed by this server',
             ], 500);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
+            report($e);
+
             return response()->json([
                 'error' => 'server_error',
                 'error_description' => 'An error occurred processing the request',

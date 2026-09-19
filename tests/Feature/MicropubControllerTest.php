@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Feature;
 
+use App\Exceptions\MicropubHandlerException;
 use App\Jobs\SendWebMentions;
 use App\Jobs\SyndicateNoteToBluesky;
 use App\Jobs\SyndicateNoteToMastodon;
@@ -12,6 +13,7 @@ use App\Models\Note;
 use App\Models\Place;
 use App\Models\SyndicationTarget;
 use Faker\Factory;
+use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Queue;
@@ -457,6 +459,11 @@ class MicropubControllerTest extends TestCase
     #[Test]
     public function micropub_client_api_request_for_unsupported_post_type_returns_error(): void
     {
+        $this->mock(ExceptionHandler::class)
+            ->shouldReceive('report')
+            ->once()
+            ->with(\Mockery::type(MicropubHandlerException::class));
+
         $response = $this->postJson(
             '/api/post',
             [
