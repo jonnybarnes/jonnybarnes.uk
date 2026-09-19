@@ -75,6 +75,17 @@ class ArticlesTest extends TestCase
     }
 
     #[Test]
+    public function slug_is_suffixed_when_a_trashed_article_already_used_it(): void
+    {
+        $original = Article::create(['title' => 'My Title', 'main' => 'Content']);
+        $original->delete();
+
+        $newArticle = Article::create(['title' => 'My Title', 'main' => 'Other content']);
+
+        $this->assertEquals('my-title-2', $newArticle->titleurl);
+    }
+
+    #[Test]
     public function date_scope_returns_expected_articles(): void
     {
         Article::factory()->create([

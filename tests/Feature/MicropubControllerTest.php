@@ -8,6 +8,7 @@ use App\Exceptions\MicropubHandlerException;
 use App\Jobs\SendWebMentions;
 use App\Jobs\SyndicateNoteToBluesky;
 use App\Jobs\SyndicateNoteToMastodon;
+use App\Models\Article;
 use App\Models\Media;
 use App\Models\Note;
 use App\Models\Place;
@@ -910,5 +911,65 @@ class MicropubControllerTest extends TestCase
             'main' => $content,
             'published' => false,
         ]);
+    }
+
+    #[Test]
+    public function micropub_client_api_request_updates_an_existing_draft_article_with_the_same_name(): void
+    {
+        $draft = Article::create([
+            'title' => 'WireGuard',
+            'main' => 'Early draft content',
+            'published' => false,
+        ]);
+
+        $response = $this->postJson(
+            '/api/post',
+            [
+                'type' => ['h-entry'],
+                'properties' => [
+                    'name' => ['WireGuard'],
+                    'content' => ['Finished content'],
+                ],
+            ],
+            ['HTTP_Authorization' => 'Bearer '.$this->getToken()]
+        );
+
+        $response
+            ->assertJson(['response' => 'created'])
+            ->assertStatus(201);
+        $this->assertSame(1, Article::where('title', 'WireGuard')->count());
+        $this->assertDatabaseHas('articles', [
+            'id' => $draft->id,
+            'title' => 'WireGuard',
+            'main' => 'Finished content',
+            'published' => true,
+        ]);
+    }
+
+    #[Test]
+    public function micropub_client_api_request_errors_when_an_article_with_the_same_name_is_already_published(): void
+    {
+        Article::create([
+            'title' => 'WireGuard',
+            'main' => 'Published content',
+            'published' => true,
+        ]);
+
+        $response = $this->postJson(
+            '/api/post',
+            [
+                'type' => ['h-entry'],
+                'properties' => [
+                    'name' => ['WireGuard'],
+                    'content' => ['Some other content'],
+                ],
+            ],
+            ['HTTP_Authorization' => 'Bearer '.$this->getToken()]
+        );
+
+        $response
+            ->assertJson(['error' => 'invalid_request'])
+            ->assertStatus(400);
+        $this->assertSame(1, Article::where('title', 'WireGuard')->count());
     }
 }

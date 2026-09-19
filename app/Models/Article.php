@@ -40,6 +40,7 @@ class Article extends Model
         return [
             'titleurl' => [
                 'source' => 'title',
+                'includeTrashed' => true,
             ],
         ];
     }
