@@ -26,7 +26,7 @@ class FrontPageController extends Controller
             ->withCount(['webmentions AS reposts' => function ($query) {
                 $query->where('type', 'repost-of');
             }])->get();
-        $articles = Article::latest()->get();
+        $articles = Article::published()->latest()->get();
         $bookmarks = Bookmark::latest()->with('tags')->get();
         $likes = Like::latest()->get();
 
