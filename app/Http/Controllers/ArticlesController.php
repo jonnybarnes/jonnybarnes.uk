@@ -17,7 +17,7 @@ class ArticlesController extends Controller
      */
     public function index(?int $year = null, ?int $month = null): View
     {
-        $articles = Article::where('published', '1')
+        $articles = Article::published()
             ->date($year, $month)
             ->orderBy('updated_at', 'desc')
             ->simplePaginate(5);

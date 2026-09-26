@@ -102,6 +102,14 @@ class Article extends Model
     }
 
     /**
+     * Scope a query to only include published (non-draft) articles.
+     */
+    public function scopePublished(Builder $query): Builder
+    {
+        return $query->where('published', 1);
+    }
+
+    /**
      * Scope a query to only include articles from a particular year/month.
      */
     public function scopeDate(Builder $query, ?int $year = null, ?int $month = null): Builder

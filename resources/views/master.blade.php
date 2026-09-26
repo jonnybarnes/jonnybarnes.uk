@@ -22,6 +22,7 @@
         @if (File::exists(public_path('gpg.key')))
             <link rel="pgpkey" href="{{ config('app.url')}}/gpg.key">
         @endif
+        @stack('head')
     </head>
     <body>
         <header>

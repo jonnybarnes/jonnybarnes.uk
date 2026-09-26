@@ -30,6 +30,39 @@ class ArticlesTest extends TestCase
     }
 
     #[Test]
+    public function articles_page_does_not_list_drafts(): void
+    {
+        Article::factory()->create(['title' => 'Published Article']);
+        Article::factory()->create(['title' => 'Draft Article', 'published' => 0]);
+
+        $this->get('/blog')
+            ->assertSee('Published Article')
+            ->assertDontSee('Draft Article');
+    }
+
+    #[Test]
+    public function draft_article_is_viewable_and_marked_as_draft(): void
+    {
+        $article = Article::factory()->create(['published' => 0]);
+
+        $this->get($article->link)
+            ->assertOk()
+            ->assertSee('draft-notice', false)
+            ->assertSee('<meta name="robots" content="noindex, nofollow">', false)
+            ->assertSee('<title>[Draft] ', false);
+    }
+
+    #[Test]
+    public function published_article_is_not_marked_as_draft(): void
+    {
+        $article = Article::factory()->create();
+
+        $this->get($article->link)
+            ->assertDontSee('draft-notice', false)
+            ->assertDontSee('noindex', false);
+    }
+
+    #[Test]
     public function wrong_date_in_url_redirects_to_correct_date()
     {
         $article = Article::factory()->create();

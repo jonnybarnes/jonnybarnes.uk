@@ -63,3 +63,16 @@
   }
 }
 
+
+@layer components {
+  .draft-notice {
+    margin-block-end: 2ex;
+    padding: 1ex 1em;
+    border: 2px dashed var(--clr-border);
+    border-radius: 8px;
+    background: light-dark(
+      oklch(95% 0.08 85deg),
+      oklch(30% 0.08 85deg)
+    );
+  }
+}

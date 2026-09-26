@@ -15,7 +15,7 @@ class FeedsController extends Controller
      */
     public function blogJson(): JsonResponse
     {
-        $articles = Article::where('published', '1')->latest('updated_at')->take(20)->get();
+        $articles = Article::published()->latest('updated_at')->take(20)->get();
         $data = [
             'version' => 'https://jsonfeed.org/version/1.1',
             'title' => 'The JSON Feed for '.config('user.display_name').'’s blog',
@@ -89,7 +89,7 @@ class FeedsController extends Controller
      */
     public function blogJf2(): JsonResponse
     {
-        $articles = Article::where('published', '1')->latest('updated_at')->take(20)->get();
+        $articles = Article::published()->latest('updated_at')->take(20)->get();
         $items = [];
         foreach ($articles as $article) {
             $items[] = [

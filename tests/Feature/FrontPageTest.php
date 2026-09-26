@@ -31,4 +31,15 @@ class FrontPageTest extends TestCase
             ->assertSee('https://example.com')
             ->assertSee('Like 1');
     }
+
+    #[Test]
+    public function front_page_does_not_show_draft_articles(): void
+    {
+        Article::factory()->create(['title' => 'Published Article']);
+        Article::factory()->create(['title' => 'Draft Article', 'published' => 0]);
+
+        $this->get('/')
+            ->assertSee('Published Article')
+            ->assertDontSee('Draft Article');
+    }
 }
