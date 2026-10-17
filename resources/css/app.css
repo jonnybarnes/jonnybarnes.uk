@@ -2,6 +2,7 @@
 @layer reset, base, components;
 
 @import url('reset.css');
+@import url('fonts.css');
 @import url('colours.css');
 @import url('layout.css');
 @import url('header.css');

@@ -60,6 +60,10 @@
     pre {
       padding: 1rem;
     }
+
+    .post-info {
+      font-size: 85%;
+    }
   }
 }
 

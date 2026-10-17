@@ -1,0 +1,61 @@
+/*
+ * Libron (serif, body text) and Cal Sans (sans, headings), both SIL OFL 1.1
+ * Libron v0.31: https://github.com/nicoverbruggen/libron/releases
+ * Cal Sans v2.011: https://github.com/calcom/sans/releases
+ */
+@font-face {
+  font-family: Libron;
+  src: url('/assets/fonts/libron/Libron-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Libron;
+  src: url('/assets/fonts/libron/Libron-Italic.woff2') format('woff2');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Libron;
+  src: url('/assets/fonts/libron/Libron-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Libron;
+  src: url('/assets/fonts/libron/Libron-BoldItalic.woff2') format('woff2');
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Cal Sans';
+  src: url('/assets/fonts/cal-sans/CalSansVF.woff2') format('woff2');
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@layer base {
+  :root {
+    --font-serif: libron, georgia, serif;
+    --font-sans: 'Cal Sans', system-ui, sans-serif;
+  }
+
+  body {
+    font-family: var(--font-serif);
+  }
+
+  h1, h2, h3,
+  h4, h5, h6,
+  body > header nav {
+    font-family: var(--font-sans);
+  }
+}

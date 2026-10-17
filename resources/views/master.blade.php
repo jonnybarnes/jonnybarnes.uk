@@ -5,6 +5,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <title>@yield('title'){{ config('app.name') }}</title>
+        <link rel="preload" href="/assets/fonts/libron/Libron-Regular.woff2" as="font" type="font/woff2" crossorigin>
+        <link rel="preload" href="/assets/fonts/cal-sans/CalSansVF.woff2" as="font" type="font/woff2" crossorigin>
         <link rel="stylesheet" href="/assets/highlight/nord.css">
         <link rel="stylesheet" href="/assets/css/app.css">
         <link rel="alternate" type="application/feed+json" title="Blog JSON Feed" href="{{ route('feed.blog.json') }}">
