@@ -7,6 +7,8 @@
     padding: 1ex 2ex;
 
     .e-content {
+      font-size: 110%;
+
       > p:first-child {
         margin-block-start: 0;
       }
@@ -15,6 +17,10 @@
         width: 100%;
         height: auto;
       }
+    }
+
+    .note-metadata {
+      font-size: 85%;
     }
 
     .syndication-links {
