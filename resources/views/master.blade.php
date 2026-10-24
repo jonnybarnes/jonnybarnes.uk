@@ -25,6 +25,15 @@
             <link rel="pgpkey" href="{{ config('app.url')}}/gpg.key">
         @endif
         @stack('head')
+        <script>
+            {{-- Apply a saved theme choice before first paint to avoid a flash of the system theme --}}
+            try {
+                const theme = localStorage.getItem('theme');
+                if (theme === 'light' || theme === 'dark') {
+                    document.documentElement.style.setProperty('color-scheme', theme);
+                }
+            } catch {}
+        </script>
     </head>
     <body>
         <header>
