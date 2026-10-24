@@ -64,31 +64,17 @@ class MicropubController extends Controller
             return response()->json([
                 'error' => 'insufficient_scope',
                 'error_description' => 'The token does not have the required scope for this request',
-            ], 401);
+            ], 403);
         } catch (ModelNotFoundException) {
             return response()->json([
                 'error' => 'invalid_request',
                 'error_description' => 'No known note with given ID',
             ], 404);
-        } catch (MicropubUnsupportedModelException $e) {
-            report($e);
-
-            return response()->json([
-                'error' => 'invalid',
-                'error_description' => 'This implementation currently only supports the updating of notes',
-            ], 500);
-        } catch (\InvalidArgumentException $e) {
+        } catch (MicropubUnsupportedModelException|MicropubHandlerException|\InvalidArgumentException $e) {
             return response()->json([
                 'error' => 'invalid_request',
                 'error_description' => $e->getMessage(),
             ], 400);
-        } catch (MicropubHandlerException $e) {
-            report($e);
-
-            return response()->json([
-                'error' => 'unsupported_operation',
-                'error_description' => 'The request could not be processed by this server',
-            ], 500);
         } catch (\Throwable $e) {
             report($e);
 

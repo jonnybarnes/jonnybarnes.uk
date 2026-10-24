@@ -51,7 +51,7 @@ class MicropubHandlerRegistry
     public function getHandler(string $type): MicropubHandlerInterface
     {
         if (! isset($this->handlers[$type])) {
-            throw new MicropubHandlerException("No handler registered for '{$type}'");
+            throw new MicropubHandlerException("Unsupported Micropub request type '{$type}'");
         }
 
         return $this->handlers[$type];

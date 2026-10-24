@@ -116,6 +116,26 @@ class BookmarksTest extends TestCase
         $response->assertJson(['response' => 'created']);
 
         Queue::assertPushed(ProcessBookmark::class);
-        $this->assertDatabaseHas('bookmarks', ['url' => 'https://example.org/blog-post']);
+        $bookmark = Bookmark::where('url', 'https://example.org/blog-post')->firstOrFail();
+        $this->assertEqualsCanonicalizing(['tag1', 'tag2'], $bookmark->tags->pluck('tag')->all());
+    }
+
+    #[Test]
+    public function form_encoded_bookmark_with_categories_creates_tags(): void
+    {
+        Queue::fake();
+
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer '.$this->getToken(),
+        ])->post('/api/post', [
+            'h' => 'entry',
+            'bookmark-of' => 'https://example.org/blog-post',
+            'category' => ['tag1', 'tag2'],
+        ]);
+
+        $response->assertJson(['response' => 'created']);
+
+        $bookmark = Bookmark::where('url', 'https://example.org/blog-post')->firstOrFail();
+        $this->assertEqualsCanonicalizing(['tag1', 'tag2'], $bookmark->tags->pluck('tag')->all());
     }
 }

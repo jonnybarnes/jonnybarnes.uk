@@ -15,25 +15,36 @@ class MicropubRequest extends FormRequest
         ];
     }
 
+    /**
+     * Determine the request type: the action (e.g. "update") if one is given,
+     * otherwise the microformat type without its "h-" prefix. Per the spec, a
+     * request with no type is treated as an h-entry.
+     */
     public function getType(): ?string
     {
         if ($this->isJson()) {
             $data = $this->json()->all();
 
-            if (isset($data['action']) && $data['action'] === 'update') {
-                return 'update';
+            if (isset($data['action']) && is_string($data['action'])) {
+                return $data['action'];
             }
 
             if (isset($data['type']) && is_array($data['type'])) {
                 $type = current($data['type']);
-                if (str_starts_with($type, 'h-')) {
+                if (is_string($type) && str_starts_with($type, 'h-')) {
                     return substr($type, 2);
                 }
+
+                return null;
             }
 
-            return null;
+            return 'entry';
         }
 
-        return $this->input('h') ?: null;
+        if ($this->filled('action')) {
+            return $this->input('action');
+        }
+
+        return $this->input('h') ?: 'entry';
     }
 }

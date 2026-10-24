@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Tests\Feature;
 
-use App\Exceptions\MicropubHandlerException;
 use App\Jobs\SendWebMentions;
 use App\Jobs\SyndicateNoteToBluesky;
 use App\Jobs\SyndicateNoteToMastodon;
@@ -41,7 +40,7 @@ class MicropubControllerTest extends TestCase
     public function micropub_get_request_without_valid_token_returns_error_response(): void
     {
         $response = $this->get('/api/post', ['HTTP_Authorization' => 'Bearer abc123']);
-        $response->assertStatus(400);
+        $response->assertStatus(401);
         $response->assertJsonFragment(['error_description' => 'The provided token did not pass validation']);
     }
 
@@ -203,7 +202,7 @@ class MicropubControllerTest extends TestCase
             ],
             ['HTTP_Authorization' => 'Bearer '.$this->getInvalidToken()]
         );
-        $response->assertStatus(400);
+        $response->assertStatus(401);
         $response->assertJson(['error' => 'invalid_token']);
     }
 
@@ -233,7 +232,7 @@ class MicropubControllerTest extends TestCase
             ],
             ['HTTP_Authorization' => 'Bearer '.$this->getTokenWithIncorrectScope()]
         );
-        $response->assertStatus(401);
+        $response->assertStatus(403);
         $response->assertJson(['error' => 'insufficient_scope']);
     }
 
@@ -456,16 +455,13 @@ class MicropubControllerTest extends TestCase
                 'error' => 'insufficient_scope',
                 'error_description' => 'The token does not have the required scope for this request',
             ])
-            ->assertStatus(401);
+            ->assertStatus(403);
     }
 
     #[Test]
     public function micropub_client_api_request_for_unsupported_post_type_returns_error(): void
     {
-        $this->mock(ExceptionHandler::class)
-            ->shouldReceive('report')
-            ->once()
-            ->with(\Mockery::type(MicropubHandlerException::class));
+        $this->mock(ExceptionHandler::class)->shouldNotReceive('report');
 
         $response = $this->postJson(
             '/api/post',
@@ -479,10 +475,10 @@ class MicropubControllerTest extends TestCase
         );
         $response
             ->assertJson([
-                'error' => 'unsupported_operation',
-                'error_description' => 'The request could not be processed by this server',
+                'error' => 'invalid_request',
+                'error_description' => "Unsupported Micropub request type 'unsupported'",
             ])
-            ->assertStatus(500);
+            ->assertStatus(400);
     }
 
     #[Test]
@@ -637,8 +633,8 @@ class MicropubControllerTest extends TestCase
             ['HTTP_Authorization' => 'Bearer '.$this->getToken()]
         );
         $response
-            ->assertJson(['error' => 'invalid'])
-            ->assertStatus(500);
+            ->assertJson(['error' => 'invalid_request'])
+            ->assertStatus(400);
     }
 
     #[Test]
@@ -676,8 +672,8 @@ class MicropubControllerTest extends TestCase
             ['HTTP_Authorization' => 'Bearer '.$this->getToken()]
         );
         $response
-            ->assertJson(['error' => 'unsupported_operation'])
-            ->assertStatus(500);
+            ->assertJson(['error' => 'invalid_request'])
+            ->assertStatus(400);
     }
 
     #[Test]
@@ -695,7 +691,7 @@ class MicropubControllerTest extends TestCase
             ['HTTP_Authorization' => 'Bearer '.$this->getTokenWithIncorrectScope()]
         );
         $response
-            ->assertStatus(401)
+            ->assertStatus(403)
             ->assertJson(['error' => 'insufficient_scope']);
     }
 
@@ -1017,5 +1013,107 @@ class MicropubControllerTest extends TestCase
             ->assertJson(['error' => 'invalid_request'])
             ->assertStatus(400);
         $this->assertSame(1, Article::where('title', 'WireGuard')->count());
+    }
+
+    #[Test]
+    public function micropub_client_web_request_without_h_property_creates_note(): void
+    {
+        $response = $this->post(
+            '/api/post',
+            ['content' => 'A note without an explicit type'],
+            ['HTTP_Authorization' => 'Bearer '.$this->getToken()]
+        );
+
+        $response->assertStatus(201)->assertJson(['response' => 'created']);
+        $this->assertDatabaseHas('notes', ['note' => 'A note without an explicit type']);
+    }
+
+    #[Test]
+    public function micropub_client_api_request_without_type_creates_note(): void
+    {
+        $response = $this->postJson(
+            '/api/post',
+            ['properties' => ['content' => ['A JSON note without an explicit type']]],
+            ['HTTP_Authorization' => 'Bearer '.$this->getToken()]
+        );
+
+        $response->assertStatus(201)->assertJson(['response' => 'created']);
+        $this->assertDatabaseHas('notes', ['note' => 'A JSON note without an explicit type']);
+    }
+
+    #[Test]
+    public function micropub_client_web_request_can_update_note(): void
+    {
+        $note = Note::factory()->create();
+
+        $response = $this->post(
+            '/api/post',
+            [
+                'action' => 'update',
+                'url' => $note->uri,
+                'replace' => ['content' => ['replaced via form']],
+            ],
+            ['HTTP_Authorization' => 'Bearer '.$this->getToken()]
+        );
+
+        $response->assertStatus(200)->assertJson(['response' => 'updated']);
+        $this->assertSame('replaced via form', $note->refresh()->content);
+    }
+
+    #[Test]
+    public function micropub_client_web_request_with_unsupported_action_is_not_treated_as_a_new_note(): void
+    {
+        $note = Note::factory()->create();
+        $noteCount = Note::count();
+
+        $response = $this->post(
+            '/api/post',
+            ['action' => 'delete', 'url' => $note->uri],
+            ['HTTP_Authorization' => 'Bearer '.$this->getToken()]
+        );
+
+        $response->assertStatus(400)->assertJson(['error' => 'invalid_request']);
+        $this->assertSame($noteCount, Note::count());
+    }
+
+    #[Test]
+    public function micropub_client_web_request_creates_note_with_photo(): void
+    {
+        $response = $this->post(
+            '/api/post',
+            [
+                'h' => 'entry',
+                'content' => 'A note with a photo',
+                'photo' => 'https://example.org/photo.jpg',
+            ],
+            ['HTTP_Authorization' => 'Bearer '.$this->getToken()]
+        );
+
+        $response->assertStatus(201);
+        $note = Note::where('note', 'A note with a photo')->firstOrFail();
+        $this->assertSame(['https://example.org/photo.jpg'], $note->media->pluck('path')->all());
+    }
+
+    #[Test]
+    public function micropub_client_web_request_accepts_single_syndication_target_without_brackets(): void
+    {
+        Queue::fake();
+        SyndicationTarget::factory()->create([
+            'uid' => 'https://mastodon.social/@jonnybarnes',
+            'service_name' => 'Mastodon',
+        ]);
+
+        $response = $this->post(
+            '/api/post',
+            [
+                'h' => 'entry',
+                'content' => 'Syndicate me',
+                'mp-syndicate-to' => 'https://mastodon.social/@jonnybarnes',
+            ],
+            ['HTTP_Authorization' => 'Bearer '.$this->getToken()]
+        );
+
+        $response->assertStatus(201);
+        Queue::assertPushed(SyndicateNoteToMastodon::class);
     }
 }
