@@ -33,6 +33,13 @@ class BookmarksTest extends TestCase
     }
 
     #[Test]
+    public function non_numeric_bookmark_id_gives_not_found_response(): void
+    {
+        $response = $this->get('/bookmarks/twcamp^share|twsrc^ios');
+        $response->assertNotFound();
+    }
+
+    #[Test]
     public function when_bookmark_is_added_using_http_syntax_check_job_to_take_screenshot_is_invoked(): void
     {
         Queue::fake();

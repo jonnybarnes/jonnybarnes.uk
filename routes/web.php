@@ -211,14 +211,14 @@ Route::get('note/{id}', [NotesController::class, 'redirect']); // for legacy not
 // Likes
 Route::prefix('likes')->group(function () {
     Route::get('/', [LikesController::class, 'index']);
-    Route::get('/{like}', [LikesController::class, 'show']);
+    Route::get('/{like}', [LikesController::class, 'show'])->whereNumber('like');
 });
 
 // Bookmarks
 Route::prefix('bookmarks')->group(function () {
     Route::get('/', [BookmarksController::class, 'index']);
     Route::redirect('/tagged', '/bookmarks');
-    Route::get('/{bookmark}', [BookmarksController::class, 'show']);
+    Route::get('/{bookmark}', [BookmarksController::class, 'show'])->whereNumber('bookmark');
     Route::get('/tagged/{tag}', [BookmarksController::class, 'tagged']);
 });
 
