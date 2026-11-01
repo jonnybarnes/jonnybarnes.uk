@@ -35,7 +35,7 @@ class EntryHandler implements MicropubHandlerInterface
 
         $dataArray = $data->toArray();
         $location = match (true) {
-            isset($dataArray['like-of']) => resolve(LikeService::class)->create($dataArray)->url,
+            isset($dataArray['like-of']) => resolve(LikeService::class)->create($dataArray)->uri,
             isset($dataArray['bookmark-of']) => resolve(BookmarkService::class)->create($dataArray)->uri,
             isset($dataArray['name']) => resolve(ArticleService::class)->create($dataArray)->uri,
             default => resolve(NoteService::class)->create($dataArray)->uri,

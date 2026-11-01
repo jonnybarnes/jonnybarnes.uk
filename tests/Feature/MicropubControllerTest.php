@@ -9,6 +9,8 @@ use App\Jobs\SendWebMentions;
 use App\Jobs\SyndicateNoteToBluesky;
 use App\Jobs\SyndicateNoteToMastodon;
 use App\Models\Article;
+use App\Models\Bookmark;
+use App\Models\Like;
 use App\Models\Media;
 use App\Models\Note;
 use App\Models\Place;
@@ -881,6 +883,50 @@ class MicropubControllerTest extends TestCase
         ]);
         $response->assertHeader('Location');
         $this->assertStringStartsWith(config('app.url').'/blog/', $response->headers->get('Location'));
+    }
+
+    #[Test]
+    public function micropub_client_api_request_for_a_like_returns_our_permalink_in_the_location_header(): void
+    {
+        Queue::fake();
+
+        $response = $this->postJson(
+            '/api/post',
+            [
+                'type' => ['h-entry'],
+                'properties' => [
+                    'like-of' => ['https://example.org/liked-post'],
+                ],
+            ],
+            ['HTTP_Authorization' => 'Bearer '.$this->getToken()]
+        );
+
+        $like = Like::where('url', 'https://example.org/liked-post')->sole();
+        $response
+            ->assertStatus(201)
+            ->assertHeader('Location', config('app.url').'/likes/'.$like->id);
+    }
+
+    #[Test]
+    public function micropub_client_api_request_for_a_bookmark_returns_our_permalink_in_the_location_header(): void
+    {
+        Queue::fake();
+
+        $response = $this->postJson(
+            '/api/post',
+            [
+                'type' => ['h-entry'],
+                'properties' => [
+                    'bookmark-of' => ['https://example.org/bookmarked-page'],
+                ],
+            ],
+            ['HTTP_Authorization' => 'Bearer '.$this->getToken()]
+        );
+
+        $bookmark = Bookmark::where('url', 'https://example.org/bookmarked-page')->sole();
+        $response
+            ->assertStatus(201)
+            ->assertHeader('Location', config('app.url').'/bookmarks/'.$bookmark->id);
     }
 
     #[Test]
