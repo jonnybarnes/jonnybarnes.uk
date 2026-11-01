@@ -18,6 +18,13 @@ class Like extends Model
     use FilterHtml;
     use HasFactory;
 
+    protected function uri(): Attribute
+    {
+        return Attribute::get(
+            get: fn () => config('app.url').'/likes/'.$this->id,
+        );
+    }
+
     protected function url(): Attribute
     {
         return Attribute::set(

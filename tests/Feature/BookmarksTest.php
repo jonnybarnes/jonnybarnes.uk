@@ -92,10 +92,10 @@ class BookmarksTest extends TestCase
     }
 
     #[Test]
-    public function bookmark_local_uri_attribute_returns_correct_url(): void
+    public function bookmark_uri_attribute_returns_correct_url(): void
     {
         $bookmark = Bookmark::factory()->create();
-        $this->assertEquals(config('app.url').'/bookmarks/'.$bookmark->id, $bookmark->local_uri);
+        $this->assertEquals(config('app.url').'/bookmarks/'.$bookmark->id, $bookmark->uri);
     }
 
     #[Test]

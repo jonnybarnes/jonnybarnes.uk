@@ -14,6 +14,14 @@ class LikesTest extends TestCase
     use RefreshDatabase;
 
     #[Test]
+    public function like_uri_attribute_returns_our_permalink(): void
+    {
+        $like = Like::factory()->create();
+
+        $this->assertEquals(config('app.url').'/likes/'.$like->id, $like->uri);
+    }
+
+    #[Test]
     public function we_can_set_the_author_url(): void
     {
         $like = new Like;

@@ -25,7 +25,7 @@ class Bookmark extends Model
         return $this->belongsToMany('App\Models\Tag');
     }
 
-    protected function localUri(): Attribute
+    protected function uri(): Attribute
     {
         return Attribute::get(
             get: fn () => config('app.url').'/bookmarks/'.$this->id,
