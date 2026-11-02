@@ -46,7 +46,6 @@ class NoteSource
                 $note->tweet_id ? 'https://twitter.com/i/web/status/'.$note->tweet_id : null,
                 $note->facebook_url,
                 $note->swarm_url,
-                $note->instagram_url,
                 $note->mastodon_url,
                 $note->bluesky_url,
             ])),

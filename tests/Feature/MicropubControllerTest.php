@@ -1242,6 +1242,81 @@ class MicropubControllerTest extends TestCase
     }
 
     #[Test]
+    public function update_that_would_do_nothing_is_rejected_without_changing_the_note(): void
+    {
+        $headers = ['HTTP_Authorization' => 'Bearer '.$this->getToken()];
+        $note = Note::factory()->create(['note' => 'original']);
+        $mediaCount = Media::count();
+
+        $operations = [
+            ['replace' => []],
+            ['replace' => ['category' => ['indieweb']]],
+            ['replace' => ['content' => ['changed'], 'category' => ['indieweb']]],
+            ['replace' => ['photo' => ['https://example.org/photo.jpg']]],
+            ['replace' => ['syndication' => ['https://unknown.example/1']]],
+            ['add' => ['category' => ['indieweb']]],
+            ['add' => ['content' => ['more']]],
+            ['add' => ['syndication' => ['https://unknown.example/1']]],
+            ['add' => ['photo' => ['http://example.org/photo.jpg']]],
+            ['delete' => ['category']],
+            ['delete' => ['category' => ['indieweb']]],
+            ['delete' => ['syndication' => ['https://unknown.example/1']]],
+        ];
+
+        foreach ($operations as $operation) {
+            $this->postJson('/api/post', ['action' => 'update', 'url' => $note->uri, ...$operation], $headers)
+                ->assertStatus(400)->assertJson(['error' => 'invalid_request']);
+        }
+
+        $this->assertSame('original', $note->refresh()->getRawOriginal('note'));
+        $this->assertSame($mediaCount, Media::count());
+    }
+
+    #[Test]
+    public function update_can_add_and_delete_mastodon_and_bluesky_syndication_urls(): void
+    {
+        $headers = ['HTTP_Authorization' => 'Bearer '.$this->getToken()];
+        SyndicationTarget::factory()->create(['uid' => 'https://mastodon.example/@me', 'service_name' => 'Mastodon']);
+        $note = Note::factory()->create();
+        $mastodon = 'https://mastodon.example/@me/1';
+        $bluesky = 'https://bsky.app/profile/jonnybarnes.uk/post/1';
+
+        $this->postJson('/api/post', ['action' => 'update', 'url' => $note->uri, 'add' => ['syndication' => [$mastodon, $bluesky]]], $headers)
+            ->assertOk();
+        $note->refresh();
+        $this->assertSame($mastodon, $note->mastodon_url);
+        $this->assertSame($bluesky, $note->bluesky_url);
+
+        $this->postJson('/api/post', ['action' => 'update', 'url' => $note->uri, 'delete' => ['syndication' => [$mastodon]]], $headers)
+            ->assertOk();
+        $note->refresh();
+        $this->assertNull($note->mastodon_url);
+        $this->assertSame($bluesky, $note->bluesky_url);
+
+        $this->postJson('/api/post', ['action' => 'update', 'url' => $note->uri, 'delete' => ['syndication']], $headers)
+            ->assertOk();
+        $this->assertNull($note->refresh()->bluesky_url);
+    }
+
+    #[Test]
+    public function update_rejects_mastodon_urls_from_instances_we_do_not_syndicate_to(): void
+    {
+        SyndicationTarget::factory()->create(['uid' => 'https://mastodon.example/@me', 'service_name' => 'Mastodon']);
+        SyndicationTarget::factory()->create(['uid' => 'https://other.example/@me', 'service_name' => 'Pixelfed']);
+        $note = Note::factory()->create(['mastodon_url' => 'https://mastodon.example/@me/1']);
+
+        foreach (['https://mastodon.social/@me/2', 'https://mastodon.example.evil/@me/2', 'https://other.example/@me/2'] as $url) {
+            $this->postJson(
+                '/api/post',
+                ['action' => 'update', 'url' => $note->uri, 'add' => ['syndication' => [$url]]],
+                ['HTTP_Authorization' => 'Bearer '.$this->getToken()]
+            )->assertStatus(400)->assertJson(['error' => 'invalid_request']);
+        }
+
+        $this->assertSame('https://mastodon.example/@me/1', $note->refresh()->mastodon_url);
+    }
+
+    #[Test]
     public function update_with_an_unusable_url_is_rejected(): void
     {
         $headers = ['HTTP_Authorization' => 'Bearer '.$this->getToken()];

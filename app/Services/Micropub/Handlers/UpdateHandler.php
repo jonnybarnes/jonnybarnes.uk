@@ -9,6 +9,7 @@ use App\Exceptions\MicropubHandlerException;
 use App\Exceptions\MicropubUnsupportedModelException;
 use App\Models\Media;
 use App\Models\Note;
+use App\Models\SyndicationTarget;
 use App\Services\Micropub\Data\MicropubData;
 use App\Services\Micropub\Data\UpdateData;
 use App\Services\Micropub\NoteResolver;
@@ -16,6 +17,26 @@ use Illuminate\Support\Str;
 
 class UpdateHandler implements MicropubHandlerInterface
 {
+    /**
+     * The properties each update operation can change.
+     */
+    private const SUPPORTED_PROPERTIES = [
+        'replace' => ['content', 'syndication'],
+        'add' => ['syndication', 'photo'],
+        'delete' => ['syndication', 'photo'],
+    ];
+
+    /**
+     * The syndication URLs we have somewhere to store. Mastodon URLs are also
+     * accepted, based on the instances in our syndication targets.
+     */
+    private const SYNDICATION_PREFIXES = [
+        'https://www.facebook.com',
+        'https://www.swarmapp.com',
+        'https://twitter.com',
+        'https://bsky.app',
+    ];
+
     public function dataClass(): string
     {
         return UpdateData::class;
@@ -43,7 +64,7 @@ class UpdateHandler implements MicropubHandlerInterface
 
         $note = resolve(NoteResolver::class)->fromUrl($data->updateUrl);
 
-        if ($data->updateReplace === null && $data->updateAdd === null && $data->updateDelete === null) {
+        if (! $data->updateReplace && ! $data->updateAdd && ! $data->updateDelete) {
             throw new MicropubHandlerException('Unsupported update operation');
         }
 
@@ -54,7 +75,6 @@ class UpdateHandler implements MicropubHandlerInterface
                 match ($property) {
                     'content' => $note->note = is_array($value[0]) ? ($value[0]['html'] ?? $value[0]['value'] ?? null) : $value[0],
                     'syndication' => $this->applySyndication($note, $value),
-                    default => null,
                 };
             }
         }
@@ -66,13 +86,11 @@ class UpdateHandler implements MicropubHandlerInterface
                 }
                 if ($property === 'photo') {
                     foreach ($value as $photoURL) {
-                        if (Str::startsWith($photoURL, 'https://')) {
-                            $media = new Media;
-                            $media->path = $photoURL;
-                            $media->type = 'image';
-                            $media->save();
-                            $note->media()->save($media);
-                        }
+                        $media = new Media;
+                        $media->path = $photoURL;
+                        $media->type = 'image';
+                        $media->save();
+                        $note->media()->save($media);
                     }
                 }
             }
@@ -91,21 +109,22 @@ class UpdateHandler implements MicropubHandlerInterface
     }
 
     /**
-     * Check the whole request before applying any of it, so that a malformed
-     * value can't leave a note partially updated. The spec requires the values
-     * of each property to be arrays.
+     * Check the whole request before applying any of it, so that a bad value
+     * can't leave a note partially updated, and a client is never told an
+     * update worked when we ignored it. The spec requires the values of each
+     * property to be arrays.
      *
      * @throws MicropubHandlerException
      */
     private function validateOperations(UpdateData $data): void
     {
-        foreach ([$data->updateReplace ?? [], $data->updateAdd ?? []] as $operation) {
-            foreach ($operation as $property => $values) {
+        foreach (['replace' => $data->updateReplace ?? [], 'add' => $data->updateAdd ?? []] as $operation => $properties) {
+            foreach ($properties as $property => $values) {
                 if (! is_string($property) || ! is_array($values) || $values === [] || ! array_is_list($values)) {
                     throw new MicropubHandlerException('The values of each property must be a non-empty array');
                 }
 
-                $this->validateValues($property, $values);
+                $this->validateProperty($operation, $property, $values);
             }
         }
 
@@ -116,6 +135,8 @@ class UpdateHandler implements MicropubHandlerInterface
                 if (! is_string($property)) {
                     throw new MicropubHandlerException('The properties to delete must be strings');
                 }
+
+                $this->validateProperty('delete', $property, []);
             }
 
             return;
@@ -126,17 +147,17 @@ class UpdateHandler implements MicropubHandlerInterface
                 throw new MicropubHandlerException('The values of each property must be an array');
             }
 
-            $this->validateValues($property, $values);
+            $this->validateProperty('delete', $property, $values);
         }
     }
 
     /**
      * @throws MicropubHandlerException
      */
-    private function validateValues(string $property, array $values): void
+    private function validateProperty(string $operation, string $property, array $values): void
     {
-        if (! in_array($property, ['content', 'syndication', 'photo'], true)) {
-            return;
+        if (! in_array($property, self::SUPPORTED_PROPERTIES[$operation], true)) {
+            throw new MicropubHandlerException("This server does not support the {$operation} operation on the {$property} property");
         }
 
         foreach ($values as $value) {
@@ -146,6 +167,14 @@ class UpdateHandler implements MicropubHandlerInterface
 
             if (! is_string($value)) {
                 throw new MicropubHandlerException("The {$property} property has an invalid value");
+            }
+
+            if ($property === 'syndication' && ! Str::startsWith($value, [...self::SYNDICATION_PREFIXES, ...$this->mastodonPrefixes()])) {
+                throw new MicropubHandlerException("This server can not store the syndication URL {$value}");
+            }
+
+            if ($operation === 'add' && $property === 'photo' && ! Str::startsWith($value, 'https://')) {
+                throw new MicropubHandlerException('Photos must be added using an https URL');
             }
         }
     }
@@ -157,7 +186,6 @@ class UpdateHandler implements MicropubHandlerInterface
                 match ($property) {
                     'syndication' => $this->clearSyndication($note),
                     'photo' => $note->media()->delete(),
-                    default => null,
                 };
             }
 
@@ -174,11 +202,28 @@ class UpdateHandler implements MicropubHandlerInterface
         }
     }
 
+    /**
+     * Mastodon can be on any host, so use the instances we syndicate to.
+     *
+     * @return string[]
+     */
+    private function mastodonPrefixes(): array
+    {
+        return SyndicationTarget::where('service_name', 'Mastodon')
+            ->pluck('uid')
+            ->map(fn (string $uid) => parse_url($uid, PHP_URL_HOST))
+            ->filter()
+            ->map(fn (string $host) => "https://{$host}/")
+            ->all();
+    }
+
     private function clearSyndication(Note $note): void
     {
         $note->facebook_url = null;
         $note->swarm_url = null;
         $note->tweet_id = null;
+        $note->mastodon_url = null;
+        $note->bluesky_url = null;
     }
 
     private function removeSyndicationValues(Note $note, array $urls): void
@@ -190,6 +235,10 @@ class UpdateHandler implements MicropubHandlerInterface
                 $note->swarm_url = null;
             } elseif (Str::startsWith($url, 'https://twitter.com')) {
                 $note->tweet_id = null;
+            } elseif (Str::startsWith($url, $this->mastodonPrefixes()) && $note->mastodon_url === $url) {
+                $note->mastodon_url = null;
+            } elseif (Str::startsWith($url, 'https://bsky.app') && $note->bluesky_url === $url) {
+                $note->bluesky_url = null;
             }
         }
     }
@@ -203,6 +252,10 @@ class UpdateHandler implements MicropubHandlerInterface
                 $note->swarm_url = $url;
             } elseif (Str::startsWith($url, 'https://twitter.com')) {
                 $note->tweet_id = basename(parse_url($url, PHP_URL_PATH));
+            } elseif (Str::startsWith($url, $this->mastodonPrefixes())) {
+                $note->mastodon_url = $url;
+            } elseif (Str::startsWith($url, 'https://bsky.app')) {
+                $note->bluesky_url = $url;
             }
         }
     }
