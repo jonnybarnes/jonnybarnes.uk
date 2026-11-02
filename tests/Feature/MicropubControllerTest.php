@@ -1116,4 +1116,188 @@ class MicropubControllerTest extends TestCase
         $response->assertStatus(201);
         Queue::assertPushed(SyndicateNoteToMastodon::class);
     }
+
+    #[Test]
+    public function source_query_returns_the_raw_note_as_microformats2(): void
+    {
+        $note = Note::factory()->create([
+            'note' => 'Some *markdown* #indieweb',
+            'in_reply_to' => 'https://example.org/post',
+            'mastodon_url' => 'https://mastodon.example/@me/1',
+        ]);
+        $media = Media::factory()->create(['path' => 'media/alt.jpg', 'type' => 'image']);
+        $note->media()->attach($media->id, ['alt_text' => 'A description', 'order' => 0]);
+
+        $response = $this->getJson(
+            '/api/post?q=source&url='.urlencode($note->uri),
+            ['HTTP_Authorization' => 'Bearer '.$this->getToken()]
+        );
+
+        $response->assertOk()->assertExactJson([
+            'type' => ['h-entry'],
+            'properties' => [
+                'content' => ['Some *markdown* #indieweb'],
+                'published' => [$note->created_at->toIso8601String()],
+                'in-reply-to' => ['https://example.org/post'],
+                'category' => ['indieweb'],
+                'photo' => [['value' => $media->url, 'alt' => 'A description']],
+                'syndication' => ['https://mastodon.example/@me/1'],
+            ],
+        ]);
+    }
+
+    #[Test]
+    public function source_query_returns_the_location_of_a_note(): void
+    {
+        $headers = ['HTTP_Authorization' => 'Bearer '.$this->getToken()];
+        $geoNote = Note::factory()->create(['location' => '1.23, 4.56']);
+        $place = Place::factory()->create();
+        $placeNote = Note::factory()->create();
+        $placeNote->place()->associate($place)->save();
+
+        $this->getJson('/api/post?q=source&properties[]=location&url='.urlencode($geoNote->uri), $headers)
+            ->assertExactJson(['properties' => ['location' => ['geo:1.23,4.56']]]);
+        $this->getJson('/api/post?q=source&properties[]=location&url='.urlencode($placeNote->uri), $headers)
+            ->assertExactJson(['properties' => ['location' => [$place->uri]]]);
+    }
+
+    #[Test]
+    public function source_query_only_returns_the_requested_properties(): void
+    {
+        $note = Note::factory()->create(['note' => 'Hello']);
+
+        $response = $this->getJson(
+            '/api/post?q=source&properties[]=content&url='.urlencode($note->uri),
+            ['HTTP_Authorization' => 'Bearer '.$this->getToken()]
+        );
+
+        $response->assertOk()->assertExactJson(['properties' => ['content' => ['Hello']]]);
+    }
+
+    #[Test]
+    public function source_query_with_no_matching_properties_returns_an_empty_object(): void
+    {
+        $note = Note::factory()->create();
+
+        $response = $this->getJson(
+            '/api/post?q=source&properties[]=nonsense&url='.urlencode($note->uri),
+            ['HTTP_Authorization' => 'Bearer '.$this->getToken()]
+        );
+
+        $this->assertSame('{"properties":{}}', $response->assertOk()->getContent());
+    }
+
+    #[Test]
+    public function source_query_reports_invalid_urls(): void
+    {
+        $headers = ['HTTP_Authorization' => 'Bearer '.$this->getToken()];
+        $note = Note::factory()->create();
+
+        $this->getJson('/api/post?q=source', $headers)
+            ->assertStatus(400)->assertJson(['error' => 'invalid_request']);
+        $this->getJson('/api/post?q=source&url='.urlencode('https://other.example/notes/'.$note->nb60id), $headers)
+            ->assertStatus(400)->assertJson(['error' => 'invalid_request']);
+        $this->getJson('/api/post?q=source&url='.urlencode(config('app.url').'/blog/A'), $headers)
+            ->assertStatus(400)->assertJson(['error' => 'invalid_request']);
+        $this->getJson('/api/post?q=source&url='.urlencode(config('app.url').'/notes/ZZZZ'), $headers)
+            ->assertStatus(404)->assertJson(['error' => 'invalid_request']);
+        $this->getJson('/api/post?q=source&url='.urlencode(config('app.url').'/notes/zzzzzzzzzz'), $headers)
+            ->assertStatus(404)->assertJson(['error' => 'invalid_request']);
+    }
+
+    #[Test]
+    public function unknown_and_malformed_queries_return_an_error(): void
+    {
+        $headers = ['HTTP_Authorization' => 'Bearer '.$this->getToken()];
+
+        foreach (['q=nonsense', 'q[]=config', 'q=geo:junk', 'q=geo:1.2.3,4'] as $query) {
+            $this->getJson('/api/post?'.$query, $headers)
+                ->assertStatus(400)->assertJson(['error' => 'invalid_request']);
+        }
+    }
+
+    #[Test]
+    public function update_with_a_malformed_value_is_rejected_without_changing_the_note(): void
+    {
+        $headers = ['HTTP_Authorization' => 'Bearer '.$this->getToken()];
+        $note = Note::factory()->create(['note' => 'original']);
+
+        $operations = [
+            ['replace' => ['content' => 'hello']],
+            ['replace' => ['content' => []]],
+            ['replace' => ['content' => [123]]],
+            ['replace' => ['content' => ['replaced'], 'syndication' => 'https://www.swarmapp.com/1']],
+            ['replace' => ['content']],
+            ['add' => ['syndication' => [['nested']]]],
+            ['delete' => [['content']]],
+            ['delete' => ['syndication' => 'https://www.swarmapp.com/1']],
+        ];
+
+        foreach ($operations as $operation) {
+            $this->postJson('/api/post', ['action' => 'update', 'url' => $note->uri, ...$operation], $headers)
+                ->assertStatus(400)->assertJson(['error' => 'invalid_request']);
+        }
+
+        $this->assertSame('original', $note->refresh()->getRawOriginal('note'));
+    }
+
+    #[Test]
+    public function update_with_an_unusable_url_is_rejected(): void
+    {
+        $headers = ['HTTP_Authorization' => 'Bearer '.$this->getToken()];
+        $note = Note::factory()->create(['note' => 'original']);
+        $replace = ['replace' => ['content' => ['changed']]];
+
+        $this->postJson('/api/post', ['action' => 'update', ...$replace], $headers)->assertStatus(400);
+        $this->postJson('/api/post', ['action' => 'update', 'url' => ['a'], ...$replace], $headers)->assertStatus(400);
+        $this->postJson('/api/post', ['action' => 'update', 'url' => 'https://other.example/notes/'.$note->nb60id, ...$replace], $headers)->assertStatus(400);
+        $this->postJson('/api/post', ['action' => 'update', 'url' => config('app.url').'/notes/zzzzzzzzzz', ...$replace], $headers)->assertStatus(404);
+
+        $this->assertSame('original', $note->refresh()->getRawOriginal('note'));
+    }
+
+    #[Test]
+    public function creating_with_a_wrongly_shaped_property_returns_an_error(): void
+    {
+        $headers = ['HTTP_Authorization' => 'Bearer '.$this->getToken()];
+        $noteCount = Note::count();
+
+        $this->postJson('/api/post', ['type' => ['h-entry'], 'properties' => ['content' => ['x'], 'mp-syndicate-to' => 'https://a.example']], $headers)
+            ->assertStatus(400)->assertJson(['error' => 'invalid_request']);
+        $this->postJson('/api/post', ['type' => ['h-entry'], 'properties' => ['content' => [123]]], $headers)
+            ->assertStatus(400)->assertJson(['error' => 'invalid_request']);
+        $this->post('/api/post', ['h' => 'entry', 'content' => ['a', 'b']], $headers)
+            ->assertStatus(400)->assertJson(['error' => 'invalid_request']);
+
+        $this->assertSame($noteCount, Note::count());
+    }
+
+    #[Test]
+    public function creating_with_an_invalid_published_date_does_not_leave_a_note_behind(): void
+    {
+        Queue::fake();
+        $noteCount = Note::count();
+
+        $this->postJson(
+            '/api/post',
+            ['type' => ['h-entry'], 'properties' => ['content' => ['x'], 'published' => ['not a date']]],
+            ['HTTP_Authorization' => 'Bearer '.$this->getToken()]
+        )->assertStatus(400)->assertJson(['error' => 'invalid_request']);
+
+        $this->assertSame($noteCount, Note::count());
+    }
+
+    #[Test]
+    public function creating_with_a_photo_object_without_alt_text_succeeds(): void
+    {
+        Queue::fake();
+
+        $this->postJson(
+            '/api/post',
+            ['type' => ['h-entry'], 'properties' => ['content' => ['x'], 'photo' => [['value' => 'https://example.org/no-alt.jpg']]]],
+            ['HTTP_Authorization' => 'Bearer '.$this->getToken()]
+        )->assertStatus(201);
+
+        $this->assertDatabaseHas('media_endpoint', ['path' => 'https://example.org/no-alt.jpg']);
+    }
 }

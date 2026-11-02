@@ -30,6 +30,9 @@ class NoteService
             $content = null;
         }
 
+        // an invalid date throws, so parse it before anything is saved
+        $published = $this->getPublished($data);
+
         $note = Note::create(
             [
                 'note' => $content,
@@ -38,7 +41,7 @@ class NoteService
             ]
         );
 
-        if ($published = $this->getPublished($data)) {
+        if ($published !== null) {
             $note->created_at = $note->updated_at = $published;
         }
 
@@ -205,11 +208,11 @@ class NoteService
                 if (is_string($photo)) {
                     $photoUrl = $photo;
                 } elseif (is_array($photo)) {
-                    $photoUrl = $photo['value'];
-                    $photoAlt = $photo['alt'];
+                    $photoUrl = $photo['value'] ?? null;
+                    $photoAlt = is_string($photo['alt'] ?? null) ? $photo['alt'] : null;
                 }
 
-                if (empty($photoUrl)) {
+                if (! is_string($photoUrl) || $photoUrl === '') {
                     continue;
                 }
 

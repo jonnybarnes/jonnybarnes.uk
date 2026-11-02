@@ -11,6 +11,7 @@ use App\Models\Media;
 use App\Models\Note;
 use App\Services\Micropub\Data\MicropubData;
 use App\Services\Micropub\Data\UpdateData;
+use App\Services\Micropub\NoteResolver;
 use Illuminate\Support\Str;
 
 class UpdateHandler implements MicropubHandlerInterface
@@ -36,17 +37,17 @@ class UpdateHandler implements MicropubHandlerInterface
             throw new InvalidTokenScopeException;
         }
 
-        $urlPath = parse_url($data->updateUrl, PHP_URL_PATH);
-
-        if (mb_substr($urlPath, 1, 5) !== 'notes') {
-            throw new MicropubUnsupportedModelException('This implementation currently only supports the updating of notes');
+        if ($data->updateUrl === null) {
+            throw new MicropubHandlerException('The url parameter is required');
         }
 
-        $note = Note::nb60(basename($urlPath))->firstOrFail();
+        $note = resolve(NoteResolver::class)->fromUrl($data->updateUrl);
 
         if ($data->updateReplace === null && $data->updateAdd === null && $data->updateDelete === null) {
             throw new MicropubHandlerException('Unsupported update operation');
         }
+
+        $this->validateOperations($data);
 
         if ($data->updateReplace !== null) {
             foreach ($data->updateReplace as $property => $value) {
@@ -87,6 +88,66 @@ class UpdateHandler implements MicropubHandlerInterface
             'response' => 'updated',
             'url' => $note->uri,
         ];
+    }
+
+    /**
+     * Check the whole request before applying any of it, so that a malformed
+     * value can't leave a note partially updated. The spec requires the values
+     * of each property to be arrays.
+     *
+     * @throws MicropubHandlerException
+     */
+    private function validateOperations(UpdateData $data): void
+    {
+        foreach ([$data->updateReplace ?? [], $data->updateAdd ?? []] as $operation) {
+            foreach ($operation as $property => $values) {
+                if (! is_string($property) || ! is_array($values) || $values === [] || ! array_is_list($values)) {
+                    throw new MicropubHandlerException('The values of each property must be a non-empty array');
+                }
+
+                $this->validateValues($property, $values);
+            }
+        }
+
+        $delete = $data->updateDelete ?? [];
+
+        if (array_is_list($delete)) {
+            foreach ($delete as $property) {
+                if (! is_string($property)) {
+                    throw new MicropubHandlerException('The properties to delete must be strings');
+                }
+            }
+
+            return;
+        }
+
+        foreach ($delete as $property => $values) {
+            if (! is_array($values) || ! array_is_list($values)) {
+                throw new MicropubHandlerException('The values of each property must be an array');
+            }
+
+            $this->validateValues($property, $values);
+        }
+    }
+
+    /**
+     * @throws MicropubHandlerException
+     */
+    private function validateValues(string $property, array $values): void
+    {
+        if (! in_array($property, ['content', 'syndication', 'photo'], true)) {
+            return;
+        }
+
+        foreach ($values as $value) {
+            if ($property === 'content' && is_array($value)) {
+                $value = $value['html'] ?? $value['value'] ?? null;
+            }
+
+            if (! is_string($value)) {
+                throw new MicropubHandlerException("The {$property} property has an invalid value");
+            }
+        }
     }
 
     private function applyDelete(Note $note, array $delete): void
