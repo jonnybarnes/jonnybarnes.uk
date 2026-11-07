@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace App\Jobs;
 
+use App\Exceptions\InvalidMentionException;
 use App\Exceptions\RemoteContentNotFoundException;
 use App\Models\Note;
 use App\Models\WebMention;
+use App\Services\WebMention\Parser;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Http;
-use Jonnybarnes\WebmentionsParser\Exceptions\InvalidMentionException;
-use Jonnybarnes\WebmentionsParser\Parser;
 use Mf2;
 
 class ProcessWebMention implements ShouldQueue

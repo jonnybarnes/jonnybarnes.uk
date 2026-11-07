@@ -10,11 +10,11 @@ use App\Jobs\ProcessWebMention;
 use App\Jobs\SaveProfileImage;
 use App\Models\Note;
 use App\Models\WebMention;
+use App\Services\WebMention\Parser;
 use Illuminate\FileSystem\FileSystem;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Queue;
-use Jonnybarnes\WebmentionsParser\Parser;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 

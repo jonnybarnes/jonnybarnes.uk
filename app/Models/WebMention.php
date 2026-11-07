@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Services\WebMention\Authorship;
 use App\Traits\FilterHtml;
 use Exception;
 use Illuminate\Database\Eloquent\Attributes\Guarded;
@@ -13,7 +14,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Filesystem\Filesystem;
-use Jonnybarnes\WebmentionsParser\Authorship;
 
 #[Table('webmentions')]
 #[Guarded(['id'])]

@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Jobs;
 
+use App\Exceptions\AuthorshipParserException;
 use App\Jobs\SaveProfileImage;
+use App\Services\WebMention\Authorship;
 use Illuminate\Support\Facades\Http;
-use Jonnybarnes\WebmentionsParser\Authorship;
-use Jonnybarnes\WebmentionsParser\Exceptions\AuthorshipParserException;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
