@@ -41,7 +41,7 @@ class MicropubMediaTest extends TestCase
             '/api/media?q=last',
             ['HTTP_Authorization' => 'Bearer abc123']
         );
-        $response->assertStatus(400);
+        $response->assertStatus(401);
         $response->assertJsonFragment(['error_description' => 'The provided token did not pass validation']);
     }
 
@@ -63,7 +63,7 @@ class MicropubMediaTest extends TestCase
             '/api/media?q=last',
             ['HTTP_Authorization' => 'Bearer '.$this->getTokenWithIncorrectScope()]
         );
-        $response->assertStatus(401);
+        $response->assertStatus(403);
         $response->assertJsonFragment(['error_description' => 'The token’s scope does not have the necessary requirements.']);
     }
 
@@ -210,14 +210,14 @@ class MicropubMediaTest extends TestCase
     }
 
     #[Test]
-    public function media_endpoint_request_with_invalid_token_returns400_response(): void
+    public function media_endpoint_request_with_invalid_token_returns401_response(): void
     {
         $response = $this->post(
             '/api/media',
             [],
             ['HTTP_Authorization' => 'Bearer abc123']
         );
-        $response->assertStatus(400);
+        $response->assertStatus(401);
         $response->assertJsonFragment(['error_description' => 'The provided token did not pass validation']);
     }
 
@@ -234,14 +234,14 @@ class MicropubMediaTest extends TestCase
     }
 
     #[Test]
-    public function media_endpoint_request_with_insufficient_token_scopes_returns401_response(): void
+    public function media_endpoint_request_with_insufficient_token_scopes_returns403_response(): void
     {
         $response = $this->post(
             '/api/media',
             [],
             ['HTTP_Authorization' => 'Bearer '.$this->getTokenWithIncorrectScope()]
         );
-        $response->assertStatus(401);
+        $response->assertStatus(403);
         $response->assertJsonFragment([
             'error_description' => 'The token’s scope does not have the necessary requirements.',
         ]);

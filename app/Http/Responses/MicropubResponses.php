@@ -17,7 +17,7 @@ class MicropubResponses
             'response' => 'error',
             'error' => 'insufficient_scope',
             'error_description' => 'The token’s scope does not have the necessary requirements.',
-        ], 401);
+        ], 403);
     }
 
     /**
@@ -29,7 +29,7 @@ class MicropubResponses
             'response' => 'error',
             'error' => 'invalid_token',
             'error_description' => 'The provided token did not pass validation',
-        ], 400);
+        ], 401);
     }
 
     /**

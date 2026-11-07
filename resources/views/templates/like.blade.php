@@ -20,7 +20,7 @@
             </blockquote>
         @endisset
         <div>
-            <a href="/likes/{{ $like->id }}"><time class="dt-published" datetime="{{ $like->updated_at->toISO8601String() }}" title="{{ $like->updated_at->toISO8601String() }}">{{ $like->updated_at->diffForHumans() }}</time></a>
+            <a href="{{ $like->uri }}"><time class="dt-published" datetime="{{ $like->updated_at->toISO8601String() }}" title="{{ $like->updated_at->toISO8601String() }}">{{ $like->updated_at->diffForHumans() }}</time></a>
         </div>
     </div>
 </div>

@@ -4,7 +4,34 @@ class ThemeSelector {
     this.btnLight = this.widget.querySelector('#btn-light');
     this.btnDark = this.widget.querySelector('#btn-dark');
     this.status = this.widget.querySelector('#theme-status');
-    this.currentTheme = 'system';
+    this.currentTheme = ThemeSelector.storedTheme();
+    this.updateButtons();
+  }
+
+  static storedTheme() {
+    try {
+      const theme = localStorage.getItem('theme');
+      return (theme === 'light' || theme === 'dark') ? theme : 'system';
+    } catch {
+      return 'system';
+    }
+  }
+
+  static storeTheme(theme) {
+    try {
+      if (theme === 'system') {
+        localStorage.removeItem('theme');
+      } else {
+        localStorage.setItem('theme', theme);
+      }
+    } catch {
+      /* storage unavailable, the choice just won't persist */
+    }
+  }
+
+  updateButtons() {
+    this.btnLight.setAttribute('aria-pressed', String(this.currentTheme === 'light'));
+    this.btnDark.setAttribute('aria-pressed', String(this.currentTheme === 'dark'));
   }
 
   setupEventListeners() {
@@ -43,9 +70,9 @@ class ThemeSelector {
     const applyChange = () => {
       this.currentTheme = theme;
       html.style.setProperty('color-scheme', selectedTheme);
+      ThemeSelector.storeTheme(theme);
 
-      this.btnLight.setAttribute('aria-pressed', String(theme === 'light'));
-      this.btnDark.setAttribute('aria-pressed', String(theme === 'dark'));
+      this.updateButtons();
       this.status.textContent = theme === 'system' ? 'Theme set to system default' : '';
     };
 

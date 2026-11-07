@@ -25,6 +25,7 @@ class EntryData extends MicropubData
         public readonly mixed $syndication,
         public readonly ?array $photos,
         public readonly ?string $postStatus,
+        public readonly ?array $category,
     ) {}
 
     public static function fromRequest(Request $request): static
@@ -51,6 +52,7 @@ class EntryData extends MicropubData
                 syndication: Arr::get($data, 'properties.syndication.0'),
                 photos: Arr::get($data, 'properties.photo'),
                 postStatus: Arr::get($data, 'properties.post-status.0'),
+                category: Arr::get($data, 'properties.category'),
             );
         }
 
@@ -62,15 +64,25 @@ class EntryData extends MicropubData
             location: $request->input('location'),
             bookmarkOf: $request->input('bookmark-of'),
             likeOf: $request->input('like-of'),
-            mpSyndicateTo: $request->input('mp-syndicate-to'),
+            mpSyndicateTo: self::wrapFormValue($request->input('mp-syndicate-to')),
             name: $request->input('name'),
             description: $request->input('description'),
             geo: $request->input('geo'),
             checkin: $request->input('checkin'),
             syndication: $request->input('syndication'),
-            photos: $request->input('photos'),
+            photos: self::wrapFormValue($request->input('photo')),
             postStatus: $request->input('post-status'),
+            category: self::wrapFormValue($request->input('category')),
         );
+    }
+
+    /**
+     * Form-encoded multi-value properties may be sent with or without the []
+     * suffix, so a single value arrives as a string rather than an array.
+     */
+    private static function wrapFormValue(mixed $value): ?array
+    {
+        return $value === null ? null : Arr::wrap($value);
     }
 
     private static function extractLocationData(array $data): array|string|null
@@ -104,6 +116,7 @@ class EntryData extends MicropubData
             syndication: $data['syndication'] ?? null,
             photos: $data['photos'] ?? null,
             postStatus: $data['post-status'] ?? null,
+            category: $data['category'] ?? null,
         );
     }
 
@@ -125,6 +138,7 @@ class EntryData extends MicropubData
             'syndication' => $this->syndication,
             'photos' => $this->photos,
             'post-status' => $this->postStatus,
+            'category' => $this->category,
         ];
     }
 }

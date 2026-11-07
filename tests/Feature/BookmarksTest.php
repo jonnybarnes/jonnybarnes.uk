@@ -33,6 +33,13 @@ class BookmarksTest extends TestCase
     }
 
     #[Test]
+    public function non_numeric_bookmark_id_gives_not_found_response(): void
+    {
+        $response = $this->get('/bookmarks/twcamp^share|twsrc^ios');
+        $response->assertNotFound();
+    }
+
+    #[Test]
     public function when_bookmark_is_added_using_http_syntax_check_job_to_take_screenshot_is_invoked(): void
     {
         Queue::fake();
@@ -85,10 +92,10 @@ class BookmarksTest extends TestCase
     }
 
     #[Test]
-    public function bookmark_local_uri_attribute_returns_correct_url(): void
+    public function bookmark_uri_attribute_returns_correct_url(): void
     {
         $bookmark = Bookmark::factory()->create();
-        $this->assertEquals(config('app.url').'/bookmarks/'.$bookmark->id, $bookmark->local_uri);
+        $this->assertEquals(config('app.url').'/bookmarks/'.$bookmark->id, $bookmark->uri);
     }
 
     #[Test]
@@ -109,6 +116,26 @@ class BookmarksTest extends TestCase
         $response->assertJson(['response' => 'created']);
 
         Queue::assertPushed(ProcessBookmark::class);
-        $this->assertDatabaseHas('bookmarks', ['url' => 'https://example.org/blog-post']);
+        $bookmark = Bookmark::where('url', 'https://example.org/blog-post')->firstOrFail();
+        $this->assertEqualsCanonicalizing(['tag1', 'tag2'], $bookmark->tags->pluck('tag')->all());
+    }
+
+    #[Test]
+    public function form_encoded_bookmark_with_categories_creates_tags(): void
+    {
+        Queue::fake();
+
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer '.$this->getToken(),
+        ])->post('/api/post', [
+            'h' => 'entry',
+            'bookmark-of' => 'https://example.org/blog-post',
+            'category' => ['tag1', 'tag2'],
+        ]);
+
+        $response->assertJson(['response' => 'created']);
+
+        $bookmark = Bookmark::where('url', 'https://example.org/blog-post')->firstOrFail();
+        $this->assertEqualsCanonicalizing(['tag1', 'tag2'], $bookmark->tags->pluck('tag')->all());
     }
 }

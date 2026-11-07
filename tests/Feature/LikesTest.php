@@ -178,4 +178,11 @@ class LikesTest extends TestCase
         $response = $this->get('/likes/202');
         $response->assertNotFound();
     }
+
+    #[Test]
+    public function non_numeric_like_id_gives_not_found_response(): void
+    {
+        $response = $this->get('/likes/twcamp^share|twsrc^ios');
+        $response->assertNotFound();
+    }
 }
