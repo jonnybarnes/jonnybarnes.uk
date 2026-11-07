@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Jobs;
 
+use App\Exceptions\AuthorshipParserException;
+use App\Services\WebMention\Authorship;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Http\Client\ConnectionException;
@@ -12,8 +14,6 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Http;
-use Jonnybarnes\WebmentionsParser\Authorship;
-use Jonnybarnes\WebmentionsParser\Exceptions\AuthorshipParserException;
 
 class SaveProfileImage implements ShouldQueue
 {

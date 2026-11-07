@@ -22,6 +22,8 @@
                 <p>
                     A tool to parse incoming webmentions to a site, including
                     determining the author of the source webmention.
+                    This library is now archived and no longer maintained; its
+                    code now lives directly in this site.
                 </p>
             </div>
 @stop

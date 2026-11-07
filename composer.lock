@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "26051a7c122209f8ee213ca660fd0eb6",
+    "content-hash": "c05d8b5c324f0f2308155a5a65c35a0d",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -1751,57 +1751,6 @@
                 "source": "https://github.com/jonnybarnes/indieweb/tree/v0.3"
             },
             "time": "2020-11-29T11:13:10+00:00"
-        },
-        {
-            "name": "jonnybarnes/webmentions-parser",
-            "version": "v0.6",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/jonnybarnes/webmentions-parser.git",
-                "reference": "cac1acb2b252d6eb611fc5f3a2c6e2265bc86b44"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/jonnybarnes/webmentions-parser/zipball/cac1acb2b252d6eb611fc5f3a2c6e2265bc86b44",
-                "reference": "cac1acb2b252d6eb611fc5f3a2c6e2265bc86b44",
-                "shasum": ""
-            },
-            "require": {
-                "guzzlehttp/guzzle": "^6.0|^7.0",
-                "mf2/mf2": "~0.4",
-                "php": "^7.3|^8.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^9.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Jonnybarnes\\WebmentionsParser\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "CC0-1.0"
-            ],
-            "authors": [
-                {
-                    "name": "Jonny Barnes",
-                    "homepage": "https://jonnybarnes.uk"
-                }
-            ],
-            "description": "A PHP library to parse webmentions from HTML",
-            "keywords": [
-                "html",
-                "indieweb",
-                "microformats",
-                "webmentions"
-            ],
-            "support": {
-                "issues": "https://github.com/jonnybarnes/webmentions-parser/issues",
-                "source": "https://github.com/jonnybarnes/webmentions-parser/tree/v0.6"
-            },
-            "time": "2020-11-29T11:40:36+00:00"
         },
         {
             "name": "laravel/framework",

@@ -6,10 +6,10 @@ namespace Tests\Feature;
 
 use App\Jobs\ProcessLike;
 use App\Models\Like;
+use App\Services\WebMention\Authorship;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Queue;
-use Jonnybarnes\WebmentionsParser\Authorship;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Tests\TestToken;
