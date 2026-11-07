@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a2842cf95580a08ad759a92d74fae3b4",
+    "content-hash": "26051a7c122209f8ee213ca660fd0eb6",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -2174,16 +2174,16 @@
         },
         {
             "name": "laravel/scout",
-            "version": "v10.25.0",
+            "version": "v11.9.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/scout.git",
-                "reference": "f28630dca44a63d80c15e596bedc5af42c8985d5"
+                "reference": "07a6255b0cf2420426a80fd0e58a96b44afbfd40"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/scout/zipball/f28630dca44a63d80c15e596bedc5af42c8985d5",
-                "reference": "f28630dca44a63d80c15e596bedc5af42c8985d5",
+                "url": "https://api.github.com/repos/laravel/scout/zipball/07a6255b0cf2420426a80fd0e58a96b44afbfd40",
+                "reference": "07a6255b0cf2420426a80fd0e58a96b44afbfd40",
                 "shasum": ""
             },
             "require": {
@@ -2211,6 +2211,7 @@
             },
             "suggest": {
                 "algolia/algoliasearch-client-php": "Required to use the Algolia engine (^3.2).",
+                "laravel/ai": "Required to generate embeddings for semantic and hybrid search.",
                 "meilisearch/meilisearch-php": "Required to use the Meilisearch engine (^1.0).",
                 "typesense/typesense-php": "Required to use the Typesense engine (^4.9)."
             },
@@ -2222,7 +2223,7 @@
                     ]
                 },
                 "branch-alias": {
-                    "dev-master": "10.x-dev"
+                    "dev-master": "11.x-dev"
                 }
             },
             "autoload": {
@@ -2250,7 +2251,7 @@
                 "issues": "https://github.com/laravel/scout/issues",
                 "source": "https://github.com/laravel/scout"
             },
-            "time": "2026-03-10T16:16:46+00:00"
+            "time": "2026-10-06T14:26:28+00:00"
         },
         {
             "name": "laravel/sentinel",

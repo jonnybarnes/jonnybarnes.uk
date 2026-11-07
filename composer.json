@@ -20,7 +20,7 @@
         "jonnybarnes/webmentions-parser": "~0.5",
         "laravel/framework": "^13.0",
         "laravel/horizon": "^5.0",
-        "laravel/scout": "^10.1",
+        "laravel/scout": "^11.0",
         "laravel/tinker": "^3.0",
         "league/commonmark": "^2.0",
         "league/flysystem-aws-s3-v3": "^3.0",
