@@ -23,7 +23,7 @@
         "lightningcss": "lightningcss --output-dir public/assets/css --sourcemap --bundle --minify resources/css/app.css",
         "fix-sourcemap": "./scripts/fix-sourcemap.sh",
         "build-css": "npm run lightningcss && npm run fix-sourcemap",
-        "build-js": "esbuild resources/js/app.js --bundle --minify --sourcemap --outfile=public/assets/js/app.js",
+        "build-js": "esbuild resources/js/app.js resources/js/theme-init.js --bundle --minify --sourcemap --outdir=public/assets/js",
         "compress": "./scripts/compress.sh",
         "build": "npm run lint && npm run build-css && npm run build-js && npm run compress"
     },

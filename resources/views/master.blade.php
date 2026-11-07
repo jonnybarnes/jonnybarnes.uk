@@ -25,15 +25,8 @@
             <link rel="pgpkey" href="{{ config('app.url')}}/gpg.key">
         @endif
         @stack('head')
-        <script>
-            {{-- Apply a saved theme choice before first paint to avoid a flash of the system theme --}}
-            try {
-                const theme = localStorage.getItem('theme');
-                if (theme === 'light' || theme === 'dark') {
-                    document.documentElement.style.setProperty('color-scheme', theme);
-                }
-            } catch {}
-        </script>
+        {{-- Blocking on purpose: applies a saved theme before first paint. Must stay external to satisfy the CSP --}}
+        <script src="/assets/js/theme-init.js"></script>
     </head>
     <body>
         <header>

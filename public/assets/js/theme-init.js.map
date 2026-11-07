@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../../resources/js/theme-init.js"],
+  "sourcesContent": ["/*\n * Apply a saved theme choice before first paint to avoid a flash of the system theme.\n * Loaded as a blocking external script (not inline) so it passes the site's CSP.\n */\ntry {\n  const theme = localStorage.getItem('theme');\n  if (theme === 'light' || theme === 'dark') {\n    document.documentElement.style.setProperty('color-scheme', theme);\n  }\n} catch {\n  /* storage unavailable, fall back to the system theme */\n}\n"],
+  "mappings": "MAIA,GAAI,CACF,IAAMA,EAAQ,aAAa,QAAQ,OAAO,GACtCA,IAAU,SAAWA,IAAU,SACjC,SAAS,gBAAgB,MAAM,YAAY,eAAgBA,CAAK,CAEpE,MAAQ,CAER",
+  "names": ["theme"]
+}
