@@ -5,6 +5,10 @@ class ThemeSelector {
     this.btnDark = this.widget.querySelector('#btn-dark');
     this.status = this.widget.querySelector('#theme-status');
     this.currentTheme = ThemeSelector.storedTheme();
+    if (this.currentTheme !== 'system') {
+      /* backstop in case theme-init.js didn't run, so the page always matches the buttons */
+      document.documentElement.style.setProperty('color-scheme', this.currentTheme);
+    }
     this.updateButtons();
   }
 
