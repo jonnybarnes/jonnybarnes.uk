@@ -8,6 +8,7 @@ use App\Models\Note;
 use App\Models\WebMention;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Http;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
@@ -96,35 +97,55 @@ class WebMentionTest extends TestCase
     }
 
     #[Test]
-    public function author_attribute_returns_null_when_mf2_is_null(): void
+    public function author_attribute_returns_null_when_no_author_stored(): void
     {
         $webmention = new WebMention;
-        $webmention->mf2 = null;
+        $webmention->author = null;
         $this->assertNull($webmention->author);
     }
 
     #[Test]
-    public function author_attribute_returns_hcard_without_photo_key_when_no_photo_present(): void
+    public function author_attribute_returns_stored_hcard_without_photo_key_when_no_photo_present(): void
     {
         $webmention = new WebMention;
-        $webmention->mf2 = json_encode([
-            'items' => [[
-                'type' => ['h-entry'],
-                'properties' => [
-                    'author' => [[
-                        'type' => ['h-card'],
-                        'properties' => [
-                            'name' => ['Test Person'],
-                            'url' => ['https://example.com'],
-                        ],
-                    ]],
-                    'content' => ['hello'],
-                ],
-            ]],
-        ]);
+        $webmention->author = [
+            'type' => ['h-card'],
+            'properties' => [
+                'name' => ['Test Person'],
+                'url' => ['https://example.com'],
+            ],
+        ];
 
         $hCard = $webmention->author;
-        $this->assertNotNull($hCard);
-        $this->assertArrayNotHasKey('photo', $hCard['properties'] ?? []);
+        $this->assertSame(['Test Person'], $hCard['properties']['name']);
+        $this->assertArrayNotHasKey('photo', $hCard['properties']);
+    }
+
+    #[Test]
+    public function author_attribute_converts_photo_object_to_a_link(): void
+    {
+        $webmention = new WebMention;
+        $webmention->author = [
+            'type' => ['h-card'],
+            'properties' => [
+                'name' => ['Test Person'],
+                'photo' => [['value' => 'https://example.com/photo.jpg', 'alt' => '']],
+            ],
+        ];
+
+        $this->assertSame('https://example.com/photo.jpg', $webmention->author['properties']['photo'][0]);
+    }
+
+    #[Test]
+    public function author_attribute_does_not_resolve_from_mf2(): void
+    {
+        Http::fake();
+        $webmention = new WebMention;
+        $webmention->mf2 = json_encode([
+            'items' => [['type' => ['h-entry'], 'properties' => ['author' => ['https://example.com/']]]],
+        ]);
+
+        $this->assertNull($webmention->author);
+        Http::assertNothingSent();
     }
 }

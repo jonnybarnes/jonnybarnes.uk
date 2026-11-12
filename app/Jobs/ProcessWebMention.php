@@ -8,6 +8,7 @@ use App\Exceptions\InvalidMentionException;
 use App\Exceptions\RemoteContentNotFoundException;
 use App\Models\Note;
 use App\Models\WebMention;
+use App\Services\WebMention\Authorship;
 use App\Services\WebMention\Parser;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -37,7 +38,7 @@ class ProcessWebMention implements ShouldQueue
      * @throws RemoteContentNotFoundException
      * @throws InvalidMentionException
      */
-    public function handle(Parser $parser): void
+    public function handle(Parser $parser, Authorship $authorship): void
     {
         try {
             $response = Http::get($this->source);
@@ -49,6 +50,7 @@ class ProcessWebMention implements ShouldQueue
         }
         $this->saveRemoteContent($response->body(), $this->source);
         $microformats = Mf2\parse($response->body(), $this->source);
+        $author = $authorship->resolve($microformats);
         $webmentions = WebMention::where('source', $this->source)->get();
         foreach ($webmentions as $webmention) {
             // check webmention still references target
@@ -61,8 +63,9 @@ class ProcessWebMention implements ShouldQueue
                     return;
                 }
                 // webmention is still a reply, so update content
-                dispatch(new SaveProfileImage($microformats));
+                dispatch(new SaveProfileImage($author));
                 $webmention->mf2 = json_encode($microformats);
+                $webmention->author = $author;
                 $webmention->save();
 
                 return;
@@ -88,13 +91,14 @@ class ProcessWebMention implements ShouldQueue
         // no webmention in the db so create new one
         $webmention = new WebMention;
         $type = $parser->getMentionType($microformats); // throw error here?
-        dispatch(new SaveProfileImage($microformats));
+        dispatch(new SaveProfileImage($author));
         $webmention->source = $this->source;
         $webmention->target = $this->note->uri;
         $webmention->commentable_id = $this->note->id;
         $webmention->commentable_type = Note::class;
         $webmention->type = $type;
         $webmention->mf2 = json_encode($microformats);
+        $webmention->author = $author;
         $webmention->save();
         dispatch(new NotifyBrrrOfWebMention($webmention));
     }

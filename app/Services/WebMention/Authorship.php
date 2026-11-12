@@ -19,6 +19,36 @@ use function Mf2\parse;
 class Authorship
 {
     /**
+     * Resolve the author to a single h-card shape, suitable for storing.
+     *
+     * A plain-name author becomes an h-card with just a name, and an author
+     * that can't be determined (including when parsing fails) becomes null.
+     */
+    public function resolve(array $mf): ?array
+    {
+        try {
+            $author = $this->findAuthor($mf);
+        } catch (AuthorshipParserException) {
+            return null;
+        }
+
+        if (is_string($author)) {
+            $name = trim($author);
+
+            return $name === '' ? null : [
+                'type' => ['h-card'],
+                'properties' => ['name' => [$name]],
+            ];
+        }
+
+        if (! is_array($author) || ! is_array($author['properties'] ?? null)) {
+            return null;
+        }
+
+        return $author;
+    }
+
+    /**
      * Find the author of the first h-entry (or h-feed) in the microformats.
      *
      * Returns the author's h-card, or their name as a string if that's all

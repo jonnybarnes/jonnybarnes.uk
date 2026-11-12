@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Jobs;
 
-use App\Exceptions\AuthorshipParserException;
 use App\Jobs\SaveProfileImage;
-use App\Services\WebMention\Authorship;
 use Illuminate\Support\Facades\Http;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
@@ -23,33 +21,27 @@ class SaveProfileImageJobTest extends TestCase
     }
 
     #[Test]
-    public function authorship_algorithm_returns_null_on_exception(): void
+    public function nothing_is_saved_when_there_is_no_author(): void
     {
-        $mf = ['items' => []];
-        $authorship = $this->createMock(Authorship::class);
-        $authorship->method('findAuthor')
-            ->will($this->throwException(new AuthorshipParserException));
-        $job = new SaveProfileImage($mf);
+        Http::fake();
+        $job = new SaveProfileImage(null);
+        $job->handle();
 
-        $this->assertNull($job->handle($authorship));
+        Http::assertNothingSent();
     }
 
     #[Test]
     public function we_do_not_process_twitter_images(): void
     {
-        $mf = ['items' => []];
         $author = [
             'properties' => [
                 'photo' => ['https://pbs.twimg.com/abc.jpg'],
                 'url' => ['https://twitter.com/profile'],
             ],
         ];
-        $authorship = $this->createMock(Authorship::class);
-        $authorship->method('findAuthor')
-            ->willReturn($author);
-        $job = new SaveProfileImage($mf);
+        $job = new SaveProfileImage($author);
 
-        $this->assertNull($job->handle($authorship));
+        $this->assertNull($job->handle());
     }
 
     #[Test]
@@ -58,19 +50,14 @@ class SaveProfileImageJobTest extends TestCase
         Http::fake([
             '*' => Http::response('fake jpeg image', 200, ['Content-Type' => 'image/jpeg']),
         ]);
-        $mf = ['items' => []];
         $author = [
             'properties' => [
                 'photo' => ['https://example.org/profile.jpg'],
                 'url' => ['https://example.org'],
             ],
         ];
-        $authorship = $this->createMock(Authorship::class);
-        $authorship->method('findAuthor')
-            ->willReturn($author);
-
-        $job = new SaveProfileImage($mf);
-        $job->handle($authorship);
+        $job = new SaveProfileImage($author);
+        $job->handle();
         $this->assertFileExists(public_path().'/assets/profile-images/example.org/image');
     }
 
@@ -80,19 +67,14 @@ class SaveProfileImageJobTest extends TestCase
         Http::fake([
             '*' => Http::response('', 404),
         ]);
-        $mf = ['items' => []];
         $author = [
             'properties' => [
                 'photo' => ['https://example.org/profile.jpg'],
                 'url' => ['https://example.org'],
             ],
         ];
-        $authorship = $this->createMock(Authorship::class);
-        $authorship->method('findAuthor')
-            ->willReturn($author);
-
-        $job = new SaveProfileImage($mf);
-        $job->handle($authorship);
+        $job = new SaveProfileImage($author);
+        $job->handle();
         $this->assertFileEquals(
             public_path().'/assets/profile-images/default-image',
             public_path().'/assets/profile-images/example.org/image'
@@ -105,7 +87,6 @@ class SaveProfileImageJobTest extends TestCase
         Http::fake([
             '*' => Http::response('fake jpeg image', 200, ['Content-Type' => 'image/jpeg']),
         ]);
-        $mf = ['items' => []];
         $author = [
             'properties' => [
                 'photo' => [[
@@ -115,12 +96,8 @@ class SaveProfileImageJobTest extends TestCase
                 'url' => ['https://example.org'],
             ],
         ];
-        $authorship = $this->createMock(Authorship::class);
-        $authorship->method('findAuthor')
-            ->willReturn($author);
-
-        $job = new SaveProfileImage($mf);
-        $job->handle($authorship);
+        $job = new SaveProfileImage($author);
+        $job->handle();
         $this->assertFileExists(public_path().'/assets/profile-images/example.org/image');
     }
 
@@ -130,7 +107,6 @@ class SaveProfileImageJobTest extends TestCase
         Http::fake([
             '*' => Http::response('fake jpeg image', 200, ['Content-Type' => 'image/jpeg']),
         ]);
-        $mf = ['items' => []];
         $author = [
             'properties' => [
                 'photo' => [[
@@ -143,12 +119,8 @@ class SaveProfileImageJobTest extends TestCase
                 ]],
             ],
         ];
-        $authorship = $this->createMock(Authorship::class);
-        $authorship->method('findAuthor')
-            ->willReturn($author);
-
-        $job = new SaveProfileImage($mf);
-        $job->handle($authorship);
+        $job = new SaveProfileImage($author);
+        $job->handle();
         $this->assertFileExists(public_path().'/assets/profile-images/example.org/image');
     }
 }

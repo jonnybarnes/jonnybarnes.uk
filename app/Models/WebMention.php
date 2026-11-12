@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use App\Services\WebMention\Authorship;
 use App\Traits\FilterHtml;
 use Exception;
 use Illuminate\Database\Eloquent\Attributes\Guarded;
@@ -27,33 +26,32 @@ class WebMention extends Model
         return $this->morphTo();
     }
 
+    /**
+     * The author's h-card, as resolved by `Authorship::resolve()` when the
+     * webmention was saved. The photo is swapped for our local copy if we
+     * have one.
+     */
     protected function author(): Attribute
     {
-        return Attribute::get(
-            get: function ($value, $attributes) {
-                if (
-                    ! array_key_exists('mf2', $attributes) ||
-                    $attributes['mf2'] === null
-                ) {
+        return Attribute::make(
+            get: function (?string $value): ?array {
+                if ($value === null) {
                     return null;
                 }
 
-                $authorship = new Authorship;
-                $hCard = $authorship->findAuthor(json_decode($attributes['mf2'], true));
+                $hCard = json_decode($value, true);
 
-                if ($hCard === false) {
+                if (! is_array($hCard) || ! is_array($hCard['properties'] ?? null)) {
                     return null;
                 }
 
-                if (
-                    array_key_exists('properties', $hCard) &&
-                    array_key_exists('photo', $hCard['properties'])
-                ) {
+                if (isset($hCard['properties']['photo'][0])) {
                     $hCard['properties']['photo'][0] = $this->createPhotoLink($hCard['properties']['photo'][0]);
                 }
 
                 return $hCard;
-            }
+            },
+            set: fn (?array $value): ?string => $value === null ? null : json_encode($value),
         );
     }
 
