@@ -51,42 +51,24 @@ class ProcessWebMention implements ShouldQueue
         $this->saveRemoteContent($response->body(), $this->source);
         $microformats = Mf2\parse($response->body(), $this->source);
         $author = $authorship->resolve($microformats);
-        $webmentions = WebMention::where('source', $this->source)->get();
-        foreach ($webmentions as $webmention) {
-            // check webmention still references target
-            // we try each type of mention (reply/like/repost)
-            if ($webmention->type === 'in-reply-to') {
-                if ($parser->checkInReplyTo($microformats, $this->note->uri) === false) {
-                    // it doesn’t so delete
-                    $webmention->delete();
-
-                    return;
-                }
-                // webmention is still a reply, so update content
-                dispatch(new SaveProfileImage($author));
-                $webmention->mf2 = json_encode($microformats);
-                $webmention->author = $author;
-                $webmention->save();
+        $existing = WebMention::where('source', $this->source)
+            ->whereMorphedTo('commentable', $this->note)
+            ->first();
+        if ($existing !== null) {
+            // A re-sent mention: drop it if the source no longer references
+            // this note, otherwise refresh the stored content
+            if (! $this->stillReferencesNote($parser, $existing->type, $microformats)) {
+                $existing->delete();
 
                 return;
             }
-            if ($webmention->type === 'like-of') {
-                if ($parser->checkLikeOf($microformats, $this->note->uri) === false) {
-                    // it doesn’t so delete
-                    $webmention->delete();
+            dispatch(new SaveProfileImage($author));
+            $existing->mf2 = json_encode($microformats);
+            $existing->author = $author;
+            $existing->save();
 
-                    return;
-                } // note we don’t need to do anything if it still is a like
-            }
-            if ($webmention->type === 'repost-of') {
-                if ($parser->checkRepostOf($microformats, $this->note->uri) === false) {
-                    // it doesn’t so delete
-                    $webmention->delete();
-
-                    return;
-                } // again, we don’t need to do anything if it still is a repost
-            }
-        }// foreach
+            return;
+        }
 
         // no webmention in the db so create new one
         $webmention = new WebMention;
@@ -101,6 +83,19 @@ class ProcessWebMention implements ShouldQueue
         $webmention->author = $author;
         $webmention->save();
         dispatch(new NotifyBrrrOfWebMention($webmention));
+    }
+
+    /**
+     * Check the source still makes the same kind of mention of this note.
+     */
+    private function stillReferencesNote(Parser $parser, ?string $type, array $microformats): bool
+    {
+        return match ($type) {
+            'in-reply-to' => $parser->checkInReplyTo($microformats, $this->note->uri),
+            'like-of' => $parser->checkLikeOf($microformats, $this->note->uri),
+            'repost-of' => $parser->checkRepostOf($microformats, $this->note->uri),
+            default => false,
+        };
     }
 
     /**
