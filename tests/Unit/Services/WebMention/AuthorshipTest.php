@@ -164,4 +164,43 @@ class AuthorshipTest extends TestCase
         $this->assertSame('Fred Bloggs', $authorship->findAuthor($this->entryBy('Fred Bloggs')));
         $this->assertFalse($authorship->findAuthor(['items' => [['type' => ['h-entry'], 'properties' => []]], 'rels' => []]));
     }
+
+    #[Test]
+    public function resolve_returns_an_embedded_h_card(): void
+    {
+        $author = (new Authorship)->resolve($this->entryBy($this->hCard('Fred Bloggs')));
+
+        $this->assertSame(['h-card'], $author['type']);
+        $this->assertSame(['Fred Bloggs'], $author['properties']['name']);
+    }
+
+    #[Test]
+    public function resolve_turns_a_plain_name_into_an_h_card(): void
+    {
+        $author = (new Authorship)->resolve($this->entryBy('Fred Bloggs'));
+
+        $this->assertSame(['type' => ['h-card'], 'properties' => ['name' => ['Fred Bloggs']]], $author);
+    }
+
+    #[Test]
+    public function resolve_returns_null_without_an_h_entry_or_h_feed(): void
+    {
+        $this->assertNull((new Authorship)->resolve(['items' => [['type' => ['h-card'], 'properties' => []]]]));
+    }
+
+    #[Test]
+    public function resolve_returns_null_when_the_author_page_cannot_be_fetched(): void
+    {
+        Http::fake([self::AUTHOR_PAGE => Http::response('Not found', 404)]);
+
+        $this->assertNull((new Authorship)->resolve($this->entryBy(self::AUTHOR_PAGE)));
+    }
+
+    #[Test]
+    public function resolve_returns_null_when_no_author_can_be_found(): void
+    {
+        $this->assertNull((new Authorship)->resolve([
+            'items' => [['type' => ['h-entry'], 'properties' => ['content' => ['A post']]]],
+        ]));
+    }
 }

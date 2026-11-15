@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Jobs;
 
-use App\Exceptions\AuthorshipParserException;
-use App\Services\WebMention\Authorship;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Http\Client\ConnectionException;
@@ -23,19 +21,21 @@ class SaveProfileImage implements ShouldQueue
 
     /**
      * Create a new job instance.
+     *
+     * @param  array|null  $author  The h-card from `Authorship::resolve()`
      */
     public function __construct(
-        protected array $microformats
+        protected ?array $author
     ) {}
 
     /**
      * Execute the job.
      */
-    public function handle(Authorship $authorship): void
+    public function handle(): void
     {
-        try {
-            $author = $authorship->findAuthor($this->microformats);
-        } catch (AuthorshipParserException) {
+        $author = $this->author;
+
+        if ($author === null) {
             return;
         }
 

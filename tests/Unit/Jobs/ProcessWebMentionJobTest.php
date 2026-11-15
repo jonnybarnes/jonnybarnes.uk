@@ -10,11 +10,13 @@ use App\Jobs\ProcessWebMention;
 use App\Jobs\SaveProfileImage;
 use App\Models\Note;
 use App\Models\WebMention;
+use App\Services\WebMention\Authorship;
 use App\Services\WebMention\Parser;
 use Illuminate\FileSystem\FileSystem;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Queue;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
@@ -45,7 +47,7 @@ class ProcessWebMentionJobTest extends TestCase
         $source = 'https://example.org/mention/1/';
 
         $job = new ProcessWebMention($note, $source);
-        $job->handle($parser);
+        $job->handle($parser, new Authorship);
     }
 
     #[Test]
@@ -69,7 +71,7 @@ class ProcessWebMentionJobTest extends TestCase
         $source = 'https://example.org/mention/1/';
 
         $job = new ProcessWebMention($note, $source);
-        $job->handle($parser);
+        $job->handle($parser, new Authorship);
 
         Queue::assertPushed(SaveProfileImage::class);
         Queue::assertPushed(NotifyBrrrOfWebMention::class);
@@ -90,6 +92,8 @@ class ProcessWebMentionJobTest extends TestCase
         WebMention::factory()->create([
             'source' => $source,
             'target' => $note->uri,
+            'commentable_id' => $note->id,
+            'commentable_type' => Note::class,
         ]);
 
         $html = <<<HTML
@@ -103,10 +107,11 @@ class ProcessWebMentionJobTest extends TestCase
         ]);
 
         $job = new ProcessWebMention($note, $source);
-        $job->handle($parser);
+        $job->handle($parser, new Authorship);
 
         Queue::assertPushed(SaveProfileImage::class);
         Queue::assertNotPushed(NotifyBrrrOfWebMention::class);
+        $this->assertNull(WebMention::where('source', $source)->first()->author);
         $this->assertDatabaseHas('webmentions', [
             'source' => $source,
             'type' => 'in-reply-to',
@@ -136,6 +141,8 @@ class ProcessWebMentionJobTest extends TestCase
         $webmention->source = $source;
         $webmention->target = config('app.url').'/notes/E';
         $webmention->type = 'in-reply-to';
+        $webmention->commentable_id = $note->id;
+        $webmention->commentable_type = Note::class;
         $webmention->save();
 
         $this->assertDatabaseHas('webmentions', [
@@ -143,7 +150,7 @@ class ProcessWebMentionJobTest extends TestCase
         ]);
 
         $job = new ProcessWebMention($note, $source);
-        $job->handle($parser);
+        $job->handle($parser, new Authorship);
 
         $this->assertDatabaseMissing('webmentions', [
             'source' => $source,
@@ -171,6 +178,8 @@ class ProcessWebMentionJobTest extends TestCase
         $webmention->source = $source;
         $webmention->target = config('app.url').'/notes/E';
         $webmention->type = 'like-of';
+        $webmention->commentable_id = $note->id;
+        $webmention->commentable_type = Note::class;
         $webmention->save();
 
         $this->assertDatabaseHas('webmentions', [
@@ -178,7 +187,7 @@ class ProcessWebMentionJobTest extends TestCase
         ]);
 
         $job = new ProcessWebMention($note, $source);
-        $job->handle($parser);
+        $job->handle($parser, new Authorship);
 
         $this->assertDatabaseMissing('webmentions', [
             'source' => $source,
@@ -207,7 +216,7 @@ class ProcessWebMentionJobTest extends TestCase
         $source = 'https://brid.gy/comment/bluesky/did:plc:n3jhgiq2ykctnpgzlm6p6b25/at%253A%252F%252Fdid%253Aplc%253An3jhgiq2ykctnpgzlm6p6b25%252Fapp.bsky.feed.post%252F3mfekjuhykb2k/at%253A%252F%252Fdid%253Aplc%253Afsfuwigo5juzdwp23hyianzg%252Fapp.bsky.feed.post%252F3mfemw4rrvs2t';
 
         $job = new ProcessWebMention($note, $source);
-        $job->handle($parser);
+        $job->handle($parser, new Authorship);
 
         Queue::assertPushed(NotifyBrrrOfWebMention::class);
         $this->assertGreaterThan(255, strlen($source));
@@ -237,6 +246,8 @@ class ProcessWebMentionJobTest extends TestCase
         $webmention->source = $source;
         $webmention->target = config('app.url').'/notes/E';
         $webmention->type = 'repost-of';
+        $webmention->commentable_id = $note->id;
+        $webmention->commentable_type = Note::class;
         $webmention->save();
 
         $this->assertDatabaseHas('webmentions', [
@@ -244,10 +255,193 @@ class ProcessWebMentionJobTest extends TestCase
         ]);
 
         $job = new ProcessWebMention($note, $source);
-        $job->handle($parser);
+        $job->handle($parser, new Authorship);
 
         $this->assertDatabaseMissing('webmentions', [
             'source' => $source,
         ]);
+    }
+
+    #[Test]
+    public function new_webmention_stores_resolved_author(): void
+    {
+        Queue::fake();
+
+        $html = <<<'HTML'
+        <div class="h-entry">
+            <span class="p-author h-card">
+                <img class="u-photo" src="https://example.org/photo.jpg" alt="">
+                <a class="p-name u-url" href="https://example.org/">Example Person</a>
+            </span>
+            I liked <a class="u-like-of" href="/notes/1">a note</a>.
+        </div>
+        HTML;
+        $html = str_replace('href="/notes', 'href="'.config('app.url').'/notes', $html);
+        Http::fake([
+            '*' => Http::response($html, 200),
+        ]);
+
+        $note = Note::factory()->create();
+        $source = 'https://example.org/mention/1/';
+
+        $job = new ProcessWebMention($note, $source);
+        $job->handle(new Parser, new Authorship);
+
+        $webmention = WebMention::where('source', $source)->firstOrFail();
+        $this->assertSame(['Example Person'], $webmention->author['properties']['name']);
+        $this->assertSame(['https://example.org/'], $webmention->author['properties']['url']);
+        Queue::assertPushed(SaveProfileImage::class, function (SaveProfileImage $job): bool {
+            $author = (fn () => $this->author)->call($job);
+
+            return ($author['properties']['name'] ?? null) === ['Example Person'];
+        });
+    }
+
+    #[Test]
+    public function new_webmention_stores_plain_name_author_as_hcard(): void
+    {
+        Queue::fake();
+
+        $html = <<<'HTML'
+        <div class="h-entry">
+            <span class="p-author">Fred Bloggs</span>
+            I liked <a class="u-like-of" href="/notes/1">a note</a>.
+        </div>
+        HTML;
+        $html = str_replace('href="/notes', 'href="'.config('app.url').'/notes', $html);
+        Http::fake([
+            '*' => Http::response($html, 200),
+        ]);
+
+        $note = Note::factory()->create();
+        $source = 'https://example.org/mention/1/';
+
+        $job = new ProcessWebMention($note, $source);
+        $job->handle(new Parser, new Authorship);
+
+        $webmention = WebMention::where('source', $source)->firstOrFail();
+        $this->assertSame(
+            ['type' => ['h-card'], 'properties' => ['name' => ['Fred Bloggs']]],
+            $webmention->author
+        );
+    }
+
+    #[Test]
+    public function new_webmention_stores_null_author_when_author_page_cannot_be_fetched(): void
+    {
+        Queue::fake();
+
+        $html = <<<'HTML'
+        <div class="h-entry">
+            <a class="u-author" href="https://example.org/about">me</a>
+            I liked <a class="u-like-of" href="/notes/1">a note</a>.
+        </div>
+        HTML;
+        $html = str_replace('href="/notes', 'href="'.config('app.url').'/notes', $html);
+        Http::fake([
+            'https://example.org/about' => Http::response('', 500),
+            '*' => Http::response($html, 200),
+        ]);
+
+        $note = Note::factory()->create();
+        $source = 'https://example.org/mention/1/';
+
+        $job = new ProcessWebMention($note, $source);
+        $job->handle(new Parser, new Authorship);
+
+        $webmention = WebMention::where('source', $source)->firstOrFail();
+        $this->assertNull($webmention->author);
+        $this->assertNull($webmention->getRawOriginal('author'));
+    }
+
+    /**
+     * @return array<string, array{string}>
+     */
+    public static function likeAndRepostTypes(): array
+    {
+        return [
+            'like' => ['like-of'],
+            'repost' => ['repost-of'],
+        ];
+    }
+
+    #[Test]
+    #[DataProvider('likeAndRepostTypes')]
+    public function resent_like_or_repost_updates_the_existing_webmention(string $type): void
+    {
+        Queue::fake();
+
+        $note = Note::factory()->create();
+        $source = 'https://example.org/mention/1/';
+        WebMention::factory()->create([
+            'source' => $source,
+            'target' => $note->uri,
+            'type' => $type,
+            'mf2' => null,
+            'commentable_id' => $note->id,
+            'commentable_type' => Note::class,
+        ]);
+
+        $html = <<<HTML
+        <div class="h-entry">
+            <span class="p-author">Fred Bloggs</span>
+            <a class="u-{$type}" href="{$note->uri}">a note</a>
+        </div>
+        HTML;
+        Http::fake([
+            '*' => Http::response($html, 200),
+        ]);
+
+        $job = new ProcessWebMention($note, $source);
+        $job->handle(new Parser, new Authorship);
+
+        $webmentions = WebMention::where('source', $source)->get();
+        $this->assertCount(1, $webmentions);
+        $this->assertSame($type, $webmentions->first()->type);
+        $this->assertNotNull($webmentions->first()->mf2);
+        $this->assertSame(['Fred Bloggs'], $webmentions->first()->author['properties']['name']);
+        Queue::assertPushed(SaveProfileImage::class);
+        Queue::assertNotPushed(NotifyBrrrOfWebMention::class);
+    }
+
+    #[Test]
+    public function mention_of_a_second_note_from_the_same_source_creates_a_new_webmention(): void
+    {
+        Queue::fake();
+
+        $firstNote = Note::factory()->create();
+        $secondNote = Note::factory()->create();
+        $source = 'https://example.org/mention/1/';
+        $existing = WebMention::factory()->create([
+            'source' => $source,
+            'target' => $firstNote->uri,
+            'type' => 'in-reply-to',
+            'mf2' => null,
+            'commentable_id' => $firstNote->id,
+            'commentable_type' => Note::class,
+        ]);
+
+        $html = <<<HTML
+        <div class="h-entry">
+            In reply to <a class="u-in-reply-to" href="{$firstNote->uri}">one note</a>
+            and <a class="u-in-reply-to" href="{$secondNote->uri}">another</a>.
+        </div>
+        HTML;
+        Http::fake([
+            '*' => Http::response($html, 200),
+        ]);
+
+        $job = new ProcessWebMention($secondNote, $source);
+        $job->handle(new Parser, new Authorship);
+
+        // the first note's webmention is left untouched
+        $this->assertNull($existing->fresh()->mf2);
+        $this->assertDatabaseHas('webmentions', [
+            'source' => $source,
+            'type' => 'in-reply-to',
+            'commentable_id' => $secondNote->id,
+        ]);
+        $this->assertSame(2, WebMention::where('source', $source)->count());
+        Queue::assertPushed(NotifyBrrrOfWebMention::class);
     }
 }

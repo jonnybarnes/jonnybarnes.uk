@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Console\Commands;
 
 use App\Models\WebMention;
+use App\Services\WebMention\Authorship;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\FileSystem\FileSystem;
@@ -30,7 +31,7 @@ class ParseCachedWebMentions extends Command
      *
      * @throws FileNotFoundException
      */
-    public function handle(FileSystem $filesystem): void
+    public function handle(FileSystem $filesystem, Authorship $authorship): void
     {
         $htmlFiles = $filesystem->allFiles(storage_path().'/HTML');
         foreach ($htmlFiles as $file) {
@@ -42,6 +43,7 @@ class ParseCachedWebMentions extends Command
                 $webmention = WebMention::where('source', $url)->firstOrFail();
                 $microformats = \Mf2\parse($html, $url);
                 $webmention->mf2 = json_encode($microformats);
+                $webmention->author = $authorship->resolve($microformats);
                 $webmention->save();
                 $this->info('Saved the microformats to the database.');
             }
